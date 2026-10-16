@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>1 AGRICULTURE</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>1 AGRICULTURE</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="1 AGRICULTURE">1 AGRICULTURE</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following statements regarding turmeric during the year 2022-23:\n1. India is the largest producer and exporter of turmeric in the world.\n2. More than 30 varieties of turmeric are grown in India.\n3. Maharashtra, Telangana, Karnataka and Tamil Nadu are major turmeric-producing States in India. (2025)","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: India holds the status of being the world's leading producer and exporter of turmeric. The country cultivates over 30 distinct varieties of the crop. Major production centers in India include the states of Maharashtra, Telangana, Karnataka, and Tamil Nadu."},{"id":1,"txt":"Which of the following countries are well known as the two largest cocoa producers in the world? (2024)","ref":"","opts":["Algeria and Morocco","Botswana and Namibia","Côte d'Ivoire and Ghana","Madagascar and Mozambique"],"ci":2,"exp":"Ex: Côte d'Ivoire and Ghana are globally recognized as the two largest producers of cocoa."},{"id":2,"txt":"Consider the following plants:\n1. Groundnut\n2. Horse-gram\n3. Soybean. How many of the above belong to the pea family? (2024)","ref":"","opts":["only one","Only two","All three","None"],"ci":2,"exp":"Ex: Groundnut, horse-gram, and soybean all belong to the Fabaceae family, commonly known as the pea family ."},{"id":3,"txt":"Among the following crops, which one is the most important anthropogenic source of both methane and nitrous oxide? (2022)","ref":"","opts":["Cotton","Rice","Sugarcane","Wheat"],"ci":1,"exp":"Ex: Rice cultivation is identified as a significant anthropogenic source for the emission of both methane and nitrous oxide gases ."},{"id":4,"txt":"Consider the following States:\n1. Andhra Pradesh\n2. Kerala\n3. Himachal Pradesh\n4. Tripura. How many of the above are generally known as tea producing States? (2022)","ref":"","opts":["Only one State","Only two States","Only three States","All four States"],"ci":3,"exp":"Ex: All four listed states—Andhra Pradesh, Kerala, Himachal Pradesh, and Tripura—are recognized as tea-producing regions in India ."},{"id":5,"txt":"Among the following, which one is the least water efficient crop? (2021)","ref":"","opts":["Sugarcane","Sunflower","Pearl millet","Red gram"],"ci":0,"exp":"Ex: Among the choices provided, sugarcane is considered the least water-efficient crop due to its high water requirement during the growth cycle ."},{"id":6,"txt":"With reference to 'palm oil, consider the following statements:\n1. The palm oil tree is native to Southeast Asia.\n2. Palm oil is a raw material for some industries producing lipstick and perfumes.\n3. Palm oil can be used to produce biodiesel. (2021)","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2, and 3"],"ci":1,"exp":"Ex: Palm oil is extensively used as a raw material in manufacturing lipsticks and perfumes. It is also a viable feedstock for biodiesel production. While common in Southeast Asia, the oil palm tree is actually native to West Africa."},{"id":7,"txt":"With reference to pulse production in India, consider the following statements:\n1. Black gram can be cultivated as both kharif and rabi crop.\n2. Green-gram alone accounts for nearly half of pulse production.\n3. In the last three decades, while the production of kharif pulses has increased, the production of rabi pulses has decreased. (2020)","ref":"","opts":["1 only","2 and 3 only","2 only","1, 2 and 3"],"ci":0,"exp":"Ex: Black gram is versatile and can be grown in both Kharif and Rabi seasons. Green-gram does not account for half of the production, and Rabi pulse production has not seen a consistent decrease over three decades ."},{"id":8,"txt":"With reference to the current trends in the cultivation of sugarcane in India, consider the following statements:\n1. A substantial saving in seed material is made when 'bud chip settlings' are raised in a nursery and transplanted in the main field.\n2. When direct planting of setts is done, the germination percentage is better with singlebudded setts as compared to setts with many buds.\n3. If bad weather conditions prevail when setts are directly planted, single-budded setts have better survival as compared to large setts.\n4. Sugarcane can be cultivated using settlings prepared from tissue culture. (2020)","ref":"","opts":["1 and 2 only","3 only","1 and 4 only","2, 3 and 4 only"],"ci":2,"exp":"Ex: Using bud chip settlings from nurseries significantly reduces the amount of seed material needed for sugarcane. Additionally, sugarcane can be grown using settlings derived from tissue culture."},{"id":9,"txt":"\"The crop is subtropical in nature. A hard frost is injurious to it. It requires at least 210 frost-free days and 50 to 100 centimeters of rainfall for its growth. A light well-drained soil capable of retaining moisture is ideally suited for the cultivation of the crop.\" Which one of the following is that crop? (2020)","ref":"","opts":["Cotton","Jute","Sugarcane","Tea"],"ci":0,"exp":"Ex: Cotton is a subtropical crop requiring at least 210 frost-free days and moderate rainfall between 50-100 cm. It thrives in well-drained, moisture-retaining soil ."},{"id":10,"txt":"Among the following, which one is the largest exporter of rice in the world in the last five years? (2019)","ref":"","opts":["China","India","Myanmar","Vietnam"],"ci":1,"exp":"Ex: India has consistently remained the world's largest exporter of rice over the recent five-year period ."},{"id":11,"txt":"With reference to the cultivation of Kharif crops in India in the last five years, consider the following statements:\n1. Area under rice cultivation is the highest.\n2. Area under the cultivation of jowar is more than that of oilseeds.\n3. Area of cotton cultivation is more than that of sugarcane.\n4. Area under sugarcane cultivation has steadily decreased. (2019)","ref":"","opts":["1 and 3 only","2, 3 and 4 only","2 and 4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: In Indian Kharif cultivation, the area dedicated to rice is the largest. Furthermore, the land area used for cotton cultivation exceeds that used for sugarcane."},{"id":12,"txt":"Among the agricultural commodities imported by India, which one of the following accounts for the highest imports in terms of value in the last five years? (2019)","ref":"","opts":["Spices","Fresh fruits","Pulses","Vegetable oils"],"ci":3,"exp":"Ex: Vegetable oils represent the highest import value among agricultural commodities for India in the last five years ."},{"id":13,"txt":"With reference to 'Initiative for Nutritional Security through Intensive Millets Promotion', which of the following statements is/are correct?\n1. This initiative aims to demonstrate the improved production and post-harvest technologies and to demonstrate value-addition techniques, in an integrated manner, with a cluster approach.\n2. Poor, small, marginal, and tribal farmers havea larger stake in this scheme.\n3. An important objective of the scheme is to encourage farmers of commercial crops to shift to millet cultivation by offering them free kits of critical inputs of nutrients and micro irrigation equipment. (2016)","ref":"","opts":["1 only","2 and 3 only","1 and 2 only","1, 2 and 3"],"ci":2,"exp":"Ex: The initiative focuses on demonstrating production, post-harvest, and value-addition technologies using a cluster approach . It specifically prioritizes small, marginal, and tribal farmers."},{"id":14,"txt":"In India, cluster bean (Guar) is traditionally used as a vegetable or animal feed, but recently the cultivation of this has assumed significance. Which one of the following statements is correct in this context? (2014)","ref":"","opts":["The oil extracted from seeds is used in the manufacture of biodegradable plastics.","The gum made from its seeds is used in the extraction of shale gas.","The leaf extract of this plant has the properties of antihistamines.","It is a source of high quality biodiesel."],"ci":1,"exp":"Ex: Guar gum, derived from cluster bean seeds, is a critical component used in the hydraulic fracturing process for extracting shale gas."},{"id":15,"txt":"Consider the following pairs: Region: Well-known for the production of\n1. Kinnaur: Arecanut\n2. Mewat: Mango\n3. Coromondal: Soyabean. Which of the above pairs is/are correctly matched? (2014)","ref":"","opts":["1 and 2 only","3 only","1, 2 and 3","None of the above"],"ci":3,"exp":"Ex: None of the listed pairs correctly match the region with its primary agricultural specialty as per the provided context ."},{"id":16,"txt":"Consider the following statements:\n1. Maize can be used for the production of starch.\n2. Oil extracted from maize can be a feedstock for biodiesel.\n3. Alcoholic beverages can be produced by using maize. (2014)","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Maize is a versatile crop used for starch production, as a feedstock for biodiesel, and in the brewing of alcoholic beverages ."},{"id":17,"txt":"Consider the following crops:\n1. Cotton\n2. Groundnut\n3. Rice\n4. Wheat. Which of these are Kharif crops? (2013)","ref":"","opts":["1 and 4","2 and 3 only","1, 2 and 3","2, 3 and 4"],"ci":2,"exp":"Ex: Cotton, groundnut, and rice are primary Kharif crops in India, whereas wheat is a Rabi crop ."},{"id":18,"txt":"Consider the following crops of India:\n1. Groundnut\n2. Sesamum\n3. Pearl millet. Which of the above is / are predominantly rainfed crop/crops? (2012)","ref":"","opts":["1 and 2 only","2 and 3 only","3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Groundnut, sesamum, and pearl millet are all predominantly grown as rainfed crops in India ."},{"id":19,"txt":"Consider the following crops of India:\n1. Cowpea\n2. Green gram\n3. Pigeon pea. Which of the above is/are used as pulse, fodder and green manure? (2012)","ref":"","opts":["1 and 2 only","2 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Cowpea and green gram are dual-purpose crops utilized as pulses, animal fodder, and green manure ."},{"id":20,"txt":"The lower Gangetic plain is characterized by a humid climate with high temperature throughout the year. Which one among the following pairs of crops is most suitable for this region? (2011)","ref":"","opts":["Paddy and cotton","Wheat and Jute","Paddy and Jute","Wheat and cotton"],"ci":2,"exp":"Ex: The humid and hot conditions of the lower Gangetic plain are ideal for the cultivation of paddy and jute ."},{"id":21,"txt":"Though coffee and tea both are cultivated on hill slopes, there is some difference between them regarding their cultivation. In this context, consider the following statements:\n1. Coffee plant requires a hot and humid climate of tropical areas whereas tea can be cultivated in both tropical and subtropical areas.\n2. Coffee, is propagated by seeds but tea is propagated by stem cuttings only. (2010)","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Coffee is strictly tropical, while tea thrives in both tropical and subtropical zones. Statement 2 is incorrect as tea can also be grown from seeds."},{"id":22,"txt":"Following are the characteristics of an area in India:\n1. Hot and humid climate\n2. Annual rainfall 200 cm\n3. Hill slopes up to an altitude of 1100 metres\n4. Annual range of temperature 15°C to 30°C. Which one among the following crops are you most likely to find in the area described above? (2010)","ref":"","opts":["Mustard","Cotton","Pepper","Virginia Tobacco"],"ci":2,"exp":"Ex: Pepper cultivation requires high rainfall (200 cm), hot/humid conditions, and specific altitudes found on hill slopes ."},{"id":23,"txt":"Consider the following materials:\n1. Agricultural residues\n2. Corn grain\n3. Wastewater treatment sludge\n4. Wood mill waste. Which of the above can be used as feedstock for producing Sustainable Aviation Fuel? (2024)","ref":"","opts":["1 and 2 only","3 and 4 only","1, 2, 3 and 4","1, 3 and 4 only"],"ci":2,"exp":"Ex: All the listed materials—agricultural residues, corn grain, sludge, and wood waste—can serve as feedstock for Sustainable Aviation Fuel ."},{"id":24,"txt":"Consider the following activities:\n1. Spreading finely ground basalt rock on farmlands extensively\n2. Increasing the alkalinity of oceans by adding lime\n3. Capturing carbon dioxide released by various industries and pumping it into abandoned subterranean mines in the form of carbonated waters. How many of the above activities are often considered and discussed for carbon capture and sequestration? (2023)","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Basalt spreading, ocean alkalinization, and subterranean carbonated water pumping are all discussed strategies for carbon sequestration ."},{"id":25,"txt":"Which one of the following best describes the concept of 'Small Farmer Large Field? (2023)","ref":"","opts":["Resettlement of a large number of people, uprooted from their countries due to war, by giving them a large cultivable land which they cultivate collectively and share the produce","Many marginal farmers in an area together make a contract with a corporate body and surrender their land to the corporate body for a fixed term for which the corporate body makes a payment of agreed amount to the farmers","Many marginal farmers in an area together make a contract with a corporate body and surrender their land to the corporate body for a fixed term for which the corporate body makes a payment of agreed amount to the farmers","A company extends loans, technical knowledge and material inputs to a number of small farmers in an area so that they produce the agricultural commodity required by the company for its manufacturing process and commercial production"],"ci":1,"exp":"Ex: This concept involves marginal farmers pooling land via contracts with corporate bodies for fixed payments ."},{"id":26,"txt":"System of Rice Intensification' of cultivation, in which alternate wetting and drying of rice fields is practised, results in:\n1. Reduced seed requirement\n2. Reduced methane production\n3. Reduced electricity consumption. (2022)","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: SRI (System of Rice Intensification) reduces seed needs, lowers methane emissions through better aeration, and decreases electricity use for pumping ."},{"id":27,"txt":"The \"Miyawaki method\" is well known for the: (2022)","ref":"","opts":["Promotion of commercial farming in arid and semi-arid areas","Development of gardens using genetically modified flora","Creation of mini forests in urban areas","Harvesting wind energy on coastal areas and on sea surfaces."],"ci":2,"exp":"Ex: The Miyawaki method is a technique used specifically to create dense, native mini-forests in urban environments ."},{"id":28,"txt":"How is permaculture farming different from conventional chemical farming?\n1. Permaculture farming discourages monocultural practices, but in conventional chemical farming, monoculture practices are predominant.\n2. Conventional chemical farming can cause an increase in soil salinity, but this phenomenon is not observed in permaculture farming.\n3. Conventional chemical farming is easily possible in semi-arid regions, but permaculture farming is not so easily possible in such regions.\n4. The practice of mulching is very important in permaculture farming but not necessarily so in conventional chemical farming. (2021)","ref":"","opts":["1 and 3","1, 2, and 4","4 only","2 and 3"],"ci":1,"exp":"Ex: Permaculture avoids monoculture, prevents salinity increases, and heavily utilizes mulching, unlike conventional chemical farming ."},{"id":29,"txt":"In the context of India's preparation for Climate-Smart Agriculture, consider the following statements:\n1. The 'Climate-Smart Village' approach in India is a part of a project led by the Climate Change, Agriculture and Food Security (CCAFS), an international research program.\n2. The project of CCAFS is carried out under the Consultative Group on International Agricultural Research (CGIAR), headquartered in France.\n3. The International Crops Research Institute for the Semi-Arid Tropics (ICRISAT) in India is one of the CGIAR's research centers. (2021)","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2, and 3"],"ci":3,"exp":"Ex: All statements are correct regarding India's Climate-Smart Agriculture, involving CCAFS, CGIAR (France), and ICRISAT ."},{"id":30,"txt":"What is the use of biochar in farming?\n1. 'Biochar can be used as a part of the growing medium in vertical farming.\n2. When biochar is a part of the growing medium, it promotes the growth of nitrogen-fixing microorganisms.\n3. When biochar is a part of the growing-medium, it enables the growing medium to retain water for longer time. (2020)","ref":"","opts":["1 and 2 only","2 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Biochar enhances vertical farming, supports nitrogen-fixing microbes, and significantly improves soil water retention ."},{"id":31,"txt":"What are the advantages of fertigation in agriculture?\n1. Controlling the alkalinity of irrigation water is possible.\n2. Efficient application of Rock Phosphate and all other phosphatic fertilizers is possible.\n3. Increased availability of nutrients to plants is possible.\n4. Reduction in the leaching of chemical nutrients is possible. (2020)","ref":"","opts":["1, 2 and 3 only","1, 2 and 4 only","1, 3 and 4 only","2, 3 and 4 only"],"ci":2,"exp":"Ex: Fertigation allows for alkalinity control, better nutrient availability, and reduced leaching, though it is not efficient for Rock Phosphate ."},{"id":32,"txt":"What is/are the advantage/advantages of zero tillage in agriculture?\n1. Sowing of wheat is possible without burning the residue of previous crop.\n2. Without the need for nursery of rice saplings, direct planting of paddy seeds in the wet soil is possible.\n3. Carbon sequestration in the soil is possible. (2020)","ref":"","opts":["1 and 2 only","2 and 3 only","3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Zero tillage prevents residue burning, allows direct seeding of paddy, and aids in soil carbon sequestration ."},{"id":33,"txt":"In the context of India, which of the following is/are considered to be of practice(s) of eco-friendly agriculture?\n1. Crop diversification\n2. Legume intensification\n3. Tensiometer use\n4. Vertical farming. (2020)","ref":"","opts":["1, 2 and 3 only","3 only","4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Crop diversification, legume intensification, and tensiometer use are key eco-friendly practices in the Indian context ."},{"id":34,"txt":"With reference to organic farming in India, consider the following statements:\n1. The National Programme for Organic Production' (NPOP) is operated under the guidelines and directions of the Union Ministry of Rural Development.\n2. The Agricultural and Processed Food Products Export Development Authority' (APEDA) functions as the Secretariat for the implementation of NPOP.\n3. Sikkim has become India's first fully organic State. (2018)","ref":"","opts":["1 and 2 only","2 and 3 only","3 only","1, 2 and 3"],"ci":1,"exp":"Ex: APEDA serves as the NPOP secretariat, and Sikkim is India's first 100% organic state. NPOP is under the Ministry of Commerce, not Rural Development ."},{"id":35,"txt":"With reference to the circumstances in Indian agriculture, the concept of \"Conservation Agriculture\" assumes significance. Which of the following fall under the Conservation Agriculture?\n1. Avoiding the monoculture practices\n2. Adopting minimum tillage\n3. Avoiding the cultivation of plantation crops\n4. Using crop residues to cover soil surface\n5. Adopting spatial and temporal crop sequencing/crop rotations. (2018)","ref":"","opts":["1, 3 and 4","2, 3, 4 and 5","2, 4 and 5","1, 2, 3 and 5"],"ci":2,"exp":"Ex: Conservation Agriculture centers on minimum tillage, soil cover with residues, and crop rotation ."},{"id":36,"txt":"Which of the following practices can help in water conservation in agriculture?\n1. Reduced or zero tillage of the land\n2. Applying gypsum before irrigating the field\n3. Allowing crop residue to remain in the field. (2017)","ref":"","opts":["1 and 2 only","3 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Zero tillage, gypsum application, and retaining crop residues all contribute to agricultural water conservation ."},{"id":37,"txt":"Why does the Government of India promote the use of 'Neem-coated Urea' in agriculture? (2016)","ref":"","opts":["Release of Neem oil in the soil increases nitrogen fixation by the soil microorganisms","Neem coating slows down the rate of dissolution of urea in the soil","Nitrous oxide, which is a greenhouse gas, is not at all released into atmosphere by crop fields","It is a combination of a weedicide and a fertilizer for particular crops"],"ci":1,"exp":"Ex: Neem coating is promoted because it slows the dissolution of urea, ensuring better nitrogen uptake by plants ."},{"id":38,"txt":"Which of the following is/are the advantage/advantages of practicing drip irrigation?\n1. Reduction in weed\n2. Reduction in soil salinity\n3. Reduction in soil erosion. (2016)","ref":"","opts":["1 and 2 only","3 only","1 and 3 only","None of the above is an advantage of practising drip irrigation"],"ci":2,"exp":"Ex: Drip irrigation reduces weed growth (by localized watering) and minimizes soil erosion, though it doesn't necessarily reduce salinity ."},{"id":39,"txt":"The FAO accords the status of 'Globally Important Agricultural Heritage System (GIAHS)' to traditional agricultural systems. What is the overall goal of this initiative?\n1. To provide modern technology, training in modern farming methods and financial support to local communities of identified GIAHS so as to greatly enhance their agricultural productivity.\n2. To identify and safeguard eco-friendly traditional farm practices and their associated landscapes, agricultural biodiversity and knowledge systems of the local communities\n3. The provide Geographical Indication status to all the varieties of agricultural produce in such identifies GIAHS. (2016)","ref":"","opts":["1 and 3 only","2 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: GIAHS aims to safeguard traditional eco-friendly practices, landscapes, and local biodiversity ."},{"id":40,"txt":"Which one of the following best describes the main objective of Seed Village Concept? (2015)","ref":"","opts":["Encouraging the farmers to use their own farm seeds and discouraging them to buy the seeds from others","Involving the farmers for training in quality seed production and thereby to make available quality seeds to others at appropriate time and affordable cost","Earmarking some villages exclusively for the production of certified seeds","Identifying the entrepreneurs in villages and providing them technology and finance to set up seed companies"],"ci":1,"exp":"Ex: This concept focuses on training farmers to produce and distribute quality seeds within the community affordably ."},{"id":41,"txt":"What can be the impact of excessive/inappropriate use of nitrogenous fertilizers in agriculture?\n1. Proliferation of nitrogen-fixing microorganisms is soil can occur.\n2. Increase in the acidity of soil can take place.\n3. Leaching of nitrate to the ground-water can occur. (2015)","ref":"","opts":["1 and 3 only","2 only","2 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Excess nitrogen increases soil acidity and causes nitrate leaching into groundwater; it does not help N-fixing microbes ."},{"id":42,"txt":"Which of the following is the chief characteristic of 'mixed farming'? (2012)","ref":"","opts":["Cultivation of both cash crops and food crops","Cultivation of two or more crops in the same field","Rearing of animals and cultivation of crops together","None of the above"],"ci":2,"exp":"Ex: Mixed farming is defined by the simultaneous practice of crop cultivation and animal rearing ."},{"id":43,"txt":"Consider the following agricultural practices:\n1. Contour bunding\n2. Relay cropping\n3. Zero tillage. In the context of global climate change, which of the above helps/help in carbon sequestration/storage in the soil? (2012)","ref":"","opts":["1 and 2 only","3 only","1, 2 and 3","None of them"],"ci":1,"exp":"Ex: In the context of climate change, zero tillage is the primary practice among these that aids soil carbon storage ."},{"id":44,"txt":"With reference to micro-irrigation, which of the following statements is/are correct?\n1. Fertilizer/nutrient loss can be reduced.\n2. It is the only means of irrigation in dry land farming.\n3. In some areas of farming, receding of the groundwater table can be checked. (2011)","ref":"","opts":["1 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Micro-irrigation reduces nutrient loss and helps check falling groundwater tables ."},{"id":45,"txt":"Consider the following statements:\n1. The Government of India provides Minimum Support Price for niger (Guizotia abyssinica) seeds.\n2. Niger is cultivated as a Kharif crop.\n3. Some tribal people in India use niger seed oil for cooking. (2023)","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: All three statements are correct: the GOI provides MSP for niger seeds, it is a Kharif crop, and tribal communities use its oil ."},{"id":46,"txt":"With reference to chemical fertilizers in India, consider the following statements:\n1. At present, the retail price of chemical fertilizers is market-driven and not administered by the Government.\n2. Ammonia, which is an input of urea, is produced from natural gas.\n3. Sulphur, which is a raw material for Phosphoric acid fertilizer, is a by-product of oil refineries. (2020)","ref":"","opts":["1 only","2 only","2 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Ammonia is made from natural gas and sulphur is a refinery by-product. Fertilizer prices (like urea) are government-administered ."},{"id":47,"txt":"Consider the following statements:\n1. In the case of all cereals, pulses and oil-seeds, the procurement at Minimum Support Price (MSP) is unlimited in any State/UT of India.\n2. In the case of cereals and pulses, the MSP is fixed in any State/UT at a level to which the market price will never rise. (2020)","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Procurement is not unlimited, and MSP is not set as a permanent ceiling above market prices ."},{"id":48,"txt":"In India, which of the following can be considered as public investment in agriculture?\n1. Fixing Minimum Support Price for agricultural produce of all crops\n2. Computerization of Primary Agricultural Credit Societies\n3. Social Capital development\n4. Free electricity supply to farmers\n5. Waiver of agricultural loans by the banking system\n6. Setting up of cold storage facilities by the governments. (2020)","ref":"","opts":["1, 2 and 5 only","1, 3, 4 and 5 only","2, 3 and 6 only","1, 2 3, 4, 5 and 6"],"ci":2,"exp":"Ex: Public investment includes infrastructure and development like PACS computerization, social capital, and cold storage ."},{"id":49,"txt":"Which of the following factors/ policies were affecting the price of rice in India in the recent past?\n1. Minimum Support Price\n2. Government's trading\n3. Government's stockpiling\n4. Consumer subsidies. (2020)","ref":"","opts":["1, 2 and 4 only","1, 3 and 4 only","2 and 3 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: All these factors—MSP, trading, stockpiling, and subsidies—collectively influence rice prices in India ."},{"id":50,"txt":"Consider the following:\n1. Areca nut\n2. Barley\n3. Coffee\n4. Finger millet\n5. Groundnut\n6. Sesamum\n7. Turmeric. The Cabinet Committee on Economic Affair, has announced the Minimum Support Price for which of the above? (2018)","ref":"","opts":["1, 2, 3 and 7 only","2, 4, 5 and 6 only","1, 3, 4, 5 and 6 only","1, 2, 3, 4, 5, 6 and 7"],"ci":1,"exp":"Ex: MSP is announced for barley, finger millet, groundnut, and sesamum, but not typically for coffee or turmeric ."},{"id":51,"txt":"In the context of which of the following do you sometimes find the terms 'amber box, blue box and green box' in the news? (2016)","ref":"","opts":["WTO affairs","SAARC affairs","UNFCCC affairs","India-EU negotiations on FTA"],"ci":0,"exp":"Ex: These terms refer to different categories of agricultural subsidies under WTO regulations ."},{"id":52,"txt":"Consider the following statements:\n1. Sweet orange plant is propagated by grafting technique\n2. Jasmine plant is propagated by layering technique. (2009)","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both propagation methods are correct: grafting for sweet orange and layering for jasmine ."},{"id":53,"txt":"The Fair and Remunerative Price (FRP) of sugarcane is approved by the (2015)","ref":"","opts":["Cabinet Committee on Economic Affairs","Commission for Agricultural Costs and Prices","Directorate of Marketing and Inspection, Ministry of Agriculture","Agricultural Produce Market Committee"],"ci":0,"exp":"Ex: The CCEA is the body that officially approves the FRP for sugarcane."},{"id":54,"txt":"In India, markets in agricultural products are regulated under the (2015)","ref":"","opts":["Essential Commodities Act, 1955","Agricultural Produce Market Committee Act enacted by States","Agricultural Produce (Grading and Marking) Act, 1937","Food Products Order, 1956 and Meat and Food Products Order, 1973"],"ci":1,"exp":"Ex: Agricultural markets are primarily regulated by State-enacted APMC Acts ."},{"id":55,"txt":"In the context of food and nutritional security of India, enhancing the 'Seed Replacement Rates' of various crops helps in achieving the food production targets of the future. But what is/are the constraint/constraints in its wider/ greater implementation?\n1. There is no National Seeds Policy in place.\n2. There is no participation of private sector seed companies in the supply of quality seeds of vegetables and planting materials of horticultural crops.\n3. There is a demand-supply gap regarding quality seeds in case of low value and high volume crops. (2014)","ref":"","opts":["1 and 2 only","3 only","2 and 3 only","None of the above"],"ci":1,"exp":"Ex: The primary constraint is the demand-supply gap for low-value, high-volume crops. A seed policy does exist ."},{"id":56,"txt":"Consider the following statements:\n1. The Union Government fixes the Statutory Minimum Price of sugarcane for each sugar season\n2. Sugar and sugarcane are essential commodities under the Essential Commodities Act. (2010)","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both statements are correct: the government sets the minimum price and they are classified as essential commodities ."},{"id":57,"txt":"The black cotton soil of India has been formed due to the weathering of (2021)","ref":"","opts":["brown forest soil","fissure volcanic rock","granite and schist","shale and limestone"],"ci":1,"exp":"Ex: Black cotton soil (Regur) originates from the weathering of fissure volcanic (basaltic) rocks ."},{"id":58,"txt":"Consider the following statements:\n1. Agricultural soils release nitrogen oxides into environment.\n2. Cattle release ammonia into environment.\n3. Poultry industry releases reactive nitrogen compounds into environment. (2019)","ref":"","opts":["1 and 3 only","2 and 3 only","2 only","1, 2 and 3"],"ci":3,"exp":"Ex: Agricultural soils, cattle, and the poultry industry are all sources of various nitrogen emissions ."},{"id":59,"txt":"With reference to agricultural soils, Consider the following statements:\n1. A high content of organic matter in soil drastically reduces its water holding capacity.\n2. Soil does not play any role in the sulphur cycle.\n3. Irrigation over a period of time can contribute to the salinization of some agricultural lands. (2018)","ref":"","opts":["1 and 2 only","3 only","1 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Persistent irrigation can lead to soil salinization. Organic matter actually increases water holding capacity."},{"id":60,"txt":"In India, the problem of soil erosion is associated with which of the following?\n1. Terrace cultivation\n2. Deforestation\n3. Tropical climate. (2014)","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Deforestation is a major factor contributing to soil erosion in India."},{"id":61,"txt":"Contour bunding is a method of soil conservation used in (2013)","ref":"","opts":["desert margins, liable to strong wind action","low flat plains, close to stream courses, liable to flooding","scrublands, liable to spread of weed growth","None of the above"],"ci":3,"exp":"Ex: None of the specific descriptions provided match the standard application of contour bunding in the given context ."},{"id":62,"txt":"Which of the following adds/add nitrogen to the soil?\n1. Excretion of urea by animals\n2. Burning of coal by man\n3. Death of vegetation. (2013)","ref":"","opts":["1 only","2 and 3 only","1 and 3 only","1, 2, and 3"],"ci":2,"exp":"Ex: Animal urea and decaying vegetation naturally add nitrogen to the soil."},{"id":63,"txt":"Which of the following statements regarding laterite soils of India are correct?\n1. They are generally red in colour.\n2. They are rich in nitrogen and potash.\n3. They are well-developed in Rajasthan and UP.\n4. Tapioca and cashew nuts grow well on these soils. (2013)","ref":"","opts":["1, 2 and 3","2, 3 and 4","1 and 4","2 and 3 only"],"ci":2,"exp":"Ex: Laterite soils are red in color and support crops like tapioca and cashew; they are poor in nitrogen ."},{"id":64,"txt":"Salinization occurs when the irrigation water accumulated in the soil evaporates, leaving behind salts and minerals. What are the effects of Salinization on irrigated land? (2011)","ref":"","opts":["It greatly increases the crop production","It makes some soils impermeable","It raises the water table","It fills the air spaces in the soil with water"],"ci":1,"exp":"Ex: Salinization can lead to soil becoming impermeable, which negatively impacts cultivation ."},{"id":65,"txt":"With reference to soil conservation, consider the following practices:\n1. Crop rotation\n2. Sand fences\n3. Terracing\n4. Wind breaks. Which of the above are considered appropriate methods for soil conservation in India? (2010)","ref":"","opts":["1, 2 and 3 only","2 and 4 only","1, 3 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: All four practices—crop rotation, sand fences, terracing, and wind breaks—are recognized soil conservation methods ."},{"id":66,"txt":"Tamil Nadu is a leading producer of mill-made cotton yarn in the country what could be the reason?\n1. Black cotton soil is the predominant type of soil in the State.\n2. Rich pool of skilled labour is available. (2010)","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: A key reason for Tamil Nadu's leadership in cotton yarn is its large pool of skilled labor."},{"id":67,"txt":"When you travel in certain parts of India, you will notice red soil. What is the main reason for this colour? (2010)","ref":"","opts":["Abundance of magnesium","Accumulated humus","Presence of ferric oxides","Abundance of phosphates"],"ci":2,"exp":"Ex: The distinctive red color of certain Indian soils is primarily due to the presence of ferric oxides ."},{"id":68,"txt":"Consider the following statements:\n1. The Commission for Agricultural Costs and Prices recommends the Minimum Support Prices for 32 crops.\n2. The Union Ministry of Consumer Affairs, Food and Public Distribution has launched the National Food Security Mission. (2009)","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Neither statement is correct regarding the specific number of crops for MSP or the ministry responsible for NFSM in this context."},{"id":69,"txt":"Consider the following statements about the Rashtriya Gokul Mission:\n1. It is important for the upliftment of rural poor as majority of low producing indigenous animals are with small and marginal farmers and landless labourers.\n2. It was initiated to promote indigenous cattle and buffalo rearing and conservation in a scientific and holistic manner. (2025)","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: The Rashtriya Gokul Mission aims to uplift the rural poor by promoting and conserving indigenous cattle and buffaloes ."},{"id":70,"txt":"\"Bollgard I and Bollgard II technologies are mentioned in the context of: (2021)","ref":"","opts":["Clonal propagation of crop plants","Developing genetically modified crop plants","Production of plant growth substances","Production of biofertilizers"],"ci":1,"exp":"Ex: Bollgard technologies are specifically used in the development of genetically modified crops, such as Bt cotton ."},{"id":71,"txt":"With reference to the Genetically Modified mustard (GM mustard) developed in India, Consider the following statements:\n1. GM mustard has the genes of a soil bacterium that give the plant the property of pest-resistance to a wide variety of pests.\n2. GM mustard has the genes that allow the plant cross-pollination and hybridization.\n3. GM mustard has been developed jointly by the IARI and Punjab Agricultural University. (2018)","ref":"","opts":["1 and 3 only","2 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: GM mustard contains genes specifically designed to facilitate cross-pollination and hybridization."},{"id":72,"txt":"Other than resistance to pests, what are the prospects for which genetically engineered plants have been created?\n1. To enable them to withstand drought\n2. To increase the nutritive value of the produce\n3. To enable them to grow and do photosynthesis in spaceships and space stations\n4. To increase their shelf life. (2012)","ref":"","opts":["1 and 2 only","3 and 4 only","1, 2 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: GE plants are developed for drought resistance, improved nutrition, and longer shelf life ."},{"id":73,"txt":"What are the reasons for the people's resistance to the introduction of BT brinjal in India?\n1. Bt brinjal has been created by inserting a gene from a soil fungus into its genome.\n2. The seeds of Bt brinjal are terminator seeds and therefore, the farmers have to buy the seeds before every season from the seed companies.\n3. There is an apprehension that the consumption of Bt brinjal may have adverse impact on health.\n4. There is some concern that the introduction of BT brinjal may have adverse effect on the biodiversity. (2012)","ref":"","opts":["1, 2 and 3 only","2 and 3 only","3 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Resistance is largely due to concerns regarding human health impacts and potential threats to biodiversity ."},{"id":74,"txt":"A genetically engineered form of brinjal, known as the Bt-Brinjal, has been developed. The objective of this is (2011)","ref":"","opts":["To make it pest-resistant","To improve its taste and nutritive qualities","To make it drought resistant","To make its shelf-life longer"],"ci":0,"exp":"Ex: The primary goal of developing Bt-Brinjal was to create a pest-resistant variety ."},{"id":75,"txt":"Mon 863 is a variety of maize. It was in the news for the following reason (2010)","ref":"","opts":["It is a genetically modified dwarf variety which is resistant to drought","It is a genetically modified variety which is pest resistant","It is a genetically modified variety with ten times higher protein content than regular maize crop","It is a genetically modified variety exclusively used for bio-fuel production."],"ci":1,"exp":"Ex: Mon 863 is a genetically modified maize variety specifically engineered for pest resistance ."},{"id":76,"txt":"Genetically modified \"golden rice\" has been engineered to meet human nutritional requirements. Which one of the following statements best qualifies golden rice? (2010)","ref":"","opts":["The grains have been fortified with genes to provide three times higher grain yield per acre than other high yielding varieties","Its grains contain pro-vitamin A which upon ingestion is converted to vitamin A in the human body","Its modified genes cause the synthesis of all the nine essential amino acids","Its modified genes cause the fortification of its grains with vitamin D"],"ci":1,"exp":"Ex: Golden rice is engineered to contain pro-vitamin A, which the human body converts into vitamin A ."}],"m":null,"tt":4620,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>
