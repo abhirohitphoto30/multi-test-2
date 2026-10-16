@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>VAJIRAM CAMP 2026 = 12</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>VAJIRAM CAMP 2026 = 12</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="VAJIRAM CAMP 2026 = 12">VAJIRAM CAMP 2026 = 12</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following statements:\nStatement I: Desertification is an example of a positive feedback loop in the climate system.\nStatement II: Desertification typically leads to a decline in carbon stocks.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["oth Statement I and Statement II are correct and Statement II explains Statement I","oth Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct"],"ci":0,"exp":"Ex: Desertification operates as a positive feedback loop in the climate system. Loss of vegetation and soil moisture reduces evapotranspiration , increases surface albedo , and suppresses local rainfall, creating hotter and drier conditions that further intensify desertification. So, statement I is correct. A positive feedback loop is a process in which a change in one variable triggers changes in another variable that further intensify the original change , leading to a self-reinforcing cycle. Desertification leads to a decline in both above-ground carbon stocks (loss of vegetation biomass) and below-ground carbon stocks (depletion of soil organic carbon), resulting in increased CO₂ release to the atmosphere . So, statement II is correct. The reduction in carbon stocks weakens land carbon sinks , amplifying atmospheric CO₂ concentrations and climate warming. This reinforces the climatic conditions that promote further desertification, thereby driving the positive feedback loop. So, both statement I and statement II are correct and statement II explains statement I."},{"id":1,"txt":"With reference to the thermal pollution, an increase in water temperature:\n1. reduces the solubility of dissolved oxygen in the water\n2. increases the toxicity of heavy metals, such as Mercury\n3. increases the metabolic rate of cold-blooded organisms such as fish\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":2,"exp":"Ex: Thermal pollution refers to the degradation of water quality caused by a change in the natural temperature of water bodies, most commonly due to the discharge of heated effluents from power plants, industries, and urban activities. The solubility of gases such as oxygen in water decreases with an increase in temperature , a basic physical principle that adversely affects dissolved oxygen levels in aquatic ecosystems. So, statement I is correct. Higher water temperatures can enhance the toxicity and bioavailability of certain pollutants, including heavy metals like mercury and compounds such as potassium cyanide , by increasing uptake rates and altering chemical forms. So, statement II is correct. Ectothermic (cold-blooded) organisms , such as fish, experience an increase in metabolic rate with rising water temperature (within tolerance limits), not a decrease. This elevates their oxygen demand at a time when dissolved oxygen availability is already reduced. So, statement III is correct. So, all three statements given above are correct."},{"id":2,"txt":"Which of the following ecosystems primarily contribute to the storage of ‘Teal Carbon’?\n1. Mangrove forests\n2. Non-tidal freshwater marshes\n3. Peatlands\n4. Coral reefs\n5. Freshwater swamps\nSelect the correct answer using the code given below:","ref":"","opts":["I and IV only","II, III and V only","I, III and IV only","II, IV and V only"],"ci":1,"exp":"Ex: Teal carbon refers to carbon stored in non-tidal fresh water wetlands, encompassing carbon sequestered in vegetation, microbial biomass, and dissolved and particulate organic matter. Major sources of Teal carbon : Non-tidal freshwater marshes. So, point II is correct. Peatlands. So, point III is correct. Freshwater swamps. So, point V is correct. Mangrove forests are coastal saline or brackish ecosystems and are classified under Blue Carbon, not Teal Carbon. So, point I is not correct. Coral reefs are marine biological structures and are not carbon-storing wetland ecosystems in this classification. They fall outside both Teal Carbon and Blue Carbon categories of vegetative carbon storage. So, point IV is not correct. Knowledge Box Colour - based Types of Carbon Black Carbon Produced by incomplete combustion of organic matter (soot, char). Strongly absorbs sunlight; contributes to atmospheric warming and cryosphere melting. Brown Carbon Also from incomplete combustion , especially biomass burning. Absorbs visible and ultraviolet light; contributes to climate forcing.   Red Carbon Carbon particles on snow and ice that darken the surface, lowering reflectivity ( albedo ) and accelerating melting. Blue Carbon Carbon stored in marine and coastal ecosystems such as mangroves, seagrasses, and salt marshes. Important in long-term climate mitigation through sequestration. Green Carbon Carbon stored in terrestrial vegetation and soils (forests, grasslands). Key natural carbon sink in land ecosystems."},{"id":3,"txt":"Consider the following statements with regard to the Graded Response Action Plan (GRAP):\n1. It is linked to Air Quality Index categories and is implemented in four stages.\n2. It is statutorily applicable only to the Delhi- NCR region.\n3. Its implementation is overseen by the Central Pollution Control Board.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":0,"exp":"Ex: The Graded Response Action Plan (GRAP) was formulated pursuant to the directions of the Supreme Court in the M.C. Mehta v. Union of India case (2016) and was formally notified by the Union Ministry of Environment, Forest and Climate Change in 2017. Hence, GRAP is a legally mandated air pollution response mechanism. GRAP is structured into four graded stages , each linked to specific Air Quality Index (AQI) categories: Stage I: Poor (AQI 201–300) Stage II: Very Poor (AQI 301–400) Stage III: Severe (AQI 401–450) Stage IV: Severe Plus (AQI >450). So, statement I is correct. GRAP is implemented specifically in the Delhi- National Capital Region (NCR) . While it serves as a reference framework for other cities, it is statutorily applicable only to the NCR . So, statement II is correct. The NCR, as notified, covers the whole of the National Capital Territory-Delhi and certain districts of Haryana, Uttar Pradesh and Rajasthan. The implementation of GRAP was overseen by the Environment Pollution (Prevention and Control) Authority (EPCA) until 2021. Following the enactment of the Commission for Air Quality Management (CAQM) Act, 2021, the responsibility now lies with the CAQM, not the Central Pollution Control Board (CPCB). So, statement III is not correct."},{"id":4,"txt":"Consider the following gases:\n1. Nitrogen Dioxide\n2. Carbon Monoxide\n3. Water Vapour\n4. Nitrogen Trifluoride\n5. Sulphur Dioxide\nHow many of the above are greenhouse gases?","ref":"","opts":["Only two","Only three","Only four","ll the five"],"ci":0,"exp":"Ex: Greenhouse gases are chemical compounds in the Earth's atmosphere that absorb infrared radiation and trap heat. This process creates a greenhouse effect that helps maintain a warmer temperature than the Earth would have otherwise, with an average temperature of 15°C (59°F). Nitrogen dioxide (NO 2 ) is a gaseous air pollutant composed of nitrogen and oxygen and belongs to a group of related gases known as Nitrogen oxides (NOx). NO 2 is produced when fossil fuels like coal, oil, gas, or diesel are burned at high temperatures. While Nitrogen Dioxide itself is not a greenhouse gas , it plays a significant role in the formation of tropospheric Ozone (O 3 ), which is a greenhouse gas. So, point I is not correct. Carbon monoxide (CO) is often regarded as a non-greenhouse gas because it does not directly absorb infrared radiation and therefore does not trap heat in the atmosphere. However, it is an important air   pollutant that can indirectly influence climate by affecting atmospheric chemistry, particularly by increasing the atmospheric lifetime of methane and tropospheric ozone, both of which are potent greenhouse gases. So, point II is not correct. Water Vapour is the most abundant greenhouse gas . It increases as the Earth's atmosphere warms but unlike CO 2 , which can remain in the Earth’s atmosphere for centuries, water vapour persists for only a few days. So, point III is correct. Nitrogen Trifluoride (NF 3 ) is used in electronics and solar panel production. It is a greenhouse gas and persists in the atmosphere for a long time. So, point IV is correct. Sulfur dioxide (SO₂) is primarily an air pollutant responsible for the formation of acid rain. It does not act as a greenhouse gas, as it does not absorb outgoing infrared radiation. Instead, SO₂ can exert a short- term cooling effect on the climate by forming sulfate aerosols in the atmosphere, which scatter and reflect incoming solar radiation. So, point V is not correct. So, only two of the above are greenhouse gases."},{"id":5,"txt":"With reference to the Biochemical Oxygen Demand (BOD) and Chemical Oxygen Demand (COD), consider the following statements:\n1. BOD measures both organic and inorganic matter, whereas COD measures organic matter only.\n2. COD is generally higher than BOD for the same water sample.\n3. The BOD/COD ratio is typically higher in domestic sewage than in industrial effluents from chemical plants.\nWhich of the statements given above is/ are not correct?","ref":"","opts":["I only","II only","II and III only","I, II and III"],"ci":0,"exp":"Ex: Biochemical Oxygen Demand (BOD) refers to the amount of dissolved oxygen consumed by aerobic microorganisms during the biological decomposition of biodegradable organic matter present in a given water sample. Chemical Oxygen Demand (COD) measures the amount of oxygen equivalent required to chemically oxidize all oxidizable substances in water using a strong chemical oxidizing agent. This includes both biodegradable and non-biodegradable organic compounds, as well as certain inorganic reducing substances. While COD measures the total oxidizable load of a water sample , BOD measures only the oxygen demand exerted by microorganisms during biological degradation. So, statement I is not correct. COD values are generally higher than BOD values for the same water sample because COD accounts for the oxygen demand of both biodegradable and non-biodegradable organic matter, whereas BOD measures only biodegradable organic matter. So, statement II is correct. The BOD/COD ratio is typically higher in domestic sewage since it consists largely of easily biodegradable organic waste. In contrast, industrial effluents , especially from chemical or pharmaceutical industries, often contain complex, non-biodegradable, or toxic substances, resulting in a lower BOD/COD ratio . So, statement III is correct."},{"id":6,"txt":"Consider the following statements:\nStatement I: Artificial light at Night (ALAN) diminishes the quality of the air.\nStatement II: ALAN increases the concentration of the nitrate radicals in the atmosphere.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["oth Statement I and Statement II are correct and Statement II explains Statement I","oth Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct"],"ci":2,"exp":"Ex: Artificial Light at Night (ALAN) causes light pollution, which impacts humans and nature alike. It also interferes with the atmosphere, leading to decreased air quality and negative public health outcomes . So, statement I is correct. Natural processes at night allow the nitrate radicals to cleanse the air by reacting with volatile organic compounds to prevent the formation of ozone and smog. However, this vital reaction is hindered by brightness from night lights , which, like sunlight, can degrade the nitrate radical and diminish its effectiveness . As a result, air quality is undermined, posing risks to health. So, statement II is not correct. So, statement–I is correct, but statement–II is incorrect.   Knowledge Box Forms of light pollution: Among the several forms of light pollution, the following can be commonly observed: Skyglow: The unnatural brightening of the night sky caused by artificial light, typically over populated areas, obscuring celestial objects. Glare: Intense, uncontrolled brightness that causes discomfort or reduces visibility. Light Trespass: Unwanted light spilling into areas where it is not intended or needed. Clutter: An overwhelming presence of too many light sources in one area that creates visual confusion and disorientation. ALAN also significantly impacts plant growth. Artificial light alters a plant’s ability to respond to natural light and disrupts its seasonal cycles."},{"id":7,"txt":"The term “Methane Slip”, frequently used in the context of green shipping and transition fuels, refers to:","ref":"","opts":["leakage of methane during storage and transportation of natural gas in pipelines","unburnt methane that escapes through the exhaust of a vessel using Liquefied Natural Gas (LNG) as fuel","release of methane during the liquefaction and regasification processes of LNG","intentional venting of methane from coal mines to prevent underground explosions"],"ci":1,"exp":"Ex: Methane slip refers to the portion of methane (CH₄) the main component of liquefied natural gas (LNG) that does not burn during combustion in an engine and escapes into the atmosphere as unburned fuel . It occurs when the LNG fuel is used in internal combustion engines (especially on LNG-fuelled vessels), and some methane passes through the combustion chamber without being combusted, exiting with the exhaust gases. This unburned methane release is a concern because methane is a potent greenhouse gas , with a significantly higher warming potential than carbon dioxide, and can undermine the environmental benefits of using LNG as a transition fuel."},{"id":8,"txt":"Consider the following situations:\n1. A hospital technician handling radioactive tracers used in cancer diagnosis\n2. A person using a mobile phone or a microwave oven\n3. A worker accidentally inhales radioactive dust emitted from a nuclear facility The type of radiation involved in the situations given above is correctly identified as:","ref":"","opts":["I and III involve ionizing radiation, while II involves non-ionizing radiation","I involves non-ionizing radiation, while II and III involve ionizing radiation","ll three involve ionizing radiation","ll three involve non-ionizing radiation 2 Vajiram & R avi's P r elims C A M P - 2026 est-Environment-EVT-2 T"],"ci":0,"exp":"Ex: Non-ionizing radiation are electromagnetic waves of longer wavelength from ultraviolet rays to radio waves, including visible light, infrared (IR) and microwaves. These waves have energies enough to excite the atoms and molecules of the medium through which they are moving, causing them to vibrate faster. But, they do not have enough energy to ionize them . Mobile phones emit radio waves and microwave ovens emit microwaves. Both are forms of non- ionizing radiation . Ionizing radiation has sufficient energy to affect the atoms in living cells and thereby damage their genetic material (DNA). Exposure to very high levels of radiation can cause acute health effects such as skin burns and acute radiation syndrome (“radiation sickness\"). It can also result in long-term health effects such as cancer and cardiovascular disease. Examples are: Alpha and Beta particles, Gamma rays and X-rays. Radioactive tracers emit alpha particles, beta particles, gamma rays , or X-rays, all of which are forms of ionizing radiation. These radiations have sufficient energy to remove electrons from atoms, a property that is exploited in medical imaging and radiotherapy. Radioactive materials present in dust emit ionizing radiation (alpha, beta, or gamma), which can cause severe internal tissue damage when inhaled.   Knowledge Box Alpha particles lack the energy to penetrate even the outer layer of skin, so exposure to the outside of the body is not a major concern. Beta particles are more penetrating than alpha particles, but are less damaging to living tissue and DNA because the ionizations they produce are more widely spaced. Some beta particles are capable of penetrating the skin and causing damage such as skin burns. Gamma rays are weightless packets of energy called photons. They can easily penetrate barriers that can stop alpha and beta particles, such as skin and clothing. They can pass completely through the human body and can cause ionizations that damage tissue and DNA."},{"id":9,"txt":"With reference to ocean acidification, consider the following statements:\n1. As the ocean’s pH decreases, its capacity to act as a carbon sink also decreases.\n2. It reduces the frequency and intensity of Harmful Algal Blooms (HABs).\n3. It can contribute to coral bleaching events.\n4. It adversely affects shell-forming organisms such as molluscs and corals.\nWhich of the above are consequences of ocean acidification?","ref":"","opts":["III and IV only","I and II only","I, III and IV only","I, II, III and IV"],"ci":2,"exp":"Ex: Ocean acidification is the progressive lowering of ocean pH due to the absorption of atmospheric carbon dioxide, which alters seawater chemistry and threatens marine ecosystems. A decline in ocean pH alters the carbonate buffering system, gradually reducing the ocean’s efficiency in absorbing additional atmospheric carbon dioxide . This leaves more CO₂ in the atmosphere, creating a positive climate feedback. So, statement I is correct. Ocean acidification can favour the growth of certain harmful algal blooms (HABs) , some of which produce toxins that affect marine organisms and pose risks to human health through seafood contamination . So, statement II is not correct. Although rising sea temperatures are the primary cause of coral bleaching, ocean acidification intensifies physiological stress on corals by weakening their skeletal structure, thereby increasing their vulnerability to bleaching and reducing recovery potential. So, statement III is correct. Ocean acidification decreases the availability of carbonate ions , which are essential for calcifying organisms such as corals and molluscs to form calcium carbonate shells and skeletons. This results in impaired growth, weaker structures, and reduced survival. So, statement IV is correct."},{"id":10,"txt":"Consider the following pairs: Pollution Control Measure\n1. Radioactive Cultivation of contamination of soil sunflowers\n2. Elevated levels of Cultivation of carbon dioxide lichen\n3. Accumulation of Introduction of polystyrene Klebsiella bacteria IV . Oil spills in the Setting up oil oceans booms\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":2,"exp":"Ex: Soil Pollution is a build-up of persistent toxic compounds, metals, chemicals, salts, radioactive materials or disease- causing agents in the soil that have adverse effects on plant growth, human and animal health. Phytoremediation is the use of plants to remove contaminants from soil and water. The sunflower has the exceptional ability to absorb and sequester various heavy metals like lead, zinc, chromium, etc. and radioactive isotopes through its roots. It was even used near Chernobyl to extract radionuclides cesium-137 and strontium-90 from the contaminated water following the catastrophic nuclear reactor accident there. So, pair I is correctly matched. Although lichens absorb CO₂ through photosynthesis, they are mainly used as indicators of air pollution, especially sulfur dioxide, rather than as a tool mitigate high levels of carbon dioxide. So, pair II is not correctly matched.   Lichen is a symbiotic relationship between a fungus and an alga. Plastic pollution is the accumulation of plastic objects and particles (e.g., plastic bottles, bags and microbeads) in the Earth's environment that adversely affects the ecosystems. Certain species of Klebsiella , along with other bacteria, are used in the bioremediation of various pollutants, including hydrocarbons and potentially plastics such as polystyrene. So, pair III is correctly matched. Polystyrene , commonly known as styrofoam, is a plastic material that is widely used in food, electronics and industrial packaging. It is difficult to break down and is therefore durable. Oil spill is one of the most dangerous of all water pollutants. Oil floats on the water surface and poses the threat of swift-spreading fire. It also decreases the oxygen level in the water. Booms are floating physical barriers, which slow the spread of oil and keep it contained. They are made of plastic, metal, or absorbent materials. They are deployed in various locations, such as around leaking tankers, near sensitive coastal areas, or to deflect oil away from wildlife habitats. Skilled teams deploy booms using mooring systems, such as anchors and land lines. So, pair IV is correctly matched. So, only three of the given pairs are correctly matched."},{"id":11,"txt":"Photochemical smog is most likely to be formed in which of the following conditions?\n1. Presence of Nitrogen Oxides\n2. Presence of Volatile Organic Compounds\n3. Strong sunlight\n4. Cool and humid climate\n5. Temperature inversion\nSelect the correct answer using the code given below:","ref":"","opts":["I, II and III only","I, IV and V only","II and IV only","I, II, III and V only"],"ci":3,"exp":"Ex: The worst form of air pollution appears as smog . Primarily, smog is an urban pollution phenomenon. Smog is of two types: Classical or London Smog and Photochemical or Los Angeles Smog. Both types comprise toxic pollutants and are the reason for high mortality in areas where such smogs are a common feature. Classical smog is mainly a product of burning large amounts of high-sulfur coal. This type of smog is characterized by high concentrations of sulfur dioxide and particulate matter , primarily resulting from the combustion of sulfur-containing fuels like coal, and is associated with cool, humid climates . So, point IV is not correct. Photochemical smog is a form of air pollution that is caused by the reaction of hydrocarbons and nitrogen oxides in the presence of sunlight and under certain meteorological conditions. Nitric oxide (NO) and Nitrogen dioxide (NO2) are emitted from the combustion of fossil fuels, along with being naturally emitted from things such as volcanoes and forest fires. When exposed to ultraviolet radiation (sunlight), nitrogen dioxide goes through a complex series of reactions with Volatile Organic Compounds (VOCs) to produce the components of photochemical smog i.e. a mixture of ozone, nitric acid, aldehydes, Peroxyacyl Nitrates (PANs) and other secondary pollutants. So, points I, II and III are correct. Stagnant air conditions, where there is little to no wind, play a significant role in the accumulation of pollutants in the lower atmosphere. Without strong winds to disperse pollutants, NOₓ and VOCs accumulate, allowing smog-forming reactions to continue throughout the day.   Temperature inversion, where a layer of warm air traps cooler air near the surface, further exacerbates smog formation. This phenomenon prevents vertical mixing of air, causing pollutants to remain trapped at ground level, leading to prolonged and intensified smog episodes. So, point V is correct."},{"id":12,"txt":"Consider the following statements with regard to the ‘forever chemicals’:\n1. They are synthetic chemicals.\n2. They can pass through the skin into the bloodstream of the body.\n3. They are known to act as endocrine disruptors in humans.\n4. They are widely used in firefighting foams.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":3,"exp":"Ex: PFAS (Per- and polyfluorinated alkyl substances), also known as th e Forever Chemicals, are a large chemical family of over 10,000 highly persistent chemicals that don’t occur in nature . They are the most persistent synthetic chemicals to date ; they hardly degrade in the natural environment and have been found in many household products. So, statement I is correct. Recently, scientists showed for the first time that some Forever Chemicals can be absorbed through the skin and into the bloodstream. Previously, skin was thought to act as a barrier against these chemicals, which has been tied to various health effects . So, statement II is correct. These can be toxic to both humans and wildlife. Two of the most studied chemicals in this family, Perfluorooctanoic acid (PFOA) and perfluorooctane sulfonate (PFOS) , have been shown to: Interfere with the hormonal system , so they are called endocrine disruptors . So, statement III is correct. Interfere with the reproductive system and the development of the foetus. Impact the immune system and have been linked to reduced responses to vaccines in children. Incineration is the most commonly used method for PFAS disposal; however, most PFAS are highly resistant to thermal degradation , which is why they are widely used in firefighting foams. So, statement IV is correct. So, all four given statements are correct."},{"id":13,"txt":"The term “plastisphere” refers to:","ref":"","opts":["the layer of plastic waste accumulated on the ocean floor","the global circulation of microplastics in marine waters","the microbial ecosystem that develops on the plastic debris","chemical by-product of plastic degradation"],"ci":2,"exp":"Ex: The plastisphere is a distinct microbial ecosystem that develops on the surface of plastic debris in aquatic and terrestrial environments. The term refers to a unique assemblage of bacteria, fungi, algae, and viruses that colonise plastics , forming a habitat structurally and functionally different from the surrounding water or soil. Knowledge Box Plastiglomerate is a rock composed of sand, rock fragments, shells and other materials held together by plastic. It is a new form of plastic pollution . Plastiglomerates form along shorelines where natural sedimentary grains and organic debris are agglutinated by melted plastic. They can be created due to heating of plastic waste during campfire burning, forest fires, during hot weather, or due to volcanic lava melting the plastic waste, etc, as is in the case on Trindade Island."},{"id":14,"txt":"Consider the following:\n1. Black carbon\n2. Nitrous Oxide\n3. Methane\n4. Tropospheric ozone\n5. Hydrofluorocarbons (HFCs)\nHow many of the above are Short-Lived Climate Pollutants (SLCPs)?","ref":"","opts":["Only two","Only three","Only four","ll the five"],"ci":2,"exp":"Ex: Short-Lived Climate Pollutants (SLCPs) are a group of climate forcers that have a relatively short atmospheric lifetime but a high global warming potential. The following pollutants fall into this category: Black carbon: It is a type of particulate matter that results from the incomplete combustion of fossil fuels, biomass and other organic materials. It absorbs sunlight and contributes to atmospheric warming. The average atmospheric lifetime of black carbon particles is 4-12 days. So, point I is correct Methane: It is a potent greenhouse gas with a much shorter atmospheric lifetime compared to CO 2 but a much higher global warming potential. It is released from agriculture, waste management and fossil fuel extraction. The lifetime of methane in the atmosphere is around 7 to 12 years. So, point III is correct. Tropospheric ozone: It is a secondary pollutant formed by the reaction of sunlight with air pollutants such as nitrogen oxides and volatile organic compounds . It acts as a greenhouse gas in the lower atmosphere. It has an atmospheric lifetime ranging from a few hours to a few weeks in polluted urban regions. So, point IV is correct. Hydrofluorocarbons (HFCs): These are synthetic greenhouse gases used in refrigeration and air conditioning. Many HFCs are very powerful with an average atmospheric lifetime of 15 years. So, point V is correct. Major Long-Lived Greenhouse Gases: Carbon dioxide (CO₂), Nitrous oxide (N₂O), Sulphur hexafluoride (SF₆), Carbon tetrafluoride (CF₄), Chlorofluorocarbons (CFCs) etc. So, point II is not correct. So, only four of the above are Short-Lived Climate Pollutants (SLCPs)."},{"id":15,"txt":"With reference to air pollution control in thermal power plants, which one of the following technologies is most commonly used to remove fine particulate matter from flue gases?","ref":"","opts":["yclone separators","Electrostatic precipitators (ESPs)","atalytic converters","Gravity settling chambers"],"ci":1,"exp":"Ex: Electrostatic Precipitators (ESPs) are highly efficient, capable of removing over 99% of fine particulate matter, and are therefore the standard technology used for particulate control in thermal power plants. Cyclone separators and gravity settling chambers are effective mainly for coarse particles and have low efficiency for fine PM. Catalytic converters are designed to control gaseous pollutants such as carbon monoxide, hydrocarbons, and nitrogen oxides in vehicles, and are not used for particulate removal in industrial flue gases."},{"id":16,"txt":"Consider the following statements with regard to microplastics:\n1. These include plastic particles smaller than 5 mm.\n2. They are completely non-biodegradable in aquatic environments.\n3. Microbeads are intentionally added microplastics used as exfoliating agents in skincare products.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: Microplastics are small plastic particles measuring less than 5 mm in size that originate either from the fragmentation of larger plastic debris (secondary microplastics) or are intentionally manufactured for specific applications such as microbeads in personal care products (primary microplastics). Due to their persistence, non-biodegradability, and ability to accumulate in ecosystems and food chains, microplastics pose significant environmental and health concerns. So, statement I is correct.   Generally, most conventional microplastics persist in water because the polymers are highly resistant to breakdown and biodegradation rates in aquatic environments are very slow or negligible. They can remain for years to centuries. However, microplastics derived from biodegradable plastics (e.g., certain bio-based polymers engineered for biodegradation) can break down biologically in water under favourable conditions , aided by microbial activity and enzymes, ultimately mineralizing into CO₂, water, and biomass. So, statement II is not correct. Microbeads are a specific type of primary microplastic, intentionally manufactured for specific uses, and are explicitly designed as exfoliating agents in products such as facial scrubs, body washes, and toothpaste. So, statement III is correct. contain a significant amount of harmful microplastics."},{"id":17,"txt":"Consider the following statements:\nStatement I: Utilisation of fly ash in the construction sector can lead to a reduction in the overall carbon footprint of infrastructure projects.\nStatement II: Fly ash possesses pozzolanic properties that allow it to substitute a portion of Portland cement during concrete production.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["oth Statement I and Statement II are correct and Statement II explains Statement I","oth Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct"],"ci":0,"exp":"Ex: Fly ash is an unwanted, unburnt residue of coal combustion in a coal thermal power plant. It is emitted along with flue gases during the burning of coal in a furnace and collected using the electrostatic precipitators. The utilization of fly ash in the construction sector significantly reduces the overall carbon footprint of infrastructure projects. This is primarily because it lessens the demand for ordinary Portland cement (OPC). So, statement I is correct. It increases the life of concrete roads and structures by improving concrete durability Fly ash possesses pozzolanic properties, meaning it reacts with the calcium hydroxide produced during cement hydration to form additional cementitious material. This property allows it to partially substitute Portland cement in concrete production. So, statement II is correct. So, both statement I and statement II are correct and statement II explains statement I."},{"id":18,"txt":"Which of the following hazardous substances are commonly released into the environment due to the improper processing or open burning of discarded electronic gadgets?\n1. Arsenic\n2. Chlorofluorocarbons (CFCs)\n3. Cadmium\n4. Strontium-90\nSelect the correct answer using the code given below:","ref":"","opts":["I and II only","III and IV only","I, II and III only","I, II, III and IV"],"ci":2,"exp":"Ex: Electronic waste (E-waste) refers to discarded electrical and electronic equipment such as computers, mobile phones, televisions, refrigerators, and batteries. These devices contain several toxic and hazardous substances. When e-waste is processed through unscientific methods like open burning, acid leaching, or informal dismantling, harmful chemicals and heavy metals are released into the environment, leading to air, soil, and water pollution and serious health risks. Arsenic is present in some electronic components and semiconductors. Improper recycling and burning can release arsenic into the environment, causing groundwater contamination and health hazards. So, point I is correct. Chlorofluorocarbons (CFCs) are found in old refrigerators, air conditioners, and cooling equipment. When such appliances are dismantled improperly, CFCs are released, contributing to ozone layer depletion. So, point II is correct.   Cadmium is commonly used in batteries, circuit boards, and semiconductors. It is highly toxic and can be released during open burning and informal recycling. So, point III is correct. Strontium-90 is a radioactive isotope mainly associated with nuclear activities and fallout. It is not a typical component of electronic waste and is not released during normal e-waste processing. So, point IV is not correct."},{"id":19,"txt":"Consider the following statements with reference to the Coloured Dissolved Organic Matter (CDOM):\n1. It is a portion of organic matter that absorbs light.\n2. It occurs in high concentrations in coastal zones due to terrestrial inputs.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":2,"exp":"Ex: Colored (or chromophoric) Dissolved Organic Matter (CDOM) is the portion of organic matter that absorbs light in the blue and UV part of the electromagnetic spectrum, giving water a “tea-like” colour. So, statement I is correct. CDOM strongly absorbs ultraviolet (UV) and visible radiation , thereby reducing UV penetration into water bodies. This property allows it to act as a natural shield , protecting light-sensitive and aquatic organisms from harmful UV radiation, particularly in coastal ecosystems . There are particularly high concentrations of CDOM in coastal zones , where terrestrial inputs constitute the primary source of dissolved organic matter (DOM) . So, statement II is correct. Although CDOM is an important and widespread component of marine DOM, it is not the most abundant fraction of DOM in the open oceans . Studies estimate that CDOM accounts for about 20%– 70% of dissolved organic carbon (DOC) in the ocean. This makes it a major fraction, but not necessarily the most abundant component of DOM, especially in the open ocean, where refractory, non-chromophoric DOM dominates."},{"id":20,"txt":"Match the following technologies with their associated benefits: Technology Benefit\n1. Vapour a. Heat recovery during Recovery steel production System\n2. Coke Dry b. Curb the release Quenching of Benzene during petroleum refueling\n3. Zig-Zag Kiln c. Reduce emissions in Technology brick kilns\nSelect the correct answer using the code given below:","ref":"","opts":["I-a, II-b, III-c","I-b, II-a, III-c","I-a, II-c, III-b","I-c, II-b, III-a"],"ci":1,"exp":"Ex: Petrol Pumps are a major source of Benzene emission (a carcinogenic compound) and other VOC (Volatile Organic Compounds) emission, which can lead to the formation of secondary particulates and ground-level ozone. Installation of the Vapor Recovery System (VRS) minimizes the release of Benzene and other VOC emissions during petroleum refueling and unloading operations. Coke Dry Quenching (CDQ) is a heat recovery system to cool the hot coke from coke ovens. It is one of the most renowned energy-efficient and environmentally-friendly facilities within steel production . o CDQ is a system where hot coke removed from coke ovens at a temperature of approximately 1,000°C is cooled and kept dry with inert gas and the resulting steam produced in a waste heat recovery boiler is used to generate electricity. Compared to the conventional wet quenching type, CDQ brings about advantages such as the reduction of dust emissions and improvement of coke quality. Zigzag Kiln Technology is a method of firing bricks in a kiln that uses a unique design to reduce emissions of pollutants and increase efficiency. The bricks are arranged in a zigzag pattern. Flue gas recirculates through the bricks, which leads to a more efficient burning process. The hot flue gases produced during the firing process are directed through the zigzag pattern of bricks."},{"id":21,"txt":"Which one of the following statements is correct\nwith regard to the Black plastic?","ref":"","opts":["It is made from carbon black.","It contains flame retardants and heavy metals.","It is often made from recycled electronic waste.","ll of the above 4 Vajiram & R avi's P r elims C A M P - 2026 est-Environment-EVT-2 T"],"ci":3,"exp":"Ex: Black plastic is a type of plastic used to make everyday items like food trays, containers, and utensils . It is often made from recycled electronic waste such as computers, TVs, and appliances. The issue is that these electronics typically contain substances such as the flame retardant bromine , antimony, and heavy metals such as lead, cadmium, and mercury. The “black” in plastics is due to the addition of carbon black , which is basically a form of soot produced by the incomplete combustion of coal, petroleum or vegetable matter. When carbon black burns, it primarily combusts to form carbon dioxide (CO2). Studies have shown that chemicals in black plastic, such as BPA and phthalates, disrupt the endocrine system, leading to potential reproductive health issues, obesity, and diabetes."},{"id":22,"txt":"With reference to the remediation of land pollution,\nconsider the following methods:\n1. Bioventing\n2. Biopiling\n3. Phytoremediation\n4. Landfarming\nWhich of the above are ex situ methods of remediation?","ref":"","opts":["II and IV only","I and III only","I, II and IV only","II, III and IV only"],"ci":0,"exp":"Ex: Ex situ remediation methods involve the removal of contaminated soil or material from its original location and its treatment in a controlled environment , such as treatment beds, piles, or reactors. In situ remediation methods treat contaminants at the site itself , without excavating the soil. Based on this distinction, the techniques are classified as follows: Bioventing (In situ): Air or oxygen is injected into contaminated soil to stimulate indigenous microorganisms, without soil excavation . So, point I is not correct. Biopiling (Ex situ): Contaminated soil is excavated and arranged in engineered piles on an impermeable base, where aeration, moisture, and nutrients are controlled to enhance biodegradation. So, point II is correct. Phytoremediation (In situ): Plants are used to absorb, immobilize, or degrade contaminants in place . Although limited ex situ applications exist, it is primarily classified as an in situ technique in land remediation. So, point III is not correct. Landfarming (Ex situ): Contaminated soil is excavated and spread in thin layers over a prepared treatment area and periodically tilled to promote microbial degradation. So, point IV is correct."},{"id":23,"txt":"Consider the following:\n1. UV-C irradiation\n2. Use of continuous low-power ultrasound\n3. Use of hydrogen peroxide\n4. Use of clay\nHow many of the above methods help in controlling Harmful Algal Blooms?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":3,"exp":"Ex: Harmful Algal Bloom (HAB) occurs when toxin-producing algae grow excessively in a body of water. The excessive algal growth, or algal bloom, becomes visible to the naked eye and can be green, blue- green, red, or brown, depending on the type of algae. Some of the methods to control HABs are as follows: UV-C exposure: UV-C (200–280 nm) irradiation is a promising approach to prevent HABs through suppressing microalgal growth. It is chemical-free; therefore, there is less possibility of Disinfection By-Product (DBPs) formation and negative impacts on ecosystems. So, point I is correct.   Ultrasound: Ultrasound at different frequencies and powers can be used to control HABs. There are two approaches to the control of algae with ultrasound: either using a continuous low- power ultrasound at sub-cavitation levels with a floating transducer or a more powerful ultrasound in which the effects are the result of cavitation. Low-power ultrasound can declump and stress algae, leading to death. High-power ultrasound can disrupt the algae's structure. So, point II is correct. Use of hydrogen peroxide: In recent years, research has focused on using Hydrogen peroxide (H 2 O 2 ) to control freshwater blooms (cyanobacteria and Prymnesium parvum, or golden algae). Some of the trials have indicated that controlled concentrations of H 2 O 2 are deadly to Prymnesium parvum . So, point III is correct. Use of Clay: When sprinkled on surface waters during an algal bloom, the tiny but dense clay particles will “flocculate” or combine with other particles in the water, including the algae cells. As these aggregations, known as “flocs,” grow, they sink through the water until they reach the bottom. This flocculation and sinking process can rupture cell membranes, killing the algae cells. In deeper water, darkness, prolonged contact with the clay, and eventual burial in sediments on the seafloor can also kill the algae cells. So, point IV is correct. So, all four given methods can help in controlling Harmful Algal Blooms. algal bloom hotspots along India’s east and west coasts."},{"id":24,"txt":"The term ‘Sea snot’, which has been in the news, refers to:","ref":"","opts":["ccumulation of oil residues on the sea surface","gelatinous organic matter formed from phytoplankton secretions","ense growth of invasive marine weeds","eposition of mineral-rich sediments in shallow seas"],"ci":1,"exp":"Ex: Sea snot, also known as marine mucilage , is a thick, slimy organic substance formed mainly from phytoplankton exudates and other biological material . Under favourable conditions, these organic secretions aggregate into large gelatinous masses visible on the sea surface and underwater. Marine mucilage, or sea snot, does not prevent marine pollution, instead, it acts as a vector for pollutants, trapping microplastics and transporting them to the deep sea floor as it sinks, potentially increasing the transfer of toxins into the marine food web. Higher sea surface temperatures is a key factor behind the formation and persistence of sea snot. Warmer waters, combined with nutrient pollution and weak water circulation in the Sea of Marmara, promote excessive phytoplankton growth and mucilage production."},{"id":25,"txt":"Which of the following pollutants can be effectively monitored using lichens as bioindicators?\n1. Sulfur dioxide\n2. Nitrogen compounds from fertilizers\n3. Mercury emissions from power plants\n4. Lead and zinc from mining activities\nSelect the correct answer using the code given below:","ref":"","opts":["I and II only","I and III only","II and IV only","I, II, III and IV"],"ci":3,"exp":"Ex: Lichens are composite organisms of symbiotic association between algae and fungi. Algae prepare food for fungi, and fungi provide shelter and absorb mineral nutrients and water for their partner. They are found in all habitats , including inhospitable tropical deserts, polar regions and even on the surface of granite boulders. They look like plants, with some having leaflike structures or leafless branches and others forming flakes that look like peeling paint. They don’t have roots ; instead, they grow on trees, rocks, and concrete and absorb nutrients from fog, wind, and rain.   Lichens have long been recognized as sensitive indicators of environmental pollution due to their capacity to absorb and accumulate airborne pollutants . This characteristic makes them valuable bioindicators for assessing air quality. Lichens get all of their nutrients from the air. Because lichens have no roots or protective surface, they cannot filter what they absorb, so anything in the air is taken straight inside. If there are pollutants, they can accumulate in the lichen and can become toxic very quickly. They are particularly sensitive to Sulfur dioxide (SO 2 ). SO 2 is detrimental to lichens because it disrupts their physiological processes, including photosynthesis and nitrogen fixation , and contributes to acid rain, which further damages their sensitive structures and substrates. So, point I is correct. Lichens are also sensitive to atmospheric pollution such as nitrogen gas . Too much nitrogen can harm and kill the algae’s chlorophyll, which is used to produce sugars that feed it and the fungi. Lichens are also sensitive to ammonia and nitrates that drift from agricultural areas where fertilizer is used, and they accumulate metals such as mercury from power plant emissions and lead and zinc from mining ore smelters. So, points II, III and IV are correct."},{"id":26,"txt":"Consider the following pollutants:\n1. Cyanide\n2. Phenol\n3. Ammonia\n4. Arsenic\nWhich of the above are typically found in the wastewater generated by iron and steel plants?","ref":"","opts":["I, II and III only","II, III and IV only","I and IV only","I, II, III and IV"],"ci":3,"exp":"Ex: Integrated iron and steel plants generate complex and highly toxic wastewater , primarily from coke oven, blast furnace, and gas-cleaning operations . Cyanides and thiocyanates are produced during high-temperature processes, especially in coke ovens and blast furnaces , where nitrogen in coal forms cyanide compounds. So, point I is correct. Phenols arise as major organic pollutants during the coal coking process and are commonly present in coke-oven effluents. So, point II is correct. Ammonia and ammonium compounds are released in large quantities during the destructive distillation of coal in coke production. So, point III is correct. Arsenic is a toxic heavy metal that may occur in industrial effluents, especially from mining and metal-processing activities , including certain processes within the iron and steel industry. So, point IV is correct."},{"id":27,"txt":"Consider the fo llowing processes:\n1. Decline in soil organic carbon\n2. Increase in surface runoff\n3. Increase in actual evapotranspiration\n4. Loss of soil structure\nWhich of the above are direct consequences of Land Desertification?","ref":"","opts":["I and IV only","I, II and IV only","II and III only","I, II, III and IV"],"ci":1,"exp":"Ex: Desertification refers to land degradation in dryland regions —arid, semi-arid, and dry sub-humid areas—resulting in a decline in biological productivity due to climatic variations and human activities . It does not imply the physical expansion of existing deserts , but rather the deterioration of land quality in drylands. Loss of vegetation exposes soil, accelerating the depletion of organic matter. This reduces soil fertility and diminishes the soil’s carbon storage capacity . So, point I is correct.   Degraded soils with poor structure and sparse vegetation have a lower infiltration capacity , resulting in higher surface runoff and reduced groundwater recharge . So, point II is correct. Desertification leads to a loss of vegetation, which directly reduces transpiration . Combined with drier soil surfaces, this lowers overall evapotranspiration in dryland regions. So, point III is not correct. Erosion and chemical degradation during desertification cause topsoil loss, compaction, and breakdown of soil aggregates , severely impairing soil structure. So, point IV is correct."},{"id":28,"txt":"With reference to the consequences of eutrophication, consider the following statements:\n1. It can lead to the dominance of diatoms during the final stages of nutrient enrichment.\n2. It may result in bioluminescence in coastal waters.\n3. It leads to a decrease in Biochemical Oxygen Demand (BOD).\n4. It can create hypoxic or anoxic conditions in water bodies.\nHow many of the statements given above are not correct?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":1,"exp":"Ex: Eutrophication is the gradual enrichment of an aquatic ecosystem, such as a lake, with nutrients primarily phosphorus and nitrogen, leading to increased plant and algal growth. Although diatoms may dominate during the initial stages of nutrient enrichment, they are often outcompeted by cyanobacteria or dinoflagellates as eutrophication intensifies and nutrient ratios change. So, statement I is not correct. Diatoms are microscopic, photosynthetic algae that form a major part of phytoplankton, serving as the base of aquatic food chains in diverse water habitats. It can result in bioluminescence in coastal waters due to blooms of certain dinoflagellates, some species of which are capable of producing light. So, statement II is correct. Eutrophication increases the production of organic matter , and its microbial decomposition raises the Biochemical Oxygen Demand (BOD) . So, statement III is not correct. Biochemical Oxygen Demand (BOD) is the amount of dissolved oxygen required by aerobic microorganisms to decompose organic matter present in water over a specific period. The decomposition of large quantities of organic matter generated during algal blooms consumes dissolved oxygen, leading to hypoxic or anoxic conditions in water bodies, commonly referred to as “dead zones.” So, statement IV is correct."},{"id":29,"txt":"Which of the following actions can lead to a situation of ‘ avoided emissions’ ?\n1. Installing a solar farm that displaces electricity generated by a coal-fired power plant\n2. A company reducing the electricity consumption of its own office building by 20 per cent\n3. Manufacturing fuel-saving tyres that reduce the fuel consumption of the vehicles\n4. Implementing agricultural IoT sensors that minimize the use of nitrogen-based fertilizers\nSelect the correct answer using the code given below:","ref":"","opts":["I and III only","II and IV only","I, III and IV only","I, II, III and IV"],"ci":2,"exp":"Ex: ‘Avoided emissions’ refer to the greenhouse gas emissions that have been ‘avoided’ by using a specific product or service, comparing it to a situation had the product or service not been used. It is the reductions in emissions that occur as a result of the use of a product or service. Installing a solar farm that displaces coal-based power is a classic case of avoided emissions , as electricity generated from solar energy replaces electricity that would otherwise have been produced by a coal-fired power plant. The emissions are avoided outside the direct operations of the solar farm. So, point I is correct. Reducing a company’s own electricity consumption represents a direct emissions reduction within the company’s own operations , not avoided emissions. So, point II is not correct. Manufacturing fuel-saving tyres is also an example of avoided emissions. By enabling lower fuel consumption, the tyres help customers avoid emissions that would otherwise have occurred . So, point III is correct.   Implementing agricultural IoT sensors is an example of avoided emissions. The sensors reduce the application of nitrogen-based fertilizers on farms, thereby lowering nitrous oxide (N₂O) emissions . The emissions are avoided at the farm level , outside the operations of the sensor manufacturer. So, point IV is correct."},{"id":30,"txt":"Consider the following air pollutants:\n1. Carbon dioxide\n2. Ozone (O₃)\n3. Particulate Matter (PM₁₀)\n4. Carbon monoxide (CO)\n5. Sulphur dioxide (SO₂)\nHow many of the pollutants given above are included under the National Ambient Air Quality Standards (NAAQS) of India?","ref":"","opts":["Only two","Only three","Only four","ll the five"],"ci":2,"exp":"Ex: The National Ambient Air Quality Standards (NAAQS) prescribe permissible limits for key air pollutants to safeguard public health and the environment . These standards were notified in 2009 by the Central Pollution Control Board (CPCB) under the powers conferred by the Air (Prevention and Control of Pollution) Act, 1981 . The current NAAQS framework covers twelve air pollutants , for which concentration limits are specified based on time-weighted averages such as annual, 24-hour, 8-hour, or 1-hour exposure. Separate limits are prescribed for industrial, residential, rural, and other areas , as well as for ecologically sensitive areas notified by the Government of India . The twelve regulated pollutants include: Ozone (O₃). So, point II is correct. Particulate Matter (PM₁₀ and PM₂.₅). So, point III is correct. Carbon monoxide (CO). So, point IV is correct. Sulphur dioxide (SO₂). So, point V is correct. Nitrogen dioxide (NO₂) Lead (Pb) Ammonia (NH₃) Benzene Benzo(a)pyrene Arsenic (As) Nickel (Ni) Carbon dioxide (CO₂) is not included in NAAQS, as it is treated primarily as a greenhouse gas rather than a conventional ambient air pollutant. So, point I is not correct. So, only four of the above are included under the National Ambient Air Quality Standards (NAAQS) of India"},{"id":31,"txt":"Consider the following:\n1. Cigarette filter\n2. Natural rubber\n3. Laundry wastewater\nWhich of the above are sources of microplastics?","ref":"","opts":["I and II only","I and III only","II and III only","I, II and III"],"ci":1,"exp":"Ex: Microplastics are plastic particles smaller than 5 millimeters in size . Cigarette filters are made of cellulose acetate , a plastic polymer. When discarded, these filters fragment into persistent microplastic fibres . So, point I is correct.   Natural rubber is derived from the latex of rubber trees and is a naturally occurring, biodegradable polymer (polyisoprene) . It is not a synthetic plastic and therefore does not generate persistent microplastics in the environment. So, point II is not correct. Washing synthetic textiles such as polyester and acrylic releases large quantities of microplastic fibres (microfibres) into wastewater. So, point III is correct."},{"id":32,"txt":"With reference to the formation of the Antarctic ozone hole, consider the following statements:\n1. It is most pronounced during the Antarctic spring months of September–October.\n2. A strong polar vortex over Antarctica inhibits stratospheric ozone.\n3. Ozone depletion is generally less severe in the Arctic than in the Antarctic.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: The ozone hole refers to a seasonal thinning of the ozone layer in the stratosphere , most prominently over Antarctica during the spring months . It is caused by human-made ozone-depleting substances such as chlorofluorocarbons (CFCs), which release chlorine and bromine that destroy ozone molecules under cold polar conditions. The Antarctic ozone hole is a seasonal phenomenon linked to stratospheric meteorology. During the polar winter, extremely low temperatures lead to the formation of Polar Stratospheric Clouds (PSCs) . When sunlight returns in the Antarctic spring (September–October), chemical reactions on PSC surfaces rapidly destroy ozone, resulting in maximum depletion . So, statement I is correct. A strong polar vortex does not inhibit ozone degradation . Instead, it intensifies ozone depletion by isolating the Antarctic stratosphere, trapping extremely cold air, promoting widespread PSC formation, and preventing the inflow of warmer, ozone-rich air from lower latitudes . This isolation enables efficient ozone-destroying chemical reactions. So, statement II is not correct. The Arctic stratosphere is comparatively warmer and experiences greater atmospheric wave activity , which disrupts the polar vortex. These conditions inhibit persistent PSC formation, making Arctic ozone depletion less severe and more variable than in Antarctica. So, statement III is correct."},{"id":33,"txt":"Which of the following are potential applications of rice straw residue (stubble)?\n1. Conversion into compost to recover soil nutrients\n2. Use as a direct feedstock for electricity generation\n3. Usage as a binding agent in clay for wall construction\n4. Use in the manufacturing of fired bricks\n5. Usage as a primary feed source for livestock\nSelect the correct answer using the code given below:","ref":"","opts":["II and III only","I , III and V only","I, II and V only","I, II, III and IV 6 Vajiram & R avi's P r elims C A M P - 2026 est-Environment-EVT-2 T"],"ci":3,"exp":"Ex: Stubble (parali) burning is a process of setting on fire the straw stubble, left after the harvesting of grains, like paddy, wheat, etc. The process of burning paddy farm residue is one of the major causes of air pollution in parts of northern India. Instead of burning, there are various local useful applications of these rice/wheat straws . Paddy stubble can be converted into compost . Composting is the decomposition of rice straw to enable recovery of portions of its nutrients and organic components. So, point I is correct. ■ Pusa-Biodecomposer is a fungi-based liquid solution that can soften hard stubble to the extent that it can be easily mixed with soil in the field to act as compost. It can either be used alone or mixed with other biomass materials in direct combustion . It can be used as combustion material in combustion boilers in combination with steam turbines to produce electricity and heat. Power production from rice straw is a promising way to meet the growing demand of energy. So, point II is correct.   It can be used to bind clay in built-up wall construction and in the manufacturing of fired brick. The resultant burn-out product provides a lightweight material with good insulating properties. Shredded or fiberized straw may also be used in layered products such as roofing paper, insulating paper and overlay products. So, points III and IV are correct. Rice straw cannot be used as a primary or sole feed for livestock without causing serious health and productivity problems. Although it is commonly used as a filler during fodder-scarce periods , it does not provide adequate nutrition for animal maintenance, growth, or milk production. So, point V is not correct."},{"id":34,"txt":"With reference to Ground-Level Ozone, consider the following statements:\n1. It is a primary pollutant emitted directly from vehicle exhausts and industrial stacks.\n2. Its formation is enhanced by high temperatures and strong solar radiation.\n3. It acts as a greenhouse gas.\n4. It can reduce agricultural crop yields by interfering with photosynthesis.\n5. It remains at elevated levels in the atmosphere only during daylight hours.\nHow many of the statements given above are correct?","ref":"","opts":["Only two","Only three","Only four","ll the five"],"ci":1,"exp":"Ex: Ground-level ozone is a secondary pollutant; it is not emitted directly from vehicles or industrial sources but forms in the atmosphere from precursor pollutants such as NOₓ and VOCs. So, statement I is not correct. Ground-level ozone is formed through photochemical reactions involving nitrogen oxides (NOₓ) and volatile organic compounds (VOCs), a process that is enhanced by strong sunlight and high temperatures. So, statement II is correct. Ozone (O₃) high in the stratosphere protects life by blocking UV radiation . However, ground-level ozone in the troposphere is a toxic air pollutant . It is a potent greenhouse gas in the troposphere that traps heat in the lower atmosphere and contributes to global warming and climate change. So, statement III is correct. Ozone is a phytotoxic pollutant. It enters plant leaves through stomata, damages plant tissues, interferes with photosynthesis , and thereby reduces agricultural crop yields and affects forest health. So, statement IV is correct. Although sunlight is required for its formation, ground-level ozone can persist at elevated concentrations even after sunset , particularly in urban areas or due to atmospheric transport and limited scavenging reactions. So, statement V is not correct. concentrations crossing the 8-hour standard of 100 μg/m³."},{"id":35,"txt":"Which of the following are examples of primary aerosols?\n1. Sea salt particles\n2. Sulphate aerosols\n3. Mineral dust\n4. Smoke\nSelect the correct answer using the code given below.","ref":"","opts":["I and III only","II and IV only","I, III ad IV only","I, II, III and IV"],"ci":2,"exp":"Ex: Aerosols are tiny particles suspended in the atmosphere. They range in size from a few tens of nanometres smaller than the width of the smallest viruses to several tens of micrometres about the diameter of a human hair and have a significant impact on climate, weather, health, and ecology. Aerosols injected directly into the atmosphere are referred to as 'primary aerosols'. These include sea salt particles, mineral dust, smoke, and volcanic ash. So, points I, III, and IV are correct.   Secondary aerosols are formed from gases emitted in other forms that undergo chemical reactions in the atmosphere, such as sulfate aerosols from volcanoes or industrial emissions, and nitrate aerosols from fossil fuel use and agricultural fertilisation. All aerosols can also experience further chemical changes, known as ‘ageing’ effects. So, point II is not correct. Sulfate and nitrate aerosols result primarily from the oxidation of sulfur dioxide and nitrogen oxides. They form the major component of particulate matter (PM2.5) and cause respiratory issues (asthma, reduced lung function), cardiovascular problems (heart attacks, stroke), inflammation, and increasing mortality, especially for vulnerable groups. northwestern and northern Indo-Gangetic Plain against long-range aerosol pollution."},{"id":36,"txt":"Under which one of the following legal provisions is noise regulated as an atmospheric pollutant in India?","ref":"","opts":["ir (Prevention and Control of Pollution) Act, 1981","Environment (Protection) Act, 1986","Noise Pollution (Regulation and Control) Rules, 2000","Factories Act, 1948"],"ci":0,"exp":"Ex: Noise is a form of atmospheric pollution transmitted through waves and has increased due to industrialization, urbanization, heavy traffic, and technological growth. It reduces human efficiency by acting as a distracter. Prolonged exposure above 90 decibels can cause hearing loss, while a single exposure of 150 decibels may lead to permanent ear damage. In India, noise is legally classified as an atmospheric pollutant under the Air (Prevention and Control of Pollution) Act, 1981 , as amended in 1987, which includes noise in the definition of “air pollutant.” The Environment (Protection) Act, 1986 provides the overarching framework to regulate noise. The Noise Pollution (Regulation and Control) Rules, 2000 , framed under the Environment Act, lay down ambient noise standards. The Factories Act, 1948 regulates workplace noise exposure but does not classify noise as an atmospheric pollutant."},{"id":37,"txt":"Oxybenzone and Octinoxate, frequently mentioned in the news, are primarily classified as:","ref":"","opts":["inorganic pigments used in high-grade industrial paints","synthetic organic compounds used as ultraviolet (UV) filters","naturally occurring enzymes used in biological wastewater treatment","Persistent Organic Pollutants (POPs) listed under the Stockholm Convention"],"ci":1,"exp":"Ex: Oxybenzone and octinoxate are chemicals that shield the skin from harmful ultraviolet (UV) rays. These are two of the most common ultraviolet (UV) filters used in sunscreens. Scientists have warned that sunscreen chemicals like Oxybenzone and octinoxate are accumulating in marine environments at alarming levels, posing a serious threat to marine life and coral reefs . Oxybenzone and octinoxate have been linked to coral bleaching , deformities in coral larvae, and reduced fertility in fish. Oxybenzone, in particular, is known to disrupt hormone function in marine organisms. Once in the ocean, these chemicals do not easily break down and can accumulate in the tissues of marine species, potentially affecting entire food chains . Wastewater treatment plants are largely ineffective in removing these contaminants, meaning they continue to circulate in the environment. These UV filters can disrupt the growth and reproduction of algae, sea urchins, and fish. alarming levels, posing a serious threat to marine life and coral reefs."},{"id":38,"txt":"With reference to the acid rain, consider the following statements:\n1. It primarily results from the atmospheric emission of sulfur dioxide and nitrogen oxides.\n2. Volcanic eruptions and lightning contribute to the gases responsible for acid rain.\n3. It causes the leaching of essential nutrients such as calcium and magnesium from the soil.\n4. It promotes a shift in soil microbial communities from fungi-dominated systems to bacteria-dominated systems.\nWhich of the statements given above are correct?","ref":"","opts":["I, II and III only","I, III and IV only","I and II only","II, III and IV only"],"ci":0,"exp":"Ex: Acid Rain is the formation of precipitation in the form of rain, fog, mist or snow that becomes acidic because of the presence of pollutants in the atmosphere. Acid rain is primarily caused by the release of sulfur dioxide (SO₂) and nitrogen oxides (NOₓ), mainly from fossil fuel combustion. These gases react in the atmosphere with water and oxygen to form sulfuric and nitric acids. So, statement I is correct. Natural sources such as volcanic eruptions (SO₂) and lightning (NOₓ formation) also contribute to background levels of acid-forming gases in the atmosphere. So, statement II is correct. Acid rain increases soil acidity , leading to the leaching of essential nutrients such as calcium and magnesium. This reduces soil fertility and adversely affects forest ecosystems. So, statement III is correct. Increased soil acidity generally suppresses bacterial activity and favours fungi, which are more tolerant of acidic conditions. Therefore, acid rain tends to shift soil microbial communities from bacteria-dominated to fungi-dominated systems , not the other way around. So, statement IV is not correct."},{"id":39,"txt":"With reference to lead and its health impacts,\nconsider the following statements:\n1. It is a potent neurotoxin.\n2. There is no World Health Organization (WHO) mandated safe threshold level for lead exposure.\n3. The use of leaded fuel has been completely ended worldwide.\n4. Approximately 85 per cent of the lead used globally goes into the manufacture of lead- acid batteries.\nWhich of the statements given above are correct?","ref":"","opts":["I and III only","II and III only","I, II and IV only","II, III and IV only"],"ci":2,"exp":"Ex: Lead is a naturally occurring element, a heavy metal. It can be found in batteries, construction materials, paints, glazes, gasoline additives, pewters, weights, ammunition, radiation shielding and cable covers. Lead is a potent neurotoxin that, with even low-level exposure, is associated with a reduction in IQ scores and shortened attention spans. So, statement I is correct. According to th e World Health Organization (WHO), there is no known safe level of lead exposure . Relatively low levels of lead exposure that were previously considered ‘safe’ have been shown to damage children’s health and impair their cognitive development. So, statement II is correct. The use of leaded fuel has not been completely ended worldwide across all applications. Although, the year 2021 has marked the end of leaded petrol worldwide, leaded fuel continues to be used in certain non-road applications such as aviation gasoline (avgas) for piston-engine aircraft and in limited specialty motorsports. So, statement III is not correct. Today, approximately 85 per cent of the lead used worldwide goes into the production of lead-acid batteries . These batteries are used in traditional and electric vehicles, back-up power supplies for consumers, critical systems such as hospitals and telecommunications, and for green technologies, such as photovoltaic and wind turbine energy storage. So, statement IV is correct."},{"id":40,"txt":"Consider the following:\n1. Manufacture of synthetic detergents\n2. Air conditioning\n3. Manufacture of aerosol sprays\n4. Dry cleaning Chlorofluorocarbons (CFCs) have applications in\nhow many of the above sectors?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":2,"exp":"Ex: Chlorofluorocarbons (CFCs) , also known as freons, are nonreactive, non-flammable, and non-toxic organic compounds. They are classified as halocarbons, containing carbon atoms bonded to halogen atoms such as chlorine and fluorine. CFCs have been widely used in various applications due to their stable and inert properties. They are commonly used in: Refrigerators and air conditioners as refrigerants. So, point II is correct. Aerosol sprays as propellants. So, point III is correct.   Specific chlorofluorocarbons (CFCs) were extensively used as solvents in the dry-cleaning industry. So, point IV is correct These compounds were also employed in the production of plastic foam and as solvents in the electronics industry. However, CFCs are not used in the manufacturing of synthetic detergents , which are typically made from sodium salts, hydrocarbons, fats, ammonium salts and sulfonic acids. So, point I is not correct. Knowledge Box The release of CFCs into the atmosphere has been a major contributor to ozone layer depletion. In the stratosphere, CFCs are broken down by ultraviolet (UV) radiation, releasing chlorine radicals that catalytically destroy ozone molecules. This has led to the adoption of the Montreal Protocol (1987), which restricts the production and release of CFCs to protect the ozone layer."},{"id":41,"txt":"Diethylene glycol and ethylene glycol, both toxic substances, are found in which of the following?\n1. Industrial solvents\n2. Antifreeze agents\n3. Agricultural pesticides\nSelect the correct answer using the code given below:","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":0,"exp":"Ex: Diethylene glycol (DEG) and ethylene glycol (EG) are toxic, colorless, odorless liquids commonly used in various industrial applications. They can cause serious health problems, including kidney failure, neurological damage, and even death. Diethylene glycol (DEG) and ethylene glycol (EG) are likely to be found in the following: Industrial Solvents: Both DEG and EG are used as industrial solvents. Their chemical properties allow them to dissolve various substances, making them useful in the production of products like resins, inks, and certain types of plastics . So, point I is correct. Antifreeze Agents: DEG and EG are commonly used in antifreeze and coolant formulations . They are effective in lowering the freezing point of water, which makes them ideal for use in automotive coolants to prevent engines from freezing in cold temperatures and overheating in hot conditions. So, point II is correct. The primary and extensive uses of ethylene glycol (EG) and diethylene glycol (DEG) are as industrial solvents and antifreeze/coolant agents . These substances are industrial chemicals and are not primary active ingredients in widely used agricultural pesticides , whose main function is pest control. So, point III is not correct. Knowledge Box Diethylene glycol (DEG) and ethylene glycol (EG) are not found in most e - cigarette liquids. While some e- cigarette liquids may contain ethylene glycol, it's usually at levels that are unlikely to cause adverse health effects. So, point 3 is not correct. counter medicines contaminated with DEG/EG."},{"id":42,"txt":"Which of the following environmental concerns is typically associated with the combustion of fuels refined from sour crude oil, as compared to fuels derived from sweet crude oil?","ref":"","opts":["Fuels from sour crude produce lower sulfur dioxide (SO₂) emissions than fuels from sweet crude","Fuels from sour crude have a higher risk of causing acid rain than fuels from sweet crude","Fuels from sour crude generate less particulate matter than fuels from sweet crude without emission controls","Fuels from sour crude have the same impact on atmospheric pollution as fuels from sweet crude"],"ci":1,"exp":"Ex: Sour crude oil c ontains a relatively high concentration of sulfur compounds. In refining, these sulfur compounds eventually end up in the hydrocarbon products (like diesel and gasoline) if not fully removed. When such sulfur-containing fuels are combusted in engines or power plants, the sulfur is oxidised to sulfur oxides (SOₓ), es pecially sulfur dioxide (SO₂). High SO₂ emissions are a major cause of acid rain and atmospheric pollution. Fuels from sour crude generally produce more particulate matter and pollutants without emission controls, as they are often heavier and contain more contaminants like metals and heavier hydrocarbons. In contrast, sweet crude oil has lower sulfur content and produces fewer sulfur oxides during combustion and refining, resulting in a comparatively lower contribution to acid rain and SOₓ -related air pollution. Refineries handling sour crude therefore require additional desulfurisation processes, increasing complexity and environmental risk."},{"id":43,"txt":"With reference to the National Clean Air Programme (NCAP), consider the following statements:\n1. It aims to achieve up to a 40% reduction in particulate matter (PM) concentrations by 2026.\n2. It uses 1990 as the baseline year for comparing air pollutant concentration levels.\n3. The \"PRANA\" portal has been launched to monitor the implementation of the programme.\nWhich of the statements given above is/ are correct?","ref":"","opts":["I only","I and III only","II and III only","I, II and III"],"ci":1,"exp":"Ex: The National Clean Air Programme (NCAP) initially targeted a 20–30% reduction in PM concentrations by 2024 , which was later revised to a 40% reduction by 2026 . So, statement I is correct. It was launched by the Ministry of Environment, Forests and Climate Change (MoEFCC) in January 2019. It is implemented by the Central Pollution Control Board (CPCB) at the national level. NCAP uses 2017–18 as the baseline year , not 1990, for assessing changes in air pollutant concentrations. So, statement II is not correct. The PRANA (Portal for Regulation of Air-pollution in Non-Attainment cities ) portal is a national platform for monitoring the implementation and progress of City Action Plans in non-attainment cities. So, statement III is correct. Under NCAP, non-attainment cities are identified based on persistent exceedance of National Ambient Air Quality Standards (NAAQS) over a longer assessment period (generally five consecutive years) , not three years."},{"id":44,"txt":"Consider the following pairs: Disease Pollutant\n1. Itai- Itai Cadmium\n2. Methaemoglobinaemia Arsenic\n3. Blackfoot Nitrate\n4. Minamata Mercury\nHow many of the pairs given above are not correctly matched?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":1,"exp":"Ex: Pollutants are harmful physical, chemical, or biological substances introduced into the environment that adversely affect human health and ecosystems. Exposure to air, water, and soil pollutants is closely linked to a wide range of diseases, including respiratory and cardiovascular disorders, neurological impairments, cancers, and water-borne illnesses. Itai-itai disease : It is caused by Cadmium (Cd) exposure, produced as a result of human activities related to industrialisation and this condition was first recognised in Japan in the 1960s. It is characterised by osteomalacia with severe bone pain and is associated with renal tubular dysfunction. So, pair I is correctly matched.   Methemoglobinemia (Blue baby syndrome): It is also known as cyanosis, is a condition that makes a baby's skin appear blue or bluish-grey, especially around the lips and hands. When a baby consumes too many nitrates, their gut converts them to nitrites , which oxidize the iron in hemoglobin. This process produces methemoglobin, which prevents red blood cells from carrying oxygen properly. So, pair II is not correctly matched. Blackfoot disease : Arsenic Chronic exposure to arsenic causes skin lesions and peripheral vascular disease , commonly known as Blackfoot disease . So, pair III is not correctly matched. Minamata disease: It is a chronic neurological disorder caused by methylmercury poisoning. It was caused by the consumption of fish and shellfish contaminated with methylmercury, which was discharged into the environment as a byproduct of manufacturing at chemical plants. It was first discovered in Minamata city in Kumamoto prefecture, Japan in 1956. So, pair IV is correctly matched. So, only two of the pairs given above are not correct. Knowledge Box Asbestosis: It is a chronic lung disease caused by the inhalation of asbestos fibers , leading to lung tissue scarring and respiratory issues. Workers in industries like construction and shipbuilding are particularly at risk. Silicosis: It is caused by prolonged exposure to silica dust , commonly affecting workers in mining, quarrying and sandblasting industries. It leads to lung fibrosis and impaired lung function. Chronic Bronchitis: It often results from long-term exposure to pollutants like cigarette smoke, industrial fumes and air pollution , chronic bronchitis involves persistent inflammation of the bronchi in the lungs. Berylliosis: It is a lung disease caused by inhaling beryllium dust or fumes, primarily affecting workers in industries that use this metal, such as aerospace and electronics manufacturing."},{"id":45,"txt":"What are the potential consequences of a persistent “Brown Tide” in a coastal ecosystem?\n1. Starvation of filter-feeding organisms such as oysters and clams\n2. Mortality of seagrasses due to reduced light penetration caused by shading\n3. Increase in the commercial yield of coastal fisheries due to enhanced nutrient availability\nSelect the correct answer using the code given below:","ref":"","opts":["I only","I and II only","II and III only","I, II and III"],"ci":1,"exp":"Ex: A brown tide is a type of harmful algal bloom caused by the rapid growth of certain microscopic algae , which discolors coastal waters to a brownish hue. Brown tides are commonly associated with blooms of the microscopic alga Aureococcus anophagefferens . These algae are extremely small and nutritionally poor, making them unsuitable for effective filtration by organisms such as oysters and clams , which can lead to starvation and large-scale mortality of filter feeders. So, statement I is correct. Dense brown tide blooms significantly reduce light penetration in the water column. This persistent shading prevents seagrasses from carrying out photosynthesis, resulting in their decline or death and the loss of vital coastal habitats. So, statement II is correct. Rather than enhancing fisheries, brown tides typically reduce commercial fishery yields . The loss of seagrass nurseries and the development of hypoxic conditions associated with dense algal blooms disrupt marine food webs and lead to ecosystem degradation. So, statement III is not correct."},{"id":46,"txt":"Consider the following factors:\n1. Increased salinity of the ocean\n2. Coastal upwelling\n3. Industrial and domestic waste disposal\n4. Decreased temperature of the ocean\nHow many of the above factors increase the acidification in the oceans?","ref":"","opts":["Only one","Only two","Only three","ll the four 8 Vajiram & R avi's P r elims C A M P - 2026 est-Environment-EVT-2 T"],"ci":2,"exp":"Ex: Ocean acidification is the progressive lowering of ocean pH due to the absorption of atmospheric carbon dioxide, which alters seawater chemistry and threatens marine ecosystems. Increased salinity does not cause ocean acidification. Higher salinity slightly reduces the solubility of CO₂ in seawater and therefore does not enhance, and may marginally slow, the rate of acidification. So, point I is not correct. Coastal upwelling brings naturally CO₂ -rich, cold deep waters to the surface, which are inherently more acidic than surface waters, thereby intensifying local ocean acidification. So, point II is correct. Industrial and domestic waste disposal may increase acidity locally. Such discharges can introduce acidic substances or promote biochemical processes that elevate CO₂ levels, contributing to regional or short-term acidification , though not at the global scale . So, point III is correct. A decrease in ocean temperature increases the solubility of CO₂ in seawater, leading to greater absorption of atmospheric CO₂ and enhanced local acidification. So, point IV is correct. So, only three of the factors given above increase the acidification of oceans."},{"id":47,"txt":"Consider the following statements:\n1. About 90% of its industrial plants rely on fresh water.\n2. It contributes about 60% of particulate matter (PM) emissions.\n3. It is responsible for nearly 45% of sulphur dioxide (SO₂).\n4. It emits around 80% of mercury (Hg) released from industrial sources. The above statements best describe which one of the following sectors in India?","ref":"","opts":["ement manufacturing industry","Iron and steel industry","Thermal power generation sector","Textile industry"],"ci":2,"exp":"Ex: The description best applies to the thermal power generation sector , particularly coal-based thermal power plants , due to the following reasons: In India, nearly 90% of thermal power plants including coal-, gas-, and nuclear-based plants depend on freshwater for cooling, making the sector the largest industrial consumer of water. Major source of particulate matter: Large-scale coal combustion makes thermal power plants the largest contributors to particulate matter (PM) emissions , despite pollution control devices. Significant SO₂ emissions: Burning coal releases substantial amounts (nearly 45% of all the industries) of sulphur dioxide and nitrogen oxides , together accounting for about half of national industrial SO₂ and NOₓ emissions . Dominant source of mercury: Coal contains trace amounts of mercury , and coal-based power plants are responsible for nearly 80% of industrial mercury emissions ."},{"id":48,"txt":"Consider the following statements:\nStatement I: Zinc oxide is widely used as a catalyst in environmentally sustainable technologies.\nStatement II: Zinc Oxide, when exposed to light, degrades pollutants into harmless by-products.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["oth Statement I and Statement II are correct and Statement II explains Statement I","oth Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct"],"ci":0,"exp":"Ex: A photocatalyst is defined as a substance activated by adsorbing a photon and capable of accelerating a reaction without being consumed. These substances are invariably semiconductors. It can be used as a sustainable technology for cleaning up the environment.   Titanium dioxide (TiO2), zinc oxide (ZnO), and tungsten trioxide (WO3) are notable catalysts used for photocatalytic degradation of organic pollutants due to their high surface area and stability. When exposed to light, they generate electron-hole pairs that degrade pollutants into harmless by-products . So, statements I and II are correct. So, both statement–I and statement–II are correct and statement–II explains statement–I. Knowledge Box Advanced oxidation processes : It refers to a set of chemical treatment procedures designed to remove organic materials in water and wastewater by oxidation through reactions with hydroxyl radicals. Semiconductors are used as photocatalysts in Advanced oxidation processes to photocatalytically degrade organic contaminants. The textile, paper, cosmetics, pharmaceutical, and food industries all make extensive use of colored dyes. Most of these colored dyes are of synthetic origin and are a major source of water contamination. So, the decomposition of dyes into non-toxic compounds is essential. Photocatalytic degradation can be used for the removal of such dyes. developed an innovative metal oxide nanocomposite for photocatalytic degradation of organic pollutants."},{"id":49,"txt":"Consider the following:\n1. Radon\n2. Volatile Organic Compounds (VOCs)\n3. Mold\n4. Argon\nHow many of the above are sources of indoor air pollution?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":2,"exp":"Ex: Indoor air pollution arises from the release of harmful pollutants within enclosed spaces, including fine particulate matter, carbon monoxide, and various other toxins. This issue is particularly severe in developing countries, where indoor fuel combustion for cooking and heating is common. Radon comes from the natural decay of the radioactive chemical elements uranium or thorium. These elements are found in nearly all soils. Radon gas typically moves up through the ground and comes into homes through cracks in floors, walls and foundations. So, point I is correct. Cleaning products often contain chemicals that release toxic fumes, polluting indoor air. Inhalation of these fumes can lead to respiratory infections, asthma, and even cancer. Many of these products also contain Volatile Organic Compounds (VOCs), which easily evaporate at room temperature, causing health issues like headaches, nausea, and potential damage to the liver, kidneys, and central nervous system. So, point II is correct. Mold is a type of fungi. It is a common indoor air pollutant that thrives in damp, humid environments, such as walls, floors, ceilings, and basements. It can trigger respiratory issues, asthma, and allergies, especially in those with weakened immune systems or pre-existing conditions. So, point III is correct. Argon is a naturally occurring, inert noble gas that constitutes nearly 1% of the Earth’s atmosphere . It is chemically stable and non-toxic , and therefore does not act as a conventional indoor air pollutant under normal conditions. So, point IV is not correct. So, only three of the above are the sources of indoor air pollution."}],"m":null,"tt":3000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

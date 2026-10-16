@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>VAJIRAM CAMP 2026 = 09</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>VAJIRAM CAMP 2026 = 09</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="VAJIRAM CAMP 2026 = 09">VAJIRAM CAMP 2026 = 09</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following statements with regard to the foreign investment in India:\n1. Any foreign investment of 10% or more in the equity or voting power of an enterprise in India is classified as Foreign Direct Investment.\n2. Foreign Institutional Investment in India is treated as a component of Foreign Portfolio Investment (FPI).\n3. FPI generally includes investments in government bonds, treasury bills, or corporate bonds where the investor does not seek managerial control.\nWhich of the statements given above are correct?","ref":"","opts":["I, II and III","I and II only","II and III only","I and III only"],"ci":0,"exp":"Ex: Foreign capital can be accessed in two ways, one is Foreign Direct Investment (FDI) and the other is Foreign Portfolio Investment (FPI). In India, Foreign Institutional Investment (FII) is a part of FPI. So, statement II is correct. The acquisition of at least ten percent of the ordinary shares or voting power in a public or private enterprise by non-resident investors makes it eligible to be categorized as (FDI). In India, a particular FII/FPI is allowed to invest upto 10% of the paid up capital of a company, which implies that any investment above 10% will be construed as FDI. So, statement I is correct. There are usually three ways of making an FDI. It involves creating a joint venture , through merger and acquisition , and by establishing a subsidiary company . FPI is an investment in a foreign country where the investing party does not seek control over the management. It takes the form of the purchase of equity in a foreign stock market or credit or capital from private or official sources. Portfolio investments are influenced by short term gains. So, statement III is correct. Investing in debt instruments like government bonds, treasury bills , or corporate bonds by foreign entities is a classic example of Foreign Portfolio Investment (FPI). FII can invest in the securities in the primary and secondary markets including shares, debentures and warrants of companies unlisted, listed or to be listed on a recognized stock exchange in India. FIIs are allowed to subscribe to new securities or trade in already issued securities."},{"id":1,"txt":"Consider the following statements with reference to Zero Defect Zero Effect Scheme:\n1. It aims to lead Micro Small and Medium Enterprises to expand their markets while reducing wastages.\n2. It is an initiative of the Ministry of Commerce and Industry.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":0,"exp":"Ex: Zero Defect Zero Effect Scheme (ZED): It aims to lead Micro Small and Medium Enterprises (MSMEs) to assure customers, reduce wastages substantially, increase productivity, expand their markets, apart from saving on energy , etc. So, statement I is correct. The scheme comprises an extensive drive to create awareness in MSME about ZED and motivate them for ZED manufacturing and support them through navigating the various levels . Thus, an ecosystem for competitive, clean and green manufacturing, development of world-class quality products, reduction in emission level of greenhouse gases, reduction in defects/wastage and support for expanding markets for MSMEs. It is an initiative by the Union Ministry of Micro, Small & Medium Enterprises ( MSME). So, statement II is not correct."},{"id":2,"txt":"Consider the following:\n1. A large number of buyers and sellers\n2. Each firm earns normal profits\n3. No interference from the government\n4. Zero advertising cost\nHow many of the above are the characteristics of ‘perfect competition’ in the market?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":3,"exp":"Ex: Perfect competition describes a market structure where competition is at its greatest possible level. To make it clearer, a market that exhibits the following characteristics in its structure is said to show perfect competition: A large number of buyers and sellers. So, point I is correct. Homogenous products are produced by every firm. Each firm earns normal profits and no firm can earn supernormal profits. So, point II is correct Every firm is a price taker. It takes the price as decided by the forces of demand and supply. No government intervention. So, point III is correct. Zero advertising cost. So, point IV is correct."},{"id":3,"txt":"Consider the following:\n1. Coal mining for captive consumption\n2. Greenfield pharmaceutical companies\n3. Insurance companies\n4. Railway operations\n5. Greenfield airport projects\nHow many of the above sectors in India have been allowed 100% Foreign Direct Investment through the Automatic route?","ref":"","opts":["Only two","Only three","Only four","ll the five"],"ci":1,"exp":"Ex: Foreign Investment in India is governed by the Foreign Direct Investment (FDI) policy announced by the Government of India and the provisions of the Foreign Exchange Management Act (FEMA) 1999. 100% FDI under automatic route for the Coal & Lignite mining for captive consumption by sectors such as iron & steel and cement units and other eligible activities permitted. So, point I is correct. For Greenfield pharmaceutical companies, 100% FDI is under automatic route. For Brownfield pharmaceutical companies, 100% FDI but automatic is allowed only up to 74%. So, point II is correct. 74% FDI under automatic route for the insurance company. 100% FDI under automatic route Intermediaries or Insurance Intermediaries. The FDI in Life Insurance Corporation (LIC) is restricted to 20% under the approval route. So, point III is not correct. 100% FDI under the automatic route is allowed in airports – green field projects and existing projects, Helicopter services/seaplane services requiring DGCA approval, Ground Handling Services, and Maintenance and Repair organizations. So, point V is correct. Sectors not open to private sector investments – atomic energy, and railway operations (other than permitted activities mentioned under the consolidated FDI Policy). So, point IV is not correct."},{"id":4,"txt":"With reference to Production Linked Incentive (PLI) schemes in India, consider the following statements:\n1. The manufacturing companies are given a cash subsidy on the new sales of manufactured goods for about five years from the base year.\n2. A company must have at least two manufacturing units based in India to avail the benefits of the scheme.\n3. The final proposals of PLI are appraised by the Expenditure Finance Committee under the Ministry of Finance.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: Production Linked Incentives (PLIs), provided by the Central government to identified sectors, gives a rebate to producers, calculated as a certain percentage of sales of the producer to encourage manufacturing in India. These companies receive an incentive in the form of a cash subsidy on the new sales of goods manufactured in India for about five years from the base year. So, statement I is correct. Intent of the PLI scheme is to crowd in Private Investment in the manufacturing sector and reduce dependence on imports by providing incentives to all the Companies (Indian and Foreign) in specific sectors, which are registered in India and having one or more than one manufacturing units based in India. So, statement II is not correct. The final proposals of PLI will be appraised by the Expenditure Finance Committee (EFC) under the Ministry of Finance and approved by the Cabinet. So, statement III is correct."},{"id":5,"txt":"Which one of the following best describes the situation of ‘poverty trap’ in an economy?","ref":"","opts":["situation where people remain poor because government welfare reduces incentives to work","spiraling mechanism which forces people to remain poor without allowing them to escape it","situation where poverty increases due to high inflation in the economy","temporary fall in living standards due to an economic recession"],"ci":1,"exp":"Ex: The poverty trap is a spiraling mechanism which forces people to remain poor. It is so binding in itself that it doesn't allow the poor people to escape it. It is not merely the absence of economic means but is created due to a mix of factors, such as access to education and healthcare, working together to keep an individual or family in poverty. Poverty trap generally happens in developing and under-developing countries and is caused by a lack of capital and credit to people. The poverty trap is seen as an “S-shaped” curve : the poor are stuck on the left side of the graph below the diagonal line, wherein future income is lower than present income, and it continues to decrease over time."},{"id":6,"txt":"With reference to Patents in India, consider the following statements:\n1. A patent granted in India can only be enforced in India.\n2. A published or disclosed invention cannot be patented in any case.\n3. The term of the patent is five years from the date of filing for all types of inventions.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: A patent is an exclusive ownership right granted by a country to the owner of an invention, provided the invention satisfies certain conditions stipulated in the law. A patent is a property right and hence, it can be gifted, inherited, assigned, sold or licensed. As the right is conferred by the State, it can be revoked by the State under very special circumstances for the benefit of the public even if the patent has been sold or licensed or manufactured or marketed in the meantime. The patent right is territorial in nature meaning thereby, that a patent granted in India can only be enforced in India. So, statement I is correct. A published or disclosed invention cannot be patented. However, a grace period of 12 months is available in India for filing a patent application after disclosure of the invention through publication or display. This grace period is available only when such publications or displays are done in government notified exhibitions or paper read before learned society. So, statement II is not correct. The term of the patent is 20 years from the date of filing for all types of inventions. So, statement III is not correct."},{"id":7,"txt":"Consider the following information: In the current employment scenario, modern workplace trends are observed like, ___ is about just doing bare minimum work to be employed and meeting performance expectations. While,__ is where unfavourable conditions compel people to resign on their own. Also, a practice of ___ quite common these days where an employee is having a second job, typically secretly, while keeping the primary job.\nWhich of the following correctly fill in the blanks in the correct order?","ref":"","opts":["Quiet firing, quiet quitting and moonlighting","Moonlighting, quiet firing and quiet quitting","Quiet quitting, quiet firing and moonlighting","Quiet firing, moonlighting and quiet quitting"],"ci":2,"exp":"Ex: Quiet quitting is about keeping one’s job, just doing bare minimum work to be employed and meeting performance expectations. The idea is to use the after-work hours to earn money by moonlighting. Moonlighting is defined as having a second job , typically secretly, while keeping the primary job. The name moonlighting was coined in the US to depict work after regular office hours. Moonlighting or Dual employment is an offence due to confidentiality breach. Moonlighting clauses are added to employment agreements; violation of these clauses amounts to confidentiality breach and conflict of interest. They could use the IP, tools, and processes from their primary job in the second job, which is legally, and ethically, wrong. Quiet firing refers to unfavourable conditions that compel people to resign on their own . The tactic helps companies cut costs by avoiding severance packages for resigning employees and it intentionally creates a deteriorating work environment—such as through overwork, stalled promotions, and lack of support."},{"id":8,"txt":"Consider the following:\n1. No member of the household aged 10 years or older has completed six years of schooling\n2. Primary source of cooking fuel is dung, charcoal or wood\n3. A man between the ages of 15 to 54 years is found to be undernourished\n4. No household member has a bank account A household is considered deprived if it fulfils\nhow many of the above criteria as per the National Multidimensional Poverty Index?","ref":"","opts":["Only one","Only two","Only three","ll the four est-Economics-ET-05 T"],"ci":3,"exp":"Ex: The National Multidimensional Poverty Index was developed by NITI Aayog to monitor the performance of States and Union Territories (UTs) in addressing multidimensional poverty. According to it: A household is considered deprived if any child between the ages of 0 to 59 months, or woman between the ages of 15 to 49 years , or man between the ages of 15 to 54 years - for whom nutritional information is available - is found to be undernourished. So, point III is correct. A household is deprived if any child or adolescent under 18 years of age has died in the household in the five-year period preceding the survey. A household is deprived if not even one member of the household aged 10 years or older has completed six years of schooling. So, point I is correct. A household is deprived if the primary source of cooking fuel is dung, agricultural crops, shrubs, wood, charcoal or coal. So, point II is correct. No household member has a bank account or a post office account. So, point IV is correct. So, a household is considered deprived if it fulfils all four of the above criteria as per the National Multidimensional Poverty Index."},{"id":9,"txt":"With reference to digital payment infrastructure in India in 2025-26, consider the following statements:\n1. Unlike UPI Lite, UPI 123Pay requires the internet for the transfer of funds.\n2. While UPI 123Pay allows a maximum transfer of Rs. 10,000 per transaction, UPI Lite allows a maximum transfer of Rs. 1000 per transaction.\n3. Unlike UPI Lite, it is not mandatory to enter UPI PIN for every transaction through UPI 123PAY.\nHow many of the above given statements are correct?","ref":"","opts":["Only one","Only two","ll three","None"],"ci":0,"exp":"Ex: UPI 123PAY is an instant payment system for feature phone users who can use Unified Payments Interface (UPI) payment service in a safe and secure manner. UPI 123Pay is a Suite of solutions developed for Non Smart phone/feature phone users to use the UPI without internet connectivity. UPI LITE is a new payment solution that leverages the trusted NPCI Common Library (CL) application to process low value transactions. UPI Lite is an \"on-device wallet\". To use UPI Lite, users must first contribute money to the app's wallet from their bank accounts. Users can make real-time payments without the Internet because it is a \"on-device wallet.”   UPI 123Pay is a Suite of solutions developed for Non Smart phone, feature phone users to use the UPI without internet connectivity . There are no charges for transactions under UPI 123PAY. Through UPI 123PAY, feature phone users will now be able to undertake a host of transactions based on four technology alternatives. They include calling an IVR (interactive voice response) number, app functionality in feature phones, missed call-based approach and also proximity sound-based payments . So, statement I is not correct. UPI LITE X allows offline payments without internet connectivity, enhancing the existing UPI LITE functionalities in a much more effective manner. Per transaction limit of UPI payment on UPI 123PAY from feature phone was Rs 5000. The Reserve Bank of India (RBI) has announced an increase in the transaction limits for UPI 123Pay. The per-transaction limit for U PI 123Pay has been raised from ₹5,000 to ₹10,000. Per day transactions limit of UPI payment on UPI 123PAY from feature phone is Rs 1,00,000. In its latest MPC meeting, the Reserve Bank of India (RBI) has announced a hike in the UPI Lite per transaction limit to Rs 1,000 from Rs 500. So, statement II is correct. While registering the account with UPI 123PAY, a customer has to set up a 4-6 digit UPI PIN. Customers have to enter UPI PIN every time he makes the transactions through UPI 123PAY. A UPI PIN is not required for transactions under limit using UPI Lite. UPI LITE does not require a separate authorization or UPI PIN to complete a transaction . So, statement III is not correct. So, only one of the above given statements is correct."},{"id":10,"txt":"Consider the following information: Port State Known for\n1. Paradip Odisha India's first corporatized major port\n2. Kamarajar Maharashtra India’s largest cargo handler\n3. V. O. Tamil Nadu Hosts Chidambaranar India's first port- based green hydrogen project\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: Paradip Port , located in Odisha on India's east coast at the Mahanadi River delta, is a crucial deep-water major port, serving as a vital gateway for trade, handling vast amounts of cargo like coal and iron ore, and driving economic growth for central & eastern India through excellent rail/road links, making it a key player in India's maritime ambitions. It has retained its position as India’s largest cargo handler , managing 13.14 million tonnes—18.04 per cent of the total—up from 12.96 million tonnes in June 2024. So, row I is not correctly matched. Kamarajar Port , formerly known as Ennore Port, is located in Tamil Nadu . It is a major port and the first port in India which is a public company. It was declared as a major port under the Indian Ports Act, 1908, in March 1999. It is the only corporatized major port and is registered as a company . The port is owned by Chennai Port Trust, which also operates the Port of Chennai. So, row II is not correctly matched. V.O. Chidambaranar Port (VOC Port) , located in Tamil Nadu , is a major artificial seaport on India's southeast coast, vital for trade, handling coal, containers, and other cargo, known for its strategic location near international sea routes and recent pioneering efforts in green energy, including India's first port- based green hydrogen project . So, row III is correctly matched."},{"id":11,"txt":"Which one of the following best defines the term ‘Knowledge Economy’?","ref":"","opts":["n economy that uses digitized information and knowledge as key factors of production","n economy that is fuelled by innovation, research, and rapid technological advancement","n economy where information is as valued as a capital good","business conducted through markets whose infrastructure is based on the internet"],"ci":1,"exp":"Ex: The concept of a knowledge-based economy is more than an information economy as the former is broader as, in addition to technical knowledge, it also includes culture, social and managerial knowledge . It is characterized by the presence of a higher percentage of highly skilled employees whose jobs require special knowledge or skills.   In the new knowledge economy, the most valuable assets that a company owns are often intangible assets – such as patents, copyrights, or proprietary software or processes. It is in contrast to previous economic epochs – the agrarian economy, where land was usually the primary asset, and the industrial economy, where manufacturing plants and equipment were key assets for most businesses. The knowledge economy both supports, and is fuelled by, innovation, research, and rapid technological advancement. The overwhelming majority of workers in the knowledge economy are extremely computer-literate and skilled at creating business and financial models. There is an increasing emphasis on data collection and analysis, and on the development of algorithms and artificial intelligence (AI)."},{"id":12,"txt":"Consider the following pairs: Type of Foreign Feature Direct Investment\n1. Greenfield A foreign entity Investment makes investment in an existing company\n2. Brownfield A foreign company Investment establishes a new business\n3. Acquisition A foreign entity purchases an existing company in the host country\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: Foreign Direct Investment (FDI) refers to investments made by foreign entities in Indian businesses. It refers to the investment made by an individual or a company in business interests located in another country. The main types of Foreign Direct Investment (FDI) include greenfield investments, brownfield investments, joint ventures, and mergers and acquisitions . Greenfield Investment involves creating a new business entity by a foreign entity from scratch in a country. It allows complete control over operations and the establishment of facilities tailored to the investor’s specifications. So, pair I is not correctly matched. Brownfield Investment entails acquiring or leasing existing facilities and operations in the host country. It is often quicker to implement than greenfield investments, as it utilizes already established infrastructure and market presence. So, pair II is not correctly matched. Mergers and Acquisitions involve purchasing an existing company in the host country. It enables immediate market entry and access to established customer bases, although it may involve more regulatory scrutiny and cultural integration challenges. It involves the consolidation of companies or major business assets through financial transactions between companies. So, pair III is correctly matched. So, only one of the pairs given above is correctly matched."},{"id":13,"txt":"Consider the following:\n1. Lower interest rates in developed countries\n2. Existence of multiple profitable exits from India\n3. Rising protectionism and geopolitical tensions\nHow many of the above factors can lead to the decline in the inflow of Foreign Direct Investments into India?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":1,"exp":"Ex: The United Nations Conference on Trade and Development (UNCTAD)’s World Investment Report 2024 highlights that global Foreign Direct Investments (FDI) declined marginally by 2 per cent to USD 1.3 trillion in 2023 from USD 1.4 trillion in 2022. This declining trend was also seen in India. The decline in global FDI flows has also impacted FDI flows to India. Net FDI inflows to India declined from USD 42.0 billion during FY23 to USD 26.5 billion in FY24. However, gross FDI inflows moderated only by 0.6 percent from USD 71.4 billion in FY23 to just under USD 71 billion in FY24. In other words, there was no change in investor interest in India. The contraction in net inflows was primarily due to a surge in repatriation/disinvestment due to many profitable exits. A market that allows investors to take profits and exit their investments is a healthy one. That is why the repatriation of investment increased from USD 29.3 billion in FY23 to USD 44.5 billion in FY24. So, point II is correct. The decline in FDI inflows in recent years is also attributable to higher interest rates in developed countries and the buoyant global stock market. So, point I is not correct.   FDI inflows can be divided into physical and digital for further analysis. Physical FDI includes sectors such as automobiles, pharmaceuticals, and construction, while digital FDI includes computer services, telecommunications, consultancy services, and information and broadcasting. Nomura’s Global Market Research May 2024, ‘Asia’s New Flying Geese’, highlights that rising protectionism and geopolitical tensions have triggered the stagnation of physical FDI. One factor exacerbating this trend is the growing prevalence of non-equity modes of international production, such as contract manufacturing, third-party outsourcing or franchising. So, point III is correct. The fall in digital FDI has much to do with tech start-ups. Following a big increase during the pandemic, global flows into tech start-ups have fallen, a global trend in flows that is mirrored in India as well."},{"id":14,"txt":"Consider the following information: “The countries who, despite economic growth and falling poverty rates, are never able to become high-income countries”. The above countries are most likely:","ref":"","opts":["trapped in a poverty paradox","experiencing secular stagnation","facing a middle-income trap","undergoing premature de-industrialization"],"ci":2,"exp":"Ex: In 2007, a World Bank report coined the concept of the “middle-income trap.” At the time, the term was used to describe countries mostly in Latin America and the Middle East who, despite economic growth and falling poverty rates, were never able to become high-income countries. The World Bank’s report describes the “middle-income trap” as a situation where middle-income countries face serious headwinds related to economic growth , wage competition and innovation, and often rely on “policies predicated on superficial measures of economic efficiency.” The circumstances make middle-income countries “ especially prone to premature slowdowns in development .” Today, roughly 75% of the global population live in middle-income countries, including an estimated 66% of people who live in extreme poverty, according to the World Bank report. Middle-income countries, the report adds, are responsible for 40% global economic output."},{"id":15,"txt":"According to the gravity model of international trade, bilateral trade between two countries is most strongly determined by which of the following?","ref":"","opts":["ifference in their agricultural output","Product of their GDPs and the distance","vailability of the natural resources","Similarity between the exchange rate regimes"],"ci":1,"exp":"Ex: The gravity model of international trade is a model that predicts the volume of trade between two countries based on their economic size and distance . The gravity model of international trade predicts that the flow of goods between two locations is positively related to their economic size (or income levels) and negatively related to the distance between them. The gravity equation in international trade is one of the most robust empirical findings in economics. It says that bilateral trade between two countries is proportional to their respective sizes measured by their GDP, and inversely proportional to the geographic distance between them. Both the role of distance and economic size are remarkably stable over time. For example: If an exporting country doubles in GDP size, its aggregate exports double. Symmetrically, if an importing country doubles in GDP size, its aggregate imports double."},{"id":16,"txt":"Consider the following statements with regard to the Purchasing Managers’ Index (PMI) and Index of Industrial Production (IIP):\n1. While PMI is a widely used economic indicator to assess the health of a country's manufacturing or services sector, IIP shows the growth rates in different industry groups.\n2. Both PMI and IIP are published by the Central Statistical Organisation (CSO) on a monthly basis.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":0,"exp":"Ex: Purchasing Managers’ Index (PMI) is a survey-based economic indicator designed to provide a timely insight into business conditions. The PMI is widely used to anticipate changing economic trends in official data such as the Gross Domestic Product (GDP). It is a widely used economic indicator that assesses the health of a country's manufacturing or services sector. So, statement I is correct.   The Index of Industrial Production (IIP) is an index which shows the growth rates in different industry groups of the economy in a stipulated period of time. The PMI is produced globally by S&P Global . A PMI above 50 represents an expansion when compared with the previous month. A PMI reading under 50 represents a contraction while a reading at 50 indicates no change. The further away from 50, the greater the level of change. The Purchasing Managers' Index results are released on the first Monday of every month. The IIP index is computed and published by the Central Statistical Organisation (CSO) under the National Statistical Office, on a monthly basis. So, statement II is not correct. IIP is a composite indicator that measures the growth rate of industry groups classified under: Broad sectors, namely, Mining, Manufacturing and Electricity Use-based sectors, namely Basic Goods, Capital Goods and Intermediate Goods."},{"id":17,"txt":"Consider the following:\n1. Devaluation of Indian currency\n2. Prices to be determined by the market in industries\n3. Abolition of import licensing for the products\n4. Removal of quantitative restrictions on imports\nHow many of the above steps were taken by the Government of India in response to the economic crisis of 1991?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":3,"exp":"Ex: India was facing a Balance of Payments (BoP) crisis , towards the end of the 1980s, due to unsustainable borrowing and high expenditure. The Current Account Deficit (3.5 percent) in 1990-91 massively weakened the ability to finance the deficit. To deal with this crisis, the reform policies introduced in and after 1991 removed many of the restrictions in the Indian economy which existed earlier. The first important reform in the external sector was made in the foreign exchange market. In 1991, as an immediate measure to resolve the balance of payments crisis, the rupee was devalued against foreign currencies. This led to an increase in the inflow of foreign exchange. It also set the tone to free the determination of rupee value in the foreign exchange market from government control. So, point I is correct. Liberalisation of the trade and investment regime was initiated to increase the international competitiveness of industrial production and also foreign investments and technology into the economy. Many goods produced by small-scale industries were de-reserved. In most industries, the market could determine the prices . So, point II is correct. Industrial licensing was abolished for almost all but product categories - alcohol, cigarettes, hazardous chemicals, industrial explosives, electronics, aerospace and drugs and pharmaceuticals. The only industries which are now reserved for the public sector are a part of atomic energy generation and some core activities in railway transport . So, point III is correct. Export duties were removed to increase the competitive position of Indian goods in the international markets. Quantitative restrictions on imports of manufactured consumer goods and agricultural products were also fully removed from April 2001. So, point IV is correct. So, all four of the above steps were taken by the Government of India in response to the economic crisis of 1991."},{"id":18,"txt":"Consider the following statements with regard to the Foreign Direct Investment (FDI) in India in the financial year 2024-25:\n1. The FDI inflows have increased by more than 20% from the financial year 2023-24.\n2. The services sector emerged as the top recipient of FDI equity.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":1,"exp":"Ex: India has received Foreign Direct Investment (FDI) inflows worth 81.04 billion US dollars in the financial year 2024-25. It reflects a 14 per cent increase from 71.28 billion US dollars in the financial year 2023-24. So, statement I is not correct.   The services sector emerged as the top recipient of FDI equity in 2024-25 by attracting 19 per cent of total inflows . It was followed by computer software and hardware at 16 per cent and trading at 8 per cent. FDI into the services sector also rose by 40.77 per cent to 9.35 billion US dollars from 6.64 billion dollars in the previous year. So, statement II is correct. India is also becoming a hub for manufacturing FDI, which grew by 18 per cent in the financial year 2024- 25 and reached 19.04 billion dollars as compared to 16.12 billion dollars in 2023-24."},{"id":19,"txt":"Consider the following pairs: Method used Feature to measure unemployment in India\n1. Usual Status No gainful work, even for 1 hour a day\n2. Weekly Status No work at all during the entire week, but available for work\n3. Current Daily No gainful work for Status the majority of the time in the preceding year\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: The National Sample Survey Organization (NSSO) provides three different estimates of employment and unemployment based on different approaches/reference periods used to classify an individual’s activity status. o Usual Status Approach o Weekly Status Approach o Current daily status approach Usual Status Approach considers those people as unemployed who had no gainful work for a majority of time during the 365 days preceding the date of survey. So, pair I is not correctly matched. Weekly Status Approach records unemployment for those who did not have work at all during the entire week, but are available for work. So, pair II is correctly matched. The third approach used by NSSO is the Current Daily Status Approach , in which unemployment is recorded for a person if he/she has no gainful work even for 1 hour in a day. It uses each day of the seven days preceding the date of survey as the reference period. So, pair III is not correctly matched."},{"id":20,"txt":"Consider the following statements regarding the poverty estimation:\n1. The poverty gap is the average of the differences between the income of the richest and the poorest in the economy.\n2. The poverty line is a monetary measure of the minimum consumption of goods a household needs to obtain to adequately meet its basic needs.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II est-Economics-ET-05 T"],"ci":1,"exp":"Ex: The Poverty Gap is the average of the differences between the income of each individual poor and the poverty line. So, statement I is not correct. The poverty gap measures the total amount of income necessary to raise everyone who is below the poverty line up to that line. The total poverty gap can be considered as the amount of money per day it would take to bring every poor person in an economy up to our defined minimum income standards. The poverty line is a monetary measure of the minimum consumption of goods and services that a household should obtain to ensure that its basic needs are adequately met. So, statement II is correct."},{"id":21,"txt":"Aditya worked in a private company that temporarily shut down during an economic slowdown. As a result, Aditya slipped below the poverty line for a few months. Once the economy recovered, the company reopened, and Aditya was rehired at the same salary, bringing him back above the poverty line. Which one of the following best describes Aditya’s situation?","ref":"","opts":["ditya is a chronic poor, as he remains consistently below the poverty line.","ditya is a churning poor, as his income fluctuates frequently due to seasonal employment.","ditya is a transitory poor, as his poverty was temporary and caused by short-term conditions.","ditya is non-poor, as he is currently above the poverty line and unlikely to fall again."],"ci":2,"exp":"Ex: Transitory Poor are those who are temporarily poor and are expected to move out of poverty due to short-term conditions, such as an economic recession or a temporary job loss. They might experience a temporary setback but have the resources or opportunities to recover quickly. Churning Poor are individuals who move in and out of poverty frequently, often due to unstable income or external factors like health issues, seasonal employment, or market volatility. They might escape poverty temporarily, but their income is vulnerable, and they often fall back below the poverty line.   Karam’s income fluctuates due to seasonal work. He earns enough during the harvest season to stay out of poverty but falls back into poverty during the off-season. This makes him an example of the churning poor. Chronic Poor are people who are persistently poor over a long period of time. They lack access to basic necessities and have very limited opportunities to improve their situation. They remain below the poverty line most of the time, regardless of economic conditions or seasonal work. Non-poor refers to people who are consistently above the poverty line and are not at risk of falling back into poverty. They have stable incomes, access to resources, and enough economic security to remain out of poverty."},{"id":22,"txt":"Consider the following pairs: Type of Example Unemployment\n1. Cyclical Layoffs in agriculture during the post- monsoon lean phase\n2. Seasonal Job loss due to the global economic slowdown\n3. Structural Job loss due to the implementation of advanced automation\n4. Frictional An engineer actively looking for a job after quitting from a previous one\nWhich of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":1,"exp":"Ex: Unemployment is people above a specified age not being in paid employment or self-employment but currently available for work during the reference period. Following are the various types of unemployment: Cyclical or demand-deficient unemployment occurs when the economy is in need of a low workforce. It mainly occurs during a recession or depression. This form of unemployment is most commonly known as cyclical unemployment since unemployment moves with the trade cycle. For instance, during the global slowdown in late 2008, many workers around the globe lost their jobs. So, pair I is not correctly matched. Seasonal unemployment occurs at a particular time of the year or season and thus is known as seasonal unemployment. It is most common in industries like agriculture, tourism, hotels, catering, etc. So, pair II is not correctly matched. Structural unemployment arises when a person's qualifications are insufficient to meet their job responsibilities. It arises due to long-term changes in the pattern of demand, which changes the economy's basic structure. The person is not able to learn new technologies used in the new expanding economic sectors, and they thus may be rendered permanently unemployed. For example, job loss due to automation or the introduction of AI. So, pair III is correctly matched. Frictional unemployment occurs when a person is out of one job and is searching for another for different reasons , such as seeking a better job, being fired from a current job, or having voluntarily quit a current job. It generally requires some time before a person can get the next job, for example, preparing for UPSC by quitting the existing job. So, pair IV is correctly matched."},{"id":23,"txt":"Consider the following statements with regard to the National Critical Mineral Mission:\n1. It has been framed under the Mines and Minerals (Development and Regulation) Amendment Act, 2023, whereby the Central Government has the exclusive powers to auction the identified critical minerals.\n2. Recycling of critical minerals from secondary sources like e-waste and end-of-life vehicle parts is a key component of the scheme.\n3. The Indian Bureau of Mines has been tasked with conducting exploration projects under the mission.\nWhich of the statements given above are correct?","ref":"","opts":["I and III only","II only","II and III only","I and II only"],"ci":3,"exp":"Ex: The National Critical Mineral Mission (NCMM) , launched in 2025, is India’s blueprint to secure domestic and global supply chains of critical minerals. It aims to secure a place for India as a global player in the emerging green economy. The legal and policy framework for NCMM is grounded in the amendment (2023) of the Mines and Minerals (Development and Regulation) Act (MMDR Act) , 1957 under which the central government has the exclusive power to auction 24 out of the 30 identified critical minerals . So, statement I is correct. The NCMM has been designed with the primary objectives of securing domestic and international supply sources and strengthening mineral value chains covering exploration, mining, processing, recycling, research and development, and human resource development.   The Incentive Scheme under the NCMM aims to boost India’s recycling capacity for critical minerals from secondary sources such as e-waste, lithium-ion battery scrap, and end-of-life vehicle parts. So, statement II is correct. Under this mission, the Geological Survey of India (GSI) has been tasked with conducting 1,200 exploration projects from 2024-25 to 2030-31. So, statement III is not correct."},{"id":24,"txt":"Consider the following statements with regard to the the rotational panel scheme in the Periodic Labour Force Survey:\n1. The sampling frames for both rural and urban areas will remain unchanged for every two- year duration.\n2. Each selected household is surveyed four times across four consecutive months.\n3. Monthly estimates will be generated for successive months without any break in the series, starting from the fourth month.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: The sample design of Periodic Labour Force Survey (PLFS) has been revamped from 2025. The salient features of the revamped sample design are described below. A rotational panel sampling design will be used in the survey. The rotational scheme will be of two years duration to accommodate the changes in the frame in the intercensal period ; in the sense that the sampling frames for both rural and urban areas will remain unchanged for every two-year duration. So, statement I is correct. In this rotational panel scheme, each selected household will be visited four times in four consecutive months – one with the first visit schedule and other three with the revisit schedule. So, statement II is correct. Monthly estimates will be generated for successive months without any break in the series starting from the fourth month , ensuring a 75% matching between two consecutive months. So, statement III is correct. In addition, the quarterly estimates will be generated for successive quarters, starting from the second quarter, ensuring a 50% matching between two consecutive quarters. Model based estimates will not be generated. Instead, usual design based estimates will be generated. The proposed design aims at generating monthly and quarterly estimates of level parameters of key labour force indicators (i.e., LFPR, WPR and UR) based on CWS data only. Annual estimates of level parameters will be generated based on usual status."},{"id":25,"txt":"Consider the following ports:\n1. Dammam, Saudi Arabia\n2. Jebel Ali, United Arab Emirates\n3. Haifa, Israel\n4. Duqm, Oman The India-Middle East Europe Economic Corridor (IMEC), a proposed multimodal transport infrastructure, aims to connect how many of the above ports?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":3,"exp":"Ex: Points To Remember The India-Middle East Europe Economic Corridor (IMEC) is a proposed economic corridor that aims to ● Signatories to the IMEC: European establish a direct trade route between India, the Middle Union, France, Germany, Italy, Saudi East, and Europe. It was announced in September Arabia, UAE and USA 2023 at the G20 summit in New Delhi. It’s a multi-modal transportation corridor consisting of Railroad, Ship-to-Rail networks, and Road transport routes. The IMEC corridor will also include an electricity cable, a hydrogen pipeline, and a high-speed data cable. The corridor is made up of two parts: Eastern corridor: Connects India to the UAE, Saudi Arabia, Jordan, and Israel. Northern corridor: Connects those Middle Eastern countries to Europe.   Ports to be Connected as part of IMEC: India: Mundra (Gujarat), Kandla (Gujarat), and Jawaharlal Nehru Port Trust (Navi Mumbai). Middle East: Fujairah, Jebel Ali , and Abu Dhabi in the UAE as well as Dammam and Ras Al Khair ports in Saudi Arabia. Railway line will connect Fujairah port (UAE) to Haifa port (Israel) via: Saudi Arabia (Ghuwaifat and Haradh) and Jordan. So, points I, II, III are correct. Europe: Piraeus port in Greece, Messina in South Italy , and Marseille in France. So, point IV is correct. So, all four of the above ports are part of the India-Middle East Europe Economic Corridor (IMEC)."},{"id":26,"txt":"In the context of unemployment in an economy, the term ‘Natural Rate of Unemployment’ best refers to which one of the following?","ref":"","opts":["It is the total number of people who are employed on a regular basis but in the unorganized sector.","It is the lowest unemployment rate that an economy can sustain without causing an unsustainable rise in inflation.","It is the rate of unemployment at which the labour supply is low, but the demand for labour is high.","It is long-term unemployment due to a mismatch between workers' skills and available jobs, caused by economic shifts."],"ci":1,"exp":"Ex: The natural rate of unemployment is the unemployment rate that persists in a well-functioning, healthy economy; it is consistent with equilibrium in the structure of real wage rates.” Thus, the natural rate of unemployment and the corresponding natural rate of employment will be such that labor demand equals labor supply at an equilibrium real wage. It refers to the unemployment that exists when the labor market is in perfect equilibrium, that is, all the resources are being utilized and there is no inflationary pressures. It is the unemployment rate that exists when an economy is producing the full employment output. The full employment real output is the amount of output that is produced in an economy when that economy is using all of its resources efficiently. It comprises structural as well as functional employment . As an economic concept, it implies that even if the economy functions at its full potential, some unemployment will still persist."},{"id":27,"txt":"It refers to the deliberate use of tariffs, sanctions, export controls and other trade policies to pressure or influence another country for strategic or geopolitical objectives, even at the cost of disrupting global supply chains and market efficiency. This best defines an action that is primarily an example of:","ref":"","opts":["Economic nationalism","Technological protectionism","Economic decoupling","Trade weaponization"],"ci":3,"exp":"Ex: Trade Weaponization refers to the strategic use of trade and economic policies as tools to achieve geopolitical or national security objectives. This occurs when countries leverage tariffs, trade barriers, or economic sanctions to exert pressure on other nations or gain competitive advantages, often compromising global supply chains and economic efficiency. It involves viewing trade transactions through the lens of national security, where countries may sacrifice economic gains to protect domestic industries, jobs, and privacy. This approach can lead to rising protectionism and global tensions, as seen with recent U.S. tariffs on Chinese goods, and India's anti- dumping measures against Chinese imports. Knowledge Box Economic Nationalism: Economic nationalism emphasises protecting domestic industries by prioritising national interests over global integration. Countries employ tariffs, subsidies , and trade barriers to promote self-sufficiency and reduce dependence on foreign goods, ensuring domestic economic growth and job preservation.   Technological Protectionism: Technological protectionism involves restricting the transfer of sensitive technologies across borders to safeguard national security and competitiveness. Governments implement export controls, intellectual property protection, and regulations to prevent foreign access to cutting-edge technologies and strategic innovations critical to national interests. Economic Decoupling: Economic decoupling refers to the deliberate reduction of economic interdependence between nations, particularly in supply chains, trade, and investment. Countries decouple to safeguard their economies from external shocks, geopolitical risks, or reliance on rival nations' critical resources."},{"id":28,"txt":"Consider the following statements:\nStatement I: India is said to be at the inflection point of its demographic transition.\nStatement II: The proportion of the working-age population is expected to peak by 2030.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["oth Statement I and Statement II are correct and Statement II explains Statement I","oth Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct"],"ci":2,"exp":"Ex: According to the International Labour Organisation’s India Employment Report 2024 , India is at an inflection point in its demographic transition, where the proportion of youths , who constituted 27 per cent of the population in 2021, is projected to decline to 25 per cent in 2031 and to 23 per cent in 2036 . So, statement I is correct and statement II is not correct. Over the past two decades, India experienced continuous decline in its crude birth and death rates, resulting in its population growth rate reaching the lowest level since Independence. Between 2011 and 2021, the decadal growth rate was 12.5 per cent, with a projected decline to 8.4 per cent in the 2021–31 decade. Despite the decline, the proportion of India’s working-age population (aged 15–59) increased from 61 per cent in 2011 to 64 per cent in 2021 and is projected to reach 65 per cent in 2036, with projected stability thereafter. Although the proportion of youths in India’s total population has started to decline, at 371 million persons, it still accounts for a considerably large population size when compared with most other countries and will remain significant for at least the next decade. Unlike China, Japan and the United States , which are today grappling with the challenges of an ageing population , India has the advantage of a sizable youth and working-age population."},{"id":29,"txt":"Consider the following information: “In many Western countries, the inexpensive Irish potato historically served as the primary staple food. But as incomes rose, consumers shifted toward wheat, which was considered a costlier and more desirable cereal. Similarly, in Asia, diets moved from coarse grains and root crops (such as cassava and sweet potato) to rice and wheat as household incomes increased.” This pattern of dietary transition is best explained by which one of the following economic principles?","ref":"","opts":["Engel’s Law","ennett’s Law","Giffen Paradox","Matthew Effect"],"ci":1,"exp":"Ex: Bennett's Law is a law of economics that states that as income rises, the per capita consumption of starchy food staples for more nutritious foods falls. It was observed in Europe and North America in the 19th and early 20th centuries and in Asia in the late 20th and early 21st centuries . For example, in Western countries , the “Irish” or white potato gave way to wheat as the preferred staple once consumers could afford the more expensive cereal grain . In Asia , the tropical root crops ( cassava and sweet potato), along with coarse grains ( maize, sorghum, and millet ), similarly give way to rice and wheat as primary food sources as incomes rise ."},{"id":30,"txt":"Consider the following:\n1. Bhutan\n2. Myanmar\n3. Bangladesh\n4. Sri Lanka Presently, India has a cross border power transmission connection with how many of the above countries?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":2,"exp":"Ex: Recently, India, Nepal, and Bangladesh have signed a trilateral agreement to export 40 megawatts of electricity from Nepal to Bangladesh via India’s power grid. The tripartite agreement enables Nepal to sell electricity to Bangladesh for the first time. Nepal’s electricity will be transmitted to Bangladesh through the transmission infrastructure on the Indian territory. India is centrally placed in the South Asian region and with cross border power interconnections with neighbouring countries. This facilitates import/ export of electricity between India and neighbouring countries. Presently, India is connected with Nepal, Bhutan, Bangladesh and Myanmar. India is providing about 3 MW of power from Moreh in Manipur (India) to Tamu town in Myanmar through an 11 kV transmission line . High capacity link between the countries is also under discussion. So, point II is correct. A high capacity interconnection between India and Bangladesh exists through Baharampur (India) – Bheramara (Bangladesh) 400kV D/C lines. So, point III is correct. Presently there is no power interconnection between India and Sri Lanka. Interconnection between India and Sri Lanka is under discussion between the two countries . So, point IV is not correct. India and Bhutan are connected through various 400kV, 220kV and 132kV lines. These connections are mainly for import of about 2000 MW power from Tala HEP (1020 MW), Chukha HEP (336MW), Kurichu HEP(60MW) and Mangdechhu HEP (720 MW) in Bhutan to India. So, point I is correct. So, India has a cross border power transmission connection with only three of the above countries."},{"id":31,"txt":"Which one of the following authorities responsible for giving Foreign Direct Investments approval through the Government Route in India?","ref":"","opts":["epartment for Promotion of Industry and Internal Trade","epartment of Investment and Public Asset Management","Securities and Exchange Board of India","Reserve Bank of India est-Economics-ET-05 T"],"ci":0,"exp":"Ex: Foreign investment is freely permitted in almost all sectors. Foreign Direct Investments (FDI) can be made under two routes—Automatic Route and Government Route. Under the Automatic Route, the foreign investor or the Indian company does not require any approval from RBI or the Government of India for the investment. Subsequent to the abolition of the Foreign Investment Promotion Board (FIPB), granting of government approval for foreign investment under the extant FDI Policy was entrusted to the concerned Administrative Ministries/Departments and Department for Promotion of Industry and Internal Trade (DPIIT) , Ministry of Commerce & Industry, was made the nodal Department."},{"id":32,"txt":"Consider the following:\n1. All India Debt and Investment Survey\n2. Periodic Labour Force Survey (PLFS)\n3. Quarterly Employment Survey (QES)\n4. Annual Survey of Industries (ASI)\nHow many of the above reports are published by the National Statistical Office (NSO)?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":2,"exp":"Ex: The National Statistical Office (NSO), Ministry of Statistics and Programme Implementation, conducts the All-India Debt & Investment Survey as a part of National Sample Survey (NSS). The main objective of the survey is to collect basic quantitative information on the assets and liabilities of the households. So, point I is correct. Periodic Labour Force Survey (PLFS) is India’s first computer-based survey launched by the National Statistical Office (NSO) in 2017 . The objective of PLFS is to estimate the key employment and unemployment indicators. So, point II is correct. The Labour Bureau under the Ministry of Labour & Employment conducts Quarterly Employment Survey (QES) as part of All India Quarterly Establishment based Employment Survey for establishments having 10 or more workers. So, point III is not correct.   The Annual Survey of Industries (ASI) is conducted by the National Statistical Office (NSO). It is the principal source of industrial statistics in India. So, point IV is correct."},{"id":33,"txt":"With regard to the Micro Small and Medium Enterprises (MSMEs) in India, consider the following statements:\n1. MSME registration process is based on self- declaration without any requirement for Adhaar verification.\n2. Central Public Sector Enterprises are required to procure a minimum 20 per cent of their total purchase from MSMEs.\n3. Retail and wholesale trade is classified as MSMEs by the Government.\nWhich of the statements given above is/are correct?","ref":"","opts":["I, II and III","I and II only","II and III only","III only"],"ci":3,"exp":"Ex: Micro Small and Medium Enterprises (MSMEs) registration process is fully online, paperless and based on self-declaration . No documents or proof are required to be uploaded for registering an MSME, however, Aadhaar is a compulsory requirement for Udyam Registration (India's free, online system for Micro, Small, and Medium Enterprises (MSMEs) to get official recognition). So, statement I is not correct. The Public Procurement Policy for Micro and Small Enterprises (MSME) has mandated that every Central Ministry/Department/PSU shall set an annual goal of a minimum 20 per cent of the total annual purchases from the products or services produced or rendered by MSMEs. The Policy (amended in 2018) mandates 25% annual procurement from MSEs by Central Ministries/Departments/Central Public Sector Enterprises (CPSEs), including 4% from MSEs owned by SC/ST and 3% from MSEs owned by women entrepreneurs. As per the Policy, MSEs must be provided tender sets free of cost and they are exempted from payment of Earnest Money Deposit. So, statement II is not correct. The government has included retail and wholesale trades under the MSME classification making them eligible for priority sector advances by banks and financial institutions per RBI guidelines. So, statement III is correct. The definition and criteria for classifying as MSMEs was revised by the Government of India in the Union Budget 2025: Enterprise Category Revised Investment Limit Revised Turnover Limit Micro Enterprise ₹ 2.5 crore ₹ 10 crore. Small Enterprise ₹ 25 crore ₹ 100 crore. Medium Enterprise ₹ 125 crore ₹ 500 crore."},{"id":34,"txt":"With reference to the Indian economy after the 1991 economic liberalization, consider the following statements:\n1. The share of the manufacturing sector in the Gross Domestic Product saw a consistent rise till date. is II. There has been a sharp rise in the annual rate of growth of forex reserves after the 1991 reforms.\n3. The telecommunications sector emerged as the largest recipient of Foreign Direct Investment.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: The economic liberalization process of 1991 culminated into a series of economic reforms along with a host of industrial policy reforms. Some of the important changes that were seen are as follows: The share of the manufacturing sector as a percentage of Gross Domestic Product has remained around 15%. So, statement I is not correct. India’s forex reserve grew sharply after liberalization. T he annual rate of growth of forex reserves during 2000-10 is $20.9 Billion while during 2010-20 is $34.7 Billion. So, statement II is correct. Liberalization of Foreign Direct Investment (FDI) policy is also responsible for a changing sectoral distribution of FDI inflows in India. In 1990, the top five sectors were electrical and electronics, chemicals, industrial machinery, mechanical engineering and metallurgy and together they accounted for 68.14% of the total FDI inflows. Conversely, during 2000 to 2010, the Services sector attracted the largest amount of FDI with a percent share of 20.35, followed by computer software with 8.5%, telecommunications with 7.9% etc. So, statement III is not correct."},{"id":35,"txt":"Consider the following pairs with regard to India’s Five-Year Plans: Plan Feature Based on Model/ Strategy\n1. Second Accorded Mahalanobis the highest Model priority to the development of irrigation and power projects\n2. Fourth Called for Rudra-Allen growth with Model stability and progressive achievement of self-reliance\n3. Fifth Introduced a D.P. Dhar Twenty-point Model Programme for poverty alleviation\n4. Eighth Emphasis on Harrod- the labour Domar reforms Model\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":1,"exp":"Ex: After independence, India decided to adopt a planned mode of development. It began with the process of setting up the Planning Commission in 1950 to achieve the goal of growth and development and a rapid rise in the standard of living of the people. As the economy was facing the problem of large-scale food grains import (1951) and the pressure of price rise, it was the First Five-Year Plan (1951–56) that accorded the highest priority to agriculture, including irrigation and power projects. The Second Plan (1956–61) based on the Mahalanobis Model laid emphasis on rapid industrialisation with a focus on heavy industries and capital goods. So, row I is not correctly matched. There were two main objectives of the Fourth Five-Year Plan (1969-74), i.e., growth with stability and progressive achievement of self-reliance. The plan was based on the Gadgil Strategy and the Rudra- Allen Model. During this time, 14 major Indian banks were nationalized and the Green Revolution was started. Implementation of Family Planning Programmes was among the major targets of the Plan. So, row II is correctly matched. The Fifth Five Year Plan (1974–79) was based on the D.P. Dhar Model . It had its focus on poverty alleviation and self-reliance. The popular Twenty-point Programme (1975) was launched during this plan. So, row III is correctly matched. The Eighth Five-Year Plan (1992-97) came up with fiscal reforms and economic reforms to prevent another Balance of Payments (BoP) crisis following the 1991 crisis. Hence, a higher economic growth rate of 6.5% was achieved against the targeted 5.3%. The Second-generation reforms started in 1996. It gave special stress on fiscal reforms, financial reforms, structural reforms, labour law reforms , etc. So, row IV is not correctly matched. The First Five-Year Plan (1951-56) was launched for the duration of 1951 to 1956, under the leadership of Jawaharlal Nehru. It was based on the Harrod-Domar model with a few modifications. Its main focus was on the agricultural development of the country. This plan was successful and achieved a growth rate of 3.6% (more than its target of 2.1%)."},{"id":36,"txt":"With reference to the Gini Coefficient Index,\nconsider the following statements:\n1. It measures the number of people in absolute poverty.\n2. India’s Gini coefficient has been consistently falling since 1991 economic reforms.\n3. Income inequality is higher in rural India as compared to urban India in the last decade.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":3,"exp":"Ex: The Gini index measures the extent to which the distribution of income or consumption among individuals or households within an economy deviates from a perfectly equal distribution. A Gini Coefficient index of 0 represents perfect equality, while an index of 100 implies perfect inequality. The Gini Coefficient index measures the area between the Lorenz curve and a hypothetical line of absolute equality, expressed as a percentage of the maximum area under the line. Gini coefficients are not unique. It is possible for two different Lorenz curves to give rise to the same Gini coefficient. It is possible for the Gini coefficient of a developing country to rise (due to increasing inequality of income) while the number of people in absolute poverty decreases. This is because the Gini coefficient measures relative, not absolute, wealth. So, statement I is not correct.   The Gini Coefficient for India has increased since 1991 (since the Liberalisation & Privatisation of the economy). As per NSSO, Gini Coefficient rose from 45 in 1990 to 51.4 in 2013, indicating a growing gap between the rich and poor. In 2019, this value was 35.7 for India. The top one percent in India earned 21 percent of the total country’s income in 2019. This was 11 percent in 1990. However, there has been a decrease in the Gini coefficient in 1993-1994 as well as 1999-2000. Thus, India’s Gini coefficient has been fluctuating since 1991. So, statement II is not correct. Consumption Gini (HCES 2023-24) Recently reflects that the Urban Gini index remains significantly higher than the Rural Gini. Rural Gini Urban Gini 2022-23 0.266 0.314 (Higher) 0.284 (Higher). 2023-24 0.237 So, statement III is not correct. In an economy, the ‘labour force’ best refers to which one of the following? a) Working-age population regardless of their employment status b) Employed individuals who are contributing to the production of goods and services c) Working age population, which is either employed or actively seeking employment d) Individuals who are currently unemployed and registered with employment exchanges The population of any country consists of two components: (i) the Labor Force and (ii) the Non-Labor Force. The labor force refers to all persons working (i.e., being engaged in economic activity) and those not working but seeking or available for work at the current wage rate. This means that the labor force consists of both employed and unemployed people. The Non-Labor Force is a component of the population that is not a part of the labor force. It includes all those who are not working and are neither seeking nor available for work. Knowledge Box The working age population is the share of 15 - to 64 - year - olds in the total population. A basic indicator for employment, it includes both the economically active population and inactive population. The workforce refers to the employed individuals who are contributing to the production of goods and services. Individuals who are currently unemployed and registered with employment exchanges are registered unemployed ."},{"id":37,"txt":"In an economy, the ‘labour force’ best refers to\nwhich one of the following?","ref":"","opts":["Working-age population regardless of their employment status","Employed individuals who are contributing to the production of goods and services","Working age population, which is either employed or actively seeking employment","Individuals who are currently unemployed and registered with employment exchanges"],"ci":2,"exp":"Ex: Detailed structural breakdown summary explanation missing from data mapping sheets arrays."},{"id":38,"txt":"Consider the following statements with reference to the Open Network for Digital Commerce:\n1. It is strictly an aggregator platform to facilitate the seamless exchange of goods and services.\n2. It aims to provide fair trading opportunities to both online and offline traders.\n3. It empowers merchants and consumers to form a single network to drive innovation and scale.\nWhich of the statements given above are correct?","ref":"","opts":["I, II and III","I and II only","II and III only","I and III only"],"ci":2,"exp":"Ex: Open Network for Digital Commerce (ONDC) is an initiative aiming at promoting open networks for all aspects of exchange of goods and services over digital or electronic networks. It is neither an aggregator application (like Amazon or Swiggy) nor a hosting platform, and all existing digital commerce applications and platforms can voluntarily choose to adopt and be a part of the ONDC network. So, statement I is not correct. Aggregator vs. Open Network Traditional ONDC Aggregator (Open Network) Centralized Platform Decentralized Protocol Structure (The platform controls (Open standards connect independent the rules) apps) Closed System Interoperable Access (Buyers/Sellers must (Buyers/Sellers can be on different apps) be on the same app) ONDC is to be based on open-sourced methodology, using open specifications and open network protocols independent of any specific platform. It is being developed as a counter to the current duopoly in the Indian e-commerce market which is largely dictated by Amazon and Walmart-owned Flipkart. It will create a level playing field for online e- commerce websites and offline traders who have been complaining about the unfair trade practices by the online ecommerce websites. So, statement II is correct. The platform will also be compliant with the Information Technology Act, 2000 and designed for compliance with the emerging Personal Data Protection Bill. The platform will allow buyers and sellers to connect and transact with each other online, regardless of what other applications they use. It will also empower merchants and consumers to form a single network to drive innovation and scale , transforming all businesses from retail goods, food to mobility. So, statement III is correct."},{"id":39,"txt":"Consider the following information: Certification Issued For Authority\n1. AGMARK Agriculture Directorate products of Marketing & Inspection (DMI)\n2. ISI Mark Household Bureau Electrical of Energy goods Efficiency (BEE)\n3. Ecomark Architectural Bureau paints of Indian Standards (BIS)\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":1,"exp":"Ex: AGMARK is a certification mark for agricultural produce, assuring that they conform to a grade standard notified by Directorate of Marketing & Inspection (DMI), Department of Agriculture, Cooperation and Farmers Welfare, Ministry of Agriculture & Farmers Welfare under Agricultural Produce (Grading Marking) Act, 1937. It is issued by the Directorate of Marketing & Inspection (DMI) . While the certification scheme is essentially voluntary, Food Safety and Standards(Prohibition and Restriction On Sale)Regulations 2011 have prescribed mandatory certification under AGMARK for certain products viz. Blended Edible Vegetable Oil, Fat Spread etc. So, row I is correctly matched The ISI mark is a product certification issued by the Bureau of Indian Standards (BIS ). It ensures that products meet the required standards for safety and quality. It applies to a wide range of products, including household electrical goods. The BEE is responsible for energy efficiency standards (e.g., the star rating system). So, row II is not correctly matched.   The Ecomark is awarded to products that meet environmental standards, including architectural paints and powder coatings . It is issued by the Bureau of Indian Standards (BIS) to encourage environmentally friendly products . So, row III is correctly matched"},{"id":40,"txt":"Technical progress that increases the effective capital input, allowing the same labour force to operate more machinery or increasing output per unit of capital, is known as:","ref":"","opts":["Labour augmenting technical progress","apital augmenting technical progress","apital reducing technological progress","None of the above"],"ci":1,"exp":"Ex: Capital-augmenting technical progress refers to innovations that enhance the productivity of capital rather than labour . It raises the effectiveness of machinery, tools, and equipment, enabling each unit of capital to contribute more to production. For example, when automation software improves the performance of existing machines rather than reducing the need for workers, it increases the productivity of capital and is therefore capital augmenting. If new machines enable the same number of workers to produce more output than before, the technology is considered labour-augmenting."},{"id":41,"txt":"Which one of the following refers to the practice of Indian-founded startups that were earlier headquartered abroad, shifting their domicile back to India to list on Indian stock exchanges?","ref":"","opts":["Round-tripping","orporate inversion","Reverse flipping","ross-listing"],"ci":2,"exp":"Ex: About Reverse Flipping: It refers to the trend of Indian founded but overseas headquartered startups shifting their domicile to India and listing on Indian stock exchanges. This move is driven by several factors, including the potential for higher valuations upon exit in the Indian market. It is also referred to as internalization . Motivations for Reverse Flipping: Higher Valuation Certainty: Startups anticipate better exit opportunities with higher valuations in India. Growing Economy: India's large and rapidly expanding economy presents significant growth opportunities. Venture Capital Access: There is access to deeper pools of venture capital within India. Favorable Tax Regimes: India offers more favorable tax regimes for businesses. Intellectual Property Protection: Improved intellectual property protection laws benefit startups. Young and Educated Population: India has a large, young, and educated workforce. Supportive Government Policies: The Indian government has implemented policies that favor business growth and development. The Economic Survey 2022-23 acknowledged the concept of reverse flipping and proposed measures to accelerate this process. These measures include simplifying tax processes, improving taxation on Employee Stock Ownership Plans (ESOPs), facilitating capital movements, and reducing tax layers."},{"id":42,"txt":"In the context of Public Private Partnership, the cost of the project is completely borne by the government in:","ref":"","opts":["uild Operate Transfer Model","Engineering, Procurement and Construction Model","Hybrid Annuity Model","Lease, Develop, Operate and Maintain Model"],"ci":1,"exp":"Ex: Public Private Partnership (PPP) means an arrangement between a Government/statutory entity/Government owned entity on one side and a private sector entity on the other, for the provision of public assets and/or public services.   Public-private partnerships (PPPs) can take a wide range of forms varying in the degree of purpose, involvement of the private entity, legal structure and risk sharing. A PPP is generally memorialized in a contract or agreement to outline the responsibilities of each party and clearly allocate risk. The broad contractual forms, as covered by extant policy include: BOT (Build Operate Transfer) : The most common form of PPP used where the private sector operator designs, builds, finances, owns and constructs the facility and operates it commercially for the concession period, after which the facility is transferred to the authority . In this case legal ownership of the asset vests with the public sector the concession period ends. The most common form of a BOT project is a Toll Road project. Operations & Maintenance (Service contract) : The Government bids out the right to deliver a specific service or gives part of the undertaking to the private sector for operations and maintenance of the assets. Such contracts are normally of a shorter duration than concession contracts. Lease, Develop, Operate and Maintain (a variation of BOT) : Assets are leased out to the private sector under specific terms , to operate and maintain the asset for the term of the concession period. Engineering, Procurement and Construction Model (EPC) : It requires the government to undertake the total funding, together with the majority of the risks—land acquisition, cost over- runs due to delay, inflation and commercial, of the project while the Private sector partner will provide the engineering and construction requirements. Hybrid Annuity Model (HAM) : It is a mix of BOT-Annuity model and EPC model. In this model, the project cost is shared between the government and the private player in the ratio of 40:60, during the construction period. The private player gets compensated by way of fixed pre- determined annuity payments. It is in the BOT-TOLL model that the private player gets its compensation from toll collection."},{"id":43,"txt":"Consider the following statements with regard to the recent demographic trends in India:\n1. Kerala has the highest sex ratio at birth, while Bihar is among the lowest-performing States on this indicator.\n2. Dadra and Nagar Haveli and Daman & Diu, Lakshadweep and Andaman and Nicobar Islands are among the Union Territories that have achieved more than 90% registration of births within the prescribed time limit.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II est-Economics-ET-05 T"],"ci":1,"exp":"Ex: The Vital Statistics of India based on Civil Registration System (CRS) report for the year 2023 compiled by the Registrar General of India (RGI) and released recently shows the following trends: The report shows that there was no major spike in deaths in 2022 and 2023. The report also stated that Jharkhand recorded the lowest sex ratio at birth at 899, followed by Bihar at 900, Telangana at 906, Maharashtra at 909, Gujarat at 910, Haryana at 911 and Mizoram at 911. Since 2020, Bihar has been recording the lowest sex ratio , which is defined as the number of females born per 1,000 males. S o, statement I is not correct. The highest sex ratio was reported by Arunachal Pradesh at 1,085, followed by Nagaland at 1,007, Goa at 973, Ladakh and Tripura at 972, and Kerala at 967 . The share of institutional births in total registered births is 74.7 % in 2023. However, the report did not include information from Sikkim. Overall registration of births for the year 2023 stood at 98.4%. The report stated that 11 States/Union Territories (UTs) achieved more than 90% registration of births within the prescribed time limit of 21 days . These States are Gujarat, Puducherry, Chandigarh, Dadra and Nagar Haveli and Daman & Diu, Tamil Nadu, Lakshadweep, Andaman and Nicobar Islands , Haryana, Himachal Pradesh, Goa and Punjab. So, statement II is correct.   Five States: Odisha, Mizoram, Maharashtra, Chhattisgarh and Andhra Pradesh reported 80-90% registration, while in 14 States: Assam, Delhi, Madhya Pradesh, Tripura, Telangana, Kerala, Karnataka, Bihar, Rajasthan, Jammu & Kashmir, Jharkhand, West Bengal, Meghalaya and Uttar Pradesh, the registration stood at 50-80%."},{"id":44,"txt":"Consider the following scenario: “Country X is witnessing rapid growth in its urban industrial sector, which is dominated by large private corporations producing manufactured goods for export. However, a major portion of the population is still engaged in traditional agriculture with low productivity, earning barely enough for subsistence and selling mostly in local markets”.\nWhich one of the following best describes the economic structure of Country X?","ref":"","opts":["ommand economy","ual economy","ircular economy","Platform economy"],"ci":1,"exp":"Ex: A dual economy refers to the existence of two distinct types of economic segments within an economy. This involves: A capitalist based manufacturing sector (geared towards global markets) Labour intensive agricultural sector (low productivity, geared towards subsistence farming or local markets) A dual economy model is characterised by the separation of the traditional agricultural sector from the modern industrial sector. Labour in the traditional agricultural sector is plentiful, frequently having a zero marginal productivity, while in the modern sector labour has a positive marginal product. There is an income gap between the two sectors and rural surplus labour in the traditional sector has an incentive to move to the modern sector. The population in the traditional sector is sufficiently high that there is an unlimited supply of labour able to move to the modern sector at a subsistence wage in a given period without lowering output. This unlimited supply of labour from the traditional sector keeps wages in the modern sector low , ensures that capital accumulation in the modern sector is sustained over time, and thus leads towards economic transformation. Subject: Economics | Indian Economy Tags: Conceptual, Analytical"},{"id":45,"txt":"Consider the following:\n1. Track energy consumption and labour usage in real-time\n2. Forecast changes in production and delivery costs based on market trends\n3. Efficient allocation of machinery and manpower\n4. Testing of alternative production strategies virtually before making real-world changes\nHow many of the above are economic benefits of digital twins?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":3,"exp":"Ex: The concept of a digital twin refers to a continuously updated, high-fidelity virtual model of a physical object, system, or process. This model is not static; it evolves in real time, drawing from multiple streams of data including IoT sensors, production control systems, and enterprise resource planning (ERP) platforms Artificial Intelligence (AI) and Machine Learning (ML) algorithms then process this data to generate actionable insights, predictive models, and optimization suggestions. Monitor real-time operational costs: Tracking variables like energy consumption, labor hours, and material usage on a minute-by-minute basis. So, point I is correct. Predict cost fluctuations: Using historical patterns and live market data to forecast changes in input costs, production overheads, and delivery expenses. So, point II is correct. Optimize resource allocation: Ensuring machinery, manpower, and materials are deployed in the most cost-efficient manner. So, point III is correct. Simulate alternative scenarios: For example, testing the impact of a change in supplier, a modification in product design, or a shift to renewable energy sources before committing to costly physical changes. So, point IV is correct."},{"id":46,"txt":"The initiatives ‘WAVES Bazaar’, ‘Create in India Challenges’ and ‘WAVES Awards’ are most closely aligned with which of the following themes?","ref":"","opts":["Silver economy","Orange economy","lue economy","Green economy"],"ci":1,"exp":"Ex: The creative economy (also known as the orange economy ) is an evolving concept based on the contribution and potential of creative assets to contribute to economic growth and development. It embraces economic, cultural and social aspects interacting with technology, intellectual property and tourism objectives : it is a set of knowledge-based, and thus more localized, economic activities with a development dimension and cross-cutting linkages at macro and micro levels to the overall economy. WAVES Bazaar: Launched in January 2025, WAVES Bazaar is a Global e-marketplace and networking hub for the media and entertainment industry. Covering films, animation, gaming, and e-sports, it connects creators, producers, investors, and platforms on a single stage. The platform enables users to showcase their content, pitch projects, and build meaningful connections that transcend geographical boundaries. It simplifies global business interactions by offering tailored tools and resources, ensuring creators and businesses can expand their reach while discovering new opportunities for growth and success. Celebrating excellence across various creative disciplines, the WAVES Awards feature categories such as Game of the Year, Film of the Year, and Advertising Campaign of the Year. The awards also include Special Selection Awards, honouring lifetime achievements and significant impacts in fields like technology and social influence. The Create in India Challenge (CIC) was launched to provide a global platform for emerging talent and to showcase the vibrant creativity of young minds. The challenges spanned a wide range of categories, giving creators the opportunity to explore and push boundaries across various forms of media. From the Anime Challenge to the AI Film Making Competition, XR Creator Hackathon, each category encouraged innovative expression, bringing together creators, technologists, and storytellers from around the world."},{"id":47,"txt":"Consider the following statements regarding the Offshore Areas (Existence of Mineral Resources) Rules, 2024:\n1. It regulates mineral resources within India's territorial waters, continental shelf and exclusive economic zone.\n2. It applies to mineral oils and related hydrocarbons included under the Atomic Energy Act, 1962.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":0,"exp":"Ex: Offshore Areas (Existence of Mineral Resources) Rules, 2024: Recently the Central Government implemented these rules under the authority granted by the Offshore Areas Mineral (Development and Regulation) Act, 2002. It governs the development and regulation of mineral resources within India's territorial waters, continental shelf, exclusive economic zone, and other maritime zones. So, statement 1 is correct. These rules apply to all minerals in offshore areas, including any minerals specified by Atomic Energy Act, 1962, except mineral oils and related hydrocarbons. Unless otherwise specified, the provisions of this Act are supplementary to, and not in place of, any other laws currently in force in the offshore areas. So, statement 2 is not correct."},{"id":48,"txt":"Consider the following information: Company Average Average annual annual net turnover worth (in crores) (in crores)\n1. Miniratna Rs. 3,000 Rs. 1,000\n2. Navratna Rs 5,000 Rs 2,000\n3. Maharatna Rs 25, 000 Rs 15,000\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: Public Sector Enterprises in India are classified as Miniratna, Navratna and Maharatna based on their financial performance and managerial autonomy. Maharatna status represents the highest category and is granted only to a Navratna company that meets additional financial thresholds: an average annual turnover exceeding ₹25,000 crore , an average annual net worth above ₹ 15,000 crore , and an average annual net profit (after tax) of over ₹5,000 crore during the preceding three years. So, row III is correctly matched.   Navratna companies enjoy significant investment freedom and can undertake large projects up to ₹ 1,000 crore or 15% of their net worth (whichever is lower) without approval from the Central Government; however, their annual ceiling on such investments cannot exceed 30% of their net worth or ₹1,000 crore. So, row II is not correctly matched. Miniratna companies have two subcategories: Category-I enterprises must have earned profits for the last three consecutive years, including a pre-tax profit of at least ₹30 crore in any one of them, and maintain a positive net worth; So, row I is not correctly matched. Category-II enterprises must also show profitability for the last three years with a positive net worth but are not required to me et the ₹30 crore benchmark. The hierarchy reflects increasing levels of financial strength and operational autonomy from Miniratna to Navratna to Maharatna."},{"id":49,"txt":"Consider the following information: Daily Calorie Person Food Pattern Intake Mostly staples, Negligible fruits/ P High vegetables, milk/ Data Set A Irregular meals, Q Low Availability Consumption Region of Food People mostly Plenty of wheat and rice; Region X cereals and sugar Data Set B Food production Region Y availability of drops during monsoon Based on the datasets above, which of the following correctly represents a case of Hidden Hunger?","ref":"","opts":["Person A in Dataset 1 and Region X in Dataset 2","Only person A in Dataset 1","Person B in Dataset 1 and Region Y in Dataset 2","Only Region X in Dataset 2   Micronutrient Status Health Outcome Severe deficiency of Frequent fatigue, Vitamin A and Iron weak immunity eggs Weight loss, often skips Normal hunger pangs meals Nutritional Problem Major Cause Pattern consume High prevalence of Poor dietary anaemia and vitamin diversity despite a rarely fruits, D deficiency full stomach vegetables, pulses Sharp fall in Widespread starvation Seasonal nature of & weight loss agricultural work farm jobs"],"ci":0,"exp":"Ex: Hidden hunger is a lack of vitamins and minerals. Hidden hunger occurs when the quality of food people eat does not meet their nutrient requirements , so the food is deficient in micronutrients as well as macronutrients, such as the vitamins and minerals that they need for their growth and development. Hidden hunger is mainly due to the deficiency of one or more micronutrients such as iron, folate, zinc, vitamin A, vitamin B12, and vitamin D. Its effects can be devastating, leading to mental impairment, poor health, low productivity, and even death. In the dataset A , person P consumes high calories through staples, but consumes negligible fruits/vegetables, milk/eggs, which causes severe deficiency of Vitamin A and Iron leading to frequent fatigue and weak immunity. This shows hidden hunger. Similarly, in data set B , in region X , despite plenty of cereals, people mostly consume wheat and rice; rarely fruits, vegetables, pulses, this causes high prevalence of anemia and vitamin D deficiency showing poor dietary diversity despite a full stomach. This is a case of hidden hunger in the region. Seasonal hunger is related to cycles of food growing and harvesting. This is prevalent in rural areas because of the seasonal nature of agricultural activities and in urban areas because of casual labour, e.g., there is less work for casual construction labour during the rainy season. This type of hunger exists when a person is unable to get work for the entire year ."}],"m":null,"tt":3000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

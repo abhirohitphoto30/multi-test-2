@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>VAJIRAM CAMP 2026 = 07</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>VAJIRAM CAMP 2026 = 07</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="VAJIRAM CAMP 2026 = 07">VAJIRAM CAMP 2026 = 07</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following:\n1. Trading of Treasury Bills (T-Bills)\n2. Long-term equity financing through stock exchanges\n3. Call Money Market operations\n4. Trading of Government Securities (G-Secs) with a maturity of 15 years\nHow many of the above activities form part of the capital market?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":1,"exp":"Ex: The Capital Market is the market for borrowing and lending of medium and long term funds , generally above one years. The market to raise investment also forms part of the capital market. Stock exchanges and development financial institutions form the capital market. Government securities (G-Secs) are long-term debt securities issued by governments to finance their activities. The government bond market is a part of the capital market as it involves the trading of long-term debt securities. So, point IV is correct. ■ In India, G-Secs are available in a wide range of maturities from 91 days to as long as 40 years to suit the duration of varied liability structure of various institutions. Long-term equity financing through stock exchanges form the part of the capital markets . So, point II is correct. Money Market is essentially a market for short term (up to one year) funds and financial assets that are close substitutes for money. In India, this market falls directly under the regulatory jurisdiction of the Reserve Bank of India. Treasury Bills (T-Bills) : These are money market securities with varied maturity dates of less TG id - @lordking5 than one year. These are essential monetary tools used by the RBI to regulate an economy's total money supply and for financing purposes. So, point I is not correct. The call/notice money market forms an important segment of the Indian Money Market . Under call money market, funds are transacted on overnight basis and under notice money market , funds are transacted for the period between 2 days and 14 days . So, point III is not correct. So, only two of the above activities form a part of the capital market. Test-Economics-ET-03"},{"id":1,"txt":"What is an ‘Effective Capex’?","ref":"","opts":["apital Expenditure and the Grants-in-aid provided for creation of capital assets","apital expenditure less the depreciation value of the capital assets","Expenditure incurred in the current accounting year to create revenue in a future","apital expenditure less the grant-in-aid for creation of capital assets"],"ci":0,"exp":"Ex: Capital expenditure is the money spent by the government on the development of machinery, equipment, building, health facilities, education, etc. It also includes the expenditure incurred on acquiring fixed assets like land and investment by the government that gives profits or dividends in future. Effective Capital Expenditure is total capital outlay of the Government directed towards building of capital assets and related expenditure. It is the sum of Capital Expenditure and Grants-in-Aid for creation of Capital Assets (GIA Capital)."},{"id":2,"txt":"Consider the following:\n1. Increase in fiscal deficit\n2. Increase in foreign investments in debt market\n3. Increase in inflation\nHow many of the above can lead to a decrease in the bond yield?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: A bond is a fixed-income instrument that represents a loan made by an investor to a borrower. Bond Yield refers to the return an investor realises on an investment in a bond. Bond Price and Bond yield are inversely related and as the price of a bond goes up, its yield goes down. Increase in market interest rates, will cause a fall in bond prices. The higher interest rate will give investors better returns in bank deposits rather than the returns offered by the bonds. And as Bond Prices and Bond Yields are inversely related, a fall in Bond Prices would mean a rise in Bond Yields, as market rates increase. An increase in fiscal deficit would mean that the government is spending more than its revenues by increasing its borrowing from the market. This leaves lesser capital for other economic players, making loans costlier (through an increase in interest rates). And as interest rates and bond yields are directly related, there will be an increase in bond yields when there is an increase in fiscal deficit. So, point I is not correct. A rise in foreign investments in the country means an increase in investors’ demand for the country's assets including bonds. As the demand for government/corporate bonds increases, the bond price will also increase. This will lead to a decrease in the bond yield. Thus, the increased demand for the bond results in rising bond prices—and falling bond yields . So, point II is correct. If there is an increase in inflation in the economy, the central bank will most likely follow a dear money policy and increase policy rates for other banks. Thus, making loans costlier. Thus, the result of increasing inflation will be increasing interest rates, and as interest rates and bond yields are directly related, an increase in inflation will cause an increase in bond yields too. So, point III is not correct."},{"id":3,"txt":"Consider the following statements with regard to the External Commercial Borrowings (ECBs) in India:\n1. Individuals are not permitted to raise ECBs.\n2. TG id - @lordking5 They cannot be raised without prior approval from the Reserve Bank of India.\n3. Existing ECBs cannot be refinanced by raising fresh ECBs.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","I and II only","II and III only","I, II and III Vajiram & R avi's P r elims C A M P - 2026 T est-Economics-ET-03"],"ci":0,"exp":"Ex: External Commercial Borrowings (ECBs) refer to commercial loans (in the form of bank loans, buyers’ credit, suppliers’ credit, securitised instruments) availed from non-resident lenders with minimum average maturity of 3 years. TG id - @lordking5 Corporates (registered under the Companies Act, 2013 except financial intermediaries, such as banks, financial institutions, housing finance companies and NBFCs) are eligible to raise ECBs. Individuals, Trusts and Non-Profit making Organisations are not eligible to raise ECBs . So, statement I is correct. The existing ECBs can be refinanced by raising fresh ECBs subject to the condition that the fresh ECBs is raised at a lower all-in-cost and the outstanding maturity of the original ECBs is maintained. So, statement III is not correct. Test-Economics-ET-03 ECBs can be raised either under the automatic route or under the approval route . For the automatic route, a case is examined by the Authorised Dealer (AD) Category-I bank. Under the approval route, the borrower is required to send the request to the Reserve Bank of India (RBI) through the AD for examination. So, statement II is not correct."},{"id":4,"txt":"Which one of the following statements best describes the term Laffer Curve?","ref":"","opts":["Tax revenue increases when the taxes are fixed at higher rates","Tax revenue is maximized when the tax rate is made uniform for all income groups","Tax revenue is maximum when the taxes are fixed at an optimal rate","Tax revenue depends on the total number of taxpayers"],"ci":2,"exp":"Ex: The Laffer curve explains the relationship between tax rate and tax revenue. It says that at lower as well as higher rates of tax, the tax revenue is low but tax revenue is high at the optimal rate of tax. At a lower rate, the tax collection is low. At higher rates of tax, there is high tax evasion and so the tax revenue is low. But, at an optimal rate, there is less tax evasion and so the tax revenue reaches its maximum."},{"id":5,"txt":"Consider the following pairs: Type Description\n1. Primary Revenue deficit minus grants Deficit for capital assets\n2. Fiscal Total expenditure minus total Deficit receipts excluding borrowings\n3. Effective Indicates the government’s Revenue borrowing from outside the Deficit country\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: Revenue deficit: It is the difference when the government's total revenue expenditure exceeds the total revenue receipts and the net income is less than the net expenditure. Transactions that directly affect the government's existing earnings and expenses come under the revenue deficit. Primary deficit: It is the difference between the fiscal deficit and the interest payment of the previous year. It indicates how much the government requires to borrow for purposes other than interest payment. High deficits indicate the inability of a government to manage the economy. So, pair I is not correctly matched. Fiscal deficit: The difference between total revenue and total expenditure of the government is termed as fiscal deficit. It is an indication of the total borrowings needed by the government. While calculating the total revenue, borrowings are not included. So, pair II is correctly matched. Effective revenue deficit: It is the difference between revenue deficit and grants for creation of capital assets. It was suggested by the Rangarajan Committee on Public Expenditure . It is aimed to deduct the money used out of borrowing to finance capital expenditure. It was introduced to ascertain the actual deficit in the revenue account after adjusting for expenditure of capital nature. Focusing on this will help in reducing the consumption component of revenue deficit and create space for increased capital spending. So, pair III is not correctly matched. So, only one of the pairs given above is correctly matched. TG id - @lordking5"},{"id":6,"txt":"If the tax multiplier is 1 in an economy, then 1 percent tax cut will lead to:","ref":"","opts":["1 percent boost to GDP","10 percent boost to GDP","1 percent reduction in GDP","no change in GDP"],"ci":0,"exp":"Ex: The tax multiplier is defined as the amount by which a change in taxes affects the Gross Domestic Product (GDP). This tool allows the government to reduce (raise) taxes by the exact amount required for GDP to rise (fall). This allows the government to implement a specific tax change rather than an estimate. Test-Economics-ET-03 Both public investments and tax cuts have multiplier effects on the economy. The capex multiplier in India is around 2.5 while the tax multiplier is closer to 1. So, a one-rupee tax cut can provide only a one-rupee boost to GDP , while every rupee spent on capex will boost GDP by 2.5x. The Union Budget of 2024 has balanced economic stimulus with fiscal discipline. The stimulus comes from a 33% increase in public investments covering roads, ports, airports and railways. The income tax rejig may also produce higher demand if people divert their tax saving towards spending."},{"id":7,"txt":"Under which one of the following conditions does the incidence of an indirect tax fall more heavily on consumers than on producers?","ref":"","opts":["When the demand curve is perfectly elastic","When the supply is more inelastic than demand","When demand is more inelastic than supply","When both supply and demand are equally elastic"],"ci":2,"exp":"Ex: Tax incidence (or incidence of tax) is an economic term for understanding the division of a tax burden between stakeholders , such as buyers and sellers or producers and consumers. Tax incidence can also be related to the price elasticity of supply and demand. When demand is inelastic, consumers are less responsive to price increases and continue purchasing similar quantities despite higher costs , leading them to bear a larger share of the tax burden. This is because, with inelastic demand, consumers do not significantly reduce their consumption in response to price increases, thus they end up paying more of the tax incidence."},{"id":8,"txt":"In the context of financial markets, which one of the following correctly describes the term “short- selling”?","ref":"","opts":["Selling securities that one does not own, expecting to buy them back later at a lower price","Selling stocks immediately after purchase to book short-term profit","Selling underperforming shares from a long- term portfolio","Selling shares at a price lower than their intrinsic value to attract investors"],"ci":0,"exp":"Ex: Short-selling involves borrowing a security whose price is going to fall and then selling it on the open market. The investor then buys the same stock back later, hopefully for a lower price than she initially sold it for, returns the borrowed stock to your broker, and pockets the difference. Short-selling can be used for speculation or hedging . Speculators use short selling to capitalise on a potential decline in a specific security or in the market as a whole. Hedgers use the strategy to protect gains or mitigate losses in a security or portfolio, using it as a form of insurance."},{"id":9,"txt":"Consider the following statements:\nStatement I: Monetization of deficit can lead to demand pull inflation.\nStatement II: Monetization of the deficit can increase the money supply without corresponding economic output.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["oth Statement I and Statement II are correct and Statement II explains Statement I","oth Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct"],"ci":0,"exp":"Ex: Monetisation of deficit means the central bank (RBI) prints new money to fund the government’s fiscal deficit. Because this increases the money supply without an increase in the production of goods and services , people have more money to spend while the amount of goods remains the same. This imbalance pushes up demand , causing demand-pull inflation , prices rise simply because too much money is chasing too few goods. So, statements I and II are correct. TG id - @lordking5 Demand-pull inflation is when there is an increase in aggregate demand and the supply remains the same or decreases . When supply cannot meet growing demand, prices for goods and services are pulled higher. There are usually a few interrelated forces working in tandem that cause demand-pull inflation. So, both Statement I and Statement II are correct and Statement II explains Statement I. Test-Economics-ET-03"},{"id":10,"txt":"Which one of the following is not correct with regard to the Treasury Bills (T-bills)? TG id - @lordking5","ref":"","opts":["These are zero coupon securities and do not pay any interest.","These can be purchased by the retail investors.","These can be issued for a maturity period of less than a year.","These can be issued both by the Central Government and the State Governments. 2 Vajiram & R avi's P r elims C A M P - 2026 est-Economics-ET-03 T"],"ci":3,"exp":"Ex: Treasury Bills (T-bills) are short-term (up to one year) borrowing instruments. These are exclusively issued by the Reserve Bank of India (RBI) on behalf of the Union Government of India. State governments do not issue them. Retail investors can buy T-bills by setting up a \"Retail Direct Scheme\" account with the RBI. The RBI launched the retail direct portal to facilitate retail investors to buy G-Secs in the primary auctions as well as buy and sell G-Secs in the secondary market. G-secs available for investment on Retail Direct platform include Sovereign Gold Bonds (SGBs); Government of India Treasury Bills (T-Bills; Government of India dated securities (dated G-Sec) and State Development Loans (SDLs). T-bills are short term debt instruments issued by the Government of India and are presently issued in three tenures, namely, 91 day, 182 day and 364 day. T-bills are zero coupon securities and pay no interest. Instead, they are issued at a discount and redeemed at the face value at maturity. For example, a 91 day T- bill of ₹100/ - (face value) may be issued at say ₹ 98. Therefore, option (d) is the answer."},{"id":11,"txt":"Consider the following pairs: Type of Description Derivative\n1. Option A right to buy/sell an asset within a certain time\n2. Future An agreement to buy/sell an asset at a predetermined price\n3. Forward A contract to exchange financial obligations based on a notional principal\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":1,"exp":"Ex: Derivative instruments are financial contracts whose value is derived from an underlying asset such as stocks, bonds, commodities, interest rates, or currencies. These instruments are widely used for hedging risk, speculation, and leveraging positions. The most common types of derivatives include options, futures, forwards, and swaps . An option is a derivative contract that provides the buyer with a right , but not an obligation , to buy (call option) or sell (put option) an asset at a pre-agreed price (strike price) within a specific period. The seller, or option writer, is obliged to fulfill the contract if the buyer exercises the option. So, pair I is correctly matched A futures contract is a standardised agreement , traded on regulated stock exchanges , where two parties agree to buy or sell an asset at a predetermined price on a future date. The standardisation involves fixed contract sizes, expiration dates, and daily mark-to-market valuation. So, pair II is correctly matched Forwards are customised, over-the-counter (OTC) contracts, not traded on exchanges, and are tailored to the needs of the contracting parties. Unlike futures, they are not standardised or marked-to-market, which increases the counterparty risk. So, pair III is not correctly matched A swap is a derivative contract in which two parties exchange financial obligations, typically TG id - @lordking5 involving cash flows based on a notional principal . The most common example is an interest rate swap. Swaps are not traded on stock exchanges and are over-the-counter contracts between businesses or financial institutions. So, only two of the pairs given above are correctly matched. Test-Economics-ET-03"},{"id":12,"txt":"With reference to surcharge and cess in India's taxation system, consider the following statements:\n1. Cess is a tax additionally levied as a percentage of existing tax amount.\n2. Surcharge on income tax is shareable with the states.\n3. Both the cess and surcharge cannot be used for purposes other than the purposes for\nwhich they are levied.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","I and II only","I and III only","II and III only"],"ci":0,"exp":"Ex: Cess is a tax additionally levied as a percentage of existing tax amount or as a percentage of value of the goods and service or as a fixed amount of quantity of goods for specific purpose. It is leviable by a law made by the Parliament as empowered by Article 270 of the Constitution. So, statement I is correct. Surcharge is levied as per Article 271 of the Constitution. It is a tax additionally levied as a percentage of existing tax amount on taxes referred in the Union list for the purpose of the Union. It is a tool to generate revenue exclusively for the Union. It is not shareable with the states . The tax on which it is additionally levied may be shareable but this additional tax levied as surcharge is not shareable. For example income tax is shareable between the Centre and the states but surcharge on Income Tax is not shareable. So, statement II is not correct. The tax amount collected as cess should not be used for purposes other than the purposes for which it is levied as the Constitution says it is leviable for specific purposes. Unlike cess, the revenue collected from a surcharge goes into the general pool of government funds. It can be used for any purpose, not just the one for which it was originally collected. So, statement III is not correct."},{"id":13,"txt":"Consider the following statements:\nStatement I: The government securities market is generally referred to as the gilt-edged market.\nStatement II: In the government securities, investors generally get assured returns.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["oth Statement I and Statement II are correct and Statement II explains Statement I","oth Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct"],"ci":1,"exp":"Ex: The term \"Gilt-Edged Market\" refers to the market for government securities, which are considered extremely safe investments . So, statement I is correct. These securities are called \"Gilt-Edged\" because they are backed by the government and therefore carry minimal risk of default . Investors in this market can expect assured returns, making it a preferred choice for conservative investors looking for safety and stability. So, statement II is correct. So, both Statement I and Statement II are correct but Statement II does not explain Statement I."},{"id":14,"txt":"Consider the following:\n1. Increase in the aggregate demand\n2. Increased government expenditure\n3. Lower levels of employment\nHow many of the above conditions lead to the emergence of an inflationary gap in an economy?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":1,"exp":"Ex: An inflationary gap specifically occurs when the actual Gross Domestic Product (GDP) exceeds the potential GDP (anticipated GDP) due to higher-than-expected aggregate demand in the economy. So, point I is correct. This gap emerges under specific conditions: elevated employment levels. So, point III is not correct. TG id - @lordking5 increased trade activities, or higher government expenditure. So, point II is correct. The key characteristic is that production lags behind the surging demand, creating upward pressure on prices to restore market equilibrium. The mathematical representation is Inflationary Gap = Actual GDP − Anticipated GDP, where the actual GDP must be higher than the potential GDP. Test-Economics-ET-03 This differs from a deflationary gap, where potential GDP exceeds real GDP. The gap triggers various policy responses, including fiscal measures like reduced government spending and monetary tools such as interest rate adjustments by central banks. So, only two of the above conditions lead to the emergence of an inflationary gap in an economy."},{"id":15,"txt":"Consider the following statements:\n1. While the GDP deflator includes only domestic goods, the Consumer Price Index (CPI) includes both domestic and foreign goods.\n2. While the GDP deflator measures the prices of a fixed basket of goods and services, the Consumer Price Index (CPI) measures the prices of all goods and services.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":0,"exp":"Ex: Consumer Price Index (CPI) is a measure that shows the level of prices in the economy and compares them to previous years to evaluate inflation. CPI is based on a fixed basket of goods that an average person buys yearly. Though it is similar to a GDP deflator, there are some differences: o GDP deflator includes only domestic goods , while CPI includes anything bought by consumers, which includes non-domestic products (imported or foreign-made). So, statement I is correct. o While the CPI measures the prices of a fixed basket of goods and services bought by consumers, the GDP deflator measures the prices of all domestically produced goods and services in an economy. So, statement II is not correct. o GDP deflator has a changing set of commodities while the CPI has a fixed basket of goods. Knowledge Box Wholesale Price Index (WPI): It measures the changes in the prices of goods sold and traded in bulk by wholesale businesses to other businesses . It is calculated and published by the Office of Economic Advisor, Department of Industrial Policy and Promotion in the Ministry of Commerce and Industry. WPI data is published monthly, with the index value representing an estimate of the price level for the month as a whole, rather than a specific date."},{"id":16,"txt":"With reference to Extra Budgetary Resources (EBRs) of the Government of India, consider the following statements:\n1. They are financial liabilities raised by Public Sector Undertakings for which repayment of the entire principal and interest is done by the Central Government.\n2. They are excluded from the Fiscal Deficit TG id - @lordking5 calculations, but are added to the total debt of the government.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II Vajiram & R avi's P r elims C A M P - 2026 T est-Economics-ET-03"],"ci":2,"exp":"Ex: According to the budget document, “ Extra Budgetary Resources (EBRs) are those financial liabilities that are raised by Public Sector Undertakings for which repayment of the entire principal and interest is done from the Government budget.” Such borrowings are made by state-owned firms to fund government schemes but are not part of the official budget calculations. So, statement I is correct. Extra budget borrowing is TG id - @lordking5 excluded from the fiscal deficit calculations , but at the same time, are added to the total debt of the government. So, statement II is correct. In recent years, several CPSUs have raised resources from the market by issuing Government of India- Fully Serviced Bonds (GoIFSB) for which the repayment of both principal and interest is to be done from the Budget. This means that though the borrowing is not a part of the Consolidated Fund of India (CFI), the interest payments for such borrowings are made out of the consolidated fund. Test-Economics-ET-03 Knowledge Box Fifteenth Finance Commission on Extra - budgetary resources The Fifteenth Finance Commission, in its initial report, advised both the centre and the states to eliminate extra budget borrowings. The Commission noted that there is an increasing tendency of the Union and State Governments to borrow outside the Consolidated Fund, leading to the accumulation of extra-budgetary liabilities. Hence, the Commission recommended that in the interest of transparency, both the Union and the States have to make full disclosure of extra-budgetary borrowings. Outstanding extra-budgetary liabilities need to be clearly identified and eliminated in a time-bound manner as per the amended FRBM Act of 2018."},{"id":17,"txt":"Consider the following pairs: Inflation Type Characteristic\n1. Stagflation Economic contraction in two consecutive quarters\n2. Skewflation Simultaneous occurrence of inflation and deflation\n3. Reflation Slow growth and a high unemployment rate\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: Inflation is the rate at which the overall level of prices for various goods and services in an economy rises over a period of time. Stagflation is an economic cycle characterised by slow growth and a high unemployment rate accompanied by inflation. As a remedy, productivity has to be increased to the point where it will lead to higher growth without additional inflation. This would then allow for the tightening of monetary policy to rein in the inflation component of stagflation. So, pair I is not correctly matched. Skewflation is a type of Biflation . Biflation is the simultaneous occurrence of inflation and deflation in an economy. It means the skewness of inflation among different sectors. Some sectors are facing huge inflation, some none and some deflation. So, pair II is correctly matched. Reflation is a policy that is applied after a period of economic slowdown or contraction . The goal is to expand output, stimulate spending and curb the effects of deflation. Policies include tax cuts, infrastructure spending, increasing the money supply, and lowering interest rates. So, pair III is not correctly matched. So, only one of the pairs given above is correctly matched."},{"id":18,"txt":"Consider the following goods/services:\n1. Research funding provided to State Universities\n2. All the Cancer drugs\n3. Distribution of electricity\n4. Medical-grade oxygen\nHow many of the above are exempted from Goods and Services Tax (GST) in India?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":1,"exp":"Ex: The Goods and Services Tax (GST) Council is a constitutional body in India, created under Article 279A of the Constitution, to govern the Goods and Services Tax (GST). The Council is responsible for making recommendations on various GST-related matters, including tax rates, exemptions, and administrative procedures. Universities and research centers TG id - @lordking5 established b y central or state government laws, or those granted income tax exemptions, are exempt from paying GST on research funding . This means the funding provided to such institutions, including Central Universities, does not attract GST. So, point I is correct. GST on cancer drugs has been reduced from 12% to 5%. While this is a significant reduction, cancer drugs are not fully exempt but are taxed at a concessional rate of 5%. So, point II is not correct. o Recently, GST on 33 life-saving cancer drugs and medicines has come down from 12 per cent to zero. Test-Economics-ET-03 Some goods or services are completely exempt from GST with no conditions attached. A common example is the transmission or distribution of electricity , which is fully exempt under GST. So, point III is correct. GST has been reduced from 12% to 5% on key medical products such as anesthetics, medical-grade oxygen , gauze, bandages, diagnostic kits, surgical gloves, glucometers, thermometers, and other appliances. So, point IV is not correct. So, only three of the above goods/services are exempted from Goods and Services Tax (GST)."},{"id":19,"txt":"A higher tax-to-GDP ratio denotes:","ref":"","opts":["increase in the current account deficit","increase in the general price levels","ecrease in the borrowings","ecrease in the capital formation"],"ci":2,"exp":"Ex: The tax-to-GDP ratio is a metric that measures a country's tax revenue as a percentage of its Gross Domestic Product (GDP). It's calculated by dividing a country's tax revenue during a specific period by its GDP during that same period. A higher tax-to-GDP ratio denotes a wider fiscal net and reduced dependence on borrowings. This indicates the government's ability to finance its expenditure from its revenue rather than relying on loans and borrowings. As of February 2024, India's tax-to-GDP ratio stands at 11.6% and is expected to reach an all-time high of 11.7% in 2024-2025. This is significantly lower than the OECD average of 34%. Developed countries tend to exhibit higher tax-to-GDP ratios compared to developing countries like India. While India's direct tax-to-GDP ratio has shown an upward trend, it has not consistently increased over the past twenty years. It has risen from an average of 5.5% in FY12-FY21 to 6.08% in the last fiscal year, but it remains below the 6.3% ratio achieved in 2007-08, indicating there have been fluctuations."},{"id":20,"txt":"Consider the following pairs: Type of Share Description\n1. Sweat share Issued to existing shareholders at a discounted price\n2. Scrip share Given to company employees without any charge\n3. Preference Dividends are paid to share shareholders prior to the issuance of common stock dividends\n4. Right share Given to existing shareholders without any charge\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":0,"exp":"Ex: A Sweat share i s a share given to the employees of the company without any charge. So, pair I is not correctly matched. A Scrip share is a share given to the existing shareholders without any charge. It is also known as bonus shares. So, pair II is not correctly matched. Preference shares, also commonly known as preferred stock, are a special type of share where dividends are paid to shareholders prior to the issuance of common stock dividends. So, pair III is correctly TG id - @lordking5 matched. Right shares refer to those shares that a company offers to its existing shareholders at a discounted price. So, pair IV is not correctly matched. So, only one of the above pairs is correctly matched. Test-Economics-ET-03"},{"id":21,"txt":"Consider the following:\n1. Decrease the repo rate\n2. Increase the tax rates\n3. Decrease public expenditure\n4. Increase the import duty on raw materials\nHow many of the above steps can be taken by a government/central bank to tackle inflation in an economy?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":1,"exp":"Ex: Inflation is the increase in the price of goods and services in an economy. It translates to reducing the purchasing power of a currency. The following are some of the remedies to tackle inflation: Lowering the repo rate makes borrowing cheaper, increasing money supply and demand in the economy. This can push prices up further. Hence, it is a pro-growth measure. So, point I is not correct. Higher taxes reduce disposable income and consumer spending. This curbs excess demand in the economy , helping bring down price levels. So, point II is correct. A reduction in public expenditure lowers overall demand in the economy. With reduced money flow, inflationary pressure decreases. It is a part of contractionary fiscal policy. So, point III is correct. Higher import duties raise input costs for industries , pushing up the final prices of goods. Instead of reducing inflation, this can worsen cost-push inflation, making it counterproductive. So, point IV is not correct."},{"id":22,"txt":"Which one of the following best describes the term “Pump and Dump scheme”?","ref":"","opts":["The practice of artificially inflating stock prices, only to sell them later at higher prices for profit TG id - @lordking5","strategy where traders sell borrowed stocks, expecting a price drop to buy them back at a lower rate","n illegal form of off-the-record stock trading where trades occur outside regulated stock exchanges","monetary policy approach where the central bank lowers interest rates or injects liquidity during market downturns to prevent crashes 4 Vajiram & R avi's P r elims C A M P - 2026 est-Economics-ET-03 T"],"ci":0,"exp":"Ex: The Pump and Dump scheme is a fraudulent stock market practice where a group of traders or promoters inflate the price of a stock through false, exaggerated, or misleading information (often via social media or messaging platforms) and then sell their holdings at inflated prices . Once they offload their shares, the stock price crashes, leaving retail investors with significant losses. This scheme is illegal and strictly prohibited by the Securities and Exchange Board of India (SEBI). Short Selling: A strategy where traders sell borrowed stocks, expecting a price drop to buy them back at a lower rate. Dabba Trading: An illegal form of off-the-record stock trading where trades occur outside regulated stock exchanges. Greenspan Put: A monetary policy approach where the central bank lowers interest rates or injects liquidity during market downturns to prevent crashes."},{"id":23,"txt":"Consider the following pairs: Tax Example\n1. Tobin tax Sales tax\n2. Ad valorem tax Import duty\n3. Pigouvian tax Carbon emissions tax\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":1,"exp":"Ex: Tobin tax: It is levied on spot currency conversions, with the intention of disincentivizing short-term currency speculation. In contrast to a consumption tax paid by consumers, the Tobin tax is meant to apply to financial sector participants as a means of controlling the stability of a given country's currency. It is more formally known as a Financial Transactions Tax (FTT), a currency transactions tax which does not impact long-term investments. It is only imposed on the excessive flow of money that moves regularly between financial markets through the actions of speculators in search of high short-term interest rates. Sales tax is not an example of the Tobin tax. So, pair I is not correctly matched. Test-Economics-ET-03 Ad valorem tax: It is based on the assessed value of an item , such as real estate or personal property. The most common Ad valorem taxes are property taxes levied on real estate and sales tax. However, ad valorem taxes may also extend to a number of tax applications, such as import duty taxes on goods from abroad. All Ad valorem taxes are levied based on the determined value of the item being taxed. So, pair II is correctly matched. Pigouvian tax: It is assessed against businesses and private individuals that engage in activities that create adverse side effects for society, such as environmental pollution, public health issues from tobacco sales, or other harmful side effects that have an external, negative impact. It is intended to make the producer of goods or services that create adverse side effects for society cover that cost. E.g., a carbon emissions tax that charges companies for their greenhouse gas emissions, and a tax on plastic bags , aimed at reducing environmental waste. So, pair III is correctly matched."},{"id":24,"txt":"Consider the following statements:\n1. Deflation refers to a sustained decrease in the general price level of goods and services in an economy, leading to a negative inflation rate.\n2. Disinflation refers to a slowdown in the rate of inflation.\n3. Both disinflation and deflation are characterized by an overall decrease in the inflation rate.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","I and II only","I, II and III"],"ci":3,"exp":"Ex: Deflation and disinflation are two scenarios that deviate from the usual trend of inflation. Deflation refers to a sustained decrease in the general price level of goods and services in an economy, leading to a negative inflation rate. It represents a broad-based decline in prices over time. Disinflation , on the other hand, refers to a slowdown in the rate of inflation. It occurs when the rate of inflation decreases, but the overall price level still increases , albeit at a slower pace. So, statements I and II are correct. Deflation can have negative consequences on the economy, as it may lead to reduced consumer spending, business investment, and economic growth. It can also increase the burden of debt and lead to deflationary spirals. Disinflation can have mixed effects on the economy. While a slowdown in inflation may indicate a more stable price environment, it can also suggest weaker demand or economic slowdown, affecting businesses and consumers. So, statement III is correct. Deflation is characterized by a sustained decrease in the general price level over an extended period, usually lasting months or even years. Disinflation refers to a temporary slowdown in the rate of inflation, often lasting for a shorter period, such as a few months or a year."},{"id":25,"txt":"Consider the following statements with regard to the Non-Convertible Preference shares:\n1. They neither result in the expansion of the company's equity base or increase its debt.\n2. They provide fixed dividends with a specified redemption period.\n3. They do not provide the voting rights in the company's general meetings.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: ‘Non-Convertible Preference shares’ are those that are issued to shareholders but cannot be converted to equity shares . These shares are preference shares and hence they do not carry voting rights . They neither result in the expansion of the company's equity base or increase its debt. So, statements I and III are correct. Such shares do not require an immediate payout and are cumulative in nature. On redemption, the shareholders receive a cash payout since these shares do not convert to equity. They always pay a fixed dividend to the shareholder until redemption. So, statement II is correct. Recently the Securities and Exchange Board of India (SEBI) has announced changes to IPO listing rules for the NCRPS wherein it has reduced the timeline from earlier 6 days to 3 days. Test-Economics-ET-03"},{"id":26,"txt":"Consider the following statements with reference to the Mutual Funds:\n1. An equity mutual fund invests more than 60% of its total assets in equity shares.\n2. Debt mutual funds are generally recommended to investors with lower risk tolerance.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":2,"exp":"Ex: Mutual funds provide diversification and offer higher returns than individual stocks. The two most prevalent types of mutual funds are equity mutual funds and debt mutual funds . Equity mutual funds are also known as open-ended equity funds and tend to be more volatile than debt mutual funds. They generate better returns because the returns on these funds are dependent on the performance of the underlying stock market indices as well as the government policies and regulations. A Mutual Fund is classified as an equity mutual fund if it invests more than 60% of its total assets in the equity shares of different companies. So, statement I is correct. Debt mutual funds invest in debt instruments such as bonds and notes, government securities, debentures and treasury bills. They offer fixed but minimum returns on your investment. Debt mutual funds are highly recommended to investors with lower risk tolerance . Debt funds are also available for short term (3-12 months) and mid term (3-5 years) investment. So, statement II is correct."},{"id":27,"txt":"Consider the following statements with regard to inflation targeting in India:\n1. It is notified by the Central Government in consultation with the Reserve Bank of India (RBI).\n2. India follows the Flexible Inflation Targeting (FIT) to maintain price stability.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":2,"exp":"Ex: The Reserve Bank of India (RBI) Act, 1934 provides for the inflation target to be set by the Government of India, in consultation with the Reserve Bank, once in every five years . Accordingly, the Central Government has notified 4 per cent Consumer Price Index (CPI) inflation as the target until the fiscal year 2025- 26 with the upper tolerance limit of 6 per cent and the lower tolerance limit of 2 per cent. So, statement I is correct. The primary objective of monetary policy is to maintain price stability while keeping in mind the objective of growth. India formally adopted Flexible Inflation Targeting (FIT) in 2016 to place price stability, defined in terms of a target CPI inflation , as the primary objective of the monetary policy. In May 2016, the RBI Act, 1934 was amended to provide a statutor y basis for the implementation of the flexible inflation targeting framework. So, statement II is correct. Flexible Inflation Targeting (FIT) framework in India is a mandate for monetary policy to manage inflation at 4% (+/-) 2%. If RBI fails to meet the target, RBI will have to explain the reason for its failure to meet as well as give a timeframe within which it will achieve it . The amended RBI Act, 1934 provides for an empowered six -member monetary policy committee (MPC) to be constituted by the Central Government by notification in the Official Gazette. The MPC determines the policy interest rate required to achieve the inflation target. The MPC’s primary mandate is to achieve the medium-term target for CPI inflation of 4 per cent within a band of +/- 2 per cent. Test-Economics-ET-03"},{"id":28,"txt":"Which of the following are derivative instruments?\n1. Futures\n2. Promissory Notes\n3. Credit Default Swaps TG id - @lordking5\n4. Commercial Paper\nSelect the correct answer using the code given below:","ref":"","opts":["I, III and IV only","II, III and IV only","I, II and IV only","I and III only Vajiram & R avi's P r elims C A M P - 2026 T est-Economics-ET-03"],"ci":3,"exp":"Ex: Derivatives are financial instruments whose value is derived from an underlying asset or a group of assets. These assets can be stocks, bonds, commodities, currencies, interest rates, or market indices. Various types of derivatives include futures, options, swaps, and forwards . Futures are derivative contracts that obligate the parties involved to buy or sell an asset at a predetermined price on a future date. So, point I is correct. Futures contracts are traded on various underlying assets like stocks, indices, commodities, and currencies. Traders and investors use derivatives to speculate on the future direction of prices in the underlying assets. These are financial instruments used by investors and hedge funds to invest in Indian securities, without registering with the Security and Exchange Board of India (SEBI). Swaps involve the exchange of cash flows or assets between two parties. It is a derivative contract where one party will exchange the value of an asset or cash flows with another. Swaps are widely used for hedging against various risks like interest rates, currency, commodity prices, and credit risks. Type of Swaps: Interest Rate Swaps, Currency Swaps, Commodity Swaps, Credit Default Swaps. Credit Default Swaps : These are financial derivatives that transfer credit risk between two parties . The buyer of the swap pays a premium to the seller and receives protection in case of a credit event, like a default, on the underlying asset. So, point III is correct. A \"Promissory note\" is a debt instrument, and not a derivative instrument . It is an instrument in writing containing an unconditional undertaking to pay a certain sum of money to a certain person. It acts like a financial instrument which forms a binding contract by law between the borrowers and the lenders. So, point II is not correct. Commercial Paper (CP) is a short-term debt instrument, not a derivative instrument. It is an unsecured money market instrument. Corporates, primary dealers (PDs) and all-India financial institutions (FIs) can raise short-term funds by issuing CP. It is issued at a discount to face value, and redeemable at par to the holder at maturity. So, point IV is not correct. Knowledge Box Other Derivative Instruments: Credit derivatives: These are financial instruments whose value is derived from the credit risk of an underlying asset, typically a bond or a loan. Credit derivatives hedge against credit risk in investment portfolios. Weather derivatives: These are financial instruments whose value is linked to specific weather conditions. They enable businesses or individuals to hedge against the risk of financial losses caused by variations in weather patterns. Currency derivatives: These are financial contracts whose value is derived from the exchange rate of one currency against another. Currency derivatives offer flexibility and opportunities to manage currency-related risks. Test-Economics-ET-03"},{"id":29,"txt":"Consider the following information: Index Released By Base Year\n1. Consumer Labour 2005-06 Price Index for Bureau Agricultural Labourers (CPI-AL)\n2. Wholesale Office of the 2011-12 Price Index Economic (WPI) Advisor\n3. Index of National 2011-12 Industrial Statistical Production Office (IIP) (NSO) IV . GDP Deflator National 2005-06 Statistical Office (NSO)\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":1,"exp":"Ex: Economic indices are statistical tools that provide insights into the performance, structure, and health of an economy . They are essential for policy formulation, inflation targeting, growth analysis , and public welfare decision-making. Among the most important indices used in India are: Consumer Price Index-Agricultural Labourers (CPI -AL): o It is a part of the Consumer Price Index (CPI) that tracks the change in retail prices of a fixed basket of goods and services consumed by different population groups. o It is a measure of inflation specifically for agricultural labourers , which is critical for rural wage indexation and social sector schemes like MGNREGA wage revisions . It is used in fixing minimum wages under the Minimum Wages Act, 1948 . o It is released by the Labour Bureau (under Ministry of Labour and Employment). o The current base year for CPI – AL is 1986-1987. Although there are proposals for updating the base year to 2019–20. So, row I is not correctly matched. Wholesale Price Index (WPI): o WPI tracks price changes at the wholesale level, unlike CPI, which is retail. Major components covered under WPI include primary articles – 22.6% (food, non-food, minerals), fuel and power – 13.2% and manufactured products – 64.2%. o It is released by the Office of the Economic Adviser , under the Ministry of Commerce and Industry. o The current base year for calculation of WPI is 2011–12 . So, row II is correctly matched. Index of Industrial Production (IIP): o Measures the volume growth of different sectors of industry grouped into three categories – Mining, Manufacturing and Electricity. o This is a monthly index that reflects the individual and cumulative performance of eight selected sectors of the economy which includes coal, crude oil, natural gas, refinery products, fertilizers, steel, cement, electricity. o In the Index of Eight Core Industries, refinery products hold the highest weight (28.04%), followed by electricity generation (19.85%), Steel (17.92%), Coal (10.33%), Crude Oil production (8.98%), Cement production (5.37%) and Fertilizers (2.63%). o It is released by the National Statistical Office (NSO), Ministry of Statistics and Programme Implementation (MoSPI) on a monthly basis. The base Year for IIP is 2011–12. So, row III is correctly matched. o It will be revised to 2022-23, effective from April 2026. GDP Deflator: o It is a measure of overall price inflation in an economy. GDP Deflator = (Nominal GDP)/Real GDP ×100 o It includes all goods and services produced domestically, unlike CPI and WPI. o It is a broader measure than WPI or CPI. o Unlike CPI/WPI, it is not based on a fixed basket — thus reflects changes in both prices and consumption patterns . o It is released on a quarterly and annual basis by the National Statistical Office (under MoSPI). Test-Economics-ET-03 o The base year for India's GDP calculation is currently 2011-12, though revisions to the base year are under consideration. o In June 2024 , MoSPI set up a 26-member Advisory Committee on National Accounts Statistics (ACNAS) to decide the base year for GDP data, under the chairmanship of Biswanath Goldar. So, row IV is not correctly matched."},{"id":30,"txt":"Consider the following statements:\nStatement I: A progressive income tax acts as an automatic stabiliser in an economy.\nStatement II: A progressive income tax makes consumer spending less sensitive to fluctuations in the GDP.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["oth Statement I and Statement II are correct and Statement II explains Statement I","oth Statement I and Statement II are correct, but Statement II does not explain Statement I","Statement I is correct, but Statement II is incorrect","Statement I is incorrect, but Statement II is correct"],"ci":0,"exp":"Ex: Automatic stabilisers automatically adjust tax rates and transfer payments in a manner that is intended to stabilize incomes, consumption and business spending over the business cycle. Automatic stabilisers can include the use of a progressive taxation structure under which the share of income that is taken in taxes is higher when incomes are high. The amount then falls when incomes fall due to a recession, job losses, or failing investments. So, statement I is correct. The progressive income tax, thus, acts as an automatic stabiliser – a shock absorber because it makes disposable income and thus consumer spending, less sensitive to fluctuations in Gross Domestic Product (GDP). So, statement II is correct. o When GDP rises, disposable income also rises but by less than the rise in GDP because a part of it is siphoned off as taxes. This helps limit the upward fluctuation in consumption spending. During a recession when GDP falls, disposable income falls less sharply and consumption does not drop as much as it otherwise would have fallen had the tax liability been fixed. This reduces the fall in aggregate demand and stabilises the economy. So, both Statement I and Statement II are correct and Statement II explains Statement I."},{"id":31,"txt":"Consider the following taxes:\n1. Stamp Duty\n2. Registration Fees\n3. Motor Vehicle Tax\n4. Security Transaction Tax\n5. Corporation Tax\nHow many of the above form part of the State Own Tax Revenue (SOTR)?","ref":"","opts":["Only two","Only three","Only four","ll the five"],"ci":1,"exp":"Ex: India has a well-developed tax structure with clearly demarcated authority between Central and State Governments and local bodies . The Central Government levies taxes on income (except tax on agricultural income, which the State Governments can levy), customs duties, central excise and service tax. State Own Tax Revenue (SOTR) refers to the budgetary resources that state governments generate through taxes they levy and collect. The own tax revenue of States includes money raised through stamp duty , registration fees , motor vehicle tax , sales tax, state excise and other taxes, along with the State component in Goods and Services Tax (GST), or State GST (SGST). It is an indicator of the state's ability to raise finances. So, points I, II and III are correct. Taxes which are solely collected by the Central Government includes: Direct Taxes: Corporation Tax , Income Tax, Other Taxes in Income & Expenditure, Wealth Tax, Security Transaction Tax and Other Tax and Duty on Commodities & Services. So, points IV and V are not correct. Indirect Taxes: Central GST, Union Excise Duty on petroleum products & tobacco and Custom duties. So, only three of the above form part of the State Own Tax Revenue (SOTR). Test-Economics-ET-03"},{"id":32,"txt":"Which one of the following refers to the provision to sell more shares than originally planned in an Initial Public Offering (IPO)?","ref":"","opts":["Oversubscription facility","Greenfield option","Greenshoe option","lue-chip clause"],"ci":2,"exp":"Ex: A greenshoe option, also known as an over-allotment option, is a provision in an Initial Public Offer (IPO) underwriting agreement that grants the underwriter the right to sell up to 15% more shares than originally planned if the demand for the security issue is higher than expected. It provides additional price stability to the security issue because the underwriter can increase the supply and smooth out price fluctuations. If the IPO is successful and share prices surge, the underwriter can exercise the option to buy extra stock from the company at the predetermined price, selling them at a profit. Conversely, if the price falls, they buy back the shares from the market to cover their short position, supporting the stock price and stabilising it."},{"id":33,"txt":"Consider the following statements with regard to the Exchange Traded Funds (ETFs):\n1. They are investment funds traded on stock exchanges, similar to stocks.\n2. They are priced once daily at the Net Asset Value (NAV).\n3. They are regulated by the Securities and Exchange Board of India (SEBI).\nWhich of the statements given above are correct?","ref":"","opts":["I, II and III","I and II only","II and III only","I and III only"],"ci":3,"exp":"Ex: Exchange-Traded Funds (ETFs) are investment funds traded on stock exchanges, similar to stocks. They typically track an index, commodity, or basket of assets, offering diversification and low costs. So, statement I is correct. Mutual funds are pooled investment vehicles managed by professional fund managers. They collect money from multiple investors to invest in a diversified portfolio of stocks, bonds or other securities. ETFs can be bought and sold throughout the trading day at market prices, providing flexibility and liquidity to investors. However, mutual funds are priced once daily at the Net Asset Value (NAV) and offer various investment strategies, from passive index tracking to active management. So, statement II is not correct. Both ETFs and mutual funds in India are regulated by the Securities and Exchange Board of India (SEBI), . So, statement III is correct. ETFs typically have lower expense ratios because they passively track an index, requiring less active management. This reduces the need for frequent buying and selling of securities, resulting in lower management fees and operational costs compared to actively managed mutual funds. Expense ratio is the annual maintenance charge levied by funds to finance its expenses. It includes annual operating costs, including management fees, allocation charges, advertising costs, etc. of the fund."},{"id":34,"txt":"Which of the following statements are correct\nwith regard to inflation?\n1. Core inflation excludes products with volatile prices.\n2. Both goods and services are included in the TG id - @lordking5 headline inflation.\n3. Core inflation is measured to study the long term trend in the price rise.\nSelect the correct answer using the code given below:","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III 6 Vajiram & R avi's P r elims C A M P - 2026 est-Economics-ET-03 T"],"ci":3,"exp":"Ex: Core inflation excludes food and fuel items from headline inflation. Headline inflation concerns all commodities, services, and goods . Headline inflation reflects the prices of essential consumption goods. Inflation in these prices hurts people in lower-income groups more as they spend a higher proportion of their incomes on food and fuel items . So, statements I and II are correct. Core inflation is less volatile than headline inflation because the prices of fuel and food items in headline inflation tend to fluctuate and create changes in inflation computation. Test-Economics-ET-03 Core inflation is measured to study the long term trend in the price rise , so that the long term policies can be framed to control inflation. So, statement III is correct."},{"id":35,"txt":"Consider the following pairs: Term Description\n1. Tax Expenditure incurred on buoyancy collection of taxes\n2. Tax Changes in tax revenue in elasticity response to changes in tax rate\n3. Tax Responsiveness of tax expenditure revenue growth to changes in Gross Domestic Product\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: Tax buoyancy explains the relationship between the changes in government’s tax revenue growth and the changes in Gross Domestic Product (GDP). It refers to the responsiveness of tax revenue growth to changes in GDP . When a tax is buoyant, its revenue increases without increasing the tax rate. So, pair I is not correctly matched. Tax elasticity refers to changes in tax revenue in response to changes in tax rate. For example, how tax revenue changes if the government reduces corporate income tax from 30 per cent to 25 per cent indicates tax elasticity. Tax elasticity considers the automatic response of revenues to the change in income given that tax structure is unchanged. So, pair II is correctly matched. Tax expenditure is the revenue forgone and not the expenditure incurred on collecting it. It is the incentives given by the government to promote certain sectors, in absence of which they may not have come up. So, pair III is not correctly matched. So, only one of the pairs given above is correctly matched."},{"id":36,"txt":"Which one of the following refers to the practice of buying and selling the same security by the same investor to create misleading market information?","ref":"","opts":["Insider trading","Wash trading","Front running","ircular trading"],"ci":1,"exp":"Ex: Insider trading refers generally to buying or selling a security, in breach of a fiduciary duty or other relationship of trust and confidence, on the basis of material, nonpublic information about the security. Insider trading violations may also include \"tipping\" such information, securities trading by the person \"tipped,\" and securities trading by those who misappropriate such information. In insider trading, usually an employee of the company or firm is involved whose non-public information about the company’s plans is used for personal gain. Wash trading is a practice where a trader buys and sells the same security to create the illusion of higher trading volume and mislead the market. This can involve collusion between a trader and a broker or an investor acting as both the buyer and the seller . The aim is to make the security appear more active and which in turn may attract real investors. Front Running: It is a fraudulent practice where t raders or brokers take advantage of non-public information about large trades by their clients. They build positions before the trade occurs in order to profit from the price movement once the trade is executed. Circular trading involves a group of traders repeatedly buying and selling among themselves to manipulate prices or volumes"},{"id":37,"txt":"Which one of the following statements best describes the term ‘tax credit’?","ref":"","opts":["It is a direct reduction in the amount of tax owed by an individual.","It is a deduction from the total income reducing the taxable income.","It is the amount that can be deferred to future tax assessment years.","It is the process of taxing the income earned in another country."],"ci":0,"exp":"Ex: The term “tax credit” refers to an amount of money that taxpayers can subtract directly from the taxes they owe. Tax credits are more favorable than tax deductions because they reduce the tax due, not just the amount of taxable income. Test-Economics-ET-03 There are three basic types of tax credits: nonrefundable, refundable and partially refundable. For example, a tax credit is available that rewards people for installing solar panels for home use. Other tax credits help offset the costs of child and dependent care, education and adoption."},{"id":38,"txt":"Consider the following:\n1. National Stock Exchange (NSE)\n2. Over-the-Counter (OTC) market\n3. RBI’s Retail Direct platform\n4. NSE-goBID Platform\nHow many of the above facilitate the trade of Government Securities (G-Secs) in the Indian security market?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":3,"exp":"Ex: Government Security (G-Sec) is a financial instrument issued by the Central Government or the State Governments. These securities are either short term (treasury bills with original maturities of less than one year) or long term (government bonds or dated securities with original maturity of one year or more). Individuals (retail investors) in India can buy government securities through the following methods: Stock Exchanges (National Stock Exchange , Bombay Stock Exchange and Multi Commodity Exchange of India). So, point I is correct. Over-the-counter market. So, point II is correct. RBI’s Retail Direct Platform: It allows individuals to open a Retail Direct Gilt account with the RBI to buy and sell G-Secs. So, point III is correct. NSE-goBID Platform: It allows investors to invest in treasury bills and dated bonds of the Government of India. So, point IV is correct. NDS-OM (Negotiated Dealing System-Order Matching System): It is an RBI trading system that enables investors to access the secondary market. So, all four of the above facilitate the trade of Government Securities (G-Secs) in the Indian security market. Knowledge Box The RBI Retail Direct Scheme : It is a one-stop solution to facilitate investment in Government of India Treasury Bills (T-Bills) , Government of India dated securities (dated G-Sec) , State Development Loans (SDLs) and Sovereign Gold Bonds (SGB) by individual investors. The RBI Retail Direct Online Portal will facilitate the following: Buying Government securities through primary auctions (non-competitive segment only). Buying and selling Government securities in the secondary market . Buying and selling Sovereign Gold Bonds (SGBs) in the primary and secondary market ."},{"id":39,"txt":"Consider the following scenario: Mr. X is a salaried employee. In the month of January 2018, he purchased equity shares of SBI Ltd. company listed on the Bombay Stock Exchange and sold the same in April 2021, after holding them for a period of more than 36 months. The profit earned by Mr. X through this will be taxed under:","ref":"","opts":["Income tax","Goods and Services Tax","apital gains tax","orporate tax"],"ci":2,"exp":"Ex: Profits or gains arising on transfer of the capital asset are charged to tax under the head “Capital Gains”. Income from capital gains is classified as “Short Term Capital Gains” and “Long Term Capital Gains”. Any capital asset held by the taxpayer for a period of more than 36 months immediately preceding the date of its transfer will be treated as long-term capital asset. Mr. X purchased shares in January 2018, and sold them in April 2021, i.e., after holding them for a period of more than 36 months. Hence, s hares will be treated as Long Term Capital Assets. Test-Economics-ET-03"},{"id":40,"txt":"With reference to BSE SENSEX in India, consider the following statements:\n1. It tracks the performance of the 100 largest companies in India.\n2. It is always calculated in terms of Indian rupees.\n3. It is reviewed and re-evaluated semi-annually each year.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II only","II and III only","III only","I, II and III"],"ci":2,"exp":"Ex: Sensex is the benchmark index of the Bombay Stock Exchange (BSE) in India. It was launched in 1986. The SENSEX index is made up of 30 of the BSE's largest and most actively traded stocks , and it serves as a gauge for the Indian economy. So, statement I is not correct. Sensex is a Free-float Market Capitalisation weighted stock market index. In this index, the total shares issued by the company is made available for trading to the general public. It does not consider promoters holding, government holding, and other shares that will not be available in the market for trading in the ordinary course of events. The market capitalization of any company in Sensex is determined by the stock price multiplied by the number of shares outstanding. Sensex is calculated in Indian rupees and U.S. dollars. As they reflect both domestic and international benchmarks for the Indian market and reflect changes in both stock prices and exchange rates properly. So, statement II is not correct. Sensex is reviewed and re-evaluated semi-annually each year in June and December. It involves re- evaluation of the constituents of a particular index as it deals with addition and removal of stocks from the index and their re-ranking based on the current market situation. So, statement III is correct."},{"id":41,"txt":"Consider the following statements with regard to the lock-in period in capital market:\n1. It is a duration after an IPO when certain shareholders are prohibited from selling their shares.\n2. The expiry of a lock-in period can lead to a sudden rise in the prices of the shares.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":0,"exp":"Ex: When a company goes public through an IPO, certain investors are restricted from selling their shares for a specific time, called the lock-in period . This period typically lasts six months but can extend up to a year, depending on the investor category and regulatory guidelines. So, statement I is correct. The primary outcome expected is a potential drop in the stock price. The sudden influx of a large volume of previously restricted shares increases the market supply, which, if not met with an equal surge in demand, creates downward pressure on the price. So, statement II is not correct. When major institutional investors, who were early backers of the company, sell large portions of their holdings, other investors might interpret this as a lack of confidence in the company's future prospects . This perception can foster a general bearish sentiment. The lock-in period aims to stabilize stock prices and reduce the risk of large-scale sell-offs immediately after the IPO listing. It ensures that major investors, especially promoters, and non-promoters and anchor investors, hold their shares for a set duration, contributing to the long-term growth of the company."},{"id":42,"txt":"In the context of India’s public finance, which TG id - @lordking5 one of the following best describes the term 'fiscal glide path'?","ref":"","opts":["strategy to increase government spending gradually","strategy to increase tax revenues","strategy to reduce inflation by controlling money supply","strategy to gradually reduce the fiscal deficit over time Vajiram & R avi's P r elims C A M P - 2026 T est-Economics-ET-03"],"ci":3,"exp":"Ex: The fiscal glide path is a strategic approach used by the government to reduce the fiscal deficit over a period of time. It aims to ensure that the budget deficit remains within manageable limits while promoting sustainable economic growth. This approach helps prevent negative long-term impacts like inflation and rising national debt. It is particularly relevant when the fiscal deficit is excessively high and needs gradual correction. Test-Economics-ET-03 The NK Singh Committee 2016 , formed under the Narendra Modi government, proposed a fiscal glide path aimed at gradually reducing the fiscal deficit. This path lays out annual targets for the deficit, ensuring the government takes steady and calculated steps towards reducing it. The Committee incorporated an escape clause, allowing a deviation of up to 0.5% of GDP in extraordinary situations. This provision permits the government to surpass its target if deemed necessary. This balance ensures fiscal responsibility without stifling economic recovery."},{"id":43,"txt":"In which of the following ways does the ‘Inverted Duty Structure (IDS)’ impact an economy?\n1. It discourages domestic manufacturing by making raw materials costlier than finished goods.\n2. It increases dependence on imports, leading to a higher trade deficit.\n3. It discourages local employment and domestic value addition.\nSelect the correct answer using the code given below:","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: In a world moving towards ‘gated globalization,’ where trade barriers, tariffs and selective trade agreements shape economic policies, the Inverted Duty Structure can create significant challenges for economies, especially those aiming for self-reliance. The Inverted Duty Structure occurs when import duties on raw materials or intermediates are higher than those on finished goods . Ideally, an economy should impose lower duties on raw materials to encourage local manufacturing. If finished goods are cheaper to import, businesses prefer imports over local production , leading to a decline in domestic manufacturing . Manufacturers face higher production costs due to expensive raw materials where locally produced goods struggle to compete with cheaper imported finished products . So, statement I is correct. ■ In India, it has impacted manufacturing of solar panels , where finished products have lower import duties than raw materials. As local manufacturing becomes unviable, businesses shift to importing finished goods rather than producing them domestically. This leads to higher imports , worsening the trade deficit (when imports exceed exports). So, statement II is correct. The Inverted Duty Structure discourages local manufacturing and value addition . When industries prefer importing finished goods over producing locally, domestic jobs in manufacturing, supply chains and logistics shrink. So, statement III is correct."},{"id":44,"txt":"Which one of the following is issued by the Government of India to meet the temporary mismatches in the government's cash flows and bridge the short-term liquidity needs?","ref":"","opts":["ommercial Bill","ash Management Bill","ertificate of Deposit","ommercial Paper"],"ci":1,"exp":"Ex: Cash Management Bills (CMBs) are short-term instruments issued by the Government of India to meet temporary mismatches in cash flow and to bridge short-term liquidity needs . They are similar to Treasury Bills but are issued for shorter durations. So, option (b) is correct. Commercial Bill is a type of short-term, negotiable instrument that is typically used in trade transactions . It is a bill of exchange issued by a business to a supplier to pay for goods or services received. So, option (a) is not correct. Commercial Paper is an unsecured, short-term debt instrument issued by a corporation, typically used for the financing of accounts payable and inventories and meeting short-term liabilities. So, option (d) is not correct. Certificate of Deposit (CD) is a short to medium-term, negotiable instrument issued by a bank or financial institution . It signifies a time deposit, which cannot be withdrawn before the maturity date without incurring a penalty. So, option (c) is not correct. Test-Economics-ET-03"},{"id":45,"txt":"Consider the following pairs: Type of Bond Objective\n1. Elephant Bond Recover black money invested overseas\n2. Impact Bond Achieve social or environmental outcomes\n3. Uday Bond Take over the debts of the power distribution companies\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":2,"exp":"Ex: Bonds are debt instruments that allow the issuer to borrow money from the investor for a fixed period of time and pay a fixed or variable interest rate. There are different types of bonds based on the issuer, the coupon rate and the tenure. Elephant bonds: They are issued by the government to recover black money invested overseas. They are 25-year sovereign bonds that require the holders to invest 50% of their undisclosed income in these securities. The funds raised by these bonds are used for financing infrastructure projects . They are not yet issued in India. So, pair I is correctly matched. Impact bonds: They link the payments to the achievement of social or environmental outcomes . They are a form of outcome-based financing that involves an outcome payer, a service provider and an investor. They are emerging as an innovative and effective way to foster relationships between public and private sectors, encourage Socially Responsible Investments (SRIs) and drive progress on attaining Sustainable Development Goals (SDGs). So, pair II is correctly matched. Uday bonds: They are issued by State Governments to take over the debts of their power Distribution Companies (DISCOMs). They are part of the Ujwal DISCOM Assurance Yojana (UDAY) scheme, which aims to improve the operational and financial efficiency of the DISCOMs. They are not traded in the market but are privately placed with banks and financial institutions. They have a maturity period of 10 to 15 years and carry a lower interest rate than the original loans of the DISCOMs. So, pair III is correctly matched. So, all three of the pairs given above are correctly matched."},{"id":46,"txt":"Consider the following statements with reference to the capital receipts:\n1. They create the sources of income contributing to the asset creation of the government.\n2. Unlike disinvestment proceeds, which are non-debt capital receipts, special securities issued to public-sector banks are debt capital receipts.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":1,"exp":"Ex: Capital Receipts contain various assets and liabilities of the government. Capital receipts are all those money receipts of the government that either create a liability for the government or reduce an asset of the government. These receipts are not recurring in nature as it is related to the valuation of assets and liabilities of the government. So, statement I is not correct. Capital receipts are non-recurring because they are not a regular source of income for a business or government. They are the result of long-term decisions and infrequent transactions. Capital receipts include non-debt receipts and debt-receipts. Non-debt receipts are those capital receipts that do not lead to debt. They include: ■ Recoveries of loans and advances given to state governments , Union territories and foreign governments. ■ Disinvestment proceeds. So, statement II is correct. ■ Money accrued to the Union government from listing of central government companies and issue of bonus shares. Debt capital receipts include market loans, issuance of special securities to public-sector banks , securities issues, short-term bank debt, treasury bills, securities against small savings, state pension schemes, relief bonds, saving bonds, gold bonds, external debt etc. Capital Receipts means money received by way of loans or from the sale of its assets Loans will have to be returned to the agencies from which they have been borrowed , thus they create liability. Test-Economics-ET-03"},{"id":47,"txt":"With reference to Participatory Notes (P-Notes),\nconsider the following statements:\n1. They are Offshore Derivative Instruments that allow foreign investors to invest in India.\n2. Investors issuing P-Notes are required register with Securities and Exchange Board of India (SEBI).\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II TG id - @lordking5 8 Vajiram & R avi's P r elims C A M P - 2026 est-Economics-ET-03 T"],"ci":0,"exp":"Ex: Participatory notes also referred to as P-notes, or PNs, are financial instruments required by investors or hedge funds to invest in Indian securities without having to register with the Securities and Exchange Board of India (SEBI). So, statement II is not correct. P-notes are among the group of investments considered to be Offshore Derivative Investments (ODIs). So, statement I is correct. Any dividends or capital gains collected from the securities go back to the investors. Indian regulators are generally not in support of P-notes because they fear that hedge funds will cause economic volatility in India's exchanges. While the Financial Institutional Investors (FII) have to report all such investments each quarter to SEBI, they need not disclose the identity of the actual investors."},{"id":48,"txt":"In which one of the following contexts the terms “Baa2 and Baa3” are mentioned?","ref":"","opts":["Generation of employment","redit ratings of companies","reation of public goods","epreciation of assets"],"ci":1,"exp":"Ex: A credit rating is an independent assessment of the creditworthiness of a business or government entity in general terms or with respect to a specific financial obligation, such as a new bond issue. Baa2 and Baa3 are credit ratings provided by credit rating agencies. It assesses how likely an issuer (the borrower) is to pay back investors (the lenders) and the interest rate it may have to pay in return. They are conferred as letter grades, ranging from A at the top to C or D at the bottom. The three major credit rating agencies are Fitch Ratings, Moody's Investors Service and S&P Global Ratings. Obligations rated Baa2 are subject to moderate credit risk. They are considered medium grade and as such may possess certain speculative characteristics. In Moody's rating system, Baa3 is a relatively lower investment-grade rating. It signifies a moderate credit risk for the issuer of the rated financial instrument or debt."},{"id":49,"txt":"Which of the following are categorised as negotiable instruments in India?\n1. Promissory Notes\n2. Bills of Exchange\n3. Cheques\nSelect the correct answer using the code given below:","ref":"","opts":["I, II and III","I and II only","II and III only to","I and III only"],"ci":0,"exp":"Ex: Negotiable Instruments are written contracts whose benefit could be passed on from its original holder to a new holder. In other words, negotiable instruments are documents which promise payment to the assignee (the person whom it is assigned to/given to) or a specified person. These instruments are transferable signed documents which promise to pay the bearer/holder the sum of money when demanded or at any time in the future. As mentioned above, these instruments are transferable. The final holder takes the funds and can use them as per his requirements. That means, that once an instrument is transferred, the holder of such an instrument obtains a full legal title to such instrument. Common examples of negotiable instruments include Cheques , Bill of exchange and Promissory Notes. So, points I, II and III are correct. Test-Economics-ET-03 Knowledge Box Promissory Notes ● It refers to a written promise to its holder by an entity or an individual to pay a certain sum of money by a pre-decided date. It shows the amount which a person owes to someone with the interest rate and also the date of payment. Bills of Exchange ● It refers to a legally binding, written document which instructs a party to pay a predetermined sum of money to the second (another) party. Some of the bills might state that money is due on a specified date in the future or they might state that the payment is due on demand. Cheque ● It refers to an instrument in writing which contains an unconditional order, addressed to a banker and is signed by a person who has deposited his money with the banker. This order requires the banker to pay a certain sum of money on demand only to the bearer of the cheque (person holding the cheque) or to any other person who is specifically to be paid as per instructions given. Certificate of Deposit (CD) ● It is a savings product that earns interest on a lump sum of money for a fixed period of time. CDs differ from savings accounts because the money must remain untouched for the entirety of their term or you risk paying a penalty. CDs usually have higher interest rates than savings accounts as an incentive for lost liquidity. Test-Economics-ET-03"}],"m":null,"tt":3000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

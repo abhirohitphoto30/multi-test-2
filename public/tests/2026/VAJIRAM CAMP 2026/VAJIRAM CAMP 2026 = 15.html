@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>VAJIRAM CAMP 2026 = 15</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>VAJIRAM CAMP 2026 = 15</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="VAJIRAM CAMP 2026 = 15">VAJIRAM CAMP 2026 = 15</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to Internationally Transferred Mitigation Outcomes (ITMOs), consider the following statements:\n1. These are part of the Paris Agreement.\n2. These can not be measured in non-GHG terms.\n3. Unlike carbon credits, ITMOs account for the Nationally Determined Contributions (NDCs) of participating countries.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":1,"exp":"Ex: Article 6 of the Paris Agreement consists of principles and mechanisms for how countries can “pursue voluntary cooperation” to reach their climate targets. One of the mechanisms under Article 6.2 is Internationally Transferred Mitigation Outcomes (ITMOs). So, statement I is correct. ITMOs can be measured in carbon dioxide equivalent (CO 2 e) or using other metrics , such as kilowatt- hours (KWh) of renewable energy. Therefore, these can be quantified in “non-GHG” metrics (e.g. kWh of renewable energy, hectares of forest). They must be verified by an external entity. So, statement II is not correct. ITMOs allow countries to trade verified emission reductions with each other. It enables some parties to meet their national emission reduction commitments (NDCs) and others to obtain economic benefits for achieving emission reductions beyond their national targets. ITMOs are used internationally and are a form of cooperation between countries to achieve global climate goals. ITMOs differ from carbon credits as they count toward countries’ Nationally Determined Contributions (NDCs). So, statement III is correct. Carbon credits are primarily used by businesses and entities to offset emissions in voluntary and compliance markets. So, only two of the given statements are correct. Test- Environment- EVT-5"},{"id":1,"txt":"Consider the following climate finance/market mechanisms:\n1. Adaptation Fund\n2. Loss and Damage Fund\n3. Global Environment Facility\n4. Clean Development Mechanism\nHow many of the above were originally established under the Kyoto Protocol?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":1,"exp":"Ex: The Kyoto Protocol gives practical effect to the United Nations Framework Convention on Climate Change by legally binding industrialised and transition economies to specific targets for limiting and reducing greenhouse gas emissions. In contrast, the Convention itself only requires these countries to adopt mitigation measures and report their actions periodically, without imposing binding emission limits. Climate financing mechanisms are designed to support global efforts to mitigate and adapt to climate change. These mechanisms, established under international agreements, mobilize financial resources to aid developing countries in transitioning to low-carbon, climate-resilient development pathways. The Adaptation Fund was established in 2001 under the Kyoto Protocol to finance concrete adaptation projects and programmes in developing country Parties to the Kyoto Protocol that are particularly vulnerable to the adverse effects of climate change. So, point I is correct. The Loss and Damage Fund (LDF) was established in 2022 at the 27th Conference of Parties ( COP27 ) of the United Nations Framework Convention on Climate Change (UNFCCC). The purpose of the Fund is to assist developing countries that are particularly vulnerable to the adverse effects of climate change in responding to economic and non-economic loss and damage associated with the adverse effects of climate change, including extreme weather events and slow onset events. So, point II is not correct. The Global Environment Facility was established during the Rio Earth Summit in 1992 to address a wide range of global environmental issues , including climate change, biodiversity, and land degradation. It serves as a financial mechanism for multiple international conventions and supports projects in many countries. Its mandate extends beyond climate financing to broader environmental challenges. So, point III is not correct. The Clean Development Mechanism (CDM) was established in 2001 under the Kyoto Protoco l, which was adopted in 1997 and came into force on 16 February 2005. The CDM officially began functioning in 2006 when the first projects were registered. It is a market-based mechanism under the Kyoto Protocol which allows developed countries to earn carbon credits by funding emission reduction projects in developing countries . These carbon credits, called Certified Emission Reductions (CERs) , can be traded or used to meet emission reduction targets under the Protocol. It provides financial incentives for clean technology transfer. So, point IV is correct. So, only two of the above climate finance mechanisms were originally established under the Kyoto Protocol."},{"id":2,"txt":"With reference to Hope Spots, consider the following statements:\n1. These are the areas of an ocean that need special protection because of critical wildlife and underwater habitats.\n2. These are designated by the United Nations Environment Programme.\n3. These can be nominated only by national governments.\n4. Sundarbans is the only designated Hope Spot in India.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II and III only","I and IV only","I, II, III and IV - 5 T e s t - E n v i r o n m e n t - E V T"],"ci":0,"exp":"Ex: Hope Spot is an area of an ocean that needs special protection because of its wildlife and significant underwater habitats. They are critical to the health of the ocean. So, statement I is correct. Mission Blue , a conservation organization, has created a network of Hope Spots . Mission Blue is an initiative in the field of ocean protection. It was initiated by Dr Sylvia Earle. It implements communications campaigns that elevate Hope Spots to the world stage through documentaries, social media, traditional media and other innovative tools. So, statement II is not correct. Test- Environment- EVT-5 The new Hope Spot nomination process allows anyone (individual/ organisations/ Government etc.) from anywhere to nominate a marine site special to them and is unique to the conservation world. This means that for the first time, the global community can have a direct say in protecting the ocean. So, statement III is not correct. Andaman and Nicobar Islands and Lakshadweep Islands have been named as \"hope spots\" in India by the International Union for Conservation of Nature (IUCN) and Mission Blue. So, statement IV is not correct."},{"id":3,"txt":"With reference to the withdrawal from the United Nations Framework Convention on Climate Change (UNFCCC), consider the following statements:\n1. A Party may submit a notice of withdrawal only after three years have elapsed from the date the Convention enters into force for that country.\n2. Withdrawal from the UNFCCC automatically result in withdrawal from the Paris Agreement.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":2,"exp":"Ex: The United Nations Framework Convention on Climate Change (UNFCCC) and the Paris Agreement are key international treaties guiding global efforts to address climate change. Both instruments contain specific legal provisions regarding withdrawal, including timelines and procedural requirements. Understanding these rules is important for assessing a country’s obligations under international climate law. Under Article 25 of the UNFCCC, a Party can submit a notice of withdrawal only after three years from the date the Convention comes into force for that country. The withdrawal takes effect one year after such notice. So, statement I is correct. The UNFCCC serves as the “parent” treaty, under whose framework the Paris Agreement was adopted. Thus, withdrawal from the Convention automatically results in withdrawal from the Paris Agreement. So, statement II is correct."},{"id":4,"txt":"Consider the following:\n1. LED lamps\n2. Ceiling Fan\n3. Front-load washing machine\n4. Computer\n5. High-energy Li-battery\nHow many of the above are not covered under the Standards and Labeling (S&L) Scheme for mandatory star labelling?","ref":"","opts":["Only two","Only three","Only four","ll the five"],"ci":0,"exp":"Ex: The Standards and Labeling (S&L) scheme , an initiative spearheaded by the Ministry of Power and overseen by the Bureau of Energy Efficiency (BEE), was introduced in May 2006. It aims to assist consumers in making well-informed decisions regarding the energy efficiency and cost savings of various appliances and equipment. It encompasses over 30 types of products, each rated on a scale of 1 to 5, with 5 representing the highest level of energy efficiency. Mandatory Labeling: The following 16 appliances and equipment are required to have mandatory energy labels: Frost Free Refrigerator Stationary Storage Type Electric Water Heater Colour Television Washing Machine (Semi/Top Load/Front Load). So, point III is not correct. Room Air Conditioner (Variable Speed) Tubular Fluorescent Lamps (TFL) LED Lamps. So, point I is not correct. Chillers Light Commercial Air Conditioners Test- Environment- EVT-5 Deep Freezers Ultra-High Definition (UHD) Televisions. Room Air Conditioner (Fixed Speed) RAC (Cassette, Floor Standing Tower, Ceiling, Corner AC) Distribution Transformer Direct Cool Refrigerator Ceiling Fan. So, point II is not correct. Voluntary Labeling: Some products are currently under voluntary labeling, including: Computers. So, point IV is correct. High Energy Lithium Batteries. So, point V is correct. So, the Bureau of Energy Efficiency (BEE) has not mandated star labelling in only two of the above appliances."},{"id":5,"txt":"With reference to the National Tiger Conservation Authority (NTCA), consider the following statements:\n1. It is chaired by the Secretary, Ministry of Environment, Forest and Climate Change.\n2. Its recommendation is mandatory for any alteration in the boundaries of tiger reserves.\n3. A State Government cannot de-notify a Tiger Reserve under any circumstance.\nWhich of the statements given above is/are correct?","ref":"","opts":["II only","I and II only","II and III only","I and III only"],"ci":0,"exp":"Ex: National Tiger Conservation Authority (NTCA): It is a statutory body under the Ministry of Environment, Forest, and Climate Change (MoEFCC). It was established in 2006 under Wildlife (Protection) Act 1972. NTCA Composition: Minister in charge of MoEFCC (as Chairperson). So, statement I is not correct. Minister of State in MoEFCC (as Vice-Chairperson), three members of Parliament, the Secretary (MoEFCC), and other members. Under the Wild Life (Protection) Act, 1972, the NTCA is empowered to issue binding directions in writing to any person, officer, or authority for the protection of tigers or tiger reserves . Such entities are legally bound to comply with these directives. No alteration in the boundaries of a Tiger Reserve shall be made except on the recommendation of the National Tiger Conservation Authority and the approval of the National Board for Wild Life . So, statement II is correct. No State Government shall de-notify a Tiger Reserve except in public interest and with the approval of the National Tiger Conservation Authority and the National Board for Wild Life . So, statement III is not correct. Knowledge Box Objectives of NTCA: Providing statutory authority to Project Tiger so that compliance of its directives becomes legal. Fostering accountability of Center-State in management of Tiger Reserves by providing a basis for MoU with States within the federal structure. Providing for an oversight by Parliament. Addressing livelihood interests of local people in areas surrounding Tiger Reserves. Test- Environment- EVT-5"},{"id":6,"txt":"With reference to the Environment Protection (Management of Contaminated Sites) Rules, 2025, which of the following contaminants or sites are explicitly excluded from their scope?","ref":"","opts":["Old industrial landfill sites","hemical waste storage and spill sites","Radioactive waste contamination","Groundwater contamination due to industrial effluent"],"ci":2,"exp":"Ex: The Environment Protection (Management of Contaminated Sites) Rules, 2025 provide a standalone legal framework to identify, assess, and remediate sites that are chemically contaminated due to industrial activity or other human causes. The rules are focused on managing contamination from toxic chemicals and hazardous substances that adversely affect soil, water, air, plants, animals, and human health. The Rules do not apply to contamination from radioactive waste, as this falls under a separate regulatory regime. They also exclude contamination from sources such as marine oil pollution, solid waste dumps, and mining operations, each of which is subject to other laws or specialised remediation frameworks. The Rules are primarily intended to address chemically contaminated sites where toxic industrial chemicals and pollution have degraded environmental quality. Old industrial landfill sites are covered if they have chemical contamination, and the rules provide for their assessment and remediation. Chemical waste storage and spill sites fall squarely under the scope of the Rules, as they deal with hazardous substances and chemical contamination. Groundwater contamination due to industrial effluent is covered when the contamination originates from hazardous chemical sites and is assessed under the remediation provisions."},{"id":7,"txt":"Which of the following is true with regard to the primary objective of the Tropical Forest Forever Facility (TFFF)?","ref":"","opts":["It provides low-interest loans to developing nations for large-scale afforestation projects.","It is a \"payment-for-performance\" mechanism that rewards countries for keeping tropical forests standing.","It is a global tax-based fund intended to compensate nations for loss and damage caused by climate change.","It is a mandatory regulatory body that sets international limits on timber exports from tropical regions."],"ci":1,"exp":"Ex: The Tropical Forest Forever Facility (TFFF) is a newly launched Brazil-led global forest finance initiative aimed at rewarding countries for protecting and conserving their tropical forests rather than simply providing project-based grants. The fund, launched at the COP30 climate summit in Belém, Brazil , seeks to raise around USD 125 billion and then invest this capital to generate returns. Those returns are channelled as performance-based financial incentives to eligible developing tropical forest countries that keep their forests standing and expand forest cover. This structure makes TFFF fundamentally a “payment-for-performance” mechanism where countries get paid based on measurable forest conservation outcomes, not loans, tax funds, or regulatory limits on exports."},{"id":8,"txt":"Consider the following:\n1. The Wildlife (Protection) Act, 1972\n2. The Forest (Conservation) Act, 1980\n3. The Air (Prevention and Control of Pollution) Act, 1981\n4. The Environment (Protection) Act, 1986\nHow many of the above come under the jurisdiction\nof the National Green Tribunal?","ref":"","opts":["Only one","Only two","Only three","ll the four - 5 e s t - E n v i r o n m e n t - E V T T"],"ci":2,"exp":"Ex: The National Green Tribunal (NGT), established in 2010, as per the National Green Tribunal (NGT) Act, is a specialised judicial body equipped with expertise solely for the purpose of adjudicating environmental cases in the country. The commission has jurisdiction over the Acts mentioned in Schedule I of the NGT Act, which are: Test- Environment- EVT-5 The Water (Prevention and Control of Pollution) Act, 1974 The Water (Prevention and Control of Pollution) Cess Act, 1977 The Forest (Conservation) Act, 1980. So, point II is correct. The Air (Prevention and Control of Pollution) Act, 1981. So, point III is correct. The Biological Diversity Act, 2002. The Environment (Protection) Act, 1986. So, point IV is correct. The Public Liability Insurance Act, 1991 The Wildlife Protection Act , 1972, does not come under the jurisdiction of the NGT. So, point I is not correct. So, only three of the above-given statues come under the jurisdiction of the National Green Tribunal"},{"id":9,"txt":"Consider the following statements with regard to the Global Tiger Forum (GTF):\n1. It was established under the aegis of the United Nations.\n2. It has both tiger-range countries and non- tiger-range countries as members.\n3. The Secretariat of GTF is based in New Delhi, India.\nWhich of the statements given above is/are correct?","ref":"","opts":["III only","I and II only","II and III only","I, II and III"],"ci":2,"exp":"Ex: The Global Tiger Forum (GTF) is an intergovernmental international body focused exclusively on the conservation of tigers in the wild. It was not established under the United Nations. So, statement I is not correct. o It was established in 1994 and serves as a platform for governments, international organizations and NGOs to collaborate on tiger conservation efforts. GTF's goal is to highlight the rationale for tiger preservation and provide leadership and a common approach throughout the world in order to safeguard the survival of the tiger, its prey, and its habitat. Among Tiger Range Countries (TRCs) , the members include Bangladesh, Bhutan, Cambodia, India, Myanmar, Nepal, and Vietnam . It is important to note that not all recognised tiger-range countries are members of the Forum. o The GTF also includes non-tiger-range countries willing to support and participate in tiger conservation efforts. At present, the United Kingdom is a member in this category. So, statement II is correct. o In addition, several international non-governmental organisations (INGOs) are members of the Forum, notably the International Fund for Animal Welfare (IFAW) , TRAFFIC – International , and WWF International . The secretariat of the Global Tiger Forum (GTF) is based in New Delhi, India. This location serves as the operational hub for managing the forum’s activities, initiatives and collaborative efforts across tiger range countries. So, statement III is correct."},{"id":10,"txt":"With reference to the Scheduled Tribes and Other Traditional Forest Dwellers (Recognition of Forest Rights) Act, 2006, consider the following statements:\n1. The Gram Sabha initiates the process for recognition of Individual and Community Forest Rights for eligible forest dwellers.\n2. It permits the grant of new forest land to eligible forest dwellers, subject to a maximum limit of four hectares.\n3. The decision of the District Level Committee on the record of forest rights is final and binding.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","I and III only","II and III only","I, II and III"],"ci":1,"exp":"Ex: The Scheduled Tribes And Other Traditional Forest Dwellers (Recognition Of Forest Rights) Act, 2006 recognizes the rights of the forest-dwelling tribal communities and other traditional forest dwellers to forest resources , on which these communities were dependent for a variety of needs, including livelihood, habitation and other socio-cultural needs. Test- Environment- EVT-5 It recognizes and vests the forest rights and occupation in Forest land in Forest Dwelling Scheduled Tribes (FDST) and Other Traditional Forest Dwellers (OTFD) who have been residing in such forests for generations. The Gram Sabha is the authority to initiate the process for determining the nature and extent of Individual Forest Rights (IFR) or Community Forest Rights (CFR) or both that may be given to FDST and OTFD. So, statement I is correct. The Act gives FDST and OTFD the right to ownership to land farmed by tribals or forest dwellers subject to a maximum of 4 hectares. Ownership is only for land that is actually being cultivated by the concerned family and no new lands will be granted. So, statement II is not correct. Section 6 (6) of the Act declares that the decision of the District Level Committee on the record of forest rights shall be final and binding. So, statement III is correct."},{"id":11,"txt":"Consider the following:\n1. Haryana\n2. Rajasthan\n3. Gujarat\n4. Delhi\n5. Punjab\nHow many of the States given above are covered under the Aravalli Green Wall Project?","ref":"","opts":["Only two","Only three","Only four","ll the five"],"ci":2,"exp":"Ex: The Aravalli Green Wall Project is part of the Union Environment Ministry's vision to create green corridors across the country to combat land degradation and desertification. The project covers states of Haryana, Rajasthan, Gujarat and Delhi, where the Aravalli hills landscape span over 6 million hectares of land. The project involves planting native species of trees and shrubs on scrubland, wasteland and degraded forest land, along with rejuvenating and restoring surface water bodies such as ponds, lakes and streams. The project will also focus on agroforestry and pasture development to enhance the livelihoods of local communities. Knowledge Box The Aravalli Green Wall Project has the following objectives: Improve the ecological health of the Aravalli range. Prevent eastward expansion of the Thar Desert and reduce land degradation, soil erosion and dust storms through green barriers. Enhance carbon sequestration, biodiversity and ecosystem services by planting native species and restoring water bodies. Promote sustainable livelihoods through afforestation, agro-forestry and water conservation with community participation. Ensure coordinated implementation by governments and stakeholders with adequate funding and technical support. Support India’s commitments under UNCCD, CBD and UNFCCC while strengthening its global environmental leadership. Ped Maa Ke Naam’ campaign to promote afforestation and ecological restoration. Test- Environment- EVT-5"},{"id":12,"txt":"With reference to the E-Waste (Management) Rules, 2022, consider the following statements:\n1. Solar photovoltaic (PV) modules, panels and cells are currently exempted from annual recycling targets.\n2. It introduces a system of tradable Extended Producer Responsibility (EPR) Certificates, analogous to carbon credits.\n3. Producers are allowed to meet their entire recycling obligation exclusively through the purchase of Refurbishing Certificates.\n4. It applies to waste batteries, plastic packaging waste, and radioactive waste.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","I and III only","II and IV only","I, II, III and IV"],"ci":0,"exp":"Ex: The E-Waste (Management) Rules, 2022, were notified to strengthen India’s Extended Producer Responsibility (EPR) framework, expand the scope of regulated electronic waste, and introduce market- based compliance mechanisms to improve recycling efficiency and environmentally sound management of e-waste. Solar PV modules, panels and cells are covered for registration, storage and annual returns under the E- Waste (Management) Rules, 2022, but are currently exempt from specific annual recycling targets. So, statement I is correct. The Rules introduce a market-based system of tradable Extended Producer Responsibility (EPR) Certificates , generated by registered recyclers for recycling fulfilment, which producers may purchase to meet their recycling obligations, conceptually similar to carbon credits . So, statement II is correct. Producers cannot fulfil their entire recycling obligation solely through refurbishing certificates . Under the Rules, refurbishing certificates only defer the recycling obligation for the specified quantity, and only 75% of the deferred quantity is later added back to the producer’s EPR recycling target after the refurbished product’s extended life ends. So, statement III is not correct. The Rules do not apply to waste batteries (regulated under the Battery Waste Management Rules), plastic packaging waste (regulated under the Plastic Waste Management Rules), or radioactive waste (governed by the Atomic Energy Act, 1962). So, statement IV is not correct. Knowledge Box The E - Waste (Management) Rules, 2016, were enacted in India to address the growing challenge of electronic waste (E-waste), which was the result of the rapid increase in electronic devices. The rules aimed to establish a structured system for managing e-waste throughout its lifecycle. These rules apply to every producer , consumer , or bulk consumer involved in e-waste. They also include collection centres , dismantlers , and recyclers . This encompasses all parties engaged in the manufacture , sale , purchase , and processing of electrical and electronic equipment or components. By including these stakeholders, the rules aim to create a comprehensive framework for effective e-waste management. The E-Waste (Management) Rules, 2016 adopt a target-based approach for implementing Extended Producer Responsibility (EPR) . This approach establishes phase-wise collection targets for producers to gather e-waste."},{"id":13,"txt":"The Emissions Gap Report is released by which one of the following organisations?","ref":"","opts":["United Nations Framework Convention on Climate Change (UNFCCC)","Intergovernmental Panel on Climate Change (IPCC)","United Nations Environment Programme (UNEP)","World Meteorological Organization (WMO)"],"ci":2,"exp":"Ex: The Emissions Gap Report (EGR) is an annual report by the United Nations Environment Programme (UNEP) that tracks the gap between global emissions and where they need to be to limit warming to 1.5°C. The report also explores ways to bridge the emissions gap. The EGR tracks the gap between where global emissions are heading with current country commitments and where they ought to be to limit warming to 1.5°C. Each edition explores ways to bridge the emissions gap. Test- Environment- EVT-5"},{"id":14,"txt":"Consider the following statutory bodies/ authorities:\n1. National Coastal Zone Management Authority\n2. Genetic Engineering Appraisal Committee (GEAC)\n3. Central Ground Water Authority (CGWA)\n4. National Green Tribunal (NGT)\nHow many of the above were specifically constituted under the provisions of the Environment (Protection) Act, 1986?","ref":"","opts":["Only one","Only two","Only three","ll the four - 5 T e s t - E n v i r o n m e n t - E V T"],"ci":2,"exp":"Ex: The Environment (Protection) Act, 1986, empowers the Central Government to constitute authorities and committees for regulating environmental protection and enforcement. The National Coastal Zone Management Authority (NCZMA) was constituted under the Environment (Protection) Act, 1986 , to protect and improve the quality of the coastal environment and to regulate activities for preventing coastal degradation and pollution. So, point I is correct. The Genetic Engineering Appraisal Committee (GEAC) is a statutory body constituted under the 1989 Rules framed specifically under the Environment (Protection) Act, 1986 , to regulate activities involving genetically engineered organisms and hazardous microorganisms. So, point II is correct. The Central Ground Water Authority (CGWA) was constituted under Section 3(3) of the Environment (Protection) Act, 1986 , pursuant to directions of the Supreme Court, to regulate and control groundwater extraction and management. So, point III is correct. The National Green Tribunal (NGT) is a specialised judicial body established under a separate legislation, namely the National Green Tribunal Act, 2010 , and not under the Environment (Protection) Act, 1986 . So, point IV is not correct. So, only three of the four statutory bodies/authorities were specifically constituted under the provisions of the Environment (Protection) Act, 1986."},{"id":15,"txt":"With reference to the Climate Finance Action Fund (CFAF), consider the following statements:\n1. It is a part of the Paris Agreement framework.\n2. It is financed exclusively through voluntary public donations.\n3. It provides for a Rapid Response Funding Facility for vulnerable countries.\nWhich of the statements given above is/are correct?","ref":"","opts":["II and III only","I and II only","III only","I, II and III"],"ci":2,"exp":"Ex: Climate Finance Action Fund (CFAF) is a funding channel to divert funds towards developing countries in order to help them mitigate the impacts of Climate change. It aims to generate funds from the fossil fuel-producing countries that have been the major beneficiaries of the developments over the past centuries. In a way, it turns the liability towards producer countries of fossil energy rather than the consumers of the same. Azerbaijan, the host country for COP-29 of the United Nations Framework Convention on Climate Change (UNFCCC) has launched this novel Climate Finance Action Fund (CFAF), during the COP, hence it doesn’t form a part of the Paris Agreement. So, statement I is not correct . It is a voluntary fund designed to collect contributions specifically from fossil fuel-producing countries and companies, rather than relying on traditional wealth-based metrics. So, statement II is not correct. Initial fundraising aims for $1 billion, with members committing to annual contributions as fixed sums or based on production volume, according to a statement. The fund will target climate projects in developing countries , meeting the next generation of national climate plans to limit global warming to 1.5 degrees Celsius, and addressing the consequences of climate change-fuelled disasters . Twenty percent of the revenues generated from investments will be deposited in a Rapid Response Funding Facility (2R2F), providing highly concessional and grant-based support. This facility will offer immediately accessible funding to address the consequences of natural disasters in Small Island Developing States, Least Developed Countries, and to other vulnerable developing communities as needed. So, statement III is correct. Test- Environment- EVT-5"},{"id":16,"txt":"With reference to the CoHABITAT project in India, consider the following statements:\n1. It focuses on conserving and sustainably managing wetlands, forests and grasslands along the Central Asian Flyway.\n2. It is jointly implemented by the United Nations Development Programme and the Ministry of Environment, Forest and Climate Change.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":2,"exp":"Ex: CoHABITAT is a flagship project focused on the conservation and sustainable management of wetlands , forests , and grasslands to secure the populations of migratory species along the Central Asian Flyway (CAF) in India. So, statement I is correct. It is funded by the Global Environment Facility (GEF) and implemented in partnership with the United Nations Development Programme (UNDP) and the Ministry of Environment, Forest and Climate Change (MoEFCC) . So, statement II is correct. The project aims to restore critical habitats, mitigate climate impacts, and promote biodiversity conservation. It emphasizes community engagement , providing sustainable livelihoods while fostering ecological stewardship, and integrates scientific research, monitoring, and policy strengthening. This initiative also focuses on fulfilling the commitments under international conventions like the Ramsar Convention and the Convention on Migratory Species ."},{"id":17,"txt":"Consider the following statements with regard to the High Seas Treaty:\n1. It is a legally binding agreement under the United Nations Convention on the Law of the Sea (UNCLOS).\n2. It recognises proprietary rights of coastal States over marine genetic resources located in the high seas.\n3. It provides for the designation of Marine Protected Areas (MPAs) in the high seas to conserve marine biodiversity.\n4. India is a party to the treaty.\nWhich of the statements given above are correct?","ref":"","opts":["I, III and IV only","I and II only","II and III only","I, II, III and IV"],"ci":0,"exp":"Ex: The High Seas treaty is formally called the Agreement on Conservation and Sustainable Use of Marine Biological Diversity of Areas Beyond National Jurisdiction (BBNJ) , the treaty is an international agreement regarding the governance of marine resources present in the High Seas , that is the marine areas which are outside the national jurisdiction of any country. Earlier, under the United Nations Convention on the Law of the Sea (UNCLOS) , the jurisdictions of the nations over the ocean regions were agreed upon. This agreement also sets the general principles for equitable access and usage of ocean resources, and protection and conservation of biodiversity and marine ecology. But it doesn’t specify how these objectives have to be achieved. This is where the High Seas Treaty comes in. Once it comes into force, this treaty would serve as one of the implementing agreements under the UNCLOS. The BBNJ treaty is legally binding and underscores the equitable sharing and conservation of marine resources . It seeks to ensure that the benefits from these ocean living resources, either through scientific research or commercial exploitation, is equally shared amongst all. So, statement I is correct. The treaty does recognise that there might be costs involved in accessing these resources or their benefits, but makes it clear that there cannot be proprietary rights of any country over these. So, statement II is not correct. Protection and conservation of marine ecology under this treaty is supposed to be achieved through the establishment of Marine Protected Areas (MPAs) , much like national parks or wildlife reserves. Activities in MPAs would be regulated, and conservation efforts would also be taken up. So, statement III is correct. The treaty's provisions on marine genetic resources also require countries to share a portion of their profits with a global fund for high-seas protection . Although India signed the treaty in September 2024 and thereby became a party to it , it has not yet ratified the agreement. So, statement IV is correct. Test- Environment- EVT-5"},{"id":18,"txt":"Under the Living Animal Species (Reporting and Registration) Rules, 2024, mandatory reporting and registration is applicable to which one of the following Schedules of the Wildlife (Protection) Act, 1972?","ref":"","opts":["Schedule I only","Schedule II only","Schedule IV only","Schedules I and II only"],"ci":2,"exp":"Ex: The Union Ministry of Environment, Forest, and Climate Change (MoEFCC) has notified the Living Animal Species (Reporting and Registration) Rules, 2024 , under the Wild Life (Protection) Act, 1972. The rules provide for registration of possession, transfer and birth and reporting of death of living scheduled animal species which are listed in the Appendices of the Convention on International Trade in Endangered Species of Wild Fauna and Flora (CITES) and as such listed in Schedule IV of the Wildlife (Protection) Act, 1972. Registration applications must be submitted electronically via the PARIVESH 2.0 portal to the Chief Wild Life Warden of the respective State. This must be done within six months of the Gazette notification or within thirty days of acquiring the exotic species."},{"id":19,"txt":"With reference to the United Nations Carbon Offset Platform, consider the following statements:\n1. It is an e-commerce platform to purchase carbon credits for voluntary emission offsetting.\n2. It enables the purchase of Certified Emission Reductions (CERs) measured in tonnes of CO₂ equivalent.\n3. The prices of carbon credits are determined by the respective project developers, and the UNFCCC does not derive any profit from these transactions.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":2,"exp":"Ex: The United Nations Carbon Offset Platform is an e-commerce platform where a company/organization or a regular citizen can purchase units (carbon credits) to compensate for greenhouse gas emissions or to simply support action on climate. So, statement I is correct. Certified Emission Reductions (CERs) are units (carbon credits) issued by the United Nations Framework Convention on Climate Change (UNFCCC) , measured in tonnes of CO 2 equivalent. Anyone can purchase these units on this platform to compensate (or offset) emissions and/or to support these projects. So, statement II is correct. They can be used by individuals, businesses and organizations to reach carbon neutrality by compensating their footprints, while they help project developers to continue to finance their green projects. Prices for the carbon credits are set directly by the project developers. Furthermore, the project developers receive the full profits from the sales, and the UNFCCC does not take a cut or derive profit from these transactions; the platform is provided free of charge for both buyers and sellers. So, statement III is correct. Knowledge Box The terms \"carbon offset\" and \"carbon offset credit\" are often used interchangeably, though they have distinct meanings. A carbon offset generally refers to a reduction in Greenhouse Gas (GHG) emissions or an increase in carbon storage,such as through land restoration or tree planting,that compensates for emissions occurring elsewhere. Carbon offset credit is a transferable instrument, certified by governments or independent bodies, representing the reduction of one metric tonne of CO 2 or an equivalent amount of other GHGs. Test- Environment- EVT-5"},{"id":20,"txt":"With reference to the Plastic Waste Management (A mendment) Rules, 2024, which one of the following statements is not correct?","ref":"","opts":["Manufacturers of intermediate materials used in plastic packaging are now classified as Producers.","Micro and Small Enterprises (MSEs) are fully exempt from all registration and reporting obligations.","new categ ory of biodegradable plastics has been introduced.","Urban Local Bodies and Panchayats are mandated to carry out an annual assessment of plastic waste generation. - 5 e s t - E n v i r o n m e n t - E V T T"],"ci":1,"exp":"Ex: The Ministry of Environment, Forest and Climate Change (MOEFCC) has notified the Plastic Waste Management (Amendment) Rules, 2024 which amends the Plastic Waste Management Rules, 2016. Under the amended rules, the definition of “Producer” within the Extended Producer Responsibility (EPR) framework has been expanded to include manufacturers of intermediate materials used in plastic packaging , thereby broadening the scope of responsibility . Although the primary Extended Producer Responsibility (EPR) obligations for Micro and Small Enterprises (MSEs) may effectively rest with raw material manufacturers or importers , MSEs are not fully exempt from all regulatory obligations. They remain subject to provisions such as compliance with single-use plastic bans , adherence to environmentally sound waste management practices , and registration or reporting requirements , depending on their role and scale within the plastic value chain. The EPR framework is designed to focus on the source of plastic material , rather than granting a blanket exemption to all MSEs. The Rules have introduced a new category, Category V, for biodegradable plastics , which is to be managed under the existing Extended Producer Responsibility (EPR) portal. It requires Urban Local Bodies and Panchayats to conduct an annual assessment of plastic waste generation and to estimate future quantities for the next five years , enabling improved planning, infrastructure development, and effective plastic waste management."},{"id":21,"txt":"With reference to Conservation Reserves and Community Reserves in India, consider the following statements:\n1. Conservation Reserves are declared by the State Government after consultation with local communities.\n2. Community Reserves can be declared only on government-owned land.\n3. Agriculture and grazing are completely prohibited in Community Reserves.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","I and II only","II and III only","I, II and III"],"ci":0,"exp":"Ex: Conservation Reserves and Community Reserves in India are terms denoting protected areas of India. These areas typically act as buffer zones to established national parks, wildlife sanctuaries and reserved and protected forests of India. Both Conservation Reserves and Community Reserves are declared under the Wildlife Protection Act, 1972. These protected area categories were first introduced in the amendment to the Act, the Wildlife (Protection) Amendment Act of 2002 . Both Conservation Reserves and Community Reserves are declared by the State Government. Section 36A of the Wildlife Protection Act, 1972 says that the State Government may, after having consultations with the local communities, declare any area owned by the Government as a conservation reserve. The Central Government can also declare Conservation Reserves. So, statement I is correct. Section 36C of the Wildlife Protection Act, 1972 says that the State Government may declare any private or community land as a community reserve, for protecting fauna, flora and traditional or cultural conservation values and practices. Such areas are designated as conservation areas if they are uninhabited and completely owned by the Government but used for subsistence by communities and community areas if part of the lands are privately owned or community owned. So, statement II is not correct. No change in land use pattern shall be made within the Community Reserve, except in accordance with a resolution passed by the Management Committee and approval of the same by the State Government . Human activities like farming and grazing can be allowed in Community Reserves. So, statement III is not correct. Test- Environment- EVT-5"},{"id":22,"txt":"Consider the following:\n1. Commercial users of Indian biological resources\n2. Applicants seeking Intellectual Property Rights (IPR) based on Indian biological material\n3. Users of Digital Sequence Information (DSI)\n4. Traditional healers using cultivated medicinal plants For how many of the categories given above is benefit sharing mandatory under the Biological Diversity (Access and Benefit Sharing) Regulation, 2025?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":2,"exp":"Ex: The Biological Diversity (Access and Benefit Sharing) Regulation, 2025 aims to ensure the fair and equitable sharing of benefits arising from the use of India’s biological resources and associated traditional knowledge, in accordance with the principles of the Convention on Biological Diversity. Accordingly, the Regulation specifies benefit-sharing obligations for different categories of users. The regulation requires commercial users to share benefits based on their annual turnover , with slabs ranging from 0.2 % to 0.6 % of turnover for entities above ₹5 crore. Users with turnover above ₹1 crore must also submit annual information about resources used. So, point I is correct. The rules explicitly include requirements for benefit sharing by those seeking intellectual property rights based on biological resources and associated knowledge. So, point II is correct. The 2025 Regulation expands benefit-sharing obligations to include digital sequence information or knowledge associated with it , which was not covered under the earlier 2014 guidelines. So, point III is correct. Traditional healers using cultivated medicinal plants are exempt from benefit sharing. The Regulation, in line with the amendments to the Biological Diversity Act, explicitly exempts the use of cultivated medicinal plants and related traditional knowledge from benefit-sharing requirements. So, point IV is not correct."},{"id":23,"txt":"With reference to the Wetland City Accreditation,\nconsider the following statements:\n1. It is granted by Wetlands International in association with UN-Habitat.\n2. It considers both natural and human-made wetlands for accreditation.\n3. No city from India has been granted this accreditation so far.\nWhich of the statements given above is/are not correct?","ref":"","opts":["I and III only","II only","II and III only","I, II and III"],"ci":0,"exp":"Ex: Wetlands are ecosystems that are neither purely land nor purely water, but areas where both intermingle. They typically occur between dry land and deep-water habitats and function as transitional zones. In these regions, the interaction of water flow, nutrient cycling, and solar energy supports a rich diversity of plant and animal life. To protect these vital ecosystems and support sustainable urban growth, the Ramsar Convention introduced the Wetland City Accreditation scheme. It is a voluntary initiative under the Ramsar Convention (Resolutions XII.10, XVI.10). It recognizes and honours the cities displaying exceptional efforts in protecting and managing their urban wetlands. So, statement I is not correct. It provides international recognition to cities that prioritize the conservation and sustainable use of their natural or human-made wetlands. So, statement II is correct. Indore (Madhya Pradesh) and Udaipur (Rajasthan) have officially become the first two Indian cities to be recognized as Wetland Cities under the Ramsar Convention in January 2025. So, statement III is not correct."},{"id":24,"txt":"Trade Records Analysis of Flora and Fauna in Commerce (TRAFFIC) was established by which one of the following organizations?","ref":"","opts":["United Nations Environment Programme and World Bank","World Wide Fund for Nature and International Union for Conservation of Nature","Food and Agriculture Organization and United Nations Educational, Scientific and Cultural Organization","onvention on International Trade in Endangered Species of Wild Fauna and Flora and United Nations Development Programme"],"ci":1,"exp":"Ex: Trade Records Analysis of Flora and Fauna in Commerce (TRAFFIC) is an international Non- Governmental Organization (NGO) founded in 1976 and headquartered in Cambridge, UK. It was established by the World Wide Fund for Nature (WWF) and the International Union for Conservation of Nature (IUCN) . It aims to monitor the trade in wild animals and plants, aiming to balance biodiversity conservation with sustainable development. Test- Environment- EVT-5 It monitors and analyses wildlife trade. Its goals include significantly reducing illegal and unsustainable trade by 2030 and enhancing legal and sustainable trade to provide greater social, economic, and environmental benefits. The Convention on International Trade in Endangered Species of Wild Fauna and Flora (CITES) is a global agreement among governments to regulate or ban international trade in species that are at risk. It came into force in July 1975 and currently includes 184 Parties, with India being a member since 1976. ■ CITES is administered by the United Nations Environment Programme (UNEP) and is not a public-private treaty. It aims to ensure that international trade does not threaten the survival of species. While CITES is legally binding for its Parties, it does not replace national laws but provides a framework for countries to develop and enforce their own legislation to implement CITES at the national level."},{"id":25,"txt":"Consider the following statements with regard to the Water (Prevention and Control of Pollution) Amendment Act, 2024:\n1. It empowers the Central Government to issue binding directions to State Pollution Control Boards regarding the grant or refusal of consent for the discharge of effluents.\n2. It mandates a fixed monetary penalty equal to one month’s basic salary for the Head of Department in case of violations by government departments.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II - 5 T e s t - E n v i r o n m e n t - E V T"],"ci":2,"exp":"Ex: The Water (Prevention and Control of Pollution) Amendment Act, 2024 , introduces several changes to modernize the framework for water pollution control in India. The Act emphasizes efficiency, compliance, and streamlining regulatory processes, including decriminalization of minor offences, penalties, and enhanced governance measures. The Amendment Act enhances central oversight by allowing the Central Government to prescribe criteria, tenure, and service conditions for the Chairman and members of State Pollution Control Boards (SPCBs) . This change is aimed at ensuring uniformity and better governance across states. It empowers the Central Government to issue binding guidelines to State Pollution Control Boards (SPCBs) regarding the grant, refusal, or imposition of conditions of consent for the discharge of sewage or trade effluents. So, statement I is correct. Under the amended provisions, the Central Government, in consultation with the Central Pollution Control Board (CPCB) , can exempt specific industrial plants or sectors from obtaining prior consent for discharge, provided they meet certain conditions. This aims to streamline processes for industries while maintaining environmental safeguards. In line with the policy of decriminalisation of minor environmental offences , the Act introduces specific monetary penalties . Where an offence is committed by a government department , the Head of the Department is liable to pay a fixed penalty equivalent to one month’s basic salary , unless they can establish that the offence occurred without their knowledge or despite the exercise of due diligence to prevent it. So, statement II is correct."},{"id":26,"txt":"Debt-for-Climate Swaps primarily involve:","ref":"","opts":["issuing green bonds in international markets","restructuring sovereign debt by redirecting debt repayments towards climate or environmental investments","providing climate finance through multilateral development banks","restructuring private sector loans without policy conditionality"],"ci":1,"exp":"Ex: Debt-for-Climate Swaps (DFCS) are an agreement between a country and its creditors that reallocates a portion of ongoing debt obligations toward investments in climate action. Such transactions provide opportunities for countries to enhance both fiscal stability and climate resilience, mobilising critical investment in areas such as renewable energy, urban infrastructure, sustainable agriculture and water security, forest conservation and restoration. Test- Environment- EVT-5"},{"id":27,"txt":"Consider the following statements with regard to the Wild Life (Protection) Act, 1972:\n1. Any wild animal or its parts found in the wild are the property of the Central Government.\n2. The sale of wild animals is prohibited even if they have been obtained legally.\n3. The notification and listing of invasive alien species are vested in the State Government, subject to the prior approval of the Central Government.\nWhich of the statements given above is/are correct?","ref":"","opts":["II only","I and II only","I and III only","I, II and III"],"ci":0,"exp":"Ex: The Wild Life (Protection) Act, 1972 establishes a comprehensive legal system for conserving wildlife and their habitats in India, regulating hunting, and controlling the trade and commerce of wild animals, plants, and their derivatives. Under the Wild Life (Protection) Act, 1972 , any wild animal (other than vermin) which is hunted, found dead, or in respect of which an offence has been committed, along with any animal article, trophy, or derivative thereof, vests in the State Government . If such an animal or article is found in a National Park or Sanctuary declared by the Central Government , ownership vests in the Central Government . So, statement I is not correct. The Act places a general prohibition on the commercial sale of wild animals , including those legally acquired or held in captivity, even with a certificate of ownership. Except for narrowly defined exemptions, trade in wild animals and their derivatives is strictly barred. So, statement II is correct. According to the Wild Life (Protection) Amendment Act, 2022, the power to regulate or prohibit the import, trade, possession, or proliferation of invasive alien species is vested in the Central Government, not the State Government. The Central Government issues the notification to declare a species as invasive to protect India's wildlife and habitats. So, statement III is not correct. Knowledge Box The Central Government, through amendment in 2022 to the Wildlife (Protection) Act, 1972 has merged four of the original six schedules into two, reducing the total number of schedules from six to four. Under the revised structure, Schedule I includes animals that require the highest level of protection, while Schedule II covers species that need comparatively less protection. Plant species are now listed under Schedule III. Additionally, Schedule IV is dedicated to species that are protected under the Convention on International Trade in Endangered Species of Wild Fauna and Flora (CITES)."},{"id":28,"txt":"With reference to the recently introduced ‘Blue’ category of industries by the Central Pollution Control Board (CPCB), consider the following statements:\n1. These are classified as non-polluting industries with a Pollution Index (PI) below 25.\n2. These are exempt from compliance with environmental norms notified from time to time.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":3,"exp":"Ex: Recently, the Central Pollution Control Board (CPCB) has carved a new category of industries called the ‘Blue’ category industries for “essential environmental services” for managing the pollution due to anthropogenic activities. This category includes sectors engaged in the management of household and municipal waste, such as sewage treatment plants (STPs), composting units, biogas facilities, and waste-to-energy (WTE) plants, all aimed at streamlining pollution control. Essentially, it covers utilities required to manage environmental concerns arising from domestic and household activities, which would otherwise have a high potential for littering and pollution. So, statement I is not correct. Blue category industries are required to meet all prescribed environmental norms/rules notified from time to time and the pollution index shall continue to be calculated as per the formula . So, statement II is not correct. With this new categorisation, the CPCB will give an additional two years validity for consent to operate. As an incentive for the essential services an additional two years validity for consent to operate (as per the Pollution Index ) will be provided. Test- Environment- EVT-5 Knowledge Box Pollution Index (PI): The Union Ministry of Environment, Forests and Climate Change (MoEFCC) introduced the concept of categorisation of industries for facilitating decisions related to the location of the industries, formulation of norms for inspection and surveillance, pollution caused and health impacts. In order to harmonise the ‘criteria of categorisation’, a Pollution Index (PI) was introduced which is a function of the emissions (air pollutants), effluents (water pollutants), hazardous wastes generated and consumption of resources. The PI is a number between ‘0’ and ‘100’ with <25 being the least polluting white category industries and 80-100 being the most polluting Red Category industries while Green (25-54) and Orange (55-79) categories lying in-between."},{"id":29,"txt":"Consider the following information: Initiative Launched by Objective\n1. GloLitter International Reduce Partnerships Maritime marine Organization plastic pollution\n2. ReSea United Strengthen Nations socio- Environment economic Programme resilience of people in coastal areas\n3. GRID- International Restore Geneva Union for damaged Conservation habitats of of Nature corals\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":0,"exp":"Ex: The GloLitter Partnerships (GLP) Programme assists developing countries to prevent and reduce marine plastic litter from the maritime transport and fisheries sectors. It is a groundbreaking project between the Government of Norway, the International Maritime Organization (IMO) and Food and Agriculture Organization (FAO), aiming to reduce sea-based marine plastic litter. So, row I is correctly matched. GloLitter Partnerships is the first project in a growing portfolio under the OceanLitter Programme at IMO. ReSea is an ambitious initiative aimed at strengthening the physical and socio-economic resilience of people living in coastal communities in the Western Indian Ocean region , including Kenya, Tanzania, Mozambique, Comoros, and Madagascar. The primary focus is to empower women, youth, and vulnerable individuals. It has been launched by the International Union for Conservation of Nature (IUCN) and Mission Inclusion (Mi), with funding from Global Affairs Canada . So, row II is not correctly matched. ReSea relies on nature-based solutions and gender-sensitive conservation practices to preserve, restore, and sustainably manage ecosystems. In addition, the project focuses on improving the livelihoods of local communities, with a particular emphasis on women and young people, through value chains that are part of a climate change adaptation approach. The Global Resource Information Database - Geneva (GRID-Geneva), is a partnership between the United Nations Environment Programme (UNEP) , the Swiss Federal Office for the Environment (FOEN) and the University of Geneva (UniGe). GRID-Geneva's main role is to transform data into information and knowledge to support the decision making process related to environmental issues. So, row III is not correctly matched. So, in only one of the above rows is the given information correctly matched. Test- Environment- EVT-5"},{"id":30,"txt":"Consider the following statements with regard to the Global Renewables and Energy Efficiency Pledge:\n1. It was launched at UNFCCC COP28, held in the United Arab Emirates (UAE).\n2. It aims to triple the current global renewable energy capacity by 2050.\n3. India is not a signatory to the pledge.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: The Global Renewables and Energy Efficiency Pledge is a key initiative launched at COP28 held at the United Arab Emirates (UAE), to accelerate global efforts toward transitioning to renewable energy and improving energy efficiency. So, statements I is correct. The pledge, signed by 118 countries, sets an ambitious goal of tripling the renewable energy capacity to 11,000 GW by 2030 , spearheaded by the European Union, UAE, and US. It also aims to double the global energy efficiency improvement rate to over 4% annually. These targets are designed to curb greenhouse gas emissions and meet the Paris Agreement goals. So, statement II is not correct. India, despite its status as the third-largest producer of renewable energy , chose not to sign the pledge . This decision stems from India's concerns about the selective focus on coal phasedown in the pledge, which accounts for 75% of India's energy production, while oil and gas expansion by other nations remains unaddressed. India also emphasized its independent renewable energy targets, including achieving 500 GW by 2030. So, statement III is correct."},{"id":31,"txt":"In the context of the initiative SAIME, the letter “A” stands for:","ref":"","opts":["griculture","quaculture","daptation","fforestation - 5 e s t - E n v i r o n m e n t - E V T T"],"ci":1,"exp":"Ex: In SAIME (Sustainable Aquaculture in Mangrove Ecosystem) , the letter “A” stands for Aquaculture because the initiative focuses on promoting environmentally friendly aquaculture practices, such as fish and shrimp farming integrated with mangrove conservation , ensuring livelihoods for coastal communities while protecting mangrove ecosystems. The initiative was started in 2019, it is a community-based initiative of sustainable shrimp cultivation in the Sunderban region, it was conceived by NGOs- Nature Environment and Wildlife Society (NEWS) and Global Nature Fund (GNF), Naturland, Bangladesh Environment and Development Society (BEDS). Therefore, option (b) is the correct option."},{"id":32,"txt":"Consider the following statements with regard to the Joint Forest Management (JFM):\n1. It was officially introduced by the Central Government through the National Forest Policy of 1988.\n2. JFM committees are statutory bodies created under the Forest (Conservation) Act, 1980.\n3. Local communities receive 100% of the income from the sale of non-timber forest produce.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","I and III only","II and III only","I, II and III"],"ci":1,"exp":"Ex: The Joint Forest Management (JFM) model is based on the principle of co-management and a mutually beneficial partnership between village communities and the forest department. It marked a departure from earlier forest policies in India, which focused mainly on revenue generation for the State and largely excluded local communities from forest governance. Joint Forest Management (JFM) was formally conceptualised under the National Forest Policy, 1988, which shifted the focus from commercial timber production to forest conservation through community participation. It was operationalised through a government circular issued in June 1990. So, statement I is correct. Test- Environment- EVT-5 JFM committees, commonly known as Village Forest Committees or Forest Protection Committees , are generally registered under the Societies Registration Act, 1860 , or relevant state cooperative laws. They are not constituted under the Forest (Conservation) Act, 1980, which mainly regulates the diversion of forest land for non-forest purposes. So, statement II is not correct . Under JFM, participatory planning and shared responsibility in conservation activities is emphasised. Local communities are entitled to benefits from forest resources , especially non-timber forest products (NTFPs) such as fruits, medicinal plants, and firewood, from which they usually receive the full income. They also receive a share from timber sales , though this is generally limited and may be as low as 25% of net revenue. Hence, Statement III is correct ."},{"id":33,"txt":"With reference to the Nagoya Protocol, consider the following statements:\n1. It is a supplementary agreement to the Convention on Biological Diversity (CBD).\n2. It mandates prior informed consent for access to genetic resources and associated traditional knowledge of indigenous and local communities.\n3. The Biosafety Clearing-House is established under this protocol.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":0,"exp":"Ex: The Nagoya Protocol on Access to Genetic Resources and the Fair and Equitable Sharing of Benefits Arising from Their Utilization (ABS) is a supplementary agreement to the Convention on Biological Diversity (CBD). It was adopted on October 29, 2010, in Nagoya, Japan, and entered into force on October 12, 2014. So, statement I is correct. The primary objective of the protocol is to establish a transparent legal framework for the fair and equitable sharing of benefits arising from the utilization of genetic resources , thereby contributing to the conservation and sustainable use of biodiversity. The protocol while laying special emphasis on the issue regarding the use of traditional knowledge for commercial gains underscored and mandated that traditional knowledge and genetic resources held by indigenous and local communities are accessed only with their prior informed consent . So, statement II is correct. Whilst it recognised the rights of indigenous communities over their traditional knowledge, it fell short of defining what constitutes Traditional Knowledge (TK) . Although the agreement did acknowledge the traditional knowledge to constitute knowledge, innovations and practices of indigenous and local communities embodying traditional lifestyles relevant for the conservation and sustainable use of biological diversity. Article 14 of the protocol provides for an Access and Benefit Sharing (ABS) Clearing-House, which serves as a platform for exchanging information related to access and benefit-sharing, facilitating transparency and compliance among parties. o The Biosafety Clearing-House (BCH) is actually established under the Cartagena Protocol on Biosafety, under the Convention on Biological Diversity (CBD) that focuses on the safe handling, transport, and use of living modified organisms (LMOs). So, statement III is not correct. Test- Environment- EVT-5"},{"id":34,"txt":"With reference to the Green Credit Programme in India, consider the following statements:\n1. Green credits for tree plantation activity are awarded only after a minimum of five years of restoration work.\n2. A minimum canopy density of 40 % must be achieved before green credits can be issued.\n3. Green credits awarded under the programme are fully tradable without restrictions on market platforms.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":0,"exp":"Ex: Under the revised norms for the Green Credit Programme in India , the methodology for awarding green credits for tree plantation activities has been significantly strengthened to focus on actual ecological outcomes rather than mere planting numbers. Green credits for tree plantation will now be awarded only after a minimum of five years of restoration work has been completed , meaning that the trees must survive over a substantial period before credits are issued. So, statement I is correct. In order to qualify for green credits, the plantation must achieve a minimum canopy density of 40 % when evaluated after five years. Simply planting trees does not qualify unless this ecological benchmark is met. So, statement II is correct. The revised rules explicitly state that green credits awarded for tree plantation are non-tradable and non-transferable , except for limited transfer between a holding company and its subsidiaries. They are not fully tradable without restrictions. So, statement III is incorrect."},{"id":35,"txt":"Which one of the following is the objective of the Renewable Purchase Obligations (RPOs) in India?","ref":"","opts":["To mandate electricity generators to reduce coal consumption","To require distribution companies to procure a minimum share of electricity from renewable sources","To provide direct subsidies to renewable energy producers","To promote private investment in nuclear energy"],"ci":1,"exp":"Ex: Renewable Purchase Obligations (RPOs) are mechanisms designed to compel power procurers in every State to annually purchase a certain minimum amount of renewable energy. The underlying idea behind setting RPO targets is two-fold. Firstly, to significantly promote power procurement from expanding renewable sources. Secondly, to establish a viable market for clean energy technologies that are presently not cost-competitive but actively contribute to climate action goals. The State Electricity Regulatory Commissions (SERCs) fix the minimum RPO for the State. The SERCs are required to determine incremental annual RPO targets based on factors such as renewable energy resource potential, current and projected load-demand shapes and the impact on the retail tariff of supplied power. Knowledge Box Renewable Purchase Obligation (RPO) is applicable to: Distribution Licensee: Power Distribution Companies ( DISCOMs ); Open Access Consumer: Those procuring power from power exchanges (IEX/PXIL), from traders, through bilateral agreements, etc.; Captive consumer: Those generating and consuming power from captive coal/natural gas power plants (primarily industrial users in cement, steel, chemical etc. sectors.). In instances where targets are not met, States can utilise the tradable renewable energy certificate (REC) mechanism , which holds comparable equivalence to RE-based power. Renewable Energy Certificates (RECs) are crucial tools in the shift toward sustainable energy, providing marketable proof that one megawatt-hour (MWh) of electricity was produced from renewable resources. Test- Environment- EVT-5"},{"id":36,"txt":"Consider the following pairs: Report/ Index Organization\n1. Living Planet International Union for Report Conservation of Nature\n2. World Energy International Energy Outlook Agency\n3. World Energy World Energy Council Issues Monitor\n4. Climate Risk World Economic Forum Index\nWhich of the pairs given above is/are correctly matched?","ref":"","opts":["I only","II and III only","I and IV only","II, III and IV"],"ci":1,"exp":"Ex: The Living Planet Report is published by the World Wide Fund for Nature every two years. The latest edition of the Living Planet Report, which measures the average change in population sizes of more than 5,000 vertebrate species, shows a decline of around 70% between 1970 and 2020. So, pair I is not correctly matched. The International Energy Agency's flagship World Energy Outlook , published annually, is the most authoritative global energy analysis and projections source. This year’s Outlook comes against a backdrop of escalating risks in the Middle East and heightened geopolitical tensions globally, and explores a range of energy security issues that decision makers face as they proceed with clean energy transitions. So, pair II is correctly matched. The 2024 World Energy Issues Monitor report, published by the World Energy Council, underlines the c omplex nature of energy transitions , emphasizing their multifaceted character where a one-size- fits-all strategy proves inadequate. So, pair III is correctly matched. Climate Risk Index: It identifies the extent to which countries have been affected by extreme weather events. It is released by Germanwatch on a yearly basis. India is ranked 6th amongst the most affected countries from climate risks. So, pair IV is not correctly matched."},{"id":37,"txt":"Consider the following statements with regard to the Kunming–Montreal Global Biodiversity Framework:\n1. It provides a global roadmap for biodiversity conservation up to 2050.\n2. It replaced the Aichi Biodiversity Targets adopted under the Convention on Biological Diversity.\n3. It mandates legally binding national biodiversity targets for all Parties.\n4. It includes specific targets addressing benefit- sharing from genetic resources.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","Only three","ll the four - 5 T e s t - E n v i r o n m e n t - E V T"],"ci":2,"exp":"Ex: Kunming-Montreal Global Biodiversity Framework (GBF): This framework was adopted during the 15th meeting of the Conference of the Parties, or COP15, to the UN Convention on Biological Diversity in 2022. It replaced the Aichi Targets. So, statements I and II are correct. It aims to support the achievement of sustainable development goals and build on previous strategic plans. It sets a bold path towards global harmony with nature by 2050. In adopting the GBF, all parties' committees set national targets to implement it. The GBF consists of 23 targets (set for 2030) and four global goals (set for 2050) to preserve biodiversity for current and future generations. The targets address reducing threats to biodiversity , meeting people's needs through sustainable use and benefit-sharing , and tools and solutions for implementation and mainstreaming. Target 13 of the Kunming–Montreal Global Biodiversity Framework seeks to enhance the fair and equitable sharing of benefits arising from the use of genetic resources, Digital Sequence Information (DSI), and associated traditional knowledge , through robust national access and benefit-sharing measures and capacity building , to be achieved by 2030 . So, statement IV is correct. The GBF is not an international treaty and is therefore not legally binding on Parties . It also doesn't require a mandatory system that forces parties to step up their efforts at a specific time. So, statement III is not correct. Target 3 of the Kunming-Montreal GBF: Target 3 of the GBF is to ensure that at least 30% of the world's land, waters, and seas are conserved by 2030. At present, protected areas (PAs) cover about 16%. This target is also known as the \"30 by 30\" target. Test- Environment- EVT-5"},{"id":38,"txt":"With reference to the Green Hydrogen Certification Scheme of India, consider the following statements:\n1. It is implemented by the Ministry of Power.\n2. It provides a certification framework ensure hydrogen is produced using renewable energy with emissions not exceeding 2 kg CO₂ equivalent per kg.\n3. It aims to establish a Green Hydrogen production capacity of 5 MMT per annum by 2030.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","I and II only","II and III only","I, II and III"],"ci":2,"exp":"Ex: Green Hydrogen Certification Scheme of India was launched by the Ministry of New and Renewable Energy (MNRE) , Government of India, under the National Green Hydrogen Mission, aiming to establish India as a global hub for green hydrogen production and export. So, statement I is not correct. The scheme emphasizes accuracy in emissions data, strict monitoring, and international compatibility, aiming to boost investor confidence and support the growth of a credible green hydrogen market in India. The scheme outlines a comprehensive certification process for producers to verify that the hydrogen is produced using renewable energy and that the greenhouse gas emissions do not exceed 2 kg of CO₂ equivalent (CO₂e)/kg of hydrogen. So, statement II is correct. This threshold is measured across the production stages within a defined system boundary. The certification framework includes clear definitions, objectives, roles of stakeholders, eligible production pathways (electrolysis and biomass conversion), and emissions quantification methods. The National Green Hydrogen Mission, under which this certification scheme operates, has a clear target to establish a production capacity of at least 5 Million Metric Tonnes (MMT) per annum by the year 2030. So, statement III is correct. To ensure compliance, the MNRE or its designated agency may withdraw certificates if verified emissions exceed the allowed threshold or if producers fail to complete the certification process on time. Repeat non-compliance can lead to penalties, including ineligibility for future certification cycles."},{"id":39,"txt":"Consider the following information: Initiative Launched/ Objective Adopted at\n1. New COP27, Filling gap Collective Sharm El- in climate Quantified Sheikh financing Goal\n2. Global COP28, Measure Goal on Dubai progress on Adaptation adaptation\n3. Nationally COP21, Country Determined Paris specific Contributions target for GHG emission reduction\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","ll the three","None - 5 e s t - E n v i r o n m e n t - E V T T"],"ci":1,"exp":"Ex: The United Nations Framework Convention on Climate Change (UNFCCC) Conferences of the Parties (COP)-29, held at Baku, set the New Collective Quantified Goal (NCQG) on climate finance. The NCQG is a key element of the Paris Agreement, designed to set a new financial target to support developing countries in their climate actions post-2025. The NCQG seeks to fill persistent gaps in climate finance , building on the $100 billion target set in 2009 and aiming to provide a more realistic and ambitious financial framework. So, row I is not correctly matched. Test- Environment- EVT-5 The Global Goal on Adaptation (GGA) aims to address the shortfall in climate change adaptation by providing a clear framework and targets for measuring progress on adaptation. Although the GGA was included in the Paris Agreement in 2015, However, countries finally agreed to an overarching framework at the 2023 UNFCCC CoP-28 in Dubai. So, row II is correctly matched. Nationally Determined Contribution (NDCs) are at the heart of the Paris Agreement, which was adopted at COP-21 in 2015. NDCs include each country's pledge to reduce GHG emissions, with specific targets, as well as measures countries are taking to adapt to climate change, alongside implementation strategies and timeframes to achieve these goals. So, row III is correctly matched. So, in only two of the above rows is the given information correctly matched."},{"id":40,"txt":"With reference to the Kigali Amendment to the Montreal Protocol, consider the following statements:\n1. It mandates a complete global phase-down of to Hydrofluorocarbons (HFCs) by 2040.\n2. The phase-down obligations follow differentiated timelines for developed and developing countries.\n3. India has not ratified the Amendment.\nWhich of the statements given above is/are correct?","ref":"","opts":["II only","I and III only","II and III only","I, II and III"],"ci":0,"exp":"Ex: The Kigali Amendment is an amendment to the Montreal Protocol on Substances that Deplete the Ozone Layer. It was adopted by the 28th Meeting of Parties to the Montreal Protocol (MOP28) in 2016 in Kigali, Rwanda. The Amendment adds powerful greenhouse gases, Hydrofluorocarbons (HFCs), to the list of substances controlled under the Protocol and which are to be phased down. Under the Amendment, Montreal Protocol parties are required to gradually reduce HFC use by 80-85 per cent by the late 2040s. First reductions by most developed countries are expected in 2019. Most developing countries will follow suit by a freeze of HFCs consumption levels in 2024, and in 2028 for some of them. So, statement I is not correct and statement II is correct. India has ratified the Kigali Amendment to the Montreal Protocol for the phase-down of Hydrofluorocarbons. Ratification of this agreement means India would need to cut down its HFCs market. It would also make India competitive in the global market for climate-friendly refrigerants with the potential to innovate and attract international investments. The Kigali Agreement is a legally binding agreement between the countries that sign or ratify it. So, statement III is not correct. Knowledge Box Montreal Protocol: It is an international treaty that took effect in 1989 and stands as a collective commitment by its signatories, including UN member nations, to address the depletion of the ozone layer caused primarily by Chlorofluorocarbons (CFCs). Kyoto Protocol: It was an international treaty adopted in 1997 to reduce greenhouse gas emissions and was the first treaty to set legally binding targets for doing so. The treaty was based on the 1992 United Nations Framework Convention on Climate Change and was signed in Kyoto, Japan on December 11, 1997. It came into effect in 2005 and was ratified by 192 countries."},{"id":41,"txt":"Which one of the following international organisations is the only environment-related body to have won the Nobel Peace Prize?","ref":"","opts":["United Nations Environment Programme","World Meteorological Organization","Intergovernmental Panel on Climate Change","International Union for Conservation of Nature"],"ci":2,"exp":"Ex: The Intergovernmental Panel on Climate Change was awarded the Nobel Peace Prize in 2007, which it shared equally with Al Gore. The award recognised their efforts to enhance and disseminate knowledge on human-induced climate change and to lay the foundation for measures to address it. Test- Environment- EVT-5 The Intergovernmental Panel on Climate Change (IPCC) is the intergovernmental body established in 1988 by the World Meteorological Organization (WMO) and the United Nations Environment Programme (UNEP) . All member countries of the United Nations (UN) and the World Meteorological Organization (WMO) can participate in the Intergovernmental Panel on Climate Change (IPCC). It is an intergovernmental organization that currently has 195 member countries. Knowledge Box The IPCC does not conduct its own research . Instead, it evaluates and synthesizes existing scientific research from a wide range of sources to produce its assessment reports. So, statement II is not correct. The IPCC's mandate is to provide objective, comprehensive scientific information to national governments, but it is policy-relevant, not policy-prescriptive. It assesses various scenarios and the potential impacts of different courses of action but does not recommend specific policies or dictate political choices to national governments. So, statement III is not correct. The IPCC prepares comprehensive assessment reports about the state of scientific, technical, and socio-economic knowledge on climate change , its impacts and future risks, and options for reducing the rate at which climate change is taking place. The IPCC also produces Special Reports on specific topics agreed by its member governments, as well as Methodology Reports that provide practical guidelines for the preparation of greenhouse gas inventories."},{"id":42,"txt":"With reference to the Forest (Conservation) Act, 1980, consider the following statements:\n1. No forest land can be diverted for non-forest purposes by a State Government without the prior approval of the Central Government.\n2. Cultivation of medicinal plants is treated as a forest purpose under the Act.\n3. Construction of zoos and safari in forests are permitted activities under the Act.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: The Forest Conservation Act, 1980, is the flagship Act of the Government of India dealing with the regulation and deregulation of activities on forest lands in the country. The Act applies to all the lands which are classified as forests under any Act or statute or are classified as forest land in any of the Government records. It further provides that any land which was erstwhile provided the status of Forest land, but was converted to non-forest land post the promulgation of the Act, will also be deemed as forest for the purpose of the Act. Although this provision doesn’t apply to the lands converted to non-forest lands prior to 12 th December 1996 (the date of TN Godavarman judgement). o The Supreme Court on 12 th December 1996, passed the landmark TN Godavarman judgement, which said any land that comes under the dictionary definition of Forest will be classified as Forest for the purpose of act, essentially including all those lands that were earlier classified as Forest land but later de-notified . The Parliament in 2023 amended the Act and exempted all those lands that were converted to non- forest land after the promulgation of the act till the date 12 th December 1996 . Hence, not all de- notified forest lands come under the purview of the act. This Act further provides that no forest land can be converted to the status of non-forest land or leased out to any private entity by the State Government without the approval of the Central Government . So, statement I is correct. Test- Environment- EVT-5 According to the Forest (Conservation) Act of 1980, the definition of ‘non-forest purpose’ includes the cultivation of tea, coffee, spices, rubber, palms, oil-bearing plants, horticultural crops or medicinal plants. So, statement II is not correct. o “Non-forest purpose” also means the breaking up or clearing of any forest land or portion thereof for any purpose other than reforestation. The 1980 Act specifies certain activities that will be excluded from the definition of non-forest purposes. It means that the restrictions on de-reservation of forest or use of forest land for non-forest purposes will not apply to these activities. These activities include works related to the conservation, management, and development of forests and wildlife , such as establishing check posts, fire lines, fencing, and wireless communication. o The 2023 Act adds more activities to this list such as: (i) zoos and safaris (ii) eco-tourism facilities, (iii) silvicultural operations (enhancing forest growth), and (iv) any other purpose specified by the central government. So, statement III is correct."},{"id":43,"txt":"With reference to the Carbon Border Adjustment Mechanism (CBAM), which one of the statements given below is not correct?","ref":"","opts":["It seeks to equalise the carbon cost of imports with that borne by domestic producers in European Union (EU).","It allows adjustment for any carbon price already paid in the country of origin, recognised by the European Union.","It links the price of CBAM certificates to the prevailing price under the EU Emissions Trading System.","The revenue generated under it is earmarked for supporting green transition in exporting developing countries."],"ci":3,"exp":"Ex: CBAM is designed to ensure that imported goods face a carbon cost equivalent to the carbon price paid by EU producers under the European Union Emissions Trading System (ETS), helping prevent competitive disadvantage and carbon leakage. Importers can receive an adjustment (credit) for carbon costs already paid in the country of origin if these are recognised within the CBAM framework alignment. This prevents double-charging. Under the Carbon Border Adjustment Mechanism (CBAM), importers are required to purchase CBAM certificates corresponding to the carbon emissions embedded in imported goods. The price of these certificates is directly linked to the average auction price of allowances under the EU Emissions Trading System (ETS). The mechanism does not earmark revenue for developing exporting countries’ green transitions. There is no provision under the current CBAM regime that requires revenues to be sent back or used specifically for this purpose. Revenues accrue under EU systems but are not dedicated funds for exporters."},{"id":44,"txt":"Which of the following initiatives have been taken by India to protect its mangroves?\n1. The Coastal Regulation Zone (CRZ) Notification, 2019 classifies mangroves as Ecologically Sensitive Areas (ESAs).\n2. Under the Environment (Protection) Act, 1986, diversion of mangroves for developmental activities requires restoration of three times the area affected.\n3. The MISHTI programme has been launched to restore and promote mangrove ecosystems.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","I and III only","II and III only","I, II and III"],"ci":3,"exp":"Ex: Mangroves are classified as Ecologically Sensitive Areas (ESAs) under the Coastal Regulation Zone (CRZ) Notification, 2019 framed under the Environment (Protection) Act, 1986. So, statement I is correct. A buffer zone of 50 metres along mangroves is specified under CRZ-2019 if the mangrove area exceeds 1,000 sq metres. In cases where development affects mangrove cover, three times the area lost must be replanted under CRZ rules. Test- Environment- EVT-5 Mangroves are also protected under the Wildlife (Protection) Act, 1972 , the Forest (Conservation) Act, 1980 , and relevant state laws. Under the Environment (Protection) Act, 1986, the Coastal Regulation Zone (CRZ) Notification provides that diversion of mangroves for developmental activities requires restoration of three times the area affected. So, statement II is correct. The Mangrove Initiative for Shoreline Habitats & Tangible Incomes (MISHTI) was launched on 5 June 2023 as part of the Union Budget 2023–24. So, statement III is correct. The objective of MISHTI is to restore and promote mangrove ecosystems along India’s coast to enhance coastal resilience and sustainability. MISHTI activities are being implemented in convergence with schemes such as CAMPA , MGNREGS , and state plans."},{"id":45,"txt":"Which of the following Indian cities are currently members of the C40 Cities Climate Leadership Group?\n1. Delhi (NCT)\n2. Mumbai\n3. Udaipur\n4. Indore\n5. Bengaluru\nSelect the correct answer using the code given below:","ref":"","opts":["I, II and V only","II, III and IV only","I, II and III only","III, IV and V only - 5 T e s t - E n v i r o n m e n t - E V T"],"ci":0,"exp":"Ex: The C40 Cities Climate Leadership Group was initiated in 2005 by the then Mayor of London, Ken Livingstone . The grouping came to be known as “C40” in 2006 , reflecting its initial strength of forty member cities. At present, the network comprises 96 cities , collectively representing over 700 million people and accounting for nearly one-fourth of the global economy . C40 functions as a collaborative platform that enables the world’s major cities to share knowledge, adopt best practices, and implement high-impact climate actions . The network aligns city-level climate action with the goals of the Paris Agreement (2016) and encourages member cities to formulate and execute ambitious local climate action plans consistent with global mitigation and adaptation targets. Ahmedabad, Bengaluru, Chennai, Delhi NCT and Mumbai are all members of the C40 Cities Network , which supports cities in collaboration, knowledge-sharing, and climate action . So, points I, II and V are correct."}],"m":null,"tt":2760,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

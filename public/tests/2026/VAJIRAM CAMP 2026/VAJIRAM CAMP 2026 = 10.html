@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>VAJIRAM CAMP 2026 = 10</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>VAJIRAM CAMP 2026 = 10</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="VAJIRAM CAMP 2026 = 10">VAJIRAM CAMP 2026 = 10</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the recently constituted Payments Regulatory Board (PRB), consider the following statements:\n1. It functions under the Reserve Bank of India (RBI).\n2. It is chaired by the Union Minister of Finance.\n3. It has replaced the Board for Regulation and Supervision of Payment and Settlement Systems (BPSS).\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","I and III only","II and III only","I, II and III"],"ci":1,"exp":"Ex: The Payments Regulatory Board (PRB) has recently been set up by the Reserve Bank of India (RBI) to strengthen the governance and regulatory oversight of India’s rapidly expanding payment systems. The PRB replaces the Board for Regulation and Supervision of Payment and Settlement Systems (BPSS). So, statements I and III are correct. Th e PRB is a six - member body, but it is chaired by the RBI Governor , not the Finance Secretary. The other two RBI representatives are the Deputy Governor and the Executive Director in charge of Payment and Settlement Systems. Additionally, three nominees are appointed by the Central Government. So, statement II is not correct. The Payment and Settlement Systems Act, 2007 (PSS Act) is the primary legal framework empowering the RBI and now the PRB to regulate and supervise payment systems in India. One of the key functions of the PRB is the regulation and supervision of all types of payment systems , covering both electronic and non - electronic systems. This includes oversight of domestic as well as cross - border transactions , ensuring that India’s payment systems remain safe, efficient, and interoperable."},{"id":1,"txt":"With reference to the recently launched Foreign Currency Settlement System (FCSS), consider the following statements:\n1. It enables local settlement of foreign currency transactions between IFSC Banking Units (IBUs).\n2. It operates under the regulatory framework of the Payment and Settlement Systems (PSS) Act, 2007.\n3. It supports US dollar settlements, reflecting its dominant role in global trade and finance.\nWhich of the statements given above is/are correct?","ref":"","opts":["III only","I, II and III","I and II only","I and III only"],"ci":1,"exp":"Ex: The Foreign Currency Settlement System (FCSS) is a pioneering initiative aimed at strengthening India’s position as a global financial hub through GIFT IFSC (International Financial Services Centre). It enables local settlement of foreign currency transactions between IFSC Banking Units (IBUs), elimi nating the dependence on foreign correspondent banking routes and significantly reducing settlement time from up to 48 hours to near real - time. So, statement I is correct. The FCSS has been established under the comprehensive legal and regulatory framewor k of the Payment and Settlement Systems Act, 2007, which governs all payment and settlement mechanisms in India. So, statement II is correct. The system is authorised by International Financial Services Centres Authority (IFSCA). It is operated by the CC IL IFSC Limited (CCIL IFSC), a subsidiary of Clearing Corporation of India Limited. Currently, foreign currency transactions in GIFT IFSC are processed via correspondent banking routes i.e through multiple Nostro account relationships (accounts held with f oreign banks) and intermediaries to route funds. That chain of relay can lead to settlement lags of 36 to 48 hours. The FCSS is meant for foreign currency settlements within GIFT IFSC, not domestic rupee settlements. Initially , the FCSS supported US dollar settlements , reflecting its dominant role in global trade and finance. However, the framework is designed with flexibility, allowing the future inclusion of other major currencies like the euro, pound sterling, or yen as the system scales. So, statement I II is correct. Knowledge Box What is the IFSC Banking Unit (IBU)? An IFSC Banking Unit (IBU) is a specialized branch of a bank that operates within an International Financial Services Centre (IFSC). These units are designed to provide financial services to non - resident individuals and foreign entities, offering a variety of banking and financial products that are not generally available in domestic banking channels. International Financial Services Centre (IFSC) in GIFT City."},{"id":2,"txt":"Which one of the following is the correct descending order of the startups according to their valuation?","ref":"","opts":["Gazelle > Unicorn > Cheetah","heetah > Unicorn > Gazelle","Unicorn > Gazelle > Cheetah","Gazelle > Cheetah > Unicorn"],"ci":2,"exp":"Ex: A unicorn is a privately owned startup company valued at over $1 billion. The term was popularized by venture capitalist Aileen Lee in 2013 to describe such rare and successful startups. Key characteristics of unicorns include private ownership, high growth potential, innovative or disruptive technology, and the ability to attract significant investment from venture capitalists. Their valuations are largely based on future growth potential, not just current profits.   Gazelle: A Gazelle is a startup founded after 2000 with the potential to become a unicorn within two years. Their valuations generally range from $500 million to $1 billion , showcasing fast growth. Cheetah: A Cheetah is a startup expected to achieve unicorn status w ithin four years. Typically valued between $200 million and $500 million , cheetahs exhibit strong innovation and early - stage expansion potential. in 2025, up from just one in 2011 according to the Hurun Global Unicorn Index 2025."},{"id":3,"txt":"With reference to the Pradhan Mantri Kisan Urja Suraksha evam Utthan Mahabhiyan (PM- KUSUM) Scheme, consider the following statements:\n1. It offers subsidies to farmers to set up solar plants and solar pumps.\n2. The surplus solar power generated can be sold to the DISCOMs.\n3. It focuses primarily on the agricultural and rural sector.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II only","II only","I and III only","I, II and III"],"ci":3,"exp":"Ex: The Pradhan Mantri Kisan Urja Suraksha evam Utthaan Mahabhiyan (PM - KUSUM) Scheme , launched in 2019 by the Ministry of New and Renewable Energy (MNRE), aims to provide energy and water security to farmers while promoting renewable energy and reducing dependence on diesel for irrigation. It seeks to enhance farmers’ income through decentralized solar power generation and sale of surplus power to DISCOMs. So, statement II is correct. The Government will subsidize 60% and provide a loan of 30% of the total cost . This leads the farmers to bear only 10% of the total cost to install solar plants and solar pumps. So, statement I is correct. The beneficiaries include individual farmers, groups of farmers, FPOs, Panchayats, Co - operatives, and Water User Associations , focusing primarily on the agricultural and rural sector. So, statement III is correct. Ther efore, option (d) is the correct answer. countries and island nations by using the International Solar Alliance platform."},{"id":4,"txt":"Which one of the following is the correct descending order of countries by the size of their official central bank gold reserves?\n1. USA\n2. India\n3. China\n4. Japan\nSelect the correct answer using the code given below:","ref":"","opts":["I - III - II - IV","III - I - II - IV","I - IV - III - II","III - II - I - IV"],"ci":0,"exp":"Ex: Central banks across the world hold gold as part of their reserve assets to ensure monetary stability and strengthen international financial credibility . The United States of America (USA) holds the largest gold reserves in the world, amounting to 8,133.5 tonnes, which constitute about 78.7% of its total foreign reserves as of August 2025. China has increased its holdings steadily. The country added 331 tonnes between 2019 and 2024, lifting its official reserves to 2,279.6 tonnes . India , now the world’s fifth - large st economy, holds 876.2 tonnes . Japan remains just behind with 846 tonnes . Taken together, the United States and Europe control more than 60% of all reported gold holdings. The correct descending order of countries by the size of their official central ba nks gold reserves is: USA > China > India > Japan. metal so far this fiscal year."},{"id":5,"txt":"Which one of the following best describes the term \"withholding tax\"?","ref":"","opts":["tax imposed for holding financial assets above a specified threshold","tax deducted at source by the payer and remitted to the government","temporary tax withheld by the government during periods of fiscal stress","tax payable only by non-resident entities on profits earned within India"],"ci":1,"exp":"Ex: Ex planation: The term \"withholding tax\" refers to the money that an employer deducts from an employee’s gross wages and pays directly to the government. The amount withheld is a credit against the income taxes the employee must pay during the year. It is wit hheld or deducted from certain types of income, such as wages, dividends, interest, and royalties, when they are paid to the recipient (non - resident individual or NRI). It is also known as Retention tax. The purpose of withholding tax in India is to ensur e that the government receives a portion of the income tax owed by the recipient."},{"id":6,"txt":"Consider the following bodies:\n1. Securities and Exchange Board of India (SEBI)\n2. Pension Fund Regulatory and Development Authority (PFRDA)\n3. Insolvency and Bankruptcy Board of India (IBBI)\n4. Insurance Regulatory Development Authority of India (IRDAI) The Securities Appellate Tribunal (SAT) hears and disposes of appeals against orders passed by\nhow many of the above bodies?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":2,"exp":"Ex: Securities Appellate Tribunal (SAT) It is formed as a statutory and autonomous body as per the prov isions of the Securities and Exchange Board of India (SEBI) Act, 1992. It was mainly established to hear appeals against orders passed by the SEBI or by an adjudicating officer under the SEBI Act. So, point I is correct. The SAT hears appeals against the following orders: Orders issued by the Insurance Regulatory and Development Authority of India (IRDAI) in relation to cases filed before it. So, point IV is correct. Orders issued by the Pension Fund Regulatory and Development Authority (PFRDA) in relation to cases filed before it. So, point II is correct. The National Company Law Appellate Tribunal (NCLAT) hears appeals against the orders passed by the Insolvency and Bankruptcy Board of India. So, point III is not correct. SAT has the same power s as vested in a civil court under the code of civil procedure while trying a suit. So, the Securities Appellate Tribunal (SAT) hears and disposes of appeals against orders passed by only three of the bodies given above. Therefore, option (c) is the correc t answer."},{"id":7,"txt":"Which one of the following States has recently got its first-ever railway line to connect it with the national rail network?","ref":"","opts":["Nagaland","Mizoram","Meghalaya","Manipur"],"ci":1,"exp":"Ex: The Bairabi – Sairang broad - gauge project is Mizoram’s first - ever railway line . It marks a historic moment in the State’s connectivity journey. Among its most striking structures is Bridge No. 144 near Sairang, which at 114 metres stands taller than Qutub Minar, making it th e tallest pier railway bridge in the country . The new route extends connectivity from Bairabi on the Assam – Mizoram border to Sairang , just 20 km from Aizawl, directly linking the state capital with In dia’s railway network for the first time. With this, Aizawl becomes the fourth northeastern capital to gain direct rail access , after Assam's Guwahati, Tripura's Agartala, and Arunachal Pradesh's Itanagar. Relev ance: The Prime Minister of India recently inaugurated Mizoram’s first - ever railway line, the Bairabi – Sairang broad - gauge project."},{"id":8,"txt":"With reference to Tea in India, consider the following statements:\n1. It is classified as an essential commodity under the Essential Commodities Act, 1955.\n2. Unprocessed green tea leaves are exempted from the Goods and Services Tax (GST).\n3. Assam contributes over 50% of India’s total tea production.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II and III only","III only","I, II and III 2"],"ci":1,"exp":"Ex: India is the second - largest producer and consumer of tea in the world after China. Tea is not just a commercial crop but also an important part of India’s culture and exports. Tea is not classified as an essential commodity under the Essential Commodities Act 1955 because tea is not considered a \"foodstuff\" under the Act. S o, statement I is not correct. Under India’s GST regime, unprocessed green tea leaves are exempted from GST (0%). However, once processed into packaged tea, it attracts GST. So, statement II is correct. The total area under tea cultivation in Assam account s for more than half of the country’s total area under tea. Assam alone produces more than half of India’s tea production. The estimated annual average production of tea in Assam is about 630 - 700 million kg. It is followed by West Bengal, and southern states like Tamil Nadu and Kerala . So, statement III is correct."},{"id":9,"txt":"Which one of the following is a bond wherein instead of returning principal on a set schedule, the issuer pays interest indefinitely?","ref":"","opts":["Puttable bond","onvertible bond","Floating Rate bond","Perpetual bond"],"ci":3,"exp":"Ex: A perpetual bon d is a fixed - income security that has no maturity date and theoretically pays interest forever. Instead of returning principal on a set schedule, the issuer pays interest indefinitely. These bonds have an obligation only to pay interest and are not require d to repay the debt. The perpetual bond means the issuer is under no obligation to redeem the principal amount at any point. Investors of these bonds do not get their principal back . However, the interest continues forever. Therefore, option (d) is the cor rect answer. Knowledge Box Floating Rate bonds, also known as floaters or variable rate bonds, are fixed income instruments whose coupon (interest) rates get changed at periodic intervals. A convertible bond is a hybrid security that offers interest payments while providing the option for conversion into a set number of the issuing company’s equity shares. A Puttable bond is a debt instrument that allows the bondholder to force the issuer to repurchase the security at specified dates before maturity. per annum through its second issue of Perpetual Bonds."},{"id":10,"txt":"Consider the following scenario: While purchasing everyday items like soaps, lotions and deodorants, Nirmala notices that products marketed towards women are significantly more expensive than similar products marketed towards men, despite having comparable quality and function. This type of gender-based price disparity is most appropriately termed as:","ref":"","opts":["rip tax","Pink tax","Luxury tax","Pigouvian tax"],"ci":1,"exp":"Ex: Pink Tax refers to the higher prices that women end up paying for comparable goods and services simply because they are branded or marketed for women. Pink tax is neither a real tax nor a government - imposed fee. Men and women often buy similar day - to - day products. But research shows that consumer products targeted and advertised to women are sometimes more expensive than comparable products marketed to men. Gender - based price disparities are prevalent in several sectors, but one of the most visible is personal care products. The se include, for example, soaps, lotions, razor blades and deodorants that are marketed specifically to either women or men. Knowledge Box Crip tax: It is a tax levied on individuals who are considered to be disabled or handicapped, often historically associated with poll taxes or other forms of taxation targeting specific groups. Luxury tax: It is a type of sales tax that applies to certain luxury i tems, such as expensive cars, jewelry, or yachts, typically targeting high - end consumers. Pigouvian tax: It is a type of tax levied on activities that generate negative externalities, such as pollution or smoking, aiming to reduce the harmful behavior and offset societal costs. men."},{"id":11,"txt":"Consider the following:\n1. Developmental expenditure and welfare measures\n2. Unfunded cost of non-contributory pension schemes\n3. Finances of the State government\n4. Working conditions available for private sector employees\n5. Inflation trajectory and projected GDP growth The Terms of Reference (TOR) of the 8th Central Pay Commission requires it to consider how many of the above factors while making its recommendations?","ref":"","opts":["Only two","Only three","Only four","ll the five"],"ci":2,"exp":"Ex: Pay commissions are set up in India by an executive order based on a Cabinet decision. T he role of the Central Pay Commission (CPC) is to go into various issues of salary structures, retirement benefits and other service conditions of Central government employees, including defence personnel, and make suitable recommendations on the changes r equired. The first CPC was set up in 1946. The Terms of Reference (TOR) of the pay commissions are finalised by the Union Cabinet. The TOR of the 8th CPC requires it to consider certain factors while making its recommendations. They include: economic conditions of the country and the need for fiscal prudence; need to ensure adequate resources for developmental expenditure and welfare measures. So, point I is correct. unfunded cost of non - contributory pension schemes. So, point II is correct. impact of recommendations on State government finances that usually adopt the recommendations of the CPC. So, point III is correct.   the prevailing emolument structure and working conditions available for central public sector undertakings and private se ctor employees. So, point IV is correct. Inflation trajectory and projected GDP growth are not the prime factors for the TOR of the 8th CPC. So, point V is not correct."},{"id":12,"txt":"What is the Thali Index?","ref":"","opts":["measure of food security based on the cost of a meal platter","n index tracking the prices of staple grains like rice and wheat","ranking of states based on nutritional standards of mid-day meals","measure of food wastage in Indian households"],"ci":0,"exp":"Ex: The Thali Index is a measure of poverty and food security in India, based on the cost of a basic thali (meal platter). It represents the Indian diet and cultural context, providing a more nuanced understanding of poverty and food deprivation. Some economists have propose d to have a \"Thali Index\" to measure poverty and standard of living more accurately in India because of various reasons like: The traditional calorie - based poverty measurement method has limitations, as it only considers energy intake and not the nutritio nal value or satisfaction of food. A Thali Index, based on the cost of a basic thali, better represents the Indian diet and cultural context . It can offer a better estimate of food deprivation than official poverty estimates suggest. of urban households still cannot afford two balanced meals daily."},{"id":13,"txt":"Consider the following statements:\nStatement I: The international price of gold always tends to rise whenever global oil prices increase.\nStatement II: Gold, being a tangible asset, is not subject to the same depreciation risks as financial assets.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["oth Statement I and Statement II are correct and Statement II explains Statement I","oth Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct"],"ci":3,"exp":"Ex:  Understanding the relationship between global commodities is crucial for analyzing market trends. The prices of gold and oil, along with the value of currencies, play a significant role in the global economy.  Generally, there’s no consistent relationship between gold and oi l. However, both gold and oil tend to perform well in periods of high inflation , albeit for different reasons. High oil prices can push consumer price baskets higher, which can result in high inflation. When high inflation persists, driven by commodities o r other factors, investors look for hedges, often lifting gold investment demand – and its price – higher. So, statement I is not correct.  Gold, being a tangible asset, is not subject to the same depreciation risks as financial assets, making it a preferr ed store of value during inflationary periods. So, statement II is correct.  On the other hand, there is a negative correlation (inverse relationship) between the value of the U.S. dollar and the price of gold. When the U.S. dollar weakens against other maj or currencies, the price of gold typically increases, as gold becomes cheaper in foreign currencies. Since the global price of gold is expressed in U.S. dollars, its depreciation raises the global price of gold. So, statement I is incorrect but Statement II is correct."},{"id":14,"txt":"Arrange the following States in the ascending order of their debt-to-GSDP ratio:\n1. Odisha\n2. Maharashtra\n3. Gujarat\n4. West Bengal\nSelect the correct answer using the code given below:","ref":"","opts":["II-IV-III-I","II-III-IV-I","I-II-III-IV","III-II-I-IV"],"ci":2,"exp":"Ex:  According to the Comptroller and Auditor General of India (CAG), the combined public debt (internal debt and loans & advances from the Centre) of 28 States tripled over a decade , rising from Rs 17.57 lakh crore in 2013 - 14 to Rs 59.60 lakh crore in 2022 - 23 . In terms of Gross State Domestic Product (GSDP), the debt increased from 16.66% of GSDP in 2013 - 14 to 22.96% in 2022 - 23. o GSDP represents the total value of all fi nished goods and services produced within a State. o Debt is measured in terms of internal debt and loans & advances from the Centre .  According to the report, at the end of 2022 - 23, the highest debt - to - GSDP ratio of 40.35 per cent was recorded in Punjab , followed by Nagaland (37.15 per cent) and West Bengal (33.70 per cent). The lowest ratios were recorded in Odisha (8.45 per cent), Maharashtra (14.64 per cent) and Gujarat (16.37 per cent).  As on 31st March 2023, eight states had public debt liability of m ore than 30 per cent of their GSDP; six states had public debt liability of less than 20 per cent of their GSDP and remaining 14 states had public debt liability between 20 to 30 per cent of their respective GSDP in FY 2022 - 23, the report said. its implications for fiscal sustainability."},{"id":15,"txt":"Which one of the following bodies publishes the annual Global Innovation Index (GII)?","ref":"","opts":["World Economic Forum","World Trade Organization","World Intellectual Property Organization","World Bank"],"ci":2,"exp":"Ex: The Global Innovation Index (GII) 2025 ranks the world's most innovative economies and identifies the top 100 innovation clusters globally. It highlights global innovation trends based on investment patterns, technological progress, adoption rates and socioeconomic impacts. It is produced by the World Intellectual Property Organisation (WIPO). As per the Index, R&D growth fell to 2.9% in 2024 and is projected to drop further to 2.3% in 2025. China has entered the top 10 of the Global Innovation Index 2025 for the first time, securing the 10th position and emerging as the leading middle - income economy . Meanwhile, India has climbed to 38th place among 139 economies , marking a notable rise from its 81st rank in 2015 . (GII) 2025."},{"id":16,"txt":"In the context of public finance, what is \"short transfer\"?","ref":"","opts":["Transferring excess funds to the Consolidated Fund of India","Failure to transfer the full amount of cess collected to the designated reserve funds","elaying transfer of funds to the States","Unauthorised use of funds granted for specific projects"],"ci":1,"exp":"Ex: In public finance, a short transfer refers to the situation when the entire amount of cess or levy collected is not transferred from the Consolidated Fund of India (CFI) to the designated Reserve Funds in the Public Account of India , as required by law and Parliamentary approval. The Comptroller and Auditor General of India (CAG), in its report on Union Accounts for 2022 - 23 and 2023 - 24, highlighted the rising contribution of cess and surcharge to the Centre’s tax revenues. Collections stood at ₹ 4.7 lakh crore in 2022 - 23 and ₹ 4.9 lakh crore in 2023 - 24, accounting for nearly 12 – 14% of gross tax receipts. However, the CAG expressed concern that the government did not fully utilise these levies for their intended purposes . A short transfer of ₹ 3.69 lakh crore was noted till March 2024, where cess proceeds were not moved to the designated reserve funds. Therefore, option (b) is the correct ans wer. withheld ₹ 3.69 lakh crore of cess collections by not transferring them to the designated reserve funds."},{"id":17,"txt":"Consider the following:\n1. Cash payments\n2. Bank transfers\n3. Standing orders\n4. UPI AutoPay\n5. Cheque payments\nHow many of the above are push transactions?","ref":"","opts":["Only two","Only three","Only four","ll the five"],"ci":1,"exp":"Ex: Push and pull payments are two distinct methods of initiating transactions, mainly differing in who controls the flow of money. In push payments, the payer has complete control over how much money is sent, when it is sent and to whom. Common examples include cash payme nts , where the payer directly hands over the money, bank transfers, where the payer decides the amount and destination and standing orders , which are scheduled transfers set up in advance but still initiated by the payer. So, points I, II and III are corre ct. Pull payments are controlled by the payee or the business receiving the money. Here, the payer gives prior authorisation and the payee withdraws funds as agreed. UPI Autopay, which involves direct debit, is a clear example, as the payee collects money from the payer’s account at scheduled intervals . So, point IV is not correct. ■ A UPI pull transaction, also called a collect request, is a type of payment where the recipient starts the transaction instead of the sender . Once the payment request is initiate d, the sender approves it by entering their UPI PIN. Similarly, cheques fall under pull payments; even though the payer writes the cheque, it merely acts as permission for the payee to initiate the actual transfer of funds. So, point V is not correct. So , only three of the above are push transactions. transactions on the UPI platform."},{"id":18,"txt":"Consider the following statements with reference to the windfall tax in India:\n1. It is levied on sectors that benefit significantly from global price hikes or unique economic situations.\n2. It is levied in the form of a Special Additional Excise Duty (SAED).\n3. In India, the windfall tax rates on oil companies are reviewed every fortnight.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: The windfall tax in India refers to an additional tax levied on certain companies that experience sudden and unexpected increases in profits, typically due to extraordinary market conditions or external factors. This tax is primarily aimed at sectors that benefit significantly from global price hikes or unique economic situations. The most common industries that fall target to windfall gains ta x include oil, gas, and mining. The tax is levied in the form of a Special Additional Excise Duty (SAED) . So, statements I and II are correct. India first imposed windfall profit taxes on July 1, 2022, joining a host of nations that tax supernormal profit s of energy companies. The tax rates are reviewed every fortnight based on average oil prices in the previous two weeks. So, statement III is correct."},{"id":19,"txt":"Which of the following statements are correct\nwith regard to the fisheries sector in India?\n1. India is the largest fish producer in the world.\n2. The inland fisheries contribute more than 50% of the country’s total fish production.\n3. The PM Matsya Sampada Yojana aims to improve aquaculture productivity and double fisheries exports to 1 lakh crores.\nSelect the correct answer using the code given below:","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":1,"exp":"Ex: India’s fisheries sector is a key player on the global stage, with the Blue Revolution highlighting the critical importance of fisheries and aquaculture in the country. Recognized as a \"sunrise sector,\" it is poised to make a significant contribution to the Indian economy in the near future, driven by its vast potential for growth and development. As the 2nd largest fish producer, it is an integral part of the global food system . So, statement I is not correct. India is also the 2nd largest aquaculture nation, contributing significan tly to the world’s shrimp and fish supply. India is the world leader in shrimp production , a critical component of its seafood exports. The sector’s continued growth supports both domestic consumption and international markets, where India has become a sig nificant exporter. India’s fish production has witnessed remarkable growth over the years. Initially dominated by marine fish production, the sector has seen a significant shift towards inland fisheries, which now contribute around 70% of the country’s tot al fish production. This transformation has been driven by the adoption of science - based fisheries management practices and the holistic approach under the Pradhan Mantri Matsya Sampada Yojana (PMMSY), which focuses on optimal utilization of resources, tec hnology infusion, and capacity building. So, statement II is correct. PM Matsya Sampada Yojana (PMMSY) , launched in 2020, is a flagship initiative aimed at transforming India’s fisheries sector. The scheme focuses on enhancing aquaculture productivity, improving fisheries management, and creating 55 lakh new jobs in the sector, along with big infrastructural changes of establishing five integrated aquaparks. It also envisages doubling fisheries ex ports to 1 lakh crores. So, statement III is correct. One of the central goals of PMMSY is to increase aquaculture productivity, which currently stands at 3 tonnes per hectare (Ha), to 5 tonnes per hectare. It also aims to improve fish farming infrastruct ure and reduce seafood production waste. In addition to these, the scheme strongly focuses on sustainable practices, ensuring that growth in the sector is achieved without compromising environmental integrity. 30,000 tonnes, necessitating the establishment of a structured market system to unlock its full potential."},{"id":20,"txt":"With reference to Minimum Public Shareholding (MPS), consider the following statements:\n1. It is a mandate issued by the Securities and Exchange Board of India (SEBI) and applicable to all the listed companies in India.\n2. The listed companies in India must ensure at least 25% public shareholders.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":2,"exp":"Ex: The Minimum Public Shareholding (MPS) is a regulatory mandate introduced by the Securities and Exchange Board of India (SEBI) to ensure greater transparency, liquidity, and corporate governance in the Indian stock market. It requires that a significant proportion of a company’s equity is held by the public rather than being concentrated with promoters. This provision, laid under the Securities Contracts (Regulation) Rules, 1957 and reinforced by SEBI’s Listing Obligations and Disclosure Requirements (LODR) , applies to all listed companies in India. So, statement I is correct. SEBI mandates that every listed company in India must maintain a minimum of 25% public shareholding . Public shareholders here refer to non - promoters and non - promoter group entities. This ensures that a significant portion of a company’s shares is available for trading in the market, improving liquidity and promoting fair price discovery. So, statement II is correct. For newly listed companies , SEBI provides a grace period of three years to comply with the 25% MPS requirement. This allows promoters flexibility to gradually reduce their stake and build public participation. However, in the case of very large companies with a post - issue market capitalization exceeding ₹ 1 trillion , the timeline is ext ended to five years due to their scale and complexity. minimum public offer (MPO) for companies aspiring to get listed."},{"id":21,"txt":"Which of the following statements is/are correct\nwith regard to the Made in India Label scheme?\n1. It is a voluntary certification scheme to help manufacturers demonstrate quality of Indian products and attain higher ratings across sectors.\n2. It is not applicable to manufacturers and producers who only assemble their products in India.\nSelect the correct answer using the code given below:","ref":"","opts":["I only","II only","oth I and II","Neither I nor II 4"],"ci":0,"exp":"Ex: The Made in India Label scheme is an initiative that lends support to the manufacturing industry by building a brand reputation, stronger identity and wider reach for products made in India. The Made in India Label is meant to showcase the quality of Indian products and attain higher ratings across sectors. The Made in India Label scheme aims to strengthen the reputation of products manufactured in India. It also guarantees authenticity of th e products originating from India and/or crafted with locally sourced raw materials. This is a voluntary certification scheme to help manufacturers demonstrate that their products are manufactured in India and are of good quality. The label displays a QR c ode and a logo with information about the location of manufacturing, validity of the label and other product - specific information. So, statement I is correct. The scheme provides identity to the product based on its origin. It develops a mechanism to qual ify and brand the products of Indian origin. It also supports recognising the products of Indian origin in domestic as well as international markets. The ‘Made in India’ Label strengthens the positioning of the product in the competitive market.   The initia tive is being led by the Department for Promotion of Industry and Internal Trade (DPIIT), Ministry of Commerce and Industry. The Quality Council of India and the India Brand Equity Foundation are actively collaborating with DPIIT in an advisory capacity. Manufacturers and producers who manufacture or assemble their products wholly or substantially in India are eligible to use the label. So, statement II is not correct. Relevanc e: The Made in India Label Scheme, a voluntary certification initiative, was in news in August 2025 for its promotion and strengthening of Indian products."},{"id":22,"txt":"Consider the following statements with regard to the European Free Trade Association (EFTA):\n1. Belgium, Germany, France and Italy are its members.\n2. The individual EFTA states are free to set their own customs tariffs.\n3. It has the Trade and Economic Partnership Agreement (TEPA) with India.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II only","II and III only","III only","I, II and III is"],"ci":1,"exp":"Ex: The European Free Trade Association (EFTA) is an intergovernmental organisation of Iceland, Liechtenstein, Norway and Switzerland established in 1960 by the Stockholm Convention. Its main objective is to promote free trade and economic integration between its members within Europe and globally. So, statement I is not correct. Belgium, G ermany, France and Italy are not the members of the EFTA. The individual EFTA States are free to set their own customs tariffs and arrange other foreign trade measures vis - à - vis the non - EFTA States. So, statement II is correct. India has officially ratifie d the Trade and Economic Partnership Agreement (TEPA) with the EFTA recently. So, statement III is correct. The TEPA, the negotiations for which began in 2008, includes 100% market access to Indian non - agricultural products and concessions on processed agr icultural products (PAP), while keeping primary agricultural products out of the ambit of the pact. EFTA will eliminate or reduce import tariffs on 99.6% of India’s exports . India will eliminate or reduce import tariffs on 95.3% of the exports from EFTA na tions. However, the effective duty on gold, which forms 80% of exports from EFTA countries, remains untouched at 15%. The trade pact also has provisions for mutual recognition agreements in professional services like nursing, chartered accountants, and arc hitects, among others. This should allow these professionals from India to have more opportunities in the four EFTA bloc countries. On intellectual property rights, the two sides agreed to follow the high standards of the Trade - Related Intellectual Propert y Rights (TRIPS) agreement . India’s interests in generic medicines and concerns related to the evergreening of patents have been fully addressed. implemented from October 1, 2025."},{"id":23,"txt":"Consider the following pairs: Report Issuing Agency Institute for Global Peace\n1. Economics and Index Peace (IEP) World of Debt\n2. World Bank Report International Poverty and\n3. Monetary Fund Equity Briefs (IMF) Global Gender World Economic IV. Gap Report Forum (WEF)\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":1,"exp":"Ex: Global Peace Index (GPI): It is the world’s leading measure of global peacefulness. It has been released by the Institute for Economics and Peace (IEP) since 2007. It measures the state of peace across three domains : Societal Safety and Security; Ongoing Domestic and International Conflict and Militarisation. So, pair I is correctly matched. World of Debt Report: It is a report published by the United Nations Trade and Development (UNCTAD) . It provides a comprehensive overview of the global debt landscape , especially focusing on developing countries. In 2023, global public debt surged to a record high of $97 trillion , driven primarily by cascading crises and the sluggish and uneven performance of the global economy. So, pair II is not correctly matched. Poverty and Equity Briefs (PEBs): These are published biannually by the World Bank . They offer insights into poverty, shared prosperity, and inequality trends across more than 100 developing countries. These briefs analyse poverty using both national poverty lines and international benchmarks , providing a comprehensive understanding of global poverty dynamics. The World Bank’s Spring 2025 Poverty and Equity Brief commended India and said between 2011 – 12 and 2022 – 23, India’s extreme poverty rate fell from 16.2% to 2.3% . So, pair III is not correctly matched. Global Gender Gap Report: It i s published annually by the World Economic Forum (WEF) . It tracks progress towards gender parity across various countries. It measures gender parity across four key dimensions : Economic Participation and Opportunity, Educational Attainment, Health and Surv ival, and Political Empowerment. The report measures the gender gap based on scores ranging from 0 to 100. In the 2025 report , India is ranked 131st out of 148 countries , with an overall score of 64.1% . So, pair IV is correctly matched. So, only two of the pairs given above are correctly matched."},{"id":24,"txt":"Which of the following statements are correct about the National Financial Reporting Authority (NFRA)?\n1. It enforces compliance with accounting and auditing standards to improve the credibility, quality, and transparency of financial reporting in India.\n2. It has the power to suo motto investigate into the matters of misconduct committed by chartered accountants.\n3. Its jurisdiction of investigation extends to listed companies and large unlisted public companies.\nSelect the correct answer using the code given below:","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: National Financial Reporting Authority is an independent regulatory body established by the Government of India under Section 132(1) of the Companies Act, 2013. Its primary role is to oversee and enforce compliance with accounting and auditing standards to improve the credibility , quality, and transparency of financial reporting in India. So, statement I is correct. It aims to protect the int erests of investors, stakeholders, and the public by ensuring high standards in the financial reporting ecosystem. It recommends accounting and auditing policies and standards to be adopted by companies for approval by the Central Government and monitors c ompliance with accounting standards and auditing standards.   NFRA has the power to investigate, either suo moto or on a reference made to it by the Central Government , into the matters of professional or other misconduct committed by any member or firm of chartered accountants registered under the Chartered Accountants Act, 1949. So, statement II is correct. It has the same powers as are vested in a civil court under the Code of Civil Procedure, 1908, while trying a suit. The jurisdiction of the NFRA for th e investigation of Chartered Accountants and their firms would extend to listed companies and large unlisted public companies , the thresholds for which shall be prescribed in the Rules. So, statement III is correct. Therefore, option (d) is the correct ans wer. Financial Reporting Authority (NFRA)."},{"id":25,"txt":"The import of Genetically Modified (GM) food products is regulated under:","ref":"","opts":["Food Safety and Standards Act, 2006","Foreign Trade (Development and Regulation) Act, 1992","Essential Commodities Act, 1955","gricultural Produce Marketing Act, 2003"],"ci":0,"exp":"Ex: Genetically Modified (GM) crops are created by inserting foreign genes (often from bacteria or other species) into the plant's genome to introduce traits such as pest resistance, herbicide tolerance, or enhanced nutrition . Import of food products is regulated under the Food Safety and Standards Act (F SSAI), 2006 . Indian Customs can clear food products including Genetically Modified(GM) food products only after necessary approval/No Objection Certificate(NOC) by FSSAI. As of now, Bt Cotton is the only GM crop approved for commercial cultivation in Indi a. Other GM crops such as GM mustard or Bt brinjal have not yet received final approval for field cultivation. USA negotiators during the ongoing negotiations for finalizing the trade deal."},{"id":26,"txt":"Consider the following statements:\n1. India is a net importer of agricultural produce.\n2. India is a net importer of Palm oil, cotton and natural rubber.\n3. The USA was the largest importer of India’s agricultural products in 2025.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II only","III only","I and III only","II and III only"],"ci":3,"exp":"Ex: India is a net exporter of agricultural produce. But, the agricultural net surplus has contracted from about $18.88 billion in 2022 - 23 to $16. 33 billion in 2023 - 24, and further to $14.91 billion in 2024 - 25. In short, although exports showed recovery in the last year, the more rapid and consistent rise in imports has progressively diminished the surplus . Imports are increasing at a more rapid pac e than exports , even in sectors where India has traditionally enjoyed a natural competitive strength. So, statement I is not correct. The imports of vegetable oils – basically palm , soyabean and sunflower – continue to go up, with domestic production unab le to match increasing demand. A similar trend is visible in cotton and natural rubber : Their production has actually dipped from their highs reached in 2013 - 14 and 2012 - 13 respectively, forcing more imports to meet domestic consumption requirements. So, s tatement II is correct.   The largest importers of India’s agricultural products, as of FY25 (until December 2024), were the USA , UAE, China, Bangladesh. During this period, the USA was the largest importer of Indian agricultural products at Rs. 36,117 cror e (US$ 4.19 billion) with a share of 11.36% of the total exports. The USA and China were the major importers of India’s marine products. So, statement III is correct."},{"id":27,"txt":"With reference to the Contract workers in India,\nconsider the following statements:\n1. The share of contract labour in the manufacturing workforce has doubled since 1999-2000.\n2. Contract workers, typically hired through third-party contractors, are excluded from the coverage of the Industrial Disputes Act, 1947.\n3. The employers are required to pay at least twice the normal wage rate for any work beyond normal working hours.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: According to the Annual Survey of Industries (ASI), the share of contract labour in the manufacturing workforce doubled from 20% in 1999 - 2000 to 40.7% in 2022 - 23, cutting across all industries. The shift towards contractualisation is often viewed as a strategy to enhan ce operational flexibility and access specialised skills as and when required. So, statement I is correct. Contract workers, typically hired through third - party contractors, are excluded from core labour laws under the Industrial Disputes Act 1947 , which governs layoffs, retrenchments, and safeguards against arbitrary dismissals. So, statement II is correct. India’s labour landscape has undergone a historic transformation with the consolidation of 29 labour laws into 4 simplified and modern Labour Codes viz. the Code on Wages, 2019, the Industrial Relations Code, 2020, the Occupational Safety, Health and Working Conditions (OSH) Code, 2020 and the Code on Social Security, 2020. The contract workers are given higher protection as the employers must pay employees at least twice the normal wage rate for any work beyond normal working hours. So, statement III is correct."},{"id":28,"txt":"Consider the following:\n1. Treasury Bills\n2. Preferred stocks\n3. Government Securities\nHow many of the above instruments are components of a Debt Mutual Fund?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":1,"exp":"Ex: A Debt Mutual Fund is a type of investment option that mainly puts money into fixed - income instruments such as treasury bills, bonds, government securities and similar debt assets. These funds provide investors with a chance to earn steady returns while taking on relatively lower risk. The following are the instruments of a Debt Mutual Fund: Treasury Bills (T - Bills) are short - term loans taken by the government. They are safe and pay a fixed return. Debt mutual f unds often invest in them because they are low risk and give steady returns. So, point I is correct. Preference shares, also commonly known as preferred stock , are a special type of share where dividends are paid to shareholders prior to the issuance of co mmon stock dividends. They are not included in Debt Mutual Funds . So, point II is not correct. Government Securities (G - Secs) are long - term loans given to the government. They pay regular interest and are very safe. Debt mutual funds invest in them to ear n steady income. So, point III is correct. So, only two of the above investment instruments are generally considered components of a Debt Mutual Fund. funds have been generating higher returns in the economy."},{"id":29,"txt":"In the context of the Indian banking system, a \"mule account\" refers to a:","ref":"","opts":["legitimate account used to launder illicit money","type of savings account with a high interest rate","ormant account with minimal transactions","ccount used by unknown or fake identities"],"ci":0,"exp":"Ex: Mule accounts are bank accounts that facilitate illegal transactions by receiving and transferring funds from unlawful activities. In India, these accounts are often opened by individuals who offer their bank accounts for a fee, making detection difficult during the onboarding process. Howeve r, with effective controls and continuous monitoring of account behaviour, banks can identify and shut down these accounts. There are five types of money mule accounts, categorised by the level of involvement and awareness of the individuals using them: V ictim Mule: Unwittingly uses their own account, often after a data breach, completely unaware it's being exploited. Misled Mule: Recruited through fake job ads (e.g., “payment processing agent”). They receive illicit funds, believing it's legitimate work. Deceiver Mule: Opens new accounts using stolen, fraudulent, or synthetic identities to facilitate money laundering. Peddler Mule: Sells access to their genuine bank account to fraudsters in exchange for a fee, knowingly enabling illicit transactions. Accom plice Mule: Fully aware of the crime, they actively open or use existing accounts to receive and transfer dirty money under criminal direction. Knowledge Box A money mule is someone who transfers or moves illeg ally acquired money on behalf of someone else. Criminals recruit money mules to help launder proceeds derived from online scams and frauds or crimes like human trafficking and drug trafficking. allegedly tied to mule accounts opened in the names of labourers."},{"id":30,"txt":"Consider the following statements with regard to the India Post Payments Banks (IPPBs):\n1. They cannot accept term deposits and any non-resident Indian deposits.\n2. They can set up subsidiaries to provide non- banking financial services.\n3. They are subject to both the Statutory Liquidity Ratio (SLR) and Cash Reserve Ratio (CRR) provisions.\nWhich of the statements given above are correct?","ref":"","opts":["I, II and III","I and II only","II and III only","I and III only"],"ci":3,"exp":"Ex: India Post Payments Bank (IPPB) has been established under the Department of Posts, Ministry of Communications with 100% equity owned by the Government of India. IPPB was launched on September 1, 2018. The bank has been set up with the vision to build the most accessible, affordable and trusted bank for the common man in India. IPPB offers a range of products such as savings and current accounts, remittances and money transfer, direct benefit transfers, bill and utility payments, enterprise and merchant payments. Payment banks are not allowed to undertake lending activ ities directly. They can accept demand deposits and are restricted to holding a maximum balance of Rs. 2 lakh per individual customer at the end of the day. Payment banks cannot accept Non - Resident Indian (NRI) deposits, Fixed Deposits (FDs), term deposits and recurring deposits (RDs). So, statement I is correct. Payment Banks cannot set up subsidiaries to undertake non - banking financial services activities. So, statement II is not correct.   Payment Banks are required to comply with specific reserve and inve stment norms laid down by the Reserve Bank of India (RBI) to ensure financial stability and prudence. As per the guidelines: They must maintain the Cash Reserve Ratio (CRR) with the RBI, which is a percentage of their outside demand and time liabilities, j ust like other scheduled banks. In addition, they are mandated to invest at least 75% of their demand deposit balances in Statutory Liquidity Ratio (SLR) - eligible instruments, such as Government securities and Treasury bills, with maturities of up to one y ear. So, statement III is correct. 25 by the Department of Financial Services (DFS), Ministry of Financ e."},{"id":31,"txt":"Consider the following statements with regard to offshore mining in India:\n1. Mining of atomic minerals is restricted to the Government, Public Sector Undertakings and Public Corporations.\n2. Royalties from offshore mining of minerals are assigned entirely to the Central Government.\n3. Private companies are prohibited from participating in off-shore mining activities.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":0,"exp":"Ex: In India, offshore mining is done under the provisions of the Offshore Areas Minerals (Development and Regulation) Act, 2002 . It provides for the development and regulation of mineral resources in the territorial waters, continental shelf, Exclusive Economic Zone (EEZ) and other maritime zones of India. Article 297 of the Indian Constitution says that: All lands, minerals and other things of value underlying the ocean within the territorial waters, or the continental shelf , or the exclusive economic zone, of India shall vest in the Union and be held for the purposes of the Union. All other resources of the exclusive economic zone of India shall also vest in the Union and be held for the purposes of the Union. OAMDR Amendment Act 2023, states that the operating rights to be granted only to Government, Government Companies and Corporations in case of atomic minerals having grade equal to or greater than the threshold. So, statement I is correct. Hence, the royal ties from mining offshore mineral resources are entirely assigned to the Central Government. So, statement II is correct. The 2023 amendment to the Offshore Minerals Act has permitted private sector involvement in the offshore mining industry. The amended Act allows private companies to participate in off - shore mining activities. So, statement III is not correct. offshore sand mining with private sector collaboration."},{"id":32,"txt":"Consider the following statements with reference to the International Monetary Fund (IMF):\n1. Executive Directors are elected by the member countries of the IMF.\n2. The Executive Directors enjoy voting power at the IMF on the basis of the share of quota their constituent countries have.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II 6"],"ci":2,"exp":"Ex: The Executive Directors of the International Monetary Fund (IMF) form the core of its Executive Board , which is responsible for the Fund's day - to - day operations. These D irectors are elected or appointed by IMF member countries or groups of countries (constituencies), ensuring that all 191 member nations are represented. So, statement I is correct.   All IMF member countries are represented on its Executive Board, which rev iews members' economic policies, approves financial assistance for balance of payments issues, and oversees capacity development efforts. o The Board is chaired by the Managing Director , who leads the IMF's staff and presides over Board meetings. The Executive Board conducts the day - to - day business of the IMF, including: o Discussing the national, regional, and global consequences of members' economic policies. o Approving IMF financing to assist member countries facing balance of payments problems. o Overseeing the IMF's capacity development efforts. Each Executive Director's voting power is determined by the quota shares of the member countries they represent. This reflects the financial contribution and economic size of the countries in the IMF. So , statement II is correct. o Countries with larger economies have their own Executive Directors, while others are grouped into constituencies. Knowledge Box The International Monetary Fund (IMF): IMF is a global organization comprising 191 member countries , established in 1944. It works to promote international monetary cooperation, secure financial stability, facilitate international trade, promote high employment and sustainable economic growth, and reduce poverty around the world. The IMF aims to achieve sustainable growth an d prosperity for all its member countries by supporting economic policies that promote financial stability and monetary cooperation. Core Functions: Policy Advice (Surveillance): The IMF monitors global economic trends and provides policy advice to member countries to promote stability and growth. Financial Assistance: It offers financial support to member countries facing balance - of - payments problems, helping them stabilize their economies. Capacity Development: The IMF provides technical assistance and training to help countries strengthen their capacity to design and implement effective policies. Governance Structure: Board of Governors: Comprising one governor from each member country, typically the finance minister or central bank governor. Executi ve Board: Consists of 25 Executive Directors representing the IMF's member countries or groups of countries, responsible for conducting the day - to - day business of the IMF. Managing Director: Heads the IMF staff and chairs the Executive Board. Financial R esources: The IMF's financial resources come primarily from member countries' quota contributions. India's Executive Director at the International Monetary Fund (IMF)."},{"id":33,"txt":"Which of the following statements is/are correct\nwith reference to the Extended Fund Facility (EFF) of the International Monetary Fund (IMF)?\n1. It is a loan facility to assist countries facing medium-term balance of payments problems.\n2. It can be availed by all the member countries\nof the IMF.\n3. India has never availed this facility.\nSelect the correct answer using the code given below:","ref":"","opts":["I only","I and II only","II and III only","I, II and III"],"ci":1,"exp":"Ex: The Extended Fund Facility (EFF) is a lending arrangement of the International Monetary Fund (IMF) , established in 1974 to assist countries facing medium - term balance of payments (BoP) problems due to stru ctural economic weaknesses. It provides loans. So, statement I is correct. It provides support for implementing medium - term structural reforms, with longer program durations and extended repayment terms. All IMF member countries with actual or potential external financing needs are eligible for this facility. So, statement II is correct. EFF programs typically last 3 years, extendable to 4 years , and repayment is made over 4½ to 10 years in 12 equal semi - annual installments. India borrowed $3.9 billion under the EFF in 1980, though it did not draw the full amount as its economy recovered. During the 1991 economic crisis, India borrowed $2.2 billion under two standby arrangements. By the 2000s, with an impr oved economy and strong BoP position, India became a creditor to the IMF. So, statement III is not correct. Lanka."},{"id":34,"txt":"Consider the following statements regarding the Mumbai Interbank Offered Rate (MIBOR):\n1. It is the rate at which Indian banks lend money to each other in the interbank market.\n2. It is currently administered by National Stock Exchange (NSE).\n3. It is used to determine short-term interest rates in the Indian money market.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: Mumbai Interbank Offere d Rate (MIBOR) is the yardstick of Points To Remember the Indian call money market . It is the rate at which banks The MIBOR was launched in borrow unsecured funds from one another in the interbank 1998, by the Indian National market. So, statement I is correct. Stock Exchange (NSE) MIBOR is an essential benchmark in the Indian m oney Committee for the market for determining short - term interest rates. At present, it Development of the Debt is used as a reference rate for floating rate notes, corporate Market as a benchmark for the debentures, term deposits, interest rate swaps and forward rate call money market. agreements. The pricing of overnight indexed swaps, a type of overnight interest rate swap used for hedging interest rate risk is based on overnight MIBOR. So, statement III is correct. However, the Reserve Bank of India (RBI) has stipulated that the methodology for computing the Fixed Income Money Market and Deri vatives Association of India (FIMMDA) - NSE overnight, the MIBOR/Mumbai Interbank Bid Rate (MIBID) rate was revised following the introduction of Financial Benchmarks India Private Limited (FBIL) Overnight MIBOR in 2015. The MIBID was the companion rate to t he original MIBOR in that it was the rate at which banks wanted to pay for a loan. It was lower than the MIBOR rate, which created a bid/ask spread between the two rates. MIBID was also discontinued in 2015. The FBIL overnight MIBOR rate is currently admin istered by Financial Benchmarks India, an entity formed by FIMMDA, Foreign Exchange Dealers Association of India (FEDAI) and Indian Banks Association (IBA). So, statement II is not correct.   The FBIL overnight MIBOR rate computed by the Clearing Corporatio n of India (CCIL) is based on trade - weighted interbank call money transactions on the NDS call platform of CCIL between 9 a.m. and 10 a.m. Only T+0 settlement deals are used for the computation of the rate."},{"id":35,"txt":"Consider the following pairs: Term Description Size of the product is\n1. Greedflation reduced while the price remains the same Businesses increase their goods prices by\n2. Shrinkflation more than their costs have risen Reduction in the quality of the product\n3. Skimpflation while the price remains the same\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one pair","Only two pairs","ll three pairs","None"],"ci":0,"exp":"Ex: Inflation is a gradual loss of purchasing power, reflected in a broad rise in prices for goods and services over time. The companies are adapting in ways that have given rise to some additional ways to understand behaviour dur ing an inflationary period: Greedflation: It is an increase in the price of goods and services caused by businesses increasing their prices by more than their costs have risen. So, pair I is not correctly matched. Shrinkflation: It occurs when companies re duce the size or quantity of a product while keeping the price the same . Often, the goal is to shrink the packaging in such a way that the consumer doesn’t notice the change. So, pair II is not correctly matched. Skimpflation: It occurs when companies redu ce the quality of a product while keeping the price the same . For example, a company might use cheaper ingredients or lower - quality manufacturing processes to make a product. So, pair III is correctly matched. So, only one of the pairs given above is corre ctly matched. Knowledge Box Excuseflation is when companies raise prices and blame it on inflation , even when inflation is not the main cause of the price increase."},{"id":36,"txt":"Consider the following statements with reference to the Reserve Bank of India's guidelines on the classification of wilful defaulters:\n1. These guidelines are not applicable to Non- Banking Financial Companies (NBFCs) and financial institutions like Exim Bank and NABARD.\n2. The wilful defaulters will be barred forever from receiving any loan once they are included in the List of Wilful Defaulters (LWD).\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":3,"exp":"Ex: The Reserve Bank of India (RBI) has recently issued final guidelines on the classification of wilful defaulters. The guidelines will apply to banks, Non - Banking Financial Compani es (NBFCs) and financial institutions such as the Export - Import Bank of India (Exim Bank) and the National Bank for Agriculture and Rural Development (NABARD) . So, statement I is not correct. These guidelines direct lenders to complete identifying and tag ging such a borrower within six months of it turning bad. The guidelines do not provide additional credit facilities to a wilful defaulter or any entity with which a wilful defaulter is associated. The bar on additional credit facilities to a wilful defaul ter or any entity with which a wilful defaulter is associated shall be effective for one year after the wilful defaulter’s name has been removed from the List of Wilful Defaulters (LWD). So, statement II is not correct.   Therefore, option (d) is the correc t answer. Knowledge Box Wilful Defaulter: A borrower will be classified as a wilful defaulter if they default on loans despite having the capacity to repay. The tag would also apply to those who have diverted funds taken from lenders or “siphoned off the funds availed under the credit facility from the lender”. The lenders are required to check al l bad loans of ₹ 25 lakh and above to classify as wilful default. This would encompass the borrower or the guarantor who has wilfully defaulted on loans. If banks in their internal preliminary screenings find that a borrower has wilfully defaulted on a loan, they would have to complete the entire process of categorising the borrower as a wilful defaulter within six months . unique corporate borrowers as wilful defaulters."},{"id":37,"txt":"Consider the following information: A startup named TechNest has been operating for several years. It continues to exist mainly due to periodic investor bailouts, yet it shows no meaningful revenue growth, struggles to innovate, and survives just enough to keep running its basic operations. Despite the funding, the company is unable to scale or become profitable.\nWhat type of startup is TechNest?","ref":"","opts":["Zombie startup","Stealth startup","Pivot startup","Scaleup startup"],"ci":0,"exp":"Ex: Zombie startups: They are the companies that, while technically still in operation, are struggling to grow, innovate, or generate significant revenue . These businesses are often stuck in a state of stagnation, unable to attract further investment or reach profitability, yet they continue to exist due to prior funding or minimal operational costs. They a re often termed as the ‘walking dead ’. These startups raise a ton of money over the boom cycle but don't produce nearly enough revenue to justify the valuation. Knowledge Box Stealth startup: It is a company t hat keeps its existence, purpose, or product secret until it's ready to launch. This approach is often used to avoid competition or protect intellectual property. Pivot startup: It is a company that has changed its business model, product, or target market in response to customer feedback, market conditions, or other factors. Pivoting is a common strategy in the startup world, allowing companies to adapt and refine their approach. Scaleup startup: It is a company that's experiencing rapid growth and is focu sed on scaling its operations, revenue, and team to achieve significant market share and profitability. Scaleups are often characterized by their high growth rates and ability to expand efficiently."},{"id":38,"txt":"Which one of the following best describes the term ‘Fiscal Profligacy’?","ref":"","opts":["Excessive government spending leading to high deficits and unsustainable debt levels","situation where the government increases the tax rates to control inflation","The strategic reduction of government spending to achieve fiscal discipline","government policy of reducing the impacts of the Crowding Out effect"],"ci":0,"exp":"Ex: Fiscal profligacy refers to excessive government spending that leads to large budget deficits and increasing debt. This can lead to unsustainable debt levels, inflationary pressures and reduced investor confidence, potentially harming the economy in the long term. It migh t also divert resources from the capital - building and lead to lower capital expenditure. Knowledge Box Contractionary Fiscal Policy: It involves increasing taxes or cutting government spending to reduce inflation. Fiscal consolidation: This is when the government aims to reduce deficits and debt levels by reducing expenditure or increasing revenues. It is the opposite of fiscal profligacy . Crowding Out effect: It is an economic theory that describes how increased government spending can lead to a decrease in private sector activity. coming years, as per the UBS, a Swiss brokerage firm."},{"id":39,"txt":"Which one of the following is the objective of the SAMARTH scheme?","ref":"","opts":["To provide placement-linked, demand-driven skill training in the textile and apparel sector","To provide gainful and sustainable employment to all citizens","To promote skill development and entrepreneurship","To improve infrastructure and logistics in rural areas"],"ci":0,"exp":"Ex: SAMARTH (Scheme for Capacity Building in the Textile Sector) is a flagship skill development scheme launched by the Government of India as a continuation of the Integrated Skill Development Scheme (ISDS). The scheme addresses the growing demand for skilled labor in the textile industry and offers significant opportunities for unemployed youth by equipping them with industry - relevant skills. The main objectives of the scheme are: To provide a demand - driven, placement - oriented skilling program aimed at generating employment in the organized textile and related sectors. To incentivize industries to create jobs while ensuring skill development and upskilling in traditional sectors like handloom, handicrafts, silk, and jute. To enhance the productivity of existing workers through upskilling and reskilling initiatives in sec tors like apparel and garment manufacturing. Samarth supports inclusive growth by offering livelihood opportunities across various sections of society while addressing skill gaps in the textile sector.   Q4 1. Credit rating is an assessment of the creditworthiness of a borrower, including an individual, a company or a country. It is an independent assessment of the creditworthiness of a country or sovereign entity. Governments borrow h uge funds by issuing debt instruments like government bonds. Creditworthiness here means the ability of the government to pay back its debt without default. Credit Rating Agencies are regulated by the Securities and Exchange Board of India (SEBI) through t he SEBI (Credit Rating Agencies) Regulations, 1999 and circulars issued under it. So, statement II is correct. Credit Rating reflects a country's ability to meet its debt obligations and impacts its borrowing costs globally . Sovereign credit ratings indica te a government's creditworthiness based on factors like economic stability, fiscal management, and political environment. A higher rating signals lower risk, which can reduce the interest rates a country pays on international loans, making borrowing cheap er . Conversely, lower ratings can increase borrowing costs due to perceived risk. So, statement I is correct. CareEdge is the first Indian credit rating agency to enter the global scale ratings space, including sovereign ratings . This allows India to contr ibute to the global rating landscape alongside well - known agencies like Moody's, S&P, and Fitch. So, statement III is not correct. So, only two of the above given statements are correct."},{"id":40,"txt":"Consider the following statements with regard to the credit rating:\n1. A higher rating signals lower risk, which can reduce the interest rates a country pays on international loans, making borrowing cheaper.\n2. In India, the credit rating agencies are regulated by the Securities and Exchange Board of India (SEBI).\n3. At present, none of the Indian credit rating agencies has entered the global scale ratings space.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","ll the three","None"],"ci":1,"exp":"Ex: Detailed structural breakdown summary explanation missing from data mapping sheets arrays."},{"id":41,"txt":"Consider the following statements with regard to the Credit Default Swap (CDS):\n1. It enables investors to manage their credit risk by transferring it to another party.\n2. It can be used for arbitrage to exploit price discrepancies between different markets.\n3. Mutual funds can engage in CDS transactions to maintain market liquidity.\nWhich of the statements given above are correct?","ref":"","opts":["I, II and III","I and II only","II and III only","I and III only"],"ci":0,"exp":"Ex: A Credit Default Swap (CDS) is a financial derivative allowing an investor to swap or offset their credit risk with another investor's . To swap the risk of default, the lender buys a CDS from another investor who agrees to reimburse them if th e borrower defaults. So, statement I is correct. Most CDS contracts are maintained via an ongoing premium payment similar to the regular premiums due on an insurance policy. A lender who is worried about a borrower defaulting on a loan often uses a CDS to offset or swap that risk. CDS serves multiple purposes: speculation, hedging and arbitrage . Speculation: Investors trade CDSs to profit from fluctuations in their market values. By buying or selling CDS contracts, they bet on changes in an entity's credit risk. Hedging: CDSs act as insurance against credit risk. For example, a bank may purchase a CDS to protect against potential default by a borrower, thereby transferring the risk to another party. Arbitrage: Investors can exploit price discrepancies betwe en different markets using CDSs. For instance, they can profit from differences in prices by buying a bond in one market and a CDS on that bond in another. So, statement II is correct. Securities and Exchange Board of India (SEBI) recently allowed mutual f unds to sell Credit Default Swaps (CDS) to aid liquidity growth in the corporate bond market. So, statement III is correct."},{"id":42,"txt":"The SCOMET List, sometimes seen in the news, is associated with:","ref":"","opts":["export controls of dual-use items","import tariffs on consumer goods","foreign direct investment","ryptocurrency regulations 8"],"ci":0,"exp":"Ex: SCOMET is an acronym for Special Chemicals, Organisms, Materials, Equipment and Technologies. This List contains goods which are considered as dual - use items, i.e., goods, technology, chemicals, organisms etc. which potentially have both, civil as well as military applications an d are capable of being deployed as weapons of mass destruction. India’s Foreign Trade Policy regulates the export of items on the SCOMET List. The exporter must obtain a license from the Directorate General of Foreign Trade (DGFT), Ministry of Commerce and Industry, to export SCOMET. Points To Remember: The SCOMET List is Governed by the Foreign Trade (Development & Regulation) Act, 1992, as amended in 2010."},{"id":43,"txt":"An increase in household financial savings coupled with decreased spending in an economy can most likely lead to which one of the following?","ref":"","opts":["ecrease in aggregate demand and per capita income","Increase in tax revenues","Increase in inflation","None"],"ci":0,"exp":"Ex: Household savings ref er to the portion of disposable income that households set aside rather than spend on consumption. These savings can be invested in various financial and physical assets. Household financial savings include currency, bank deposits, debt securities, mutual funds, pension funds, insurance, and investments in small savings schemes. The total of these savings is referred to as gross household financial savings. Points To Remember Net Household Financial Savings= Gross Savings - Financial Liabilities If increased savings lead to reduced spending, it can slow down economic activity. Lower demand can cause businesses to reduce wages or lay off workers, resulting in a decrease in per capita income . When households choose to save more, they are typically r educing their consumption of goods and services. Typically, an increase in household savings leads to a decrease in consumer spending, which can reduce demand for goods and services. This tends to have a deflationary rather than an inflationary effect. In creased savings usually reduce consumption, which may result in lower tax revenues."},{"id":44,"txt":"Which of the following statements is/are correct\nwith regard to the Vertical Fiscal Imbalance (VFI)?\n1. It is a situation where both central and state governments collect equal revenues but have different spending levels.\n2. It can be corrected through the financial transfers from the central to the state governments.\nSelect the correct answer using the code given below:","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":1,"exp":"Ex: Vertical Fiscal Asymmetry (VFA): It is defined as the share of sub - national governments’ own spending not financed through their own revenues . It is a situation in which revenues do not match expenditures for different levels of government. So, statement I is not correct.   In other words, VFI is the fiscal gap in the sub - national governments due t o improper decentralization of public revenue and expenditure.This asymmetry in revenue and expenditure decentralization is called Vertical Fiscal Asymmetry (VFA).’ It is a structural issue that can be resolved if revenue and expenditure responsibilities c an be reassigned. It can be corrected through the financial transfers from the Union to the state governments. So, statement II is correct. With a horizontal fiscal imbalance , revenues and spending are mismatched for different regions of the country. In a VFI, revenue and spending are not balanced for different government levels."},{"id":45,"txt":"Consider the following statements with regard to the National Traders’ Welfare Board (NTWB):\n1. It is constituted under the Ministry of Finance.\n2. It advises the government on developing and implementing policies that facilitate the growth and sustainability of the retail sector.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","oth I and II","Neither I nor II"],"ci":1,"exp":"Ex: The National Traders’ Welfare Board (NTWB) was constituted by the Department for Promotion of Industry and Internal Trade (DPIIT) under the Ministry of Commerce and Industry. Its primary objective is to safeguard and promote the interests of traders, including small retailers and shopkeepers. So, statement I is not corre ct. One of the key functions of the NTWB is to advise the government on developing and implementing policies that facilitate the growth and sustainability of the retail sector. It plays a crucial role in advocating for a National Retail Trade Policy, whic h aims to leverage the potential of all retail trade formats, such as traditional retail shops, organized retail chains, and e - commerce platforms. So, statement II is correct."},{"id":46,"txt":"Consider the following:\n1. Unusually high number of loans to same PAN holders\n2. Loans being closed within days of sanction\n3. Rolling over loans with partial payments\n4. Absence of fresh credit appraisal for top-up loans\nHow many of the above are identified as the key indicators of loan evergreening in India?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":3,"exp":"Ex: Ev ergreening of loans is a banking malpractice where lenders extend new loans to stressed borrowers specifically to help them repay existing loans that are about to turn into Non - Performing Assets (NPAs). This practice artificially maintains the loan's 'per forming' status, helping banks avoid mandatory provisioning requirements and maintain healthier balance sheets. The Reserve Bank of India (RBI) has identified key indicators of evergreening: Unusually high number of loans to same PAN holders: This suggests that a single individual or entity is taking multiple loans, possibly to repay earlier loans. So, point I is correct. Loans being closed within days of sanction: This indicates that the loan is being used to repay an existing loan, rather th an serving its intended purpose. So, point II is correct. Rolling over loans with partial payments: This is a classic sign of evergreening, where the borrower is unable to repay the loan and the bank rolls it over, masking the loan's true status. So, point III is correct. Absence of fresh credit appraisal for top - up loans: Skipping proper credit appraisal for top - up loans can be a sign that the bank is not assessing the borrower's creditworthiness and is instead extending credit to facilitate repa yment of an existing loan. So, point IV is correct. So, all four of the above are identified as the key indicators of loan evergreening in India."},{"id":47,"txt":"Consider the following statements regarding the regulation of internet domain names in India:\n1. They are regulated under the Information Technology (IT) Act, 2000.\n2. They can be accorded protection under the Trademarks Act of 1999.\n3. Their allocation in India is the exclusive prerogative of the Ministry of Electronics and Information Technology.\nWhich of the statements given above is/are correct?","ref":"","opts":["I, II and III","I and II only","II only","I and III only"],"ci":2,"exp":"Ex: A domain name is the strin g of characters that a user types into their browser to find a particular website. Domain names are created as per the procedures and rules of the international framework of Domain Name System (DNS) . The Information Technology (IT) Act, 2000 does not addre ss domain names, the rights of domain owners, or liabilities. So, statement I is not correct. A domain name serves the same functions online that a trademark performs offline in business dealings and transactions. In India, domain names can be granted prot ection as a trademark or service mark under the provisions of the Trademarks Act, 1999. So, statement II is correct. Once a registered trademark, the owner of the domain name will have all the rights and authorities that the registered trademark owners hav e in India including the right to sue for infringement or passing off. Any person using a domain name registered as a valid and subsisting trademark under the Act in an unauthorised manner can be held liable for infringement of the trademark of the domain name under the Act. Domain Name System is an international system of allocating Domain names to various websites and servers and is under the control of the nonprofit Internet Corporation for Assigned Names and Numbers (ICANN). So, statement III is not co rrect. Knowledge Box Cybersquatting – a form of cybercrime where the perpetrator buys or registers a domain name that is identical or similar to an existing domain to profit from a recognizable trademark, company name, or personal name. In India, there is no specific law that prohibits the practice of domain squatting."},{"id":48,"txt":"Consider the following statements regarding the Serious Fraud Investigation Office (SFIO):\n1. It operates under the Ministry of Corporate Affairs.\n2. It is responsible for the enforcement of the Fugitive Economic Offenders Act, (FEOA), 2018.\n3. If a case under the Companies Act of 2013 is assigned to SFIO for investigation, no other investigating agency can proceed with such a case.\nWhich of the statements given above are correct?","ref":"","opts":["I, II and III","I and II only","II and III only","I and III only"],"ci":3,"exp":"Ex: The Serious Fraud Investigation Office (SFIO) is a multi - disciplinary organization under the Ministry of Corporate Affairs. It consists of experts from various fields for detecting and prosecuting or recommending prosecution of white - collar crimes/frauds. These experts are appointed by the Central Go vernment. So, statement I is correct. SFIO is a statutory body established under the Companies Act, 2013. The Act says that “The Central Government shall, by notification, establish an office to be called the Serious Fraud Investigation Office to investiga te frauds relating to a company”. The Central Government can assign an investigation into the affairs of any company to the SFIO if the former is of the opinion that it is necessary to investigate the internal affairs of that particular company.   Accord ing to the Act, “If any case has been assigned by the Central Government to the Serious Fraud Investigation Office, no other investigating agency of the Central Government or any State Government shall proceed with the investigation in such cases in respec t of any offence under this Act”. So, statement III is correct. With the increase in the number of cases relating to economic offenders taking shelter in foreign countries, the Government has passed the Fugitive Economic Offenders Act, 2018 (FEOA). The Enforcement Directorate (ED) is entrusted with its enforcement with effect from 21st April 2018. So, statement II is not correct. The headquarters of SFIO is in New Delhi with its regional offices in Mumbai, Chennai, Hyderabad, and Kolkata. Therefore, opt ion (d) is the correct answer."},{"id":49,"txt":"Consider the following indicators:\n1. Access to sanitation\n2. Maternal health\n3. Housing quality\n4. Nutrition\nHow many of the above are part of the Global Multidimensional Poverty Index (MPI)?","ref":"","opts":["Only one","Only two","Only three","ll the four"],"ci":2,"exp":"Ex: The Global Multidimensional Poverty Index (MPI) , developed by the Oxford Poverty and Human Development Initiative (OPHI) and the United Nations Development Programme (UNDP), assesses poverty acro ss three key dimensions: Health, Education, and Standard of Living. These dimensions are measured using 10 indicators: Health: ■ Nutrition ■ Child and adolescent mortality Education: ■ Years of schooling ■ School attendance Standard of Living: ■ Housing quality ■ Cooking fuel ■ Sanitation ■ Drinking water ■ Electricity ■ Household assets Access to sanitation (Indicator 1) and Housing quality (Indicator 3) are part of the Standard of Living dimension of the Global MPI. So, points I and III are correct. Nutrition (Indicator 5) is part of the Health dimension of the Global MPI. So, point IV is correct. Maternal health is not the indicator of the Global Multidimensional Poverty Index (MPI). So, point II is not correct. So, only three of the above are part of the Global Multidim ensional Poverty Index (MPI)."}],"m":null,"tt":3000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>
