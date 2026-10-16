@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>251-500</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>251-500</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="251-500">251-500</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following statements regarding the 'Veda Samaj' —\n1. It was established in Madras in 1864\n2. It was inspired by the Brahmo Samaj\n3. It worked against the caste system and promoted widow remarriage.","ref":"","opts":["1️⃣, 2️⃣, and 3️⃣","2️⃣ and 3️⃣ only","1️⃣ and 2️⃣ only","1️⃣ and 3️⃣ only"],"ci":0,"exp":"Ex: The Veda Samaj was established in Madras in 1864. It was inspired by the Brahmo Samaj and worked to reform Hindu social customs, advocating against caste distinctions and for the education and remarriage of women."},{"id":1,"txt":"Who among the following was the founder of the 'Seva Sadan' in 1908?","ref":"","opts":["G.K. Gokhale","Shiva Narayan Agnihotri","Debendranath Tagore","Behramji M. Malabari"],"ci":3,"exp":"Ex: Behramji M. Malabari, a Parsi social reformer, founded Seva Sadan along with Dayaram Gidumal to provide social services and upliftment for destitute women."},{"id":2,"txt":"The 'Ahmadiyya Movement' was founded by Mirza Ghulam Ahmad in 1889 at —","ref":"","opts":["Deoband","Qadian","Patna","Aligarh"],"ci":1,"exp":"Ex: The movement started at Qadian in Punjab. Mirza Ghulam Ahmad described himself as a 'Standard Bearer of Mohammedan Renaissance' and claimed to be the Messiah."},{"id":3,"txt":"Which of the following pairs is correctly matched regarding tribal revolts?\n1. Kol Mutiny: Buddho Bhagat\n2. Rampa Rebellion: Alluri Sitarama Raju\n3. Santhal Rebellion: Sidhu and Kanhu.","ref":"","opts":["1️⃣ and 2️⃣ only","1️⃣, 2️⃣, and 3️⃣","1️⃣ and 3️⃣ only","2️⃣ and 3️⃣ only"],"ci":1,"exp":"Ex: The Kol Mutiny (1831) was led by Buddho Bhagat. The Santhal Rebellion (1855-56) was led by the Murmu brothers. The Rampa Rebellion (1922-24) saw Alluri Sitarama Raju using guerrilla warfare."},{"id":4,"txt":"Who was the primary organizer of the 'Deccan Riots' of 1875?","ref":"","opts":["The British army","Local moneylenders","Indigo planters","The Maratha peasantry"],"ci":3,"exp":"Ex: The riots were a localized uprising of the Maratha peasantry against the corruption and high-interest rates of Sahukars (moneylenders) in Poona and Ahmednagar."},{"id":5,"txt":"The 'Farazi Movement' (1818) was founded by —","ref":"","opts":["Haji Shariatullah","Tipu Shah","Karam Shah","Dudu Mian"],"ci":0,"exp":"Ex: Haji Shariatullah founded the movement in East Bengal to purge Islam of un-Islamic practices. His son, Dudu Mian, later turned it into a revolutionary peasant struggle."},{"id":6,"txt":"Consider the following —\n1. Abolition of Sati\n2. Hindu Widow Remarriage Act\n3. Age of Consent Act\n4. Sarda Act. What is the correct chronological order?","ref":"","opts":["1️⃣-3️⃣-2️⃣-4️⃣","2️⃣-1️⃣-4️⃣-3️⃣","4️⃣-3️⃣-2️⃣-1️⃣","1️⃣-2️⃣-3️⃣-4️⃣"],"ci":3,"exp":"Ex: Abolition of Sati (1829), Widow Remarriage Act (1856), Age of Consent Act (1891), and Sarda Act (1930)."},{"id":7,"txt":"Who led the 'Pagal Panthis' revolt in Bengal?","ref":"","opts":["Karam Shah","Tipu Shah","Majnum Shah","Chirag Ali"],"ci":1,"exp":"Ex: The Pagal Panthi was a semi-religious group founded by Karam Shah, but his son Tipu Shah led the peasants against the oppression of the Zamindars."},{"id":8,"txt":"The 'Young Bengal Movement' was heavily influenced by —","ref":"","opts":["The French Revolution","The Industrial Revolution","The Russian Revolution","The American War of Independence"],"ci":0,"exp":"Ex: Henry Vivian Derozio and his followers (Derozians) were inspired by the French Revolution's ideals of liberty, equality, and fraternity, emphasizing rational thinking."},{"id":9,"txt":"Which British Governor-General abolished the 'Dual System' of government in Bengal?","ref":"","opts":["Lord Cornwallis","Robert Clive","Lord Wellesley","Warren Hastings"],"ci":3,"exp":"Ex: Warren Hastings abolished the Dual System in 1772, bringing Bengal under the direct administration of the East India Company."},{"id":10,"txt":"The 'Faraizi Movement' emphasized the —","ref":"","opts":["Study of Western Science","Establishment of a Sikh state","Armed struggle against the Mughals","Return to the fundamental duties of Islam"],"ci":3,"exp":"Ex: The movement, started by Haji Shariatullah, focused on 'Faraiz' or obligatory duties commanded by Allah, aiming for religious purification."},{"id":11,"txt":"Who was the founder of the 'Scientific Society' in 1864?","ref":"","opts":["Dadabhai Naoroji","Badruddin Tyabji","Maulana Azad","Sir Syed Ahmed Khan"],"ci":3,"exp":"Ex: Sir Syed Ahmed Khan founded the Scientific Society in Aligarh to translate Western scientific works into Urdu to modernize the Muslim community's outlook."},{"id":12,"txt":"The 'Tana Bhagat' movement was a tribal uprising in —","ref":"","opts":["Malabar","Assam","Odisha","Chotanagpur"],"ci":3,"exp":"Ex: The Tana Bhagat movement (1914) occurred among the Oraon tribes of Chotanagpur, initially starting as a religious reform movement under Jatra Bhagat."},{"id":13,"txt":"Who was known as the 'Grand Old Man of India'?","ref":"","opts":["Dadabhai Naoroji","Bal Gangadhar Tilak","Justice Ranade","Gopal Krishna Gokhale"],"ci":0,"exp":"Ex: Dadabhai Naoroji was given this title for his lifelong service to the national cause and his 'Drain of Wealth' theory."},{"id":14,"txt":"The 'Polygar Rebellions' (1799–1805) took place in —","ref":"","opts":["Western India","Punjab","South India","Bengal"],"ci":2,"exp":"Ex: The Polygars (feudal lords) of Tinnevelly and other parts of South India revolted against British land revenue demands and territorial encroachments."},{"id":15,"txt":"Who authored the book 'Satyarth Prakash'?","ref":"","opts":["Swami Vivekananda","Raja Rammohan Roy","Annie Besant","Dayananda Saraswati"],"ci":3,"exp":"Ex: Dayananda Saraswati wrote 'Satyarth Prakash' (The Light of Truth) to explain the principles of the Arya Samaj and the superiority of the Vedas."},{"id":16,"txt":"The 'Kukis' rebellion (1917–19) occurred in which modern-day Indian states?","ref":"","opts":["Gujarat and Maharashtra","Punjab and Haryana","Bihar and Jharkhand","Manipur and Mizoram"],"ci":3,"exp":"Ex: The Kuki revolt in Manipur and the neighboring Chin Hills was a response to the British policy of forced labor recruitment during World War I."},{"id":17,"txt":"Who founded the 'Bharat Dharma Mahamandala'?","ref":"","opts":["Swami Vivekananda","Dayananda Saraswati","Gopal Krishna Gokhale","Pandit Madan Mohan Malaviya"],"ci":3,"exp":"Ex: It was an all-India organization of orthodox Hindus (Sanatanists) formed to defend orthodox Hinduism against the critiques of the Arya Samaj and Brahmo Samaj."},{"id":18,"txt":"The 'Basumati' was a nationalist newspaper in which language?","ref":"","opts":["Marathi","Tamil","Bengali","English"],"ci":2,"exp":"Ex: Basumati was a prominent Bengali daily that supported the nationalist cause, especially during the Swadeshi and revolutionary periods."},{"id":19,"txt":"Who among the following was the first Governor-General of Bengal?","ref":"","opts":["Warren Hastings","Lord William Bentinck","Robert Clive","Lord Cornwallis"],"ci":0,"exp":"Ex: The Regulating Act of 1773 designated the Governor of Bengal as the Governor-General of Bengal, with Warren Hastings being the first appointee."},{"id":20,"txt":"The 'Prarthana Samaj' was most active in which region?","ref":"","opts":["Bengal","Punjab","Maharashtra","Madras"],"ci":2,"exp":"Ex: Under leaders like M.G. Ranade and R.G. Bhandarkar, the Prarthana Samaj became a powerful force for social reform in Western India."},{"id":21,"txt":"Which of the following pairs is correctly matched?\n1. Rahnumai Mazdayasnan Sabha: Parsis\n2. Singh Sabha Movement: Sikhs\n3. Deoband Movement: Muslims.","ref":"","opts":["1️⃣ and 3️⃣ only","2️⃣ and 3️⃣ only","1️⃣ and 2️⃣ only","1️⃣, 2️⃣, and 3️⃣"],"ci":3,"exp":"Ex: All three were community-specific reform or revivalist movements: Parsis (1851), Sikhs (1873), and Muslims (1866)."},{"id":22,"txt":"Who led the 'Kuka Movement' in Punjab?","ref":"","opts":["Baba Ram Singh","Baba Balak Singh","Banda Bahadur","Guru Gobind Singh"],"ci":0,"exp":"Ex: Baba Ram Singh was the most prominent leader, turning the movement into a political campaign against British rule, advocating the use of Swadeshi."},{"id":23,"txt":"The 'General Service Enlistment Act' (1856) caused resentment among sepoys because —","ref":"","opts":["It reduced their pay","It introduced new uniforms","It required them to serve overseas","It banned the use of religious marks"],"ci":2,"exp":"Ex: Crossing the sea (Kalapani) was a taboo for high-caste Hindus as it was believed to lead to loss of caste. This act made overseas service mandatory."},{"id":24,"txt":"Who was the founder of 'Theosophical Society' in New York (1875)?","ref":"","opts":["Annie Besant","Raja Rammohan Roy","Madame Blavatsky and Colonel Olcott","Swami Vivekananda"],"ci":2,"exp":"Ex: It was founded by H.P. Blavatsky and H.S. Olcott in New York before shifting its headquarters to Adyar, India, in 1882."},{"id":25,"txt":"The 'Vaikom Satyagraha' was specifically aimed at —","ref":"","opts":["The Partition of Bengal","The Indigo system","The Salt Tax","The prohibition of lower castes from using temple roads"],"ci":3,"exp":"Ex: This 1924–25 satyagraha in Travancore was a landmark movement for the rights of 'untouchables' to use roads leading to the Vaikom Temple."},{"id":26,"txt":"Which British official was assassinated by the Chapekar brothers in 1897?","ref":"","opts":["W.C. Rand","A.M.T. Jackson","John Saunders","Curzon Wyllie"],"ci":0,"exp":"Ex: Damodar and Balkrishna Chapekar killed Rand, the Plague Commissioner of Poona, due to the atrocities committed by British soldiers during the plague operations."},{"id":27,"txt":"Who founded the 'Indian Home Rule Society' in London in 1905?","ref":"","opts":["V.D. Savarkar","Shyamji Krishnavarma","Lala Hardayal","Madan Lal Dhingra"],"ci":1,"exp":"Ex: Shyamji Krishnavarma founded the society and \"India House\" to promote the cause of Indian independence among students in England."},{"id":28,"txt":"The 'Eka Movement' (1921) was primarily a —","ref":"","opts":["Student protest","Peasant movement","Tribal uprising","Religious reform"],"ci":1,"exp":"Ex: The Eka or Unity Movement started in the districts of Awadh (UP) by peasants against high rents and the oppression of 'Thikadars'."},{"id":29,"txt":"Who was the Viceroy of India when the Indian National Congress was founded?","ref":"","opts":["Lord Curzon","Lord Lytton","Lord Ripon","Lord Dufferin"],"ci":3,"exp":"Ex: The INC was founded in 1885 during the tenure of Lord Dufferin, who initially viewed it with \"neutrality\"."},{"id":30,"txt":"The 'Aravippuram Installation' (1888) was done by —","ref":"","opts":["Dr. Palpu","Kumaran Asan","C.V. Raman Pillai","Shree Narayana Guru"],"ci":3,"exp":"Ex: By installing a Shiva idol, Shree Narayana Guru challenged the Brahmin monopoly over temple rituals, famously stating \"One Caste, One Religion, One God for Man.\""},{"id":31,"txt":"The 'Tattvabodhini Sabha' was merged into which organization?","ref":"","opts":["Theosophical Society","Prarthana Samaj","Brahmo Samaj","Arya Samaj"],"ci":2,"exp":"Ex: Founded by Debendranath Tagore, the Tattvabodhini Sabha eventually merged with the Brahmo Samaj to strengthen the reform movement."},{"id":32,"txt":"Who among the following was the leader of the 'Wahabi Movement' in India?","ref":"","opts":["Syed Ahmed of Rai Bareilly","Haji Shariatullah","Shah Walliullah","Sir Syed Ahmed Khan"],"ci":0,"exp":"Ex: Syed Ahmed of Rai Bareilly was the key leader who gave the movement a political and military character against the Sikhs and later the British."},{"id":33,"txt":"The 'Indigo Revolt' (1859-60) was famously depicted in the play 'Nil Darpan' by —","ref":"","opts":["Rabindranath Tagore","Madhusudan Dutt","Bankim Chandra Chattopadhyay","Dinabandhu Mitra"],"ci":3,"exp":"Ex: Dinabandhu Mitra’s play Nil Darpan highlighted the extreme exploitation of Bengali peasants by European indigo planters."},{"id":34,"txt":"Who was the first Indian to be elected to the British House of Commons?","ref":"","opts":["Dadabhai Naoroji","Surendranath Banerjea","W.C. Bonnerjee","Pherozeshah Mehta"],"ci":0,"exp":"Ex: Dadabhai Naoroji was elected to the House of Commons in 1892 as a member of the Liberal Party."},{"id":35,"txt":"The 'Ramosi Rebellion' (1822) was led by —","ref":"","opts":["Umaji Naik","Vasudev Balwant Phadke","Chittur Singh","Nana Patil"],"ci":2,"exp":"Ex: Chittur Singh led the Ramosis of Satara against the British administration and heavy land assessments."},{"id":36,"txt":"Which Act provided for a 'Law Member' in the Governor-General’s Council for the first time?","ref":"","opts":["Charter Act, 1813","Pitt’s India Act, 1784","Regulating Act, 1773","Charter Act, 1833"],"ci":3,"exp":"Ex: The Charter Act of 1833 added a fourth member (Law Member) to the council. Lord Macaulay was the first to hold this position."},{"id":37,"txt":"Who was the founder of the 'Servants of India Society'?","ref":"","opts":["Gopal Krishna Gokhale","B.R. Ambedkar","M.G. Ranade","Bal Gangadhar Tilak"],"ci":0,"exp":"Ex: Gokhale founded the society in 1905 to train Indians to devote their lives to the cause of the country in a secular spirit."},{"id":38,"txt":"The 'Ghadar Movement' was primarily based in —","ref":"","opts":["Paris","London","Tokyo","San Francisco"],"ci":3,"exp":"Ex: The Ghadar Party was an international political movement founded by expatriate Indians in North America, with its headquarters in San Francisco."},{"id":39,"txt":"Who among the following was involved in the 'Alipore Bomb Case'?","ref":"","opts":["Chandrashekhar Azad","Surya Sen","Aurobindo Ghosh","Bhagat Singh"],"ci":2,"exp":"Ex: Aurobindo Ghosh and his brother Barindra were tried in the Alipore Bomb Case (1908) following the attempt on Douglas Kingsford’s life."},{"id":40,"txt":"The 'Communal Award' of 1932 was announced by —","ref":"","opts":["Ramsay MacDonald","Winston Churchill","Lord Irwin","Clement Attlee"],"ci":0,"exp":"Ex: British PM Ramsay MacDonald announced the award which granted separate electorates to minorities, including the 'Depressed Classes'."},{"id":41,"txt":"Which session of the INC passed the resolution on Fundamental Rights and Economic Policy?","ref":"","opts":["1938 Haripura","1939 Tripuri","1931 Karachi","1929 Lahore"],"ci":2,"exp":"Ex: The Karachi session, presided over by Sardar Vallabhbhai Patel, passed these landmark resolutions amidst the tension of Bhagat Singh's execution."},{"id":42,"txt":"Who founded the 'All India Depressed Classes Association' in 1930?","ref":"","opts":["Jagjivan Ram","B.R. Ambedkar","Jyotirao Phule","M.C. Rajah"],"ci":1,"exp":"Ex: Dr. B.R. Ambedkar organized this association to represent the interests of the Dalits at the national level."},{"id":43,"txt":"The 'Deepavali Declaration' (1929) issued by Lord Irwin was related to —","ref":"","opts":["Partition of Bengal","Quit India","Dominion Status","Communal representation"],"ci":2,"exp":"Ex: It was a vague statement suggesting that the \"natural issue of India's constitutional progress\" was the attainment of Dominion Status."},{"id":44,"txt":"Who among the following was the founder of the 'Self-Respect Movement'?","ref":"","opts":["C.N. Mudaliar","P. Tyagaraja Chetti","E.V. Ramaswamy Naicker","Shree Narayana Guru"],"ci":2,"exp":"Ex: Popularly known as Periyar, he started the Self-Respect Movement in 1925 to promote social equality and challenge Brahminical dominance."},{"id":45,"txt":"The 'Hindustan Socialist Republican Association' (HSRA) was founded in —","ref":"","opts":["1932","1930","1928","1924"],"ci":2,"exp":"Ex: Reorganized from the HRA at Ferozshah Kotla, Delhi, the HSRA adopted socialism as its official goal."},{"id":46,"txt":"Who was the leader of the 'Bardoli Satyagraha' (1928)?","ref":"","opts":["Vallabhbhai Patel","Mahatma Gandhi","Morarji Desai","Mahadev Desai"],"ci":0,"exp":"Ex: Patel led the successful no-tax campaign in Bardoli, Gujarat, which earned him the title 'Sardar'."},{"id":47,"txt":"The 'Butler Committee' (1927) was appointed to —","ref":"","opts":["Examine the relationship between the Paramount Power and the Indian States","Review the working of Dyarchy","Examine the growth of education","Recommend police reforms"],"ci":0,"exp":"Ex: Also known as the Indian States Committee, it aimed to define the relations between the British Crown and the Princely States."},{"id":48,"txt":"Who was the president of the 'Haripura Session' of INC (1938)?","ref":"","opts":["Sardar Patel","Subhash Chandra Bose","Jawaharlal Nehru","Abul Kalam Azad"],"ci":1,"exp":"Ex: Subhash Chandra Bose was unanimously elected president and emphasized the need for a National Planning Committee."},{"id":49,"txt":"The 'Quit India Resolution' was passed by the AICC at which city?","ref":"","opts":["Bombay","Calcutta","Lucknow","Madras"],"ci":0,"exp":"Ex: The resolution was passed on August 8, 1942, at the Gowalia Tank Maidan (August Kranti Maidan) in Bombay."},{"id":50,"txt":"Who among the following was the first Viceroy of India?","ref":"","opts":["Lord Dalhousie","Lord Lawrence","Lord William Bentinck","Lord Canning"],"ci":3,"exp":"Ex: Following the Act of 1858, the Governor-General was also given the title of Viceroy, and Lord Canning was the first to hold it."},{"id":51,"txt":"The 'Kheda Satyagraha' (1918) was primarily focused on —","ref":"","opts":["Indigo prices","Remission of land revenue due to crop failure","Salt tax","The Rowlatt Act"],"ci":1,"exp":"Ex: Gandhi led the peasants of Kheda, Gujarat, who were unable to pay taxes because of a failed harvest and plague."},{"id":52,"txt":"Who was the author of the 'Drain Theory'?","ref":"","opts":["M.G. Ranade","G.K. Gokhale","R.C. Dutt","Dadabhai Naoroji"],"ci":3,"exp":"Ex: In his book 'Poverty and Un-British Rule in India', Naoroji explained how British policies were draining India's wealth to England."},{"id":53,"txt":"The 'Satyashodhak Samaj' was founded in which year?","ref":"","opts":["1873","1885","1867","1875"],"ci":0,"exp":"Ex: Mahatma Jyotirao Phule founded the 'Truth Seekers’ Society' on September 24, 1873."},{"id":54,"txt":"Which Act formally abolished the 'East India Company's' rule in India?","ref":"","opts":["Government of India Act, 1858","Regulating Act, 1773","Indian Councils Act, 1861","Charter Act, 1833"],"ci":0,"exp":"Ex: Following the 1857 Revolt, the British Parliament passed this act to transfer the governance of India to the British Crown."},{"id":55,"txt":"The 'Aravippuram' movement started in —","ref":"","opts":["Tamil Nadu","Karnataka","Kerala","Andhra Pradesh"],"ci":2,"exp":"Ex: It was a religious and social reform movement among the Ezhava community in Kerala, led by Shree Narayana Guru."},{"id":56,"txt":"Who founded the 'Indian Home Rule League' in April 1916?","ref":"","opts":["Joseph Baptista","Bal Gangadhar Tilak","G.S. Khaparde","Annie Besant"],"ci":1,"exp":"Ex: Tilak launched his league in April at Belgaum, while Annie Besant launched her separate league in September at Madras."},{"id":57,"txt":"The 'Lucknow Pact' (1916) marked the —","ref":"","opts":["Separation of the Muslim League from the Congress","Declaration of Purna Swaraj","Split between Moderates and Extremists","Union between Moderates and Extremists and the Congress-League alliance"],"ci":3,"exp":"Ex: It was significant for the re-entry of Extremists into the Congress and the joint constitutional demands by the Congress and the League."},{"id":58,"txt":"Who among the following was the founder of the 'Ghadar Party' in San Francisco?","ref":"","opts":["V.D. Savarkar","Bhagat Singh","Rashbehari Bose","Lala Hardayal"],"ci":3,"exp":"Ex: Lala Hardayal was the chief architect and founder of the Ghadar Party in 1913."},{"id":59,"txt":"The 'Komagata Maru' incident (1914) was related to —","ref":"","opts":["An Indian army mutiny","A ship carrying Indian immigrants to Canada","A revolutionary plot in Bengal","A peasant uprising in Punjab"],"ci":1,"exp":"Ex: The ship was turned back by Canadian authorities, leading to a violent clash with the police at Budge Budge, Calcutta, upon its return."},{"id":60,"txt":"Who gave the call \"Go back to the Vedas\"?","ref":"","opts":["Raja Rammohan Roy","Swami Vivekananda","Dayananda Saraswati","Ramakrishna Paramahamsa"],"ci":2,"exp":"Ex: Dayananda Saraswati believed that the Vedas were the source of all truth and called for a return to Vedic purity."},{"id":61,"txt":"The 'Chauri Chaura' incident (1922) led to the suspension of which movement?","ref":"","opts":["Quit India Movement","Non-Cooperation Movement","Civil Disobedience Movement","Swadeshi Movement"],"ci":1,"exp":"Ex: After a violent mob burned a police station in Chauri Chaura, Gandhi withdrew the movement, believing the country was not ready for non-violence."},{"id":62,"txt":"Who founded the 'Swaraj Party' in 1923?","ref":"","opts":["Motilal Nehru and C.R. Das","Lala Lajpat Rai and B.C. Pal","Jawaharlal Nehru and Subhash Chandra Bose","Gandhi and Sardar Patel"],"ci":0,"exp":"Ex: The Swarajists wanted to enter the legislative councils to \"wreck the reforms from within\" after the suspension of the Non-Cooperation Movement."},{"id":63,"txt":"The 'Simon Commission' was boycotted because —","ref":"","opts":["It recommended the Partition of India","It did not have any Indian members","It supported the Salt Tax","It was led by a Conservative politician"],"ci":1,"exp":"Ex: The commission was sent to review the 1919 reforms, but its all-white composition was seen as an insult to Indian self-respect."},{"id":64,"txt":"Who was the first woman President of the Indian National Congress?","ref":"","opts":["Annie Besant","Vijayalakshmi Pandit","Sarojini Naidu","Nellie Sengupta"],"ci":0,"exp":"Ex: Annie Besant presided over the Calcutta session in 1917. Sarojini Naidu was the first 'Indian' woman president (1925)."},{"id":65,"txt":"The 'Karachi Session' of INC (1931) was presided over by —","ref":"","opts":["Subhash Chandra Bose","Abul Kalam Azad","Sardar Vallabhbhai Patel","Jawaharlal Nehru"],"ci":2,"exp":"Ex: This session is famous for adopting the Resolution on Fundamental Rights and the National Economic Programme."},{"id":66,"txt":"Who among the following was the leader of the 'Hindustan Republican Association' (HRA)?","ref":"","opts":["Bhagat Singh","Ramprasad Bismil","Sukhdev","Chandrashekhar Azad"],"ci":1,"exp":"Ex: Bismil, along with Jogesh Chatterjee and Sachin Sanyal, founded the HRA in 1924 in Kanpur."},{"id":67,"txt":"The 'Kakori Train Robbery' (1925) was executed by members of —","ref":"","opts":["Anushilan Samiti","Jugantar Party","HSRA","HRA"],"ci":3,"exp":"Ex: Members of the HRA looted the official cash from the 8-Down train to fund their revolutionary activities."},{"id":68,"txt":"The 'Nehru Report' (1928) was a response to the challenge by —","ref":"","opts":["Winston Churchill","Lord Curzon","Lord Irwin","Lord Birkenhead"],"ci":3,"exp":"Ex: Secretary of State Birkenhead challenged Indians to produce a constitution that all parties could agree upon."},{"id":69,"txt":"Who among the following was famously known as 'Frontier Gandhi'?","ref":"","opts":["Khan Abdul Ghaffar Khan","Maulana Azad","Liaquat Ali Khan","Muhammad Ali Jinnah"],"ci":0,"exp":"Ex: He led the 'Khudai Khidmatgars' (Red Shirts) in the North-West Frontier Province and was a staunch follower of Gandhi's non-violence."},{"id":70,"txt":"The 'Poona Pact' (1932) resulted in —","ref":"","opts":["The end of the Civil Disobedience Movement","Increased reserved seats for the Depressed Classes in legislatures","The abolition of the Salt Tax","The creation of Pakistan"],"ci":1,"exp":"Ex: Gandhi and Ambedkar reached this agreement to replace separate electorates for Dalits with reserved seats in joint electorates."},{"id":71,"txt":"Who founded the 'Forward Bloc' in 1939?","ref":"","opts":["Jawaharlal Nehru","C.R. Das","Sardar Patel","Subhash Chandra Bose"],"ci":3,"exp":"Ex: After resigning from the Congress presidency, Bose formed the Forward Bloc as a left-wing faction within the Congress."},{"id":72,"txt":"The 'August Offer' (1940) was made by —","ref":"","opts":["Lord Wavell","Lord Linlithgow","Lord Irwin","Lord Mountbatten"],"ci":1,"exp":"Ex: In return for support in World War II, the British offered Dominion Status and an expanded Executive Council, which the Congress rejected."},{"id":73,"txt":"The 'Cripps Mission' (1942) was described as a \"post-dated cheque on a crashing bank\" by —","ref":"","opts":["Jawaharlal Nehru","Sardar Patel","Subhash Chandra Bose","Mahatma Gandhi"],"ci":3,"exp":"Ex: Gandhi used this phrase because the mission offered Dominion Status only after the war, which was unacceptable to the Congress."},{"id":74,"txt":"Who was the leader of the 'Indian National Army' (INA) after its reorganization in 1943?","ref":"","opts":["Shah Nawaz Khan","Subhash Chandra Bose","Rashbehari Bose","Captain Mohan Singh"],"ci":1,"exp":"Ex: Rashbehari Bose handed over the leadership of the INA and the Indian Independence League to Subhash Chandra Bose in Singapore."},{"id":75,"txt":"The 'Wavell Plan' (1945) was discussed at the —","ref":"","opts":["Calcutta Conference","Karachi Conference","Delhi Conference","Simla Conference"],"ci":3,"exp":"Ex: The conference failed because the Muslim League insisted on being the sole representative of Indian Muslims, which the Congress opposed."},{"id":76,"txt":"The 'Cabinet Mission' (1946) did NOT include —","ref":"","opts":["A.V. Alexander","Lord Mountbatten","Stafford Cripps","Pethick-Lawrence"],"ci":1,"exp":"Ex: The mission consisted of three British cabinet ministers: Pethick-Lawrence, Stafford Cripps, and A.V. Alexander."},{"id":77,"txt":"Who was the first Governor-General of Independent India?","ref":"","opts":["Jawaharlal Nehru","C. Rajagopalachari","Dr. Rajendra Prasad","Lord Mountbatten"],"ci":3,"exp":"Ex: Lord Mountbatten continued as the Governor-General until June 1948. C. Rajagopalachari was the first 'Indian' Governor-General."},{"id":78,"txt":"The 'Indian Independence Act' was passed by the British Parliament in —","ref":"","opts":["June 1945","January 1950","July 1947","August 1942"],"ci":2,"exp":"Ex: The act was based on the Mountbatten Plan and received Royal Assent on July 18, 1947."},{"id":79,"txt":"Who authored the 'Indian War of Independence, 1857'?","ref":"","opts":["R.C. Majumdar","V.D. Savarkar","S.N. Sen","S.B. Chaudhuri"],"ci":1,"exp":"Ex: V.D. Savarkar wrote this book to argue that the 1857 revolt was a planned war for national independence, not just a sepoy mutiny."},{"id":80,"txt":"The 'Treaty of Amritsar' (1809) was signed between the British and —","ref":"","opts":["The Marathas","Ranjit Singh","The Nawab of Awadh","Tipu Sultan"],"ci":1,"exp":"Ex: This treaty fixed the River Sutlej as the boundary between the British territories and Ranjit Singh’s Sikh Empire."},{"id":81,"txt":"Which Governor-General introduced the 'Permanent Settlement' in Bengal?","ref":"","opts":["Warren Hastings","Lord Dalhousie","Lord Wellesley","Lord Cornwallis"],"ci":3,"exp":"Ex: Introduced in 1793, it fixed the land revenue for Zamindars in perpetuity, creating a loyal class of landlords."},{"id":82,"txt":"The 'Ryotwari System' was primarily introduced in —","ref":"","opts":["United Provinces","Madras and Bombay","Punjab and Haryana","Bengal and Bihar"],"ci":1,"exp":"Ex: Thomas Munro and Alexander Read introduced this system where the government dealt directly with the 'Ryots' (cultivators)."},{"id":83,"txt":"Who founded the 'Atmiya Sabha' in 1814?","ref":"","opts":["Atmaram Pandurang","Keshab Chandra Sen","Debendranath Tagore","Raja Rammohan Roy"],"ci":3,"exp":"Ex: This was a precursor to the Brahmo Samaj, intended for philosophical discussions on monotheism."},{"id":84,"txt":"The 'Dharma Sabha' (1830) was founded to —","ref":"","opts":["Promote widow remarriage","Establish English-medium schools","Support Raja Rammohan Roy","Oppose the abolition of Sati and defend orthodoxy"],"ci":3,"exp":"Ex: Radhakant Deb founded the Dharma Sabha as a response to the radical reforms proposed by the Brahmo Samaj."},{"id":85,"txt":"Who was the founder of the 'Young Bengal Movement'?","ref":"","opts":["Henry Vivian Derozio","David Hare","Ishwar Chandra Vidyasagar","Dwarkanath Tagore"],"ci":0,"exp":"Ex: Derozio, a teacher at Hindu College, encouraged his students to think freely and question all authority."},{"id":86,"txt":"The 'Widow Remarriage Act' of 1856 was passed due to the efforts of —","ref":"","opts":["Ishwar Chandra Vidyasagar","Raja Rammohan Roy","M.G. Ranade","Jyotirao Phule"],"ci":0,"exp":"Ex: Vidyasagar used Vedic texts to prove that widow remarriage was sanctioned by Hindu religion and petitioned the government."},{"id":87,"txt":"Who founded the 'Prarthana Samaj' in Bombay (1867)?","ref":"","opts":["M.G. Ranade","Vivekananda","Atmaram Pandurang","Dayananda Saraswati"],"ci":2,"exp":"Ex: Inspired by the Brahmo Samaj, it focused on social reforms like inter-dining, inter-marriage, and widow remarriage."},{"id":88,"txt":"The 'Satyashodhak Samaj' was founded by Jyotirao Phule to —","ref":"","opts":["Promote the Sanskrit language","Promote Vedic studies","Defend the caste system","Uplift the backward classes and women"],"ci":3,"exp":"Ex: Phule’s movement aimed at social service and the spread of education among lower castes in Maharashtra."},{"id":89,"txt":"Who founded the 'Arya Samaj' in 1875?","ref":"","opts":["Swami Vivekananda","Dayananda Saraswati","Ramakrishna Paramahamsa","Annie Besant"],"ci":1,"exp":"Ex: The Samaj emphasized the authority of the Vedas, rejected idol worship, and worked for social reform through education."},{"id":90,"txt":"The 'Theosophical Society' was popularized in India by —","ref":"","opts":["Colonel Olcott","Madame Blavatsky","Annie Besant","A.O. Hume"],"ci":2,"exp":"Ex: While founded by Blavatsky and Olcott, Annie Besant's leadership from 1893 onwards gave the movement a massive Indian following."},{"id":91,"txt":"Who founded the 'Ramakrishna Mission' in 1897?","ref":"","opts":["Sarada Devi","Swami Dayananda","Ramakrishna Paramahamsa","Swami Vivekananda"],"ci":3,"exp":"Ex: Vivekananda founded the mission to propagate his teacher’s message and combine spirituality with social service."},{"id":92,"txt":"The 'Aligarh Movement' was started by —","ref":"","opts":["Maulana Azad","Sir Syed Ahmed Khan","The Agha Khan","Muhammad Ali Jinnah"],"ci":1,"exp":"Ex: The movement aimed at modernizing Indian Muslims through Western education while remaining loyal to the British."},{"id":93,"txt":"Who founded the 'Deoband Movement' (1866)?","ref":"","opts":["Shah Walliullah","Mohammad Qasim Nanautavi and Rashid Ahmad Gangohi","Sir Syed Ahmed Khan","Mirza Ghulam Ahmad"],"ci":1,"exp":"Ex: This was a revivalist movement that aimed at purging Islam of foreign influences and training religious leaders."},{"id":94,"txt":"The 'Singh Sabha Movement' was aimed at —","ref":"","opts":["The restoration of Sikh political power","The reform of Sikh religion and education","The merger of Sikhism with Hinduism","The support of the British army"],"ci":1,"exp":"Ex: Founded in 1873, it aimed to bring modern education to Sikhs and remove non-Sikh practices from the Gurdwaras."},{"id":95,"txt":"Who was the first President of the Indian National Congress (1885)?","ref":"","opts":["A.O. Hume","Badruddin Tyabji","W.C. Bonnerjee","Dadabhai Naoroji"],"ci":2,"exp":"Ex: Womesh Chandra Bonnerjee presided over the first session held at Gokuldas Tejpal Sanskrit College, Bombay."},{"id":96,"txt":"The 'Drain of Wealth' theory was first propounded in which book?","ref":"","opts":["India Today","The Discovery of India","The Economic History of India","Poverty and Un-British Rule in India"],"ci":3,"exp":"Ex: Dadabhai Naoroji’s book detailed how India's resources were being systematically transferred to Britain."},{"id":97,"txt":"Who was the founder of the 'Indian Association of Calcutta' (1876)?","ref":"","opts":["Pherozeshah Mehta","Justice Ranade","Surendranath Banerjea and Ananda Mohan Bose","Dadabhai Naoroji"],"ci":2,"exp":"Ex: This was the most important of the pre-Congress associations, aiming to unify Indians on a common political platform."},{"id":98,"txt":"The 'Vernacular Press Act' (1878) was passed by —","ref":"","opts":["Lord Dufferin","Lord Ripon","Lord Lytton","Lord Mayo"],"ci":2,"exp":"Ex: The act, known as the 'Gagging Act', aimed to suppress the vernacular press which was critical of government policies."},{"id":99,"txt":"Who repealed the 'Vernacular Press Act' in 1882?","ref":"","opts":["Lord Dufferin","Lord Curzon","Lord Lytton","Lord Ripon"],"ci":3,"exp":"Ex: Lord Ripon, known for his liberal policies, repealed the act to restore the freedom of the vernacular press."},{"id":100,"txt":"The 'Ilbert Bill' controversy occurred during the tenure of —","ref":"","opts":["Lord Ripon","Lord Lytton","Lord Lansdowne","Lord Dufferin"],"ci":0,"exp":"Ex: The bill proposed to allow Indian judges to try Europeans, leading to a massive protest by the European community."},{"id":101,"txt":"Who was the leader of the 'Swadeshi Movement' in Bengal?","ref":"","opts":["Sardar Patel","Lala Lajpat Rai","Bal Gangadhar Tilak","Aurobindo Ghosh and B.C. Pal"],"ci":3,"exp":"Ex: While Tilak and Lajpat Rai led the movement elsewhere, the Bengal phase was led by leaders like Aurobindo, Pal, and Surendranath Banerjea."},{"id":102,"txt":"The 'Partition of Bengal' (1905) was revoked in which year?","ref":"","opts":["1909","1907","1911","1914"],"ci":2,"exp":"Ex: The partition was cancelled at the Delhi Durbar of 1911, and the capital was shifted from Calcutta to Delhi."},{"id":103,"txt":"Who was the founder of the 'Servants of India Society' (1905)?","ref":"","opts":["B.R. Ambedkar","M.G. Ranade","Gopal Krishna Gokhale","Bal Gangadhar Tilak"],"ci":2,"exp":"Ex: Gokhale founded it to train 'national missionaries' for the service of the country."},{"id":104,"txt":"The 'Surat Split' (1907) occurred between —","ref":"","opts":["The Congress and the British","The Moderates and the Extremists","The Congress and the Muslim League","The Swarajists and the No-Changers"],"ci":1,"exp":"Ex: Differences over the methods of agitation (Swadeshi and Boycott) led to the expulsion of Extremists from the Congress."},{"id":105,"txt":"The 'Muslim League' was founded in 1906 at —","ref":"","opts":["Calcutta","Dacca","Aligarh","Lucknow"],"ci":1,"exp":"Ex: It was founded under the leadership of Nawab Salimullah of Dacca and the Agha Khan to protect Muslim interests."},{"id":106,"txt":"The 'Morley-Minto Reforms' (1909) introduced —","ref":"","opts":["Universal Adult Franchise","Provincial Autonomy","Separate electorates for Muslims","Dyarchy"],"ci":2,"exp":"Ex: This was the first time that the principle of communal representation was legally recognized in India."},{"id":107,"txt":"Who founded the 'Ghadar Party' (1913)?","ref":"","opts":["Chandrashekhar Azad","Lala Hardayal","Bhagat Singh","Rashbehari Bose"],"ci":1,"exp":"Ex: Based in San Francisco, it aimed at an armed revolution against British rule in India."},{"id":108,"txt":"The 'Lucknow Pact' (1916) was signed between —","ref":"","opts":["The Moderates and the Extremists","The British and the Congress","The British and the Sikhs","The Congress and the Muslim League"],"ci":3,"exp":"Ex: This agreement saw the Congress and the League presenting a joint set of political demands to the government."},{"id":109,"txt":"Who started the 'Home Rule League' movement in India?","ref":"","opts":["Jawaharlal Nehru and Subhash Chandra Bose","Mahatma Gandhi and Sardar Patel","Annie Besant and Bal Gangadhar Tilak","Motilal Nehru and C.R. Das"],"ci":2,"exp":"Ex: Tilak started his league in April 1916, while Besant started hers in September 1916."},{"id":110,"txt":"The 'Champaran Satyagraha' (1917) was related to —","ref":"","opts":["Land revenue in Gujarat","The Rowlatt Act","The Tinkathia system","The Salt Tax"],"ci":2,"exp":"Ex: This was Gandhi's first satyagraha in India, launched to support indigo farmers forced to grow indigo on 3/20th of their land."},{"id":111,"txt":"The 'Ahmedabad Mill Strike' (1918) involved —","ref":"","opts":["Industrial workers","Students","Peasants","Indigo farmers"],"ci":0,"exp":"Ex: Gandhi used the weapon of hunger strike for the first time to help workers demand a 35% wage hike."},{"id":112,"txt":"The 'Rowlatt Act' (1919) was called the —","ref":"","opts":["White Act","Gagging Act","Black Act","Independence Act"],"ci":2,"exp":"Ex: It allowed the government to imprison any person without trial for up to two years, leading to nationwide protests."},{"id":113,"txt":"The 'Jallianwala Bagh Massacre' occurred in which city?","ref":"","opts":["Delhi","Jalandhar","Lahore","Amritsar"],"ci":3,"exp":"Ex: On April 13, 1919, General Dyer ordered troops to fire on a peaceful crowd, killing hundreds."},{"id":114,"txt":"The 'Khilafat Movement' was started to —","ref":"","opts":["Promote Urdu education","Protest against the treatment of the Caliph of Turkey","Support the Indian National Congress","Demand the Partition of India"],"ci":1,"exp":"Ex: Indian Muslims, led by the Ali brothers, launched the movement to protect the religious authority of the Ottoman Sultan."},{"id":115,"txt":"The 'Non-Cooperation Movement' was launched in which year?","ref":"","opts":["1930","1920","1919","1922"],"ci":1,"exp":"Ex: Approved at the Nagpur session of the INC, it aimed at attaining Swaraj through non-violent means."},{"id":116,"txt":"Who were the 'Swarajists' within the Congress?","ref":"","opts":["Those who wanted to enter legislative councils","Those who wanted armed revolution","Those who supported the British","Those who supported non-cooperation"],"ci":0,"exp":"Ex: Led by C.R. Das and Motilal Nehru, they believed in 'wrecking the councils from within'."},{"id":117,"txt":"The 'Hindustan Republican Association' (HRA) was founded at —","ref":"","opts":["Delhi","Kanpur","Calcutta","Lahore"],"ci":1,"exp":"Ex: Founded in 1924 by Ramprasad Bismil, Jogesh Chatterjee, and Sachin Sanyal."},{"id":118,"txt":"Who among the following was NOT executed in the Kakori Conspiracy Case?","ref":"","opts":["Chandrashekhar Azad","Ramprasad Bismil","Roshan Singh","Ashfaqullah Khan"],"ci":0,"exp":"Ex: Azad managed to escape and later reorganized the revolutionary movement."},{"id":119,"txt":"The 'Simon Commission' (1927) was sent to India to —","ref":"","opts":["Negotiate with the Muslim League","Investigate the Jallianwala Bagh massacre","Review the working of the 1919 Act","Abolish the Salt Tax"],"ci":2,"exp":"Ex: The commission's report was to serve as the basis for further constitutional reforms."},{"id":120,"txt":"The 'Nehru Report' (1928) demanded —","ref":"","opts":["Dyarchy at the center","Dominion Status","Complete Independence (Purna Swaraj)","Sovereign State of Pakistan"],"ci":1,"exp":"Ex: It was the first major attempt by Indians to draft a constitution, but it limited its goal to Dominion Status, which younger leaders opposed."},{"id":121,"txt":"Which session of the INC passed the 'Purna Swaraj' resolution?","ref":"","opts":["1928 Calcutta","1931 Karachi","1934 Bombay","1929 Lahore"],"ci":3,"exp":"Ex: Under the presidency of Jawaharlal Nehru, the Congress declared 'Complete Independence' as its goal on the banks of River Ravi."},{"id":122,"txt":"The 'Dandi March' (1930) marked the beginning of —","ref":"","opts":["Civil Disobedience Movement","Quit India Movement","Khilafat Movement","Non-Cooperation Movement"],"ci":0,"exp":"Ex: Gandhi marched from Sabarmati to Dandi to break the salt law, symbolizing defiance of British rule."},{"id":123,"txt":"The 'First Round Table Conference' (1930) was boycotted by —","ref":"","opts":["The Muslim League","The Princely States","The Justice Party","The Indian National Congress"],"ci":3,"exp":"Ex: The Congress stayed away as it was busy with the Civil Disobedience Movement."},{"id":124,"txt":"The 'Gandhi-Irwin Pact' (1931) led to —","ref":"","opts":["The granting of Dominion Status","The end of the Salt Tax","The release of all political prisoners including those who used violence","The suspension of the Civil Disobedience Movement"],"ci":3,"exp":"Ex: Gandhi agreed to attend the Second Round Table Conference and suspend the movement in exchange for certain concessions."},{"id":125,"txt":"Who represented the Congress at the 'Second Round Table Conference'?","ref":"","opts":["Sardar Patel","Mahatma Gandhi","Jawaharlal Nehru","Subhash Chandra Bose"],"ci":1,"exp":"Ex: Gandhi attended as the sole representative of the Congress, but the conference failed due to disagreements over communal representation."},{"id":126,"txt":"The 'Communal Award' (1932) was announced by —","ref":"","opts":["Winston Churchill","Ramsay MacDonald","Lord Willingdon","Lord Irwin"],"ci":1,"exp":"Ex: The award granted separate electorates for different communities, including the 'Depressed Classes'."},{"id":127,"txt":"The 'Poona Pact' (1932) was signed between —","ref":"","opts":["The British and the Congress","Gandhi and Jinnah","Gandhi and Ambedkar","Nehru and Patel"],"ci":2,"exp":"Ex: Gandhi's fast unto death led to an agreement where reserved seats were given to Dalits within joint electorates."},{"id":128,"txt":"The 'Government of India Act, 1935' introduced —","ref":"","opts":["Universal Adult Franchise","Complete Independence","Dyarchy in provinces","Provincial Autonomy"],"ci":3,"exp":"Ex: The act abolished dyarchy in the provinces and introduced it at the center, though the latter part was never implemented."},{"id":129,"txt":"The 'Tripuri Crisis' (1939) led to the resignation of —","ref":"","opts":["Jawaharlal Nehru","Subhash Chandra Bose","Sardar Patel","Abul Kalam Azad"],"ci":1,"exp":"Ex: Despite winning the election for president, Bose resigned due to differences with Gandhi and the Right Wing of the Congress."},{"id":130,"txt":"The 'Forward Bloc' was founded by —","ref":"","opts":["C.R. Das","Jawaharlal Nehru","Subhash Chandra Bose","Jayaprakash Narayan"],"ci":2,"exp":"Ex: Bose formed this party after his resignation from the Congress presidency in 1939."},{"id":131,"txt":"The 'August Offer' (1940) was proposed by —","ref":"","opts":["Lord Linlithgow","Lord Wavell","Lord Mountbatten","Lord Irwin"],"ci":0,"exp":"Ex: It was a set of proposals to gain Indian support for World War II, but was rejected by the Congress."},{"id":132,"txt":"Who was the first 'Individual Satyagrahi' (1940)?","ref":"","opts":["Jawaharlal Nehru","Sardar Patel","Sarojini Naidu","Vinoba Bhave"],"ci":3,"exp":"Ex: Gandhi chose Vinoba Bhave as the first satyagrahi to protest against the British war effort without causing a mass uprising."},{"id":133,"txt":"The 'Cripps Mission' (1942) offered —","ref":"","opts":["Dominion Status after the war","Partition of India","Abolition of the Viceroy's Council","Complete Independence"],"ci":0,"exp":"Ex: The mission failed because it did not offer immediate power transfer and included a 'local option' for provinces to secede."},{"id":134,"txt":"The 'Quit India Movement' (1942) was launched after the failure of —","ref":"","opts":["Cabinet Mission","Wavell Plan","Cripps Mission","Simon Commission"],"ci":2,"exp":"Ex: With the slogan 'Do or Die', Gandhi called for an immediate British withdrawal from India."},{"id":135,"txt":"The 'C.R. Formula' (1944) was a proposal to —","ref":"","opts":["Abolish the Princely States","Solve the Congress-League deadlock","Reform the civil services","Gain independence"],"ci":1,"exp":"Ex: C. Rajagopalachari proposed a plan for cooperation between the Congress and the League for the goal of independence."},{"id":136,"txt":"The 'Wavell Plan' (1945) was discussed at the —","ref":"","opts":["Karachi Conference","Delhi Conference","Simla Conference","Calcutta Conference"],"ci":2,"exp":"Ex: The conference failed over the issue of the Muslim League's demand to be the sole nominator of Muslim members to the executive council."},{"id":137,"txt":"The 'Indian National Army' (INA) was first conceived by —","ref":"","opts":["Captain Mohan Singh","Shah Nawaz Khan","Subhash Chandra Bose","Rashbehari Bose"],"ci":0,"exp":"Ex: Mohan Singh, an officer of the British Indian Army, formed the INA with Japanese help in Malaya."},{"id":138,"txt":"The 'Cabinet Mission' (1946) recommended —","ref":"","opts":["A three-tier federal structure for a united India","Complete British rule for 10 more years","Dominion Status only","The immediate Partition of India"],"ci":0,"exp":"Ex: The mission rejected the demand for Pakistan and proposed a weak center with strong provincial autonomy."},{"id":139,"txt":"The 'Direct Action Day' (August 16, 1946) was called by —","ref":"","opts":["The Congress","The RSS","The British","The Muslim League"],"ci":3,"exp":"Ex: Jinnah called for 'Direct Action' to achieve Pakistan, which led to horrific communal riots, starting in Calcutta."},{"id":140,"txt":"Who headed the 'Interim Government' formed in 1946?","ref":"","opts":["Lord Mountbatten","Sardar Patel","C. Rajagopalachari","Jawaharlal Nehru"],"ci":3,"exp":"Ex: Nehru was the Vice-President of the Executive Council, effectively the Prime Minister of the interim administration."},{"id":141,"txt":"The 'Mountbatten Plan' (June 3, 1947) was the basis for —","ref":"","opts":["The Indian Independence Act","The Simla Conference","The 1935 Act","The August Offer"],"ci":0,"exp":"Ex: The plan outlined the procedure for the partition of India and the transfer of power to two dominions."},{"id":142,"txt":"Who was the first 'Indian' Governor-General of India?","ref":"","opts":["C. Rajagopalachari","Lord Mountbatten","Dr. Rajendra Prasad","Jawaharlal Nehru"],"ci":0,"exp":"Ex: He served as the Governor-General from 1948 until India became a republic in 1950."},{"id":143,"txt":"The 'Sanyasi Revolt' (1763–1800) was centered in —","ref":"","opts":["Maharashtra","Punjab","Bengal","Madras"],"ci":2,"exp":"Ex: It was led by sanyasis and fakirs against British restrictions on pilgrims and economic exploitation."},{"id":144,"txt":"The 'Ahom Revolt' (1828) took place in —","ref":"","opts":["Bengal","Odisha","Assam","Bihar"],"ci":2,"exp":"Ex: Led by Gomdhar Konwar, it was a protest against the British failure to withdraw from Assam after the Burmese war."},{"id":145,"txt":"The 'Kukis' belong to which region?","ref":"","opts":["Manipur/Tripura","Punjab","Gujarat","Maharashtra"],"ci":0,"exp":"Ex: The Kuki revolt (1917–19) was a significant tribal uprising in the North-East."},{"id":146,"txt":"Who led the 'Munda Rebellion' (1899–1900)?","ref":"","opts":["Birsa Munda","Buddho Bhagat","Sidhu and Kanhu","Tana Bhagat"],"ci":0,"exp":"Ex: Birsa Munda led the 'Ulgulan' (Great Tumult) against the destruction of their system of joint landholding by outsiders."},{"id":147,"txt":"The 'Satyashodhak Samaj' emphasized —","ref":"","opts":["Social service and education for lower castes","The study of Persian","The superiority of Brahmins","Vedic rituals"],"ci":0,"exp":"Ex: Jyotirao Phule used the symbol of Raja Bali to counter the Brahminical mythology of Rama."},{"id":148,"txt":"Who was known as 'Lokahitawadi'?","ref":"","opts":["Gopal Hari Deshmukh","G.K. Gokhale","M.G. Ranade","Jyotirao Phule"],"ci":0,"exp":"Ex: He wrote 'Shatapatre' (hundred letters) in the weekly Prabhakar, advocating for rationalism and social reform in Maharashtra."},{"id":149,"txt":"The 'Rahnumai Mazdayasnan Sabha' was a reform movement for —","ref":"","opts":["Muslims","Sikhs","Hindus","Parsis"],"ci":3,"exp":"Ex: Founded in 1851, it aimed at restoring the Parsi religion to its pristine purity and modernizing social customs."},{"id":150,"txt":"Who founded the 'Dharma Sabha' in 1830?","ref":"","opts":["Keshab Chandra Sen","Radhakant Deb","Debendranath Tagore","Raja Rammohan Roy"],"ci":1,"exp":"Ex: Radhakant Deb founded the Sabha to counter the reformist agenda of the Brahmo Samaj and defend orthodox Hinduism."},{"id":151,"txt":"Which of the following was NOT a member of the 'Cabinet Mission' (1946)?","ref":"","opts":["Lord Wavell","A.V. Alexander","Stafford Cripps","Pethick-Lawrence"],"ci":0,"exp":"Ex: The mission consisted of three British cabinet ministers. Lord Wavell was the Viceroy but not a member of the mission itself."},{"id":152,"txt":"The 'Hindustan Socialist Republican Association' (HSRA) was reorganized at —","ref":"","opts":["Calcutta","Lahore","Delhi","Kanpur"],"ci":2,"exp":"Ex: In 1928, at Ferozshah Kotla, Delhi, the HRA was renamed HSRA under the leadership of Chandrashekhar Azad."},{"id":153,"txt":"Who was the first Indian to be elected to the British House of Commons?","ref":"","opts":["Pherozeshah Mehta","Dadabhai Naoroji","W.C. Bonnerjee","Surendranath Banerjea"],"ci":1,"exp":"Ex: Dadabhai Naoroji was elected as a Liberal candidate from Central Finsbury in 1892."},{"id":154,"txt":"The 'Communal Award' was announced by Ramsay MacDonald in —","ref":"","opts":["1932","1931","1933","1930"],"ci":0,"exp":"Ex: The award followed the failure of the Second Round Table Conference to solve the communal issue."},{"id":155,"txt":"Who founded the 'Swaraj Party' in 1923?","ref":"","opts":["C.R. Das and Motilal Nehru","Gandhi and Sardar Patel","Lala Lajpat Rai and B.C. Pal","Jawaharlal Nehru and Subhash Chandra Bose"],"ci":0,"exp":"Ex: They formed the party within the Congress to participate in the upcoming elections to the legislative councils."},{"id":156,"txt":"The 'Indigo Revolt' (1859-60) started in which village?","ref":"","opts":["Chauri Chaura","Champaran","Dandi","Govindpur"],"ci":3,"exp":"Ex: Digambar Biswas and Bishnu Biswas led the revolt in Govindpur village of Nadia district, Bengal."},{"id":157,"txt":"Who was the first Chief Election Commissioner of Independent India?","ref":"","opts":["T.N. Seshan","Nagendra Singh","K.V.K. Sundaram","Sukumar Sen"],"ci":3,"exp":"Ex: Sukumar Sen, an ICS officer, oversaw the first two general elections of India in 1951-52 and 1957."},{"id":158,"txt":"The 'Simla Conference' (1945) was convened by —","ref":"","opts":["Clement Attlee","Lord Wavell","Lord Mountbatten","Lord Linlithgow"],"ci":1,"exp":"Ex: Wavell called the conference to discuss his plan for an interim executive council of Indian leaders."},{"id":159,"txt":"Who gave the slogan \"Jai Hind\"?","ref":"","opts":["Sardar Patel","Mahatma Gandhi","Jawaharlal Nehru","Subhash Chandra Bose"],"ci":3,"exp":"Ex: Bose used \"Jai Hind\" as the greeting and slogan for the Indian National Army (INA) and later for the nation."},{"id":160,"txt":"The 'Pledge Movement' was associated with which organization?","ref":"","opts":["The Theosophical Society","The Brahmo Samaj","The Arya Samaj","The Indian Social Conference"],"ci":3,"exp":"Ex: The Indian Social Conference, founded by M.G. Ranade, launched this movement to inspire people to take a pledge against child marriage."},{"id":161,"txt":"Who among the following was known as the 'Lion of Punjab'?","ref":"","opts":["Ranjit Singh","Hardit Singh","Lala Lajpat Rai","Bhagat Singh"],"ci":2,"exp":"Ex: Lala Lajpat Rai was given this title for his fearless leadership against British policies, especially the Simon Commission."},{"id":162,"txt":"The 'Vaikom Satyagraha' (1924-25) was led by —","ref":"","opts":["K.P. Kesava Menon","Dr. B.R. Ambedkar","E.V. Ramaswamy Naicker","Shree Narayana Guru"],"ci":0,"exp":"Ex: It was a movement in Travancore for the right of untouchables to use the public roads leading to the Vaikom Temple."},{"id":163,"txt":"Which act introduced 'Dyarchy' at the Central level?","ref":"","opts":["Government of India Act, 1935","Government of India Act, 1919","Government of India Act, 1909","Indian Independence Act, 1947"],"ci":0,"exp":"Ex: The 1935 Act abolished dyarchy in the provinces and introduced it at the center, though it was never fully implemented."},{"id":164,"txt":"Who founded the 'Atmiya Sabha' in 1814?","ref":"","opts":["Debendranath Tagore","Raja Rammohan Roy","Keshab Chandra Sen","Atmaram Pandurang"],"ci":1,"exp":"Ex: This was a group for philosophical discussions and the promotion of monotheistic ideals in Calcutta."},{"id":165,"txt":"The 'Deepavali Declaration' (1929) was issued by —","ref":"","opts":["Lord Linlithgow","Lord Reading","Lord Irwin","Lord Willingdon"],"ci":2,"exp":"Ex: Viceroy Lord Irwin declared that the \"natural issue of India's constitutional progress... is the attainment of Dominion Status.\""},{"id":166,"txt":"Who was the author of the play 'Nil Darpan'?","ref":"","opts":["Michael Madhusudan Dutt","Rabindranath Tagore","Dinabandhu Mitra","Bankim Chandra Chattopadhyay"],"ci":2,"exp":"Ex: The play depicted the atrocities committed by indigo planters against the peasants in Bengal."},{"id":167,"txt":"The 'Ramosi Peasant Force' was organized in Maharashtra by —","ref":"","opts":["Vasudev Balwant Phadke","Jyotirao Phule","Vinayak Savarkar","M.G. Ranade"],"ci":0,"exp":"Ex: Phadke organized the Ramosis into an armed band to fight against British rule in the late 1870s."},{"id":168,"txt":"Who founded the 'Self-Respect Movement'?","ref":"","opts":["E.V. Ramaswamy Naicker","Shree Narayana Guru","Jyotirao Phule","B.R. Ambedkar"],"ci":0,"exp":"Ex: Periyar started this movement in 1925 to advocate for social equality and the removal of caste disabilities."},{"id":169,"txt":"The 'Statutory Civil Service' was introduced in 1878-79 by —","ref":"","opts":["Lord Lytton","Lord Mayo","Lord Dufferin","Lord Ripon"],"ci":0,"exp":"Ex: It was an attempt to fill higher administrative posts with Indians from \"families of merit and status,\" but it failed."},{"id":170,"txt":"Who was the first President of the 'All India Trade Union Congress' (1920)?","ref":"","opts":["Joseph Baptista","V.V. Giri","N.M. Joshi","Lala Lajpat Rai"],"ci":3,"exp":"Ex: Lala Lajpat Rai presided over the first session of AITUC in Bombay. N.M. Joshi was the general secretary."},{"id":171,"txt":"The 'Battle of Wandiwash' (1760) was a conflict between —","ref":"","opts":["The English and the Dutch","The French and the Mughals","The English and the Marathas","The English and the French"],"ci":3,"exp":"Ex: This battle during the Third Carnatic War decisively ended French political ambitions in India."},{"id":172,"txt":"Who among the following was NOT a member of the 'Ghadar Party'?","ref":"","opts":["Sochan Singh Bhakna","Lala Hardayal","Bhai Parmanand","Dadabhai Naoroji"],"ci":3,"exp":"Ex: The Ghadar Party was a revolutionary group based in North America. Naoroji was a moderate constitutionalist."},{"id":173,"txt":"The 'Cripps Mission' (1942) visited India during the tenure of which Viceroy?","ref":"","opts":["Lord Wavell","Lord Mountbatten","Lord Linlithgow","Lord Irwin"],"ci":2,"exp":"Ex: Linlithgow was the Viceroy when Stafford Cripps brought the British government's proposals during WWII."},{"id":174,"txt":"Who founded the 'Widow Remarriage Association' in 1850?","ref":"","opts":["D.K. Karve","M.G. Ranade","Vishnu Shastri Pandit","Ishwar Chandra Vidyasagar"],"ci":2,"exp":"Ex: Vishnu Shastri Pandit founded the association to promote the cause of widow remarriage in Maharashtra."},{"id":175,"txt":"The 'Tehzeeb-ul-Akhlaq' was a journal started by —","ref":"","opts":["Zakir Hussain","Sir Syed Ahmed Khan","Muhammad Ali Jinnah","Maulana Azad"],"ci":1,"exp":"Ex: Sir Syed started this journal to spread social and religious reform among Indian Muslims."},{"id":176,"txt":"Who was the leader of the 'Pagal Panthis' revolt?","ref":"","opts":["Tipu Shah","Dudu Mian","Haji Shariatullah","Majnum Shah"],"ci":0,"exp":"Ex: Tipu Shah, son of Karam Shah, organized the semi-religious sect of Pagal Panthis into a revolutionary force in Bengal."},{"id":177,"txt":"The 'Bandi Jiwan' was a book written by which revolutionary?","ref":"","opts":["Chandrashekhar Azad","Barindra Kumar Ghosh","Sachindra Nath Sanyal","Bhagat Singh"],"ci":2,"exp":"Ex: Sanyal's book 'Bandi Jiwan' (A Life in Captivity) became a source of inspiration for many revolutionaries."},{"id":178,"txt":"Who was the first Indian woman to become the President of the INC?","ref":"","opts":["Vijayalakshmi Pandit","Nellie Sengupta","Sarojini Naidu","Annie Besant"],"ci":2,"exp":"Ex: Sarojini Naidu presided over the 1925 Kanpur session. (Annie Besant was the first woman but not Indian)."},{"id":179,"txt":"The 'Simla Deputation' (1906) was led by —","ref":"","opts":["Sir Syed Ahmed Khan","Nawab Salimullah","Muhammad Ali Jinnah","Agha Khan"],"ci":3,"exp":"Ex: A delegation of Muslim leaders met Viceroy Minto to demand separate electorates and communal representation."},{"id":180,"txt":"Who founded the 'Seva Samiti' at Allahabad in 1914?","ref":"","opts":["G.K. Gokhale","Jyotirao Phule","H.N. Kunzru","M.G. Ranade"],"ci":2,"exp":"Ex: Hridayanath Kunzru founded the Seva Samiti to improve social conditions and provide relief during disasters."},{"id":181,"txt":"The 'Triple Alliance' (1790) against Tipu Sultan consisted of —","ref":"","opts":["The Marathas, the Nizam, and the Mughals","The English, the Marathas, and the Nizam","The English, the French, and the Nizam","The English, the Marathas, and the French"],"ci":1,"exp":"Ex: Lord Cornwallis formed this alliance during the Third Anglo-Mysore War to defeat Tipu Sultan."},{"id":182,"txt":"Who among the following was known as the 'Grandmother of the Indian Revolution'?","ref":"","opts":["Aruna Asaf Ali","Annie Besant","Madam Bhikaji Cama","Sarojini Naidu"],"ci":2,"exp":"Ex: Madam Cama was a revolutionary leader who unfurled the first Indian national flag in Stuttgart, Germany, in 1907."},{"id":183,"txt":"The 'Lee Commission' (1923) was related to —","ref":"","opts":["Civil service reforms","Police reforms","Military reforms","Education reforms"],"ci":0,"exp":"Ex: The commission recommended direct recruitment to the Superior Civil Services on a parity basis between Indians and Europeans."},{"id":184,"txt":"Who founded the 'Independent Labour Party' in 1936?","ref":"","opts":["Jayaprakash Narayan","N.M. Joshi","B.R. Ambedkar","Jawaharlal Nehru"],"ci":2,"exp":"Ex: Dr. Ambedkar formed the party to represent the interests of the laboring classes and the Dalits."},{"id":185,"txt":"The 'Minto-Morley Reforms' of 1909 were officially known as —","ref":"","opts":["The Government of India Act, 1909","The Indian Councils Act, 1909","The Regulating Act, 1909","The Indian Independence Act, 1909"],"ci":1,"exp":"Ex: These reforms introduced separate electorates for Muslims and increased the size of the legislative councils."},{"id":186,"txt":"Who was the first Indian to become a member of the Viceroy’s Executive Council?","ref":"","opts":["Surendranath Banerjea","Dadabhai Naoroji","Rashbehari Ghosh","Satyendra Prasad Sinha"],"ci":3,"exp":"Ex: S.P. Sinha was appointed as the Law Member in 1909 following the Minto-Morley reforms."},{"id":187,"txt":"The 'Butler Committee' report (1929) dealt with —","ref":"","opts":["Financial reforms","Relationship between the Paramount Power and Indian States","Education for girls","Labor laws"],"ci":1,"exp":"Ex: It aimed to define the relationship between the British Crown and the Indian Princely States."},{"id":188,"txt":"Who was the leader of the 'Eka Movement' (1921)?","ref":"","opts":["Sahajanand Saraswati","Baba Ramchandra","Jadunandan Sharma","Madari Pasi"],"ci":3,"exp":"Ex: The movement started in Awadh against high rents and the oppression of 'Thikadars' (tax collectors)."},{"id":189,"txt":"The 'Operation Polo' (1948) was the code name for the integration of —","ref":"","opts":["Junagarh","Hyderabad","Kashmir","Manipur"],"ci":1,"exp":"Ex: It was the police action taken by the Indian government to integrate the Princely State of Hyderabad."},{"id":190,"txt":"Who among the following was the founder of the 'Prarthana Samaj'?","ref":"","opts":["R.G. Bhandarkar","Atmaram Pandurang","M.G. Ranade","Jyotirao Phule"],"ci":1,"exp":"Ex: Atmaram Pandurang founded the Prarthana Samaj in Bombay in 1867 with the help of Keshab Chandra Sen."},{"id":191,"txt":"The 'Tattvabodhini Sabha' was founded in 1839 by —","ref":"","opts":["Debendranath Tagore","Keshab Chandra Sen","Dwarkanath Tagore","Raja Rammohan Roy"],"ci":0,"exp":"Ex: It was established to carry forward the mission of Raja Rammohan Roy and promote the study of India's past."},{"id":192,"txt":"Who was the founder of the 'Ahmadiyya Movement'?","ref":"","opts":["Mirza Ghulam Ahmad","Haji Shariatullah","Syed Ahmed Barelvi","Sir Syed Ahmed Khan"],"ci":0,"exp":"Ex: Mirza Ghulam Ahmad founded the movement in 1889, based on liberal and universal principles."},{"id":193,"txt":"The 'Treaty of Sagauli' (1816) ended which war?","ref":"","opts":["Third Anglo-Mysore War","Anglo-Nepal War","First Anglo-Burmese War","First Anglo-Maratha War"],"ci":1,"exp":"Ex: The war ended with the British gaining control over Garhwal, Kumaon, and parts of the Terai region."},{"id":194,"txt":"Who was the founder of the 'Indian Home Rule Society' in London?","ref":"","opts":["Shyamji Krishnavarma","Lala Hardayal","V.D. Savarkar","Madan Lal Dhingra"],"ci":0,"exp":"Ex: Krishnavarma established the society and 'India House' in 1905 to promote the cause of Indian independence in Britain."},{"id":195,"txt":"The 'Official Secrets Act' (1904) was passed during the tenure of —","ref":"","opts":["Lord Lytton","Lord Curzon","Lord Ripon","Lord Minto"],"ci":1,"exp":"Ex: This act was aimed at curbing the freedom of the press and the nationalist movement."},{"id":196,"txt":"Who founded the 'Widow Remarriage Association' in the 1850s?","ref":"","opts":["M.G. Ranade","Ishwar Chandra Vidyasagar","Vishnu Shastri Pandit","D.K. Karve"],"ci":2,"exp":"Ex: Vishnu Shastri Pandit was a key figure in the reform movement in Western India."},{"id":197,"txt":"The 'Battle of Plassey' (1757) was fought between —","ref":"","opts":["The French and the Marathas","The English and Haidar Ali","The English and Mir Jafar","The English and Siraj-ud-Daulah"],"ci":3,"exp":"Ex: Robert Clive led the English East India Company forces to victory over the Nawab of Bengal."},{"id":198,"txt":"Who founded the 'Atmiya Sabha' in 1814?","ref":"","opts":["Raja Rammohan Roy","Keshab Chandra Sen","Atmaram Pandurang","Debendranath Tagore"],"ci":0,"exp":"Ex: This group was focused on philosophical discussions and the promotion of monotheism."},{"id":199,"txt":"The 'Satyashodhak Samaj' was founded by —","ref":"","opts":["Shree Narayana Guru","B.R. Ambedkar","E.V. Ramaswamy Naicker","Jyotirao Phule"],"ci":3,"exp":"Ex: Phule founded the 'Truth Seekers’ Society' in 1873 to empower backward classes and women."},{"id":200,"txt":"Who founded the 'Aligarh Movement'?","ref":"","opts":["Maulana Azad","Sir Syed Ahmed Khan","The Agha Khan","Muhammad Ali Jinnah"],"ci":1,"exp":"Ex: Sir Syed Ahmed Khan aimed to spread modern education among Muslims while maintaining religious roots."},{"id":201,"txt":"The 'Vernacular Press Act' (1878) was nicknamed —","ref":"","opts":["The Gagging Act","The Liberator Act","The Press Act","The Black Act"],"ci":0,"exp":"Ex: It was called the 'Gagging Act' as it severely restricted the freedom of local language newspapers."},{"id":202,"txt":"Who founded the 'Ramakrishna Mission' in 1897?","ref":"","opts":["Annie Besant","Ramakrishna Paramahamsa","Swami Vivekananda","Sarada Devi"],"ci":2,"exp":"Ex: Vivekananda founded the mission to provide spiritual training and humanitarian social work."},{"id":203,"txt":"The 'Poona Pact' (1932) was an agreement between Gandhi and —","ref":"","opts":["The British Government","Muhammed Ali Jinnah","B.R. Ambedkar","Subhash Chandra Bose"],"ci":2,"exp":"Ex: The pact provided for reserved seats for the depressed classes in provincial legislatures rather than separate electorates."},{"id":204,"txt":"Who founded the 'Indian Women’s University' in 1916?","ref":"","opts":["Ramabai Ranade","Sarojini Naidu","Professor D.K. Karve","Annie Besant"],"ci":2,"exp":"Ex: Karve was a pioneer in women's education and established the university in Poona."},{"id":205,"txt":"The 'Simla Deputation' (1906) was led by —","ref":"","opts":["Muhammed Ali Jinnah","Nawab Salimullah","Sir Syed Ahmed Khan","The Agha Khan"],"ci":3,"exp":"Ex: A delegation of Muslim elites demanded separate electorates commensurate with their \"political importance\"."},{"id":206,"txt":"Who among the following was known as the 'Singing Sword of Kerala'?","ref":"","opts":["Subramaniyam Tirumambu","A.K. Gopalan","K. Kelappan","P. Krishna Pillai"],"ci":0,"exp":"Ex: Poet Tirumambu was a prominent volunteer in the Kerala temple entry movement."},{"id":207,"txt":"The 'Hindustan Socialist Republican Association' was founded at —","ref":"","opts":["Calcutta","Lahore","Delhi","Kanpur"],"ci":2,"exp":"Ex: Reorganized from the HRA, the HSRA was formed at a meeting in Ferozshah Kotla, Delhi, in 1928."},{"id":208,"txt":"Who founded the 'Natal Indian Congress' in South Africa?","ref":"","opts":["M.K. Gandhi","Herman Kallenbach","Manilal Gandhi","Dada Abdullah"],"ci":0,"exp":"Ex: Gandhi set up this organization during his moderate phase in South Africa to unite different sections of Indians."},{"id":209,"txt":"The 'Operation Polo' led to the integration of —","ref":"","opts":["Junagarh","Kashmir","Manipur","Hyderabad"],"ci":3,"exp":"Ex: In September 1948, the Indian army took control of Hyderabad, forcing the Nizam to accede to India."},{"id":210,"txt":"Who founded the 'Bharat Stree Mahamandal' in 1910?","ref":"","opts":["Pandita Ramabai","Sarla Devi Chaudhurani","Sarojini Naidu","Ramabai Ranade"],"ci":1,"exp":"Ex: It was the first major Indian women's organization set up by a woman to work for their upliftment."},{"id":211,"txt":"The 'Treaty of Allahabad' (1765) was signed between Robert Clive and —","ref":"","opts":["Mir Kasim and Shuja-ud-Daulah","Shah Alam II and Mir Jafar","Mir Jafar and Haidar Ali","Shah Alam II and Shuja-ud-Daulah"],"ci":3,"exp":"Ex: Two treaties were signed, one with the Nawab of Awadh and another with the Mughal Emperor."},{"id":212,"txt":"Who among the following was the founder of the 'Arya Samaj'?","ref":"","opts":["Dayananda Saraswati","Ramakrishna Paramahamsa","Swami Vivekananda","Raja Rammohan Roy"],"ci":0,"exp":"Ex: Dayananda Saraswati founded the Arya Samaj in 1875, advocating for a classless and casteless society."},{"id":213,"txt":"The 'Satyashodhak Samaj' was founded by —","ref":"","opts":["E.V. Ramaswamy Naicker","B.R. Ambedkar","Shree Narayana Guru","Jyotirao Phule"],"ci":3,"exp":"Ex: Phule founded this society in 1873 to work for the empowerment of women and lower-caste groups."},{"id":214,"txt":"Who founded the 'Wahabi Movement' in India?","ref":"","opts":["Syed Ahmed of Rai Bareilly","Shah Walliullah","Mirza Ghulam Ahmad","Sir Syed Ahmed Khan"],"ci":0,"exp":"Ex: Syed Ahmed of Rai Bareilly founded this Islamic revivalist movement to return to pure Islam."},{"id":215,"txt":"The 'Communal Award' (1932) was introduced by —","ref":"","opts":["Lord Irwin","Ramsay MacDonald","Lord Willingdon","Winston Churchill"],"ci":1,"exp":"Ex: The award set up separate communal electorates for Muslims, Sikhs, Europeans, and others."},{"id":216,"txt":"Who among the following founded the 'Aravippuram Movement'?","ref":"","opts":["Shree Narayana Guru","Dr Palpu","K.P. Kesava","Kumaran Asan"],"ci":0,"exp":"Ex: Shree Narayana Guru consecrated a Sivalinga in 1888 to challenge Brahminical religious dominance."},{"id":217,"txt":"The 'Indo-German Conspiracy' occurred during which war?","ref":"","opts":["Revolt of 1857","First World War","Indo-Pak War 1971","Second World War"],"ci":1,"exp":"Ex: Revolutionaries planned an all-India armed rising during WWI with help from Germany."},{"id":218,"txt":"Who was the founder of the 'Servants of India Society'?","ref":"","opts":["Gopal Krishna Gokhale","Lala Lajpat Rai","Bal Gangadhar Tilak","M.G. Ranade"],"ci":0,"exp":"Ex: Gokhale founded the society in 1905 to train national missionaries for the service of the country."},{"id":219,"txt":"The 'Sarda Act' (1930) pushed the minimum marriage age for girls to —","ref":"","opts":["14 years","18 years","15 years","12 years"],"ci":0,"exp":"Ex: This act, named after Harbilas Sarda, check child marriages and established age limits for both genders."},{"id":220,"txt":"Who founded the 'Indian Association of Calcutta' in 1876?","ref":"","opts":["Sisir Kumar Ghosh","Surendranath Banerjea and Ananda Mohan Bose","Dadabhai Naoroji","Womesh Chandra Bonnerjee"],"ci":1,"exp":"Ex: This was the most important pre-Congress nationalist organization to promote advance of the people."},{"id":221,"txt":"The 'Morley-Minto Reforms' were enacted as the —","ref":"","opts":["Indian Councils Act, 1909","Indian Councils Act, 1892","Government of India Act, 1919","Indian Councils Act, 1861"],"ci":0,"exp":"Ex: These reforms provided for communal representation and increased non-official members in councils."},{"id":222,"txt":"Who founded the 'Atmiya Sabha' in 1814?","ref":"","opts":["Ishwar Chandra Vidyasagar","Raja Rammohan Roy","Keshab Chandra Sen","Debendranath Tagore"],"ci":1,"exp":"Ex: Roy founded the Sabha to propagate monotheistic ideals and fight against social ills."},{"id":223,"txt":"The 'Battle of Buxar' (1764) made the British a power in —","ref":"","opts":["Western India","The Deccan","Northern India","Southern India"],"ci":2,"exp":"Ex: After defeating the confederacy of Mir Kasim, Awadh, and the Mughals, the British became contenders for supremacy."},{"id":224,"txt":"Who among the following was known as the 'Singing Sword of Kerala'?","ref":"","opts":["K. Kelappan","P. Krishna Pillai","Subramaniyam Tirumambu","A.K. Gopalan"],"ci":2,"exp":"Ex: Poet Tirumambu led a group of volunteers in the Guruvayur temple entry movement."},{"id":225,"txt":"The 'Official Secrets Act' (1904) restricted the —","ref":"","opts":["Freedom of speech","Freedom of press","Right to education","Right to assemble"],"ci":1,"exp":"Ex: Passed under Curzon, this act was one of several that restricted information and press freedom."},{"id":226,"txt":"Who was the first woman graduate of Calcutta University to address an INC session?","ref":"","opts":["Nellie Sengupta","Annie Besant","Kadambini Ganguly","Sarojini Naidu"],"ci":2,"exp":"Ex: Kadambini Ganguly addressed the 1890 session, showing the role of women in the national struggle."},{"id":227,"txt":"The 'Bande Mataram' song was feature in which novel?","ref":"","opts":["Anandamath","Pather Dabi","Gulamgiri","Gora"],"ci":0,"exp":"Ex: Written by Bankim Chandra Chatterjee, 'Anandamath' depicted the Sanyasi Revolt and gave India its national song."},{"id":228,"txt":"Who founded the 'Hindustan Socialist Republican Association' in 1928?","ref":"","opts":["Chandrashekhar Azad","Sachindranath Sanyal","Bhagat Singh","Ramprasad Bismil"],"ci":0,"exp":"Ex: Azad reorganized the HRA at Delhi into the HSRA, with collective leadership and socialist goals."},{"id":229,"txt":"The 'Ilbert Bill' controversy occurred during the tenure of which Viceroy?","ref":"","opts":["Lord Lytton","Lord Curzon","Lord Ripon","Lord Dufferin"],"ci":2,"exp":"Ex: The bill aimed to remove judicial race distinctions but was modified after European backlash."},{"id":230,"txt":"Who was the founder of the 'Self-Respect Movement'?","ref":"","opts":["E.V. Ramaswamy Naicker","Shree Narayana Guru","Jyotirao Phule","B.R. Ambedkar"],"ci":0,"exp":"Ex: Naicker started this movement in the mid-1920s to reject Brahminical culture and dominance."},{"id":231,"txt":"The 'Statutory Civil Service' (1878-79) was introduced by —","ref":"","opts":["Lord Ripon","Lord Lytton","Lord Dufferin","Lord Mayo"],"ci":1,"exp":"Ex: Lytton introduced this system to reserve one-sixth of covenanted posts for Indians of high families."},{"id":232,"txt":"Who founded the 'Natal Indian Congress'?","ref":"","opts":["Dada Abdullah","Herman Kallenbach","Manilal Gandhi","M.K. Gandhi"],"ci":3,"exp":"Ex: Gandhi set up the NIC to organize Indian workers and fight for their rights in South Africa."},{"id":233,"txt":"The 'Operation Blue Star' (1984) targeted militants in —","ref":"","opts":["Amritsar","Aizawl","Srinagar","Delhi"],"ci":0,"exp":"Ex: The army action stormed the Golden Temple complex to remove militants led by Bhindranwale."},{"id":234,"txt":"Who was the first Indian to qualify for the ICS in 1863?","ref":"","opts":["Satyendra Nath Tagore","Surendranath Banerjea","Dadabhai Naoroji","Gopal Krishna Gokhale"],"ci":0,"exp":"Ex: Satyendra Nath Tagore was the first Indian to enter the prestigious Indian Civil Service."},{"id":235,"txt":"The 'Bhopal Gas Tragedy' (1984) involved the leak of —","ref":"","opts":["Chlorine","Nitrogen dioxide","Carbon monoxide","Methyl Isocyanate"],"ci":3,"exp":"Ex: A leak from the Union Carbide plant killed thousands and remains a major industrial tragedy."},{"id":236,"txt":"Who founded the 'Prarthana Samaj' in 1867?","ref":"","opts":["R.G. Bhandarkar","Atmaram Pandurang","M.G. Ranade","Jyotirao Phule"],"ci":1,"exp":"Ex: Pandurang founded the Samaj to promotion social reform through emphasis on monotheism."},{"id":237,"txt":"The 'Communal Award' (1932) provided separate electorates for —","ref":"","opts":["Muslims and Sikhs","Anglo-Indians only","Parsis and Christians","Europeans and Depressed classes among others"],"ci":3,"exp":"Ex: Ramsay MacDonald’s award provided for separate communal electorates for several groups."},{"id":238,"txt":"Who founded the 'Indian Women’s University' in 1916?","ref":"","opts":["Annie Besant","Ramabai Ranade","Professor D.K. Karve","Sarojini Naidu"],"ci":2,"exp":"Ex: Karve founded the university in Poona to provide higher education for Indian women."},{"id":239,"txt":"The 'Simla Deputation' (1906) was led by —","ref":"","opts":["The Agha Khan","Muhammed Ali Jinnah","Nawab Salimullah","Sir Syed Ahmed Khan"],"ci":0,"exp":"Ex: A delegation of Muslim elites met the Viceroy to demand separate communal representation."},{"id":240,"txt":"Who was known as the 'Singing Sword of Kerala'?","ref":"","opts":["P. Krishna Pillai","A.K. Gopalan","Subramaniyam Tirumambu","K. Kelappan"],"ci":2,"exp":"Ex: Poet Tirumambu was a prominent leader in the 1931 Kerala temple entry movement."},{"id":241,"txt":"The 'Hindustan Socialist Republican Association' was founded at —","ref":"","opts":["Lucknow","Delhi","Lahore","Kanpur"],"ci":1,"exp":"Ex: Reorganized from the HRA, the HSRA was formed at a historic meeting at Ferozshah Kotla."},{"id":242,"txt":"Who was the founder of the 'Bharat Stree Mahamandal' in 1910?","ref":"","opts":["Pandita Ramabai","Sarojini Naidu","Sarla Devi Chaudhurani","Ramabai Ranade"],"ci":2,"exp":"Ex: It was the first major Indian women's organization set up by a woman to work for their upliftment."},{"id":243,"txt":"The 'Treaty of Allahabad' (1765) was signed by Clive and —","ref":"","opts":["Mir Kasim and Shah Alam II","Mir Jafar and Shuja-ud-Daulah","Haidar Ali and Mir Jafar","Shah Alam II and Shuja-ud-Daulah"],"ci":3,"exp":"Ex: Robert Clive signed two separate treaties with the Nawab of Awadh and the Mughal Emperor."},{"id":244,"txt":"Who among the following was the founder of the 'Arya Samaj'?","ref":"","opts":["Ramakrishna Paramahamsa","Dayananda Saraswati","Raja Rammohan Roy","Swami Vivekananda"],"ci":1,"exp":"Ex: Dayananda founded the Samaj in 1875, advocating for Vedic purity and social reform."},{"id":245,"txt":"The 'Satyashodhak Samaj' was founded by —","ref":"","opts":["B.R. Ambedkar","Shree Narayana Guru","Jyotirao Phule","E.V. Ramaswamy Naicker"],"ci":2,"exp":"Ex: Phule founded this society in 1873 to empower backward classes and women in Maharashtra."},{"id":246,"txt":"Who founded the 'Wahabi Movement' in India?","ref":"","opts":["Shah Walliullah","Syed Ahmed of Rai Bareilly","Sir Syed Ahmed Khan","Mirza Ghulam Ahmad"],"ci":1,"exp":"Ex: Syed Ahmed of Rai Bareilly founded this revivalist movement to return to pure Islamic spirit."},{"id":247,"txt":"The 'Communal Award' (1932) was introduced by —","ref":"","opts":["Winston Churchill","Lord Willingdon","Lord Irwin","Ramsay MacDonald"],"ci":3,"exp":"Ex: The British Prime Minister announced the award for separate communal representation for various groups."},{"id":248,"txt":"Who among the following founded the 'Aravippuram Movement'?","ref":"","opts":["Shree Narayana Guru","T.K. Madhavan","Kumaran Asan","Dr Palpu"],"ci":0,"exp":"Ex: In 1888, Shree Narayana Guru consecrated a Sivalinga to challenge caste-based religious monopolies."},{"id":249,"txt":"The 'Indo-German Conspiracy' happened during —","ref":"","opts":["Revolt of 1857","First World War","Second World War","Quit India Movement"],"ci":1,"exp":"Ex: Revolutionaries planned an insurrection during WWI with expectations of German help."}],"m":null,"tt":15000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>
