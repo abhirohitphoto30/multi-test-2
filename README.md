@@ -1,4 +1,4 @@
-# ✦ QuizINOX — Coaching-wise Quiz Website
+# ✦ Quizinoz — Coaching-wise Quiz Website
 
 A lightweight, responsive test library that automatically lists HTML quiz files by coaching folder. Deploy the **same repository** to both Vercel and Render.
 
