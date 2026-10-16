@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>CHAPTER = 11-20</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>CHAPTER = 11-20</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="CHAPTER = 11-20">CHAPTER = 11-20</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Which of the following statements is/are correct regarding the amendment of the Indian Constitution?\n1. The procedure for its amendment is a synthesis of flexibility and rigidity.\n2. Article 368 in Part XX of the Constitution deals with the power of Parliament to amend the Constitution.\n3. Parliament can amend any provision of the Constitution, including those which form the 'basic structure'.","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: The Indian Constitution is neither as flexible.\nthe British Constitution nor as rigid as the American Constitution, but a synthesis of both.\nArticle 368 in Part XX deals with the powers of Parliament to amend the Constitution and its procedure.\nHowever, the Supreme Court ruled in the Kesavananda Bharati case (1973).\nthat Parliament cannot amend provisions forming the 'basic structure'."},{"id":1,"txt":"With reference to the procedure for the amendment of the Constitution as laid down in Article 368, consider the following statements:\n1. An amendment bill can be initiated in either House of Parliament or in the State Legislatures.\n2. The bill can be introduced either by a minister or by a private member.\n3. Prior permission of the President is required before introducing the bill in Parliament.","ref":"","opts":["1 and 2 only","2 only","1 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: An amendment of the Constitution can be initiated only by the introduction of a bill in either House of Parliament and not in the state legislatures.\nThe bill can be introduced by a minister or a private member and does not require prior permission of the President."},{"id":2,"txt":"In case of a disagreement between the two Houses of Parliament regarding a Constitutional Amendment Bill, which of the following happens?","ref":"","opts":["The President calls for a joint sitting of both Houses.","The Bill is referred to the Supreme Court for arbitration.","There is no provision for holding a joint sitting.","The Lok Sabha's decision prevails over the Rajya Sabha."],"ci":2,"exp":"Ex: Each House must pass the constitutional amendment bill separately. In case of a disagreement between the two Houses, there is no provision for holding a joint sitting of the two Houses for the purpose of deliberation and passage of the bill."},{"id":3,"txt":"Which of the following provisions requires ratification by the legislatures of half of the states by a simple majority for its amendment?\n1. Election of the President and its manner.\n2. Fundamental Rights.\n3. Supreme Court and High Courts.\n4. Distribution of legislative powers between the Union and the states.","ref":"","opts":["1, 2 and 3","1, 3 and 4","2, 3 and 4","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Provisions related to the federal structure, such as the election of the President, the extent of executive power of the Union and states, the Supreme Court and high courts, and the distribution of legislative powers, require ratification by half of the states.\nFundamental Rights are amended by a special majority of Parliament alone."},{"id":4,"txt":"Consider the following statements regarding the President's role in the constitutional amendment process:\n1. The 24th Constitutional Amendment Act of 1971 made it obligatory for the President to give his/her assent to a constitutional amendment bill.\n2. The President can withhold his/her assent to the bill but cannot return it for reconsideration.\n3. The President must give his/her assent and can neither withhold assent nor return the bill.","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: The 24th Constitutional Amendment Act of 1971 made it obligatory for the President to give assent to a constitutional amendment bill.\nAfter the bill is passed by both Houses and ratified by states (if necessary), the President must give his/her assent; he/she can neither withhold assent nor return the bill for reconsideration."},{"id":5,"txt":"Which of the following amendments are NOT deemed to be amendments of the Constitution for the purposes of Article 368?","ref":"","opts":["Amendments by special majority of Parliament.","Amendments requiring ratification by half of the states.","Amendments by simple majority of Parliament.","Amendments affecting the 'basic structure'."],"ci":2,"exp":"Ex: Some articles provide for the amendment of certain provisions by a simple majority of Parliament (similar to the ordinary legislative process). Notably, these amendments are not deemed to be amendments of the Constitution for the purposes of Article 368."},{"id":6,"txt":"Which of the following can be amended by a simple majority of Parliament?\n1. Admission or establishment of new states.\n2. Abolition or creation of legislative councils in states.\n3. Use of English language in Parliament.\n4. Directive Principles of State Policy.","ref":"","opts":["1, 2 and 3 only","2, 3 and 4 only","1 and 3 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Provisions like the admission of new states, creation of legislative councils, and the use of English in Parliament can be amended by a simple majority. Directive Principles of State Policy (DPSP) require a special majority under Article 368."},{"id":7,"txt":"For the purpose of a 'special majority' under Article 368, what does the expression 'total membership' mean?","ref":"","opts":["Total number of members present at the time of voting.","Total number of members comprising the House including vacancies and absentees.","Total number of members excluding those who are on leave.","Total number of members who are eligible to vote."],"ci":1,"exp":"Ex: The expression 'total membership' means the total number of members comprising the House irrespective of the fact whether there are vacancies or absentees."},{"id":8,"txt":"Which of the following provisions can be amended by a special majority of Parliament and consent of states?","ref":"","opts":["Fundamental Rights.","Directive Principles of State Policy.","Representation of states in Parliament.","Quorum in Parliament."],"ci":2,"exp":"Ex: Representation of states in Parliament is a federal provision and requires a special majority of Parliament plus the consent of half of the state legislatures. Fundamental Rights and DPSP require only a special majority of Parliament, while quorum is amended by a simple majority."},{"id":9,"txt":"In which case did the Supreme Court rule that the power of Parliament to amend the Constitution under Article 368 also includes the power to amend Fundamental Rights?","ref":"","opts":["Golak Nath case (1967)","Shankari Prasad case (1951)","Minerva Mills case (1980)","Waman Rao case (1980)"],"ci":1,"exp":"Ex: In the Shankari Prasad case (1951), the Supreme Court ruled that the power of Parliament to amend the Constitution under Article 368 includes the power to amend Fundamental Rights, holding that 'law' in Article 13 only includes ordinary laws."},{"id":10,"txt":"In the Golak Nath case (1967), the Supreme Court ruled that:","ref":"","opts":["Fundamental Rights can be amended by a constitutional amendment act.","Fundamental Rights are given a 'transcendental and immutable' position.","The basic structure of the Constitution cannot be amended.","Judicial review is a basic feature of the Constitution."],"ci":1,"exp":"Ex: In the Golak Nath case (1967), the Supreme Court reversed its earlier stand and ruled that Fundamental Rights are given a 'transcendental and immutable' position; therefore, Parliament cannot abridge or take away any of these rights."},{"id":11,"txt":"The doctrine of 'basic structure' was first laid down by the Supreme Court in:","ref":"","opts":["Shankari Prasad case (1951)","Sajjan Singh case (1964)","Kesavananda Bharati case (1973)","Indira Nehru Gandhi case (1975)"],"ci":2,"exp":"Ex: The Supreme Court laid down the new doctrine of the 'basic structure' (or 'basic features') of the Constitution in the landmark Kesavananda Bharati case (1973)."},{"id":12,"txt":"In the Minerva Mills case (1980), the Supreme Court invalidated a provision of the 42nd Amendment Act (1976) because:","ref":"","opts":["It took away the right to property.","It excluded judicial review, which is a 'basic feature' of the Constitution.","It allowed for a joint sitting for constitutional amendments.","It transferred subjects from the State List to the Concurrent List."],"ci":1,"exp":"Ex: The Supreme Court in the Minerva Mills case (1980) held that since the Constitution conferred a limited amending power on Parliament, Parliament cannot enlarge that power into an absolute one. It invalidated the provision excluding judicial review as it is a basic feature."},{"id":13,"txt":"According to the Waman Rao case (1980), the doctrine of 'basic structure' applies to constitutional amendments enacted after:","ref":"","opts":["January 26, 1950","August 15, 1947","April 24, 1973","November 26, 1949"],"ci":2,"exp":"Ex: In the Waman Rao case (1980), the Supreme Court clarified that the doctrine of the 'basic structure' would apply to constitutional amendments enacted after April 24, 1973, which was the date of the judgement in the Kesavananda Bharati case."},{"id":14,"txt":"Which of the following are recognized as elements of the 'basic structure' of the Constitution?\n1. Supremacy of the Constitution.\n2. Secular character of the Constitution.\n3. Separation of powers between legislature, executive and judiciary.\n4. Rule of law.","ref":"","opts":["1 and 2 only","2 and 3 only","1, 2 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: Based on various judgements, elements of the basic structure include the supremacy of the Constitution, secular character, separation of powers, rule of law, federalism, and judicial review, among others."},{"id":15,"txt":"Which case declared 'Free and fair elections' as a basic feature of the Constitution?","ref":"","opts":["Kesavananda Bharati case (1973)","Indira Nehru Gandhi case (1975)","Minerva Mills case (1980)","S.R. Bommai case (1994)"],"ci":1,"exp":"Ex: In the Indira Nehru Gandhi case (1975), popularly known as the Election Case, the Supreme Court declared free and fair elections as a basic feature of the Constitution."},{"id":16,"txt":"In which system of government is the executive responsible to the legislature for its policies and acts?","ref":"","opts":["Presidential system","Parliamentary system","Unitary system","Monarchical system"],"ci":1,"exp":"Ex: The parliamentary system of government is one in which the executive is responsible to the legislature for its policies and acts. In contrast, the presidential system's executive is not responsible to the legislature."},{"id":17,"txt":"The parliamentary system of government is also known as:\n1. Cabinet government.\n2. Responsible government.\n3. Westminster model of government.\n4. Non-responsible government.","ref":"","opts":["1 and 2 only","1, 2 and 3 only","2, 3 and 4 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Parliamentary government is known as cabinet government (as the cabinet is the nucleus of power), responsible government (as the cabinet is accountable to Parliament), and the Westminster model (after the British Parliament's location)."},{"id":18,"txt":"In the Indian parliamentary system, who is the 'nominal executive' and who is the 'real executive'?","ref":"","opts":["Prime Minister; President","President; Prime Minister","President; Cabinet","Speaker; Prime Minister"],"ci":1,"exp":"Ex: The President is the nominal executive (de jure executive or titular executive), while the Prime Minister is the real executive (de facto executive)."},{"id":19,"txt":"What is the 'bedrock principle' of parliamentary government in India?","ref":"","opts":["Political Homogeneity","Dissolution of the Lower House","Collective Responsibility","Secrecy"],"ci":2,"exp":"Ex: Collective responsibility is the bedrock principle of parliamentary government. Ministers are collectively responsible to the Parliament in general and to the Lok Sabha in particular (Article 75)."},{"id":20,"txt":"Which article of the Constitution stipulates that a minister who is not a member of Parliament for six consecutive months ceases to be a minister?","ref":"","opts":["Article 74","Article 75","Article 163","Article 164"],"ci":1,"exp":"Ex: Under the principle of Double Membership, ministers must be members of the legislature. The Constitution stipulates (Article 75) that a minister who is not a member of Parliament for six consecutive months ceases to be a minister."},{"id":21,"txt":"In the American presidential system, the President is:\n1. Both head of State and head of government.\n2. Elected for a fixed tenure of four years.\n3. Responsible to the Congress for his/her acts.\n4. Able to dissolve the House of Representatives.","ref":"","opts":["1 and 2 only","2 and 3 only","1, 2 and 4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: In the American system, the President is both head of State and government, elected for a fixed four-year term, and is not responsible to Congress. The President cannot dissolve the House of Representatives."},{"id":22,"txt":"Which of the following is a merit of the parliamentary system?","ref":"","opts":["Stability of government.","Continuity of policies.","Harmony between legislature and executive.","Government by experts."],"ci":2,"exp":"Ex: A major merit of the parliamentary system is harmony between the legislature and the executive, as the executive is part of the legislature and both are interdependent, reducing disputes."},{"id":23,"txt":"Why did the founding fathers of the Indian Constitution prefer the parliamentary system?\n1. Familiarity with the system during British rule.\n2. Preference for more responsibility over stability.\n3. Need to avoid legislative-executive conflicts.\n4. Heterogeneous nature of Indian society.","ref":"","opts":["1 and 2 only","2 and 3 only","1, 2 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: Reasons include familiarity from the British era, Dr. Ambedkar’s preference for responsibility, the desire to avoid conflicts inherent in presidential systems, and the need to represent India's complex plural society."},{"id":24,"txt":"How does the Indian parliamentary model differ from the British model?\n1. India has a republican system, while Britain has a monarchical system.\n2. The British Parliament is sovereign, while the Indian Parliament has limited powers.\n3. In India, the Prime Minister must be a member of the Lower House.\n4. Britain has a system of legal responsibility for ministers, while India does not.","ref":"","opts":["1, 2 and 4 only","2, 3 and 4 only","1 and 3 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: India's head of state is elected (Republic), unlike the hereditary British monarch. The Indian Parliament is not supreme due to a written Constitution and judicial review. In India, the PM can be from either House, whereas in Britain, the PM must be from the House of Commons. India also lacks the British system of legal responsibility for ministers."},{"id":25,"txt":"Political scientists classify governments into unitary and federal on the basis of:","ref":"","opts":["The number of houses in the legislature.","The nature of relations between the national and regional governments.","The method of election of the head of state.","The presence or absence of a written constitution."],"ci":1,"exp":"Ex: Governments are classified as unitary or federal based on the nature of relations between the national (Central) government and the regional (State) governments."},{"id":26,"txt":"Which of the following countries has a federal model of government?","ref":"","opts":["Britain","France","China","USA"],"ci":3,"exp":"Ex: Unitary models exist in Britain, France, Japan, and China. Federal models are found in the USA, Switzerland, Australia, Canada, Russia, and Brazil."},{"id":27,"txt":"The term 'federation' is derived from the Latin word 'foedus', which means:","ref":"","opts":["Division","Union","Treaty or Agreement","Sovereignty"],"ci":2,"exp":"Ex: The term 'federation' comes from the Latin word 'foedus', meaning 'treaty' or 'agreement'. A federation is a new state formed through a treaty between various units."},{"id":28,"txt":"According to Dr. B.R. Ambedkar, the phrase 'Union of States' was preferred in Article 1 to 'Federation of States' to indicate:\n1. The Indian federation is not the result of an agreement among states.\n2. The states have the right to secede from the federation.\n3. The states have no right to secede from the federation.\n4. The federation is indestructible.","ref":"","opts":["1 and 2 only","1, 3 and 4 only","2 and 3 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: 'Union of States' implies the Indian federation is not an agreement (unlike the US) and states cannot secede, making the union indestructible."},{"id":29,"txt":"Which of the following is a federal feature of the Indian Constitution?\n1. Dual Polity.\n2. Single Constitution.\n3. Division of Powers.\n4. Independent Judiciary.","ref":"","opts":["1, 3 and 4 only","2, 3 and 4 only","1 and 2 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Federal features include dual polity, written constitution, division of powers, supremacy of the constitution, rigid constitution, independent judiciary, and bicameralism. Single Constitution is a unitary feature."},{"id":30,"txt":"The Seventh Schedule of the Indian Constitution contains:","ref":"","opts":["The forms of oath and affirmation.","The division of powers between the Centre and states.","The list of languages recognized by the Constitution.","The provisions relating to the administration of scheduled areas."],"ci":1,"exp":"Ex: The Constitution divides powers between the Centre and states via the Union List, State List, and Concurrent List found in the Seventh Schedule."},{"id":31,"txt":"Which of the following is considered a unitary or non-federal feature of the Indian Constitution?\n1. Strong Centre.\n2. All-India Services.\n3. Bicameralism.\n4. Appointment of Governor by the President.","ref":"","opts":["1, 2 and 4 only","2, 3 and 4 only","1 and 3 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Unitary features include a strong Centre, destructible states, single constitution, flexibility, emergency provisions, single citizenship, integrated judiciary, all-India services, and appointment of the governor by the Centre. Bicameralism is a federal feature."},{"id":32,"txt":"In the context of the Indian federation, the phrase \"an indestructible Union of destructible states\" refers to:","ref":"","opts":["The states' power to change the Union's boundaries.","The Parliament's power to unilaterally change the area, boundaries or name of any state.","The absolute territorial integrity of the states.","The temporary nature of the Indian Union."],"ci":1,"exp":"Ex: Unlike the US (\"indestructible Union of indestructible states\"), India is an \"indestructible Union of destructible states\" because Parliament can change state boundaries or names by a simple majority without state consent."},{"id":33,"txt":"Who described the Constitution of India as \"quasi-federal\"?","ref":"","opts":["Paul Appleby","Morris Jones","K.C. Wheare","Granville Austin"],"ci":2,"exp":"Ex: K.C. Wheare described the Indian Constitution as \"quasi-federal\" and remarked that it is a unitary state with subsidiary federal features."},{"id":34,"txt":"In the Bommai case (1994), the Supreme Court characterized federalism as:","ref":"","opts":["A matter of administrative convenience.","A 'basic feature' of the Constitution.","A secondary principle to the unitary structure.","An outdated concept in the Indian context."],"ci":1,"exp":"Ex: In the S.R. Bommai case (1994), the Supreme Court laid down that the Constitution is federal and characterized federalism as its 'basic feature'."},{"id":35,"txt":"Articles 245 to 255 in Part XI of the Constitution deal with:","ref":"","opts":["Administrative relations between the Centre and states.","Financial relations between the Centre and states.","Legislative relations between the Centre and states.","Inter-state trade and commerce."],"ci":2,"exp":"Ex: Articles 245 to 255 in Part XI deal with the legislative relations between the Centre and the states."},{"id":36,"txt":"With reference to the territorial extent of legislation, which of the following is correct?\n1. Parliament can make laws for the whole or any part of the territory of India.\n2. A state legislature can make laws applicable outside the state even without a territorial nexus.\n3. Parliament alone can make 'extra-territorial legislation'.","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Parliament makes laws for the whole of India; state laws apply only within the state unless there is a \"sufficient nexus\". Only Parliament can make extra-territorial laws applicable to Indian citizens and property abroad."},{"id":37,"txt":"In which list are residuary powers of legislation vested in the Indian Constitution?","ref":"","opts":["Union List","State List","Concurrent List","None; they are vested in Parliament"],"ci":3,"exp":"Ex: The power to make laws with respect to residuary subjects (not mentioned in any of the three lists) is vested in the Parliament."},{"id":38,"txt":"Under which situation can Parliament legislate on a matter in the State List?\n1. When Rajya Sabha passes a resolution in national interest.\n2. During a National Emergency.\n3. When two or more states make a request.\n4. To implement international agreements.","ref":"","opts":["1 and 2 only","2, 3 and 4 only","1, 3 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: Parliament can legislate on state subjects: (1) if Rajya Sabha passes a resolution, (2) during national emergency, (3) when states request, (4) to implement international treaties, and (5) during President's Rule."},{"id":39,"txt":"The 42nd Amendment Act of 1976 transferred which of the following subjects from the State List to the Concurrent List?\n1. Education.\n2. Forests.\n3. Weights and Measures.\n4. Protection of wild animals and birds.","ref":"","opts":["1 and 2 only","2, 3 and 4 only","1, 2 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: The 42nd Amendment (1976) transferred five subjects to the Concurrent List: education, forests, weights and measures, protection of wild animals and birds, and administration of justice."},{"id":40,"txt":"Articles 256 to 263 in Part XI of the Constitution deal with:","ref":"","opts":["Legislative relations between the Centre and states.","Administrative relations between the Centre and states.","Financial relations between the Centre and states.","Emergency provisions."],"ci":1,"exp":"Ex: Articles 256 to 263 in Part XI deal with the administrative relations between the Centre and the states."},{"id":41,"txt":"Which article provides for the imposition of President's Rule if a state fails to comply with directions given by the Centre?","ref":"","opts":["Article 352","Article 356","Article 360","Article 365"],"ci":3,"exp":"Ex: Article 365 says that if a state fails to comply with directions given by the Centre, the President can hold that the state government cannot be carried on in accordance with the Constitution, leading to President's Rule under Article 356."},{"id":42,"txt":"All-India Services (IAS, IPS, IFOS) are controlled:","ref":"","opts":["Exclusively by the Centre.","Exclusively by the States.","Jointly by the Centre and the States.","By the Union Public Service Commission."],"ci":2,"exp":"Ex: All-India Services are controlled jointly by the Centre and the states. Ultimate control lies with the Centre, while immediate control vests with the state governments."},{"id":43,"txt":"Who can create a new All-India Service?","ref":"","opts":["The President","The Prime Minister","Parliament on the basis of a Rajya Sabha resolution","The Union Public Service Commission"],"ci":2,"exp":"Ex: Article 312 authorizes Parliament to create new All-India Services on the basis of a Rajya Sabha resolution supported by two-thirds of members present and voting."},{"id":44,"txt":"Articles 268 to 293 in Part XII of the Constitution deal with:","ref":"","opts":["Legislative relations.","Administrative relations.","Financial relations between the Centre and states.","Inter-state water disputes."],"ci":2,"exp":"Ex: Articles 268 to 293 in Part XII deal with the Centre-state financial relations."},{"id":45,"txt":"The residuary power of taxation is vested in:","ref":"","opts":["The State Legislatures","The Parliament","The Finance Commission","The GST Council"],"ci":1,"exp":"Ex: The residuary power of taxation (imposing taxes not in any of the three lists) is vested in the Parliament, which has used it to impose gift tax and wealth tax."},{"id":46,"txt":"Which constitutional amendment introduced the Goods and Services Tax (GST)?","ref":"","opts":["80th Amendment Act","88th Amendment Act","101st Amendment Act","42nd Amendment Act"],"ci":2,"exp":"Ex: The 101st Amendment Act of 2016 introduced the Goods and Services Tax (GST) and paved the way for a new tax regime."},{"id":47,"txt":"The Finance Commission is a quasi-judicial body constituted by the President every:","ref":"","opts":["Third year","Fifth year","Sixth year","Yearly"],"ci":1,"exp":"Ex: Under Article 280, the Finance Commission is constituted by the President every fifth year (or earlier) to recommend the distribution of tax proceeds."},{"id":48,"txt":"Article 262 of the Constitution deals with:","ref":"","opts":["Adjudication of inter-state water disputes.","Coordination through inter-state councils.","Freedom of inter-state trade.","Establishment of Zonal Councils."],"ci":0,"exp":"Ex: Article 262 provides for the adjudication of disputes relating to the use, distribution, and control of waters of any inter-state river or river valley."},{"id":49,"txt":"The Inter-State Council was established in 1990 on the recommendation of which commission?","ref":"","opts":["Administrative Reforms Commission","Rajamannar Committee","Sarkaria Commission","Punchhi Commission"],"ci":2,"exp":"Ex: In pursuance of the recommendations of the Sarkaria Commission (1983-88), the Inter-State Council was established in 1990."},{"id":50,"txt":"Zonal Councils are:","ref":"","opts":["Constitutional bodies","Statutory bodies","Extra-constitutional advisory bodies","Judicial bodies"],"ci":1,"exp":"Ex: Zonal Councils are statutory bodies established by an Act of Parliament (States Reorganisation Act of 1956), not constitutional bodies."},{"id":51,"txt":"Which part of the Constitution contains the Emergency Provisions?","ref":"","opts":["Part XV","Part XVII","Part XVIII","Part XX"],"ci":2,"exp":"Ex: The Emergency provisions are contained in Part XVIII of the Constitution, from Articles 352 to 360."},{"id":52,"txt":"A proclamation of National Emergency under Article 352 can be declared on the grounds of:\n1. War.\n2. External aggression.\n3. Internal disturbance.\n4. Armed rebellion.","ref":"","opts":["1, 2 and 3 only","2, 3 and 4 only","1, 2 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: The grounds for National Emergency are war, external aggression, or armed rebellion. The term 'internal disturbance' was replaced by 'armed rebellion' by the 44th Amendment Act of 1978."},{"id":53,"txt":"The President can proclaim a National Emergency only after receiving a written recommendation from:","ref":"","opts":["The Prime Minister","The Parliament","The Cabinet","The Supreme Court"],"ci":2,"exp":"Ex: The 44th Amendment Act of 1978 introduced the safeguard that the President can proclaim a National Emergency only after receiving a written recommendation from the cabinet."},{"id":54,"txt":"A proclamation of National Emergency must be approved by Parliament within:","ref":"","opts":["Two weeks","One month","Two months","Six months"],"ci":1,"exp":"Ex: The proclamation of Emergency must be approved by both Houses of Parliament within one month from the date of its issue."},{"id":55,"txt":"Once approved, a National Emergency continues for six months and can be extended indefinitely with parliamentary approval every:","ref":"","opts":["Three months","Six months","One year","Two years"],"ci":1,"exp":"Ex: If approved by both Houses, the emergency continues for six months and can be extended to an indefinite period with approval for every six months."},{"id":56,"txt":"Which Fundamental Rights CANNOT be suspended even during a National Emergency?","ref":"","opts":["Rights under Article 19","Rights under Articles 20 and 21","Rights under Article 14","Rights under Article 32"],"ci":1,"exp":"Ex: The 44th Amendment Act restricted the scope of Article 359, stating that the President cannot suspend the right to move the Court for the enforcement of fundamental rights guaranteed by Articles 20 and 21."},{"id":57,"txt":"President's Rule under Article 356 is imposed due to:","ref":"","opts":["War or external aggression.","Armed rebellion.","Failure of constitutional machinery in a state.","Threat to the financial stability of India."],"ci":2,"exp":"Ex: President's Rule (Article 356) is imposed when a situation arises where the government of a state cannot be carried on in accordance with the provisions of the Constitution."},{"id":58,"txt":"The maximum period for which President's Rule can be extended is:","ref":"","opts":["One year","Two years","Three years","Indefinite"],"ci":2,"exp":"Ex: President's Rule can be extended for a maximum period of three years with the approval of Parliament every six months."},{"id":59,"txt":"Which amendment made it obligatory for the President to give assent to a constitutional amendment bill?","ref":"","opts":["24th Amendment Act","42nd Amendment Act","44th Amendment Act","52nd Amendment Act"],"ci":0,"exp":"Ex: The 24th Constitutional Amendment Act of 1971 made it obligatory for the President to give his/her assent to a constitutional amendment bill."},{"id":60,"txt":"The \"Basic Structure\" doctrine was reaffirmed by the Supreme Court in the Minerva Mills case (1980) specifically regarding:","ref":"","opts":["The power to create new states.","The exclusion of judicial review.","The election of the Prime Minister.","The administration of Tribal areas."],"ci":1,"exp":"Ex: In the Minerva Mills case (1980), the Court held that judicial review is a 'basic feature' and Parliament cannot use its limited amending power to acquire absolute power."},{"id":61,"txt":"In the parliamentary system, the Cabinet is responsible to:","ref":"","opts":["The President","The Prime Minister","The Lok Sabha","The Rajya Sabha"],"ci":2,"exp":"Ex: The Cabinet (Council of Ministers) is collectively responsible to the Lok Sabha (the lower house of Parliament)."},{"id":62,"txt":"Which of the following is NOT a feature of the American Presidential system?","ref":"","opts":["Single executive","Double membership","Non-responsibility to legislature","Separation of powers"],"ci":1,"exp":"Ex: Double membership (being a member of both executive and legislature) is a feature of the Parliamentary system. The Presidential system features single membership."},{"id":63,"txt":"The Sarkaria Commission (1983-88) was concerned with:","ref":"","opts":["Electoral reforms","Centre-State relations","Judicial activism","Fundamental Rights"],"ci":1,"exp":"Ex: The Sarkaria Commission was appointed in 1983 to examine and review the working of existing arrangements between the Centre and states."},{"id":64,"txt":"Which article of the Constitution describes India as a 'Union of States'?","ref":"","opts":["Article 1","Article 2","Article 3","Article 4"],"ci":0,"exp":"Ex: Article 1 of the Constitution describes India as a 'Union of States'."},{"id":65,"txt":"The residuary subjects in India are assigned to the Centre. This follows the model of:","ref":"","opts":["USA","Australia","Canada","Switzerland"],"ci":2,"exp":"Ex: In India, residuary powers are given to the Centre, following the Canadian model, whereas in the USA and Australia, they are vested in the states."},{"id":66,"txt":"Which of the following is an All-India Service?\n1. IAS.\n2. IPS.\n3. IFOS (Forest Service).\n4. Foreign Service.","ref":"","opts":["1 and 2 only","1, 2 and 3 only","2 and 3 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: There are three All-India Services: Indian Administrative Service (IAS), Indian Police Service (IPS), and Indian Forest Service (IFOS)."},{"id":67,"txt":"The Governor of a state is:","ref":"","opts":["Elected by the State Legislature.","Elected by the people of the state.","Appointed by the President.","Appointed by the Chief Justice of the High Court."],"ci":2,"exp":"Ex: The Governor of a state is appointed by the President and holds office during the pleasure of the President."},{"id":68,"txt":"Financial Emergency under Article 360 has been declared in India:","ref":"","opts":["Once (1991)","Twice","Thrice","Never"],"ci":3,"exp":"Ex: No Financial Emergency has been declared so far in India, though there was a financial crisis in 1991."},{"id":69,"txt":"The President of India is elected by:","ref":"","opts":["Direct election by the people.","Members of both Houses of Parliament only.","An electoral college consisting of elected members of Parliament and State Legislative Assemblies.","The Prime Minister and his Cabinet."],"ci":2,"exp":"Ex: The President is elected by an electoral college consisting of elected members of both Houses of Parliament and the elected members of the state legislative assemblies (including Delhi and Puducherry)."},{"id":70,"txt":"The oath of office to the President is administered by:","ref":"","opts":["The Prime Minister","The Vice-President","The Chief Justice of India","The Speaker of Lok Sabha"],"ci":2,"exp":"Ex: The oath of office to the President is administered by the Chief Justice of India or, in his/her absence, the seniormost judge of the Supreme Court."},{"id":71,"txt":"The President can be removed from office by impeachment for:","ref":"","opts":["Misbehavior","Incapacity","Violation of the Constitution","Criminal acts"],"ci":2,"exp":"Ex: The President can be removed from office by a process of impeachment for 'violation of the Constitution'."},{"id":72,"txt":"Who acts as the President when a vacancy occurs due to death or resignation and the Vice-President's office is also vacant?","ref":"","opts":["The Prime Minister","The Speaker of Lok Sabha","The Chief Justice of India","The Home Minister"],"ci":2,"exp":"Ex: If the offices of both the President and Vice-President are vacant, the Chief Justice of India acts as the President."},{"id":73,"txt":"The President's power to promulgate ordinances is provided under:","ref":"","opts":["Article 72","Article 111","Article 123","Article 143"],"ci":2,"exp":"Ex: Article 123 of the Constitution empowers the President to promulgate ordinances during the recess of Parliament."},{"id":74,"txt":"The Vice-President is the ex-officio Chairman of:","ref":"","opts":["The Lok Sabha","The Rajya Sabha","The NITI Aayog","The Finance Commission"],"ci":1,"exp":"Ex: The Vice-President acts as the ex-officio Chairman of the Rajya Sabha."},{"id":75,"txt":"How does the Indian Vice-President's role differ from the American Vice-President during a vacancy in the Presidency?","ref":"","opts":["The Indian VP becomes President for the remainder of the term.","The Indian VP only serves as acting President until a new one is elected .","The American VP serves only as an acting President.","There is no difference in their roles."],"ci":1,"exp":"Ex: In the USA, the Vice-President succeeds to the presidency for the unexpired term. In India, the Vice-President merely acts as President until a new election is held, which must be within six months."},{"id":76,"txt":"What happens to the Council of Ministers if the Prime Minister resigns or dies?","ref":"","opts":["The senior-most minister becomes the acting PM.","The Council continues until a new leader is elected.","The Council of Ministers is automatically dissolved .","The President takes over the administration directly."],"ci":2,"exp":"Ex: Since the PM is the head of the council, his/her resignation or death automatically dissolves the entire Council of Ministers, creating a vacuum."},{"id":77,"txt":"Article 78 of the Constitution defines:","ref":"","opts":["The President's power to grant pardons.","The duties of the Prime Minister regarding furnishing information to the President .","The appointment of the Attorney General.","The composition of the Rajya Sabha."],"ci":1,"exp":"Ex: Article 78 specifies the duty of the PM to communicate cabinet decisions and furnish requested information to the President."},{"id":78,"txt":"A \"Caretaker Government\" is expected to:","ref":"","opts":["Initiate major new policy decisions.","Manage only routine day-to-day administrative activities .","Request a joint sitting of Parliament.","Appoint new judges to the Supreme Court."],"ci":1,"exp":"Ex: A caretaker government is a situational arrangement meant only for managing routine activities and is not expected to make significant policy decisions."},{"id":79,"txt":"The Sarkaria Commission recommended that Article 356 (President's Rule) should be used:","ref":"","opts":["Frequently to ensure stability.","As a last resort in extreme cases .","Only during a national emergency.","By the Governor directly."],"ci":1,"exp":"Ex: The Commission emphasized that Article 356 should be used very sparingly, only as a last resort when all other alternatives fail."},{"id":80,"txt":"Who was the Chairman of the Second Commission on Centre-State Relations set up in 2007?","ref":"","opts":["R.S. Sarkaria","M.M. Punchhi  Morarji Desai","P.V. Rajamannar Ex: The second commission was headed by Madan Mohan Punchhi, former Chief Justice of India."],"ci":1,"exp":"No explanation provided."},{"id":81,"txt":"The Inter-State River Water Disputes Act (1956) empowers the Centre to set up:","ref":"","opts":["A permanent water council.","An ad hoc tribunal .","A committee of Chief Ministers.","A division of the NITI Aayog."],"ci":1,"exp":"Ex: The Act allows the Central government to establish a tribunal for adjudicating water disputes between two or more states."},{"id":82,"txt":"The decisions of an Inter-State Water Dispute Tribunal are:","ref":"","opts":["Advisory to the Supreme Court.","Subject to review by the Parliament.","Final and binding on the parties .","Non-binding in cases of national emergency."],"ci":2,"exp":"Ex: Under the Inter-State River Water Disputes Act, the decision of the tribunal is final and binding."},{"id":83,"txt":"The North-Eastern Council was created by:","ref":"","opts":["The States Reorganisation Act, 1956.","The 42nd Amendment Act.","A separate Act of Parliament in 1971 .","An executive order of the President."],"ci":2,"exp":"Ex: The North-Eastern Council was established under the North-Eastern Council Act of 1971."},{"id":84,"txt":"During a National Emergency, the Life of the Lok Sabha can be extended for:","ref":"","opts":["Six months at a time.","One year at a time .","Two years at a time.","Indefinitely without any law."],"ci":1,"exp":"Ex: Parliament can extend the term of the Lok Sabha by one year at a time during an emergency, but this extension cannot continue beyond six months after the emergency expires."},{"id":85,"txt":"Article 359 is different from Article 358 because it:","ref":"","opts":["Suspends Fundamental Rights automatically.","Does not automatically suspend any right but empowers the President to suspend their enforcement .","Applies only to Article 19.","Operates only in case of External Emergency."],"ci":1,"exp":"Ex: Unlike Article 358, Article 359 does not suspend rights automatically; the President must specify which rights' enforcement is being suspended."},{"id":86,"txt":"The first proclamation of National Emergency (1962) was issued due to:","ref":"","opts":["Attack by Pakistan.","Chinese aggression in NEFA .","Internal disturbance in Punjab.","Armed rebellion in Mizoram."],"ci":1,"exp":"Ex: The first National Emergency was declared in October 1962 following Chinese aggression in the North-East Frontier Agency."},{"id":87,"txt":"According to the Supreme Court in the Bommai case (1994), a presidential proclamation under Article 356 is:","ref":"","opts":["Immune from judicial review.","Subject to judicial review .","Valid even if based on irrelevant facts.","Final and conclusive."],"ci":1,"exp":"Ex: The Court held that the President's satisfaction must be based on relevant material and is subject to judicial review."},{"id":88,"txt":"The President of India is the \"Supreme Commander\" of:","ref":"","opts":["The Cabinet.","The Parliament.","The Defense Forces .","The NITI Aayog."],"ci":2,"exp":"Ex: The President is the supreme commander of the defense forces and appoints the chiefs of the Army, Navy, and Air Force."},{"id":89,"txt":"International treaties are negotiated and concluded on behalf of:","ref":"","opts":["The Prime Minister.","The President .","The Parliament.","The External Affairs Minister."],"ci":1,"exp":"Ex: International agreements are made in the President's name, though they are subject to parliamentary approval."},{"id":90,"txt":"The \"Pocket Veto\" of the Indian President is considered \"bigger\" than that of the American President because:","ref":"","opts":["The Indian President can reject any bill.","The Indian Constitution prescribes no time-limit for giving assent .","The American President has no veto power.","The Indian President can return money bills."],"ci":1,"exp":"Ex: In the USA, the President must return a bill within 10 days. The Indian Constitution is silent on a time-limit, allowing the President to keep a bill pending indefinitely."},{"id":91,"txt":"The 42nd Amendment Act (1976) made the President:","ref":"","opts":["Bound by the advice of the Council of Ministers .","Independent of the Prime Minister.","Eligible for only one term.","Head of the NITI Aayog."],"ci":0,"exp":"Ex: The 42nd Amendment explicitly made ministerial advice binding on the President. The 44th Amendment later added that the President could ask for one-time reconsideration."},{"id":92,"txt":"Which body audits the accounts of both the Central and State governments?","ref":"","opts":["The Finance Commission.","The Comptroller and Auditor-General .","The NITI Aayog.","The GST Council."],"ci":1,"exp":"Ex: The CAG is responsible for auditing the accounts of the Union and all state governments."},{"id":93,"txt":"The expression \"primus inter pares\" in relation to the Prime Minister means:","ref":"","opts":["Master of the Government.","First among equals .","Moon among lesser stars.","Captain of the ship."],"ci":1,"exp":"Ex: This Latin phrase highlights the PM's role as the leader of the cabinet while acknowledging their status as a peer among ministers."},{"id":94,"txt":"In which case did the Supreme Court invalidate a provision of the 39th Amendment Act that kept election disputes of the PM outside the jurisdiction of courts?","ref":"","opts":["Indira Nehru Gandhi case  Minerva Mills case Waman Rao case","S.R. Bommai case Ex: In the Indira Nehru Gandhi case (1975), the Court struck down the provision as it affected the \"basic structure\"."],"ci":0,"exp":"No explanation provided."},{"id":95,"txt":"\"Bicameralism\" is a federal feature because:","ref":"","opts":["It allows for two Prime Ministers.","The Rajya Sabha represents the states and protects their interests .","It ensures faster legislation.","The Lok Sabha represents the President."],"ci":1,"exp":"Ex: By having an Upper House representing the states, the system maintains federal equilibrium and prevents undue Central interference."},{"id":96,"txt":"Who called the parliamentary system a \"cabinet system\" because the cabinet is the nucleus of power?","ref":"","opts":["Ivor Jennings","B.R. Ambedkar","K.C. Wheare Walter Bagehot Ex: Ivor Jennings emphasized that the cabinet is the central power structure in this form of government."],"ci":0,"exp":"No explanation provided."},{"id":97,"txt":"The \"Shadow Cabinet\" is an institution found in:","ref":"","opts":["India.","Britain .","USA.","Canada."],"ci":1,"exp":"Ex: The shadow cabinet is a unique British institution where the opposition forms a parallel cabinet to prepare for future office. India has no such institution."},{"id":98,"txt":"The Governor's term of office is:","ref":"","opts":["Fixed at five years.","Determined by the State Legislature.","Subject to the pleasure of the President .","Linked to the term of the Lok Sabha."],"ci":2,"exp":"Ex: While five years is the usual term, the Governor holds office during the pleasure of the President and can be removed at any time."},{"id":99,"txt":"Under the Indian Constitution, the executive power of the Union is vested in:","ref":"","opts":["The Prime Minister.","The Council of Ministers.","The President .","The Parliament."],"ci":2,"exp":"Ex: Article 53 states that the executive power of the Union shall be vested in the President."},{"id":100,"txt":"Which system of government is characterized by the \"Fusion of Powers\"?","ref":"","opts":["Presidential System.","Parliamentary System .","Unitary System.","Federal System."],"ci":1,"exp":"Ex: In a parliamentary system, the executive is part of the legislature, leading to a fusion of powers rather than a strict separation."},{"id":101,"txt":"The \"Kitchen Cabinet\" is a term associated with:","ref":"","opts":["The Indian Prime Minister's residence.","The American Presidential advisory body .","The British House of Commons.","The Indian Zonal Councils."],"ci":1,"exp":"Ex: The American President often governs with the help of a small, informal advisory body known as the 'Kitchen Cabinet'."},{"id":102,"txt":"The \"Integrated Judiciary\" in India means:","ref":"","opts":["Separate courts for Union and State laws.","A single system of courts enforcing both Central and State laws .","Judges are elected by the people.","The Supreme Court has no power over High Courts."],"ci":1,"exp":"Ex: Unlike the US, India has one hierarchy of courts (Supreme Court at top, High Courts below) that handles all legal matters regardless of jurisdiction."},{"id":103,"txt":"The \"Special Majority\" for amending Fundamental Rights requires:","ref":"","opts":["Simple majority of both Houses.","Majority of total membership and two-thirds of those present and voting .","Unanimous vote in the Lok Sabha.","Consent of all State Legislatures."],"ci":1,"exp":"Ex: Article 368 defines this special majority to ensure significant consensus for changing core constitutional provisions."},{"id":104,"txt":"In the context of the President's election, \"Population\" refers to the figures of:","ref":"","opts":["The latest census.","The 1951 census.","The 1971 census .","The 2011 census."],"ci":2,"exp":"Ex: The 84th Amendment (2001) fixed the 1971 census figures as the basis for the President's election until the first census after 2026."},{"id":105,"txt":"The Prime Minister can recommend the dissolution of the Lok Sabha to:","ref":"","opts":["The Speaker.","The Chief Justice.","The President .","The Rajya Sabha."],"ci":2,"exp":"Ex: One of the legislative powers of the PM is advising the President on dissolving the lower house."},{"id":106,"txt":"The \"Integrated Audit Machinery\" (CAG) is considered a unitary feature because:","ref":"","opts":["The states pay the CAG's salary.","The CAG is appointed and removed by the President without state consultation .","The CAG only audits Central accounts.","The CAG is a member of the Cabinet."],"ci":1,"exp":"Ex: Because the states have no say in the appointment or removal of the auditor who controls their financial records, it centralizes power."},{"id":107,"txt":"Under Article 123, an Ordinance must be approved by Parliament within:","ref":"","opts":["Six months.","Six weeks from reassembly .","One month from issuance.","14 days of the session."],"ci":1,"exp":"Ex: Once Parliament meets, it has six weeks to approve or disapprove the ordinance, or it will lapse."},{"id":108,"txt":"The \"Alternative Scheme of Devolution\" (80th Amendment) was based on the recommendations of:","ref":"","opts":["The 1st Finance Commission.","The 10th Finance Commission .","The Sarkaria Commission.","The NITI Aayog."],"ci":1,"exp":"Ex: The 80th Amendment implemented the 10th Finance Commission's plan to share 29% of total Central tax proceeds with the states."},{"id":109,"txt":"In the context of Article 356, the term \"Dead-letter\" was used by:","ref":"","opts":["Dr. B.R. Ambedkar","H.V. Kamath Jawaharlal Nehru","S.R. Bommai Ex: Ambedkar hoped that President's Rule would rarely be used and remain a 'dead-letter', though it later became a 'deadly weapon'."],"ci":0,"exp":"No explanation provided."},{"id":110,"txt":"Who is the \"symbol of unity, integrity and solidarity of the nation\"?","ref":"","opts":["The Prime Minister.","The President .","The Chief Justice.","The Speaker."],"ci":1,"exp":"Ex: As the head of state and first citizen, the President represents the nation's unity."},{"id":111,"txt":"The system of \"Single Citizenship\" in India is similar to that of:","ref":"","opts":["USA.","Canada .","Australia.","Switzerland."],"ci":1,"exp":"Ex: Unlike the US where people have state and national citizenship, India follows the Canadian model of one single national citizenship."},{"id":112,"txt":"The \"Doctrine of Separation of Powers\" is the basis of:","ref":"","opts":["The British Parliamentary system.","The American Presidential system .","The Indian Federal system.","The Unitary system of China."],"ci":1,"exp":"Ex: In the US, legislative, executive, and judicial powers are strictly vested in three independent organs."},{"id":113,"txt":"Who described the Indian federalism as \"cooperative federalism\"?","ref":"","opts":["K.C. Wheare.","Granville Austin .","Morris Jones.","Ivor Jennings."],"ci":1,"exp":"Ex: Austin argued that while the Centre is strong, state governments are not mere administrative agencies."},{"id":114,"txt":"The \"Contingency Fund of India\" is at the disposal of:","ref":"","opts":["The Finance Minister.","The President .","The Prime Minister.","The CAG."],"ci":1,"exp":"Ex: The President can make advances from this fund to meet unforeseen expenditure pending parliamentary approval."},{"id":115,"txt":"Who appoints the Chief Election Commissioner of India?","ref":"","opts":["The Prime Minister.","The Parliament.","The President .","The Chief Justice."],"ci":2,"exp":"Ex: The President appoints the CEC and other election commissioners."},{"id":116,"txt":"\"Escheat and lapse\" are sources of revenue for:","ref":"","opts":["Only the Centre.","Only the States.","Both the Centre and the States .","Neither."],"ci":2,"exp":"Ex: Both levels of government can acquire property through escheat (lack of heirs) or lapse."},{"id":117,"txt":"The \"Joint State Public Service Commission\" members are appointed by:","ref":"","opts":["The concerned Governors.","The President .","The UPSC Chairman.","The Prime Minister."],"ci":1,"exp":"Ex: While regular state commission members are appointed by the Governor, JSPSC members are appointed by the President."},{"id":118,"txt":"The \"Secretariat of the Inter-State Council\" also serves as the secretariat for:","ref":"","opts":["The NITI Aayog.","The Zonal Councils .","The Finance Commission.","The GST Council."],"ci":1,"exp":"Ex: Since 2011, the Inter-State Council Secretariat has also managed the Zonal Councils."},{"id":119,"txt":"Under Article 263, the Inter-State Council is established by:","ref":"","opts":["The Parliament.","The President .","The Prime Minister.","The Chief Justice."],"ci":1,"exp":"Ex: The President can establish the council if it appears that public interest would be served."},{"id":120,"txt":"Who is the Chairman of the \"Standing Committee\" of the Inter-State Council?","ref":"","opts":["The Prime Minister.","The Union Home Minister .","The Finance Minister.","A rotated Chief Minister."],"ci":1,"exp":"Ex: While the PM chairs the full Council, the Home Minister chairs the Standing Committee."},{"id":121,"txt":"\"Full faith and credit\" applies to:","ref":"","opts":["Penal laws.","Civil judgments .","Private records.","Treaty implementation."],"ci":1,"exp":"Ex: Final judgments of civil courts are executable anywhere in India without a fresh suit, but this doesn't extend to criminal judgments."},{"id":122,"txt":"Article 301 guarantees:","ref":"","opts":["Freedom of speech.","Freedom of trade, commerce, and intercourse .","Right to property.","Right to education."],"ci":1,"exp":"Ex: Trade throughout the territory of India shall be free, aiming to break down internal border barriers."},{"id":123,"txt":"The \"Common Chairman\" of all five Zonal Councils is:","ref":"","opts":["The President.","The Prime Minister.","The Union Home Minister .","The Chief Justice."],"ci":2,"exp":"Ex: The Home Minister serves as the chairman for all Zonal Councils."},{"id":124,"txt":"A \"National Emergency\" is technically referred to in the Constitution as:","ref":"","opts":["State Emergency.","Proclamation of Emergency .","Unitary Transformation.","Armed Rebellion."],"ci":1,"exp":"Ex: The Constitution uses the phrase 'proclamation of emergency' for Article 352 situations."},{"id":125,"txt":"The \"38th Amendment (1975)\" made the declaration of National Emergency:","ref":"","opts":["Subject to Parliament.","Immune from judicial review .","Obligatory for the PM.","Limited to six months."],"ci":1,"exp":"Ex: This amendment tried to shield the emergency from court challenges, though the 44th Amendment later restored judicial review."},{"id":126,"txt":"Which House can pass a resolution for the \"Revocation\" of a National Emergency?","ref":"","opts":["Rajya Sabha.","Lok Sabha .","Both Houses.","State Legislatures."],"ci":1,"exp":"Ex: While approval needs both Houses, the Lok Sabha alone can force a revocation by passing a resolution with a simple majority."},{"id":127,"txt":"During a National Emergency, the Centre can give executive directions to a state on:","ref":"","opts":["Only Union List subjects.","Only Concurrent List subjects.","Any matter whatsoever .","No matter without state consent."],"ci":2,"exp":"Ex: The Centre's executive power expands to include the right to direct states on any administrative matter."},{"id":128,"txt":"The \"Minerva Mills case (1980)\" held that:","ref":"","opts":["Parliament has unlimited amending power.","The limited amending power of Parliament is a 'basic feature' .","Directive Principles always prevail over Fundamental Rights.","Judicial review is not part of the basic structure."],"ci":1,"exp":"Ex: The Court ruled that a limited power cannot be used to make that power absolute."},{"id":129,"txt":"Who can initiate \"Charges\" for the impeachment of the President?","ref":"","opts":["Only the Lok Sabha.","Only the Rajya Sabha.","Either House of Parliament .","The Supreme Court."],"ci":2,"exp":"Ex: Charges for violation of the Constitution can be started in either house of Parliament."},{"id":130,"txt":"The \"Security Deposit\" for a Presidential candidate is:","ref":"","opts":["₹2,500.","₹10,000.","₹15,000 .","₹25,000."],"ci":2,"exp":"Ex: Candidates must deposit ₹15,000 with the RBI; it is forfeited if they fail to get one-sixth of the votes."},{"id":131,"txt":"How many \"Proposers\" are required for the nomination of a Presidential candidate?","ref":"","opts":["10.","20.","50 .","100."],"ci":2,"exp":"Ex: To ensure serious candidates, 50 electors must propose and 50 must second the nomination."},{"id":132,"txt":"The President CANNOT return which type of bill for reconsideration?","ref":"","opts":["Ordinary Bill.","Money Bill .","Private Member's Bill.","State Bill reserved by Governor."],"ci":1,"exp":"Ex: The President must either give assent to or withhold it from a Money Bill but cannot return it to the Parliament."},{"id":133,"txt":"Who was the first President to exercise the \"Pocket Veto\"?","ref":"","opts":["Dr. Rajendra Prasad.","Giani Zail Singh .","R. Venkataraman.","K.R. Narayanan."],"ci":1,"exp":"Ex: Zail Singh used the pocket veto on the Indian Post Office (Amendment) Bill in 1986."},{"id":134,"txt":"An \"Ordinance\" can be issued only on subjects:","ref":"","opts":["In the Union List.","In the Concurrent List.","On which Parliament can make laws .","In the State List during normal times."],"ci":2,"exp":"Ex: The ordinance-making power is co-extensive with the legislative power of the Parliament."},{"id":135,"txt":"The Supreme Court's \"D.C. Wadhwa case (1986)\" judgment concerned:","ref":"","opts":["Pardoning power.","Re-promulgation of ordinances .","Federal structure.","Election disputes."],"ci":1,"exp":"Ex: The Court ruled that repromulgating ordinances without attempting to pass bills is a violation of the Constitution."},{"id":136,"txt":"Which term describes \"reducing the period of sentence without changing its character\"?","ref":"","opts":["Commutation.","Remission .","Respite.","Reprieve."],"ci":1,"exp":"Ex: Remission involves shortening the duration, like reducing a two-year sentence to one year."},{"id":137,"txt":"Which President was elected \"Unopposed\"?","ref":"","opts":["Dr. S. Radhakrishnan.","N. Sanjeeva Reddy .","Dr. Rajendra Prasad.","V.V. Giri."],"ci":1,"exp":"Ex: Neelam Sanjeeva Reddy is the only President to have been elected unopposed (1977)."},{"id":138,"txt":"The \"Council of Ministers\" remains in office as long as it enjoys the confidence of:","ref":"","opts":["The President.","The Rajya Sabha.","The Lok Sabha .","The Chief Justice."],"ci":2,"exp":"Ex: Ministerial accountability to the lower house is the core of responsible government."},{"id":139,"txt":"Who is the \"Crisis Manager-in-Chief\" at the political level?","ref":"","opts":["The Home Minister.","The President.","The Prime Minister .","The Defense Minister."],"ci":2,"exp":"Ex: During emergencies, the PM plays the lead role in managing political and administrative crises."},{"id":140,"txt":"\"Sumptuary Allowance\" is provided to:","ref":"","opts":["The President.","The Vice-President.","The Prime Minister .","The Chief Justice."],"ci":2,"exp":"Ex: In addition to salary, the PM receives allowances for entertaining official guests."},{"id":141,"txt":"The \"National Water Resources Council\" is chaired by:","ref":"","opts":["The Water Resources Minister.","The Environment Minister.","The Prime Minister .","The NITI Aayog Chairman."],"ci":2,"exp":"Ex: The PM chairs several top-level councils including the Water Resources Council."},{"id":142,"txt":"The \"Union Budget\" is laid before Parliament by the President under:","ref":"","opts":["Article 110.","Article 111.","Article 112 .","Article 123."],"ci":2,"exp":"Ex: Article 112 refers to the budget as the 'annual financial statement'."},{"id":143,"txt":"\"Qualified Veto\" is possessed by:","ref":"","opts":["The Indian President.","The British Monarch.","The American President .","The Indian Governor."],"ci":2,"exp":"Ex: This veto can be overridden by a higher majority, a feature of the US Constitution."},{"id":144,"txt":"\"Nominal Executive\" is also known as:","ref":"","opts":["De facto executive.","De jure executive .","Real executive.","Administrative executive."],"ci":1,"exp":"Ex: The President is the de jure (by law) head, while the PM is de facto (in practice)."},{"id":145,"txt":"The \"Tarkunde Committee\" recommendations related to:","ref":"","opts":["Judicial appointments.","Caretaker governments .","Centre-State relations.","All-India Services."],"ci":1,"exp":"Ex: This unofficial committee (1975) outlined what a caretaker government should not do."},{"id":146,"txt":"Who is the \"Head of the Indian State\"?","ref":"","opts":["The Prime Minister.","The President .","The Chief Justice.","The Speaker."],"ci":1,"exp":"Ex: The President is the head of state, while the PM is the head of government."},{"id":147,"txt":"The President's \"Executive Actions\" are authenticated according to rules made by:","ref":"","opts":["The Prime Minister.","The Parliament.","The President himself/herself .","The Cabinet Secretary."],"ci":2,"exp":"Ex: The President makes rules specifying how orders in his/her name shall be authenticated."},{"id":148,"txt":"\"Suspensive Veto\" is overridden by the Parliament with:","ref":"","opts":["Special majority.","Ordinary majority .","Unanimous vote.","Consent of States."],"ci":1,"exp":"Ex: If Parliament repasses a returned bill by a simple majority, the President must give assent."},{"id":149,"txt":"The \"Summoning\" of Parliament is a:","ref":"","opts":["Legislative power of the President .","Executive power of the President.","Discretionary power of the Speaker.","Power of the Vice-President."],"ci":0,"exp":"Ex: Summoning, proroguing, and dissolving the Lok Sabha are part of the President's legislative functions."},{"id":150,"txt":"Who performs the \"Duties of the President\" when the President and Vice-President are both unable to act?","ref":"","opts":["The Speaker.","The Chief Justice of India .","The Home Minister.","The senior-most Cabinet Minister."],"ci":1,"exp":"Ex: In the absence of the VP, the CJI (or senior-most SC judge) takes over the functions."},{"id":151,"txt":"\"Inter stellas luna minores\" (moon among lesser stars) describes the PM's role according to:","ref":"","opts":["Lord Morely.","Sir William Vernor Harcourt .","Jennings.","Munro."],"ci":1,"exp":"Ex: Harcourt used this phrase to illustrate the PM's pre-eminence among other ministers."},{"id":152,"txt":"Which Constitutional Amendment added \"Socio-economic justice\" to the basic structure (Welfare State)?","ref":"","opts":["Kesavananda Case.","Minerva Mills Case.","Bhim Singhji Case .","Bommai Case."],"ci":2,"exp":"Ex: In the Bhim Singhji Case (1980), the Welfare State (socio-economic justice) was declared a basic feature."},{"id":153,"txt":"The \"Salary\" of the Vice-President is fixed in his/her capacity as:","ref":"","opts":["Vice-President.","Chairman of Rajya Sabha .","Acting President.","Member of Parliament."],"ci":1,"exp":"Ex: The Constitution doesn't fix a salary for the VP as such; they draw a salary as the head of the upper house."},{"id":154,"txt":"\"Elections to Parliament\" can be amended by:","ref":"","opts":["Special majority.","Simple majority .","Parliamentary resolution.","Executive order."],"ci":1,"exp":"Ex: Provisions regarding elections and delimitation are amended outside the scope of Article 368."},{"id":155,"txt":"Who is the \"Principal Channel of Communication\" between President and Cabinet?","ref":"","opts":["The Cabinet Secretary.","The Prime Minister .","The Speaker.","The Vice-President."],"ci":1,"exp":"Ex: It is the duty of the PM to keep the President informed of all cabinet decisions."},{"id":156,"txt":"\"Collective Responsibility\" implies that:","ref":"","opts":["All ministers must be from the same party.","The Lok Sabha can remove the ministry by a vote of no-confidence .","Ministers are responsible to the President individually.","The Prime Minister can act without consulting the cabinet."],"ci":1,"exp":"Ex: The entire team \"swims and sinks together,\" meaning the house can oust the whole government at once."},{"id":157,"txt":"Which amendment gave constitutional status to \"Panchayats\"?","ref":"","opts":["42nd Amendment.","44th Amendment.","73rd Amendment .","101st Amendment."],"ci":2,"exp":"Ex: The 73rd and 74th Amendments (1992) granted status to rural and urban local bodies."},{"id":158,"txt":"The \"Union List\" includes:","ref":"","opts":["Public order.","Agriculture.","Atomic energy .","Police."],"ci":2,"exp":"Ex: Atomic energy, defense, and foreign affairs are matters of national importance in the Union List."},{"id":159,"txt":"The \"State List\" includes:","ref":"","opts":["Banking.","Currency.","Public health and sanitation .","Inter-state trade."],"ci":2,"exp":"Ex: Local and regional matters like health, sanitation, and police are in the State List."},{"id":160,"txt":"\"Marriage and divorce\" is a subject in:","ref":"","opts":["The Union List.","The State List.","The Concurrent List .","The Residuary List."],"ci":2,"exp":"Ex: Subjects where nationwide uniformity is desirable but not essential are in the Concurrent List."},{"id":161,"txt":"\"Education\" was moved to the Concurrent List from the State List by:","ref":"","opts":["The 24th Amendment.","The 42nd Amendment .","The 44th Amendment.","The 101st Amendment."],"ci":1,"exp":"Ex: Five subjects were transferred in 1976 to allow Central involvement in policy."},{"id":162,"txt":"In case of conflict on a Concurrent subject, whose law prevails?","ref":"","opts":["The State's law.","The Centre's law .","The law passed later in time.","The law approved by the Supreme Court."],"ci":1,"exp":"Ex: Federal supremacy ensures that Central law overrides state law in the concurrent sphere to maintain uniformity."},{"id":163,"txt":"The \"Exception\" to Central law prevailing on a Concurrent subject is:","ref":"","opts":["If the State law is older.","If the State law received Presidential assent .","If the Lok Sabha approves the State law.","There is no exception."],"ci":1,"exp":"Ex: A state law can prevail in that specific state if it was reserved for and received the President's assent."},{"id":164,"txt":"\"Residuary Taxes\" are levied by:","ref":"","opts":["The States.","The Parliament .","The Finance Commission.","The President."],"ci":1,"exp":"Ex: Examples include gift tax and wealth tax, which are not listed in any of the three schedules."},{"id":165,"txt":"The \"Sarkaria Commission\" observed that federal supremacy is:","ref":"","opts":["An invasion of state authority.","Indispensable for the federal system .","A static institutional concept.","Unconstitutional."],"ci":1,"exp":"Ex: The commission argued that without union supremacy, there would be legal chaos and confusion."},{"id":166,"txt":"\"Double Membership\" in a parliamentary system means:","ref":"","opts":["Being a member of both Houses.","Being a member of both the Executive and the Legislature .","Having citizenship of two countries.","Representing two constituencies."],"ci":1,"exp":"Ex: Ministers must be members of Parliament; this facilitates coordination but goes against strict separation of powers."},{"id":167,"txt":"The \"President's satisfaction\" in declaring emergency:","ref":"","opts":["Is beyond judicial review.","Is justifiable on the ground of malafide .","Must be approved by the CJI.","Is only required for Financial Emergency."],"ci":1,"exp":"Ex: The Supreme Court restored judicial review to prevent arbitrary use of emergency powers."},{"id":168,"txt":"\"Armed rebellion\" as a ground for emergency must be:","ref":"","opts":["Determined by the President alone.","Based on a written recommendation of the Cabinet .","Certified by the Chief of Army Staff.","Approved by the Supreme Court."],"ci":1,"exp":"Ex: This requirement was added in 1978 to ensure the Prime Minister does not act unilaterally."},{"id":169,"txt":"During a \"National Emergency\", the Parliament can make laws on:","ref":"","opts":["Only subjects in the Union List.","Any subject in the State List .","Only subjects approved by the states.","No subjects without a new amendment."],"ci":1,"exp":"Ex: Emergency converts the federal structure into a unitary one, giving Parliament overarching powers."},{"id":170,"txt":"\"Article 358\" suspends Article 19:","ref":"","opts":["For the entire duration of the emergency .","Only for a period specified by the President.","Only in parts of the country.","Only if specified in a Presidential order."],"ci":0,"exp":"Ex: Article 358 is more rigid and automatic compared to Article 359."},{"id":171,"txt":"\"Article 359\" can operate:","ref":"","opts":["Only during External Emergency.","Only during Internal Emergency.","During both External and Internal Emergencies .","Only during President's Rule."],"ci":2,"exp":"Ex: Article 359 provides the President with flexibility across all types of National Emergency."},{"id":172,"txt":"The \"Maximum duration\" of President's Rule in a state is:","ref":"","opts":["6 months.","1 year.","3 years .","Indefinite."],"ci":2,"exp":"Ex: While National Emergency can go on indefinitely, President's Rule must end within three years."},{"id":173,"txt":"\"Financial Emergency\" (Article 360) requires parliamentary approval within:","ref":"","opts":["1 month.","2 months .","6 months.","No approval required."],"ci":1,"exp":"Ex: Both President's Rule and Financial Emergency have a two-month window for approval."},{"id":174,"txt":"Once approved, \"Financial Emergency\" continues:","ref":"","opts":["For six months.","For one year.","Indefinitely until revoked .","For a maximum of three years."],"ci":2,"exp":"Ex: Unlike other emergencies, Article 360 does not require repeated approvals."},{"id":175,"txt":"The \"Pardoning power\" is:","ref":"","opts":["A judicial power of the President.","An executive power of the President .","A discretionary power of the CJI.","A power of the Home Ministry."],"ci":1,"exp":"Ex: Though it deals with sentences, it is an executive function exercised on cabinet advice."},{"id":176,"txt":"\"Commutation\" means:","ref":"","opts":["Removing both sentence and conviction.","Substituting one form of punishment for a lighter one .","Reducing the period of sentence.","Awards a lesser sentence for pregnancy."],"ci":1,"exp":"Ex: An example is changing a death sentence to life imprisonment."},{"id":177,"txt":"\"Reprieve\" means:","ref":"","opts":["Reducing the character of punishment.","A stay of execution of a sentence .","Awarding a lesser sentence.","Complete absolution."],"ci":1,"exp":"Ex: This is often used to give a convict time to apply for mercy."},{"id":178,"txt":"\"Qualified Majority\" (USA) refers to:","ref":"","opts":["A simple majority.","A majority of total membership.","A higher majority required to override a veto .","A two-thirds majority of present and voting."],"ci":2,"exp":"Ex: The Indian President's suspensive veto is easier to override than the US version."},{"id":179,"txt":"\"Political Homogeneity\" in a cabinet means:","ref":"","opts":["All ministers are of the same age.","All ministers belong to the same political party .","Ministers have the same educational background.","Ministers are from the same state."],"ci":1,"exp":"Ex: This ensures they share an ideology, though coalition governments rely on consensus."},{"id":180,"txt":"Who can be a \"Minister\" in the Union Government?","ref":"","opts":["Only Lok Sabha members.","Only Rajya Sabha members.","Any member of Parliament or a person who becomes one within 6 months .","Only persons with 35 years of age."],"ci":2,"exp":"Ex: Ministers can be from either house, and even non-members can be appointed temporarily."},{"id":181,"txt":"\"Joint Sitting\" of both Houses is presided over by:","ref":"","opts":["The President.","The Vice-President.","The Speaker of Lok Sabha .","The Prime Minister."],"ci":2,"exp":"Ex: The President summons the sitting, but the Speaker leads the proceedings."},{"id":182,"txt":"\"Veto\" is a Latin word meaning:","ref":"","opts":["To approve.","To forbid .","To delay.","To sign."],"ci":1,"exp":"Ex: The word accurately reflects the power to stop a piece of legislation."},{"id":183,"txt":"\"Article 360\" (Financial Emergency) satisfaction of the President:","ref":"","opts":["Is beyond judicial review.","Is subject to judicial review .","Requires Lok Sabha approval first.","Must be based on a RBI report."],"ci":1,"exp":"Ex: Like other emergencies, the court can review it for malafide intent."},{"id":184,"txt":"\"Union Territories\" are administered by:","ref":"","opts":["The Prime Minister.","The Home Minister.","The President through administrators .","The Zonal Councils."],"ci":2,"exp":"Ex: The President manages UTs directly or through appointed officials."},{"id":185,"txt":"\"Inter-State Trade Commission\" (Article 307):","ref":"","opts":["Is a permanent body.","Has not been appointed so far .","Is chaired by the Home Minister.","Was established in 1990."],"ci":1,"exp":"Ex: Though provided for in the Constitution, this authority has never been created."},{"id":186,"txt":"The \"Punchhi Commission\" report was submitted in:","ref":"","opts":["1988.","1990.","2007.","2010 ."],"ci":3,"exp":"Ex: The second commission on Centre-State relations released its seven-volume report in 2010."},{"id":187,"txt":"\"Shadow Cabinet\" prepares members for:","ref":"","opts":["Judicial roles.","Future ministerial office .","Diplomatic missions.","Parliamentary committees."],"ci":1,"exp":"Ex: It is an \"alternative cabinet\" formed by the opposition to stay ready for power."},{"id":188,"txt":"The \"Comptroller and Auditor General\" is appointed by:","ref":"","opts":["The Prime Minister.","The President .","The Finance Commission.","The UPSC."],"ci":1,"exp":"Ex: The CAG is a key constitutional office appointed by the head of state."},{"id":189,"txt":"\"Article 312\" deals with:","ref":"","opts":["Financial Emergency.","Zonal Councils.","All-India Services .","Election of President."],"ci":2,"exp":"Ex: This article provides the procedure for creating new national-level services."},{"id":190,"txt":"\"Rajya Sabha\" represents:","ref":"","opts":["The people of India.","The States of Indian Federation .","The President.","The Union Territories only."],"ci":1,"exp":"Ex: It is the \"Council of States,\" designed to safeguard provincial interests."},{"id":191,"txt":"\"Simple Majority\" amendment is used for:","ref":"","opts":["Fundamental Rights.","DPSP.","Creation of new States .","Supreme Court jurisdiction."],"ci":2,"exp":"Ex: Changes like state reorganization or language use are done outside Article 368."},{"id":192,"txt":"\"P.V. Narasimha Rao\" was the first PM from:","ref":"","opts":["North India.","South India .","West India.","East India."],"ci":1,"exp":"Ex: He was a former Chief Minister of Andhra Pradesh before becoming PM."},{"id":193,"txt":"\"Article 280\" pertains to:","ref":"","opts":["The Inter-State Council.","The Finance Commission .","The GST Council.","All-India Services."],"ci":1,"exp":"Ex: This article mandates a five-yearly commission for fiscal federalism."},{"id":194,"txt":"Who described PM as \"captain of the ship of the state\"?","ref":"","opts":["Lord Morely.","Munro .","Ramsay Muir.","Laski."],"ci":1,"exp":"Ex: This maritime analogy highlights the PM's leadership of the executive branch."},{"id":195,"txt":"\"Absolute Majority\" in President's election means:","ref":"","opts":["Securing more votes than the nearest rival.","Securing a fixed quota of votes .","Getting 100% of votes.","Winning in all states."],"ci":1,"exp":"Ex: The winner must cross a specific mathematical threshold to be declared elected."},{"id":196,"txt":"\"Article 161\" gives pardoning power to:","ref":"","opts":["The President.","The Governor .","The Prime Minister.","The High Court."],"ci":1,"exp":"Ex: The Governor's power is similar but more restricted than the President's."},{"id":197,"txt":"\"His Superfluous Highness\" is a comment on:","ref":"","opts":["The President.","The Vice-President .","The Prime Minister.","The Speaker."],"ci":1,"exp":"Ex: Some scholars use this phrase because the Vice-President has few significant independent functions."}],"m":null,"tt":11880,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>
