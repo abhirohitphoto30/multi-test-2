@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 37</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 37</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 37">PW ONLY IAS 2026 = 37</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to Gupta-period inscriptions, tamra-śāsanas primarily record","ref":"","opts":["proclamations of military conquests","decisions of royal courts of justice","grants of land and related fiscal privileges","details of temple rituals and ceremonies"],"ci":2,"exp":"Ex: During the Gupta period (c. 4th–6th centuries CE), the use of tamra-śāsanas (copper-plate charters) became a standardized administrative practice for recording the permanent transfer of land and the accompanying legal and tax exemptions. The Nature of Tamra-śāsanas: While stone inscriptions (prashastis) were often used for public displays of royal genealogy and military glory, copper plates were legal documents. They were usually issued to individuals (mostly Brahmins) or religious institutions (Buddhist or Jaina monasteries). Contents of the Plates: A typical Gupta copper plate followed a specific legal formula: 1. Genealogy: A brief history of the donor king's lineage. 2. The Grant: Precise details of the land being donated (boundaries, village name). 3. Fiscal Privileges: A list of taxes the state would no longer collect from that land (e.g., udranga, uparikara), transferring that income to the donee. 4. The Curse: A concluding spiritual threat against anyone (including future kings) who might try to revoke the grant. Hence option C is correct."},{"id":1,"txt":"With reference to Hun rulers in India, consider the following statements:\n1. The Eran stone inscription is issued in the name of Toramana, providing direct epigraphic evidence of Hun political authority in central India.\n2. The Bhitari inscription records the defeat of the Huns and was issued by Skandagupta.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: The Eran Stone Boar Inscription (Madhya Pradesh) is a crucial historical marker. It was issued in the 1st regnal year of Toramana, the Huna ruler. The inscription records the construction of a temple by a local feudatory who had shifted his allegiance from the Guptas to Toramana. This proves that Huna authority had penetrated deep into central India (Malwa region) by the early 6th century. SPP 22638 Statement 2 is correct: The Bhitari Pillar Inscription (Ghazipur, Uttar Pradesh) was issued by the Gupta Emperor Skandagupta (c. 455–467 CE). It is a heroic Prashasti that describes his desperate struggle to save the empire. It explicitly records his decisive victory over the Huns, stating that he \"shook the earth\" when he joined in close conflict with them. This victory delayed the Huna conquest of the Gangetic heartland for several decades."},{"id":2,"txt":"Which one of the following sources is most useful for understanding the ideals, values, and courtly culture of the Gupta period, rather than reconstructing specific political events?","ref":"","opts":["Devichandraguptam","Raghuvaṃśa","Allahabad Pillar inscription","Narada Smriti"],"ci":1,"exp":"Ex: Raghuvaṃśa (b) is correct: This mahakavya (epic poem) by Kalidasa ostensibly tells the story of the Raghu dynasty (of Lord Rama), but historians widely agree it is a poetic reflection of the Gupta courtly ideal. It articulates the concept of the Digvijaya (conquest of the four quarters), the ideal of the \"Chakravartin\" ruler who is both a conqueror and a protector of Dharma, and the sophisticated aesthetic standards of the urban elite (Nagarakas). It captures the ethos of the age rather than the chronology. Devichandraguptam (a) is incorrect: This play by Vishakhadatta is primarily used by historians to reconstruct a specific political event: the controversial transition of power from Ramagupta to Chandragupta II. It is more about a political crisis than general cultural values. Allahabad Pillar Inscription (c) is incorrect: This is the quintessential political and military record. While it uses poetic language (Prashasti), its core function is to list the specific kings and regions conquered by Samudragupta. It is a \"fact-heavy\" document for political history. 2 Narada Smriti (d) is incorrect: This is a legal and normative text. While it reflects the values of the era regarding law, inheritance, and judicial procedure, it is a technical manual of \"what should be\" rather than a literary depiction of \"courtly culture\" and high-art ideals."},{"id":3,"txt":"The expression “Licchavi-Duhitra” in Gupta records primarily served to:","ref":"","opts":["Prove Chandragupta I’s Kshatriya origin","Legitimize Samudragupta’s sovereignty","Establish matrimonial diplomacy with republics","Assert political continuity from Magadha"],"ci":1,"exp":"Ex: In the context of the 4th century CE, the title Licchavi-Duhitra (Son of the daughter of the Licchavis) was a strategic genealogical claim rather than a mere family record. The Significance of the Maternal Line: In the Allahabad Pillar Inscription (Prayaga Prashasti), Samudragupta is explicitly and repeatedly called \"the son of the daughter of the Licchavis.\" This is a striking departure from the standard ancient Indian practice where kings primarily emphasized their paternal lineage (Pitripaksha). The Question of Varna Status: The Guptas are widely believed to have been of Vaishya origin. By highlighting his connection to the Licchavis—an ancient, prestigious, and powerful Kshatriya clan of Vaishali— Samudragupta sought to acquire the \"Kshatriya\" social capital necessary for imperial legitimacy. Political Legitimacy: The Licchavis had a long history of dominance in the Magadha region. The marriage of Chandragupta I to the Licchavi princess Kumaradevi was likely the catalyst that transformed the Guptas from local petty rulers into imperial contenders. For Samudragupta, being a \"Licchavi-Duhitra\" meant he was the rightful heir to the combined territories and prestige of both the Guptas and the Licchavis. Hence option B is correct."},{"id":4,"txt":"Consider the following pairs:\nFeature Ruler Kaviraja Samudragupta Ashvamedha type coins Samudragupta Lion-slayer imagery Chandragupta II\nHow many pairs are correctly matched?","ref":"","opts":["Only One","Only Two","All Three","None"],"ci":2,"exp":"Ex: Pair 1 is Correct: In the Allahabad Pillar Inscription, Samudragupta is described as a \"King of Poets\" (Kaviraja). His musical SPP 22638 interest is further corroborated by his Lyrist- type coins, which depict him sitting on a couch and playing the Veena. Pair 2 is Correct: Samudragupta revived the Vedic horse sacrifice to celebrate his Digvijaya (conquest of the four quarters). He issued specialized gold coins for the occasion, featuring a sacrificial horse on the obverse and the legend \"The restorer of the Ashvamedha\" (Ashvamedha-parakramah) on the reverse. Pair 3 is Correct: While Samudragupta had \"Tiger-slayer\" coins (commemorating his conquests in the forest-clad regions of the South), Chandragupta II introduced the Lion-slayer type. This was symbolic of his conquest of the Saka Kshatrapas of Western India (Gujarat/Saurashtra), a region where the Asiatic lion was a prominent symbol of local power."},{"id":5,"txt":"With reference to Gupta patronage of Buddhism, consider the following statements:\n1. A Chinese Buddhist pilgrim I-tsing records that a Gupta ruler built a chaitya near Nalanda specifically for Chinese pilgrims.\n2. This reference relates to Srigupta, whose patronage predates the development of Nalanda as a full-fledged mahāvihāra.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: The Chinese monk I- tsing (Yijing), who traveled to India in the 7th century CE, recorded a tradition about a king named \"Che-li-ki-to\" (identified as Srigupta, the earliest known Gupta ruler). According to I-tsing, this king built a temple (a China-shala or chaitya) near a site often associated with the early vicinity of Nalanda for the benefit of Chinese pilgrims coming to India. Statement 2 is correct: Srigupta is the first known figure of the dynasty (c. late 3rd century CE). His patronage of this \"China Temple\" happened long before the \"Imperial Guptas\" (starting with Chandragupta I) rose to power and centuries before Kumaragupta I formally endowed Nalanda as a monastic university (Mahavihara) in the 5th century CE. It shows that even when the Guptas were small local chieftains, they were engaged in religious diplomacy and international Buddhist networks. 3"},{"id":6,"txt":"The imperial title “Digvijaya” (universal conquest) attributed to Chandragupta II is most convincingly corroborated by evidence from","ref":"","opts":["the Allahabad Pillar inscription","the Udayagiri cave inscription","the Mehrauli Iron Pillar inscription","Fa-Hien’s travel account"],"ci":1,"exp":"Ex: Option B is correct: The Udayagiri Cave Inscription is the most crucial piece of evidence for Chandragupta II’s military ideology. One of the inscriptions here was made by Saba Virasena, his Minister of War and Peace (Sandhivigrahika). It explicitly states that the king came to the region \"with the desire to conquer the whole world\" (Kritsna-Prithvi-Jaya-Arthena). Udayagiri (near Vidisha, MP) was the strategic base for his campaign against the Western Kshatrapas (Sakas). Option A is incorrect: Allahabad Pillar Inscription is the primary record for Samudragupta, not Chandragupta II. It details the first great Digvijaya of the Gupta era, but it belongs to the father, not the son. Option C is incorrect: The Mehrauli Iron Pillar Inscription mentions a king named \"Chandra\" who conquered the Vahlikas (Bactria) and the southern oceans. While most historians identify \"Chandra\" with Chandragupta II, it is a posthumous record and more poetic/eulogistic in nature compared to the contemporary military records at Udayagiri. Option D is incorrect: Fa-Hien provides an excellent description of the social and religious conditions of the empire. However, interestingly, he does not even mention the name of the king (Chandragupta II) and provides almost no details on military conquests or political history."},{"id":7,"txt":"Among the Navaratnas traditionally associated with the Gupta court, which pair together represents contributions to Sanskrit grammar (structure of language) and lexicography (meaning of words)?","ref":"","opts":["Vararuchi and Amarasimha","Kalidasa and Varahamihira","Dhanvantari and Sankhu","Vetala Bhatta and Ghatakarapara"],"ci":0,"exp":"Ex: The legend of the Navaratnas (Nine Gems) in the court of \"Vikramaditya\" (Chandragupta II) serves as a cultural metaphor for the intellectual explosion of the Gupta \"Golden Age.\" SPP 22638 Vararuchi (Grammar): Traditionally identified as a great grammarian, he is associated with the study of the structure of language. He is credited with the Prakrita- Prakasha, the oldest extant grammar of the Prakrit language, and is often linked to the tradition of Panini’s Sanskrit grammar. His work was essential for maintaining the linguistic standards of the court. Amarasimha (Lexicography): He was a Buddhist scholar and the author of the Amarakosha (also known as Namalinganushasana). This is the most celebrated thesaurus and dictionary of the Sanskrit language. It organizes words by meaning (synonyms) and gender, making it the foundational text for Sanskrit lexicography. Hence option A is correct. Name Field / Contribution Kalidasa Literature and Drama (The greatest of all) Amarasimha Lexicography (Amarakosha) Vararuchi Grammar and Prakrit studies Dhanvantari Medicine (Ayurveda) Varahamihira Astronomy and Astrology (Brihat Samhita) Kshapanaka Astrology Shanku Architecture (Shilpa Shastra) Vetala Bhatta Magician / Occultist (Niti-pradeepa) Ghatakarapara Poetry and Sculpture"},{"id":8,"txt":"With reference to classical Sanskrit authors and their works, consider the following pairs:\nPerson Work /Association\n1. Kalidasa Ritusamhara\n2. Varahamihira Brihadsamhita\n3. Amarasimha Kavyamimamsa\n4. Dhanvantari Ayurveda\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only two","Only three","All four","Only one"],"ci":1,"exp":"Ex: Kalidasa — Ritusamhara is Correct: Ritusamhara (The Gathering of the Seasons) is widely considered to be Kalidasa's earliest work. It is a lyrical poem that vividly describes the six Indian seasons (Ritus) and their impact on lovers. 4 Varahamihira — Brihadsamhita is Correct: Varahamihira was a monumental figure in Indian science. His Brihadsamhita is an encyclopedic work covering a vast array of subjects including astronomy, planetary movements, eclipses, rainfall, clouds, architecture, and even the qualities of gemstones. Amarasimha — Kavyamimamsa is Incorrect: This is the mismatched pair. Amarasimha is the author of the Amarakosha (the famous Sanskrit lexicon). The Kavyamimamsa, which is a practical guide for poets and a work on poetics, was actually written much later (10th century CE) by the scholar Rajasekhara. Dhanvantari — Ayurveda is Correct: In the Gupta tradition, Dhanvantari is celebrated as the \"father of Indian medicine.\" While \"Dhanvantari\" is also the name of the mythological physician of the gods, the courtly figure associated with the Navaratnas represents the peak of medical knowledge (Ayurveda) during the Gupta era"},{"id":9,"txt":"The Damodar Copper Plate of Kumaragupta I is significant because it indicates:","ref":"","opts":["Complete monetisation of rural economy","Royal monopoly over commercial credit","Institutional role of trade guilds in finance","State-regulated interest rates"],"ci":2,"exp":"Ex: The Damodarpur Copper Plate inscriptions (specifically those dating to the reign of Kumaragupta I in the 5th century CE) are among the most important administrative documents of the Gupta period. They provide a \"molecular\" view of how local government and the economy actually functioned in the province of Pundravardhana (modern-day Bengal). The significance of these plates lies in the description of the Adhisthana-adhikarana (the city/district board). The board was not composed solely of royal officials, but of representatives from the most powerful economic interests in the region: 1. Nagarasreshthi: The Chief Merchant (representing the urban business community and trade guilds). SPP 22638 2. Sarthavaha: The Chief Caravan Leader (representing the mobile trading community). 3. Prathama-kulika: The Chief Artisan (representing the various craft guilds). 4. Prathama-kayastha: The Chief Scribe (representing the professional administrative class). These individuals had a decisive say in the sale and transfer of state-owned wasteland (khila). When an individual wanted to buy land to donate to a temple or a Brahmin, they had to apply to this board. This proves that trade guilds and merchant leaders were institutionally integrated into the financial and land-administration machinery of the state. Hence option C is correct."},{"id":10,"txt":"With reference to administrative officials in ancient Indian polity, consider the following pairs:\nOfficial Primary function\n1. Saulkika Collection of customs duties and tolls\n2. Gaulmika Administration of forests and forts\n3. Agradhika Supervision of agrahara (tax- free) land grants\n4. Dhruvadh- Assessment and collection of ikarana land revenue\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Saulkika — Collection of customs duties and tolls is Correct: The term is derived from Shulka (customs or tolls. The Saulkika was the official responsible for collecting duties on goods entering a city or crossing a frontier. This role was vital for revenue generation in the highly commercialized Gupta and post-Gupta periods. Gaulmika — Administration of forests and forts is Incorrect: While the Gaulmika had a military role, the pair is mismatched. In the Satavahana system, a Gaulmika was the head of a Gulma (a small military squadron). However, their primary administrative function was the supervision of rural areas and villages on behalf of the state, serving as a local military-cum-police administrator. The administration of forests was traditionally handled by the Atavika or Atavikapala. Agradhika — Supervision of agrahara land grants is Correct: Derived from Agrahara (land granted to Brahmins or religious institutions), the Agradhika was the official tasked with the oversight and management of these tax-free zones. This involved ensuring that the conditions of the grant were met and that the donees received their stipulated privileges. 5 Dhruvadhikarana — Assessment and collection of land revenue is Correct: The term Dhruva refers to the fixed or permanent share of the grain produced. The Dhruvadhikarana (or Dhruvasthanadhi- karanika) was a key Gupta official who oversaw the permanent records of land revenue and ensured the regular collection of the state's share of the harvest."},{"id":11,"txt":"Consider the following officials:\n1. Senapati\n2. Baladhyaksha\n3. Mahabaladhyaksha\n4. Bhatasvapati\nWhich of the above would most likely have exercised direct command over infantry units?","ref":"","opts":["1 and 4 only","2 and 3 only","1, 2 and 3 only","1 only"],"ci":0,"exp":"Ex: Senapati is Correct: Senapati was the field commander of the army. He exercised direct operational command during campaigns. He could command multiple arms, including infantry units. Baladhyaksha & Mahabaladhyaksha are incorrect: These were high-ranking administrative officials. The Baladhyaksha was the \"Superintendent of Forces,\" and the Mahabaladhyaksha was the \"Great Superintendent of Forces.\" While they were senior in rank to a Senapati, their role was more about the management, recruitment, and supply of the entire military machine rather than the direct tactical command of infantry units on the battlefield. Bhatasvapati is Correct: This is a specialized title. Bhata refers to infantry/soldiers, and Asva refers to horses/cavalry. In the later Gupta and Vardhana (Harsha) administrations, the Bhatasvapati (sometimes referred to as Mahabhatasvapati) was the commander who had direct oversight and command over the regular foot-soldiers and the cavalry detachments that supported them."},{"id":12,"txt":"With reference to land grants in the Gupta period, consider the following statements:\n1. Early Gupta land grants prohibited beneficiaries from transferring land or rents further.\n2. The Indore grant of Skandagupta marks a shift by allowing cultivation rights to the grantee.\n3. Evidence of sub-infeudation is mostly absent in Gupta inscriptions.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","1 and 2 only","1 and 3 only"],"ci":0,"exp":"Ex: Statement 1 is correct: In the early Gupta period, land grants (especially those to Brahmins or religious institutions) were often strictly personal or institutional. The charters frequently included clauses that prevented the SPP 22638 beneficiary from selling, mortgaging, or sub- letting the land to others. The state’s primary goal was to ensure the land was used for the specified religious or charitable purpose without creating unauthorized secondary layers of authority. Statement 2 is incorrect: The Indore Copper Plate Inscription of Skandagupta (465 CE) is famous for a different reason. It records an endowment by a merchant for the maintenance of a lamp in a Sun temple. It does not represent a shift toward granting \"cultivation rights\" in a revolutionary way; rather, it highlights the role of guilds (specifically the oil-pressers' guild) in managing the interest of a permanent endowment (akshaya-nivi). Statement 3 is incorrect: Evidence of sub- infeudation (the practice where a grantee further grants portions of their land to others) is actually present in later Gupta inscriptions. By the late 5th and early 6th centuries, we see records of \"secondary grants,\" where a recipient of a royal land grant would, with the king's permission or sometimes independently, donate a part of that land to someone else. This is one of the key markers of the weakening central authority and the rise of a landed intermediary class."},{"id":13,"txt":"Which pairing is correctly matched?","ref":"","opts":["Bhitargaon Temple – Panchayatana style","Dashavatara Temple, Deogarh – Platform- based brick temple","Bhitargaon Temple – Early structural Nagara temple","Dashavatara Temple, Deogarh – Rock-cut architecture"],"ci":2,"exp":"Ex: Bhitargaon Temple is located in Kanpur, Uttar Pradesh, this is the oldest surviving brick temple in India (5th century CE). It is an \"early structural Nagara\" temple because it features a Shikhara (spire), though the spire is somewhat truncated. Its walls are decorated with beautiful terracotta panels depicting mythological scenes. Hence option C is correct. Dashavatara Temple, Deogarh (Incorrect pairs a, b, d): It is one of the earliest examples of the Panchayatana style (where a main shrine is surrounded by four smaller subsidiary shrines). It is a stone structural temple, not a brick one (unlike Bhitargaon). It 6 is built on a high platform (Jagati) with four stairways, but it is definitely not rock-cut; it is a \"structural\" temple, meaning it was built using dressed stone blocks."},{"id":14,"txt":"With reference to classical Sanskrit literature,\n1. Raghuvaṃśam\n2. Kumārasambhavam\n3. Śiśupālavadha\n4. Naiṣadhīyacaritam\nwhich of the following works do NOT belong to the Gupta period, though they are part of the broader classical tradition? Select the correct answer using the code below:","ref":"","opts":["3 and 4 only","3 only","1 and 2 only","4 only"],"ci":0,"exp":"Ex: Raghuvaṃśam and Kumārasambhavam (1 & 2) are incorrect: These are the masterpieces of Kalidasa, the court poet of Chandragupta II (Vikramaditya). Raghuvaṃśam traces the lineage of the Raghu dynasty (ending with Agnivarna). Kumārasambhavam describes the birth of Kartikeya (Kumara). These exemplify the \"Gupta Style\": balanced, graceful, and emphasizing the ideal of the Chakravartin king. Chronological Mapping of Classical Poets Poet Era Primary Patronage Kalidasa 4th-5th Century Gupta (Chandragupta II) Bharavi 6th Century Pallava / Western Ganga Magha 7th-8th Century Western Indian Dynasties Bhavabhuti 8th Century Yashovarman of Kannauj Sriharsha 12th Century Gahadavalas"},{"id":15,"txt":"Consider the following pairs:\nText/School Concept attributed\n1. Shulvasutras — Preparationsacrificial altars of\n2. Yavanajataka — Decimal place value\n3. ChhandasutraPingala — of Binary numeration\n4. Vaisheshika school Atomic theory\nWhich of the pairs given above are correctly matched?","ref":"","opts":["1, 2 and 4 only","1, 3 and 4 only","2 and 3 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Shulvasutras (1) is Correct: These are the oldest Indian texts on geometry, dating back to the late Vedic period. They provided the mathematical rules for the construction of complex sacrificial altars (vedis). The \"Baudhayana Shulvasutra\" contains one of the earliest statements of what is now known as the Pythagorean Theorem. Yavanajataka (2) is Incorrect: The Yavanajataka (written by Sphujidhvaja) is primarily a foundational text of Horoscopy/Astrology (Jataka) influenced by Hellenistic (Greek) traditions. While it contains mathematical calculations for planetary positions, it is not the source attributed to the decimal place value system. That breakthrough is associated with later SPP 22638 Śiśupālavadha (3) is correct: This work was composed by Magha in the 7th or 8th century CE (likely under the patronage of the Western Indian King Varmalata or during the later Pratihara/Gurjara transition). It is famous for its linguistic complexity and is considered part of the \"Post-Gupta\" or Early Medieval trend where poets focused more on verbal acrobatics (Chitrakavya) than the simplicity of Kalidasa. Naiṣadhīyacaritam (4) is correct: This epic, based on the story of Nala and Damayanti, was composed by Sriharsha in the 12th century CE under the patronage of the Gahadavala King Jayachandra of Kannauj. This represents the peak of the late classical style, characterized by extreme ornamentation and philosophical depth. Famous Work Raghuvaṃśam Kirātārjunīya Śiśupālavadha Uttararamacharita Naiṣadhīyacaritam mathematicians like Aryabhata and Brahmagupta. Chhandasutra of Pingala (3) is Correct: Pingala’s work on prosody (the study of poetic meters) dates to roughly the 3rd or 2nd century BCE. In his quest to categorize all possible combinations of light (laghu) and heavy (guru) syllables, he effectively developed a system of binary numeration. He also described what is now known as Pascal’s Triangle (called Meru Prastara in India). Vaisheshika School (4) is Correct: Founded by the sage Kanada, the Vaisheshika school of philosophy is famous for its atomic theory (Paramanu-vada). It posited that the physical universe is composed of indivisible, eternal atoms (paramanus). This was a sophisticated attempt to explain the material world through logic and categorization (Padarthas). 7"},{"id":16,"txt":"With reference to Taxila as a centre of learning, consider the following statements:\n1. Taxila had a centralized administrative authority regulating curriculum and examinations.\n2. Teachers at Taxila enjoyed complete autonomy in framing their syllabus.\n3. Guru-dakshina was compulsory and its duration depended on the teacher’s satisfaction.\n4. Alexander carried scholars from Taxila to Greece during his invasion.\nWhich of the statements given above are correct?","ref":"","opts":["2 and 4 only","1, 3 and 4 only","2, 3 and 4 only","1 and 2 only"],"ci":0,"exp":"Ex: Statement 1 is incorrect: Unlike Nalanda, which had a Rector (Pandita), a structured admissions exam (at the Dvarapala level), and centralized housing, Taxila was a collection of independent teacher-led hermitages. There was no central university office, no common syllabus, and no university-wide examination system. Statement 2 is correct: Each teacher was an institution unto himself. Teachers enjoyed complete autonomy to decide which students to admit, what to teach, and when the student’s education was complete. This allowed for highly specialized and personalized training in fields ranging from the Vedas and Grammar to Medicine and Military Arts. Statement 3 is incorrect: While Guru- dakshina (honorarium) was a tradition, it was not strictly compulsory for admission. Many students (especially those from poor backgrounds) were admitted as \"service scholars\" who helped the teacher with household chores instead of paying fees. The duration of study was generally around 7 to 8 years, but it was not arbitrarily dependent on a teacher’s \"satisfaction\" in a way that would make it \"compulsory\" for all. Statement 4 is correct: When Alexander the Great reached Taxila in 326 BCE, he and his companions (like Onesicritus) were fascinated by the \"Gymnosophists\" (naked philosophers). Alexander interviewed these scholars and, according to Greek accounts, several philosophers and thinkers from Taxila either accompanied or were taken by the Greeks back to the Hellenistic world, facilitating the first major intellectual exchange between India and Greece."},{"id":17,"txt":"With reference to literary and foreign accounts of Harsha, consider the following statements:\n1. Harshacharita is valuable mainly for its description of contemporary court life, society, and political ideology rather than for precise military chronology.\n2. Xuanzang’s Si-Yu-Ki corroborates Harsha’s conquest of Vallabhi, providing an external confirmation of events mentioned in Indian sources.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: As a charita (biographical kavya), Banabhatta's work is a SPP 22638 masterpiece of ornate Sanskrit literature. While it provides specific details about Harsha’s rise to power and his search for his sister Rajyashri, it is not a military diary. Its true value for historians lies in its vivid \"thick description\" of the 7th-century social fabric: the sights and smells of the royal camp, the diverse religious sects (Buddhist, Jaina, Pashupata), the complex court etiquette, and the political ideology of the \"Ideal King.\" The chronology of his later campaigns is largely absent or romanticized. Statement 2 is correct: The Chinese pilgrim Xuanzang (Hiuen Tsang) spent several years at Harsha's court. His account, the Si-Yu-Ki (Records of the Western World), serves as a critical external check on Indian records. Specifically, he provides details on Harsha’s conflict with and eventual victory over the Maitraka ruler of Vallabhi (Dhruvabhata/Dhruvasena II). This event is significant because it led to a matrimonial alliance where Harsha gave his daughter in marriage to the Vallabhi king, turning a former rival into a subordinate ally."},{"id":18,"txt":"Which of the following titles/claims of Harsha are epigraphically attested?\n1. Maharajadhiraja\n2. Paramabhattaraka\n3. Siladitya\nSelect the correct answer using the code below:","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3 only"],"ci":3,"exp":"Ex: Maharajadhiraja and Paramabhattaraka (1 & 2) are correct: These are the standard imperial titles of the era. They are found in Harsha’s own copper plate inscriptions, such as the Madhuban and Banskhera plates. These titles signify his status as a \"Great King of Kings\" and a \"Supreme Overlord,\" marking his transition from a local ruler of Thanesar to the imperial master of Kannauj. Siladitya (3) is correct: This was Harsha's personal \"regnal name\" or title. It is famously recorded by the Chinese pilgrim Xuanzang, but more importantly for this question, it is also epigraphically attested. Harsha is referred to as Siladitya in the records of his subordinates and in contemporary seals (such as the Sonipat Seal). 8"},{"id":19,"txt":"With reference to socio-economic terms mentioned in sources of Harsha’s period, consider the following pairs:\nTerm Description\n1. Udranga Tax levied in frontier or border regions\n2. Uparikara Additional tribute paid to intermediate/divisional officials\n3. Sarva-vishti System of compulsory unpaid labour\n4. Shudras Social group primarily engaged in agriculture and manual services\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Pair 1 is Incorrectly matched: While it was a tax, its description here is wrong. Udranga was a tax levied on permanent tenants or settled agriculturists. It is often contrasted with Uparikara. It was not specifically a frontier or border tax (frontier taxes were often referred to as Prantiya or related to Gulma stations). Pair 2 is correctly matched: This was an additional tax or an \"extra-cess\" levied on temporary tenants or those who did not have permanent rights to the land. In many cases, it also referred to tributes or additional payments made to the Uparikas (provincial governors) or intermediate administrative layers. Pair 3 is correctly matched: The term Vishti refers to forced or unpaid labor. By Harsha's time, the state increasingly demanded Sarva- vishti (all forms of forced labor) from the village communities, particularly for the movement of the royal army, the construction of fortifications, or the maintenance of local infrastructure. This is a key indicator of the \"feudalization\" of the economy. Pair 4 is correctly matched: A major social shift occurred during this period. As recorded by the Chinese pilgrim Xuanzang, the Shudras, who were traditionally described as a service class in older Dharmashastras, were now increasingly identified as agriculturists (Krishakas). This elevated their economic role, though they remained at the bottom of the varna hierarchy for manual services."},{"id":20,"txt":"Consider the following statements regarding Harsha’s administration:\n1. Harsha’s administration shows increasing decentralisation with strong feudal intermediaries.\n2. Skandhavaras functioned as permanent provincial capitals.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is Correct: Harsha’s administration is a classic example of the \"Samanta-System.\" Unlike the Maurya or early Gupta periods, Harsha relied heavily on a network of subordinate kings and intermediaries (Samantas and SPP 22638 Mahasamantas). These figures provided military support in exchange for administrative autonomy and the right to collect revenue from their assigned lands. This \"decentralized\" model meant that while Harsha was the supreme overlord, the actual day-to-day administration was fragmented among various local power-holders. Statement 2 is Incorrect: While Skandhavaras were central to Harsha's governance, they were not permanent provincial capitals. The term Skandhavara refers to a royal military camp. Because Harsha was constantly on the move to suppress rebellions or oversee his vast territories, these \"moving capitals\" became the actual seats of government. Many of his official charters (like the Banskhera and Madhuban plates) were issued from these camps, not from a fixed city office."},{"id":21,"txt":"With reference to administrative and military offices in early medieval India, consider the following pairs:\nPerson/Term/Office Associated function\n1. Avanti Minister responsible for foreign relations and war\n2. Simhananda Commander-in-Chief of the army\n3. Mahāpratihāra Head of the palace guard\n4. Mahākṣapaṭalika Keeper of official records\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only three","All four","Only one","Only two"],"ci":1,"exp":"Ex: Pair 1 is correctly matched: In Harsha’s court, Avanti was the title (and specifically the name of the individual in the Harshacharita) of the Mahasandhivigrahika, the Minister of Foreign Relations, War, and Peace. He was responsible for handling diplomacy with other states and deciding on military campaigns. Pair 2 is correctly matched: Simhananda was the Senapati or Commander-in-Chief of Harsha's army. Banabhatta describes him as a seasoned veteran who provided strategic advice to Harsha during his early campaigns for imperial consolidation. Pair 3 is correctly matched: The Pratihara was the doorkeeper, but the Mahāpratihāra was the high-ranking \"Lord High Chamberlain\" or the Head of the Palace Guard. This official controlled access to the King and managed the internal security and etiquette of the royal court. Pair 4 is correctly matched: The Akṣapaṭalika (or Mahākṣapaṭalika) was the Keeper of Royal Records and the 9 Accountant General. This office was responsible for maintaining the registers of land grants (Agraharas), tax assessments, and official edicts. Given the proliferation of land grants during Harsha’s time, this office was crucial for the state’s fiscal management."},{"id":22,"txt":"With reference to the Gupta Empire, consider the following statements:\n1. The Guptas ruled over Anuganga, Saketa and Magadha.\n2. They utilized the iron ore deposits of central India and southern Bihar for economic prosperity.\n3. The political unification of a large part of the subcontinent under a decentralised government is a hallmark of the Gupta Empire. Which of the given above statement(s) is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","3 only","1, 2, and 3"],"ci":0,"exp":"Ex: ❖ Statement 1 is correct:The Guptas are believed to be feudatories of the Kushans. They are most likely Vaishyas in origin, and they ruled over fertile parts of the madhyadesha, that is, Anuganga (the middle Gangetic basin), Saketa (modem Ayodhya, Uttar Pradesh) and Magadha (mostly Bihar). Prayag (modem Allahabad, Uttar Pradesh) was probably their important centre of power, which, due to its strategic location, further aided in the expansion of the empire. ❖ Statement 2 is correct:The Guptas could easily exploit the iron ore deposits of central India and southern Bihar, and also took advantage of their proximity to the areas of north India which carried on silk trade with the Byzantine empire (Eastern Roman empire). ❖ Statement 3 is incorrect:Historians often consider the Gupta period as the 'Golden age' of India's past as it is often remembered for certain key classical features, such as the political unification of a large part of the subcontinent under a mostly centralised government, the production of exceptional Sanskrit literary works, sophisticated stone sculpture and architecture, and innovative developments in the field of science and technology. SPP 22638"},{"id":23,"txt":"This ruler is described in inscriptions as a valiant warrior whose body bore numerous scars from various weapons such as battle-axes, arrows, spears, swords, barbed carts, javelins and many other weapons signifying his prowess on the battlefield. He is renowned for his military campaigns and is considered one of the greatest rulers of ancient India. Who is this ruler?","ref":"","opts":["Chandragupta Maurya","Ashoka","Samudragupta","Harshavardhana"],"ci":2,"exp":"Ex: The given description is derived from the Allahabad Pillar Inscription (Prashasti), which glorifies Samudragupta as a warrior king.The Allahabad prasasti of Samudragupta was composed by Harisena who was a poet and minister in the royal court of the king. He assumed the official titles sandhivigrahika (minister of war and peace), kumaramatya (minister attached to the king and the crown prince) and mahadandanayaka (officer in charge of military and judicial matters). The vivid imagery of his scars caused by various weapons underscores his bravery and numerous victories in battle, earning him the title of the \"Napoleon of India.\" This aligns with historical accounts of his conquests and martial achievements."},{"id":24,"txt":"Arrange the following administrative divisions of the Gupta Empire in ascending order of hierarchy:\n1. Bhukti\n2. Vithti\n3. Vishya\n4. Grama\nSelect the correct answer using the code given below:","ref":"","opts":["4-3-2-1","3-4-2-1","4-2-3-1","3-2-4-1"],"ci":2,"exp":"Ex: ❖ 4-Grama: Vithis were further divided into villages, led by the gramadhyaksha or gramika. ❖ 2-Vithi (Subdivision of Vishya): In eastern India, vishyas were further divided into vithis (sub-districts). ❖ 3-Vishya (District): The provinces were further divided into a number of districts called pradeshas or vishayas, which were placed under the charge of vishayapati. ❖ 1-Bhukti (Province): The Gupta empire was divided into provinces known as deshas, rashtra or bhuktis and their head was called uparika. Sometimes, crown princes were also made the viceroys of the provinces. The uparika was appointed directly by the king and he had the authority to appoint the head of the district administration and district town board. 10"},{"id":25,"txt":"Consider the following terms and their meanings:\nTerms Meaning\n1. Khila Fertile land ready for cultivation.\n2. Nivartana A measure of land.\n3. Araghatta Mechanism for irrigation involving pots and chains.\n4. Kshauma Type of craft style used in magadha.\nHow many pairs given above is/are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: ❖ Pair 1 is incorrect:Various types of land are mentioned in the inscriptions; land under cultivation was usually called Kshetra. Lands not under cultivation were variously called as Khila, Aprahata, etc., and inscriptions give the impression that uncultivated land was being regularly brought under cultivation. ❖ Pair 2 is correct: In some areas Nivartana was the term used for a measure of land whereas in the inscriptions of Bengal terms like Kulyavapa and Dronavapa are used. ❖ Pair 3 is correct: Araghatta is an irrigation mechanism using pots and chains to draw water. ❖ Pair 4 is incorrect: Different varieties of silk cloth, called Kshauma and Pattavastra are mentioned in the texts of Gupta period."},{"id":26,"txt":"With reference to crafts production and trade during the Gupta period, consider the following statements:\n1. The term Sreni was used to refer to organizations that facilitated the functioning of both craftsmen and traders.\n2. The Nagarasresthi and the Sarthavaha were the representatives of all craftsmen.\n3. The Dharmashastras of the Gupta period assigned different ranks to craftsmen and suggested that each craft formed a specific caste or jati.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All Three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: There were organizations which facilitated the functioning of both craftsmen and traders. The ancient term which was generally used for these organizations was Sreni, and the State was expected to provide the guilds protection and to respect their customs and norms. Similarly, members of the Sreni were also expected to follow the norms of the organization; otherwise, they were liable to punishment. Statement 2 is incorrect: Nagarasresthi was the chief merchant of a city, representing the merchant community, not all craftsmen. Sarthavaha referred to caravan traders (long-distance merchants), mainly involved in trade rather than craft production. Statement 3 is correct: The Dharmasastras also suggest that each group of craftsmen formed a jati or caste. For example, the Kumbhakaras or potters formed one caste, the Suvarnakaras or goldsmiths formed another caste and so on. SPP 22638 PW ONLY IAS SUPER HINT For S2, Nagarasresthi has \"Nagara\" (city) in the name, indicating it is likely related to city administration or trade, not all craftsmen. Sarthavaha contains \"Sartha\" (caravan), which strongly suggests a connection to traders, not artisans. The phrase \"representatives of all craftsmen\" seems too broad and unlikely. Hence S2 is likely false, eliminate option C. For S3, In Indian society, professions often had hereditary links, making it logical that texts would classify crafts into castes/jatis. This statement is plausible and aligns with historical social structures. Hence eliminate option D."},{"id":27,"txt":"\"This ruler, considered the important king of his dynasty, claimed the title of Maharajadhiraja, and began an era in 319-320 CE, presumed to mark his accession. His empire spanned parts of modern Bihar, Uttar Pradesh, and Bengal, with Pataliputra as its capital. He enhanced his power through a marital alliance with a Kshatriya clan, striking coins that bore the names of his queen, their dynasty, and the allied nation.\" Who is this ruler?","ref":"","opts":["Chandragupta I","Samudragupta","Chandragupta II","Kumaragupta I"],"ci":0,"exp":"Ex: Chandragupta I ❖ Title of Maharajadhiraja: Chandragupta I is noted as the first important king of the Gupta Dynasty and claimed the title of Maharajadhiraja. ❖ Gupta Era: He began the Gupta Era in 319-320 CE, which is presumed to mark his accession. ❖ Territorial Extent: His empire included parts of modern Bihar, Uttar Pradesh, and Bengal, with Pataliputra as its capital. ❖ Marital Alliance with Lichchhavi Clan: His marriage to Kumaradevi, a princess of the Kshatriya Lichchhavi clan, granted legitimacy, prestige, and strength to the Guptas. Coins struck in their joint names highlight this alliance. ❖ Connection to Samudragupta: The reference to Samudragupta as Lichchhavi-dauhitra (grandson of the Lichchhavis) further confirms the familial link. 11"},{"id":28,"txt":"With reference to Fa-Hien’s account of the Gupta Empire during the reign of Chandragupta II, consider the following statements:\n1. The Gupta administration was marked by strict regulations, including passport requirements and registration of households.\n2. The Gupta rulers, despite being followers of the Brahmana religion, demonstrated tolerance towards all sects.\n3. Capital punishment was unknown in the Gupta Empire.\n4. Revenue in the Gupta Empire was derived mainly from taxing trade and commerce, as indicated in Fa-Hien's travelogue.\nWhich of the statements given above is/are correct?","ref":"","opts":["1, 2, and 4 only","2 and 3 only","3 and 4 only","1, 2, 3, and 4"],"ci":1,"exp":"Ex: ❖ Statement 1 is incorrect:Fa-Hien visited India during the reign of Chandragupta II, and observed that the territories under the Gupta ruler were well governed and order was maintained, life and property were secure, and the roads were very safe for travellers. His travelogue informs us that government did not interfere much in the life of the people under Guptas and there were neither passport regulations nor registration of households. ❖ Statement 2 is correct: Fa-hien notes that despite Guptas being followers of Brahmana religion, they observed the rule of toleration and generosity towards all sects as many Buddhist monasteries enjoyed royal grants of land. ❖ Statement 3 is correct:The criminal law was mild and fines were the usual form of punishment. Rebellion was punished by amputation of the hand. Fa-hien found that capital punishment was altogether unknown in Gupta Empire. ❖ Statement 4 is incorrect:The revenue was derived chiefly from the crown lands. Mentions of free hospitals founded by benevolent citizens also found mention in Fa-hien’s account. Those at Pataliputra sheltered the cripple, destitute and diseased from any region. Food, medicine, and water were provided free. Additional information: ❖ Fa Xian began his journey back home from Bengal. He boarded a ship belonging to some merchants. They had barely travelled for two days when they were caught in a storm. The merchants began throwing their merchandise overboard so as to lighten the load and save the ship from sinking. Fa Xian threw away his meagre personal belongings, but clung to his books and the statues of the Buddha that he had collected.  SPP 22638 ❖ Finally, the storm subsided after 13 days. This is how he describes the sea: “The sea itself is boundless in extent — it is impossible to know east or west, except by observing the sun, moon, or stars in their motions. If it is dark, rainy weather, the only plan is to steer by the wind.” It took him more than 90 days to reach Java, where he halted for five months, before boarding another merchant ship that took him to China."},{"id":29,"txt":"With reference to the military conquests of Harsha Vardhana, consider the following statements:\n1. Harsha Vardhana's empire included Punjab, Mithila, and Orissa.\n2. Harsha was victorious against Pulkesin II, the Chalukyan king of Badami, and extended his empire beyond the Narmada River.\n3. The kings of Kamrupa and Vallabhi accepted Harsha's overlordship.\n4. Harsha shifted his capital to Thaneshwar from Kannauj.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 3 only","1, 2 and 4 only","2, 3 and 4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: ❖ Statement 1 is correct: Harsha's reign was marked by many military victories and he brought most of north India under his control as he brought the five 'Indies (regions)' - Punjab, Kannauj, Bengal, Orissa, Mithila and assumed the title of 'Siladitya' (as mentioned in travel records of Chinese traveler Xuanzang (Hsuan Tsang). ❖ Statement 2 is incorrect: Harsha was defeated by Pulkesin II (western Chalukyan King of Badami) on the banks of Narmada. Pulkesin II bestowed the title of 'Sakalauttarapathanatha', meaning 'Lord of the entire north', upon him. ❖ Statement 3 is correct: The kings of Kamrupa (Bhaskaravarman) and Vallabhi accepted Harsha's overlordship, and the forest tribes of the Vindhyas paid him tribute and supported him militarily. ❖ Statement 4 is incorrect: Harsha's empire probably included Thaneswar, Kannauj, Ahichchhatra, Shravasti, and Prayag, and he extended his empire into Magadha and Orissa. The capital of Harsha was originally Thaneswar, but he shifted it to Kannauj.  12"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

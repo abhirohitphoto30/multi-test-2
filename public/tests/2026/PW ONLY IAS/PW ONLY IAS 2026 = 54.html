@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 54</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 54</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 54">PW ONLY IAS 2026 = 54</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the Struggle–Truce–Struggle (S-T-S) strategy, consider the following statements:\n1. It involved alternating phases of mass agitation and reprieve to restore popular strength and assess the government’s response.\n2. Jawaharlal Nehru rejected S-T-S and favoured uninterrupted confrontation after the Lahore Congress (1929).\n3. Nehru proposed a Struggle–Victory (S-V) line based on continuous direct action.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 3 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: The Struggle–Truce– Struggle (S-T-S) strategy was the primary political framework adopted by Mahatma Gandhi. It was based on the understanding that the masses have a limited capacity to sacrifice and cannot sustain a high-pitch movement indefinitely. Therefore, phases of mass agitation (Struggle) were deliberately followed by periods of non-confrontational political work (Truce) to allow the people to recuperate their strength and to build pressure on the government for negotiations. Statement 2 is correct: During the mid-1930s, particularly after the suspension of the Civil Disobedience Movement, Jawaharlal Nehru (along with other socialists) became a vocal critic of the S-T-S strategy. He argued that every \"truce\" phase led to a decline in revolutionary fervor and gave the British administration time to consolidate its power. He believed that the national movement should remain in a state of constant confrontation until the goal was achieved. Statement 3 is correct: As an alternative to Gandhi's model, Nehru proposed the Struggle– Victory (S-V) line. Under this philosophy, the movement would start with direct action and continue without any \"truce\" or compromise until the colonial state was completely overthrown. He argued that the \"truce\" period was a sign of weakness and that the only way to achieve real independence was through an uninterrupted struggle leading directly to victory."},{"id":1,"txt":"With reference to Subhas Chandra Bose and the Haripura Congress Session (1938), consider the following statements:\nStatement 1: Subhas Chandra Bose viewed the Congress ministries formed after the 1937 elections as instruments with revolutionary potential for transforming colonial governance. Statement 2: The Haripura Congress Session resolved to provide moral support to popular agitations against princely state administrations.\nWhich one of the following is correct?","ref":"","opts":["Both Statement 1 and Statement 2 are correct, and Statement 2 is the correct explanation of Statement 1","Both Statement 1 and Statement 2 are correct, but Statement 2 is not the correct explanation of Statement 1","Statement 1 is correct, but Statement 2 is incorrect","Statement 1 is incorrect, but Statement 2 is correct"],"ci":1,"exp":"Ex: Statement 1 is correct: In his presidential address at the Haripura Session, Subhas Chandra Bose emphasized that the Congress ministries should not merely act as administrative bodies but as tools to strengthen the masses. He believed they had the potential to be used for SPP 22655 revolutionary purposes—by implementing pro- people reforms and providing administrative experience to nationalists—thereby preparing the nation for the final struggle against colonial rule. Statement 2 is correct: The Haripura Session is famous for its resolution on the Princely States. While the Congress reiterated that the people of the states should lead their own struggles for civil liberties through Praja Mandals, the Congress formally extended its moral support and sympathy to these popular agitations. It marked a significant shift from the earlier policy of strict non-interference in the internal affairs of the Princely States. Analysis of the relationship: While both statements are historically accurate, Statement 2 (regarding Princely States) does not explain Statement 1 (regarding the revolutionary potential of provincial ministries). Statement 1 concerns the administrative strategy in British Indian provinces, whereas Statement 2 concerns the diplomatic and political stance toward the Princely States. Key Highlights of the Haripura Session (1938) National Planning Committee: Under Bose's leadership, the Congress set up the National Planning Committee with Jawaharlal Nehru as its chairman, laying the groundwork for a planned economy in independent India. Opposition to Federation: Bose and the Congress used the session to voice a firm rejection of the \"Federal Scheme\" proposed in the 1935 Act, which sought to link democratic provinces with autocratic princely states."},{"id":2,"txt":"With reference to the First Round Table Conference, consider the following statements:\n1. It was held in Birmingham from November 1930 to January 1931.\n2. The Indian National Congress boycotted the conference during the Civil Disobedience Movement, while princes, minorities, and business groups represented Indian interests.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: The First Round Table Conference was held in London, not Birmingham. It took place at the Royal Gallery in the House of Lords from November 12, 1930, to January 19, 1931. It was inaugurated by King George V and presided over by the British Prime Minister, Ramsay MacDonald. 2 Statement 2 is correct: The Indian National Congress, which was leading the Civil Disobedience Movement at the time, decided to boycott the conference. However, the British government invited other segments of Indian society to ensure the appearance of a consultative process. The participants included: ❖ Princely States: Represented by rulers like the Maharaja of Bikaner and the Nawab of Bhopal. ❖ Minorities: B.R. Ambedkar (Depressed Classes), Muhammad Ali Jinnah and Muhammad Shafi (Muslim League), and representatives of Sikhs and Indian Christians. ❖ Business Groups and Liberals: Leaders like Tej Bahadur Sapru and C.Y. Chintamani."},{"id":3,"txt":"Which one of the following statements about the formation of Congress Ministries in 1937 is NOT correct?","ref":"","opts":["The Congress initially hesitated to assume office due to concerns over the Governors’ discretionary powers","The Viceroy’s assurances regarding non- interference influenced the Congress decision to form ministries","Ministries were eventually formed in several provinces where Congress had won majorities","The Congress accepted office as a sign of endorsement of the Government of India Act, 1935"],"ci":3,"exp":"Ex: Option (d) is correct: The Congress did not accept office to endorse the Government of India Act, 1935. On the contrary, the Congress had officially rejected the Act, calling it a \"Charter of Slavery.\" They decided to form ministries to \"combat the Act from within\" and to demonstrate that the British administration could not function without popular Indian support. The Congress's goal was to use the administrative machinery to provide relief to the masses (peasants and laborers) and to strengthen the national movement's reach. They remained committed to the goal of Purna Swaraj and viewed the 1935 Act as a hurdle to be overcome, not a system to be endorsed. Option (a) is incorrect (It is a correct statement): After winning the elections, the Congress was reluctant to take office. They feared that the Governors’ discretionary powers and \"special responsibilities\" under the 1935 Act would allow British officials to overrule the decisions of elected Indian ministers, making the ministries powerless. SPP 22655 Option (b) is incorrect (It is a correct statement): The deadlock was broken when the Viceroy, Lord Linlithgow, issued a public statement in June 1937. He gave a gentleman’s agreement that Governors would not use their \"special powers\" to interfere in the day-to-day administration of the provinces by the ministers. This assurance paved the way for the Congress to accept office. Option (c) is incorrect (It is a correct statement): In July 1937, Congress formed ministries in six provinces where it had won a majority: Madras, Bombay, Central Provinces, Orissa, Bihar, and the United Provinces. Later, it also formed coalition governments in the North- West Frontier Province (NWFP) and Assam."},{"id":4,"txt":"With reference to the Third Round Table Conference, consider the following statements:\n1. The conference was attended by Mahatma Gandhi as the sole representative of the Indian National Congress.\n2. The recommendations of the conference were published in a White Paper and later examined by a Joint Select Committee.\n3. The deliberations of the conference contributed to the formulation of the Government of India Act, 1935.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Statement 1 is Incorrect: The Third Round Table Conference, held in London from 17 November to 24 December 1932, was not attended by Mahatma Gandhi or the Indian National Congress. The Congress had resumed the Civil Disobedience Movement after the failure of the Second Round Table Conference and therefore decided to boycott the third session. Most other prominent nationalist leaders also ignored it, which severely weakened the representative character of the conference. Statement 2 is Correct: As in the two earlier Round Table Conferences, the Third Round Table Conference produced no substantial consensus on India’s constitutional future. Nevertheless, its recommendations were formally published in a White Paper in March 1933. These proposals were then taken up for scrutiny by a Joint Select Committee of the British Parliament, which included members from both the House of Commons and the House of Lords. This step marked the transition from discussion to legislative drafting. Statement 3 is Correct: The findings of the Joint Select Committee, which were based on the deliberations of the Round Table Conferences, formed the basis for the Government of India Bill. This bill was eventually passed and received royal assent as the Government of India Act, 1935, which introduced provincial autonomy and a proposed (though never realized) All-India Federation. 3"},{"id":5,"txt":"With reference to the Individual Satyagraha (1940–41), consider the following statements:\nStatement 1: The Individual Satyagraha was launched as an immediate mass movement to paralyse the British war effort through widespread civil disobedience. Statement 2: The primary demand of the satyagrahis was the formation of an interim national government in return for Congress support to the British war effort.\nWhich of the following is correct?","ref":"","opts":["Both Statement 1 and Statement 2 are correct and Statement 2 explains Statement 1","Both Statement 1 and Statement 2 are correct but Statement 2 does not explain Statement 1","Both Statement 1 and Statement 2 are incorrect","Statement 1 is correct but Statement 2 is incorrect"],"ci":2,"exp":"Ex: Statement 1 is incorrect: The Individual Satyagraha was specifically designed not to be a mass movement. Mahatma Gandhi wanted to avoid a large-scale uprising that would embarrass Britain’s war effort against Fascism or lead to widespread violence. Instead, it was a \"symbolic\" protest where carefully selected individuals would publicly offer satyagraha to affirm the right to free speech, specifically the right to speak against the war. Statement 2 is incorrect: The primary and immediate demand of the Individual Satyagraha was the right to freedom of speech. The satyagrahis were to use a specific formula: \"It is wrong to help the British war effort with men or money. The only worthy effort is to resist all war with non-violent resistance.\" While the Congress had earlier asked for an interim government in the \"August Offer\" discussions, the Individual Satyagraha itself was a protest against the government's refusal to allow Indians to express their views on the war. Key Facts about Individual Satyagraha ❖ The First Satyagrahi: Vinoba Bhave was chosen by Gandhi as the first person to offer satyagraha on October 17, 1940. ❖ The Second Satyagrahi: Jawaharlal Nehru followed shortly after. ❖ The \"Delhi Chalo\" Movement: The campaign was also known as the \"Delhi Chalo\" movement because the satyagrahis, if not arrested, were instructed to march towards Delhi while preaching against the war. ❖ Outcome: By May 1941, over 25,000 people had been convicted for individual civil disobedience, demonstrating that Indian patience with British colonial policy was wearing thin. SPP 22655"},{"id":6,"txt":"Consider the following organization and their founders Organization Founder\n1. Bahishkrit Hitkarini Jyotiba Phule Sabha\n2. Harijan Sevak Sangh B.R. Ambedkar\n3. All India Scheduled caste Mahatma Federation Gandhi\nHow many of the above pairs is/are correct ?","ref":"","opts":["Only one","Only two","All three","None"],"ci":3,"exp":"Ex: ❖ Pair 1 is incorrect: Dr Ambedkar established the Bahishkrit Hitakarini Sabha in 1924 to highlight the difficulties and grievances of the dalits before the government. Its motto was: ‘Educate, Agitate and Organise’. ❖ Pair 2 is incorrect: Harijan Sevak Sangh was founded by Mahatma Gandhi in 1932 to help improve the social and economic status of the \"Harijans\" (a term Gandhi used for the Dalits) ❖ Pair 3 is incorrect: All India Scheduled Castes Federation (AISCF) was an organisation in India founded by B. R. Ambedkar in 1942 to campaign for the rights of the Dalit community Thus, Option D is the correct answer."},{"id":7,"txt":"Consider the following events in Indian history.\n1. Second Round Table Conference\n2. Execution of Bhagat Singh\n3. Gandhi-Irwin Pact\n4. Delhi manifesto\nSelect the correct chronological order of the above events from the code given below.","ref":"","opts":["1-2-3-4","4-3-2-1","4-1-2-3","2-3-4-1"],"ci":1,"exp":"Ex: ❖ Second Round Table Conference (1931) – This conference was held in London between September and December 1931, where Indian leaders, including Gandhi, met with British officials to discuss constitutional reforms. ❖ Execution of Bhagat Singh (1931) – Bhagat Singh, along with Rajguru and Sukhdev, was executed on March 23, 1931. ❖ Gandhi-Irwin Pact (1931) – Signed on 5 March 1931, this agreement between Mahatma Gandhi and the British Viceroy, Lord Irwin, led to the suspension of the Civil Disobedience Movement and the release of political prisoners not convicted of violence. ❖ Delhi Manifesto (1929) – The Delhi Manifesto was issued by the Indian National Congress in November 1929 for inclusion of certain demands in the Round table conference like congress should have majority representation. Thus, Option B is the correct answer. 4 Additional Information: On November 2, 1929, a conference of prominent national leaders issued a ‘Delhi Manifesto’, which put forward certain conditions for attending the Round Table Conference: 1. That the purpose of the Round Table Conference should be not to determine whether or when dominion status was to be reached but to formulate a constitution for implementation of the dominion status (thus acting as a constituent assembly) and the basic principle of dominion status should be immediately accepted; 2. That the Congress should have majority representation at the conference; and 3. There should be a general amnesty for political prisoners and a policy of conciliation;"},{"id":8,"txt":"With reference to the Government of India Act, 1935, consider the following statements:\n1. The proposed All India Federation did not come into existence because the required number of princely states failed to accede to it.\n2. The Act introduced provincial autonomy by abolishing dyarchy at the provincial level and granting provinces independent financial powers, including borrowing on their own security.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: The Government of India Act, 1935, proposed the establishment of an All India Federation consisting of British Indian Provinces and the Princely States. However, the Federation was conditional: it would only come into existence if states representing at least half of the total states' population and entitled to half of the seats in the Council of States signed the Instrument of Accession. The Princes, fearing a loss of their internal sovereignty and the rise of democratic nationalist influence, refused to join, and thus the Federation never materialized. Statement 2 is correct: The Act introduced Provincial Autonomy by abolishing the system of Dyarchy (introduced by the 1919 Act) at the provincial level. Provinces were no longer considered mere administrative agents of the Center but were recognized as legal entities with their own defined executive and legislative powers. Crucially, they were granted independent financial powers, including the authority to raise loans on the security of their own provincial revenues, which gave them a degree of fiscal independence previously unknown. SPP 22655 Some provisions of the Government of India Act, 1935: 1. Proposed an All-India Federation of British provinces and princely states, which never materialised due to non- participation of states. 2. The Governor-General became the constitutional pivot, exercising wide discretionary, legislative and financial powers. 3. Introduced reserved and transferred subjects at the Centre, with reserved subjects kept outside legislative control. 4. Set up a bicameral central legislature— Council of States (260) and Federal Assembly (375). 5. Provided direct elections to the Council of States and indirect elections to Federal Assembly. 6. Introduced Federal, Provincial and Concurrent Lists for legislative distribution. 7. Extended communal and class-based separate electorates and kept 80% of central budget non-votable. 8. Abolished provincial dyarchy and introduced provincial autonomy with separate legal identity. 9. Made provincial ministers responsible to legislatures, while Governors retained overriding emergency powers. 10. Expanded franchise, granted women equal voting rights, but kept 40% of provincial budgets non-votable."},{"id":9,"txt":"Which one of the following statements about the Tripuri Session of the Indian National Congress (1939) is correct?","ref":"","opts":["It resolved to launch immediate nationwide civil disobedience without conditions","It endorsed the formation of a coalition government with the Muslim League","It witnessed a proposal to give the British government a time-bound ultimatum for independence","It accepted the Government of India Act, 1935 as a transitional constitutional framework"],"ci":2,"exp":"Ex: Option (c) is correct: The Tripuri Session (1939) was one of the most dramatic in Congress history, marked by the ideological rift between Subhas Chandra Bose and the \"Old Guard\" (Gandhi’s supporters). Subhas Chandra Bose, who was re-elected as President at Tripuri despite Gandhi's opposition, believed that the international situation (impending World War II) provided a golden opportunity for India. He proposed that the 5 Congress should give the British government a six-month ultimatum for independence. If the demand was not met, he argued for the immediate launch of a nationwide struggle. Option (a) is incorrect: Although Bose wanted immediate action, the session actually passed the Pant Resolution. This resolution stated that the Congress would follow Gandhi’s leadership and that Gandhi felt the country was not yet ready for a mass struggle. Thus, no immediate civil disobedience was launched. Option (b) is incorrect: The session was primarily concerned with internal Congress leadership and the attitude toward the British. It did not focus on forming a coalition with the Muslim League. Option (d) is incorrect: The Congress remained steadfast in its rejection of the 1935 Act, especially its federal part. The Tripuri session reaffirmed that the only acceptable framework was a constitution drafted by a Constituent Assembly. Key Outcomes of Tripuri 1. The Pant Resolution: This effectively clipped Bose's wings by requiring him to nominate his Working Committee in accordance with Gandhi's wishes. 2. Bose's Resignation: Unable to work under these restrictive conditions and facing a non-cooperative Working Committee, Bose resigned in April 1939. 3. Formation of Forward Bloc: Following his resignation, Bose formed the Forward Bloc within the Congress to rally radical and leftist elements"},{"id":10,"txt":"Consider the following statements regarding Dharasana Satyagraha:\n1. It was initiated by textile mill workers against an increase in duty on cotton by the British.\n2. Sarojini Naidu provided leadership to the movement.\n3. Webb Miller provided accounts of the Satyagraha in his reports.\nHow many of the above statement(s) is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is incorrect: Dharasana Satyagraha was a protest against the British salt tax in colonial India in May 1930. At Dharsana in Gujarat, salt production and storage was monopolised by the British. In May 1930, Gandhi wrote to Viceroy Irwin explaining his intention to raid the Darshana Salt Works and was immediately arrested. However, the Indian National Congress decided to continue with the proposed plan of action. This led to the arrest of several important Congress leaders. SPP 22655 Statement 2 is correct: Following the arrest of important Congress leaders including Abbas Tyabji, Mahatma Gandhi and others, the peaceful agitation continued under leadership of Sarojini Naidu and Maulana Abul Kalam Azad. Statement 3 is correct: American journalist Webb Miller was an eyewitness of the Satyagraha. He witnessed the oppression conducted by the British on the peaceful satyagrahis and reported the same, which attracted international attention."},{"id":11,"txt":"With reference to the Congress Socialist Party (1934) and the left-wing bloc within the Indian National Congress, consider the following statements:\n1. It supported Gandhian methods such as boycott of foreign goods and tax refusal as its primary strategy.\n2. It advocated the establishment of a dictatorship of the proletariat on the Soviet model.\n3. It opposed separate electorates and worked within the Congress framework to promote democratic socialism.\nHow many of the above statement/s is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is incorrect: While the Congress Socialist Party (CSP) members were part of the Congress and participated in mass movements, they were often critical of Gandhian methods. They believed that constitutionalism and the \"Struggle-Truce-Struggle\" strategy were inadequate. Instead, they advocated for militant mass action, the organization of peasants and workers into class-based unions, and a more revolutionary approach to overthrowing imperialism. Statement 2 is incorrect: Although the CSP was deeply influenced by Marxism-Leninism, it sought to adapt socialist principles to Indian conditions. Unlike the Communist Party of India (CPI) at the time, the CSP did not advocate for a \"dictatorship of the proletariat\" on the Soviet model. Their goal was to transform the Congress into a mass-based, anti-imperialist organization and to establish a Socialist State within a democratic framework. Statement 3 is correct: The CSP remained an integral part of the Indian National Congress. Its members believed that the Congress was the primary vehicle for the national struggle and worked within it to push the leadership toward a more radical, pro-peasant, and pro-labor stance. They opposed communalism and separate electorates, viewing them as British tools to divide the working classes, and consistently promoted the ideals of Democratic Socialism. 6"},{"id":12,"txt":"Who among the following was the founder of the Revolutionary Socialist Party in 1940?","ref":"","opts":["C. Rajagopalachari","Jay Prakash Narayan","Tridib Chaudhari","Subhash Chandra Bose"],"ci":2,"exp":"Ex: The Revolutionary Socialist Party (RSP) is a communist party in India. The party was founded on 19 March 1940 by Tridib Chaudhuri and has its roots in the Bengali liberation movement, Anushilan Samiti and the Hindustan Socialist Republican Army.It advocated for a classless, stateless society and has historically supported agrarian reforms and trade union movements. Thus,Option C is the correct answer."},{"id":13,"txt":"With reference to the Communal Award (1932), consider the following statements:\n1. Separate electorates were provided for several communities, including the Depressed Classes, for a period of 20 years.\n2. The Depressed Classes were declared a minority and given a double vote.\n3. The provincial legislature seats were doubled and distributed on a communal basis.\n4. In Bombay Province, seats were specifically allocated to the Marathas.\nWhich of the statements given above are correct?","ref":"","opts":["1, 2 and 3 only","1, 2 and 4 only","2, 3 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: Statement 1 is correct: The Communal Award, announced by British Prime Minister Ramsay MacDonald on August 16, 1932, established separate electorates for Muslims, Europeans, Sikhs, Indian Christians, Anglo-Indians, and the Depressed Classes. It was specified that these arrangements (specifically for the Depressed Classes) were to be reviewed after 20 years. Statement 2 is correct: The Award treated the Depressed Classes as a minority community separate from Hindus. To satisfy their demands, they were given a \"double vote\": one to be used in their own separate electorates to elect their own representatives, and another to be used in the general (Hindu) electorates to maintain a link with the majority community. Statement 3 is correct: The Award significantly increased the number of seats in the provincial legislatures (effectively doubling them in some cases) and distributed them entirely based on communal representation, including reserved seats for women, labor, commerce, and landlords. Statement 4 is correct: In a move to address regional social dynamics, the Award specifically allocated seats to the Marathas in the Bombay Presidency. SPP 22655"},{"id":14,"txt":"Following the Civil Disobedience Movement of 1930 and the resulting crackdown by the British authorities, who among the following leaders were accepted as mediators for peace talks between the Congress and the British colonial government ?","ref":"","opts":["Motilal Nehru and Tej Bahadur Sapru","M.R. Jayakar and Vallabhbhai Patel","M.R. Jayakar and Tej Bahadur Sapru","Jawaharlal Nehru and Maulana Azad"],"ci":2,"exp":"Ex: Option (c) is correct: In response to the unrest and the suppression of the Civil Disobedience Movement, the British government faced significant challenges. The government's ambivalence and the use of repressive measures led to considerable political friction. To address the situation and explore the possibility of a settlement, Lord Irwin, the Viceroy, proposed a Round Table Conference and accepted the suggestion to involve mediators. Tej Bahadur Sapru and M.R. Jayakar was appointed as intermediary to explore a peaceful resolution between the Indian National Congress and the British government. This initiative aimed to address the growing discontent and seek a compromise that could lead to a more stable political environment."},{"id":15,"txt":"With reference to the Calcutta Session of the Indian National Congress (1928), consider the following statements:\n1. The Nehru Report was approved, but some Congress leaders rejected dominion status in favour of purna swaraj.\n2. A two-year deadline for accepting dominion status was later reduced to one year.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is Correct: At the Calcutta Session of 1928, the Nehru Report was approved. However, it led to a rift within the Congress. Younger leaders like Jawaharlal Nehru and Subhas Chandra Bose were dissatisfied with the report's goal of Dominion Status and demanded that the Congress adopt Purna Swaraj (Complete Independence) as its immediate objective. Statement 2 is Correct: To prevent a split between the seniors and the youth, Mahatma Gandhi proposed a compromise. Initially, a two- year deadline was suggested for the British government to accept the Nehru Report. However, under pressure from the younger faction, this was reduced to a one-year deadline. It was declared that if the British did not grant Dominion Status by December 31, 1929, the Congress would shift to the goal of Complete Independence. 7"},{"id":16,"txt":"Consider the following statements:\nStatement 1: The Second Round Table Conference became deadlocked primarily because several minority groups jointly demanded separate electorates, which Gandhi strongly opposed. Statement 2: Gandhi argued that the untouchables were Hindus and therefore should not be treated as a separate minority requiring special safeguards or separate electorates.\nWhich of the statements given above is/are correct?","ref":"","opts":["Both Statement 1 and Statement 2 are correct, and Statement 2 is the correct explanation of Statement 1","Both Statement 1 and Statement 2 are correct, but Statement 2 is not the correct explanation of Statement 1","Statement 1 is correct, but Statement 2 is incorrect","Statement 1 is incorrect, but Statement 2 is correct"],"ci":0,"exp":"Ex: Statement 1 is correct: The Second Round Table Conference (1931) failed to reach a consensus largely due to the \"Communal Question.\" A coalition of minority groups— including Muslims, Christians, Anglo-Indians, and the Depressed Classes (led by Dr. B.R. Ambedkar)—signed a \"Minorities Pact\" demanding separate electorates. Gandhi, representing the Congress, found this unacceptable as he believed it would divide the Indian people and prevent national unity. Statement 2 is correct: Gandhi’s opposition to separate electorates for the Depressed Classes (untouchables) was based on his conviction that they were an integral part of the Hindu fold. He argued that treating them as a separate political entity would \"fragment\" Hinduism and permanently \"brand\" them as untouchables, hindering their social integration. He was willing to accept reserved seats but not separate electorates. Analysis of the relationship: Statement 2 is the correct explanation for Statement 1. The primary reason the conference reached a deadlock was Gandhi's refusal to accept the Minorities Pact, and the core of his refusal was his specific ideological stance regarding the status of the Depressed Classes within the Hindu community."},{"id":17,"txt":"With reference Krishak Praja Party (KPP), consider the following statements:\n1. The party was founded by Fazlul Haq in 1936.\n2. The party tried to defend the rights of landless peasants in Bengal Province.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 and 2"],"ci":2,"exp":"Ex: ❖ Statement 1 is correct: Krishak Praja Party (KPP) was founded by Fazlul Haq in 1936. ❖ Statement 2 is correct: The party tried to defend the rights of landless peasants in Bengal Province. Thus, Option C is the correct answer. Additional Information: ❖ A.K. Fazlul Huq burst onto the Bengal political scene with such ferocity during the 1937 Provincial Assembly elections that he soon acquired the moniker, Sher- e-Bangla, or the Lion of Bengal. This was a pattern he followed for the rest of his career – defying odds and choosing paths few dared to take. SPP 22655 ❖ A “champion of the Bengal peasantry”, Fazlul Huq was first Mayor of Calcutta before he became the Premier of an undivided Bengal from 1937 to 1943. After Partition, he was the home minister of then Pakistan, chief minister of East Bengal, and Governor of East Pakistan from 1956 to 1958. ❖ Sher-e-Bangla donned many important political hats during a tumultuous time in history. He was president of the All India Muslim League (AIML) from 1916 to 1921 and general secretary of the Indian National Congress (INC) from 1918 to 1919."},{"id":18,"txt":"Which one of the following national leaders described Rani Gaidinliu as the “daughter of the hills” and conferred upon her the title ‘Rani’?","ref":"","opts":["Mahatma Gandhi","Jawaharlal Nehru","Subhas Chandra Bose","Sardar Vallabhbhai Patel"],"ci":1,"exp":"Ex: Rani Gaidinliu (1915–1993) was a prominent Naga spiritual and political leader from present- day Manipur who played an important role in the anti-British resistance movement in Northeast India. She joined the Heraka religious movement at a young age under the leadership of her cousin Haipou Jadonang. After Jadonang was executed by the British in 1931, she assumed leadership and transformed the movement into an organised resistance against colonial rule. At just 16 years of age, she led an armed struggle against the British in the Naga Hills region. She was arrested in 1932 and sentenced to life imprisonment. She remained in jail for about 14 years and was released only after India’s independence in 1947. During her imprisonment, Jawaharlal Nehru visited the region and admired her courage, calling her the “daughter of the hills” and giving her the title ‘Rani’, by which she became widely known. After independence, she continued to work for the welfare and unity of the Naga people and opposed separatist movements. She was later honoured with the Padma Bhushan (1982) for her contribution to the freedom struggle and social reform. 8"},{"id":19,"txt":"Consider the following information :\n1. Sarojini Naidu\n2. Radhabai Subbarayan\n3. Begum Jahanara Shahnawaz\n4. Kamaladevi Chattopadhyay How many women leaders given above participated in all Round Table Conferences which were held in London?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: The Round Table Conference was a series of three meetings held in London between 1930 and 1932 to discuss constitutional reforms in India. Initiated by the British government, these conferences aimed to address Indian demands for self-governance and to find a solution to India’s constitutional future. The conferences brought together Indian political leaders, representatives from the British government, and various stakeholders to deliberate on issues such as communal representation, minority rights, and the future structure of governance in India. Among the given freedom fighters only Begum Jahanara Shahnawaz, participated in all Round Table conferences. Round table women conference (RTC) 1. RTC 1 Begum Jahanara (1930-31) Shahnawaz, Radhabai Subbarayan 1. RTC2(1931) Sarojini Naidu, Begum Jahanara Shahnawaz, Radhabai Subbarayan 1. RTC3(1932-32) Begum Jahanara Shahnawaz, Additional Information: Sarojini Naidu: Sarojini Naidu, often referred to as the “Nightingale of India,”. Sarojani Naidu was elected as the first Indian woman president of the Indian National congress in 1925(Kanpur Session) . Kamala Chattopadhyay, also known as Kamaladevi Chattopadhyay, was a remarkable Indian freedom fighter, social reformer, and cultural ambassador. Kamaladevi was actively involved in the Civil Disobedience Movement and the Quit India Movement, working alongside prominent leaders like Mahatma SPP 22655 Gandhi and Jawaharlal Nehru. Beyond her political activism, she played a pivotal role in reviving and promoting India’s traditional arts and handicrafts. She founded organizations like the All India Handicrafts Board and the National School of Drama, working tirelessly to empower rural artisans and preserve India’s rich cultural heritage."},{"id":20,"txt":"Who among the following is associated with “Songs from Prison‟, a translation of ancient Indian religious lyrics in English?","ref":"","opts":["Bal Gangadhar Tilak","Jawaharlal Nehru","Mohandas Karamchand Gandhi","Sarojini Naidu"],"ci":2,"exp":"Ex: Mahatma Gandhi was associated with the book “Songs from Prison”. In 1922 Narayan Maheshwar Khare - the resident musician in Sabarmati Ashram together with Gandhi compiled about 250 devotional songs in different languages into the Ashram Bhajanavali which formed part of the morning and evening prayers at his ashrams. Gandhi translated these into English during his imprisonment in Yerwada jail in 1930, and an adaptation of this work by John S. Hoyland was published in 1934 as “Songs from Prison”. It contains various hymns, including passages from the Bhagavad Gita, Upanishads, and other religious texts, reflecting his deep connection to spirituality and Indian culture. This work demonstrated his efforts to bridge the gap between Indian traditions and the global audience. Thus, Option C is the correct answer."},{"id":21,"txt":"With reference to Gandhi’s Harijan Campaign, consider the following statements:\n1. After his release in August 1933, Gandhi conducted a nationwide anti- untouchability campaign from Wardha.\n2. Gandhi linked the removal of untouchability with the abolition of the caste system and inter-caste practices.\n3. Gandhi defended untouchability using religious texts while advocating limited reform.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: After being released from jail in August 1933, Gandhi settled at Wardha and launched a massive nationwide campaign against untouchability. Starting in November 1933, he undertook a \"Harijan Tour\" that covered over 20,000 km across India to collect funds for the newly formed Harijan Sevak Sangh and to spread the message of social equality. Statement 2 is incorrect: During this specific campaign, Gandhi made a tactical distinction between untouchability and the caste system. He focused entirely on the abolition of 9 untouchability, calling it a \"blot on Hinduism.\" At this stage, he did not call for the total abolition of the caste system (Varnashrama) or advocate for inter-caste marriage and inter- dining, believing that such a radical shift would alienate orthodox Hindus and distract from the immediate goal of removing untouchability. Statement 3 is incorrect: Gandhi was the primary opponent of untouchability. He argued that untouchability had no scriptural sanction and that any religious text supporting it was either a later interpolation or contrary to the fundamental truth of the Shastras. He characterized untouchability as a \"heinous sin\" and \"Satanic,\" rather than defending it."},{"id":22,"txt":"With reference to the Ramgarh Session of the Indian National Congress (March 1940), which one of the following best describes the Congress position on India’s response to the Second World War?","ref":"","opts":["Conditional cooperation with Britain based on immediate grant of dominion status","Moral and non-violent support to Britain while postponing the demand for independence","Rejection of all cooperation unless complete independence was conceded.","Immediate launch of an all-India mass struggle irrespective of organisational preparedness"],"ci":2,"exp":"Ex: Option (c) is correct: The Ramgarh Session (March 1940), presided over by Maulana Abul Kalam Azad, was a turning point where the Congress clarified its stance during the early years of World War II. At Ramgarh, the Congress passed a resolution stating that \"nothing short of Complete Independence (Purna Swaraj) can be accepted by the people of India.\" They explicitly rejected any cooperation in a war that was being fought for imperialist ends and declared that Indian participation could only be possible if the British first recognized India as an independent nation. The Congress reiterated that the people of India alone must determine their own constitution through a Constituent Assembly elected on the basis of adult suffrage. Why the other options are incorrect: Option (a) is incorrect: By 1940, the Congress had moved far beyond \"Dominion Status.\" They viewed the British refusal to grant immediate independence as proof that British war aims were not democratic. Option (b) is incorrect: While Gandhi personally felt a moral sympathy for Britain's struggle against Nazism, the Congress as an organization refused to provide even moral support as long as India herself was denied freedom. SPP 22655 Option (d) is incorrect: Although the left wing (led by Subhas Chandra Bose and the Socialists) wanted an immediate mass struggle, Gandhi and the Congress leadership at Ramgarh advised patience. They argued that the country was not yet prepared for a massive non-violent struggle and that such a move might turn violent or be suppressed easily while the British were in a \"life and death\" struggle in Europe."},{"id":23,"txt":"Consider the following statements:\n1. Purpose of the Round Table Conference should be to determine whether Dominion Status was to be conferred or not.\n2. All parties should have equal representation at the conference.\nWhich of the above conditions were put forward in the ‘Delhi Manifesto’ for attending the Round Table Conference?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: On November 2, 1929, a conference of prominent national leaders issued a ‘Delhi Manifesto’, which put forward certain conditions for attending the Round Table Conference: ❖ The purpose of the Round Table Conference should be not to determine whether or when dominion status was to be reached but to formulate a constitution for implementation of the dominion status (thus acting as a constituent assembly) and the basic principle of dominion status should be immediately accepted. Hence, Statement 1 is incorrect ❖ The Congress should have majority representation at the conference. Hence, Statement 2 is incorrect. ❖ There should be a general amnesty for political prisoners and a policy of conciliation."},{"id":24,"txt":"During the Indian freedom struggle, the Khudai Khidmatgars, also known as Red Shirts called for:","ref":"","opts":["The Union of Pakhtun tribal areas in northwest with the Afghanistan.","The adoption of terrorist tactics and methods for terrorizing and finally ousting the colonial rulers.","The adoption of communist revolutionist ideology for political and social reform.","The Pathan regional nationalist unity and a struggle against colonialism"],"ci":3,"exp":"Ex: During Civil disobedience movement, Gaffar Khan, also called Badshah Khan and Frontier Gandhi, had started the first Pashto political monthly Pukhtoon and had organised a volunteer brigade ‘Khudai Khidmatgars’, popularly known as the ‘Red-Shirts’, who were pledged to the freedom struggle and non- violence. The Khudai Khidmatgars were strongly opposed to British colonial rule, and their main focus was on Pathan regional nationalist unity. Thus, Option D is the correct answer. 10"},{"id":25,"txt":"With reference to the Gandhi–Irwin Pact (1931), consider the following statements:\n1. The pact was signed in Delhi on 5 March 1931, following the unconditional release of Gandhi and members of the Congress Working Committee.\n2. The British government agreed to a public enquiry into police excesses during the Civil Disobedience Movement.\n3. The Congress agreed to suspend the Civil Disobedience Movement and to participate in the next Round Table Conference.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 only","1 and 3 only","2 and 3 only"],"ci":2,"exp":"Ex: Statement 1 is correct: The Gandhi–Irwin Pact (also known as the Delhi Pact) was signed on March 5, 1931. This was made possible because, in January 1931, the Viceroy Lord Irwin ordered the unconditional release of Mahatma Gandhi and the members of the Congress Working Committee (CWC) to create a favorable atmosphere for negotiations. Statement 2 is incorrect: This was a major point of contention during the negotiations. While Gandhi demanded a public enquiry into police excesses committed during the Civil Disobedience Movement, the British government flatly refused this demand. Gandhi eventually dropped this condition to reach an agreement. Statement 3 is correct: As part of the pact, the Congress agreed to suspend the Civil Disobedience Movement. Furthermore, the Congress agreed to participate in the Second Round Table Conference in London to discuss the constitutional future of India on the basis of federation, responsibility, and safeguards."},{"id":26,"txt":"Which one of the following statements regarding the Provincial Elections of 1937 is correct?","ref":"","opts":["The elections were conducted under the Montagu–Chelmsford Reforms framework","The Indian National Congress secured an overall majority of seats across all provinces and formed ministries in every province where elections were held","The elections were held under provincial autonomy provisions of the Government of India Act, 1935, and the Congress emerged as the single largest party in most provinces","The franchise extended to a majority of the adult population."],"ci":2,"exp":"Ex: Option (c) is correct: The 1937 elections were a landmark event in Indian history, representing the first time Provincial Autonomy was put into practice as mandated by the Government of India Act, 1935. The Congress performed exceptionally well, winning a clear majority in five provinces and emerging as the largest party in several others. The 1935 Act provided the legal basis for these elections. The Congress won 716 out of 1,161 seats it contested. It secured absolute majorities in Madras, Central Provinces, United Provinces, Bihar, and Orissa. It also emerged as the single largest party in Bombay and later formed governments in the North-West Frontier Province (NWFP) and Assam. SPP 22655 Option (a) is incorrect: The elections were conducted under the Government of India Act, 1935, not the Montagu–Chelmsford Reforms (which governed the earlier 1919 framework). The 1935 Act expanded the legislature and abolished the \"Dyarchy\" system in the provinces, replacing it with responsible government. Option (b) is incorrect: While the Congress's performance was dominant, it did not secure a majority in all provinces. It failed to gain a majority in Bengal, Punjab, and Sindh. Specifically, it formed ministries in 8 out of 11 provinces (initially 6, then later adding 2 more through coalitions). In Punjab, the Unionist Party took power, and in Bengal, a coalition of the Krishak Praja Party and the Muslim League formed the government. Option (d) is incorrect: The franchise was still very limited. It was based on property qualifications, education, and tax-paying status. Only about 10% to 14% of the total adult population was eligible to vote. Universal adult franchise was only introduced later with the Constitution of independent India."},{"id":27,"txt":"With reference to the working of Congress Ministries (1937–39), consider the following statements:\n1. The Congress ministries repealed emergency laws, relaxed press restrictions, and released political prisoners.\n2. Despite welfare and civil liberty measures, the ministries could not dismantle the colonial–imperialist structure of governance.\n3. The record of the Congress ministries on civil liberties was mixed rather than uniformly liberal.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","1, 2 and 3","2 and 3 only"],"ci":2,"exp":"Ex: Statement 1 is correct: Upon taking office, the Congress ministries took several immediate steps to expand civil liberties. They repealed emergency powers acts passed by previous governments, lifted bans on various political organizations (except for the Communist Party in some instances), and significantly relaxed restrictions on the press. A major achievement was the release of thousands of political prisoners, including many involved in earlier revolutionary activities. Statement 2 is correct: While the ministries provided substantial relief to the people, they operated within the strict legal and constitutional framework of the Government of India Act, 1935. The ultimate authority still rested with the British-appointed Governors and the Viceroy. The fundamental colonial-imperialist structure—including the police, the bureaucracy (ICS), and the overall legal system—remained intact and was beyond the control of the provincial ministers to dismantle. Statement 3 is correct: Historians often 11 characterize the record on civil liberties as \"mixed.\" While they were generally liberal, the ministries sometimes used the same colonial machinery they had criticized. For instance, in some provinces, the police were used to suppress militant labor strikes or peasant agitations that the Congress leadership felt were becoming too radical or violent. The Bombay Trade Disputes Act (1938) was criticized by left-wing groups as being restrictive toward the right to strike."},{"id":28,"txt":"With reference to the Civil Disobedience Movement in different regions of India, consider the following pairs:\nRegion Main Leader(s)\n1. Tamil Nadu C. Rajagopalachari\n2. Malabar K. Kelappan\n3. Orissa Gopalbandhu Choudhuri\n4. Assam Chandraprabha Saikiani\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Pair 1 is correctly matched: C. Rajagopalachari led the salt satyagraha in Tamil Nadu. Much like Gandhi's Dandi March, he led a march from Trichinopoly to Vedaranyam on the Tanjore coast to break the salt law. Pair 2 is correctly matched: In the Malabar region (Kerala), K. Kelappan, popularly known as 'Kerala Gandhi', organized salt marches. He led a group of satyagrahis from Calicut to Payyanur to manufacture salt. Pair 3 is correctly matched: In Orissa (Odisha), the movement was led by Gopalbandhu Choudhuri. Under his leadership, salt satyagraha was effectively organized in the coastal districts of Balasore, Cuttack, and Puri. Pair 4 is correctly matched: In Assam, Chandraprabha Saikiani was a prominent leader who mobilized women and tea garden laborers. She was instrumental in the civil disobedience activities in the region, particularly in the Kachari areas, and was arrested for her role in the movement."},{"id":29,"txt":"Consider the following statements regarding the Poona Pact in Indian history.\n1. It was signed by B.R. Ambedkar on behalf of the depressed classes in September,\n2. Separate electorates were accepted for the depressed classes under the pact.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: ❖ Statement 1 is correct: The Poona Pact was signed on September 24, 1932, between Mahatma Gandhi and B.R. Ambedkar, representing the depressed classes (later known as Scheduled Castes) ❖ Statement 2 is incorrect: Under the Poona Pact, separate electorates for the depressed classes were abolished. Instead, reserved seats were provided for the depressed classes in the general electorate system. Thus, Option A is the correct answer.  SPP 22655 Additional Information: ❖ The Communal Award was announced by the British prime minister, Ramsay MacDonald, on August 16, 1932. The Communal Award, based on the findings of the Indian Franchise Committee (also called the Lothian Committee), established separate electorates and reserved seats for minorities, including the depressed classes, which were granted 78 reserved seats. ❖ Thus, this award accorded separate electorates for Muslims, Europeans, Sikhs, Indian Christians, Anglo-Indians, depressed classes, and even to the Marathas for some seats in Bombay. The award was perceived by the national leaders led by the Congress as another manifestation of the British policy of divide and rule. ❖ Gandhi demanded that the depressed classes be elected through joint and if possible a wider electorate through universal franchise, while expressing no objection to the demand for a larger number of reserved seats. And to press his demands, he went on an indefinite fast on September 20, 1932. Now leaders of various persuasions, including B.R. Ambedkar, M.C. Rajah, and Madan Mohan Malaviya got together to hammer out a compromise contained in the Poona Pact. ❖ Signed by B.R. Ambedkar on behalf of the depressed classes on September 24, 1932, the Poona Pact abandoned the idea of separate electorates for the depressed classes. But the seats reserved for the depressed classes were increased from 71 to 147 in provincial legislatures and to 18 per cent of the total in the Central Legislature. ❖ The Poona Pact was accepted by the government as an amendment to the Communal Award.  12"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

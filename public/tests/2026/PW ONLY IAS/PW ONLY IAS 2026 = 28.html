@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 28</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 28</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 28">PW ONLY IAS 2026 = 28</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Which of the following best explains why the Banking Regulation Act, 1949 was necessary despite the existence of the RBI Act, 1934?","ref":"","opts":["RBI Act did not create RBI as a statutory body","RBI Act was applicable only during British rule","RBI Act applied only to Scheduled Banks","RBI Act focused on currency and monetary stability, not prudential regulation"],"ci":3,"exp":"Ex: Option (d) is correct: The RBI Act, 1934 primarily established the Reserve Bank of India and empowered it to manage Currency issuance, Monetary policy, and Credit conditions and exchange stability. It lacked the specific legal mandate for micro-prudential oversight, such as licensing requirements, minimum paid-up capital, and the power to control the management and governance of individual commercial banks. The Banking Regulation Act, 1949 was therefore necessary to introduce prudential regulation and supervisory control over banking companies, especially in the wake of bank failures in the 1940s. Option (a) is incorrect: The RBI Act did create RBI as a statutory body. Option (c) is incorrect: The concept of \"Scheduled Banks\" is actually defined in the Second Schedule of the RBI Act, 1934 itself; however, the Act lacked the teeth to regulate the non-scheduled sector, which remained highly unstable until 1949. Option (b) is incorrect: The RBI Act continues to apply post-Independence; its relevance is not confined to British rule. PWOnlyIAS Extra Edge Statutory Liquidity Ratio (SLR): While the CRR (Cash Reserve Ratio) is primarily governed by the RBI Act (Section 42) for monetary control, the SLR is mandated under the Banking Regulation Act (Section 24) for prudential safety. PW ONLYIAS SUPER HINT Indian laws don't just \"expire\" because a country becomes independent; they are adapted. Most of the 1934 Act still functions today. (Eliminate B) SPP 22629 The RBI Act applied only to \"Scheduled Banks.\" If this were the only problem, you would just amend the 1934 Act to include more banks. You don't write a whole new massive law just to change a definition.\"Scope\" issues are usually fixed with small edits. \"Power\" issues require a new Legal Framework. (Eliminate C) An \"Act\" by definition creates a \"Statutory\" body. If the 1934 Act existed, the status existed. (Eliminate A)"},{"id":1,"txt":"With reference to loan recovery mechanisms, consider the following statements:\n1. Commercial Banks derive their loan recovery powers under the SARFAESI Act.\n2. All NBFCs are empowered to invoke SARFAESI for recovery of dues.\n3. Housing Finance Companies enjoy SARFAESI powers even though they are NBFCs.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is correct: Commercial Banks are explicitly covered under SARFAESI as “secured creditors”. Under the SARFAESI Act, 2002, Commercial Banks (as \"secured creditors\") can issue a 60-day notice to a defaulter. If the dues aren't cleared, the bank can take possession of the collateral (land, building, etc.) without the intervention of a court or tribunal. Statement 2 is incorrect: Not all NBFCs are eligible. Currently, only those NBFCs with an asset size of ₹100 crore and above are notified as \"financial institutions\" under the Act. Furthermore, they can only invoke SARFAESI for loans with a minimum principal amount of ₹20 lakh. Statement 3 is correct: Housing Finance Companies (HFCs) are specialized NBFCs. Given that their primary business is mortgage- backed lending, they were among the first \"non- banks\" to be granted SARFAESI powers to ensure the health of the housing finance market. PWOnlyIAS Extra Edge What is NOT covered: SARFAESI cannot be used for: ❖ Agricultural land. ❖ Cases where the remaining debt is less than 20% of the original principal. 2 ❖ Unsecured loans (where no collateral was taken). CERSAI: The Central Registry of Securitisation Asset Reconstruction and Security Interest (CERSAI) is a digital portal created under SARFAESI to prevent the same property from being used as collateral for multiple loans at different banks. PW ONLYIAS SUPER HINT Does the law give a \"Dangerous Power\" to everyone, or only to those it trusts? SARFAESI allows you to take someone’s property without going to court. This is a massive power. Whenever you see the word \"All\" in a regulatory context regarding a high- stakes power, it is a \"Red Flag.\" There is almost always a Threshold (like asset size) to ensure only stable, large players have this right. (Eliminate Statement 2)"},{"id":2,"txt":"Which of the following are classified as promotional functions of the RBI rather than regulatory functions?\n1. Priority Sector Lending norms\n2. Banking Ombudsman\n3. Liquidity coverage ratio\n4. Branch expansion mandates in rural areas\nSelect the correct code below:","ref":"","opts":["1, 2 and 4 only","2 and 3 only","1 and 3 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Function 1 is correct: Priority Sector Lending (PSL) is a developmental/promotional tool used to channel credit to agriculture, MSMEs, weaker sections, and priority activities that markets may otherwise under-serve. Function 2 is correct: The Integrated Ombudsman Scheme is a promotional function designed to build consumer confidence and protect the interests of depositors, thereby encouraging a wider segment of the population to use the formal banking system. Function 4 is Correct: Branch expansion mandates (such as the 25% rule for unbanked rural centers) are core promotional activities directed at achieving Financial Inclusion and geographical parity in banking services. Function 3 is incorrect: LCR is a prudential regulatory norm aligned with Basel III, intended to ensure banks maintain adequate high-quality liquid assets to withstand short- term stress. It is purely regulatory, not promotional. SPP 22629 PWOnlyIAS Extra Edge Differentiated Banks: The creation of Small Finance Banks and Payment Banks is a modern example of the RBI's promotional role to reach the \"last mile.\" Financial Literacy: The RBI’s \"RBI Kehta Hai\" campaign and the establishment of Financial Literacy Centres (FLCs) are also classified as promotional/developmental functions."},{"id":3,"txt":"Consider the following about the Daksh Web Portal:\n1. It is primarily meant for submission of supervisory data by regulated entities.\n2. It directly handles customer grievances related to banking frauds.\n3. It enables RBI to track sector-wide risk indicators in near real time.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: The DAKSH Web Portal is a supervisory and regulatory technology (SupTech) platform of the RBI, designed for data ingestion and risk monitoring. Initially launched for banks, it has been expanded to cover Non-Banking Financial Companies (NBFCs) and Payment System Operators (PSOs), making the supervisory framework uniform across the financial sector. Statement 1 is correct: DAKSH (meaning efficient/competent) is the RBI’s advanced Supervisory Management System. It provides a single interface for regulated entities to submit compliance returns, which were previously scattered across various manual and digital channels. Statement 3 is correct: The portal uses Data Analytics and Machine Learning to help the RBI monitor compliance culture and identify Early Warning Signals (EWS). It moves supervision from \"periodic\" to \"continuous, \" allowing for near real-time risk assessment of the financial system. Statement 2 is incorrect: DAKSH is a back- end tool for the regulator (RBI) and the regulated (Banks). Customer-facing functions like reporting frauds or lodging complaints are handled by the CMS (Complaint Management System) and the Sachet portal. PW ONLYIAS SUPER HINT If you are a customer with a fraud complaint, do you use the \"Supervisory Portal\" or the \"Ombudsman/CMS\"? Supervisory tools are Internal. Customer grievances are External. 3 Hence S2 is likely false. Eliminate option C and D. The \"Near Real Time\" Goal. The main likely reason to build a sophisticated portal like Daksh is to get speed. By having all banks upload data to one dashboard(S1), the RBI can see \"Red Flags\" (Risk Indicators) across the whole sector instantly rather than waiting for monthly physical reports. Thus, S3 is the logical \"Value-Add\" of the portal and likely true."},{"id":4,"txt":"Consider the following:\nList-I List-II (Event / Entity) (Correct Association)\n1. Universal Forty percent priority Bank sector lending norm\n2. Regional Lending rates linked to Rural Bank cooperative banks\n3. Local Area Geographical restriction Bank up to three districts\nHow many of the above pairs is/are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Pair 1 is correctly matched: Universal banks are full-service banks and are mandatorily subject to the 40% Priority Sector Lending (PSL) requirement. This distinguishes them from Small Finance Banks or RRBs, which have a much higher target of 75%. Pair 2 is correctly matched: RRBs operate within the rural credit ecosystem and their lending rates are aligned with/coordinated alongside cooperative banking structures and sponsor banks, reflecting their developmental mandate. Pair 3 is correctly matched: Local Area Banks (LABs) were introduced in 1996 as private sector institutions with a specific local focus. They are legally restricted to a jurisdiction of a maximum of three contiguous districts. PWOnlyIAS Extra Edge RRB Ownership: RRBs have a unique shareholding pattern: Central Govt (50%), State Govt (15%), and Sponsor Bank (35%). PSL Comparison Table: Universal Banks: 40%, RRBs: 75%, Small Finance Banks: 75%, Foreign Banks (< 20 branches): 40% (with a phase-in period)."},{"id":5,"txt":"Which of the following best defines a neobank?","ref":"","opts":["A traditional bank that operates both online and offline.","A type of cooperative bank that focuses on rural banking services.","A payment gateway that facilitates online transactions.","A fully digital bank that provides financial services without any physical branches."],"ci":3,"exp":"Ex: ❖ Neobanks are digital-only banks that operate without any physical branches. They offer banking services such as payments, savings, lending, and investments entirely through online platforms and mobile apps. SPP 22629 ➢ The Reserve Bank of India (RBI) has not yet granted any digital banking licenses to neobanks in India. Currently, neobanks operate through partnerships with traditional banks rather than as fully licensed digital banks. ➢ RazorpayX and Jupiter are prominent neobanks in India, offering digital banking services in collaboration with traditional banks."},{"id":6,"txt":"The \"Impossible Trinity\" in international economics refers to which of the following challenges faced by policymakers?","ref":"","opts":["The inability to achieve full employment, stable inflation, and economic growth simultaneously.","The difficulty in balancing fiscal deficit, trade deficit, and inflation control.","The challenge of maintaining independent monetary policy, a fixed exchange rate, and free capital flow all at the same time.","The impossibility of achieving financial inclusion, banking profitability, and low interest rates simultaneously."],"ci":2,"exp":"Ex: The Impossible Trinity, also called the Trilemma, is a key concept in international economics and monetary policy. ❖ It states that a country cannot simultaneously have: a. An independent monetary policy (control over interest rates and money supply). b. A fixed exchange rate (stabilizing the domestic currency against a foreign currency). c. Free capital flow (unrestricted movement of capital in and out of the country). ❖ A country can only achieve two of these three objectives at any given time. ❖ This concept was independently proposed by Robert Mundell and Marcus Fleming in the 1960s ❖ 1997 Asian Financial Crisis: Countries with fixed exchange rates faced issues due to capital flight. ❖ 1992 European Exchange Rate Mechanism Crisis: The UK struggled to maintain a fixed exchange rate with independent monetary policy. ➢ India has partially open capital markets and aims to control exchange rate fluctuations while having an independent monetary policy. ➢ The RBI and policymakers often face this trilemma when managing capital flows and exchange rate stability. 4"},{"id":7,"txt":"With reference to RBI’s initiatives on Artificial Intelligence, consider the following statements:\n1. FREE-AI framework focuses on ethical enablement of AI in the financial sector.\n2. MuleHunter AI aims to identify mule accounts used in money laundering.\n3. Both initiatives are being developed by RBI Innovation Hub.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 only","1, 2 and 3","1 and 3 only"],"ci":2,"exp":"Ex: Statement 1 is correct: FREE-AI (Framework for Responsible and Ethical Enablement of AI) focuses on ethical use of AI, fairness, accountability, transparency, and explainability, responsible deployment of AI/ML models in the financial sector. It is a proactive regulatory framework designed to address the \"Black Box\" problem of AI. It ensures that when banks use AI for credit scoring or insurance, the decisions are explainable, free from algorithmic bias, and respect data privacy. Statement 2 is correct: MuleHunter AI is designed to identify mule accounts—accounts used to route illicit funds—thereby supporting efforts against money laundering and financial fraud. MuleHunter AI uses Network Analysis and Pattern Recognition to detect \"Money Mule\" accounts (often Jan Dhan or dormant accounts) that show sudden high-volume transactions. It is a critical tool for the Centralized Information Management System (CIMS) to curb the \"layering\" stage of money laundering. Statement 3 is correct: Both FREE-AI and MuleHunter AI are being developed under the aegis of the RBI Innovation Hub (RBIH). The RBI Innovation Hub (RBIH), a wholly-owned subsidiary of the RBI located in Bengaluru, acts as the primary engine for these initiatives. PWOnlyIAS Extra Edge Project Resilience: Alongside AI, the RBIH is working on \"Project Resilience\" to ensure that the core banking systems (CBS) can remain operational even during massive technical failures or cyber-attacks."},{"id":8,"txt":"In which of the following does the principle of “one member, one vote” apply?","ref":"","opts":["Commercial Banks only","Cooperative Banks only","Regional Rural Banks only","Cooperative Banks and RRBs"],"ci":1,"exp":"Ex: The \"one member, one vote\" principle is the defining feature of the Cooperative movement (Rochdale Principles). It ensures democratic control, preventing a single wealthy individual from controlling the institution by buying up shares—a stark contrast to the Joint Stock Company model used by commercial banks. SPP 22629 Option B is correct: Cooperative Banks are owned by their members. Voting rights are based on membership, not shareholding. Hence, each member gets one vote, irrespective of capital contribution. This principle preserves the mutual, democratic character of cooperatives. Option (a) is incorrect: Commercial banks are Joint Stock Companies governed by the Companies Act and the Banking Regulation Act. Their governance follows the \"Proportional Representation\" rule, where the number of votes is directly linked to the number of shares held. Option (c) is incorrect: RRBs are not cooperatives. Their ownership is shared among Government of India, State Government, Sponsor Bank with a fixed ownership ratio (50: 15: 35). Decisions are made by a Board of Directors appointed by the stakeholders, not by a general body of \"members.\" Option (d) is incorrect: RRBs do not follow the cooperative voting principle."},{"id":9,"txt":"With reference to Commercial Banks and NBFCs in India, consider the following statements:\n1. Only Commercial Banks can accept both time and demand deposits, and such deposits are covered under DICGC.\n2. Deposit-taking NBFCs can accept only time deposits, but such deposits are also covered under DICGC.\n3. Payment Banks are prohibited from accepting time deposits, but their demand deposits are insured under DICGC.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 3 only","1 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: Only Commercial Banks can accept both time and demand deposits, and such deposits are covered under DICGC. Commercial Banks (public, private, foreign, RRBs) can accept Demand deposits (savings, current), Time deposits (FDs).These deposits are covered by DICGC up to the prescribed limit. Statement 2 is incorrect: While NBFC-Ds are indeed restricted to time deposits, these deposits lack DICGC protection. Investors in NBFC deposits bear the full credit risk, as the Deposit Insurance and Credit Guarantee Corporation (DICGC) Act only covers \"banking\" institutions. Statement 3 is correct: While it is true that Payment Banks cannot accept time deposits (FDs/RDs), their demand deposits (Savings/Current) ARE insured under 5 DICGC. According to RBI guidelines, all differentiated banks—including Payment Banks and Small Finance Banks—are considered \"insured banks\" under the DICGC Act. PWOnlyIAS Extra Edge Another major difference is that NBFCs cannot issue cheques drawn on themselves or be part of the primary payment and settlement system, whereas all banks (including Payment Banks) can."},{"id":10,"txt":"Which of the following powers flows specifically from scheduled bank status rather than from a general banking license?","ref":"","opts":["Power to accept demand deposits","Eligibility to be wound up under RBI supervision","Participation in RBI’s monetary policy transmission framework","Authority to open branches with RBI approval"],"ci":2,"exp":"Ex: A banking licence allows a bank to operate as a bank, but scheduled bank status (inclusion in the Second Schedule of the RBI Act, 1934) confers privileged access to RBI’s monetary and liquidity framework. Option (c) is correct: Participation in RBI’s monetary policy transmission framework—such as Access to Liquidity Adjustment Facility (LAF), Standing facilities (MSF / SDF), repo– reverse repo corridor operations, is specifically linked to scheduled bank status, not merely to holding a banking licence. This is why scheduled banks are the primary conduits of RBI’s monetary policy transmission. Option (a) is incorrect: The power to accept demand deposits (current and savings accounts) and time deposits is the core definition of \"banking business\" under Section 5(b) of the Banking Regulation Act, 1949. All licensed banks, scheduled or not, must do this to be called a bank Option (b) is incorrect: RBI’s supervisory and resolution-related powers apply to all licensed banks, scheduled or not. Option (d) is incorrect: Branch authorisation arises from licensing and regulation."},{"id":11,"txt":"Which of the following Government securities can be invested in through the Retail Direct platform?\n1. Government of India Treasury Bills (T- Bills)\n2. Government of India dated securities (G- Secs)\n3. State Development Loans (SDLs)\n4. Sovereign Gold Bonds (SGBs)\nSelect the correct answer using the codes given below:","ref":"","opts":["1 and 4 only","1, 2 and 3 only","2, 3 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: Retail Direct Scheme is a one-stop solution to facilitate investment in Government Securities by individual investors. Under this scheme individual retail investors can open a Gilt Securities Account – “Retail Direct Gilt (RDG)” account with RBI. SPP 22629 ❖ Option 1 is correct: Government of India Treasury Bills (T-Bills) are eligible: These are short-term money market instruments issued by the Government of India to manage short-term liquidity. Available in 91-day, 182-day, and 364-day maturities. ❖ Option 2 is correct: Government of India dated securities (G-Secs) are eligible: These are long-term debt instruments issued by the Government of India with maturities ranging from 5 to 40 years. ❖ Option 3 is correct: State Development Loans (SDLs) are eligible: These are issued by State Governments to fund developmental activities. SDLs are similar to G-Secs but issued by states. ❖ Option 4 is correct: Sovereign Gold Bonds (SGBs) are eligible: These are issued by RBI on behalf of the Government of India to allow individuals to invest in gold digitally. SGBs offer interest income and capital appreciation linked to gold prices."},{"id":12,"txt":"Consider the following statements:\n1. EXIM Bank provides loans in foreign currency to promote exports.\n2. SIDBI operates Udyamimitra portal for MSME credit facilitation.\n3. Neither EXIM Bank nor SIDBI directly accept deposits from the public.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 only","1, 2 and 3"],"ci":3,"exp":"Ex: Development Finance Institutions (DFIs) like Export-Import Bank of India and Small Industries Development Bank of India are designed to provide targeted development finance, not to operate as deposit-taking commercial banks. Statement 1 is correct: EXIM Bank acts as a catalyst for international trade. It offers Lines of Credit (LOC) to foreign governments and entities to import Indian goods, and provides Export Credit in foreign currencies to Indian exporters to help them compete in global markets. Statement 2 is correct: The Udyamimitra portal is a \"one-stop shop\" developed by SIDBI to improve credit flow to MSMEs. It 6 allows entrepreneurs to apply for loans (including Pradhan Mantri Mudra Yojana) and tracks the application across multiple financial institutions. Statement 3 is correct: AIFIs like EXIM, SIDBI, NABARD, and NHB are non-deposit- taking institutions. They rely on \"Wholesale Funding\"—such as issuing bonds, borrowing from the RBI, or receiving budgetary support from the Government—rather than \"CASA\" (Current Account Savings Account) deposits from the public. PWOnlyIAS Extra Edge The Five AIFIs: Under RBI's direct supervision, there are currently five AIFIs: NABARD, SIDBI, EXIM Bank, NHB, and the newly added NaBFID (National Bank for Financing Infrastructure and Development). Project Amar: EXIM Bank recently introduced \"Project Amar\" to support the export of GI-tagged products from India, aligning with the \"One District One Product\" (ODOP) initiative. MUDRA Bank: It is important to remember that MUDRA is a wholly-owned subsidiary of SIDBI. It does not lend directly to entrepreneurs but \"refinances\" banks and NBFCs who do."},{"id":13,"txt":"Match the following:\nList-I (Entity) List-II (Correct Description) A. NIDHI Ministry of Corporate Companies Affairs B. Microfinance RBI + MCA (dual Companies nature) C. Chit Funds State Registrar D. Policy IRDAI Aggregator Platforms\nHow many of the above pairs is/are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Pair 1 is correctly matched: NIDHI Companies are mutual benefit societies governed under the Companies Act and NIDHI Rules, and are regulated by the Ministry of Corporate Affairs (MCA). While they are a type of NBFC, the RBI has exempted them from its core provisions. They are primarily governed under Section 406 of the Companies Act, 2013 and the Nidhi Rules, 2014 by the MCA Pair 2 is correctly matched: Most modern microfinance entities are registered as NBFC- MFIs. As companies, they fall under the MCA for incorporation and corporate governance. As SPP 22629 financial intermediaries, they must follow RBI’s prudential norms regarding \"qualifying assets, \" interest rate caps, and lending limits. Thus there is a dual regulatory nature. Pair 3 is correctly matched: Chit funds are governed by the Chit Funds Act, 1982 and are regulated by the Registrar of Chits at the State level, not by RBI. The RBI’s role is limited to prohibiting \"Prize Chits\" and \"Money Circulation Schemes.\" Pair 4 is correctly matched: Policy Aggregators operate in the insurance distribution space and are regulated by IRDAI under the IRDAI (Insurance Web Aggregators) Regulations."},{"id":14,"txt":"Consider the following pairs:\n1. Manmohan Singh — Payment Banks\n2. Raghuram Rajan — CPI inflation targeting framework\n3. Urjit Patel — Insolvency and Bankruptcy Code (IBC) framework\n4. Shaktikanta Das — Bretton Woods Conference\nHow many of the above RBI Governors is/are correctly matched with a major institutional reform?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Option (b) is correct: Raghuram Rajan oversaw the formal adoption of the CPI inflation targeting framework in India. This culminated in the Monetary Policy Framework Agreement (2015) between the Government of India and the RBI, anchoring monetary policy to CPI inflation and later institutionalised via the MPC. Option (a) is incorrect: Manmohan Singh served as RBI Governor from 1982–1985. Payment Banks were recommended by the Nachiket Mor Committee (2013) and licensed during Raghuram Rajan’s tenure. Manmohan Singh’s RBI governorship is associated with balance-of-payments crisis management and financial sector reforms of the early 1990s, not Payment Banks. Option (c) is correct: Although the IBC was enacted in May 2016, the banking sector was initially hesitant to use it. In May 2017, during Urjit Patel’s tenure, the Banking Regulation (Amendment) Act was passed, inserting Sections 35AA and 35AB. This amendment gave the RBI the specific power to \"direct\" banks to initiate insolvency proceedings against specific defaulters. Without this \"nudge\" from the RBI, banks were often reluctant to take \"haircuts\" (losses) on their loans. 7 Option (d) is incorrect: The Bretton Woods Conference (1944) predates Shaktikanta Das by decades and is unrelated to his governorship. C.D. Deshmukh was the RBI Governor during the Bretton Woods era."},{"id":15,"txt":"Arrange the following in chronological order:\n1. Launch of Airtel Payments Bank operations\n2. Launch of India Post Payments Bank\n3. RBI’s action restricting Paytm Payments Bank\n4. Announcement by India Post Payments Bank expressing intent to convert into a Small Finance Bank\nSelect the correct answer using the code below:","ref":"","opts":["1 – 4 – 2 – 3","1 – 2 – 3 – 4","2 – 1 – 4 – 3","1 – 2 – 4 – 3"],"ci":3,"exp":"Ex: ❖ Launch of Airtel Payments Bank operations (2017): Airtel Payments Bank was among the first payments banks to commence operations, marking the initial operationalisation of the Payments Bank model. ❖ Launch of India Post Payments Bank (September 2018): While incorporated earlier, the full-scale national launch was inaugurated by the Prime Minister in 2018, aiming to utilize the vast network of 1.55 lakh post offices. ❖ Announcement by IPPB expressing intent to convert into a Small Finance Bank (2023): The Ministry of Communications announced in late 2022/early 2023 that IPPB had applied to the RBI for a license to convert into a Small Finance Bank (SFB). This transition allows them to provide credit (loans), which the Payments Bank model prohibits. ❖ RBI’s action restricting Paytm Payments Bank (2024): Invoking Section 35A of the Banking Regulation Act, the RBI directed the bank to stop accepting fresh deposits or credit transactions in any customer accounts due to \"persistent non- compliances.\" PWOnlyIAS Extra Edge A Payments Bank can apply to convert into an SFB after five years of successful operations, provided it meets the minimum net worth requirements (currently ₹200 crore for SFBs). SLR Mandate: Because they cannot lend, Payments Banks must invest at least 75% of SPP 22629 their demand deposit balances in Statutory Liquidity Ratio (SLR) eligible Government Securities/T-bills with a maturity of up to one year."},{"id":16,"txt":"With reference to Regional Rural Banks (RRBs), consider the following statements:\n1. RBI is the ultimate regulator of RRBs, but NABARD functions as the immediate regulator.\n2. RBI can prescribe CRR and SLR norms for RRBs different from other commercial banks.\n3. Interest rates charged by RRBs cannot exceed lending rates of cooperative banks in the same area.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1, 2 and 3","1 and 3 only"],"ci":0,"exp":"Ex: Regional Rural Banks (RRBs) operate under a dual regulatory architecture—with RBI as the apex regulator and NABARD as the immediate supervisor—and are subject to differentiated prudential norms reflecting their developmental mandate. Statement 1 is correct: While the RBI is the primary regulator under the Banking Regulation Act, 1949, NABARD has been delegated the responsibility of statutory inspection of RRBs under Section 35 of the same Act. Thus, NABARD acts as the \"immediate\" supervisor. Statement 2 is correct: RBI can prescribe CRR and SLR norms for RRBs that are different from other commercial banks, recognising their smaller size, regional focus, and role in financial inclusion. While RRBs currently maintain the same CRR (4%), they have historically enjoyed lower SLR requirements to facilitate greater credit flow to rural areas. Statement 3 is incorrect: Following the deregulation of interest rates in 2002, RRBs are free to determine their own lending rates based on their MCLR (Marginal Cost of Funds Based Lending Rate) or external benchmarks. There is no legal \"ceiling\" linked to cooperative bank rates. PWOnlyIAS Extra Edge M. Narasimham Committee (1975): RRBs were established based on this committee's recommendation to combine the \"local feel\" of cooperatives with the \"professionalism\" of commercial banks. First RRB: The Prathama Bank (sponsored by Syndicate Bank) was the first RRB, established on October 2, 1975, in Moradabad, UP. 8"},{"id":17,"txt":"Which of the following are classified as Commercial Banks in India?\n1. Domestic Public Sector Banks\n2. Land Development Banks\n3. Foreign Banks\n4. Payments Banks\n5. Small Finance Banks\nSelect the correct answer using the codes given below:","ref":"","opts":["1, 3, 4 and 5 only","2, 3 and 5 only","1, 2 and 4 only","1, 2, 3, 4 and 5"],"ci":0,"exp":"Ex: Commercial banks in India are financial institutions that accept deposits, provide loans, and offer financial services to businesses and individuals. They operate under the regulation of the Reserve Bank of India (RBI). The major types of commercial banks include: ❖ Option 1 is correct: Domestic Public Sector Banks: These are government- owned banks where the government holds more than 50% of the stake. Example: State Bank of India (SBI), Punjab National Bank (PNB), Bank of Baroda (BOB), Canara Bank, etc. ❖ Option 2 is incorrect: Land Development Banks (LDBs) are NOT classified as commercial banks. They provide long-term credit to farmers for agricultural development. LDBs operate at state and district levels and are primarily focused on land mortgage finance rather than regular banking operations. ❖ Option 3 is correct: Foreign Banks: These are banks that have headquarters outside India but operate within India through branches. Example: HSBC, Citibank, Standard Chartered, Deutsche Bank, etc. ❖ Option 4 is correct: Payments Banks: These are a new category of commercial banks introduced by the RBI. They can accept deposits (up to ₹2 lakh per individual) but cannot offer loans. Example: Airtel Payments Bank, Paytm Payments Bank, India Post Payments Bank, etc. ❖ Option 5 is correct: Small Finance Banks: These are commercial banks that cater primarily to small businesses, unorganized sectors, and low-income households. Example: Ujjivan Small Finance Bank, Equitas Small Finance Bank, AU Small Finance Bank, etc. SPP 22629"},{"id":18,"txt":"Which of the following statements correctly describes Payment Banks after being classified as Scheduled Banks?\n1. They can accept fixed deposits beyond the prescribed limits.\n2. They can issue loans and credit cards directly to customers.\n3. They may act as agents of other banks for credit delivery.\nSelect the correct answer using the code below:","ref":"","opts":["2 and 3 only","1 and 2 only","3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Payment Banks were envisioned by the Nachiket Mor Committee to provide small savings accounts and payments/remittance services to low-income households. Statement 1 is incorrect: Scheduled status does not change the deposit rules for Payment Banks. They are still restricted to accepting demand deposits (savings and current accounts) up to a limit of ₹2 lakh per individual customer. They cannot accept Fixed Deposits (FDs) or Recurring Deposits (RDs) on their own books. Statement 2 is incorrect: Payment Banks are explicitly prohibited from issuing loans or credit cards from their own balance sheet. They are prohibited from issuing loans or credit cards, regardless of whether they are a scheduled bank or not. Statement 3 is correct: Payment Banks may act as agents or business correspondents of other banks for Credit delivery, Loan origination, and Financial inclusion services. This is a permitted workaround that allows them to participate indirectly in credit markets."},{"id":19,"txt":"Consider the following statements regarding Bond Yield:\nStatement-I: Bond yield is inversely related to the price of the bond in the secondary market. Statement-II: When the economy is booming, investors prefer bonds over stocks, leading to an increase in bond prices and bond yields.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct, and Statement-II is the correct explanation for Statement-I.","Both Statement-I and Statement-II are correct, but Statement-II is not the correct explanation for Statement-I.","Statement-I is correct, but Statement-II is incorrect.","Statement-I is incorrect, but Statement-II is correct."],"ci":2,"exp":"Ex: ❖ Statement-I is correct: Bond yield is inversely related to bond price. If the demand for bonds increases, their price rises, leading to a decrease in yield. ➢ Conversely, if the demand for bonds falls, their price drops, causing yield to increase. ❖ Statement-II is incorrect: In a booming economy, investors prefer stocks over bonds because stocks can generate higher returns through dividends and capital appreciation. As a result, bond demand falls, their prices decrease, and yields increase. 9"},{"id":20,"txt":"With reference to National Urban Cooperative Finance and Development Corporation (NUCFDC), consider the following statements:\n1. NUCFDC will receive funding support from National Cooperative Development Corporation (NCDC).\n2. NCDC is a statutory body under the Ministry of Cooperation.\n3. NUCFDC plans to mobilize capital from investors for technology development of UCBs.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1, 2 and 3","1 and 3 only"],"ci":0,"exp":"Ex: The NUCFDC (launched in 2024) is the long- awaited Umbrella Organization (UO) for the Urban Cooperative Banking sector. Statement 1 is correct: To operationalize the NUCFDC, the National Cooperative Development Corporation (NCDC) has committed to providing initial funding support. This enables the NUCFDC to act as a Self- Regulatory Organization (SRO) and a service provider for nearly 1, 500 Urban Cooperative Banks (UCBs) through refinancing, capacity- building, and technology upgradation. Statement 2 is correct: The NCDC is a statutory body (1962 Act). While it was historically under the Ministry of Agriculture, it was shifted to the Ministry of Cooperation following the ministry's creation in July 2021 to streamline the \"Sahkar se Samriddhi\" vision. Statement 3 is incorrect: The NUCFDC’s primary goal is to pool the resources of the UCBs themselves and the cooperative sector. It is not an \"investor-driven\" entity. It aims to bridge the digital divide by providing a common technology platform for smaller UCBs that cannot afford independent core banking systems (CBS). PWOnlyIAS Extra Edge The idea for NUCFDC came from the Vishwanathan Committee (2021) recommendations. It aims to solve the \"isolated\" nature of UCBs by giving them a central liquidity and technology hub, similar to the Rabobank model in the Netherlands. UCBs are now classified into four tiers (Tier 1 to Tier 4) based on their deposit size. This helps NUCFDC and RBI apply \"proportional regulation.\" PW ONLYIAS SUPER HINT Does the body match the Ministry's mission? It is logically consistent for the \"Primary Engine\" of cooperatives to be under the \"Ministry of Cooperation.\" Furthermore, most major national development corporations are established by an Act of Parliament to give SPP 22629 them \"Statutory\" weight. Hence S2 is likely true. For S3, Does a \"Support Body\" (NUCFDC) take on \"Market Risk\" or \"Administrative Risk\"? UCBs are historically sensitive and prone to local failures. If a government-backed entity brings in private \"investors\" to fund their technology, it creates a massive Financial Liability. Therefore, Statement 3 is logically inconsistent with the cooperative model and likely false."},{"id":21,"txt":"Shadow banking institutions typically mobilize funds through:\n1. Borrowing from commercial banks\n2. Issuing Commercial Papers (CPs)\n3. Issuing non-convertible debentures\n4. Accepting demand deposits from the public\nSelect the correct answer using the code below:","ref":"","opts":["1 and 4 only","2 and 4 only","1, 2 and 3 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Shadow banking refers to credit intermediation activities and institutions that operate outside the traditional commercial banking system, but are not necessarily illegal or unregulated. Examples include NBFCs, Housing Finance Companies, Money Market Mutual Funds, Securitisation vehicles. They may be partially regulated (often by RBI or SEBI), but outside the core banking framework. Statement 1 is correct: Shadow banks (e.g., NBFCs, HFCs) commonly borrow from banks via term loans, lines of credit, or inter-corporate deposits. Shadow banks (NBFCs) are major borrowers from the banking system. Banks provide them with Term Loans and Working Capital facilities. This creates an \"interconnectedness\" risk; if a large NBFC fails, it can destabilize the commercial banks that lent to it. Statement 2 is correct: For short-term liquidity, shadow banks issue Commercial Papers—unsecured money market instruments. This allows them to raise funds for periods ranging from 7 days to 1 year from institutional investors like Mutual Funds. Statement 3 is correct: To match long-term assets (like 15-year home loans), shadow banks issue Non-Convertible Debentures (NCDs). These are debt instruments that cannot be converted into equity and offer a fixed rate of interest, helping the institution manage Asset- Liability Mismatch (ALM). 10 Statement 4 is incorrect: This is exclusive to banks. Shadow banks cannot accept demand deposits. Shadow banks are strictly prohibited from this; even \"Deposit-taking NBFCs\" can only accept Time Deposits (Fixed Deposits). PW ONLYIAS SUPER HINT Why are they called \"Shadow\" banks? Because they look and act like banks, but they lack the core power of a real bank. If an institution could accept demand deposits, it wouldn't be in the \"Shadows\"—it would just be a Bank. (Eliminate Statement 4) In India, the power to accept Demand Deposits is the \"Sacred Wall\" that separates real banks from everyone else."},{"id":22,"txt":"Consider the following:\nList-I List-II (Event / Entity) (Correct Association)\n1. Narasimham Triggered by Balance of Committee-I Payments crisis\n2. On-Tap Continuous application Licensing model replacing invitation\n3. Bandhan Bank Selection during third round of private bank licensing\nHow many of the above pairs is/are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Pair 1 is correctly matched: The Narasimham Committee-I (1991) was constituted in the aftermath of the 1991 BOP crisis and laid the foundation for financial sector reforms, including prudential norms and competition. Pair 2 is correctly matched: : Under On-Tap Licensing, the \"window\" for applications is open throughout the year. This ended the era of \"discretional rounds\" and made the process more predictable and merit-based for eligible entities. Pair 3 is correctly matched: Along with IDFC First Bank, Bandhan Bank (formerly an MFI) was the only entity granted a universal banking license in the third phase of private sector licensing in 2014."},{"id":23,"txt":"With reference to the Legal Entity Identifier (LEI), consider the following statements:\n1. The Legal Entity Identifier (LEI) is a 20- character alphanumeric code used globally to uniquely identify entities involved in financial transactions.\n2. In India, LEI can be obtained from Legal Entity Identifier India Ltd. (LEIL), which is recognized as an issuer of LEI by the Reserve Bank of India (RBI).\n3. LEI is mandatory for all transactions, including those made by individuals, businesses, and government departments through NEFT and RTGS.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: ❖ Statement 1 is correct: The LEI is a globally recognized identification system developed to enhance the transparency of financial transactions. It consists of 20 alphanumeric characters and is used to uniquely identify legal entities participating in financial transactions SPP 22629 worldwide. The system is managed by the Global Legal Entity Identifier Foundation (GLEIF). ❖ Statement 2 is correct: In India, Legal Entity Identifier India Ltd. (LEIL), a subsidiary of Clearing Corporation of India Ltd. (CCIL), is responsible for issuing LEIs. The RBI has mandated the use of LEI for large-value transactions to improve financial risk management and regulatory compliance. ❖ Statement 3 is incorrect: LEI is not required for individual transactions where both the sender and beneficiary are individuals. However, LEI is mandatory for non-individual entities (companies, partnerships, government undertakings) for transactions of ₹50 crore and above through NEFT and RTGS. Government departments and ministries are exempt from obtaining an LEI, but corporations and undertakings owned by the government must comply."},{"id":24,"txt":"Consider the following statements regarding the establishment of the RBI:\n1. The collapse of several banks during the Great Depression strengthened the case for a central banking institution in India.\n2. The Hilton Young Commission was constituted after the Great Depression to respond to banking failures.\n3. The Reserve Bank of India Act was enacted before the global economic crisis of the 1930s.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: The collapse of several banks during the Great Depression (post-1929) exposed the fragility of India’s banking system and strengthened the case for a central banking authority to ensure regulation, stability, and lender-of-last-resort functions. Statement 2 is incorrect: The Hilton Young Commission (officially the Royal Commission on Indian Currency and Finance) submitted its report in 1926, several years prior to the 1929 stock market crash. Its purpose was to address the volatility of the Rupee and the lack of a unified monetary authority. Statement 3 is incorrect: The Reserve Bank of India Act was enacted in 1934, squarely in the aftermath of the Great Depression's peak, and the bank commenced operations on April 1, 1935 11 PWOnlyIAS Extra Edge When established, the RBI was a shareholders’ bank (privately owned). It was only nationalized in 1949 following the Reserve Bank (Transfer to Public Ownership) Act, 1948. Central Banking before RBI: Before the RBI, the Imperial Bank of India (formed in 1921) performed some central banking functions, but it was also a commercial competitor to other banks, leading to a conflict of interest that the RBI was meant to resolve."},{"id":25,"txt":"Consider the following statements regarding the Capital Adequacy Ratio (CAR):\nStatement-I: The Capital Adequacy Ratio (CAR) is a measure of a bank’s financial strength, ensuring it has enough capital to absorb losses and protect depositors. Statement-II: CAR is calculated as the ratio of a bank’s Tier 1 and Tier 2 capital to its Risk- Weighted Assets (RWA), ensuring that risk exposure is appropriately accounted for.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct, and Statement-II is the correct explanation of Statement-I.","Both Statement-I and Statement-II are correct, but Statement-II is not the correct explanation of Statement-I.","Statement-I is correct, but Statement-II is incorrect.","Statement-I is incorrect, but Statement-II is correct."],"ci":0,"exp":"Ex: ❖ Statement I is correct: CAR is a key financial indicator used to assess a bank's ability to withstand potential losses and ensure depositor safety. It acts as a buffer against financial risks, preventing banks from collapsing due to excessive risk- taking. A higher CAR indicates a more stable and resilient banking system. ❖ Statement II is correct: The formula for CAR is: 𝑇𝑖𝑒𝑟 1 𝐶𝑎𝑝𝑖𝑡𝑎𝑙+𝑇𝑖𝑒𝑟 2 𝐶𝑎𝑝𝑖𝑡𝑎𝑙 CAR= 𝑅𝑖𝑠𝑘 𝑊𝑒𝑖𝑔ℎ𝑡𝑒𝑑 𝐴𝑠𝑠𝑒𝑡𝑠 ➢ Tier 1 Capital includes equity capital and disclosed reserves, which can absorb losses while the bank remains operational. Tier 2 Capital includes revaluation reserves, subordinated debt, and hybrid instruments, which act as supplementary support. Risk- Weighted Assets (RWA) adjust the bank’s assets based on their associated risk levels, ensuring that high-risk loans require more capital coverage. ❖ Statement-II is the correct explanation of Statement-I: The formula for CAR explains that lower risk weighted assets will lead to higher CAR thus enhancing financial health of the banks. SPP 22629"},{"id":26,"txt":"With reference to the Monetary Policy Committee (MPC), consider the following statements:\n1. The Monetary Policy Committee (MPC) is responsible for setting the monetary policy stance, including the repo rate.\n2. The MPC consists of four members, and a minimum of three members is required to hold a meeting.\n3. The Governor of the Reserve Bank of India (RBI) has a casting vote in case of a tie in the voting process.\n4. The Monetary Policy Report (MPR) is published annually by the RBI.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","2 and 4 only","1, 2 and 3 only","1, 3 and 4 only"],"ci":0,"exp":"Ex: ❖ Statement 1 is correct: The MPC is responsible for setting the monetary policy stance, primarily the repo rate, which is the key policy rate used to control inflation and economic growth. ➢ The RBI provides data and analysis to assist in decision-making, but the MPC makes the final policy decisions. ❖ Statement 2 is incorrect: The MPC consists of six members (3 members from RBI side +3 from government side), not four. A minimum of four members is required for a meeting to be held. ❖ Statement 3 is correct: Each MPC member has one vote, and in the case of a tie, the RBI Governor has a casting vote to break the deadlock. ❖ Statement 4 is incorrect: The Monetary Policy Report (MPR) is published every six months (biannually), not annually. The report provides an analysis of inflation sources and forecasts for the next 6 to 18 months."},{"id":27,"txt":"Consider the following statements regarding a bank being included in the Second Schedule of the RBI Act, 1934:\n1. Fulfilment of minimum paid-up capital and reserves is a necessary but not sufficient condition for being classified as a scheduled bank.\n2. RBI may deny scheduled status even if capital norms are met, if the bank’s conduct is considered prejudicial to depositor interests.\n3. A bank becomes eligible for access to RBI’s liquidity adjustment facilities immediately upon receiving a banking license.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Inclusion in the Second Schedule of the RBI Act, 1934 (i.e., becoming a Scheduled Bank) depends not only on quantitative criteria (capital/reserves) but also on qualitative supervisory judgment by the RBI. Statement 1 is correct: Fulfilment of minimum paid-up capital and reserves is a necessary condition, but not sufficient by itself, for inclusion in the Second Schedule. RBI retains discretion to assess overall soundness. Statement 2 is correct: The RBI must be satisfied that the affairs of the bank are not being conducted in a manner detrimental to the interests of its depositors. This \"Satisfaction Clause\" gives the RBI qualitative veto power over the scheduling process. 12 Statement 3 is incorrect: While a license allows a company to do \"banking business, \" only Scheduled Banks are eligible for Liquidity Adjustment Facility (LAF), Marginal Standing Facility (MSF), and the right to become members of Clearing Houses. Non- scheduled banks generally cannot borrow from the RBI for day-to-day liquidity. PW ONLYIAS SUPER HINT Access to the Liquidity Adjustment Facility (LAF)—which is like an emergency credit card from the RBI—is a high-level perk. Beware of the word \"Immediately.\" In the banking world, nothing happens immediately upon licensing; there is a hierarchy of status you must climb first. (Hence likely eliminate Statement 3)"},{"id":28,"txt":"Consider the following statements:\n1. Credit Information Companies (CIC) are regulated by the Reserve Bank of India, while Credit Rating Agencies (CRA) are regulated by SEBI.\n2. Both CICs and CRAs assess the repayment capacity of individual borrowers.\n3. CICs generate numerical scores, whereas CRAs assign alphabetical symbols.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 3 only","2 only","1, 2 and 3"],"ci":1,"exp":"Ex: Credit Information Companies (CICs) and Credit Rating Agencies (CRAs) serve distinct purposes in the credit ecosystem—one is borrower-level information aggregation, the other is instrument/entity-level risk assessment and are regulated by different authorities. Statement 1 is correct: CICs are regulated by the Reserve Bank of India (RBI) under the Credit Information Companies (Regulation) Act, 2005. CRAs are regulated by SEBI under the SEBI (Credit Rating Agencies) Regulations. The RBI regulates CICs because their data is primary to the lending activities of banks. SEBI regulates CRAs because their ratings are primary to the capital markets (bonds, debentures, commercial paper). Statement 2 is incorrect: CICs maintain records of individuals and small businesses (e.g., CIBIL score). CRAs (like CRISIL, ICRA, CARE) rate debt instruments (bonds) or the creditworthiness of corporate entities and governments. They do not provide \"scores\" for individual retail borrowers. SPP 22629 Statement 3 is correct: CICs typically generate numerical credit scores (e.g., score ranges). CRAs assign alphabetical rating symbols (e.g., AAA, AA). PWOnlyIAS Extra Edge The Four CICs: There are only four CICs in India: CIBIL, Equifax, Experian, and CRIF High Mark. Free Credit Report: Under RBI rules, every CIC must provide one full credit report free of charge once every calendar year to any individual whose credit information they hold PW ONLYIAS SUPER HINT If two different agencies regulated by two different bosses(S1) did the exact same task for the exact same people, one would be redundant. Regulatory logic assumes Specialization, not 100% overlap. (Eliminate Statement 2) Credit \"Information\" is raw bank data (Environment A). Credit \"Rating\" is a market product for investors (Environment B). It is logically consistent for them to have different \"Bosses\" based on these two separate environments. (Statement 1 is Structurally Sound hence likely true)"},{"id":29,"txt":"Consider the following conditions regarding the classification of Non-Performing Assets (NPAs):\n1. A loan is classified as an NPA if interest or principal remains overdue for more than 90 days.\n2. An overdraft (OD) or cash credit (CC) account is considered NPA if it remains “out of order” for more than 30 days.\n3. A bill purchased or discounted is classified as NPA if it remains overdue for more than 90 days.\n4. Agricultural loans are always classified as NPAs if unpaid for more than 90 days.\nWhich of the statements given above are correct?","ref":"","opts":["2 and 4 only","1, 2 and 3 only","1 and 3 only","2, 3 and 4 only"],"ci":2,"exp":"Ex: ❖ Statement 1 is correct: A loan is classified as a Non-Performing Asset (NPA) if the interest or principal remains overdue for more than 90 days in respect of a Term Loan. This 90-day norm was introduced as per RBI guidelines effective March 31, 2004 to align with international best practices. ❖ Statement 2 is incorrect: An Overdraft (OD) or Cash Credit (CC) account is classified as NPA if it remains \"out of order\" for more than 90 days, not 30 days. \"Out of order\" means the account has insufficient balance or no credits for a continuous 90-day period to cover the outstanding dues. 13 ❖ Statement 3 is correct: A bill purchased or discounted is considered an NPA if it remains overdue for more than 90 days as per RBI norms. ❖ Statement 4 is incorrect: Agricultural loans follow different NPA norms based on the crop cycle: ➢ Short duration crops: Classified as NPA if unpaid for more than 2 crop seasons. ➢ Long duration crops: Classified as NPA if unpaid for more than 1 crop season.  SPP 22629  14"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

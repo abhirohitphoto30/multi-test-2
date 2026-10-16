@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 35</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 35</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 35">PW ONLY IAS 2026 = 35</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"In Buddhist philosophy, the rejection of atman is most directly linked to which of the following doctrines?","ref":"","opts":["Karma","Anicca","Panchakhandha","Nirvana"],"ci":2,"exp":"Ex: Option C is correct: The Buddhist rejection of Atman (Anatta) is an analytical conclusion derived from the Panchakhandha doctrine. By deconstructing the individual into five changing streams—Material Form, Sensation, Perception, Mental Formations, and Consciousness—Buddhism demonstrates that there is no 'ghost in the machine' or unchanging core. This aligns with the broader principle of Anicca (Impermanence), suggesting that 'self' is a conventional label for a dynamic, causal process rather than a static entity. Option (a) Karma is incorrect: While Buddhism maintains a belief in Karma, the rejection of Atman creates the famous philosophical challenge: \"If there is no soul, who receives the fruit of Karma?\" (Answered via the \"continuity of consciousness\" rather than a permanent soul). Option (b) Anicca is incorrect: This is the basis for Anatta. Because all things are impermanent (Anicca), they cannot have a permanent essence (Anatta). However, Anicca is a general observation of the universe, whereas Panchakhandha is the specific psychological deconstruction used to reject the Atman. Option (d) Nirvana is incorrect: This is the goal (the cessation of suffering). Reaching Nirvana requires the realization of Anatta, but Nirvana itself is not the doctrine that explains why the Atman is rejected."},{"id":1,"txt":"The spread of Buddhism from India to Central Asia and China was primarily facilitated through which one of the following routes?","ref":"","opts":["Lower Indus basin connecting to maritime trade routes of the Arabian Sea","Middle Ganga plain through coastal Bengal and Southeast Asia","Deccan plateau through passes of the Western Ghats","North-western frontier via the Upper Indus region and the Pamir–Tarim Basin"],"ci":3,"exp":"Ex: Option (d) is Correct: The Gandhara region (modern-day Pakistan and Afghanistan) served as the \"melting pot\" where Indian Buddhism met Hellenistic and SPP 22636 Persian influences. From the North-western frontier, monks and traders traveled through the Khyber Pass, followed the Upper Indus river valley, and crossed the high-altitude passes of the Pamir Mountains. Once across the mountains, the route entered the Tarim Basin (modern-day Xinjiang, China). Here, a string of oasis city-states like Kashgar, Kucha, and Khotan became major centers of Buddhist learning before the religion reached the heartland of China (Dunhuang and Luoyang). Option (a) is incorrect: Lower Indus/Arabian Sea: While this route was vital for trade with the Roman Empire and the Persian Gulf, it was not the primary corridor for the early spread of Buddhism to Central Asia. Option (b) is incorrect: Middle Ganga/Southeast Asia: This represents the \"Southern Transmission\" (Theravada) to Sri Lanka, Myanmar, and Thailand. While Buddhism did reach China via the sea later on, the \"spread\" referred to in historical geography almost always prioritizes the overland Silk Road. Option (c) is incorrect: Deccan/Western Ghats: This route connected the Buddhist cave complexes (like Ajanta and Ellora) to the western ports (like Sopara and Kalyan) for trade with the West, rather than the northward expansion to China."},{"id":2,"txt":"Consider the following sites:\n1. Nalanda\n2. Kaushambi\n3. Vikramashila\n4. Odantapuri\nWhich of the above were major Mahayana– Vajrayana centres located east of the Ganga– Yamuna confluence?","ref":"","opts":["1, 3 and 4 only","1 and 2 only","2 and 3 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Nalanda is correct: Nalanda, located in present-day Bihar, lies east of the Ganga– Yamuna confluence. From the Gupta period onward, it emerged as a major centre of Mahayana Buddhism, and in its later phase also incorporated Vajrayana (Tantric) teachings. 2 Kaushambi is incorrect: Near modern-day Prayagraj. While a vital site in early Buddhism, it is located at or slightly west of the actual confluence. More importantly, it was primarily associated with the Theravada and early Mahayana traditions during the Mauryan and Kushan eras. It was not a major center for the later Vajrayana movement. Its prominence belongs mainly to the early and mainstream (Hinayana/Theravada) phase, making it fail both the doctrinal and locational criteria. Vikramashila is correct: Founded under the Pala rulers in Bihar, Vikramashila lies east of the Ganga–Yamuna confluence. Founded by the Pala King Dharmapala, it was explicitly established to promote Vajrayana teachings. It became the most formidable center for Tantric scholarship in the 8th–12th centuries. Odantapuri is correct: Odantapuri, also in Bihar and under Pala patronage, lies east of the confluence and functioned as a significant Mahayana–Vajrayana centre. It is often considered a precursor or companion institution to Nalanda and played a role in the transmission of Tantric Buddhism."},{"id":3,"txt":"With reference to geography and doctrinal evolution, consider the following:\n1. Mahayana ideas gained prominence in regions exposed to Indo-Greek and Central Asian influences.\n2. Areas dominated by Theravada show greater continuity with early monastic rules.\n3. Vajrayana emerged primarily in the Middle and west Gangetic plain.\nWhich of the statements given above are correct?","ref":"","opts":["2 and 3 only","1 and 2 only","1 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is correct: Mahayana ideas gained prominence in regions with strong Indo-Greek, Central Asian, and trans-regional contacts, especially north-western India (Gandhara), the Upper Indus region, and Central Asian corridors. These areas were exposed to cosmopolitan influences, trade networks, and cultural pluralism, which encouraged doctrinal innovation—such as the Bodhisattva ideal, expanded cosmologies, and new devotional practices. The Kushan Empire, which bridged India and Central Asia, provided the political stability for these innovations to crystallize. SPP 22636 Statement 2 is correct: Regions dominated by Theravada—such as Sri Lanka and later Southeast Asia—show greater continuity with early monastic discipline (Vinaya) and doctrinal conservatism. Theravada traditions emphasise adherence to early canonical texts and monastic rules, preserving features closer to early Buddhism than later Mahayana or Vajrayana developments. Statement 3 is incorrect: It flourished primarily in Eastern India—specifically in the regions of modern-day Bihar and Bengal—under the patronage of the Pala Dynasty (c. 8th–$12th century CE). While the Middle Gangetic plain (Bihar) hosted centers like Nalanda, the \"West Gangetic plain\" was never a primary hub for Vajrayana."},{"id":4,"txt":"Which region emerged as an important centre for Sarvastivada Buddhist scholasticism in early historic India?","ref":"","opts":["Magadha","Kashmir","Bengal","Deccan"],"ci":1,"exp":"Ex: The Sarvastivada school was one of the most powerful and influential of the early \"18 schools\" of Buddhism The Sarvastivada school (literally \"the doctrine that all exists\") argued that past, present, and future phenomena (dharmas) all have a real existence. This was a major departure from the Theravada view. Under the patronage of the Kushan Emperor Kanishka, the Fourth Buddhist Council was held in Kashmir (specifically at Kundalvana). It was here that the Sarvastivadin doctrines were codified into the Mahavibhasha, a massive encyclopedic commentary. Kashmir remained the center of Sarvastivada scholasticism for centuries, attracting scholars from across Asia. It was the training ground for famous monks like Vasubandhu (before he converted to Mahayana) and served as the primary source for the transmission of Buddhism to Central Asia and China. Hence option B is correct. 3"},{"id":5,"txt":"Consider the following:\nPatron Council Consequence\n1. Ajatashatru First Oral codification of the Sutta and Vinaya Pitakas\n2. Kalashoka Second Emergence of the Sthaviravada and Mahasanghika schism\n3. Ashoka Third Finalization of the Abhidhamma and the Kathavatthu\n4. Kanishka Fourth Composition of the Vibhashas and shift to Sanskrit\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Row 1 is correctly matched: The First Buddhist Council was convened at Rajagriha shortly after the Buddha’s Mahaparinirvana and was patronized by King Ajatashatru of the Haryanka dynasty. Under the presidency of Mahakasyapa, the central objective was the preservation of the Buddha’s teachings in an oral form, resulting in the Vinaya Pitaka being recited by Upali and the Sutta Pitaka being recited by Ananda. Although the Abhidhamma Pitaka was systematically finalized during a later period, this council marks the initial oral fixation of the canonical corpus which served as the foundation for the Tripitaka. Row 2 is correctly matched: The Second Buddhist Council was held at Vaishali approximately one hundred years after the Buddha's passing and was patronized by King Kalashoka of the Shishunaga dynasty. This council arose due to intense disputes over the Ten Points of monastic discipline, specifically involving relaxations such as the acceptance of gold and silver by monks. Presided over by Sabbakami, the council's rejection of these practices led to the first major schism in the Sangha, splitting the community into the traditionalist Sthaviravadins and the more liberal Mahasanghikas. Row 3 is correctly matched: The Third Buddhist Council was held at Pataliputra under the patronage of the Maurya Emperor Ashoka and was presided over by the monk Moggaliputta Tissa. The primary purpose of this gathering was to purge the Sangha of heterodox elements and clarify the true doctrinal positions of the Buddha's teachings. The most significant doctrinal outcome was the compilation of the Kathavatthu, a systematic refutation of non-Theravada doctrines that was subsequently included in the Abhidhamma Pitaka, effectively establishing Theravada as the state-sanctioned orthodoxy. SPP 22636 Row 4 is correctly matched: The Fourth Buddhist Council was held in Kashmir during the 1st or 2nd century CE under the patronage of the Kushan Emperor Kanishka. Presided over by Vasumitra with the assistance of the scholar Asvaghosa, this council focused on the scholastic consolidation of the Sarvastivada school and the compilation of the Mahavibhasha commentaries. It is remembered for the formal systematization of Mahayana philosophy and a critical linguistic shift from Prakrit to Sanskrit, which facilitated the spread of Buddhist texts into Central Asia and China."},{"id":6,"txt":"In the Pali Canon, which one of the following Nikayas is best known for longer discourses presented mainly in the form of dialogues, often dealing with philosophical and ethical issues?","ref":"","opts":["Anguttara Nikaya","Samyutta Nikaya","Majjhima Nikaya","Digha Nikaya"],"ci":3,"exp":"Ex: Option (d) is Correct: The Digha Nikaya (literally \"The Collection of Long Discourses\") contains 34 suttas. These are the longest suttas in the Sutta Pitaka and are famous for being framed as dialogue-based philosophical debates between the Buddha and various contemporary thinkers, including Brahmins, ascetics of other sects, and kings. A prime example is the Brahmajala Sutta, which lists 62 different philosophical views, and the Samannaphala Sutta, which discusses the fruits of a life of a recluse through a dialogue with King Ajatashatru. Option (a) is incorrect: The Anguttara Nikaya (The \"Numerical\" Collection) organizes suttas based on numerical groupings (e.g., the Fours, the Fives). It focuses more on brief, instructional lists for laypeople and monks rather than lengthy philosophical debates. Option (b) is incorrect: The Samyutta Nikaya (The \"Connected\" Collection) organizes suttas by subject matter (e.g., suttas about the Five Aggregates or the Eightfold Path). While deeply philosophical, these discourses are generally short and thematic rather than being structured as long, narrative debates. 4 Option (c) is incorrect: The Majjhima Nikaya (The \"Middle-length\" Collection) contains 152 suttas of medium length. While it contains many profound philosophical discussions and interactions, it is the Digha Nikaya that is specifically characterized by the \"Long\" (Digha) format designed to address broader philosophical systems and social structures."},{"id":7,"txt":"Which one of the following Buddhist texts is associated with Buddhaghosa?","ref":"","opts":["Lalitavistara","Saddharmapundarika Sutra","Visuddhimagga","Prajnaparamita Sutras"],"ci":2,"exp":"Ex: Option (c) is Correct: The Visuddhimagga (The Path of Purification) was written by the great Indian Buddhist scholar and commentator Buddhaghosa in the 5th century CE. It is a comprehensive manual that systematizes the Theravada teachings of the Mahavihara monastery in Sri Lanka. The text is structured around the three pillars of the Buddhist path: Sila (Virtue), Samadhi (Concentration), and Panna (Wisdom). To this day, it remains the standard reference for understanding the meditation practices and philosophical framework of the Southern Buddhist tradition. Option (a) is incorrect: The Lalitavistara Sutra is a Mahayana hagiography that provides a detailed and stylized account of the life of the Buddha, from his descent from Tushita heaven to his first sermon. It is not associated with Buddhaghosa, who focused exclusively on the Pali tradition. Option (b) is incorrect: The Saddharmapundarika Sutra, commonly known as the Lotus Sutra, is one of the most influential texts of Mahayana Buddhism. It emphasizes the \"One Vehicle\" (Ekayana) and the eternal nature of the Buddha's life, concepts that are distinct from the Theravada orthodoxy of Buddhaghosa. Option (d) is incorrect: The Prajnaparamita Sutras, or the Perfection of Wisdom texts (including the Heart Sutra and SPP 22636 Diamond Sutra), are foundational to Mahayana philosophy. They deal primarily with the concept of Sunyata (Emptiness) and were developed centuries before Buddhaghosa by thinkers like Nagarjuna. Author Major Work School Buddhaghosa Visuddhimagga Theravada Ashvaghosa Buddhacharita Early Mahayana / Sarvastivada Nagarjuna Mulamadhya- Madhyamaka makakarika (Mahayana) Vasubandhu Abhidha- Sarvastivada rmakosha / Yogacara Shantideva Bodhich- Mahayana aryavatara"},{"id":8,"txt":"Consider the following statements:\n1. Prajñāpāramitā literature is foundational to Mahayana philosophy.\n2. Lalitavistara belongs to the biographical genre of Buddhist literature.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: The Prajñāpāramitā (Perfection of Wisdom) literature is indeed foundational to Mahayana philosophy, marking the transition from the focus on individual liberation to the Bodhisattva ideal. These texts, which include the famous Heart Sutra and Diamond Sutra, introduced and elaborated upon the concept of Śūnyatā (Emptiness), arguing that all phenomena are devoid of intrinsic existence. This philosophical core was later systematically developed by Nāgārjuna into the Madhyamaka school, which remains a pillar of Mahayana thought across East Asia and Tibet. Statement 2 is correct: The Lalitavistara Sutra belongs to the biographical genre of Buddhist literature, specifically within the Mahayana tradition. Unlike the more sober accounts found in the Pali Canon, the Lalitavistara is a \"playful\" (Lalita) and highly \"extended\" (Vistara) narrative that portrays the life of the Buddha as a transcendental and miraculous event. It covers his descent from Tushita heaven, his miraculous birth, 5 and his ultimate enlightenment. This text is historically significant not only for its religious value but also for its influence on art; for instance, the famous reliefs at Borobudur in Indonesia are largely based on the biographical sequences described in the Lalitavistara."},{"id":9,"txt":"Which one of the following Bodhisattvas is associated with wisdom and intellectual understanding in Mahayana Buddhism?","ref":"","opts":["Avalokiteshvara","Manjushri","Vajrapani","Samantabhadra"],"ci":1,"exp":"Ex: Option (b) is Correct: The Bodhisattva Manjushri is the principal figure associated with wisdom, intelligence, and eloquent speech in the Mahayana pantheon. He is traditionally depicted as a youthful prince carrying a flaming sword in his right hand, which symbolizes the sharpness of wisdom used to cut through the veil of ignorance (Avidya) and delusion. In his left hand, he often holds a lotus flower upon which rests a book, typically the Prajnaparamita Sutra (Perfection of Wisdom), representing the intellectual realization of the ultimate truth of Sunyata (Emptiness). Option (a) is incorrect: Avalokiteshvara is the Bodhisattva of Infinite Compassion (Karuna). He is known for hearing the cries of all sentient beings and is often depicted with multiple arms or heads to symbolize his omnipresent ability to help others. While wisdom is a prerequisite for his compassion, his primary functional role in Mahayana theology is mercy rather than intellectual understanding. Option (c) is incorrect: Vajrapani represents the power and energy of the Buddha. He is often depicted in a wrathful form, holding a Vajra (thunderbolt or diamond scepter). Historically, he evolved from a guardian figure (resembling Indra or Herakles) into a symbol of the strength required to overcome the obstacles on the path to enlightenment. SPP 22636 Option (d) is incorrect: Samantabhadra is associated with practice and meditation. He represents the \"Great Conduct\" or the perfect fulfillment of the Bodhisattva vows. He is frequently depicted riding a six-tusked white elephant, symbolizing the power of patience and the steady progress of Buddhist practice."},{"id":10,"txt":"With reference to Mahayana Buddhism, consider the following statements:\n1. The Bodhisattva ideal emphasises working for the liberation of all beings, even if one’s own final liberation is delayed.\n2. The concept of a fully enlightened Buddha (Samyaksambuddha) is central to Theravada Buddhism but is not emphasised in Mahayana Buddhism.\n3. Mahayana Buddhism places compassion above wisdom as the sole guiding principle.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","1 and 2 only","1 and 3 only","2 and 3 only"],"ci":0,"exp":"Ex: Statement 1 is Correct: The Bodhisattva ideal is the defining characteristic of Mahayana Buddhism, emphasizing that an individual should seek enlightenment not just for themselves, but to aid in the liberation of all sentient beings. According to this doctrine, a Bodhisattva makes a vow to remain in the cycle of Samsara and delay their own final entry into Nirvana until every other being has been saved. This marks a significant shift from the Arhat ideal of early Buddhism, which focused primarily on personal liberation from the cycle of rebirth. Statement 2 is Incorrect: The goal of becoming a Samyaksambuddha (fully enlightened Buddha) is actually central to Mahayana Buddhism. While Theravada Buddhism typically focuses on attaining the status of an Arhat (one who has achieved liberation by following the Buddha's teachings), Mahayana encourages all practitioners to aim for the highest state of a Samyaksambuddha, who discovers the truth independently and can teach others. Mahayana cosmologies often depict a universe filled with multiple contemporary Buddhas and Bodhisattvas working toward this goal simultaneously. Statement 3 is Incorrect: Mahayana philosophy is built upon the inseparable union of Karuna (Compassion) and Prajna (Wisdom). To reach enlightenment, a practitioner must cultivate both; wisdom without compassion is considered cold and sterile, while compassion without wisdom is seen as blind and ineffective. This balance is personified in the Mahayana pantheon by the pair of Avalokiteshvara (representing compassion) and Manjushri (representing wisdom). 6"},{"id":11,"txt":"Which one of the following mudras in Buddhist iconography symbolises the union of wisdom and compassion?","ref":"","opts":["Jnana Mudra","Vitarka Mudra","Uttarabodhi Mudra","Anjali Mudra"],"ci":2,"exp":"Ex: Option (c) is correct: The Uttarabodhi Mudra is known as the gesture of Supreme Enlightenment. It is formed by joining both hands at the chest with the index fingers extended and touching at the tips, while the other fingers are intertwined. This mudra represents the union of the individual with universal energy and the balance between the masculine principle of Compassion (Karuna) and the feminine principle of Wisdom (Prajna). It is often associated with the celestial Buddha Vairochana, who personifies the all-encompassing nature of the Buddhist truth. Option (a) is incorrect: The Jnana Mudra, also known as the gesture of Knowledge, is formed by touching the tips of the thumb and index finger together to form a circle, with the other three fingers extended. While it signifies the realization of spiritual knowledge, it is a general gesture of teaching and contemplation common to both Buddhist and Yogic traditions, rather than a specific symbol for the union of wisdom and compassion. Option (b) is incorrect: The Vitarka Mudra is the gesture of discussion, argument, and intellectual transmission. Similar to the Jnana Mudra, it involves the thumb and index finger forming a circle, but it is typically held at chest level with the palm facing outward. It symbolizes the communication of the Buddha's teachings and the logical explanation of the Dharma, rather than the internal union of spiritual virtues. Option (d) is incorrect: The Anjali Mudra is the universal gesture of greeting, prayer, and adoration. Formed by pressing the palms together at the heart center, it signifies supplication and respect. While it can represent the unity of two sides of the body, in a Buddhist iconographic context, it is used by Bodhisattvas or devotees to show reverence to the Buddha, rather than symbolizing the specific philosophical union of wisdom and compassion. SPP 22636"},{"id":12,"txt":"With reference to early Buddhist texts and chronicles, consider the following pairs:\nText Description\n1. Dipavamsa Lesser Chronicle of Tibet\n2. Mahavamsa Regional historical chronicle of Sri Lanka\n3. Milinda Panha Dialogue between a ruler and Buddha\n4. Nettipakarana Jain text on social rules\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Pair 1 is incorrectly matched: The Dipavamsa is incorrectly described as the \"Lesser Chronicle of Tibet\"; it is actually the oldest historical record of Sri Lanka, likely compiled in the 4th century CE. It provides a chronological account of the Buddha's visits to the island and the history of the Theravada tradition, serving as a primary precursor to the more elaborate Mahavamsa. Pair 2 is correctly matched: The Mahavamsa is correctly matched as the regional historical chronicle of Sri Lanka. Written in the 5th century CE, it is a sophisticated epic poem that details the history of the island's kings and the establishment of Buddhism. It is an invaluable source for understanding the Maurya-Sri Lanka relationship, particularly the mission of Mahinda and Sanghamitta sent by Emperor Ashoka. Pair 3 is incorrectly matched: The Milinda Panha is incorrectly described as a \"dialogue between a ruler and Buddha.\" In reality, it records a famous philosophical discussion between the Indo-Greek King Menander I (Milinda) and the Buddhist sage Nagasena. The dialogue took place approximately 400 years after the Buddha’s Mahaparinirvana and is celebrated for Nagasena's skillful use of metaphors, such as the analogy of the chariot, to explain the concept of Anatta (Non-self). Pair 4 is incorrectly matched: The Nettipakarana is incorrectly identified as a \"Jain text on social rules.\" It is, in fact, a Buddhist treatise belonging to the Pali tradition that serves as a guide to interpretation and exegesis. It provides a systematic framework for understanding the Buddha's discourses and is traditionally attributed to Mahakaccana, one of the Buddha's direct disciples. It is an essential tool for scholars to decode the diverse linguistic styles used in the Sutta Pitaka 7"},{"id":13,"txt":"With reference to Jain Tirthankaras, consider the following statements:\n1. All Tirthankaras are believed to have taught identical doctrines.\n2. Rishabhadeva is associated with the current avasarpini cycle.\n3. Parshvanatha predates Mahavira and lived in the Varanasi region.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: According to Jain philosophy, all twenty-four Tirthankaras are believed to have taught identical doctrines at their core, as they each rediscover the eternal truth of Samyak Darshana (Right Faith), Samyak Jnana (Right Knowledge), and Samyak Charitra (Right Conduct). While the minor rules of conduct might be adjusted to suit the specific needs of the age—such as Mahavira adding the fifth vow of Brahmacharya (Chastity) to the four vows of Parshvanatha—the fundamental metaphysical principles regarding the soul, karma, and liberation remain constant across all teachers. Statement 2 is correct: Rishabhadeva, also known as Adinatha, is traditionally recognized as the first Tirthankara of the current avasarpini cycle, which refers to the present descending era of time in Jain cosmology. Jainism views time as a wheel with two halves: Utsarpini (the ascending half of increasing prosperity) and Avasarpini (the descending half of decline). Rishabhadeva lived during the transition of the third and fourth stages of this current cycle and is credited with establishing the basic structures of human civilization, including agriculture, law, and marriage. Statement 3 is correct: Parshvanatha is historically recognized as the twenty-third Tirthankara and is widely accepted by historians to have lived approximately 250 years before Mahavira. He was born as a prince in Varanasi, which is located in the eastern Gangetic region, and he renounced his worldly life to attain enlightenment on Mount Sammeta (modern-day Parasnath Hill in Jharkhand). His teachings, known as Chaturyama Dharma (the Fourfold Restraint), provided the immediate theological foundation upon which Mahavira expanded to form the current structure of the Jain community. SPP 22636"},{"id":14,"txt":"With reference to Jain monastic traditions, consider the following statements:\n1. Both Digambara and Shvetambara traditions recognise women as capable of attaining liberation.\n2. The Digambara tradition holds that nudity is essential for liberation.\n3. Shvetambara texts preserve more historical details about Mahavira’s life.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","2 and 3 only","1 and 2 only","2 only"],"ci":1,"exp":"Ex: Statement 1 is Incorrect: The Digambara and Shvetambara traditions disagree on the spiritual status of women. While the Shvetambara school maintains that women are fully capable of attaining Moksha (liberation) and recognizes the 19th Tirthankara, Malli, as a woman, the Digambara school holds that a woman must first be reborn as a man to achieve final liberation. This Digambara view is rooted in the belief that women cannot strictly adhere to the vow of Aparigraha (non-possession) since the practicalities of social life and monastic modesty necessitate the wearing of clothes. Statement 2 is Correct: The Digambara tradition holds that absolute nudity is essential for liberation. Following the example of Mahavira, Digambara monks renounce all material possessions, including clothing, as they believe that any form of attachment—even a simple piece of white cloth—constitutes Parigraha (possession) and creates an obstacle to complete detachment. This practice of \"sky-clad\" asceticism is seen as the ultimate expression of the victory over the senses and the physical self. Statement 3 is Correct: Shvetambara texts preserve significantly more historical and biographical details about Mahavira’s life. The Shvetambara canon, particularly works like the Kalpasutra and the Acharanga Sutra, provides extensive narratives regarding Mahavira's birth, his renunciation, and his years as a wandering ascetic. In contrast, the Digambara tradition believes that the original canonical scriptures (the Angas) were lost during a great famine in Magadha, and they rely more on later secondary texts like the Mahapurana, which often present Mahavira's life in a more stylized or transcendental manner. 8 Feature Digambara Shvetambara (Sky-clad) (White-clad) Monastic Absolute White Robes Dress Nudity Female Not possible Fully possible Moksha in current birth 19th Mallinatha Malli Tirthankara (Male) (Female) Scriptures Believed the Angas are Angas were preserved lost Mahavira's Never Married to Marriage married Yashoda"},{"id":15,"txt":"With reference to gunasthanas, consider the following statements:\n1. They represent ethical stages rather than metaphysical states.\n2. Kevalajnana is attained before the final stage.\n3. The final stage is attained only at the moment of death\n4. Liberation in Jainism is achieved only after the soul passes through all fourteen Gunasthanas sequentially.\nWhich of the statements given above are correct?","ref":"","opts":["2 and 3 only","1, 2 and 4","3 and 4","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Statement 1 is incorrect: Gunasthanas represent both ethical stages and metaphysical states. While they do track the ethical refinement of the practitioner, they are primarily defined by the metaphysical purification of the soul from the bondage of Mohaniya Karma (delusory karma). As the soul ascends through these fourteen stages, its inherent qualities of infinite knowledge and perception are gradually unveiled, making the process a transformation of the soul's very nature rather than just a shift in outward behavior. Statement 2 is incorrect: Kevalajnana (Omniscience) is attained exactly at the thirteenth stage, not before the final stage. The thirteenth stage is known as Sayoga Kevali, where the soul has destroyed all four Ghatiya Karmas (destructive karmas) and achieved full enlightenment while still possessing a physical body and performing activities. The final, or fourteenth stage (Ayoga Kevali), is a very brief state of total inactivity that occurs after omniscience has already been reached. SPP 22636 Statement 3 is Correct: The final stage (Ayoga Kevali) is attained only at the moment of death, or immediately preceding the soul's final departure from the physical body. In this fourteenth stage, all remaining bodily and mental activities cease completely. This stage lasts only for the duration of a few short syllables, serving as the final transition point before the soul achieves Moksha and ascends to the Siddhashila. Statement 4 is Correct: liberation in Jainism is achieved only after the soul passes through all fourteen Gunasthanas sequentially. The Gunasthanas serve as a mandatory spiritual roadmap where each stage represents a decrease in delusion and an increase in self-realization. A soul cannot bypass these steps; it must systematically overcome various categories of passions and karmic attachments to transition from the state of a \"wrong believer\" (Mithyadrishti) to a \"liberated soul\" (Siddha)."},{"id":16,"txt":"Consider the following statements:\n1. Jain philosophy recognises that reality has multiple aspects.\n2. Jain logic uses an eightfold method to express conditional truth.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct as Jain philosophy explicitly recognises that reality has multiple aspects, a doctrine known as Anekantavada. According to this principle, every object or entity possesses infinite attributes (anantadharmatmakam vastu), making reality so complex that no single perspective can claim to be the absolute or exclusive truth. This ontological stance encourages intellectual humility and forms the basis for the Jain practice of non-violence in thought and speech. Statement 2 is incorrect because Jain logic uses a sevenfold method, not an eightfold one, to express conditional truth. This system is called Sapta-bhangi-naya (the Seven- Mode Predication). It provides seven distinct logical permutations—such as \"in a certain sense, it is,\" \"in a certain sense, it is not,\" and 9 \"in a certain sense, it is indescribable\"—to describe a thing from various standpoints. The number seven is mathematically significant in Jainism as it covers all possible combinations of existence, non-existence, and the limits of language without redundancy."},{"id":17,"txt":"Which of the following Jain sites is correctly matched with the dominant inscriptional language found there?","ref":"","opts":["Palitana — Prakrit","Girnar — Sanskrit","Shravanabelagola — Tamil","Udayagiri–Khandagiri — Pali"],"ci":1,"exp":"Ex: Option (a) is Incorrect: While the earliest Jain scriptures were in Prakrit, the thousands of marble inscriptions found within the temple city of Palitana on Shatrunjaya Hill are primarily in Sanskrit and Old Gujarati. These inscriptions mostly record the construction, renovation, and endowment of temples by wealthy merchants from the medieval period onwards. Option (b) is Correct: The Girnar hills in Gujarat are home to one of the most famous historical records in India: the Junagadh Rock Inscription of Rudradaman, which is written in Sanskrit. While Girnar is a major Jain pilgrimage site dedicated to Neminatha, the dominant historical inscriptions on the rock face—including those of the Western Kshatrapa ruler Rudradaman and the Gupta Emperor Skandagupta—are celebrated as early examples of pure Chaste Sanskrit used for secular and religious purposes. Option (c) is Incorrect: Shravanabelagola inscriptions, including those associated with Bahubali (Gommateshwara), are primarily in Old Kannada (with some Sanskrit), reflecting the linguistic milieu of the Western Ganga and Hoysala regions. Tamil is not the dominant inscriptional language here. Option (d) is Incorrect: The famous Hathigumpha inscription of Kharavela and associated Jain records at Udayagiri– Khandagiri are written in Prakrit, not Pali. Pali is mainly associated with Theravada Buddhist canonical literature, not Jain epigraphy. SPP 22636"},{"id":18,"txt":"Consider the following dynasties:\n1. Rashtrakutas\n2. Guptas\n3. Gangas of Talakad\n4. Kadambas Which of the dynasties listed above are correctly associated with Jain patronage?","ref":"","opts":["1 and 4 only","2 and 3 only","1 and 2 only","1, 3 and 4"],"ci":3,"exp":"Ex: Dynasty 1 Rashtrakutas is Correct: The Rashtrakuta dynasty was one of the most significant supporters of Jainism in the Deccan. Many Rashtrakuta monarchs, most notably Amoghavarsha I, were deeply influenced by Jain philosophy, and the famous Jain scholar Jinasena served as the emperor's spiritual preceptor. During this period, Jainism flourished through the construction of remarkable cave temples at Ellora (such as the Indra Sabha) and the development of Kannada and Sanskrit Jain literature. Dynasty 2 Guptas is Incorrect: The Gupta dynasty (2) is primarily associated with the revival of Brahmanical Hinduism. While the Guptas were generally tolerant and provided some support to Buddhist and Jain centers (as seen in the Kahaum pillar inscription), they are not historically categorized as \"major patrons\" of Jainism in the same structural and cultural sense as the other dynasties listed. Their patronage was vastly more skewed toward the development of Vaishnavism and the construction of early Hindu stone temples. Dynasty 3: Gangas of Talakad is Correct: The Gangas of Talakad were perhaps the most fervent royal patrons of Jainism in South India. They were responsible for the creation of the world-famous monolithic statue of Gommateshwara at Shravanabelagola during the 10th century CE, commissioned by the Ganga minister and commander Chavundaraya. The Ganga era is considered a golden age for Jainism in Karnataka, during which the religion deeply influenced the region's social and literary fabric. Dynasty 4: Kadambas is Correct: The Kadamba dynasty (4) of Banavasi also provided early and consistent patronage to Jainism. Inscriptions from the Kadamba period record numerous land grants (known as Brahmadeya or Devadana) made to Jain ascetics and the construction of Jain temples (Basadis). The Kadambas played a crucial 10 role in establishing Jainism as a major religious force in the Konkan and Kannada regions long before the rise of the later medieval empires."},{"id":19,"txt":"Consider the following pairs of Jain texts and authors:\nText Author\n1. Kalpa Sutra — Bhadrabahu\n2. Tattvartha Sutra — Umaswami\n3. Samayasara — Kundakunda\n4. Syadvadamanjari — Hemachandra\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Pair 1 is Correct: Bhadrabahu was a contemporary of Chandragupta Maurya and the last \"Shrutakevali\" (one who knew all the scriptures by heart). His work, the Kalpa Sutra, is a crucial text of the Shvetambara tradition, primarily containing the biographies of the Tirthankaras, most notably Mahavira and Parshvanatha. It is traditionally recited during the holy festival of Paryushana. Pair 2 is Correct: Umaswami (or Umaswati) is uniquely significant because it is the first Jain work written in Sanskrit and is accepted as authoritative by both the Digambara and Shvetambara sects. It serves as a comprehensive compendium of Jain philosophy, famously opening with the definition of the path to liberation: Samyak Darshana-Jnana-Charitrani Mokshamargah (Right faith, knowledge, and conduct constitute the path to liberation). Pair 3 is Correct: Acharya Kundakunda is the most revered philosopher of the Digambara tradition, and the Samayasara (The Nature of the Self) is his magnum opus. The text explores the nature of the pure soul (atman) and the distinction between the soul and material karma, forming the backbone of Jain mystical and internal spiritual practice. Pair 4 is Incorrect: While Hemachandra was indeed a legendary Jain polymath (often called Kalikala Sarvajna), the Syadvadamanjari was actually written by the 13th-century scholar Mallisena. Hemachandra's most famous philosophical work is the Anyayoga-vyavaccheda- dvattrimsika, and Mallisena's Syadvadamanjari is a detailed commentary on that specific work, focusing on the logic of Syadvada (conditional predication) and Anekantavada. SPP 22636"},{"id":20,"txt":"Consider the Following:\nList I (Site) List II (Feature) A. Mount 1. Statue of Ahimsa Mangi Tungi B. Sittanavasal 2. Jain Samavasarana paintings C. Ranakpur 3. Dedication to Rishabhdev\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Pair 1 is correctly matched: Mount Mangi- Tungi is a prominent \"Siddha Kshetra\" in Maharashtra known for its two pinnacles. The site features numerous rock-cut caves containing Kayotsarga (standing) and Padmasana (seated) images of Tirthankaras. It has gained modern fame for the Statue of Ahimsa, a 108-foot monolithic sculpture of Rishabhdev depicted in the Kayotsarga posture, which is currently the tallest Jain statue in the world. Pair 2 is correctly matched: Sittanavasal in Tamil Nadu is home to a 2nd-century BCE Jain cave complex famous for its exquisite murals and paintings. The most celebrated fresco depicts a Samavasarana, the celestial preaching hall of a Tirthankara. The painting shows a \"tank filled with lotuses,\" monks, and animals, symbolizing the universal harmony and the divine assembly where the Tirthankara delivers his first sermon after attaining omniscience. Pair 3 is correctly matched: Ranakpur in Rajasthan is home to the Chaturmukha Dharana Vihara, which is primarily dedicated to Rishabhdev (Adinatha). This 15th-century marble marvel is one of the five most important Jain pilgrimage sites. The temple is designed as a \"Chaumukha\" (four- faced) structure, meaning the image of Rishabhdev faces all four cardinal directions, symbolizing his conquest of the universe. It is world-renowned for its 1,444 uniquely carved marble pillars, no two of which are identical."},{"id":21,"txt":"Consider the following statements:\n1. Mati and Shruta jnana are forms of mediate knowledge.\n2. Kevala jnana is the highest form of knowledge in Jainism.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct because Mati and Shruta jnana are categorized as forms of Paroksha (mediate) knowledge. In Jain epistemology, Mati jnana refers to 11 knowledge obtained through the senses and the mind, while Shruta jnana refers to knowledge gained through words, scriptures, or symbols. These are considered \"mediate\" or \"indirect\" because the soul requires an external intermediary—such as the sense organs or a text—to perceive the object. Unlike the absolute perception of the soul, these forms of knowledge are limited and subject to error. Statement 2 is correct as Kevala jnana is the highest and ultimate form of knowledge in Jainism. It is defined as Samyaksambuddha or omniscience, where the soul achieves a state of infinite, direct, and instantaneous perception of all substances and their modes across all time (past, present, and future). Kevala jnana is a form of Pratyaksha (immediate) knowledge because it is independent of the senses and the mind, arising directly from the soul once the four destructive (Ghatiya) karmas have been entirely eliminated."},{"id":22,"txt":"Consider the following statements:\n1. Murtipujaka is an idol-worshipping sect of Buddhism.\n2. The Sthanakavasi sect of Jainism rejects both temple and image worship.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect because Murtipujaka is a sub-sect of Shvetambara Jainism, not Buddhism. While Buddhism certainly utilizes idols—particularly in the Mahayana and Vajrayana traditions—the term \"Murtipujaka\" (literally meaning \"Idol- Worshipper\") is the specific designation for that branch of the Shvetambara sect which believes that the construction of temples and the ritual worship of Tirthankara images are essential for generating merit and focusing the mind on spiritual ideals. Statement 2 is correct as the Sthanakavasi sect of Jainism rejects both temple and image worship. This reformist school emerged from within the Shvetambara tradition during the 15th and 16th centuries, primarily under the influence of the teacher SPP 22636 Lonka Shah. Sthanakavasis believes that the essence of Jainism lies in internal meditation and the following of the five great vows rather than in external rituals. Consequently, they do not build temples or install idols, preferring to perform their religious duties in a simple hall known as a Sthanaka."},{"id":23,"txt":"In the context of the religious history of ancient India, the term ‘purvas’ refers to which of the following?","ref":"","opts":["They are fourteen Jain texts containing the original teachings of all the Tirthankaras.","It is a religious death ritual that is performed by followers of Jainism.","Code of conduct which a Jaina monk is required to follow.","Buddhist literature that contains the philosophical ideas or teachings of Buddhism."],"ci":0,"exp":"Ex: Jain Literature comprises a vast corpus of texts spanning diverse genres such as scriptures, commentaries, biographies, and philosophical treatises. These texts, written in various ancient Indian languages including Prakrit, Sanskrit, and Apabhramsha, serve as primary sources for Jain teachings, rituals, and ethical guidelines. Key Features: ❖ Earliest important works of Jainas were composed in Apabhramsa. ❖ Language: They abandoned Sanskrit and adopted Prakrit to preach their doctrines and Ardha- Magadhi (the language of the common people) to compose their religious texts. The adoption of Prakrit influenced regional languages like Sauraseni, which gave rise to Marathi. Option (a) is correct: The Fourteen Purvas (meaning ancient or prior knowledge) are a large body of Jain scriptures that was preached by all Tirthankaras (omniscient teachers) of Jainism encompassing the entire gamut of knowledge available in this universe. The persons having the knowledge of purvas were given an exalted status of Shrutakevali or \"scripturally omniscient persons\". Both the Jain traditions, Shvetambara and Digambara hold that all the fourteen purvas have been lost. According to tradition, the Purvas were part of canonical literature and deposited in the third section of Drstivada (the twelfth and last canon). 12 Below is a list of the fourteen Purvas, containing various descriptions and details: 1. Utpaad Purva: Living (Jiv), non-living (Ajiv), and its modes (Paryaya) 2. Agrayaniya Purva: Nine realities (Navtattva), six substances (Shad- dravya), etc. 3. Viryapravada Purva: Relating to energy of soul, non-living, etc. 4. Asti Nasti Pravada Purva: Multiplicity of views (Anekantvad), Saptabhangi, etc. 5. Jnana Pravada Purva: Five types of knowledge and three types of ignorance, etc. 6. Satya Pravada Purva: Relating to truth, restraint, silence (Maun), speech, etc. 7. Atma pavada Purva: Analysis of soul from different view points (naya) 8. Karma Pravada Pūrva: Theory of karma its bondage, influx, its nature, fruition, shedding 9. Pratyakhyana Purva: Giving up (Pachchhakhān), restraint, vows, detachment, etc. 10. Vidya Pravada Purva: Expertise (vidya), exceptional abilities, practice 11. Kalyana Pravada Purva: Spiritual alertness (Apramad) and laziness (Pramad) 12. Prana Pravada Purva: Ten types of life substances or vitalities (Pran), life span, etc. 13. Kriya Visala Purva: Skills, 64 arts of women, 84 arts of men, etc. 14. Lokbindusa Purva: Three parts of universe including heavens and hells, mathematics, etc."},{"id":24,"txt":"With reference to Jainism and its literary contributions, which of the following statements is/are correct?\n1. Lord Mahavira's immediate disciples were known as Ganadharas.\n2. Monks who had knowledge of a minimum of ten Purvas were known as Srut-kevlis.\n3. The Jaina monks wrote religious treatises but also promoted secular literature.\nSelect the correct answer using the code below:","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: ❖ Statement 1 is correct: Jain texts mention that Mahavira had 11 immediate disciples, called Ganadharas, who were responsible for spreading his teachings. SPP 22636 ❖ Statement 2 is correct: Jain tradition identifies Srut-kevlis as monks who were well-versed in the Purvas, which were ancient Jain scriptures. ❖ Statement 3 is correct: Jain monks contributed to religious literature as well as secular works, such as those on grammar, mathematics, and astronomy."},{"id":25,"txt":"Which of the following statements regarding the spread of Jainism in ancient India are correct?\n1. Jainism initially spread to western India where the Brahmanical religion was weak.\n2. The use of Sanskrit language by early Jainas helped in expanding their follower base.\n3. Chandragupta Maurya played a significant role in popularizing Jainism in southern India.\n4. The great famine in Magadha after the death of Mahavira contributed to the spread of Jainism in southern India.\nSelect the correct answer using the codes given below:","ref":"","opts":["1, 3 and 4 only","2, 3 and 4 only","1, 2 and 3 only","1 and 4 only"],"ci":0,"exp":"Ex: ❖ Statement 1 is correct: Jainism gradually spread to western India where the Brahmanical religion was weak. ❖ Statment 2 is not correct: The early Jainas adopted Prakrit language of the common people to preach their doctrines and discarded Sanskrit language (which was mainly patronised by the Brahmanas). This greatly helped in widening the follower base of Jainism. ❖ Statement 3 is correct: Chandragupta Maurya became a Jaina ascetic and spent his last years in Karnataka resulting in popularity of Jainism in southern India too. ❖ Statement 4 is correct: The great famine that occurred in Magadha after 200 years of the death of Mahavira also contributed to its spread in southern India. According to tradition, the famine lasted for about 12 years; and in order to protect themselves, many Jaina followers under the leadership of Bhadrabahu (who later came to be known as Digambaras) went South and spread Jainism there. PW ONLY IAS SUPER HINT For S2, The goal was to reach common people, and Sanskrit was the language of elite Brahmanas. Using Sanskrit would limit access, not expand it. Hence likely false, eliminating option B and C. 13"},{"id":26,"txt":"Consider the following Assertion and Reason and choose the correct option:\nAssertion (A): Jainism and Buddhism both rejected the authority of the Vedas and criticized animal sacrifices and ritual authority of the Brahmanas.\nReason (R): Both Jainism and Buddhism emphasized moral conduct, wisdom, and human effort over birth-based status, and both accepted people from all castes in their monastic orders.\nSelect the correct option:","ref":"","opts":["Both (A) and (R) are correct, and the (R) is the correct explanation of the (A).","Both (A) and (R) are correct, but the (R) is not the correct explanation of the (A).","(A) is correct, but (R) is incorrect.","(A) is incorrect, but (R) is correct."],"ci":0,"exp":"Ex: ❖ Assertion (A) is correct: Both Buddhism and Jainism had some similarities in their teachings For instance, both rejected the authority of Vedas. Like Buddhist texts, Jaina texts criticise the Brahmanas, their practice of animal sacrifices, and ritual authority giving preference to Brahmanas. ❖ Reason (R) is correct: Both emphasised on renunciation and human effort as the means of obtaining salvation, and established a monastic order for both men and women. Like Buddhism monastic order, people of all castes and social backgrounds were welcomed in Jainism as well. Jainism opened its doors to women mendicants who were addressed as aryika or sadhvi."},{"id":27,"txt":"Consider the following statements regarding Siddhartha's journey to enlightenment:\n1. He practiced severe austerities with five ascetics before realizing that self- mortification was not the path to enlightenment.\n2. He left his royal life after seeing the suffering caused by old age, sickness, and death, which made him search for the truth.\n3. After abandoning his ascetic practices, Siddhartha was immediately satisfied with his spiritual progress and attained enlightenment.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: ❖ Statement 1 is correct: Siddhartha left his home and family and wandered around for six years, seeking the truth. He attached himself to teachers, but was not satisfied by their instruction. Accompanied by five wandering ascetics, he practised severe austerities until his body was emaciated. He then realized that he must nourish his body and try to attain peace of mind. His companions abandoned him, thinking he had compromised his ascetism. ❖ Statement 2 is correct: Siddhartha saw four things that completely shattered his composure—an old man, a sick man, a corpse, and a renunciant. The first three scenes brought home to him the harsh realities and inevitabilities of old age, sickness, and death, while the fourth pointed to the way of dealing with these inevitabilities. SPP 22636 ❖ Statement 3 is not correct: After abandoning ascetic practices, Siddhartha did not immediately attain enlightenment. He sat under the pipal tree, resolving not to get up until he had attained enlightenment. Some texts describe his rising to progressively higher and higher states of knowledge through meditation. Others describe how a wicked being, Mara, tried to tempt and taunt him out of his meditative state, all in vain. Siddhartha ultimately attained enlightenment and became known as the Buddha, the enlightened one. Additional Information: ❖ He sat for seven weeks near this spot, tempted to keep his extraordinary experience to himself. According to Buddhist tradition, the god Brahma had to implore him three times to go forth and spread his insight. ❖ The Buddha gave his first sermon on deliverance from suffering to his five former companions in a deer park near Benaras. This event is known as dhammachakka-pavattana."},{"id":28,"txt":"What does the term ‘Paticchasamuppada’ in Buddhist philosophy refer to?","ref":"","opts":["Interdependent Arising","Causation Cycle","Dependent Origination","Chain of Becoming"],"ci":2,"exp":"Ex: Paticchasamuppada: The law of dependent origination; This was both an explanation of all phenomena as well as an explanation of dukkha. The elements of this law were presented as a wheel consisting of 12 nidanas, one leading to the next: ignorance (avijja), formations (sankhara), consciousness (vinnana), mind and body (nama-rupa), the six senses (salayatana), sense contact (phassa), feeling (vedana), craving (tanha), attachment (upadana), becoming (bhava), birth (jati), and old age and death (jara-marana). The nidanas were later divided into three groups pertaining to the past, present, and future lives, and patichchasamuppada therefore also became an explanation of how the origins of rebirth lay in ignorance. 14"},{"id":29,"txt":"Consider the following pairs:\nSymbol Event\n1. Lotus and Bull — First Sermon\n2. Horse — Renunciation\n3. DharmachakraPravartana — Birth\n4. Footprints — Nirvana\nWhich of the following pairs are correctly matched?","ref":"","opts":["1 and 3","2 and 3","1 and 2","2 and 4"],"ci":3,"exp":"Ex: Buddha is represented in five forms: 1. Lotus and Bull – Birth 2. Horse – Renunciation 3. Bodhi Tree – Mahabodhi 4. Dhammachakra Pravartana – First Sermon 5. Footprints – Nirvana  SPP 22636  15"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 07</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 07</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 07">PW ONLY IAS 2026 = 07</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"The Supreme Court has repeatedly emphasised that the Anti-Defection Law must balance party discipline with democratic functioning. This principle is best reflected in which of the following provisions?","ref":"","opts":["Finality of the presiding officer’s decision","Merger exception requiring collective legislative consent","Bar on judicial review of disqualification decisions","Immediate disqualification upon resignation from party"],"ci":1,"exp":"Ex: The Supreme Court has consistently interpreted the Anti-Defection Law (Tenth Schedule) as a mechanism that must prevent political instability caused by opportunistic defections, while not stifling legitimate democratic dissent and collective political realignments. This balance between party discipline and democratic functioning is most clearly reflected in the merger provision. Option (b) is correct: Under the Tenth Schedule, a merger is recognised only when at least two-thirds of the members of a legislature party agree to it. This provision: ❖ Prevents individual or small-group defections motivated by personal gain, thereby ensuring party discipline. ❖ Simultaneously allows collective, democratic decisions by a substantial majority of legislators, recognising that political parties may legitimately realign due to ideological or political shifts. The Supreme Court, in cases such as Kihoto Hollohan v. Zachillhu (1992) and subsequent judgments, has upheld this provision as a reasonable constitutional compromise—one that discourages instability while respecting democratic choice within legislatures. Why the other options are incorrect: (a) Finality of the presiding officer’s decision: This provision strengthens enforcement but does not embody a balance; moreover, the Supreme Court has clarified that such decisions are subject to judicial review, precisely to avoid arbitrariness. (c) Bar on judicial review of disqualification decisions: There is no absolute bar on judicial review. In fact, judicial oversight is essential to protect democratic principles, not to balance party discipline. SPP 22608 (d) Immediate disqualification upon resignation from party: Disqualification is not automatic or immediate; it follows a prescribed procedure and adjudication. This provision focuses on discipline, not democratic accommodation."},{"id":1,"txt":"Consider the following statements regarding amendments in the Representation of the People Act (RPA), 1951:\n1. Candidates must declare all pending criminal cases, including cases under investigation, in their nomination forms.\n2. Legislators convicted of offenses with two-year imprisonment are automatically disqualified regardless of appeals.\nSelect the correct answer using the code given below:","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is incorrect: According to Section 33A of the Representation of the People Act (RPA), 1951, a candidate must disclose only those pending cases where a charge has been framed by a competent court and the offence is punishable with imprisonment for two years or more. Section 33A does not require disclosure of every case under investigation or FIR without cognizance or charge. High courts have expressly clarified that cases where charges have not been framed or cognizance has not been taken need not be disclosed in the candidate’s affidavit. Statement 2 is incorrect: Under Section 8(3) of the RPA, a person convicted of an offence and sentenced to imprisonment of two years or more is disqualified from Parliament or State Legislature. However, the disqualification hinges on the actual conviction; if a higher court issues a stay on the conviction itself (not merely the sentence), then disqualification may not operate. Mere filing of an appeal without a stay on the conviction does not prevent disqualification under current law."},{"id":2,"txt":"Consider the following statements:\nStatement I: Routine re-promulgation of ordinances to bypass legislative approval is fraud on the Constitution.\nStatement II: The Supreme Court has subjected ordinance-making power to judicial review.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement–I and Statement–II are correct and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct and Statement–II is not the correct explanation for Statement–I","Statement–I is correct but Statement–II is incorrect","Statement–I is incorrect but Statement–II is correct"],"ci":0,"exp":"Ex: The ordinance-making power under Articles 123 (President) and 213 (Governor) is an emergency legislative power meant to meet urgent situations when the legislature is not in session. Being an exception to the normal legislative process, it is constitutionally circumscribed and subject to checks. 2 Statement I is correct: The Constitution empowers the President (or a Governor) to promulgate ordinances under Article 123 (for the Union) and Article 213 (for States) when Parliament (or the State Legislature) is not in session. ❖ However, ordinances are temporary laws that must be approved by the legislature within six weeks of reassembly. Re- promulgating the same ordinance repeatedly to bypass Parliament violates the principle of legislative supremacy. ❖ This was explicitly held in C. Wadhwa v. State of Bihar (1987), where the Supreme Court declared that repeated re- promulgation of ordinances amounts to “a fraud on the Constitution”. Such a practice undermines the democratic and constitutional process. Statement II is correct: The Supreme Court has clarified that the ordinance-making power is not absolute and is subject to judicial scrutiny. Courts can examine whether the ordinance was promulgated without relevant material, mala fide, or to bypass Parliament, as in Krishna Kumar Singh v. State of Bihar (2017). Judicial review ensures that the ordinance-making power is exercised in accordance with constitutional provisions, upholding legislative supremacy and the rule of law. Statement–II directly explains Statement–I. The reason routine re-promulgation of ordinances to avoid legislative approval is fraud on the Constitution is that the ordinance- making power is subject to judicial review. Courts can strike down ordinances that attempt to circumvent the legislature, thereby reinforcing the principle stated in Statement–I."},{"id":3,"txt":"Consider the following statements with reference to the transfer of a Governor from one State to another:\nStatement I: A Governor can be transferred from one State to another during the term of office without the consent of the State Government.\nStatement II: The Constitution explicitly empowers the President to transfer Governors between States.\nWhich one of the following is correct?","ref":"","opts":["Both Statement I and Statement II are correct, and Statement II is the correct explanation for Statement I","Both Statement I and Statement II are correct, but Statement II is not the correct explanation for Statement I","Statement I is correct, but Statement II is incorrect","Statement I is incorrect, but Statement II is correct"],"ci":2,"exp":"Ex: Statement I is correct: The Constitution, under Article 156, provides that a Governor holds office during the pleasure of the President. SPP 22608 Although the Constitution does not explicitly mention \"transfer,\" it is considered an incident of the President’s pleasure over the Governor’s tenure. Consequently, the executive (Union government) can transfer a Governor from one State to another without consulting or seeking consent from the State Government. Statement II is incorrect: The Constitution does not contain any explicit provision granting the President the power to transfer Governors from one State to another. Articles 155 and 156 deal with appointment, tenure, and removal at the President’s pleasure, but transfer is not expressly mentioned. The power to transfer has developed through convention and executive practice, rather than through textual authority in the Constitution. Judicial commentary, including observations in B.P. Singhal acknowledges this practice but clarifies that it is a political convention subject to the principles of fairness, reasonableness, and non-arbitrariness."},{"id":4,"txt":"Which of the following statements is NOT consistent with the constitutional scheme governing election disputes?","ref":"","opts":["Article 323B envisages an alternative adjudicatory mechanism for election disputes","Parliament may create tribunals for election disputes through law","The High Courts currently decide election petitions","The Election Commission is the final authority in all electoral disputes"],"ci":3,"exp":"Ex: Option (a) is consistent with the constitutional scheme: Article 323B empowers the appropriate legislature to provide, by law, for the adjudication of certain disputes—including election disputes—by tribunals. Thus, the Constitution envisages alternative adjudicatory mechanisms for election-related disputes. Option (b) is consistent with the constitutional scheme: Under Article 323B, Parliament may create tribunals through law to deal with election disputes. This reflects the constitutional intent to allow specialised bodies for adjudication, subject to judicial review. Option (c) is consistent with the constitutional scheme: At present, election petitions are decided by High Courts, as provided under the Representation of the People Act, 1951. Appeals from High Court decisions lie before the Supreme Court, making this statement correct. 3 Option (d) is NOT consistent with the constitutional scheme: The Election Commission of India is responsible for the conduct and supervision of elections under Article 324, but it is not the final adjudicatory authority in election disputes. Disputes relating to elections are resolved through courts or tribunals, not by the Election Commission itself."},{"id":5,"txt":"During a Rajya Sabha session, a procedural dispute arises regarding the disqualification of a member under the Tenth Schedule. The Vice President, acting as the Chairperson of the Rajya Sabha, is asked to make a ruling on whether the member should be allowed to vote. Based on constitutional provisions and established practices, which of the following is correct?","ref":"","opts":["The Vice President must act strictly on the aid and advice of the Union Council of Ministers in all matters as Rajya Sabha Chairperson.","The Vice President cannot preside over proceedings involving the disqualification of a member under the Tenth Schedule.","The decision of the Vice President as Chairperson is subject to judicial review before implementation.","The Vice President as Chairperson can exercise discretion in parliamentary proceedings, including rulings on disqualification and voting."],"ci":3,"exp":"Ex: The Vice-President of India is the ex-officio Chairman of the Rajya Sabha under Article 64 of the Constitution. In this capacity, he functions as the presiding officer of the House and does not act on the aid and advice of the Council of Ministers, since this role is legislative and procedural, not executive. Under the Tenth Schedule, the Chairman of the Rajya Sabha is the original authority to decide questions of disqualification of Rajya Sabha members on grounds of defection. While performing this role, the Chairman exercises procedural discretion in regulating the proceedings of the House, including matters relating to participation and voting, in accordance with the Rules of Procedure and parliamentary conventions. The decision of the Chairman under the Tenth Schedule is subject to judicial review only after the decision is made, on limited grounds such as mala fides, perversity, or violation of constitutional provisions, as laid down in Kihoto Hollohan v. Zachillhu (1992). Courts do not interfere during the pendency of proceedings or before the Chairman renders a final decision. Therefore, the correct position is that the Vice- President, acting as Chairman of the Rajya Sabha, can exercise discretion in parliamentary proceedings, including matters related to disqualification and voting, subject to post-decision judicial review. Hence, option (d) is correct. SPP 22608"},{"id":6,"txt":"With reference to the Office of the President of India, consider the following statements:\n1. The President is part of the Union Executive but does not exercise executive powers independently.\n2. The President can return a Money Bill for reconsideration of the Parliament.\n3. All executive actions of the Government of India are formally taken in the name of the President.\n4. The Constitution provides a time limit within which the President must give assent to a Bill.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 4 only","2 and 3 only","1 and 3 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Statement 1 is correct: The President of India is indeed part of the Union Executive but does not exercise executive powers independently. Under Article 74(1), the President is required to act in accordance with the aid and advice of the Council of Ministers, headed by the Prime Minister. This principle reflects India’s parliamentary system, where the President is the formal or constitutional head, and the real executive authority resides with the elected government. The Supreme Court in Shamsher Singh v. State of Punjab (1974) affirmed that while the President is nominally the head of the executive, all real administrative powers are exercised by the Council of Ministers. Statement 2 is incorrect: The Constitution does not empower the President to return a Money Bill to Parliament for reconsideration. Article 111 specifically differentiates between Money Bills and other types of legislation. While the President may return ordinary Bills with or without recommendations, a Money Bill can only be assented to or withheld; it cannot be returned for reconsideration. Statement 3 is correct: All executive actions of the Government of India are formally taken in the name of the President, as provided under Article 77(1). This requirement is mandatory and reinforces the constitutional principle that the President is the nominal head of the Union Executive, while the Council of Ministers exercises actual administrative authority. It is a procedural necessity and does not confer independent power to the President. Statement 4 is incorrect: The Constitution does not prescribe any time limit within which the President must give assent to a Bill. Although constitutional conventions and judicial pronouncements emphasize that the power should not be exercised arbitrarily or unreasonably, there is no explicit temporal restriction in the constitutional text. 4 This point is also affirmed by recent Supreme Court rulings (e.g., in advisory opinion and related judgments) which repeatedly note that neither Article 200 nor Article 201 contains a constitutionally mandated time limit for assent to bills, and courts cannot judicially impose fixed timelines because such timelines are absent from the constitutional text."},{"id":7,"txt":"Consider the following articles of the Indian Constitution:\n1. Article 74 discusses the connection between the Prime Minister, President, and the Council of Ministers.\n2. Article 75 states that the Council of Ministers is collectively responsible to the Rajya Sabha.\n3. Article 78 mandates the Prime Minister to communicate decisions of the Council of Ministers to the President.\nWhich of the statements given above is/are incorrect?","ref":"","opts":["2 only","1 and 3 only","2 and 3 only","1, 2, and 3"],"ci":0,"exp":"Ex: Article 74 and Article 78 establish the advisory role of the Council of Ministers and the communication duties of the Prime Minister to the President. Article 75 emphasizes the collective responsibility of the Council of Ministers to the Lok Sabha, not the Rajya Sabha. This ensures that the government must maintain the confidence of the lower house to stay in power. Statement 1 is correct: Article 74 of the Indian Constitution provides for a Council of Ministers headed by the Prime Minister, which aids and advises the President in the exercise of executive functions. This article establishes the constitutional relationship between the Prime Minister, the Council of Ministers, and the President. Statement 2 is incorrect: Article 75(3) states that the Council of Ministers is collectively responsible to the Lok Sabha, not the Rajya Sabha. This means that the government can remain in power only if it enjoys the confidence of the Lok Sabha, the lower house of Parliament. The Rajya Sabha (Council of States) does not have this role in holding the government accountable. Statement 3 is correct: Article 78 outlines the duties of the Prime Minister with respect to the President. The Prime Minister is required to: ❖ Communicate to the President all decisions of the Council of Ministers concerning Union affairs and legislative proposals. SPP 22608 ❖ Provide information on Union affairs as required by the President. ❖ Submit matters to the Council of Ministers if a minister has made decisions on issues not yet discussed by the Council, upon the President's request."},{"id":8,"txt":"With reference to the Prime Minister of India, consider the following statements:\n1. The Prime Minister is appointed by the President and must be a member of either House of Parliament at the time of appointment.\n2. The Prime Minister continues in office as long as he or she enjoys the Lok Sabha’s confidence.\n3. The Prime Minister’s resignation affects only Cabinet Committees not the entire Council of Ministers.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","2 only","1 and 2 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is incorrect: The Prime Minister is appointed by the President, but need not already be a member of either House at the time of appointment. A non-member can be appointed PM, provided he/she becomes a member of either House within 6 months; otherwise, he/she must resign. This flows from Article 75 read with the general rule for ministers. So the “must be a member … at the time of appointment” part makes the statement wrong. Statement 2 is correct: Under Article 75(3), the Council of Ministers is collectively responsible to the Lok Sabha. Loss of confidence in the Lok Sabha obliges the Prime Minister to resign or seek dissolution. Conversely, so long as confidence exists, the Prime Minister continues, including during caretaker periods after Lok Sabha dissolution. Statement 3 is incorrect: Collective responsibility under Article 75(3) ensures that all ministers are accountable to the Lok Sabha as a single unit. When the Prime Minister resigns, the entire Council of Ministers automatically ceases to hold office, not just Cabinet Committees or specific ministers. This principle maintains political accountability and parliamentary discipline."},{"id":9,"txt":"Consider the following statements regarding the Vice-President of India:\n1. The Vice-President is elected for a term of six years.\n2. The Vice-President can be removed by a resolution passed by a majority of all the then members of the Rajya Sabha and agreed to by the Lok Sabha.\n3. The Vice-President automatically becomes the President if the President’s office falls vacant.\n4. The Vice-President is not eligible for re- election to the office.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: The Vice-President of India is the second- highest constitutional office in India. Elected by an electoral college consisting of members of both Houses of Parliament, the Vice-President serves as the ex-officio Chairman of the Rajya Sabha. 5 Statement 1 is incorrect : The Vice-President of India is elected for a term of five years, not six years. There is no provision for a six-year term for the Vice-President. Statement 2 is correct: The Vice-President can indeed be removed from office by a resolution passed by majority of all the then members of the Rajya Sabha (majority of total membership- vacant sheets) and agreed to by the Lok Sabha (House of the People). This process is mentioned in Article 67 of the Indian Constitution. No impeachment is required for his removal, unlike the President. Statement 3 isincorrect: The Vice-President does not automatically become the President when the President’s office falls vacant. Instead, the Vice- President acts as the President until a new one is elected. He serves as the acting President for a maximum period of six months, but he does not take over the full term of the President. Statement 4 is incorrect : The Vice-President is eligible for reelection to the office. There is no constitutional provision that limits the number of terms a Vice-President can serve. He can be reelected for any number of terms as long as he continues to meet the eligibility criteria."},{"id":10,"txt":"Consider the following statements in reference to the functions of the Governor of the States:\n1. He/She determines the remuneration for the advocate general of state.\n2. He/She can remove the chairman and members of the state public service commission on certain grounds.\n3. He/She can make rules for more convenient transactions of the business of a state government.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is correct: According to Article 165 (3) of the Indian Constitution, the Advocate General for a State is appointed by the Governor and holds office during the Governor’s pleasure. The Governor also determines the remuneration of the Advocate General. Hence, this statement is correct. Statement 2 is incorrect: As per Article 317, the removal of the Chairman or a member of a State Public Service Commission (SPSC) is not within the independent purview of the Governor. The President of India has the authority to remove them, and this process involves: ❖ A reference to the Supreme Court for an inquiry of allegations of misbehavior are made. SPP 22608 ❖ Based on the Supreme Court’s report, which must recommend removal, the President can take action. Grounds for removal include misbehavior, insolvency, engaging in paid employment during the term of office, or infirmity of mind or body. Since the Governor does not have the power to remove the Chairman or members, this statement is incorrect. Statement 3 is correct: Under Article 166(3) of the Constitution, the Governor is empowered to make rules for the more convenient transaction of the business of the state government and for the allocation of such business among ministers. This provision enables the Governor to structure the functioning of the government’s administrative machinery for smooth governance. Therefore, this statement is correct. Additional Information: The Governor is the constitutional head of a state, with powers derived from Articles 153- 167 of the Indian Constitution. Executive Functions: ❖ State Executive Head: Exercises executive power under Article 154. ❖ Appointments: Chief Minister (CM) and Council of Ministers (on CM’s advice) , Advocate General, Chairperson of State Public Service Commission. Legislative Functions: ❖ Sessions: Summons, prorogues, and dissolves Legislative Assembly (Article 174). ❖ Assent to Bills: Signs, withholds, or reserves bills for President’s approval (Article 200). ❖ Ordinances: Issues ordinances when the legislature is not in session (Article 213). ❖ Nomination: Nominates Anglo-Indian members (if applicable) under Article 333. However, this provision was removed by the 104th Constitutional Amendment Act, 2019. 6 Judicial Functions: ❖ Pardoning Power: Grants pardons, reprieves, remissions under Article 161 (offences against state laws). Financial Functions: ❖ Budget: Ensures annual budget presentation before the legislature. ❖ Recommendation: Recommends money bills (Article 207). ❖ Contingency Fund: Manages the state’s contingency fund. Discretionary Powers: ❖ Hung Assembly: Appoints CM in case of no clear majority. ❖ President’s Rule: Recommends its imposition under Article 356. ❖ Bill Reservation: Reserves bills for the President’s assent. Miscellaneous Functions: ❖ Special Responsibilities: Tribal areas, law and order in specific states (e.g., Nagaland, Mizoram). ❖ University Chancellor: Functions as Chancellor of state universities, appoints Vice-Chancellors, and oversees university affairs, subject to state laws.\""},{"id":11,"txt":"Consider the following statements regarding the Council of Ministers and the Cabinet:\n1. The Council of Ministers is a smaller body consisting of only 15–20 members, while the Cabinet is a larger body consisting of 60–70 ministers.\n2. The Cabinet comprises only Cabinet Ministers and meets regularly to make policy decisions, whereas the Council of Ministers includes Cabinet Ministers, Ministers of State, and Deputy Ministers.\n3. The Cabinet upholds the collective responsibility of the Council of Ministers to the Lok Sabha (Lower House of Parliament).\nHow many of the above statements are correct?","ref":"","opts":["None","Only one","Only two","All three"],"ci":2,"exp":"Ex: The Cabinet and Council of Ministers are two key bodies in the Indian government. The Cabinet is a smaller group of senior ministers who hold key portfolios and make major policy decisions. The Council of Ministers is a larger body that includes all ministers, including Cabinet Ministers, Ministers of State, and Deputy Ministers. Statement 1 is incorrect: TheThe Council of Ministers is the larger body, encompassing all ministers in the government. This includes: ❖ Cabinet Ministers: Senior-most ministers, part of the core decision-making body. SPP 22608 ❖ Ministers of State: These ministers can either hold independent charge or assist the Cabinet Ministers. ❖ Deputy Ministers: Junior-most ministers who assist the Ministers of State or Cabinet Ministers. The Council of Ministers can comprise 60–70 ministers or more. ❖ In contrast, the Cabinet is a smaller body, usually composed of 15–20 key members, including the Prime Minister and senior ministers handling crucial portfolios such as Finance, Home, and Defence. Statement 2 is correct: The Cabinet comprises only Cabinet Ministers, who are senior members of the executive. ❖ The Cabinet meets regularly (usually weekly) to deliberate on significant policy matters and national issues. ❖ The Cabinet holds the real executive power and is collectively responsible for governance. ❖ The Council of Ministers, however, is a broader body that includes Cabinet Ministers, Ministers of State, and Deputy Ministers. The Council of Ministers does not meet as a single body to transact government business. Statement 3 is correct: The Cabinet is responsible for enforcing the principle of collective responsibility within the Council of Ministers to the Lok Sabha (Lower House of Parliament). ❖ This principle means that if the Lok Sabha passes a vote of no confidence against the Cabinet, the entire Council of Ministers, including the Prime Minister, must resign. ❖ Policy decisions made by the Cabinet are binding on the entire Council of Ministers, even if individual members may have differing opinions. This ensures a unified approach to governance and accountability to Parliament. 7"},{"id":12,"txt":"Which of the following Supreme Court judgments held that the Election Commission’s powers under Article 324 are plenary but operate subject to laws made under the Representation of the People Act?","ref":"","opts":["Mohinder Singh Gill v. Chief Election Commissioner","Kihoto Hollohan v. Zachillhu","N.P. Ponnuswami v. Returning Officer","Indira Nehru Gandhi v. Raj Narain"],"ci":0,"exp":"Ex: The Supreme Court in Mohinder Singh Gill v. Chief Election Commissioner (1978) laid down the authoritative interpretation of Article 324 of the Constitution. Option (a) is correct: The Court held that the powers of the Election Commission under Article 324 are plenary in nature, meaning they are wide, residual, and comprehensive. However, these powers operate subject to laws made by Parliament, particularly the Representation of the People Act, 1950 and 1951. Where the law (RPA) occupies the field, the Election Commission must act within the statutory framework. Only in areas where the law is silent or inadequate can the Election Commission exercise its residual powers. This judgment balances constitutional authority (Article 324) with legislative supremacy (RPA). Other options are incorrect: (b) Kihoto Hollohan v. Zachillhu: This case dealt with the constitutional validity of the Anti-Defection Law (Tenth Schedule) and judicial review of the Speaker’s decision, not the scope of Article 324. (c) N.P. Ponnuswami (1952): Established the bar on judicial interference during elections (Article 329), not the scope of EC’s powers. (d) Indira Nehru Gandhi v. Raj Narain: This case concerned the validity of the 39th Constitutional Amendment and the election of the Prime Minister, not the scope of the Election Commission’s powers under Article 324."},{"id":13,"txt":"Consider the following statements:\nStatement I: The Chief Minister is appointed by the Governor, and the Governor has the discretion to appoint anyone to the position of Chief Minister.\nStatement II: The Governor must appoint the leader of the majority party or coalition in the state legislative assembly as the Chief Minister, following the conventions of the parliamentary system.\nWhich of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct, and Statement-II is the correct explanation for Statement-I.","Both Statement-I and Statement-II are correct, and Statement-II is not the correct explanation for Statement-I.","Statement-I is correct, but Statement-II is incorrect.","Statement-I is incorrect, but Statement-II is correct."],"ci":3,"exp":"Ex: Statement 1 is incorrect: While it is true that the Chief Minister is appointed by the Governor as per Article 164(1) of the Indian Constitution, the Governor does not have absolute discretion to appoint anyone. SPP 22608 The discretion of the Governor is very limited and applies in rare cases such as: ❖ Hung Assembly: When no party or coalition has a clear majority, the Governor may use discretion to appoint the leader of the largest party or coalition and ask them to prove majority support on the floor of the House. ❖ Uncertainty: In case of political instability, the Governor may exercise discretion to identify a leader who is likely to command the majority. Statement 2 is correct: In a parliamentary democracy, the Governor must appoint the leader of the majority party or coalition as the Chief Minister, ensuring representation of the majority’s will. In a coalition government, the Governor appoints the leader chosen by the partners. This practice is supported by judicial precedents like the S.R. Bommai (1994) case, where the Supreme Court stated that a Chief Minister’s majority must be tested in the assembly, not decided by the Governor. The Rameshwar Prasad (2006) case also opposed arbitrary decisions by Governors in appointing Chief Ministers."},{"id":14,"txt":"Consider the following statements regarding the Vice President of India:\n1. The Vice President continues to hold office until a newly elected Vice President enters upon office.\n2. The Constitution specifies a fixed time period within which a vacancy in the office of the Vice President must be filled.\nHow many of the statements given above are correct?","ref":"","opts":["1 Only","2 Only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The Vice President of India is a constitutional authority under Part V of the Constitution, holding a dual role as the second-highest constitutional office and the ex-officio Chairperson of the Rajya Sabha(Articles 63 and 64). Provisions relating to tenure and vacancies are contained primarily in Articles 67 and 68. Statement 1 is correct: Article 67(b) of the Constitution clearly provides that the Vice President shall continue in office until his successor enters upon office, even after the expiry of the normal five-year term. This provision ensures continuity of constitutional functioning, particularly because the Vice President is the ex-officio Chairperson of the Rajya Sabha under Article 64. 8 Statement 2 is incorrect: Under Article 68(2) of the Constitution of India, when a vacancy arises in the office of the Vice President due to death, resignation, or removal, the Constitution provides that an election shall be held “as soon as possible.” Importantly, the phrase “as soon as possible” is deliberately open-ended and does not prescribe any numerical or mandatory time limit. This constitutional design gives administrative and logistical flexibility to the Election Commission of India and the Parliament to conduct the election in a practical manner, especially considering that the Vice President is elected by an electoral college consisting of members of both Houses of Parliament."},{"id":15,"txt":"Consider the following statements regarding the election of the President of India:\n1. The value of the vote of a Member of Parliament is the same as that of a Member of a State Legislative Assembly.\n2. Nominated members of Rajya Sabha participate in the presidential election.\n3. The election of the President is held using proportional representation by means of a single transferable vote.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: The President of India is elected through an indirect election system designed to reflect the federal character of the Constitution. The process balances the representation of the Union and the States through a specially constituted electoral college and a weighted voting mechanism under Article 55. Statement 1 is incorrect: The value of votes of MPs and MLAs is not the same. The value of an MLA’s vote is calculated based on the population of the state (as per the 1971 census) divided by the number of elected members of the Assembly, while the value of an MP’s vote is determined so that the total value of all MP votes equals the total value of votes of all MLAs combined. This ensures proportional representation across states but results in MPs and MLAs generally having different vote values. Statement 2 is incorrect: Only elected members of the Lok Sabha, Rajya Sabha, and State Legislative Assemblies participate in the election of the President. Nominated members of Parliament or State Assemblies do not have voting rights in Presidential elections. This is clearly specified in Article 55 and the relevant rules governing the electoral college. SPP 22608 Statement 3 is correct: Article 55 of the Constitution mandates that the President is elected by an electoral college comprising elected MPs and MLAs, using proportional representation by means of a single transferable vote, with voting conducted by secret ballot. This system ensures that the result reflects the relative strength of parties and the population of states, making it a fair and representative process."},{"id":16,"txt":"Which of the following statements regarding the Anti-Defection Law is incorrect?","ref":"","opts":["A presiding officer is expected to sever formal party ties to maintain institutional neutrality","Disqualification for defying the party whip can be avoided if the party condones the act","A merger is recognised only when at least two-thirds of legislators agree to it","Every act of voting against party directions leads to immediate and irreversible disqualification"],"ci":3,"exp":"Ex: Option (a) is correct: The Presiding Officer (Speaker/Chairman) is expected to sever formal party ties upon assuming office. Although this expectation is based on constitutional convention and parliamentary practice (not an explicit constitutional mandate), it is meant to ensure institutional neutrality, which is consistent with the scheme of the Tenth Schedule Option (b) is correct: Under the Tenth Schedule, disqualification for defying the party whip can be avoided if the political party condones the act within 15 days. This provision recognises that parties may internally resolve instances of indiscipline, and not every deviation must lead to disqualification. Option (c) is correct: A merger is recognised under the Tenth Schedule only when at least two-thirds of the members of the legislature party agree to the merger. If this numerical threshold is met, the members are exempt from disqualification. Option (d) is incorrect: Voting against party directions does not automatically or irreversibly lead to disqualification. Disqualification: requires a petition, is subject to decision by the Presiding Officer, and may be avoided if the party condones the act within the prescribed time. Thus, the process is neither automatic nor irreversible. 9"},{"id":17,"txt":"With reference to the role of constitutional authorities in deciding questions of disqualification of legislators, consider the following statements:\n1. In cases of disqualification of Members of Parliament under Article 102, the President takes the final decision.\n2. The Election Commission’s opinion in such matters is advisory and may be disregarded by the President.\n3. For Members of the State Legislature, the Governor decides the issue after consulting the Election Commission under article 202.\n4. The Constitution envisages a judicial role for the Supreme Court at the first stage of disqualification proceedings.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Statement 1 is correct: In matters relating to the disqualification of Members of Parliament, the President of India is the constitutional authority to take the final decision. This is clearly provided under Article 103(1) of the Constitution, which states that if any question arises as to whether a Member of Parliament has become subject to disqualification under Article 102, the question shall be decided by the President. Statement 2 is incorrect: Although Article 103 requires the President to decide the matter after obtaining the opinion of the Election Commission, judicial interpretation has clarified that the Election Commission’s opinion is binding and not merely advisory. The President cannot independently assess or disregard the Election Commission’s opinion and is constitutionally obliged to act in accordance with it. Statement 3 is incorrect: In the case of Members of a State Legislature, the corresponding constitutional provision is Article 192(1) not 202. It provides that any question relating to disqualification under Article 191 shall be decided by the Governor, after obtaining the opinion of the Election Commission. As with the President, the Governor is bound by the Election Commission’s opinion Statement 4 is incorrect: The Constitution does not envisage any role for the Supreme Court or High Courts at the initial stage of disqualification proceedings. The primary authority rests with the President or Governor, acting on the opinion of the Election Commission. Judicial intervention is limited to post-decision judicial review, not first-instance adjudication. SPP 22608"},{"id":18,"txt":"If the Prime Minister of India resigns or dies, what happens to the Council of Ministers?","ref":"","opts":["The Council of Ministers continues to function until a new Prime Minister is appointed.","The Council of Ministers continues, but the Prime Minister’s duties are temporarily taken over by the President.","The resignation or death of the Prime Minister automatically dissolves the Council of Ministers.","Only the Prime Minister’s post is vacated, and the other ministers continue functioning."],"ci":2,"exp":"Ex: Option (c) is correct: The Council of Ministers is a collective body headed by the Prime Minister. The Prime Minister holds a pivotal role, and the functioning of the entire government depends on their leadership. Therefore, the resignation or death of the Prime Minister leads to the automatic dissolution of the Council of Ministers. This ensures that the government continues under fresh leadership, and a new Prime Minister is appointed by the President to form a new Cabinet."},{"id":19,"txt":"With reference to the Council of Ministers at the Union and State levels, consider the following statements:\n1. The constitutional limit on the maximum size of the Union Council of Ministers is linked to the strength of the Lok Sabha.\n2. The minimum strength of the Council of Ministers is constitutionally prescribed only for the States and not for the Union.\n3. The constitutional provisions relating to the size of the Council of Ministers were introduced to curb political defections.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: The size of the Council of Ministers at both Union and State levels is governed by Articles 75 and 164, as amended by the 91st Constitutional Amendment Act, 2003, which sought to rationalise executive size and strengthen political stability. Statement 1 is correct: The Constitution explicitly links the maximum size of the Union Council of Ministers to the strength of the Lok Sabha. Article 75(1A), inserted by the 91st Constitutional Amendment Act, 2003, provides that the total number of ministers, including the Prime Minister, shall not exceed 15% of the total membership of the Lok Sabha. This provision was introduced to prevent excessively large ministries at the Union level and establishes a direct numerical relationship between the executive and the popularly elected House. Statement 2 is correct: The Constitution makes a clear distinction between the Union and the States with respect to the minimum strength of the Council of Ministers. While no minimum number of ministers is prescribed for the Union Council of Ministers, Article 164(1A) mandates that in States, the Council of Ministers shall not be less than 12 members, including the Chief Minister (subject to an exception for States with very small Legislative Assemblies). Hence, a constitutionally prescribed minimum exists only at the State level, not at the Union level. 10 Statement 3 is correct: The provisions relating to the size of the Council of Ministers were introduced as part of a broader constitutional reform aimed at curbing political defections and the practice of “jumbo cabinets.” The 91st Constitutional Amendment Act, 2003, which inserted Articles 75(1A) and 164(1A), was enacted alongside measures strengthening the anti-defection framework under the Tenth Schedule. By limiting the number of ministerial positions, the amendment sought to reduce the use of ministerial office as a political inducement for defections and coalition management."},{"id":20,"txt":"Consider the following statements regarding the executive power in India:\n1. The real executive authority of the Union vests in the Council of Ministers headed by the Prime Minister.\n2. The President may exercise independent discretion in routine executive matters when ministerial advice is unavailable or delayed.\n3. The content of advice tendered by the Council of Ministers to the President is immune from judicial inquiry.\n4. Courts may examine whether executive action taken in the name of the President violates constitutional limitations.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statement 1 is correct: In Shamsher Singh v. State of Punjab (1974), the Supreme Court authoritatively held that under India’s parliamentary system, the President is a constitutional head, while the real executive power is exercised by the Council of Ministers led by the Prime Minister. Executive authority formally flows in the President’s name but substantively rests with the political executive. Statement 2 is incorrect: The same judgment (Shamsher Singh) clarified that the President cannot act independently in routine executive matters and is bound by the aid and advice of the Council of Ministers, except in narrowly defined constitutional situations. Absence or delay of advice does not confer a general discretionary power on the President. Statement 3 is correct: Article 74(2) bars courts from inquiring into what advice was tendered by the Council of Ministers. This constitutional protection of executive advice has been repeatedly affirmed by the Supreme Court and forms a core feature of cabinet confidentiality. Statement 4 is correct: In S.R. Bommai v. Union of India (1994), the Supreme Court held that while advice itself is immune, executive actions taken on the basis of such advice are subject to judicial review to test their constitutionality, mala fides, or relevance of material. SPP 22608"},{"id":21,"txt":"A vacancy in a legislative seat requiring a bye- election may arise due to which of the following?\n1. Resignation of the sitting member\n2. Death of the sitting member\n3. Dissolution of the House\n4. Disqualification under constitutional or statutory provisions\nSelect the correct answer using the code below:","ref":"","opts":["1, 2 and 4 only","1 and 2 only","2, 3 and 4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Statement 1 is correct: When a sitting member resigns from the House and the resignation is accepted by the Speaker/Chairman (Articles 101(3)(a) for Parliament and 190(3)(a) for State Legislatures), the seat becomes vacant. Such a vacancy is required to be filled through a bye- election, unless the House itself is nearing dissolution. Statement 2 is correct: The death of a sitting member automatically creates a vacancy. This vacancy is ordinarily filled through a bye- election under the Representation of the People Act, 1951. Statement 3 is incorrect: When the entire House is dissolved (e.g., Lok Sabha or State Legislative Assembly), all seats lapse together. No bye-elections are held because the entire House is to be reconstituted through a general election, not seat-wise replacement. Statement 4 is correct: Disqualification under: Constitutional provisions(Articles102and191), or Statutory provisions (e.g., Representation of the People Act, 1951, Anti-Defection Law), results in a vacancy. Such a vacancy is ordinarily filled through a bye-election."},{"id":22,"txt":"Consider the following statements comparing the powers and roles of the President of India and the President of the United States:\n1. The President of India is both the constitutional head and the real executive head, while the President of the United States is purely the executive head of the government.\n2. The President of the United States and the President of India are indirectly elected by different electoral colleges.\n3. The Indian President can dissolve the Lok Sabha, while the U.S. President has no authority to dissolve the Congress.\n4. In the event of impeachment, both the Indian President and the U.S. President are tried by their respective legislative bodies.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statement 1 is incorrect: ❖ President of India: The President is the constitutional head of the state, and real executive powers are exercised by the Prime Minister and the Council of Ministers. The Indian President does not have significant executive powers. ❖ President of the United States: The U.S. President is both the constitutional head and the real executive head. They hold significant powers, including those of a Commander-in-Chief, head of state, and head of government. 11 Statement 2 is correct: ❖ President of India: Elected indirectly by an electoral college comprising Members of Parliament and Members of State Legislative Assemblies. ❖ President of the United States: Elected indirectly by the Electoral College, but citizens vote directly for electors in a general election. Hence, the process appears more direct than in India. Statement 3 is correct: ❖ Indian President: Has the power to dissolve the Lok Sabha on the advice of the Prime Minister (Article 85). ❖ U.S. President: Has no power to dissolve the Congress as it is an independent branch under the principle of separation of powers. Statement 4 is correct: ❖ President of India: Can be impeached by both Houses of Parliament for \"violation of the Constitution\" under Article 61. ❖ President of the United States: Can be impeached by the House of Representatives and tried in the Senate. Conviction requires a two-thirds majority in the Senate. Additional Information: Aspect President of President of India the USA Nature of Role Constitutional Executive Head Head (Real (Ceremonial) Power) Election Indirect Indirect Process through through Electoral Electoral College College (citizens vote for electors) Ordinance Yes (Article No Powers 123) Military Role Supreme Commander- Commander in-Chief (Ceremonial) (Operational) Dissolution Can dissolve Cannot Powers Lok Sabha dissolve Congress Impeachment Violation of Treason, Grounds the Bribery, High Constitution Crimes SPP 22608"},{"id":23,"txt":"Which of the following best describes an Effective Majority in the context of Parliamentary proceedings?","ref":"","opts":["A majority of the total membership of the House, including vacant seats","A majority of the members present and voting","A majority of the total strength of the House after excluding vacancies","A majority of not less than two-thirds of the total membership of the House"],"ci":2,"exp":"Ex: An Effective Majority refers to a specific type of majority used in certain parliamentary procedures, where the calculation is based on the effective strength of the House, not its sanctioned strength. Option (c) is correct: Effective Majority = (Total strength of the House − Vacant seats) ÷ 2 + 1. It excludes vacant seats and counts only the existing membership. This type of majority is used in important motions such as: ❖ Removal of the Vice-President of India (Article 67(b)) ❖ Removal of the Speaker or Deputy Speaker of the Lok Sabha ❖ Removal of the Deputy Chairman of the Rajya Sabha other options are incorrect: (a) Majority of total membership including vacancies: This describes Absolute Majority, not Effective Majority. (b) Majority of members present and voting: This refers to Simple Majority, used for ordinary legislation. (d) Two-thirds of total membership: This along with the Majority of members present and voting is described as a Special Majority, used for constitutional amendments under Article 368."},{"id":24,"txt":"With reference to the above scenario, consider the following statements:\n1. The Model Code of Conduct comes into effect from the date the election schedule is announced by the Election Commission.\n2. Launching new schemes and inaugurating projects for publicity during elections violates the MCC.\n3. The MCC is legally enforceable, and violation can attract criminal liability.\n4. The Election Commission has the authority to censure political parties and candidates for violating the MCC.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1, 2 and 4 only","2, 3 and 4 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Statement 1 is correct: The MCC is a set of guidelines issued by the Election Commission to ensure free and fair elections. It becomes immediately effective from the date the election schedule is announced, covering all political parties and candidates until the completion of the election process. 12 Statement 2 is correct: The MCC prohibits the ruling party from using its official position to gain unfair advantage during elections. Announcing new subsidies, inaugurating development projects, or using government resources for election propaganda can violate the MCC, as it may influence voters unduly. Statement 3 is incorrect: The MCC is not legally enforceable, it is a set of ethical guidelines issued by the ECI and the ECI does not have judicial authority to impose fines, imprisonment, or other criminal penalties. Its actions are limited to reprimands, warnings, or recommendations, which rely on moral and political pressure to ensure compliance. Statement 4 is correct: When a suspected MCC violation occurs, the Election Commission of India (ECI) can take action either on its own initiative or based on a complaint from another party or candidate. The ECI first issues a notice to the concerned party or candidate. The recipient must respond in writing, either acknowledging the violation and offering an apology or refuting the allegation. If the party or candidate denies the charge but is later found guilty of violating the MCC, the ECI may issue a written reprimand, which serves as an official censure. In some cases, the ECI can also appoint a committee to assess the conduct and investigate the matter in detail."},{"id":25,"txt":"With reference to the Governor’s constitutional position, consider the following statements:\n1. A Bill affecting the Governor’s powers may be reserved for the President.\n2. Reservation of a Bill under Article 200 is a discretionary act of the Governor.\n3. Reservation of a Bill ends the Governor’s constitutional role in the legislative process.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Under Articles 200 and 201 of the Constitution, the Governor plays a crucial role in the State legislative process, including assent, reservation of Bills for the President, and subsequent procedural steps. These provisions define the Governor’s discretionary space and continuing constitutional responsibilities. Statement 1 is correct: Article 200 of the Constitution empowers the Governor to reserve a Bill for the consideration of the President. One of the well-recognised grounds for such reservation is when a State Bill affects the SPP 22608 powers or position of the Governor. If legislation substantially alters the Governor’s role, whether constitutional or statutorily attached to the office (such as the position of Chancellor of State Universities), the Governor may constitutionally reserve the Bill so that the President, acting on Union advice, can take a final view. This safeguard reflects the Governor’s role as a constitutional sentinel. Statement 2 is correct: Although the Governor ordinarily acts on the aid and advice of the Council of Ministers, the power to reserve a Bill under Article 200 is treated as one of the limited discretionary functions of the Governor. The wording of Article 200 (“the Governor may reserve the Bill”) and constitutional practice indicate that, in situations affecting constitutional propriety or the Governor’s own position, the Governor is not strictly bound by ministerial advice. Judicial pronouncements, including Nabam Rebia v. Deputy Speaker (2016), clarified that discretion exists only where the Constitution so contemplates—reservation of Bills being one such recognised area. Statement 3 is incorrect: Reservation of a Bill does not terminate the Governor’s constitutional role. After the President considers the reserved Bill under Article 201, the Bill may be assented to, withheld, or returned (if not a Money Bill). The Bill is then communicated back to the Governor for further constitutional action. Hence, the Governor continues to play a formal role in the legislative process even after reservation."},{"id":26,"txt":"A major executive decision is taken collectively by the Council of Ministers under the leadership of the Prime Minister. The decision is challenged before a constitutional court on the ground that it violates constitutional limitations. In the light of constitutional principles governing the Prime Minister and the Council of Ministers, which of the following is the most appropriate conclusion?","ref":"","opts":["Collective decisions of the Council of Ministers are entirely immune from judicial review.","Cabinet decisions can be reviewed only if the Prime Minister has acted in an individual capacity.","Judicial review applies only to decisions taken by individual ministers and not to collective Cabinet decisions.","Courts may examine the constitutional validity of Cabinet decisions but the internal deliberations of the Council of Ministers remain protected."],"ci":3,"exp":"Ex: Under India’s parliamentary system, the Council of Ministers headed by the Prime Minister constitutes the real executive authority. Executive decisions are taken collectively, and the principle of collective responsibility under Article 75(3) ensures political accountability to the Lok Sabha. 13 However, collective responsibility does not confer constitutional immunity. While the internal deliberations, discussions, and advice within the Council of Ministers are protected to preserve cabinet confidentiality, the executive decisions emerging from such deliberations are subject to judicial review. Courts are empowered to examine whether such decisions violate constitutional provisions, exceed legal authority, or are vitiated by mala fides or irrelevant considerations. Hence option D is correct. Thus, even though the Prime Minister leads the Council of Ministers and decisions are taken collectively, constitutional supremacy and the rule of law prevail."},{"id":27,"txt":"Consider the following statements regarding the President’s “satisfaction”:\n1. The President’s satisfaction under the Constitution is always beyond judicial scrutiny.\n2. Courts can examine whether such satisfaction is based on relevant material.\n3. The President may act without ministerial advice in forming such satisfaction.\nWhich of the statements given above is/are correct?","ref":"","opts":["2 and 3 only","1 and 2 only","2 only","1, 2 and 3"],"ci":2,"exp":"Ex: The expression “President’s satisfaction” appears at several places in the Constitution (e.g., Articles 74, 123, 356). Although phrased as the President’s personal satisfaction, Indian constitutional practice treats it as institutional satisfaction, exercised within the framework of parliamentary democracy and subject to constitutional checks. Statement 1 is incorrect: The Constitution does not make the President’s satisfaction immune from judicial review. In several landmark cases, such as Rameshwar Prasad v. Union of India (2006) and S.R. Bommai v. Union of India (1994), the Supreme Court held that while the President acts on the aid and advice of ministers, courts can review whether the satisfaction was based on relevant material or exercised mala fide. Statement 2 is correct: Judicial review is permissible to ensure that the satisfaction of the President (or Governor) is constitutionally valid. Courts may assess whether relevant facts were considered and whether the action aligns with constitutional norms. This principle was established in Rameshwar Prasad (2006), where the Court emphasized that subjective satisfaction is justiciable to prevent misuse of power. SPP 22608 Statement 3 is incorrect: Under Article 74(1), the President is bound to act according to the aid and advice of the Council of Ministers, even in forming satisfaction under the Constitution. The President cannot act independently of ministerial advice when forming satisfaction. Sometimes students think there is ambiguity because: ❖ The President may seek reconsideration once (Article 74(1), proviso), or ❖ There are rare situations like: ➢ appointment of PM in a hung House, ➢ dissolution of Lok Sabha when no alternative government is possible. But these are NOT cases of forming constitutional “satisfaction” independently. They are procedural or situational discretions, not substantive satisfaction under Articles like 123 or 356. Statement 3, as worded, asserts a general power of independent satisfaction. Such a power does not exist under the Constitution. Therefore, Statement 3 is unambiguously incorrect."},{"id":28,"txt":"With reference to the Anti-Defection Law, consider the following statements:\n1. A member of a House can be disqualified for voluntarily giving up membership of their political party, even if they do not vote against the party whip.\n2. A member cannot be disqualified if they vote against the party whip in a confidence motion but later claim they were following personal conscience.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The Anti-Defection Law was added to the Constitution by the 52nd Amendment in 1985, introducing the Tenth Schedule. Its primary purpose is to prevent political defections motivated by personal gain or inducements and to ensure stability in elected governments. Statement 1 is correct: The Tenth Schedule defines “voluntarily giving up membership” broadly. The Supreme Court has clarified in Kihoto Hollohan vs. Zachillhu (1992) that a legislator need not formally resign from the party to be considered as having voluntarily given up membership. Therefore, disqualification can be invoked even without any specific vote against the party whip, as the law focuses on loyalty and association with the party. 14 Statement 2 is incorrect: The Tenth Schedule explicitly mandates that members are bound to follow the directions of the party leadership, particularly in critical matters such as confidence and no-confidence motions, money bills, and important legislative decisions. The Court emphasized that adherence to the party whip is essential to maintain the stability of governments, which was the main objective behind enacting the law. Therefore, claiming personal conscience as a defense does not exempt a member from disqualification under the Tenth Schedule."},{"id":29,"txt":"Consider the following statements regarding the Council of Ministers in India:\n1. The total number of ministers, including the Prime Minister, in the Council of Ministers shall not exceed 10% of the total strength of the Lok Sabha.\n2. The ministers shall hold office during the pleasure of the Prime Minister.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 Only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: The Prime Minister is appointed by the President, usually the leader of the majority party in the Lok Sabha. Other ministers are appointed by the President on the Prime Minister's advice. Ministers must be members of Parliament or become members within six months of appointment. They can be removed by the President, but this is usually done on the Prime Minister's advice, ensuring political accountability.  SPP 22608 Statement 1 is incorrect : According to Article 75(1A) (introduced by the 91st Constitutional Amendment Act, 2003), the total number of ministers, including the Prime Minister, shall not exceed 15% of the total strength of the Lok Sabha, not 10%. Statement 2 is incorrect: As per Article 75(2), ministers hold office during the pleasure of the President, not the Prime Minister. However, the President exercises this power on the advice of the Prime Minister, meaning the Prime Minister can recommend the dismissal of a minister.  15"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

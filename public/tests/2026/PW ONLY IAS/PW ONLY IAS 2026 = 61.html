@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 61</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 61</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 61">PW ONLY IAS 2026 = 61</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Which of the following statements is incorrect with reference to the species and their natural distribution in India?","ref":"","opts":["The Nilgiri Tahr is endemic to the Western Ghats.","The Bonobo is found in the forested regions of Northeast India.","The Olive Ridley Turtle is known for mass nesting along the Odisha coast.","The Snow Leopard inhabits the high- altitude regions of Jammu & Kashmir and Ladakh."],"ci":1,"exp":"Ex: Option (a) is correct: The Nilgiri Tahr is an endemic mountain ungulate of the Western Ghats, primarily distributed across Tamil Nadu and Kerala in high-altitude grasslands and shola ecosystems. Option (b) is incorrect: The Bonobo is not found in India. It is endemic to the Democratic Republic of the Congo (DRC) in Central Africa and inhabits tropical rainforests south of the Congo River. It does not occur in Northeast India or any part of the Indian subcontinent. Option (c) is correct: The Olive Ridley Turtle is widely known for its mass nesting phenomenon, called “Arribada,” along the Odisha coast, particularly at Gahirmatha Marine Sanctuary, Rushikulya, and the Devi river mouth. Option (d) is correct: The Snow Leopard inhabits the high-altitude trans-Himalayan and Himalayan regions of India. In India, its range covers the Himalayan states, including Ladakh (where it is the State Animal), Jammu & Kashmir, Himachal Pradesh, Uttarakhand, Sikkim, and Arunachal Pradesh."},{"id":1,"txt":"Consider the following wetlands:\n1. Wular Lake\n2. Loktak Lake\n3. Sambhar Lake\n4. Kolleru Lake\nWhich of the above are natural freshwater lakes?","ref":"","opts":["1 and 2 only","1, 2 and 4 only","2 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Wular Lake (Natural Freshwater) is Correct: Wular Lake (Jammu & Kashmir) is one of the largest natural freshwater lakes in India. It is fed primarily by the Jhelum River and is designated as a Ramsar Site. Loktak Lake (Natural Freshwater) is Correct: Loktak Lake (Manipur) is a natural freshwater lake and is famous for its floating vegetative masses called phumdis. It also hosts Keibul Lamjao National Park. The largest freshwater lake in Northeast India. It is on the Montreux Record due to ecological changes. SPP 22662 Sambhar Lake (Natural Saline) is Incorrect: Sambhar Lake (Rajasthan) is not a freshwater lake. It is India’s largest inland saline lake and is well known for salt production and a major wintering ground for Flamingos. Kolleru Lake (Natural Freshwater) is Correct: Kolleru Lake (Andhra Pradesh) is a natural freshwater lake located between the Godavari and Krishna river deltas. It is an important wetland ecosystem and also a Ramsar Site."},{"id":2,"txt":"With reference to Dal Lake in Jammu and Kashmir, consider the following statements:\n1. It is fed by the Arrah river, which enters the lake through a northern extremity known as Tel Bal.\n2. It hosted the first-ever Khelo India water sports event.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Dal Lake, often called the \"Jewel in the crown of Kashmir,\" is a vital urban wetland that has seen significant restoration efforts and increased sports activity in recent years. Statement 1 is correct: Dal Lake is fed by the Arrah (also spelled Dara/Arrah) stream, which enters the lake at its northern extremity known as Tel Bal. This inflow contributes significantly to the lake’s hydrology. Statement 2 is correct: In April 2021, the Srinagar-based Water Sports Academy at Dal Lake hosted the first-ever Khelo India State Centre of Excellence (KISCE) water sports event. The event focused on Olympic disciplines like Rowing, Canoeing, and Kayaking. This was part of a larger push by the Ministry of Youth Affairs and Sports to tap into the natural potential of the Himalayan region for aquatic sports and to provide world-class training facilities to local athletes."},{"id":3,"txt":"With reference to India's Long-Term Low Emission Development Strategy (LT-LEDS) submitted to the UNFCCC at COP27, consider the following statements:\n1. India aims to achieve 20% ethanol blending in petrol by 2025.\n2. The National Hydrogen Mission is aimed at making India a global hub for green hydrogen production.\n3. India’s forest and tree cover is projected to absorb 50% of its Carbon dioxide emissions by 2030.\nWhich of the above statements is/are correct?","ref":"","opts":["1 only","3 only","1 and 2 only","1, 2, and 3"],"ci":2,"exp":"Ex: India's Long-Term Low Emission Development Strategy (LT-LEDS), presented at COP27, provides a roadmap for achieving low-carbon growth. It prioritizes energy security, the expansion of 2 green hydrogen, increased ethanol blending, the promotion of electric vehicles, and improved forest carbon sequestration, all while emphasizing climate justice and sustainable lifestyles. Statement 1 is correct: India has set a target to reach 20% ethanol blending in petrol by the year 2025 as part of its low- carbon development strategy. Ethanol blending is seen as a crucial step toward reducing carbon emissions in the transport sector and decreasing dependency on fossil fuels. Statement 2 is correct: The National Hydrogen Mission, launched in 2021, focuses on making India a hub for green hydrogen production. Green hydrogen is considered a key element for India's transition to clean energy, and the country aims to increase electrolyser manufacturing capacity and expand the use of green hydrogen in sectors such as industry and transport. Statement 3 is incorrect: While India’s forest and tree cover plays a role in absorbing CO2, it is not projected to absorb 50% of emissions by 2030. According to the LT-LEDS, India’s forest and tree cover was absorbing 15% of its CO2 emissions in 2016. The country is on track to achieve its Nationally Determined Contribution (NDC) commitment of 2.5 to 3 billion tonnes of additional carbon sequestration by 2030, but not 50%."},{"id":4,"txt":"Consider the following statements about Compensatory Afforestation Fund Management and Planning Authority (CAMPA):\n1. CAMPA activities are implemented by engaging local communities in afforestation, nursery raising, soil-water conservation.\n2. The CAMPA funds are utilised for compensating the loss of forest land and ecosystem services.\n3. The Compensatory Afforestation Fund (CAF Act), 2016 and Rules, 2018 provide elaborate guidelines and activities for utilization of CAMPA Fund.\nHow many of the above statement is/are correct?","ref":"","opts":["Only one","Only two","All three","None","1, 2 और 3"],"ci":2,"exp":"Ex: Statement 1 is correct: The Compensatory Afforestation Fund Management and Planning Authority (CAMPA) engages local communities in activities such as afforestation, nursery raising, and soil-water conservation. This collaborative approach ensures effective implementation of compensatory afforestation efforts. CAMPA promotes community participation, especially through Joint Forest Management SPP 22662 Committees (JFMCs), Gram Sabhas, and eco-development committees. Statement 2 is correct: CAMPA funds are utilised to compensate for the loss of forest land and ecosystem services. These funds are specifically allocated for afforestation and regeneration activities to mitigate the adverse effects of forest land diversion for non-forest purposes. Statement 3 is correct: The Compensatory Afforestation Fund (CAF) Act, 2016, and its subsequent Rules, 2018, provide detailed guidelines and activities for the utilisation of CAMPA funds. These legal frameworks ensure that the funds are managed and used effectively for their intended purposes."},{"id":5,"txt":"The “World Heritage Outlook” report is released by which one of the following organizations?","ref":"","opts":["United Nations Educational, Scientific and Cultural Organization (UNESCO)","United Nations Environment Programme (UNEP)","International Union for Conservation of Nature (IUCN)","World Wide Fund for Nature (WWF)"],"ci":2,"exp":"Ex: While UNESCO is the body that designates World Heritage Sites, the World Heritage Outlook report is the flagship publication of the IUCN. The fourth edition of the IUCN World Heritage Outlook (2025) was officially launched at the IUCN World Conservation Congress in Abu Dhabi. The Outlook is a flagship assessment published by the International Union for Conservation of Nature (IUCN), which serves as the advisory body to UNESCO on natural World Heritage Sites under the World Heritage Convention. Hence, option (C) is correct. The report evaluates the conservation status, protection and management effectiveness, and future prospects of natural World Heritage Sites worldwide. It categorizes sites into four levels of \"Conservation Outlook\": 1. Good 2. Good with some concerns 3. Significant concern 4. Critical (meaning the site's values are severely threatened) In the most recent assessments, India's natural sites have shown varying trends: 3 ❖ Western Ghats: Usually categorized under \"Significant Concern\" due to pressure from population growth, infrastructure development, and climate change. ❖ Kaziranga National Park: Generally rated as \"Good with some concerns\", primarily due to the ongoing threat of poaching and annual flooding, though management is considered highly effective. ❖ Sundarbans: Faces \"Significant Concern\" due to sea-level rise and increased frequency of cyclones."},{"id":6,"txt":"The Genetic Engineering Appraisal Committee (GEAC) is a statutory body constituted under\nwhich of the following Acts?","ref":"","opts":["Biological Diversity Act, 2002","Seeds Act, 1966","Wildlife (Protection) Act, 1972","Environment (Protection) Act, 1986"],"ci":3,"exp":"Ex: The Genetic Engineering Appraisal Committee (GEAC) is constituted under the Environment (Protection) Act, 1986, specifically through the Rules for the Manufacture, Use, Import, Export and Storage of Hazardous Microorganisms/Genetically Engineered Organisms or Cells, 1989 (commonly known as the 1989 Rules). Hence, option (D) is correct. GEAC functions under the Ministry of Environment, Forest and Climate Change (MoEFCC) and is the apex body responsible for granting approvals for activities involving large-scale use, environmental release, and commercialization of genetically engineered organisms (GMOs) and products derived from them. Its mandate is to assess biosafety, environmental risks, and compliance before permitting the release of genetically modified crops or organisms."},{"id":7,"txt":"Under the Coastal Regulation Zone (CRZ) framework, the “High Tide Line” (HTL) serves as a reference point for classification of coastal areas. In this context, CRZ–I refers to:","ref":"","opts":["Ecologically sensitive areas","Developed urban areas","Rural areas","Territorial waters"],"ci":0,"exp":"Ex: The Coastal Regulation Zone (CRZ) notifications classify coastal stretches into different categories based on ecological sensitivity and level of development, with the High Tide Line (HTL) acting as the demarcating reference. SPP 22662 CRZ–I comprises ecologically sensitive and geomorphologically important areas. These include mangroves, coral reefs, sand dunes, national parks, wildlife habitats, biosphere reserves, and other fragile coastal ecosystems. Such areas are accorded the highest level of protection, and most developmental activities are either strictly regulated or prohibited. Hence, option (A) is correct. Developed urban areas fall under CRZ–II, rural and relatively undisturbed areas under CRZ–III, and CRZ–IV covers water areas such as territorial waters and tidal-influenced water bodies."},{"id":8,"txt":"Which one of the following Tiger Reserves lies in the Western Ghats?","ref":"","opts":["Similipal","Periyar","Dudhwa","Valmiki"],"ci":1,"exp":"Ex: Periyar Tiger Reserve is located in Kerala and forms part of the Western Ghats, a UNESCO World Heritage biodiversity hotspot known for high endemism and tropical evergreen forests. It lies in the Cardamom Hills and is centered around the Periyar Lake. Hence, option (B) is correct. Why other options are incorrect A. Similipal Tiger Reserve is located in Odisha and forms part of the Eastern Ghats region. It is famous for its unique \"Melanistic\" (black) tigers. B. Dudhwa Tiger Reserve is located in Uttar Pradesh in the Terai belt along the Indo-Nepal border, not in the Western Ghats. C. Valmiki Tiger Reserve is located in Bihar, also in the Terai landscape along the Indo- Nepal border. Like Dudhwa, it belongs to the Terai-Arc Landscape and is the easternmost limit of the Himalayan Terai forests in India."},{"id":9,"txt":"Which Act regulates the diversion of forest land for non-forest purposes?","ref":"","opts":["Indian Forest Act, 1927","Forest (Conservation) Act, 1980","Biological Diversity Act, 2002","Forest Rights Act, 2006"],"ci":1,"exp":"Ex: The Forest (Conservation) Act, 1980 is the primary legislation that regulates the diversion of forest land for non-forest purposes such as mining, irrigation projects, dams, roads, and infrastructure development. 4 Under this Act, prior approval of the Central Government is mandatory before any State Government or authority can dereserve forest land or permit its use for non- forest activities. The objective is to check rapid deforestation and ensure that forest land is diverted only after due scrutiny, including compensatory afforestation and environmental safeguards. Hence, option (B) is correct. Why other options are incorrect Indian Forest Act, 1927, Primarily deals with classification of forests (Reserved, Protected, Village forests) and regulation of forest produce and transit. It does not specifically regulate diversion for non-forest use. Biological Diversity Act, 2002, Focuses on conservation of biodiversity, access to biological resources, and benefit-sharing. It does not govern forest land diversion. Forest Rights Act, 2006, Recognizes and vests forest rights in Scheduled Tribes and other traditional forest dwellers. It addresses tenure and rights, not diversion approval mechanisms."},{"id":10,"txt":"With reference to the Environment Audit (EA) Rules, 2025, consider the following statements:\n1. The EA Rules, 2025 have been notified under the Environment (Protection) Act, 1986.\n2. Entities requiring consent under the Water (Prevention and Control of Pollution) Act, 1974 and the Air (Prevention and Control of Pollution) Act, 1981 are mandated to submit annual environmental statements to the State Pollution Control Board (SPCB).\n3. The EA framework establishes a single-tier system exclusively based on third-party auditors.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The Environment Audit (EA) Rules, 2025, represent a significant shift in India's environmental governance, moving from a self-reporting mechanism to a more structured and verified regulatory framework. Statement 1 is correct: Like most secondary environmental legislations in India (such as the PWM Rules or E-Waste Rules), the Environment Audit Rules, 2025, have been notified under the Environment (Protection) Act, 1986. This Act serves as the \"umbrella\" legislation, providing the Central Government the power to take all necessary measures for protecting and improving the quality of the environment. Statement 2 is correct: Under the 2025 framework, the mandate for an environmental audit is linked to the \"Consent to Operate\" SPP 22662 (CTO). Any industrial operation, process, or treatment system that requires consent under the Water Act (1974) or the Air Act (1981) must now submit an annual Environmental Statement (Form V) to the respective State Pollution Control Board (SPCB). This ensures that pollution-intensive industries are held accountable for their resource consumption and waste generation. Statement 3 is incorrect: The EA framework 2025 does not establish a single-tier system. Instead, it introduces a multi-tier verification system: 1. First Tier (Self-Audit): Internal assessment by the industry. 2. Second Tier (Third-Party Audit): Compulsory verification by empanelled environmental auditors for specific \"Red\" and \"Orange\" category industries. 3. Third Tier (Regulatory Oversight): Random \"surprise\" audits and cross- verification by officials from the Central Pollution Control Board (CPCB) or SPCB to ensure the integrity of the third- party reports."},{"id":11,"txt":"With reference to the ‘Globally Important Agricultural Heritage Systems (GIAHS), consider the following statements:\n1. It is an initiative by the Food and Agriculture Organization (FAO) to recognize traditional agricultural systems.\n2. Below Sea Level Farming System, Kuttanad, Kerala has received recognition under it.\n3. Its goal is to provide Geographical Indication status to all the varieties of agricultural produce in such identified GIAHS.\nWhich of the statements given above is/are correct?","ref":"","opts":["2 and 3 only","1 and 2 only","1, 2 and 3","1 and 3 only (UNFCCC) (UNFCCC)"],"ci":1,"exp":"Ex: Statement 1 is correct: The Globally Important Agricultural Heritage Systems (GIAHS) is an initiative by the Food and Agriculture Organization (FAO) to recognize and safeguard traditional agricultural systems that are rich in biodiversity, knowledge systems, and cultural heritage. Statement 2 is correct: The Below Sea Level Farming System in Kuttanad, Kerala, has been recognized under the GIAHS program. This unique system involves rice cultivation below sea level, achieved by draining delta swamps in brackish waters. Statement 3 is incorrect: The primary goal of the GIAHS initiative is not to provide Geographical Indication (GI) status to 5 agricultural produce. Instead, its objective is to identify and safeguard globally important agricultural heritage systems and their associated landscapes, agricultural biodiversity, and knowledge systems through dynamic conservation and sustainable management. Thus, Option B is the correct answer."},{"id":12,"txt":"Consider the following statements regarding The Forest (Conservation) Amendment Act, 2023:\n1. The State government requires prior approval of the Governor of the state to assign any forest land to a private entity.\n2. The Act specifies activities that cannot be carried out in forests, such as running zoos and safaris.\nWhich of the statements given above is/are Incorrect?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: The Bill amends the Forest (Conservation) Act, 1980 to make it applicable to certain types of land. These include land notified as a forest under the Indian Forest Act, 1927 or in government records after the 1980 Act came into effect. The Act will not be applicable for land converted to non-forest use before December 12, 1996. Statement 1 is incorrect: As per the Act, the state government requires prior approval of the central government to assign any forest land to a private entity. The Bill extends this to all entities, and allows the assignment to be made on terms and conditions specified by the central government. Statement 2 is incorrect: The Act specifies some activities that can be carried out in forests, such as establishing check posts, fencing, and bridges. The Bill also allows running zoos, safaris and eco-tourism facilities. The bill also exempts certain types of land from the purview of the Act. These include land within 100 km of India’s border needed for national security projects, small roadside amenities, and public roads leading to a habitation."},{"id":13,"txt":"The Aravalli Green Wall Initiative, aimed at restoring nearly 6.31 million hectares of degraded land, covers which of the following sets of States/UTs?","ref":"","opts":["Rajasthan, Gujarat, Punjab, and Haryana","Rajasthan, Gujarat, Haryana, and Delhi","Rajasthan, Madhya Pradesh, Gujarat, and Haryana","Delhi, Uttar Pradesh, Haryana, and Rajasthan"],"ci":1,"exp":"Ex: The Aravalli Green Wall Initiative is a large- scale ecological restoration programme inspired by Africa’s “Great Green Wall” model. It seeks to create a continuous green buffer along the Aravalli range to combat desertification, restore degraded land, enhance biodiversity, and improve groundwater recharge. SPP 22662 The initiative spans approximately 6.31 million hectares across Rajasthan, Gujarat, Haryana, and the National Capital Territory of Delhi. The Aravalli range runs from Gujarat through Rajasthan and Haryana up to Delhi, making these regions central to the project. Hence, option (B) is correct. Punjab, Madhya Pradesh, and Uttar Pradesh are not part of the Aravalli landscape under this initiative. The Aravalli range is one of the oldest fold mountain systems in the world. Its degradation due to illegal mining and urbanization has significantly contributed to the rise in dust storms in the National Capital Region (NCR). The Green Wall project is a central component of India's commitment to the Bonn Challenge, where India aims to restore 26 million hectares of degraded land by 2030."},{"id":14,"txt":"The PARIVESH 2.0 portal is related to:","ref":"","opts":["Online environmental clearance and monitoring system for sustainable development.","A digital database for wildlife species conservation in India.","A web platform for tracking air and water pollution levels in major cities.","A government initiative for promoting renewable energy adoption in industries."],"ci":0,"exp":"Ex: The Ministry has undertaken systemic and policy reforms through technological interventions through PARIVESH to streamline and expedite the Environment Clearance process by taking into account the imperative need for development while balancing the same with due environmental safeguards in line with the concept of sustainable development. PARIVESH 2.0 highlights the commitment to transparent and accountable governance. Through IT enablement, the clearance process has been transformed in PARIVESH 2.0, ensuring accessibility for all stakeholders. Hence, Option A is the correct answer. PW ONLYIAS SUPER HINT This question tests knowledge of PARIVESH 2.0, a key e-governance portal for environmental clearances. UPSC favors such questions combining digital initiatives, policy reforms (launched 2022), and sustainable development, aligning with recent trends on environmental governance and tech-driven solutions in prelims. 6"},{"id":15,"txt":"‘The Rise of Environmental Crime Report’ is released by which of the following?","ref":"","opts":["United Nations Environment Programme.","United Nations Framework Convention on Climate Change (UNFCCC)","Intergovernmental Panel on Climate Change","Commission on Crime Prevention and Criminal Justice"],"ci":0,"exp":"Ex: The \"Rise of Environmental Crime Report\" is released by the United Nations Environment Programme (UNEP). The \"Rise of Environmental Crime Report\" aims to raise awareness about the growing threats posed by environmental crimes and provides data and insights into trends, impacts, and necessary responses. It emphasizes the need for enhanced legal frameworks, better enforcement mechanisms, and international cooperation to combat these crimes. The report often collaborates with other organizations, such as INTERPOL and the World Customs Organization, to collect data and foster a comprehensive response to environmental crime globally."},{"id":16,"txt":"Which of the following statements accurately describes the objectives of the Cool Coalition launched by UNEP?","ref":"","opts":["It aims to integrate cooling technologies into the renewable energy grid to enhance global energy security.","It focuses on coordinating international trade policies to support the cooling sector's development.","It seeks to provide efficient, climate- friendly cooling solutions while supporting the goals of the Global Cooling Pledge.","It is designed to implement the Montreal Protocol’s requirements on phasing out ozone-depleting substances in the cooling industry."],"ci":2,"exp":"Ex: The Cool Coalition, launched by UNEP at the First Global Conference on Synergies between the 2030 Agenda for Sustainable Development and the Paris Agreement, is a global network focused on sustainable cooling. Its mission is to unite various stakeholders—governments, cities, businesses, and civil society—to address the growing need for cooling while minimizing its environmental impact. The Cool Coalition’s primary aim is to advance sustainable cooling solutions globally by uniting governments, businesses, cities, and civil society. The Coalition supports the Global Cooling Pledge, which seeks to cut cooling-related emissions by 68% by 2050 and improve energy efficiency by 50% by 2030. This collective effort is integral to achieving the Sustainable Development Goals and complementing the Kigali Amendment to the Montreal Protocol and the Paris Climate Agreement. SPP 22662"},{"id":17,"txt":"The “Adaptation Gap Report 2025”, titled “Running on Empty”, is released by which one of the following organizations?","ref":"","opts":["United Nations Framework Convention on Climate Change (UNFCCC)","Intergovernmental Panel on Climate Change (IPCC)","United Nations Environment Programme (UNEP)","World Meteorological Organization (WMO)"],"ci":2,"exp":"Ex: The Adaptation Gap Report is an annual publication of the United Nations Environment Programme (UNEP). It assesses the gap between current adaptation efforts and the level required to respond effectively to climate change impacts. The 2025 edition, titled “Running on Empty”, highlights widening adaptation finance gaps and the urgent need to scale up resilience- building measures globally. Hence, option (C) is correct. Key takeaways of the report: 1. The Finance Gap: The report estimates that the adaptation finance needs of developing countries are 5 to 10 times greater than current international public finance flows. 2. Implementation Gap: Despite almost all countries having national adaptation plans, the \"speed of implementation\" is not keeping pace with the \"speed of climate change.\" 3. The \"Double Burden\": Developing nations are increasingly forced to divert their own domestic budgets from health and education to deal with climate- induced disasters, leading to a cycle of debt and vulnerability."},{"id":18,"txt":"With reference to Kaziranga National Park and Tiger Reserve, consider the following statements:\n1. It is situated in the Brahmaputra floodplain at the foothills of the Karbi–Anglong hills.\n2. The first-ever grassland bird census was conducted here using the Acoustic Monitoring Technique.\n3. The rivers Difalu and Moradifalu flow through the park.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None (CITES) सूचना (Digital Sequence Information) से (Ramsar Wetland City Accreditation) प्राप्त"],"ci":2,"exp":"Ex: Kaziranga National Park and Tiger Reserve (KNPTR) in Assam is a UNESCO World Heritage site and remains one of India's most successful conservation stories. Statement 1 is correct: Kaziranga National Park is located in the Brahmaputra floodplain in Assam and lies along the foothills of the Karbi–Anglong hills. Its geographical setting makes it a classic alluvial floodplain ecosystem, characterized by grasslands, wetlands, and riverine habitats shaped by periodic flooding. 7 Statement 2 is correct: In early 2025, Kaziranga conducted its first-ever specialized census for grassland birds. A key highlight was the use of Acoustic Monitoring Technique (using automated recorders to capture bird calls). This was aimed at documenting rare and elusive species like the Bengal Florican, Swamp Francolin, and various warblers that are difficult to spot in the tall \"elephant grass. Statement 3 is correct: While the Brahmaputra forms the northern boundary, several smaller rivers and rivulets crisscross the park. The Difalu and Moradifalu are two major internal rivers that play a vital role in maintaining the park's \"Beels\" (oxbow lakes) and wetland ecosystem."},{"id":19,"txt":"As per the Solid Waste Management Rules, 2016 in India, which one of the following statements is correct?","ref":"","opts":["Waste generators have to segregate waste into four categories.","No person should throw the solid waste generated by him, on streets or in the drain.","The developers of Special Economic Zone, Industrial Estate, Industrial park to earmark at least 33 % of the total area of the plot for recovery and recycling Facility.","The Rules are applicable to notified urban local bodies only."],"ci":1,"exp":"Ex: ❖ The Solid Waste Management Rules, 2016, mandate that waste generators segregate waste into three categories: biodegradable, non-biodegradable (dry waste), and domestic hazardous waste. There is no requirement for segregation into four categories. ❖ The rules explicitly prohibit individuals from disposing of solid waste on streets, open areas, or in drains, emphasizing the importance of proper waste disposal to maintain public health and environmental standards. ❖ The developers of Special Economic Zone, Industrial Estate, Industrial park to earmark at least 5% (not 33% ) of the total area of the plot or minimum 5 plots/ sheds for recovery and recycling facility. ❖ The Solid Waste Management Rules, 2016, are applicable to a wide range of areas, including urban local bodies, outgrowths in urban agglomerations, census towns, notified industrial townships, areas under Indian Railways, airports, special economic zones, places of pilgrimage, and even rural areas. They are not limited to notified urban local bodies only. Thus, Option B is the correct answer. SPP 22662"},{"id":20,"txt":"Consider the following multilateral environmental agreements:\n1. Convention on International Trade in Endangered Species of Wild Fauna and Flora (CITES)\n2. Basel Convention on the Control of Transboundary Movements of Hazardous Wastes and their Disposal\n3. Vienna Convention for the Protection of the Ozone Layer\n4. Stockholm Convention on Persistent Organic Pollutants\n5. Paris Agreement\nHow many of the above agreements function under the aegis of the United Nations Environment Programme (UNEP)?","ref":"","opts":["Only two","Only three","Only four","All five"],"ci":2,"exp":"Ex: 1. CITES (1973) – Administered by UNEP, CITES regulates international trade in endangered species through a system of Appendices (I, II, III). It ensures that trade does not threaten species survival and operates through a permit-based mechanism. 2. Basel Convention (1989) – Also under UNEP, it regulates the transboundary movement of hazardous wastes and aims to reduce hazardous waste generation. It promotes environmentally sound management and restricts dumping of toxic waste in developing countries. 3. Vienna Convention (1985) – A UNEP- administered framework agreement focused on protection of the ozone layer. It laid the foundation for the Montreal Protocol, which established binding controls on ozone-depleting substances. 4. Stockholm Convention (2001) – Under UNEP, it targets Persistent Organic Pollutants (POPs), which are toxic chemicals that persist in the environment, bioaccumulate, and pose risks to human health and ecosystems. It mandates elimination or restriction of listed POPs. 5. Paris Agreement (2015) – Not administered by UNEP. It operates under the UNFCCC framework and focuses on limiting global temperature rise through nationally determined contributions (NDCs), adaptation measures, and climate finance mechanisms."},{"id":21,"txt":"The “Cali Fund,” adopted during recent multilateral negotiations, is primarily intended to:","ref":"","opts":["Finance carbon capture and storage projects in developing countries under climate agreements.","Support marine biodiversity conservation beyond national jurisdiction through ocean treaties.","Provide adaptation grants for vulnerable nations under the Loss and Damage mechanism.","Operationalise benefit-sharing from Digital Sequence Information under the biodiversity framework."],"ci":3,"exp":"Ex: The Cali Fund is a landmark financial mechanism established during the COP16 of the Convention on Biological Diversity (CBD), held in Cali, Colombia, in late 2024. 8 The Problem (Digital Sequence Information - DSI): For decades, companies (pharmaceuticals, cosmetics, and agribusiness) have used the genetic data of plants and animals—now stored digitally as DSI—to develop new products. Since this \"digital\" data could be accessed without physically taking a sample from the country of origin, the traditional \"Access and Benefit Sharing\" (ABS) rules were being bypassed. The Solution (The Cali Fund): The fund aims to ensure that those who profit from DSI contribute a portion of their revenue back to the conservation of the biodiversity that provided the data. ❖ Who pays? Large companies that use DSI in their commercial products are encouraged to contribute 1% of their profits or 0.1% of their revenue to the fund. ❖ Who benefits? At least 50% of the fund is earmarked for Indigenous Peoples and Local Communities (IPLCs), recognizing their role as custodians of biodiversity. Hence, option (D) is correct."},{"id":22,"txt":"Consider the following statements:\nStatement-I: The Ministry of Environment, Forest and Climate Change (MoEF&CC) has notified Wetlands (Conservation and Management) Rules, 2017 under the provisions of the The Water (Prevention and Control of Pollution) Act, 1974 . Statement-II: Wetlands (Conservation and Management) Rules 2017 have enhanced the focus of management of wetlands from a central authority to state bodies.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I.","Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I.","Statement-I is correct but Statement-II is incorrect.","Statement-I is incorrect but Statement-II is correct."],"ci":3,"exp":"Ex: ❖ Statement 1 is incorrect: The Ministry of Environment, Forest and Climate Change (MoEF&CC) notified the Wetlands (Conservation and Management) Rules, 2017 under the provisions of the Environment (Protection) Act, 1986, not the Water (Prevention and Control of Pollution) Act, 1974. ❖ Statement 2 is correct: The 2017 Rules shifted the focus of wetland management from a central authority to state bodies. The rules provide for an advisory role for the National Wetland Committee, to guide the state bodies on the integrated management of wetlands based on wise‐ use principle and review the progress of integrated management of Ramsar Convention sites among other roles. Thus, Option D is the correct answer. SPP 22662"},{"id":23,"txt":"Consider the following statements regarding wetlands:\n1. India has the largest number of Ramsar Sites in the world.\n2. Indore and Udaipur are the first Indian cities to receive Ramsar Wetland City Accreditation.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: Although India has significantly increased its number of Ramsar Sites in recent years and has the largest number of Ramsar Sites in Asia, it does not have the largest number in the world. Countries such as the United Kingdom have more Ramsar-designated wetlands globally. Statement 2 is correct: Indore and Udaipur officially received their Ramsar Wetland City Accreditation in 2025 (announced at the 64th Standing Committee and formalised at COP15 in Victoria Falls, Zimbabwe). They are indeed the first Indian cities to achieve this global recognition. Bhopal: Although nominated alongside them, Bhopal did not receive the accreditation in this round due to ecological concerns raised by citizen groups regarding a proposed road project near the Bhoj Wetland."},{"id":24,"txt":"With reference to agricultural methane emissions as highlighted in Global Methane Status Report (GMSR) 2025, which one of the following sub-sectors contributes the highest percentage?","ref":"","opts":["Rice cultivation","Waste management","Oil and gas production","Enteric fermentation from livestock"],"ci":3,"exp":"Ex: According to the Global Methane Status Report (GMSR) 2025, agriculture remains the largest anthropogenic source of methane, with livestock being the dominant contributor within that sector. In 2024–25, this sub-sector accounted for roughly 27–30% of total global anthropogenic methane emissions. Methane (CH4) is a Short-Lived Climate Pollutant (SLCP). While it stays in the atmosphere for only about 12 years (compared to centuries for CO2), it has a Global Warming Potential (GWP) over 80 times higher than CO2 over a 20-year period. Within the agricultural sector, the largest share of methane emissions arises from enteric fermentation, a digestive process in ruminant livestock such as cattle, buffalo, sheep, and goats. During digestion, microbes in the stomach break down food and release methane, which is expelled primarily through belching/burping. Hence, option (D) is correct. 9 To reduce agricultural methane, India is promoting initiatives like Direct Seeded Rice (DSR) and System of Rice Intensification (SRI) to reduce flooding in fields. For livestock, the National Livestock Mission encourages the use of specific feed supplements (like \"Harit Dhara\") that can reduce enteric methane emissions by 17–20%."},{"id":25,"txt":"Which of the following statements accurately describes the ‘Partnership for Action on Green Economy’ (PAGE)?","ref":"","opts":["It was established in response to the Rio+20 Declaration to integrate sustainability into economic policymaking.","PAGE is a UN initiative that focuses exclusively on providing financial aid to developing countries for green economy projects.","It is a collaborative effort involving only the United Nations Environment Programme (UNEP) to offer technical assistance on green economy policies.","PAGE aims to create a global carbon tax system to fund sustainable development initiatives."],"ci":0,"exp":"Ex: The Partnership for Action on Green Economy (PAGE) was created in direct response to the Rio+20 Declaration, The Future We Want, which emphasized the need for sustainability in economic policymaking. PAGE supports countries by offering technical assistance, capacity building, and guidance in developing and implementing green economy policies. It is a collaborative initiative involving five UN agencies: ❖ UNEP (United Nation Environment Programme) ❖ ILO (International Labour Organisation) ❖ UNIDO (United Nations Industrial Development Organization) ❖ UNDP (United Nations Development Programme) ❖ UNITAR (United Nations Institute for Training and Research)"},{"id":26,"txt":"Which officer is specifically appointed under the Indian Forest Act, 1927 to determine the existence and nature of any rights of people in proposed forest land?","ref":"","opts":["District Collector","Chief Wildlife Warden","Range Forest Officer","Forest Settlement Officer"],"ci":3,"exp":"Ex: Under the Indian Forest Act, 1927, when the State Government proposes to constitute any land as a Reserved Forest, a formal settlement process is initiated to inquire into and determine the rights of individuals or communities over that land. For this purpose, a Forest Settlement Officer (FSO) is appointed. The Forest Settlement Officer examines claims relating to rights such as grazing, collection of forest produce, or other SPP 22662 customary usages. The officer has quasi- judicial powers to admit, reject, or modify such claims and to decide whether rights should be recorded, commuted, or extinguished in accordance with the law. Hence, option (D) is correct."},{"id":27,"txt":"With reference to the Global Forest Resources Assessment (GFRA) 2025 Report, consider the following statements:\n1. The report is published by the Food and Agriculture Organization (FAO) of the United Nations.\n2. India ranks 9th globally in terms of total forest area and 3rd in annual net gain in forest area.\n3. Globally, forests cover about one-third of the Earth’s total land area.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Statement 1 is correct: The report is published by the Food and Agriculture Organization (FAO). It has been providing these assessments since 1948 to monitor the status and trends of forest resources globally, helping nations track their progress toward Sustainable Development Goal (SDG) 15 (Life on Land). Statement 2 is correct: As per the GFRA 2025 findings, India has improved its global standing to 9th position in terms of total forest area. Simultaneously, India retains the 3rd rank globally in annual net forest area gain, indicating consistent expansion in forest cover compared to many other countries. Statement 3 is correct: Globally, forests cover approximately 4.14 billion hectares, accounting for nearly 32% of the Earth’s total land area—roughly one-third. This statistic underscores the ecological significance of forests in regulating climate, conserving biodiversity, storing carbon, and sustaining livelihoods."},{"id":28,"txt":"Consider the following pairs:\nProtected Area State\n1. TsarapConservation ReserveChu — HimachalPradesh\n2. MahuadanrSanctuary Wildlife — Jharkhand\n3. ThattekadSanctuary — Bird Kerala\n4. KeibulNational Park Lamjao — Manipur\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Pair 1 is correctly matched: Tsarap Chu is located in the Lahaul–Spiti region of Himachal Pradesh and is known for its high- altitude cold desert ecosystem and snow leopard habitat. Pair 2 is correctly matched: Situated in Latehar district of Jharkhand, Mahuadanr is known for wolf conservation and dry deciduous forest ecosystems as it is the only wildlife sanctuary in India dedicated exclusively to the protection of the Indian Grey Wolf (Canis lupus pallipes) 10 Pair 3 is correctly matched: Also known as Salim Ali Bird Sanctuary, Thattekad is located in Ernakulam district, Kerala, and is famous for its avifaunal diversity. It is famous for rare species like the Ceylon Frogmouth and the Malabar Trogon. Pair 4 is correctly matched: Located in Manipur, it is the world’s only floating national park. The park is characterized by \"Phumdis\" (floating mats of soil and vegetation) and is the last natural habitat of the critically endangered Sangai (Brow- antlered deer), also known as the \"Dancing Deer of Manipur.\""},{"id":29,"txt":"The “Ek Ped Maa Ke Naam” campaign, under which over 262 crore saplings were reportedly planted, utilizes which digital platform for tracking plantation progress?","ref":"","opts":["Parivesh Portal","Meri LiFE Portal","Gaj Soochna App","Green India Dashboard"],"ci":1,"exp":"Ex: The \"Ek Ped Maa Ke Naam\" (Plant4Mother) campaign was launched by the Prime Minister of India on World Environment Day (June 5, 2024) and has since grown into one of the world's largest mass-plantation drives.  SPP 22662 Tracking Mechanism: The Meri LiFE Portal (and its associated mobile application) serves as the digital backbone for this campaign. It allows individuals, government departments, and organizations to upload \"geotagged\" photos of their saplings. The LiFE Concept: The portal is named after the LiFE (Lifestyle for Environment) movement, which encourages mindful and deliberate utilization of resources. Scale of Achievement: By early 2025, the campaign recorded the planting of over 262 crore saplings across India. The portal provides a real-time leaderboard showing contributions from various states and union territories. Hence, option (B) is correct.  11"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 51</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 51</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 51">PW ONLY IAS 2026 = 51</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Which one of the following statements regarding the leadership of the Anti-Partition Campaign is NOT correct?","ref":"","opts":["Surendranath Banerjea played a prominent role in mobilising public opinion","The movement witnessed cooperation between moderate and extremist leaders","The boycott programme was formally initiated after the 1906 Calcutta session of the Congress","It involved active use of newspapers and public meetings"],"ci":2,"exp":"Ex: Option (a) is incorrect (It is a correct statement): Surendranath Banerjea was one of the most powerful orators and leaders of the movement. He used his newspaper, The Bengalee, and toured the province to create a massive wave of public opinion against the partition, making the movement a truly popular struggle in Bengal. Option (b) is incorrect (It is a correct statement): Initially, the movement was led by Moderates, but as the British remained indifferent to petitions, Extremist leaders like Aurobindo Ghosh, Bipin Chandra Pal, and Lala Lajpat Rai took over. For a significant period, both factions worked together to promote Swadeshi and the boycott of British goods. Option (c) is correct (It is NOT a correct statement): The formal proclamation of the Swadeshi Movement and the Boycott Resolution took place on August 7, 1905. The 1906 Calcutta session, presided over by Dadabhai Naoroji, merely gave the official stamp of approval to the goals of Swadeshi, Boycott, National Education, and Swaraj to prevent a split between the Moderates and Extremists. Option (d) is incorrect (It is a correct statement): The campaign relied heavily on the press and public discourse. Journals like K.K. Mitra’s Sanjivani and Prithwishchandra Ray’s Hitabadi were used to reach the masses. Public meetings became the primary tool for passing resolutions and taking the \"Swadeshi vow.\""},{"id":1,"txt":"Who among the following accepted the existence of economic drain from India but did not regard it as the sole or primary cause of India’s poverty?","ref":"","opts":["Dadabhai Naoroji","R.C. Dutt","M.G. Ranade","Bal Gangadhar Tilak"],"ci":2,"exp":"Ex: M.G. Ranade accepted that economic drain from India existed under British rule, but he did not regard it as the sole or overriding cause of Indian poverty. He argued that India’s economic stagnation was also rooted SPP 22652 in internal social conditions, institutional weaknesses, and the absence of modern economic practices. Ranade emphasised gradual reform, education, and administrative improvement, placing the drain alongside—rather than above—other factors."},{"id":2,"txt":"With reference to the moderates consider the following statements.\n1. They believed that the British basically wanted to be just to the Indians but were not aware of the real conditions.\n2. Believed in the capacity of the masses to challenge the authority;\n3. Rejected ‘providential mission theory’.\n4. Demanded swaraj as the panacea for Indian ills.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Statement 1 is correct: The Moderates believed that the British rulers were basically benevolent and wanted to be just towards Indians, but they felt that the British were misinformed about the real conditions of India. They thought that with the right information, the British would be more inclined to make reforms in favor of Indians. Statement 2 is incorrect:They Believed that the movement should be limited to middle class intelligentsia; masses not yet ready for participation in political work. Statement 3 is incorrect: The Moderates accepted the ‘providential mission theory’, which was the idea that the British had a divine mission to rule over India and bring civilizational ethos. Statement 4 is incorrect: They demanded constitutional reforms and share for Indians in services not swaraj. Thus, Option A is the correct answer."},{"id":3,"txt":"He attacked Hindu orthodoxy and supported social and religious equality. He wrote against the evils of the caste system. He said, “If religion does not sanction social reform, then change religion.” In the context of social reform movements, the above statement is related to one of the following personalities.","ref":"","opts":["B.R. Ambedkar.","Gopal Ganesh Agarkar.","Gopalhari Deshmukh","Jyotirao Phule"],"ci":2,"exp":"Ex: Gopalhari Deshmukh ‘Lokahitawadi’ was a social reformer and rationalist from Maharashtra. He attacked Hindu orthodoxy and supported social and religious equality. He wrote against the evils of the caste system. He said, “If religion does not sanction social reform, then change religion.” He started a weekly, Hitechhu, and also played a leading role in founding the periodicals, Gyan Prakash, Indu Prakash, and Lokahitawadi. Thus, Option C is the correct answer. 2"},{"id":4,"txt":"Which one of the following statements about Jyotirao Phule is NOT correct?","ref":"","opts":["He established the Satyashodhak Samaj in 1873 to promote social equality and oppose Brahmanical dominance","He, along with Savitribai Phule, started one of the earliest schools for girls in Pune in","He authored Gulamgiri in 1873, dedicating it to the anti-slavery movement in the United States","He served as a nominated member of the Viceroy’s Legislative Council during the 1880s"],"ci":3,"exp":"Ex: Option (a) is incorrect (It is a correct statement): Phule founded the Satyashodhak Samaj (Truth Seekers' Society) on September 24, 1873. The organization’s primary goal was to liberate the Shudras and Ati-Shudras from exploitation by the priestly classes and to advocate for equal social and religious rights. Option (b) is incorrect (It is a correct statement): Jyotirao and his wife, Savitribai Phule, were pioneers of women's education in India. They opened their first school for girls at Bhide Wada in Pune in 1848, overcoming immense social opposition and physical attacks from orthodox sections of society. Option (c) is incorrect (It is a correct statement): In 1873, Phule wrote Gulamgiri (Slavery). He dedicated the book to the American movement to free Black slaves, linking the struggle of the \"lower castes\" in India to the global struggle against slavery and racial discrimination. Option (d) is correct (It is NOT a correct statement): While Phule was a member of the Poona Municipal Corporation (1876–1883), he did not serve on the Viceroy's Legislative Council. His political engagement was largely through submitting evidence to commissions, such as the Hunter Commission in 1882, where he advocated for free and compulsory primary education for the masses."},{"id":5,"txt":"With reference to the Dalit and non-Brahmin movements in modern India, consider the following pairs:\nLeader Associated initiative / / Organisation idea 1 Kisan Faguji Advocacy of Dalit uplift Bansod within Hinduism and use of print media. 2 B.R. Ambedkar Launch of Mooknayak (1920) and formation of Bahishkrit Hitakarini Sabha (1924). 3 E.V. Ramaswamy Leadership of the Self- Naicker Respect Movement in South India. 4 Sri Narayana Organisation of the Guru Mahad Satyagraha (1927).\nWhich of the pairs given above are correctly matched?","ref":"","opts":["Only one pair","Only two pairs","Only three pairs","All four pairs"],"ci":2,"exp":"Ex: Pair 1 is correct: Kisan Faguji Bansod was an important early Dalit reformer who believed in the upliftment of Dalits within the Hindu social framework. He actively used the printing press to awaken political and social consciousness among Dalits and published journals aimed at exposing caste oppression, such as Vital Vidhwansak. SPP 22652 Pair 2 is correct: B.R. Ambedkar launched Mooknayak in 1920, a fortnightly newspaper that highlighted the sufferings of the untouchables and argued that nationalism could not develop without social equality. In 1924, he founded the Bahishkrit Hitakarini Sabha with the motto “Educate, Agitate and Organise”, marking the beginning of organised mass mobilisation of the depressed classes. Pair 3 is correct: The Self-Respect Movement in South India was led by E.V. Ramaswamy Naicker (Periyar) during the 1920s. The movement opposed Brahminical dominance, rejected caste hierarchy, and promoted rationalism, self-respect, and social equality. Pair 4 is incorrect: The Mahad Satyagraha (March 1927), which asserted the right of untouchables to access public water sources, was led by B.R. Ambedkar, not Sri Narayana Guru. Sri Narayana Guru worked mainly in Kerala, advocating spiritual and social equality through the idea of “one religion, one caste, one God for mankind.”"},{"id":6,"txt":"With reference to British racial policies and early nationalist political learning in India, consider the following statements:\n1. In 1876, the upper age limit for the Indian Civil Services (ICS) examination was reduced from 21 years to 19 years.\n2. The Vernacular Press Act (1878) and Arms Act (1878) were enacted during a period of widespread famine in India.\n3. The Ilbert Bill (1883) proposed empowering Indian judges to try European offenders without racial distinction.\nWhich of the above statements are correct?","ref":"","opts":["1 and 3 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: The reduction of the ICS age limit from 21 to 19 years in 1876 under Lord Lytton was a calculated administrative move that disproportionately affected Indians. Since the examination was conducted in England and required long years of preparation, the lowered age virtually excluded most Indians, reinforcing the belief that the civil services were racially closed to them. Statement 2 is correct: The Vernacular Press Act (1878) imposed severe restrictions on Indian-language newspapers, while the Arms Act (1878) disarmed Indians but exempted Europeans. Both were enacted during the Great Famine of 1876–78, when millions were dying. This contrast between imperial display and coercive laws deepened Indian hostility toward British rule. 3 Statement 3 is correct: The Ilbert Bill (1883) aimed to remove racial barriers in the judicial system by allowing Indian judges to try European offenders. The proposal directly challenged the myth of European racial superiority and exposed the unwillingness of British officials and settlers to accept legal equality."},{"id":7,"txt":"Which of the following best explains the significance of Kadambini Ganguly addressing the Indian National Congress session in 1890?","ref":"","opts":["It marked the beginning of women’s suffrage and voting rights within the Congress organisation.","It reflected the early nationalist recognition of women’s participation in public and political life.","It led to the formation of exclusive women- only political organisations under the Congress.","It signified the replacement of provincial associations by the Indian National Congress."],"ci":1,"exp":"Ex: Option (b) is correct: Kadambini Ganguly, the first woman graduate of Calcutta University, addressing the Congress in 1890 symbolised the inclusive vision of the early national movement, which acknowledged the importance of women’s role in national life even during the moderate phase. Though mass participation of women came later, this event reflected a conscious ideological commitment to gender inclusion. Option (a) is incorrect: Women’s suffrage and voting rights were not introduced within the Congress at this stage; such demands emerged much later in the nationalist movement. Option (c) is incorrect: The address did not immediately lead to the creation of exclusive women’s political organisations under the Congress. Separate women’s organisations developed gradually in the early 20th century. Option (d) is incorrect: Provincial associations, newspapers, and literature continued to function alongside the Congress; they were not replaced by it."},{"id":8,"txt":"Which one of the following best characterises the distinctive feature of the Parsi reform movement in the 19th century?","ref":"","opts":["It attempted to synthesise Zoroastrian theology with Western rationalist thought","It rejected modern education in favour of scriptural orthodoxy","It sought political separation of Parsis from colonial administration","It advocated revival of ritual practices without reinterpretation"],"ci":0,"exp":"Ex: The Parsi reform movement, spearheaded by the Rahnumai Mazdayasnan Sabha, was defined by its effort to harmonize traditional Zoroastrian teachings with the principles of modern Western rationalism to rid the community of superstitious practices. SPP 22652 Option (a) is correct: Leaders like Dadabhai Naoroji, Naoroji Furdonji, and S.S. Bengalee utilized Western liberal education to critique the rigid social customs and priestly rituals that had crept into the community over time. They aimed to return the religion to its \"pristine purity\" by applying rationalist interpretation to ancient scriptures. This synthesis led to significant social progress, including the promotion of women's education and the abolition of the purdah system. Option (b) is incorrect: The movement was actually a champion of modern education. The reformers believed that education was the primary tool for social advancement and founded several schools, particularly for girls, to modernize the community. Option (c) is incorrect: The Parsi community was historically one of the most pro-British and collaborative groups in colonial India. They did not seek political separation; instead, they leveraged their close ties with the British to excel in trade, industry, and the civil services. Option (d) is incorrect: The movement was strictly anti-orthodoxy. It advocated for the simplification of rituals and the reinterpretation of religious texts through the lens of logic and social utility, rather than a blind revival of old practices."},{"id":9,"txt":"Which one of the following statements about Swami Vivekananda is NOT correct?","ref":"","opts":["He represented Hinduism at the Parliament of Religions in Chicago in 1893","He rejected the authority of the Upanishads","He advocated practical Vedanta and social service","He founded the Ramakrishna Mission in"],"ci":1,"exp":"Ex: Option (a) is incorrect (It is a correct statement): Vivekananda gained international fame after his speech at the Parliament of the World's Religions in Chicago in 1893. He introduced the Western world to the core tenets of Hinduism, emphasizing religious tolerance and the universal truth underlying all faiths. Option (b) is correct (It is NOT a correct statement): Vivekananda was a staunch proponent of the Vedantic tradition. He famously urged Indians to \"Go back to the Upanishads\" to find the spiritual strength needed to overcome national stagnation. He believed the Upanishads preached a message of fearlessness and the divinity of the human soul. 4 Option (c) is incorrect (It is a correct statement): He introduced the concept of \"Practical Vedanta,\" which bridged the gap between spiritual contemplation and social action. He argued that \"service to man is service to God\" (Shiva Jnane Jiva Seva) and that religion was useless to a hungry man, thereby making social service a core religious duty. Option (d) is incorrect (It is a correct statement): To carry out his vision of humanitarian work and education, he founded the Ramakrishna Mission on May 1, 1897. Named after his guru, Ramakrishna Paramahansa, the mission focused on providing relief during famines and epidemics, and establishing schools and hospitals across India."},{"id":10,"txt":"He advocated the exclusive promotion of Sanskrit education over English learning in government institutions","ref":"","opts":["He advocated the exclusive promotion of Sanskrit education over English learning in government institutions","He translated selected Upanishads into Bengali and English to emphasise monotheistic philosophy","He declined to engage with British authorities on questions of legal and social reform","He opposed the Charter Act of 1813 primarily to restrict missionary activity in India"],"ci":1,"exp":"Ex: Raja Ram Mohan Roy was a profound scholar who translated the Upansishads and the Vedas into Bengali and English. His goal was to prove to his countrymen that ancient Hindu texts actually preached monotheism (the worship of one God) and were devoid of the superstitions, idol worship, and complex rituals that had come to dominate 19th- century Hinduism. Option (b) is correct: Roy used his translations to demonstrate that the Vedas taught that God is one and formless. By providing these translations in the vernacular (Bengali) and the language of the administration (English), he sought to provide a scriptural basis for his reformist movement and challenge the monopoly of the priestly class over religious interpretation. Option (a) is incorrect: He was a staunch advocate of Western and English education. He believed that for India to progress, it must embrace modern scientific and rationalist thought. He famously wrote to Lord Amherst in 1823, opposing the government's plan to establish a Sanskrit College and instead demanding a curriculum focused on Mathematics, Natural Philosophy, and Chemistry. SPP 22652 Option (c) is incorrect: He engaged deeply with the British authorities. He was one of the first Indian leaders to use constitutional agitation and petitions to the British Parliament to seek reforms in the press, the judiciary, and the land revenue system. Option (d) is incorrect: Roy did not oppose the Charter Act of 1813. On the contrary, he generally welcomed its provisions because it ended the East India Company's monopoly and paved the way for the entry of Western education and modern ideas, which he viewed as essential for India's intellectual awakening."},{"id":11,"txt":"Consider the following statements regarding the Poona Sarvajanik Sabha:\n1. The members were mostly from the educated middle class of society and consisted of lawyers, pensioners, teachers, journalists and government servants.\n2. The Sabha represented to the government the interests of the peasants and also opposed the forest laws, the salt laws and the press laws.\n3. Members of the Sabha included Vishnu M Bhide, Bal Gangadhar Tilak and Gopal Hari Deshmukh.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 and 3 only","3 only","1,2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: The Poona Sarvajanik Sabha was established in 1870 at Poona by Mahadev Govind Ranade, an eminent lawyer and scholar from the Bombay Presidency. The members were mostly from the educated middle class of society and comprised lawyers, pensioners, pleaders, teachers, journalists and government servants in the judicial and education departments. Even though the members were mostly from the upper-middle classes, the membership was open to people of all castes and classes. Statement 2 is correct: The Sabha represented to the government the interests of the peasants and also opposed the forest laws, the salt laws and the press laws. It had a quarterly journal through which it propagated its ideas and also urged Indians to unite and press for economic and political reforms. Statement 3 is correct: The key members who helped in the formation of Poona Sarvajanik Sabha were Bhawanrao Shriniwasrao Pant Pratinidhi, Ganesh Vasudeo Joshi and S H Chiplunkar. Other important members of the Sabha included M M Kunte, Vishnu M Bhide, Bal Gangadhar Tilak and Gopal Hari Deshmukh. 5"},{"id":12,"txt":"Which one of the following was NOT a feature of the Indian Councils Act, 1892?","ref":"","opts":["Permitting limited discussion of the annual budget in legislative councils","Allowing indirect representation through nomination by local bodies","Granting members the right to vote on budgetary demands","Expanding the size of legislative councils in the provinces"],"ci":2,"exp":"Ex: Option (a) is incorrect (It was a feature): The Act of 1892 was a significant step forward as it allowed members of the legislative councils to discuss the annual financial statement (the budget). Prior to this, they had no such right. Option (b) is incorrect (It was a feature): The Act introduced a system of indirect representation. While the word \"election\" was avoided, the government allowed certain local bodies—such as universities, district boards, and municipalities—to recommend or nominate non-official members to the councils. Option (c) is correct (It was NOT a feature): Although members could discuss the budget and ask questions (with a six-day notice), they were not granted the right to vote on any part of the budget. The executive remained completely independent of the legislature's financial control. Option (d) is incorrect (It was a feature): The Act increased the number of additional (non-official) members in both the Central and Provincial Legislative Councils. In the provinces like Bengal and the North-Western Provinces, the number of members was expanded to accommodate broader representation."},{"id":13,"txt":"Who were the founders of the Bombay Presidency Association?","ref":"","opts":["Pherozeshah Mehta, K.T. Telang and Badruddin Tyabji","Bal Gangadhar Tilak, Gopal Krishna Gokhale, and Annie Besant","Surendranath Banerjee, R.C. Dutt, and S.N. Tagore","Aurobindo Ghosh, Bipin Chandra Pal, and Lala Lajpat Rai"],"ci":0,"exp":"Ex: The Bombay Presidency Association was founded in 1885 by Pherozeshah Mehta, K.T. Telang and Badruddin Tyabji as a political organization to represent the interests of educated Indians and promote constitutional reforms in British India. Thus, Option A is the correct answer."},{"id":14,"txt":"With reference to the early phase of the Indian National Congress, consider the following statements:\n1. A.O. Hume played a key role in organising the first session of the Indian National Congress at Bombay in December 1885.\n2. The Indian National Conference, held in 1883 and 1885, was mainly associated with Surendranath Banerjea and Ananda Mohan Bose.\n3. The first session of the Indian National Congress was presided over by Dadabhai Naoroji and attended by representatives from all major towns of India.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is Correct: By the late 1870s and early 1880s, political associations, provincial conferences, newspapers, and SPP 22652 reformist leaders had created a favourable climate for an all-India political organisation. A.O. Hume, a retired English civil servant, gave concrete shape to this idea by bringing together leading Indian intellectuals. With their cooperation, he organised the first session of the Indian National Congress in December 1885 at Gokuldas Tejpal Sanskrit College, Bombay. His role was mainly that of an organiser and facilitator, not of a mass leader. Statement 2 is Correct: Before the formation of the Congress, attempts were already being made to build an all-India political platform. The Indian National Conference, held in 1883 and again in 1885, was an important precursor. It drew representatives from major towns across India and helped establish the practice of nationwide political consultation. Surendranath Banerjea and Ananda Mohan Bose were the principal architects of this conference, and their efforts directly influenced the emergence of the Indian National Congress. Statement 3 is Incorrect: The first session of the Indian National Congress was presided over by Womesh Chandra Bonnerjee, a prominent lawyer and nationalist leader. Although the session was attended by 72 delegates, Dadabhai Naoroji did not preside over the inaugural meeting. He later became one of the most influential Congress leaders and served as its president three times, in 1886, 1893, and 1906."},{"id":15,"txt":"Consider the following statements regarding associations prevalent in Bengal before the Indian National Congress.\n1. The Bangabhasha Prakasika Sabha was formed in 1836 by associates of Raja Rammohan Roy.\n2. In 1851, both the Bangabhasha Prakasika Sabha and the Bengal British India Society merged into the British Indian Association.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: ❖ Statement 1 is correct: The Bangabhasha Prakasika Sabha was formed in 1836 by associates of Raja Rammohan Roy. The Bengal British India Society was founded in 1843 with the object of the collection and dissemination of information relating to the actual condition of the people of India to Britain. 6 ❖ Statement 2 is incorrect: In 1851, both the Landholders’ Society and the Bengal British India Society merged into the British Indian Association. It sent a petition to the British Parliament demanding inclusion of some of its suggestions in the renewed Charter of the Company. Thus, Option A is the correct answer."},{"id":16,"txt":"With reference to 19th-century Indian society, consider the following statements:\nStatement 1: The caste system in India restricted social mobility and fragmented society into rigid hierarchical groups. Statement 2: The impact of modern Western ideas and education created a new awareness among sections of Indians about the need for social reform.\nWhich of the following is correct?","ref":"","opts":["Both Statement 1 and Statement 2 are correct, and Statement 2 correctly explains Statement 1","Both Statement 1 and Statement 2 are correct, but Statement 2 does not correctly explain Statement 1","Statement 1 is correct, but Statement 2 is incorrect","Statement 1 is incorrect, but Statement 2 is correct"],"ci":1,"exp":"Ex: Statement 1 is Correct: The caste system enforced strict segregation based on ritual status, denied social mobility, and imposed severe disabilities on the untouchables. It fragmented society and weakened collective social cohesion, later becoming an obstacle to national unity and democracy. Statement 2 is Correct: Exposure to modern Western education and ideas, combined with awareness of political subjugation, generated a new consciousness among educated Indians. This awakening strengthened the resolve to reform social and religious institutions. Why Statement 2 does NOT explain Statement 1: The restrictive nature of the caste system existed independently of the rise of Western education and reformist consciousness. While Statement 2 describes a response to social weaknesses, it does not explain the structural features or origins of caste-based social fragmentation described in Statement 1."},{"id":17,"txt":"Consider the following pairs regarding women organizations and their founders. Organizations Founder\n1. Bharat Stree Saralabala Devi Mahamandal Chaudhurani\n2. Ladies Social Pandita Ramabai Conference Saraswati\n3. All India Women’s Margaret Cousins Conference (AIWC)\n4. Arya Mahila Samaj Ramabai Ranade\nHow many of the above pairs is/are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: ❖ Pair 1 is correct: Sarla Devi Chaudhurani founded the Bharat Stree Mahamandal. The organization aimed to promote education, empowerment, and welfare for women in India. ❖ Pair 2 is incorrect: Ramabai Ranade founded the Ladies Social Conference (Bharat Mahila Parishad), under the parent organisation National Social Conference, in 1904 in Bombay. SPP 22652 ❖ Pair 3 is correct: The All India Women’s Conference (AIWC), founded by Margaret Cousins in 1927, was perhaps the first women’s organisation with an egalitarian approach. Its first conference was held at Fergusson College, Pune. Important founding members included Sarojini Naidu, Kamla Devi Chattopadhyaya, and Lady Dorab Tata. ❖ Pair 4 is incorrect: Pandita Ramabai Saraswati founded the Arya Mahila Samaj to serve the cause of women. She pleaded for improvement in the educational syllabus of Indian women before the English Education Commission, which was referred to Queen Victoria. Thus, Option B is the correct answer."},{"id":18,"txt":"With reference to early political associations in British India, consider the following statements:\n1. The British Indian Association (1851) demanded reforms including separation of executive and judiciary, and some of its suggestions influenced the Charter Act of 1853.\n2. The Indian Association of Calcutta (1876) was founded by Surendranath Banerjea and Ananda Mohan Bose to broaden nationalist politics beyond elite and landlord interests.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: The British Indian Association was formed by merging the Landholders' Society and the Bengal British India Society. It submitted a petition to the British Parliament in 1851 demanding a separate legislature, the separation of executive from judicial functions, and the reduction of salaries for higher officers. These efforts were partially reflected in the Charter Act of 1853, which added six new legislative members to the Governor-General’s Council, marking the beginning of a separate legislative wing. Statement 2 is correct: The Indian Association of Calcutta was established to replace the more conservative, pro-landlord politics of earlier groups. Surendranath Banerjea and Ananda Mohan Bose aimed to create a strong body of public opinion and unify Indian people on a common political program. They specifically reached out to the masses and the educated middle class, rather than just the wealthy landed aristocracy. 7"},{"id":19,"txt":"Which one of the following was NOT a feature of the Theosophical Movement in India?","ref":"","opts":["Emphasis on universal brotherhood beyond distinctions of race or creed","Engagement with Vedantic and Yogic philosophical traditions","Advocacy of complete political independence from Britain as its primary objective","Institutional contributions to modern education in India"],"ci":2,"exp":"Ex: Option (a) is incorrect (It was a feature): One of the three main goals of the Theosophical Society was to form a nucleus of the Universal Brotherhood of Humanity, without distinction of race, creed, sex, caste, or color. This made the movement popular among the educated Indian middle class. Option (b) is incorrect (It was a feature): The movement heavily drew upon Hindu and Buddhist philosophy. Under Madame Blavatsky and later Annie Besant, the society emphasized the study of ancient Indian scriptures, including the Upanishads and the Bhagavad Gita, and promoted the practice of Yoga as a means of spiritual growth. Option (c) is correct (It was NOT a feature): The Theosophical Movement focused on the revival of ancient religions and Indian cultural pride to restore self- confidence among Indians. Although Annie Besant later founded the Home Rule League in 1916, that was a distinct political initiative; the Society's original and primary objective remained spiritual and educational. Option (d) is incorrect (It was a feature): The society made significant institutional contributions to education. Annie Besant founded the Central Hindu College at Varanasi in 1898 (which later became the nucleus of the Banaras Hindu University), aiming to combine modern western scientific education with traditional Indian cultural values."},{"id":20,"txt":"Consider the following statements:\n1. Arya Samaj believed that the aim of human life is to attain moksha through escape from this evil world to seek union with God.\n2. Dev Samaj emphasised on the eternity of the soul, the supremacy of the guru and the need for good action.\n3. Ramakrishna Mission totally discarded image worship.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is incorrect: Dayananda Saraswati founder of Arya Samaj, strongly criticised the escapist Hindu belief of Maya (illusion) as the running theme of all physical existence and the aim of human life as a struggle to attain moksha (salvation) through escape from this evil world to seek union with God. Instead, he SPP 22652 advocated that God, soul and matter (prakriti) were distinct and eternal entities and every individual had to work out his own salvation in the light of the eternal principles governing human conduct. Statement 2 is correct: Dev Samaj was founded in 1887 at Lahore by Shiv Narayan Agnihotri, earlier a Brahmo follower. The society emphasised on the eternity of the soul, the supremacy of the guru, and the need for good action. It called for ideal social behaviour such as not accepting bribes, avoiding intoxicants & non- vegetarian food, and keeping oneself away from violent actions. Statement 3 is incorrect: Ramakrishna Mission was founded in 1897 by Vivekananda. The Mission stood for religious and social reform, humanitarian relief and social work. Unlike the Arya Samaj, the Mission recognises the utility and value of image worship in developing spiritual fervour and worship of the eternal omnipotent God, although it emphasises on the essential spirit and not the symbols or rituals."},{"id":21,"txt":"Consider the following statements regarding the Arya samaj\n1. Repudiated the infallibility of the Vedas.\n2. Opposed caste rigidities, untouchability.\n3. It also launched Shuddhi movement that aimed to bring Hindus who had converted to other religions back to Hinduism\nWhich of the statements given above are correct?","ref":"","opts":["1 only","1 and 2 only","3 only","2 and 3 only"],"ci":3,"exp":"Ex: The Arya Samaj Movement was the result of a reaction to Western influences. Its founder was Dayananda Saraswati or Mulshankar. ❖ Statement 1 is incorrect: It took inspiration from the Vedas and considered them to be ‘India’s Rock of Ages’, the infallible. He gave the slogan “Back to the Vedas”. The infallibility of the Vedas was repudiated by Brahmo samaj. ❖ Statement 2 is correct: Dayananda launched a frontal attack on Hindu orthodoxy, caste rigidities, untouchability, idolatry, polytheism, belief in magic, charms and animal sacrifices, taboo on sea voyages, feeding the dead through shraddhas, etc. 8 ❖ Statement 3 is correct: Shraddhanand led the Shuddhi movement that aimed to bring Hindus who had converted to other religions back to Hinduism Thus, Option D is the correct answer. Additional Information: ❖ After the death of Dayananda in 1883, the work of the samaj was carried on by illustrious members. Education was an all-important field for the samaj. The Dayananda Anglo- Vedic (D.A.V.) College was established in 1886 at Lahore. But a difference of opinion between two groups in the samaj arose over the curriculum of the D.A.V. College. ❖ One group was known as the College Party (some sources say ‘Culture’ Party), among whose leaders were Lala Hansraj, Lala Lal Chand and Lala Lajpat Rai, and the other was the Mahatma (later Gurukul) Party led by Guru Datta Vidyarthi and Lala Munshi Ram (who later came to be known as Swami Shraddhanand). ❖ While the College Party favoured the government curriculum and English education to meet economic and professional needs, the Mahatma Party was interested in introducing the study of Sanskrit and Vedic philosophy in the tradition of ancient gurukuls."},{"id":22,"txt":"Consider the following pairs regarding political associations and their founder. Political associations Founder\n1. East India Dadabhai Naoroji Association\n2. Poona Sarvajanik Mahadev Ranade Sabha\n3. MadrasSabha — Mahajan B. Subramania Aiyer\n4. Madras Native Gazulu Association Lakshminarasu Chetty\nHow many of the above pairs is/are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: ❖ Pair 1 is correct: The East India Association was organised by Dadabhai Naoroji in 1866 in London to discuss the Indian question and influence public men in England to promote Indian welfare. Later, branches of the association were started in prominent Indian cities. SPP 22652 ❖ Pair 2 is correct: The Poona Sarvajanik Sabha was founded in 1867 by Mahadev Govind Ranade and others, with the object of serving as a bridge between the government and the people. ❖ Pair 3 is correct: The Madras Mahajan Sabha was founded in 1884 by Viraraghavachari (also, Veeraraghavachariar), B. Subramania Aiyer, and P. Ananda- charlu. ❖ Pair 4 is correct: The Madras Native Association (MNA) was the one of the first political organizations in the Madras Presidency to be formed by Indians. The MNA was established in 1852 by Gajula Lakshminarasu Chetty, a Telugu- speaking businessman, and was a political hub for the landed gentry of the presidency. Thus, Option D is the correct answer."},{"id":23,"txt":"Which of the following best explains the role of Syed Ahmed Khan and the Aligarh Movement in late nineteenth-century India?","ref":"","opts":["Mobilising Muslims for anti-British mass politics with the Indian National Congress","Promoting modern education and social reform through a rational interpretation of Islam","Reviving pre-modern Islamic institutions against Western education","Rejecting British cooperation and Western learning as un-Islamic"],"ci":1,"exp":"Ex: Syed Ahmed Khan and the Aligarh Movement emerged in the post-1857 context, when a large section of the British administration blamed Muslims for the Revolt and treated them with suspicion. Syed Ahmed Khan believed that the backward position of Muslims in education and government service was due to their late acceptance of Western scientific learning, not because of any inherent conflict between Islam and modern knowledge. Through institutions such as the Mohammedan Anglo-Oriental College at Aligarh (1875) and writings like Tahdhib-ul- Akhlaq, he argued that Islam could be interpreted rationally, in harmony with science and contemporary thought. He held the Quran to be the ultimate authority but insisted that its teachings must be understood in the light of reason and changing social conditions, or religion would become stagnant. 9 The Aligarh Movement therefore prioritised education and social reform over political agitation. It sought to improve the condition of Muslims by promoting modern education, women’s education, opposition to purdah and polygamy, and by encouraging Muslims to secure government employment. Syed Ahmed Khan deliberately discouraged political participation, fearing that early political confrontation would provoke hostility from the colonial state and harm Muslim interests."},{"id":24,"txt":"Who among the following personalities gave the famous slogan “One religion, one caste, one God for mankind”?","ref":"","opts":["Sri Narayan Guru","Sahadaran Ayyapan","Maharaja of kolhapur","Dr Bhimrao Ambedkar"],"ci":0,"exp":"Ex: During the 1920s in South India, the non- brahmins organised the Self-Respect Movement led by E.V. Ramaswamy Naicker. There were numerous other movements demanding that the ban on the entry of lower castes into temples be lifted. Sri Narayana Guru in Kerala led a lifelong struggle against upper-caste domination. He coined the slogan “one religion, one caste, one God for mankind”, which his disciple Sahadaran Ayyapan changed into “no religion, no caste, no God for mankind”. Sri Narayana Guru in Kerala led a lifelong struggle against upper caste domination. He coined the slogan “one religion, one caste, one God for mankind”, which his disciple Sahadran Ayyapan changed into “No religion, no caste, no God for mankind”."},{"id":25,"txt":"Which of the following administrative and legal measures were adopted during Curzon's rule in India?\n1. Vernacular Press Act\n2. Official Secrets Act\n3. Annulment of Bengal partition\n4. Appointment of Police Commission\n5. Calcutta Corporation Act\nSelect the correct answer using the code given below:","ref":"","opts":["2, 4 and 5 only","1, 2 and 3 only","1, 4 and 5 only","All of the above"],"ci":0,"exp":"Ex: Statement 1 is incorrect: The Vernacular Press Act was passed in 1878 by Lord Lytton. The district magistrate was empowered to call upon the printer and publisher of any vernacular newspaper to enter into a bond with the government undertaking not to cause disaffection against the government. Statement 2 is correct: In 1904, under Viceroy Curzon, the Indian Official Secrets Act was passed which restricted the freedom of the Press. SPP 22652 Statement 3 is incorrect: The partition of Bengal was annulled in 1911 by Lord Hardinge. It was done in response to the Swadeshi movement's riots in protest against the partition. Statement 4 is correct: During Lord Curzon's rule, in 1902-03, the Police Commission was appointed under Sir Andrew Frazer to oversee police reforms. The Department of Criminal Intelligence (DCI) was attached to the Government of India at the Center by Lord Curzon which evolved into a major domestic and foreign intelligence organisation. Statement 5 is correct: Lord Curzon (1899- 1905) passed the Calcutta Corporation Act in the year 1899. According to the Act, it increased the number of official members and decreased the strength of elected members. As official members were mostly British Subjects it caused resentment in the Indian public."},{"id":26,"txt":"With reference to the Indian Social Conference, consider the following statements:\n1. It reflected the moderate reformist belief that national regeneration required internal social transformation.\n2. It rejected the use of legislative reform as a means of social change.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: The Indian Social Conference, founded by M.G. Ranade and Raghunath Rao in 1887, was effectively the social reform cell of the Indian National Congress. It was built on the moderate philosophy that for India to achieve political \"national regeneration,\" it first had to undergo a deep internal social transformation to eliminate stagnant customs like child marriage, polygamy, and the prohibition of widow remarriage. Statement 2 is incorrect: The Conference did not reject legislative reform; in fact, it actively advocated for it. One of its most famous initiatives was the \"Pledge Movement,\" which encouraged people to take a formal oath against child marriage. The leaders of the Conference frequently petitioned the government to use legal measures to support social progress, believing that the state had a role in protecting the vulnerable and enforcing reform. 10"},{"id":27,"txt":"Which of the following statements is/are correct about the campaigns organised by political associations before Indian National Congress?\n1. They agitated for imposition of import duty on cotton.\n2. They were in support of the Inland Emigration Act 1859.\n3. They were against Lytton’s Afghan adventure.\nSelect the correct answer using the codes given below:","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Associations before the Indian National Congress agitated for political, economic and administrative reforms. ❖ Statement 1 is correct: Indian National Association agitated for the imposition of an import duty on cotton to protect Indian industries and weavers from the competition posed by cheap British- manufactured cotton textiles. ❖ Statement 2 is incorrect: Indian National Association opposed the Inland Emigration Act, 1859, as it prohibited plantation workers from leaving the tea gardens without permission from their employers. This effectively made them bonded laborers. ❖ Statement 3 is correct: It also agitated against Lord Lytton’s Afghan adventure primarily because of the financial burden and lack of consultation with Indians in decision-making. Thus, Option C is the correct answer."},{"id":28,"txt":"With reference to Indian History, Monier Williams, R.G. Bhandarkar and Rajendralal Mitra were associated with","ref":"","opts":["archaeological excavations","establishment of English Press in Colonial India","Orientalist studies and Indology","Development of modern Indian education"],"ci":2,"exp":"Ex: Monier Williams, R.G. Bhandarkar, and Rajendralal Mitra were associated with Oriental studies and Indology, the scholarly study of Indian languages, culture, history, and literature. Their historical research created an entirely new picture of India’s past. This picture was characterised by well-developed political, economic, and social institutions, a flourishing trade with the outside world, a rich heritage in arts and culture and numerous cities. Thus, Option C is the correct answer.  SPP 22652"},{"id":29,"txt":"With reference to women-related social reforms in 19th-century India, consider the following statements:\n1. The practice of sati was declared illegal in 1829 during the governorship of William Bentinck.\n2. The regulation abolishing sati was initially applied to the Bengal Presidency and extended to Madras and Bombay in 1830.\n3. Bengal regulations of 1795 and 1804 treated female infanticide as a criminal offence equivalent to murder.\n4. The Hindu Widows’ Remarriage Act of 1856 legalised widow remarriage and recognised the legitimacy of children born from such unions.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1, 3 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: Statement 1 is Correct: In 1829, during the tenure of Governor-General William Bentinck, the British government formally abolished the practice of sati through Regulation XVII. The practice was declared illegal and punishable as culpable homicide, marking a major intervention in social customs affecting women. Statement 2 is Correct: The abolition of sati was first enforced only in the Bengal Presidency. In 1830, the same regulation was extended, with minor modifications, to the Madras and Bombay Presidencies, thereby widening its territorial application. Statement 3 is Correct: The Bengal Regulations of 1795 and 1804 declared female infanticide a criminal offence equivalent to murder. These measures were aimed at curbing the widespread killing of female infants, especially among certain upper-caste and landowning groups. Statement 4 is Correct: The Hindu Widows’ Remarriage Act of 1856, passed largely due to the efforts of Ishwar Chandra Vidyasagar, legalised the remarriage of Hindu widows. It also explicitly recognised children born from such marriages as legitimate, removing both legal and social disabilities.  11"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

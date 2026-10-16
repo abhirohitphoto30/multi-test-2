@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 10</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 10</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 10">PW ONLY IAS 2026 = 10</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the Election Commission of India, consider the following statements:\n1. It conducts elections to Parliament, State Legislatures, and local bodies across India.\n2. The President appoints the Chief Election Commissioner as well as the Election Commissioners.\n3. All Election Commissioners, including the Chief Election Commissioner enjoy equal powers.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The Election Commission of India (ECI) is an independent constitutional authority established under Article 324 of the Constitution. Statement 1 is incorrect: The Election Commission of India conducts elections to Parliament, State Legislatures, and the offices of President and Vice-President. Elections to panchayats andmunicipalities areconductedby separate State Election Commissions. Hence, it does not conduct elections to local bodies. Statement 2 is correct: The President appoints the Chief Election Commissioner (CEC) and the other Election Commissioners. This is explicitly providedunder Article324of the Constitution. Statement 3 is correct: Under the 1991 Act, the Chief Election Commissioner and the Election Commissioners have equal powers, and decisionsare takenby majority when there is a difference of opinion. The CEC’s special position is relevant mainly to removal and service protection, not routine powers."},{"id":1,"txt":"Which one of the following best reflects the change introduced by the Supreme Court in the Anoop Baranwal judgment?","ref":"","opts":["The President must obtain approval of a parliamentary committee before appointing the Chief Election Commissioner.","A three-member committee now recommends appointments to the Election Commission that includes CJI.","A three-member committee now recommends appointments to the Election Commission that includes the home minister.","All three election commissioners will now have the same constitutional status in all matters."],"ci":1,"exp":"Ex: In Anoop Baranwal v. Union of India (2023), the Supreme Court laid down an interim selection mechanism for appointing the Chief Election Commissioner and Election Commissioners through a three-member committee (Prime Minister, Leader of Opposition, and Chief Justice of India), pending a law under Article324(2). Hence option B is correct. This judicially mandated arrangement was neutralised by Parliament through the Chief Election Commissioner and Other Election Commissioners (Appointment, Conditions of Service and Termof Office)Act, 2023,which replaced theChief Justiceof India with a Union Cabinet Minister nominated by the Prime Minister in the selection committee, thereby restoring executive predominance in appointments. SPP 22611"},{"id":2,"txt":"Which of the following statements is/are NOT correct?\n1. The Election Commission determines the Code of Conduct but cannot cancel polls even in cases of rigging.\n2. It can advise the Governor on the disqualification of members of State Legislature.\n3. It prepares a roster for the publicity of policies of political parties during elections.\nSelect the correct answer:","ref":"","opts":["1 only","1 and 3 only","2 and 3 only","1 and 2 only"],"ci":0,"exp":"Ex: Statement 1 is incorrect: The Election Commission is empowered to ensure the integrity of the electoral process. Under Article 324 and statutoryprovisions (e.g., Sections 58, 58A, 64A of the RPA, 1951) ECI have the authority to cancel or countermand polls when it finds large-scale rigging, booth capturing, violence, or any situation that prevents a free and fair election. Statement 2 is correct: The Commission performs an advisory role on issues of disqualification of members of State Legislatures. As per article 192 when the Governor seeks an opinion on whether a member has incurred disqualification under relevant constitutional provisions or laws, the Commission provides its advice, which is generally binding in practice. This ensures uniformity and neutrality in such decisions. Statement 3 is correct: To ensure fairness among political parties during elections, the Commission prepares a roster for publicity of party policies on All India Radio and Doordarshan. This prevents misuse of state- owned media and guarantees equal opportunitiesfor all recognised political parties."},{"id":3,"txt":"Consider the following:\nStatement-I: The expenses of the UPSC are charged on the Consolidated Fund of India. Statement-II: This ensures that Parliament can regulate UPSC expenditure through annual voting and budgeting.\nWhich one of the following is correct?","ref":"","opts":["Both Statement–I and Statement–II are correct, and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct, but Statement–II is not the correct explanation for Statement–I","Statement–I is correct, but Statement–II is incorrect","Statement–I is incorrect, but Statement–II is correct"],"ci":2,"exp":"Ex: Statement-I is correct: Article 322 provides that the expenses of the UPSC, including salaries, allowances and pensions of the Chairman, Members andstaff, are charged on the Consolidated Fund of India. Money charged on this Fund is not submitted to the vote of Parliament. This financial arrangement strengthens institutional independence by insulating UPSC’s functioning from routine legislative control. Statement-II is incorrect: Being“charged” on the Consolidated Fund means Parliament cannot regulate or alter such expenditure through annual votingor budgeting. Therefore, Statement II wrongly interprets the meaning of ‘charged expenditure’. 2"},{"id":4,"txt":"Which one of the following best describes the constitutional position of UPSC?","ref":"","opts":["It is the central personnel agency of India with authority over service conditions of Group A and B officers.","It is an independent constitutional body whose advisory role is binding on the Government of India.","It is an independent recruiting agency whose advice is not binding but whose operational jurisdiction may be expanded by Parliament.","It is a statutory authority functioning under the Ministry of Personnel, Public Grievances and Pensions."],"ci":2,"exp":"Ex: Option (a) is incorrect: The UPSC is not the central personnel agency of India. Matters like cadre management, serviceconditions, pay,and trainingof officers fall under the Department of Personnel and Training (DoPT). Option (b) is incorrect: Although independent, the UPSC’s advisoryrole is not binding on the Government of India. The government may accept or reject UPSC’s advice. Option (c) is correct: The UPSC is an independent constitutional recruiting agency created directly bythe Constitution. Its primary role is to conduct examinations and advise the government on recruitment, promotion, and disciplinary matters. Its advice, however, is not binding on the government. Article 321 of the Indian Constitution grants Parliament andState Legislatures the power to extend the functions of the Union Public Service Commission (UPSC) and State Public Service Commissions (SPSCs) beyond their usual duties, allowing them to handle recruitment and advisory roles for local authorities, statutory corporations, and public institutions, ensuring flexible, merit-based public administration across various government bodies. Option (d) is incorrect: The UPSC is a constitutional, not statutory, body. It does not functionunder any ministry; it is autonomous and reports directly to the President."},{"id":5,"txt":"Which of the following statements is/are NOT correct regarding the functional limitations of UPSC?\n1. UPSC is not consulted while making reservations in favour of backward classes.\n2. UPSC is not consulted in appointments to temporary posts even if the tenure exceeds one year.\n3. UPSC is not consulted in appointments to diplomatic posts abroad.\nSelect the correct answer:","ref":"","opts":["2 only","1 and 2 only","2 and 3 only","1 and 3 only"],"ci":0,"exp":"Ex: Statement 1 is correct: Matters related to reservation of appointments or posts in favour of any backward class do not require consultation with the UPSC. This is expressly kept outside its functional jurisdiction. This is covered under Article 320(3) read with Exemption Regulations under Article320(4). Reservation policy is a policy decision, not an individual service matter. SPP 22611 Statement 2 is incorrect: Theexemption from consultation applies only whenthe temporary or officiatingappointment is not likely to exceed one year. The statement reverses this condition by saying UPSC is not consulted even if the tenure exceeds one year, which is incorrect. If the tenure is likely to exceed one year, consultation with UPSC becomes necessary unless specifically exempted. Statement 3 is correct: Appointments to diplomatic, consular and similar missions abroad (such as Ambassadors, High Commissioners, Consuls-General, etc.) fall outside UPSC’s consultative jurisdiction. Hence, UPSC is not consulted in these appointments."},{"id":6,"txt":"Consider the following statements:\nStatement I: As in the case of the UPSC, the Constitution provides safeguards to ensure the independent and impartial functioning of a State Public Service Commission.\nStatement II: The entire expenditure of a SPSC, including salaries and pensions of its chairman, members and staff, is charged on the Consolidated Fund of India.\nStatement III: A chairman or member of a SPSC is eligible for a second term in the same office after completing the first term.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one of them explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":3,"exp":"Ex: Statement I is correct: The Constitution extends similar independence safeguards to SPSC as to UPSC, including: ❖ Security of tenure (Article 316) ❖ Removal only by the President after SC inquiry (Article 317) ❖ Protection of service conditions (Article 318) ❖ Financial autonomy (Article 322). These safeguards ensure insulation from executive interference. Statement II is incorrect: Article 322(2) clearly provides: Expenditure of a State Public Service Commission is charged on the Consolidated Fund of the State, not India. Charging the expenses on the State’s Consolidated Fundprevents thestate legislature from voting on or altering that expenditure, thereby strengthening the Commission’s financial independence. Statement III is incorrect: As per Article 316(2) Chairman or member of a SPSC is not eligible for reappointment to the same office This bar on a second term prevents the possibility of seekingfavour withthe executive for reappointment and thereby contributes to institutional neutrality. However, A member may be appointedas Chairman of the same or another SPSC, or as UPSC member 3"},{"id":7,"txt":"With reference to the Joint State Public Service Commission (JSPSC), consider the following statements:\n1. A JSPSC is established directly by the Constitution in the same manner as the UPSC and the SPSC.\n2. The chairman and members of a JSPSC are appointed by the President and may be removed by the President.\nWhich of the above statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: Unlike the UPSC and SPSC, which are constitutional bodies created directly bythe Constitution, a JSPSC is not a constitutional body. It is a statutory body, created byan Act of Parliament based on the request of theconcerned State Legislatures. Article 315(2) Provides: “Two or more States may agree to have a Joint State Public Service Commission” Such a commission is created by an Act of Parliament, only after a request (resolution) by the concerned State Legislatures Statement 2 is correct: The chairman and members of a JSPSC are appointed by the President, and theyhold office for six years or until the age of 62, whichever is earlier. The President also has the authority to suspend or remove them. This centralisedappointment and removal mechanism ensures uniformity across participating states."},{"id":8,"txt":"With reference to the Finance Commission, consider the following statements:\n1. Article 280 of the Constitution of India provides for a Finance Commission as a quasi-judicial body.\n2. The Finance Commission consists of a Chairman and four other members appointed by the President of India.\n3. The members of the Finance Commission are not eligible for reappointment.\n4. The Constitution authorises the Parliament to determine the qualifications of the members of the Finance Commission and the manner in which they are to be selected.\nHow many of the above statements are incorrect?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Statement 1 is correct: Article 280 of the Constitution provides for theestablishment of a Finance Commission. Though the Constitution does not explicitlyuse the term quasi-judicial, the Commission is regarded as having a quasi- judicial character because it performs constitutional adjudicatory functions such as balancingcompetingfiscal claims of the Union and the States and makes reasoned recommendationsafter examiningevidenceand representations. Statement 2 is correct: The Finance Commission consists of a Chairman and four other members, all of whom are appointed by the President of India. Theyholdofficefor such a period as specifiedby thePresident in his/her order. Statement 3 is incorrect: Members of the Finance Commission are eligible for reappointment. The Constitution does not impose anybar onreappointment. Their tenure and eligibility for reappointment are determined by the President through the order constituting the Commission. SPP 22611 Statement 4 is correct: The Constitution expressly authorises Parliament to determine the qualifications of the Chairman and other members of theFinanceCommission, as well as the manner in which they are to be selected. This ensures legislative control over the expertise and standards of the Commission while preserving its constitutional status."},{"id":9,"txt":"With reference to the qualifications of members of the Finance Commission, consider the following statements:\n1. A Judge of a High Court or a person qualified to be appointed as a Judge of a High Court.\n2. A person having specialised knowledge of finance and accounts of the government.\n3. A person having wide experience in financial matters and administration.\n4. A person having special knowledge of economics.\nHow many of the above represent eligible conditions for appointment as members of the Finance Commission?","ref":"","opts":["Only two","Only three","All four","None"],"ci":2,"exp":"Ex: The Constitution authorises the Parliament to determine thequalifications of members of the commission and the manner in which they should be selected.Accordingly, the Parliament has specifiedthe qualificationsof the chairman and members of thecommission under the The Finance Commission (Miscellaneous Provisions) Act, 1951, enacted as per Article 280 of the Indian Constitution, defines the eligibility and qualifications for the Chairman and four members of theFinance Commission. The chairman should be a person having experience in public affairs and the four other members should beselected from amongst the following: 1. A judge of the high court or one qualified to be appointed as one. Hence, statement 1 is correct. 2. A person who has specialised knowledge of financeandaccounts of thegovernment. Hence, statement 2 is correct. 3. A person who has wide experience in financial matters and administration. Hence, statement 3 is correct. 4. A person who has special knowledge of economics.Hence, statement 4 is correct."},{"id":10,"txt":"Consider the following statements:\nStatement I: The 101st Constitutional Amendment Act, 2016 paved the way for the introduction of a new indirect tax regime in India.\nStatement II: The Amendment inserted a new Article 289-A in the Constitution.\nStatement III: This Article empowered the Parliament to constitute a GST Council by law.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I.","Both Statement II and Statement III are correct but only one of them explains Statement I.","Only one of the Statements II and Statement III is correct and that explains Statement I.","Neither Statement II nor Statement III is correct."],"ci":3,"exp":"Ex: Statement I is correct: The 101st Constitutional Amendment Act, 2016 fundamentally restructured India’s indirect tax system by enabling the introduction of the Goods and Services Tax (GST). It subsumed multiple Central and State indirect taxes into a unified tax framework, marking a major shift towards cooperative fiscal federalism. 4 Statement II is incorrect: TheAmendment did not insert Article 289-A. It inserted Article 279-A, which specifically deals with theGoods and Services Tax Council. Hence, the Article number mentionedis constitutionally incorrect. Statement III is incorrect: Article 279-A empowers the President, not Parliament, to constitute the GST Council by an order. The Council is a constitutional body created through presidential order, although its functioning and recommendations involve both the Union and the States. Replacing the President with Parliament makes the statement incorrect."},{"id":11,"txt":"With reference to the Goods and Services Tax (GST) Council, consider the following statements:\n1. The GST Council makes recommendations on the taxes, cesses and surcharges levied by the Centre, States and local bodies that are to be subsumed under GST.\n2. The GST Council recommends the goods and services that may be subjected to GST or exempted from it, and also the threshold turnover below which GST shall not apply.\n3. The GST Council has the power to finally decide and impose GST rates, including special rates during natural calamities.\n4. The GST Council is required to recommend a mechanism for adjudication of disputes arising out of its recommendations or their implementation between the Centre and the States.\nWhich of the above statements are correct?","ref":"","opts":["1, 2 and 4 only","1 and 4 only","2 and 3 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Statement 1 is correct: As per Article 279A(4)(a) the GST Council is constitutionally mandatedto recommend which existing taxes, cesses and surcharges levied by the Centre, States and local bodies are to besubsumed into GST, ensuring a harmonised indirect tax structure. Statement 2 is correct: As per Article 279A(4)(b) & (c) theCouncil recommendsboth the list of goods andservices that may be taxed or exempted under GST and the threshold turnover limit below which entities may be exemptedfrom GST, providing relief to small taxpayers. Statement 3 is incorrect: As per Article 279A(4)(e) the GST Council does not have the power to finally impose or enforce GST rates. Its role is recommendatory in nature. Even special rates during natural calamities are recommended bythe Council, while the actual levy is carried out through legislation by the competent legislature. Statement 4 is correct: As per Article 279A(11) the Council is required to establish a mechanism to adjudicate disputes arising from its recommendations or their implementation between the Centre and the States or among States, reflecting the cooperative federal structure of GST."},{"id":12,"txt":"With reference to the National Commission for Scheduled Castes, consider the following statements:\nStatement I: The National Commission for Scheduled Castes presents its annual report to the Parliament.\nStatement II: While investigating matters relating to safeguards for Scheduled Castes, the Commission has the powers of a civil court.\nWhich of the following is correct?","ref":"","opts":["Both Statement I and Statement II are correct","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct","Both Statement I and Statement II are incorrect"],"ci":2,"exp":"Ex: Statement I is incorrect: As per Article 338(5) the National Commissionfor Scheduled Castes submits its annual report to the President of SPP 22611 India, not to Parliament. The President then causes the report to be laid before Parliament along with a memorandum of action taken. Statement II is correct: Article 338(8) expressly vests the NCSC with powers of a civil court while investigatingor inquiring into complaints, including: ❖ Summoning and enforcing attendance ❖ Requiring production of documents ❖ Receiving evidence on affidavits"},{"id":13,"txt":"Which of the following is NOT a function of the National Commission for Scheduled Castes?","ref":"","opts":["Investigating and monitoring the implementation of constitutional and legal safeguards for Scheduled Castes","Inquiring into specific complaints regarding deprivation of rights and safeguards of Scheduled Castes","Participating in and advising on the planning process of socio-economic development of Scheduled Castes","Adjudicating disputes between the Union and the States relating to safeguards for Scheduled Castes"],"ci":3,"exp":"Ex: Option (a) is correct: Investigating and monitoring all mattersrelatingto constitutional and legal safeguards for Scheduled Castes and evaluating their working is a core function of the National Commissionfor Scheduled Castes as per Article 338(5)(a). Option (b) is correct: The Commission is specifically empowered to inquire into individual andcollective complaints regarding deprivation of rights and safeguards of Scheduled Castes as per Article 338(5)(b). Option (c) is correct: The Commission participates in and advises on the planning process of socio-economic development of Scheduled Castes andevaluatesthe progress of such development underthe Unionor the States as per Article 338(5)(c). Option (d) is incorrect: Adjudicating disputes between the Union and the States is not a function of the National Commission for Scheduled Castes. The Commission does not have adjudicatory or dispute-resolutionpowers. Its role is limited to investigation, inquiry, monitoring, recommendation and advisory functions."},{"id":14,"txt":"With reference to the constitutional evolution of commissions for Scheduled Castes and Scheduled Tribes, consider the following statements:\n1. The combined National Commission for Scheduled Castes and Scheduled Tribes was established by the 64th Constitutional Amendment Act, 1990.\n2. The 89th Constitutional Amendment Act, 2003 bifurcated the combined commission and provided for a separate National Commission for Scheduled Tribes.\nWhich of the statements given above is/are correct?","ref":"","opts":["Only 1","Only 2","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: The combined National Commissionfor ScheduledCastes and Scheduled Tribes was established by the 65th Constitutional Amendment Act, 1990, not the 64th Amendment which inserted Article 338 providing for a National Commission for Scheduled Castes and Scheduled Tribes. 5 Statement 2 is correct: The 89th Constitutional Amendment Act, 2003 bifurcatedthe combined commissionand led to the establishment of a separate National Commission for Scheduled Tribes, ensuring focused constitutional protectionfor STs. Thus, retained Article 338 for NCSC, and Inserted Article 338A to create a separate National Commission for Scheduled Tribes (NCST)"},{"id":15,"txt":"With reference to the Commissioner for Linguistic Minorities (CLM), consider the following statements:\n1. The post of Special Officer for Linguistic Minorities was created by the original Constitution of India.\n2. Article 350-B mandates that the Special Officer shall investigate matters relating to safeguards for linguistic minorities.\n3. The Constitution specifies the qualifications, tenure and service conditions of the Commissioner for Linguistic Minorities.\n4. The Commissioner for Linguistic Minorities functions under the Ministry of Minority Affairs at the Central level.\nWhich of the above statements are correct?","ref":"","opts":["2 and 4 only","1 and 3 only","1, 2 and 4 only","2, 3 and 4 only"],"ci":0,"exp":"Ex: Statement 1 is incorrect: The original Constitution did not provide for a Special Officer for LinguisticMinorities. Theprovision was inserted later by the Seventh Constitutional Amendment Act, 1956, following the recommendation of the States Reorganisation Commission. Statement 2 is correct: Article 350-B mandatesthat the Special Officer for Linguistic Minorities shall investigate all matters relating to constitutional safeguards for linguistic minorities andsubmit reportsto the President at intervals directed by him. Statement 3 is incorrect: The Constitution does not specify the qualifications, tenure, salaries, allowances, service conditions or procedure forremoval of the Commissioner for Linguistic Minorities. Statement 4 is correct: At the Central level, the Commissioner for Linguistic Minorities functions under the Ministry of Minority Affairs and submits reports to the President through the Union Minority Affairs Minister."},{"id":16,"txt":"With reference to the Attorney General of India, consider the following statements:\n1. The Attorney General of India is the highest law officer of the country.\n2. He is appointed by the President and must be qualified to be appointed as a judge of the Supreme Court.\n3. The Constitution fixes the tenure and procedure for removal of the Attorney General.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: Article 76 of the Constitution provides for the office of the Attorney General for India, who is the highest law officer of the countryandactsas the chief legal adviser to the Government of India. Statement 2 is correct: The Attorney General is appointed by thePresident of India and must possess the qualifications required for appointment as a judge of the Supreme Court, namely beinga citizenof India and having the SPP 22611 prescribed judicial or advocacy experience or being an eminent jurist. Statement 3 is incorrect: The Constitution does not fix the tenure, procedure or grounds for removal of theAttorney General. He holds officeduringthe pleasureof the President and may be removed at any time or may resign by submitting his resignation to the President."},{"id":17,"txt":"Consider the following statements regarding the duties of the Attorney General of India:\n1. He gives legal advice to the Government of India on matters referred by the President.\n2. He represents the Government of India in all cases before the Supreme Court.\n3. He represents the Government in High Courts only when required by the Government of India.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: As the chief law officer of the Government of India, the Attorney General gives legal advice to the Government on matters referred to him by the President. This advisoryrole flows directly from Article 76 and underscoreshis positionas the principal legal adviser to the Union executive. Statement 2 is incorrect: The Attorney General appears on behalf of the Government of India in the Supreme Court and High Courts when required. There is no constitutional or statutory mandate that he must represent the Government in all Supreme Court cases. In practice, many cases are handled by Solicitor General, Additional Solicitors General. The word “all” makes the statement wrong. Statement 3 is correct: The Attorney General appears before High Courts only when required by the Government of India.Unlike his mandatory appearance in Supreme Court cases involving the Union, representation in High Courts is contingent upon governmental requirement or direction."},{"id":18,"txt":"With reference to the Advocate General of a State, consider the following statements:\n1. The Advocate General is appointed by the Governor of the State.\n2. The Constitution, under Article 156, provides for the office of the Advocate General for the States.\n3. He or she must be a person qualified to be appointed as a Judge of a High Court.\n4. The Constitution does not lay down the procedure and grounds for the removal of the Advocate General.\nHow many of the above statements are incorrect?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Statement 1 is correct: As per Article 165(1) the Advocate General of a State is appointedby the Governor. He is the highest law officer of the State and holdsofficeduringthe pleasureof the Governor. Statement 2 is incorrect: The office of the Advocate General is provided under Article 165, not Article 156. Article156deals with the term of office of the Governor. Hence, this statement is constitutionally incorrect. 6 Statement 3 is correct: A person appointed as Advocate General must possess the qualifications required for appointment as a Judge of a High Court, ensuring high legal competence for the office. Statement 4 is correct: The Constitution does not prescribe the procedure or grounds for removal of the Advocate General. He holds officeduringthe pleasureof the Governor and may resign at any time."},{"id":19,"txt":"With reference to the Delimitation Commission in India, which of the following statements is correct?","ref":"","opts":["Its decisions require approval of Parliament to become operative","Its orders, once notified, cannot be altered by legislatures","It is constituted automatically after every decennial Census","Its recommendations are advisory in nature"],"ci":1,"exp":"Ex: The Delimitation Commission is a statutory body constituted under a Delimitation Act enacted by Parliament. It is set up only when Parliament enacts a Delimitation Act (e.g., 1952, 1962, 1972,2002). Its key feature is the finality of its orders: ❖ Once the Delimitation Commission’s orders are published (notified), they have the force of law.The Commission’s determinations are binding, not advisory. ❖ These orders cannot be modified or questioned by Parliament or State Legislatures.The Commission’sorders do not require Parliamentary approval. They becomeoperative upon notification. ❖ Judicial review is also very limited, reinforcing the finality intended to keep delimitation freefrom political influence. Hence, option (b) correctly states the legal position. The constitutional basis for the finality of delimitation ordersis found in Article 329(a) of the Constitution. Article 329(a) bars courts from questioning the validity of any law relatingto the delimitationof constituencies or the allotment of seats."},{"id":20,"txt":"Consider the following statements:\n1. The finality of Delimitation Commission orders is intended to insulate constituency boundaries from political influence.\n2. Absolute judicial immunity of delimitation orders would violate the basic structure of the Constitution.\n3. Article 329(a) creates a complete bar on any form of constitutional scrutiny of delimitation.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: The finality accorded to Delimitation Commission orders is intended to insulate constituency boundaries from political and legislative influence. Delimitation orders acquire the force of law upon notification and cannot be modified by legislatures. This insulation flows from Article SPP 22611 329(a), which seeks to preserve electoral neutrality and fairness bypreventing political interferencein boundarydetermination. Hence, Statement 1 correctly captures the constitutional objective behind delimitation finality. Statement 2 is correct: An absolute exclusion of judicial review over delimitation would violate the Basic Structure of the Constitution, particularly the principle of judicial review. Judicial review has been repeatedly affirmed as part of the basic structure (e.g., Minerva Mills). Therefore, any constitutional or statutory bar must be read subject to basic-structure limitations. This position was explicitly clarified by the Supreme Court in Kishorchandra Chhanganlal Rathod v. Union of India (2024), where the Court held that: Although Article 329(a) restricts judicial intervention in delimitation matters, it does not completely oust judicial review. The Court affirmedthat constitutional courts may examine Delimitation Commission orders if they are: manifestly arbitrary, or violative of constitutional principles. Statement 3 is incorrect: Thestatement claims that Article 329(a) creates a complete bar on constitutional scrutiny, which is not correct. Article 329(a) bars courts from questioning delimitation as a routine electoral matter. However, as clarified in Kishorchandra Chhanganlal Rathod (2024), the bar is not absolute. Constitutional courts retain limited but essential review powers to safeguard constitutional values. Hence, Statement 3 overstates the scope of Article 329(a)."},{"id":21,"txt":"Consider the following organisations:\n1. Special Officer for Linguistic Minorities.\n2. Central Vigilance Commission.\n3. National Human Rights Commission.\n4. GST Council.\nHow many of the above are Constitutional bodies?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statement 1 is correct: The Linguistic Minorities are considered as a group or collectivities of individuals residing in the territory of Indiaor anypart thereof having a distinct language or script of their own. Article 350-B of the Indian Constitution provides for a Special Officer for Linguistic Minorities, who is known as the Commissioner for Linguistic Minorities in India (CLM) to investigate all the matters 7 relating to the Safeguards provided for the linguistic minorities in India under the Constitution andreportingto the President. The President causes all such reports to be laid beforeeachHouseof the Parliament and sent to the Government/Administrations of States/UTs concerned. Theword linguistic minorities has not been defined in the Constitution of India. Statement 2 is incorrect: Central Vigilance Commission (CVC) is a Statutory body, introduced in the year 1964. The commission was set up on the recommendation of K. SanthanamCommittee on Prevention of Corruption. It was originally introduced through an executive resolution. Central Vigilance Act came into effect in the year 2003 after the CVC bill was passed by both Lok Sabha and Rajya Sabha. The Central Vigilance Committee’s role is to advise and guide the Central Government in the field of surveillance. Statement 3 is incorrect: National Human Rights Commission is a th Statutory body established on 12 October 1993, under the Protection of Human Rights Act (PHRA), 1993. It was established in conformity with the Paris Principles which was adopted for promoting and protecting human rights. ❖ It ensures theprotection of rights related to life, liberty, equality, and dignity of individuals. ❖ Rights guaranteed by the Indian Constitution and international covenants enforceable by Indian courts. Statement 4 is correct: GST Council is a constitutional body constituted under Article 279 A of the Indian Constitution. It is an intergovernmental organisation that advises both the federal government and state governments on matters pertaining to the Goods and Services Tax. Composition of GST Council: ❖ Union Finance Minister as Chairperson ❖ The Union Minister of State, in-charge of Revenue or Finance as Member ❖ The Minister in charge of Finance or Taxation or anyother Minister nominated by each State Government as a Members. SPP 22611"},{"id":22,"txt":"Consider the following:\n1. The State Finance Commission is established under Article 243I.\n2. The SFC recommends the distribution of taxes between the Centre and States.\n3. The Governor constitutes the State Finance Commission every five years.\n4. The recommendations of the SFC are binding on the State Government.\nHow many of the above statements about the State Finance Commission (SFC) are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statement 1: Correct: The State Finance Commission (SFC) is a constitutional body established under Article 243I. It is tasked with reviewingthe financial position of panchayats and municipalities andrecommending ways to improve thedevolutionof funds to local bodies. Statement 2: Incorrect The State Finance Commission does not recommend the distribution of taxes between the Centre and States. This role is performed by the Finance Commission of India (FC), established under Article 280. The SFC focuses on state-local fiscal relations, such as: ❖ Distribution of taxes between the state government and local bodies. ❖ Allocation of grants-in-aid to panchayats and municipalities. Statement 3: Correct As per Article 243I, the Governor of a state is required to constitute the State Finance Commission every five years. The SFC examines the financial needs and resource requirements of panchayats and municipalities. Statement 4: Incorrect Therecommendations of the State Finance Commission are advisory in nature and are not binding on the state government. The state legislature may decide to accept or reject the recommendations, partially or fully."},{"id":23,"txt":"Consider the following statements:\n1. Summoning and enforcing the attendance of witnesses.\n2. Investigating complaints related to deprivation of rights.\n3. Submitting reports to the President of India.\n4. Direct implementation of welfare schemes for the respective communities.\nWhich of the above powers is/are common to the NCSC(National Commission for Scheduled Castes), NCST(National Commission for Scheduled Tribes), and NCBC(National Commission for Backward Classes)?","ref":"","opts":["1, 2, and 3 only","2 and 4 only","1 and 3 only","1, 2, 3, and 4"],"ci":0,"exp":"Ex: The NCSC, NCST, and NCBC are constitutional and statutory bodies in India established to protect therights and interests of marginalized andunderprivilegedcommunities, specifically Scheduled Castes (SCs), Scheduled Tribes (STs), and Backward Classes (BCs). Statement 1 is correct: All three commissions (NCSC, NCST, and NCBC) have powers of a civil court while investigating complaints. These include summoning witnesses, examiningthemunder oath, and requisitioning documents. 8 Statement 2 is Correct:All three commissions have the power to investigate complaints related to the violation or deprivation of rights of ScheduledCastes, Scheduled Tribes,and Other Backward Classes, respectively. Statement 3 is Correct: The NCSC, NCST, and NCBC submit their annual reports to the President, who then lays these reports before Parliament for discussion. Statement 4 is Incorrect: None of these commissions directly implement welfare schemes. Their role is advisory and investigative in nature, providing recommendations to the government."},{"id":24,"txt":"Consider the following statements\n1. The NCBC is a constitutional body under Article 342A.\n2. The NCBC can recommend the inclusion or exclusion of communities in the Central List of OBCs.\n3. The NCBC was granted constitutional status through the 102nd Constitutional Amendment Act, 2018.\n4. The NCBC has the power to enforce its recommendations.\nHow many of the above statements regarding the National Commission for Backward Classes (NCBC) are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statement 1 Incorrect: The NCBC is a constitutional body under Article 338B, not Article 342A. Article 342A deals with the power of thePresident to notifythe Central List of OBCs. Statement 2 Correct: The NCBC has the authority to recommendinclusion or exclusion of communities in the Central List of Other Backward Classes (OBCs). These recommendations are forwarded to the President for approval. Statement 3 Correct: The NCBC was granted constitutional status through the 102nd Constitutional Amendment Act, 2018, which inserted Article 338B into the Constitution. Statement 4 Incorrect: The NCBC does not have the power to enforceits recommendations. Its role is advisory, and the government takes the final decision on implementing its recommendations."},{"id":25,"txt":"How many of the pairs given below regarding State Election Commissions (SEC) are correctly matched? Pair Position/Power\n1. SEC conducts Article 243K local body polls\n2. Tenure of SEC Determined by the State Executive\n3. Removal of Same as the process for SEC HC Judges\n4. SEC reports to State Legislature","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Pair 1 is Correct: Article243K empowers the State Election Commission (SEC) to conduct elections to: Panchayats (Part IX) and Municipalities (Part IX-A). The SEC is also responsible for preparing electoral rolls and delimiting constituencies. SPP 22611 Pair 2 is Incorrect: The tenure of the State Election Commissioner is not determined bythe State Executive (which includes the Governor and Council of Ministers). Under Article 243K(2), the State Legislature determines the tenure and conditionsof service through a law. Importantly, after appointment, the State Executive has nopower to alter the conditions of service to the SEC’s disadvantage. Pair 3 is Correct: As per Article 243K(2), the removal process of the State Election Commissioner is the same as that for High Court judges: ❖ Grounds: Proven misbehavior or incapacity. ❖ Process: Requires an inquiry by the Supreme Court and action by the Governor. ❖ This safeguard ensuresindependence from arbitrary dismissal. Pair 4 is Correct: The State Election Commission reports to the State Legislature, ensuring accountability at the state level. This differsfromthe Election Commission of India (ECI), which reports to the President."},{"id":26,"txt":"Which of the following is/are extra- constitutional device(s) for securing cooperation and coordination between the States in India?\n1. The National Development Council\n2. The Governor’s Conference\n3. Zonal Councils\n4. Inter-State Council\nSelect the correct answer using the code given below :","ref":"","opts":["1 and 2 only","1, 2 and 3 only","3 and 4 only","4 only"],"ci":1,"exp":"Ex: Extra-constitutional devices refer to institutions or mechanisms not explicitly provided for in the Constitution. Statement 1 is correct: The NDC, established in 1952, is neither a constitutional nor a statutory body. It was created through an executiveorder as anadvisorybodyto promote cooperativefederalismand coordinate policies between the Centre and the States. Statement 2 is correct: The Governor’s Conference is an informal meeting of Governors convened by the President or the Union Government to discuss administrative issues and secure better coordination between states. Statement 3 is correct: Zonal Councils were established under the States Reorganization Act, 1956, to promote interstate cooperation and coordination. They function as statutory bodies, not constitutional ones. 9 Statement 4 is incorrect: The Inter-State Council was established under Article 263 of the Constitution. It serves as a constitutional mechanism to investigateanddiscuss matters of commoninterest amongstates andbetween the Centre and states."},{"id":27,"txt":"Consider the following pairs regarding the GST Council:\nPair Position Role in GST Council 1 Union Revenue Ex-officio Secretary Secretary to the Council 2 President of Chairperson of the India Council 3 Article 279-A Empowers the of the President to Constitution constitute the Council 4 GST Council Located in Secretariat Mumbai\nHow many pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Pair 1 is correct: The Union Revenue Secretary acts as theex-officio Secretary to the GST Council, as per Article 279-A of the Constitution. Pair 2 is incorrect: ThePresident of Indiadoes not chair the GST Council. Instead,the Council is chaired by the Union Finance Minister. The President’s role is limited to constituting the Council by an order under Article 279-A. Pair 3 is correct: Article279-A empowers the President to constitute the GST Council, facilitatingthe coordinationbetween theCentre and the states in administeringthe GST regime. Pair 4 is incorrect: The GST Council Secretariat is located in New Delhi, not Mumbai. Additional Information: ❖ The GST Council plays a pivotal role in ensuringcooperative federalismin taxation matters. ❖ It provides recommendations to the Union and states on issues related to GST, including tax rates, exemptions, and special provisions for certain states. ❖ The structure of the GST Council ensures representation from both the Centre and states, fostering collaboration."},{"id":28,"txt":"Consider the following statements about the Finance Commission:\n1. The Finance Commission’s recommendations are binding on the government.\n2. It recommends measures to augment resources of panchayats and municipalities.\n3. The first Finance Commission was chaired by K.C. Neogy.\nWhich of the statements given above is/are correct?","ref":"","opts":["2 and 3 only","1 and 2 only","1, 2, and 3","1 and 3 only"],"ci":0,"exp":"Ex: The Finance Commission of India is a constitutional body established under Article 280 of theIndian Constitution. It is responsible for definingthe financial relations between the Central Government and the State Governments.The commission ensures a fair distribution of financial resources in thefederal system of India. SPP 22611 Statement1 isIncorrect: Therecommendations of the Finance Commission are advisory in nature, meaning they are not binding on the government. However, governments usually implement them unless thereare strongreasons to deviate, as these recommendations are based on constitutional principles and thorough deliberations. Statement 2 is Correct: The Finance Commission recommends measures to augment the resources of panchayats and municipalities in states, basedon therecommendations of the State Finance Commissions. This role was introduced after the 73rd and 74th Constitutional Amendments, ensuringfinancial devolution to local bodies for better governance. Statement 3 is Correct: The first Finance Commission was established in 1951, and K.C. Neogy servedas its Chairman. Its primary role was to definea formula for sharingtax revenues between the Centre and the states after independence. PW ONLYIAS SUPER HINT For S1, If UPSC says something is \"binding,\" always pause and think — only judgments, orders, or certain constitutional directives are binding. Most commissionrecommendations are not. Hencemore plausiblyits false. Giving option A as correct."},{"id":29,"txt":"Consider the following types of audits conducted by the Comptroller and Auditor General (CAG) of India and their descriptions:\nType of Audit Description\n1. Performance Reviews the outcomes of Audit government schemes to assess their economy, efficiency, and effectiveness.\n2. Compliance Ensures legality, Audit regularity, and adherence to rules in financial transactions.\n3. Financial Verifies the accuracy Audit and integrity of accounts presented by government departments.\nWhich of the following pairs is/are correctly matched?","ref":"","opts":["1 only","1 and 2 only","1, 2, and 3","2 and 3 only"],"ci":2,"exp":"Ex: The Comptroller andAuditor General of India (CAG), established under Article 148, is an independent constitutional authority auditing Union and State accounts. Known as the friend and guide of the Public Accounts Committee, the CAG ensures transparency, accountability, and financial discipline. Articles 149-151defineits duties, powers, and reporting mechanisms. Performance Audit – (A) Reviews outcomes of specific government schemes. ❖ Performance audits are conducted to evaluate whether government schemes and programs are achieving their intended outcomes effectively and efficiently. 10 ❖ This type of audit assesses theperformance of government departments or schemes in relation to their objectives, examining factors such as economy, efficiency, and effectiveness. For example, if a government welfare program is underperforming, the performance audit can identify where improvements are needed. Compliance Audit – (B) Examines the legality and regularity of financial transactions. ❖ Compliance audits examine whether financial transactions are conducted in accordance with established laws, regulations, and government policies. ❖ This type of audit ensures that the government, its departments, and public entities adhere to the legal frameworks governing financial activities. Non- compliance can lead to irregularities, which may result in legal consequences.  SPP 22611 Financial Audit – (C) Verifies the accuracy of accounts presented. ❖ Financial audits focus onthe accuracy and integrity of financial statements and records. Theprimaryobjective is to verify that the accounts presentedby government departments are accurate, free from material misstatements, and comply with accounting standards. ❖ This ensures that public funds are properly accountedfor andthat financial reports are reliable for decision-making purposes.  11"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

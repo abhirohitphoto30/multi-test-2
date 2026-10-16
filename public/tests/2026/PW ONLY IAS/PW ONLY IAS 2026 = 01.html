@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 01</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 01</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 01">PW ONLY IAS 2026 = 01</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to Articles related to “Union and its Territory”, consider the following statements:\n1. Article 2 deals with the admission or establishment of new states.\n2. Article 3 empowers the President to form new states and alter the areas or names of existing states.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: Article 2 empowers Parliament to admit or establish new states into the Union of India. This power applies primarily to territories that were not previously part of India—for example, the incorporation of Sikkim initially as an associate state and later as a full state. Statement 2 is incorrect: Article 3 enables Parliament not the President to form new states and alter the area, boundaries or names of existing states. This article allows reorganization within the Indian Union, such as: ❖ creation of Telangana (2014), ❖ renaming of Orissa to Odisha (2011), ❖ statehood of Uttarakhand, Jharkhand, Chhattisgarh (2000). Before introducing such a bill, the President must refer it to the concerned State Legislature, but the State’s opinion is not binding on Parliament. PW extra edge: Article 4 explicitly states that laws under Articles 2 and 3 shall not be considered constitutional amendments under Article 368. Hence, they can be passed by a simple majority, not a special majority. Article 1 declares that “India, that is Bharat, shall be a Union of States” and defines the territory of India."},{"id":1,"txt":"Consider the following states:\n1. Gujarat\n2. Nagaland\n3. Haryana\n4. Chhattisgarh Which of the states given above were not created under the States Reorganisation Act, 1956?","ref":"","opts":["1, 2, and 3 only","2, 3, and 4 only","1 and 4 only","1, 2, 3, and 4"],"ci":3,"exp":"Ex: Option 1 is correct:Gujarat was formed on1st May 1960 bybifurcatingthe BombayState into Gujarat and Maharashtra based on linguistic lines. The bilingual Bombay State had seen tensions between the Marathi-speaking and Gujarati-speaking populations, leading to the Bombay Reorganisation Act, 1960. It was not part of the States Reorganisation Act, 1956, but rather was the outcome of the Bombay Reorganisation Act, 1960. SPP 22601 Option 2 is correct: Nagaland was formed on 1st December 1963 as the 16th state of India. It was carved out of Assam to address the cultural and political aspirations of the Naga people following years of insurgency and demands for autonomy. This creation followed years of insurgency and demands for autonomy, and was done via a separate legislation, not through the States Reorganisation Act, 1956. Option 3 is correct: Haryana was formed on 1st November 1966 from the state of Punjab after the Punjab Reorganisation Act, 1966, and is not part of the 1956 Act. This was based on linguistic differences, as the Shah Commission recommended the separation of Hindi-speaking areas from the Punjabi- speaking regions. Chandigarh was made a Union Territory and servesas the sharedcapital of Punjab and Haryana. Option 4 is correct: Chhattisgarh was formed on 1st November 2000 by bifurcating Madhya Pradesh. The state was created to promote administrative efficiency and address regional developmental disparities in the Chhattisgarh region.This formation was done through the Chhattisgarh Act, 2000, and is therefore not part of the States Reorganisation Act, 1956. Additional Information: ❖ The States Reorganisation Act, 1956 primarily reorganized states based on linguistic lines, creating 14 states and 6 Union Territories: ❖ 14 States:Andhra Pradesh, Assam, Bihar, Bombay (later divided into Maharashtra and Gujarat in 1960), Jammu & Kashmir, Kerala, Madhya Pradesh, Madras (later renamed Tamil Nadu), Mysore (later renamed Karnataka), Orissa (later renamed Odisha), Punjab, Rajasthan, Uttar Pradesh, & West Bengal 2 6 Union Territories: Andaman and Nicobar Islands, Delhi, Lakshadweep, Himachal Pradesh (became a state in 1971), Manipur (became a state in 1972) & Tripura (became a state in 1972)"},{"id":2,"txt":"With reference to the term ‘Sovereign’ in the Preamble, consider the following statements:\n1. Being sovereign India is free to conduct both its internal and external affairs without any external authority.\n2. India’s membership of the United Nations limits its sovereignty.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The Preamble to the Indian Constitution is the brief introductory statement that declares the source of authority (“We, the people of India”) and outlines the **ideals and objectives** of the Constitution—justice, liberty, equality, fraternity, sovereignty, socialism, secularism, and democracy. Statement 1 is correct: The word sovereign in the Preamble means India is neither a dependency nor a dominion of any country. No authority is above India, and it is fully free to conduct its internal and external affairs. Statement 2 is incorrect: India’s membership of the United Nations does not limit its sovereignty. Membership of the UN or Commonwealth does not impose any constitutional restriction on India’s decision- making."},{"id":3,"txt":"With reference to the evolution of the Preamble to the Constitution of India, consider the following statements:\n1. The term Secular was inserted to reinforce the principle of equal respect and protection to all religions by the State.\n2. The term Socialist was added to emphasise both social and economic equality in governance.\n3. The term Integrity was incorporated to strengthen national unity against secessionist tendencies.\n4. The term Fraternity was added by the 42nd Constitutional Amendment.\nWhich of the statements given above are correct?","ref":"","opts":["1, 2 and 3 only","1, 3 and 4 only","2 and 4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: The Preamble to the Indian Constitution is the brief introductory statement that declares the source of authority (“We, the people of India”) and outlines the ideals and objectives of the Constitution—justice, liberty, equality, fraternity, sovereignty, socialism, secularism, and democracy. Statement 1 is correct: The 42nd Amendment inserted Secular to clarify equal treatment of all religions by the State. Statement 2 is correct: The term Socialist was added to highlight the constitutional vision of social and economic justice, especially in resource distribution. It reflects: SPP 22601 ❖ social equality ❖ economic equality ❖ reduction of inequalities ❖ distributive justice (aligns with DPSPs) Statement 3 is correct: Integrity was included to reinforce the idea of national unity during a time of internal unrest and secessionist pressures. Statement 4 is incorrect: Fraternity was already part of the original Preamble (1950) and hence was not inserted by the 42nd Amendment."},{"id":4,"txt":"Consider the following pairs:\n1. Part IV - Provisions related to Fundamental Duties.\n2. Part VI - Provisions related to State Governments.\n3. Part VII - Provisions related to the Union Territories.\n4. Part XV - Provisions related to Elections.\nWhich of the above pairs are correct with reference to the Parts of the Constitution of India?","ref":"","opts":["1 and 3 only","2 and 4 only","1, 2, and 4 only","2, 3, and 4 only"],"ci":1,"exp":"Ex: The Constitution of India organizes its provisions into Parts, each addressing specific areas of governance, rights, and responsibilities. Pair 1 is incorrect:Part IVof the Constitution pertains to the Directive Principles of State Policy (DPSPs), which serve as guidelines for the State to achieve social and economic justice. Fundamental Duties, however, are listed under Part IVA, which was introduced by the 42nd Constitutional Amendment Act, 1976. Pair 2 is correct: Part VI of the Constitution deals with the State Governments, outlining provisions for: ❖ The Governor, who acts as the executive head of the State. ❖ The State Legislature, comprising either a unicameral or bicameral structure. ❖ The State Executive, including the Chief Minister and the Council of Ministers. Pair 3 is incorrect: Part VIII, not Part VII, pertains to the Union Territories and their administration.Part VII, which initially dealt with states like Hyderabad, Jammu and Kashmir, Madhya Bharat, Mysore, Patiala and East Punjab States Union (PEPSU) in the Part B of the First Schedule, was repealed by the 7th Constitutional Amendment Act, 3 1956, following the reorganization of states. Pair 4 is correct: Part XV of the Constitution relates to Elections, covering: ❖ The Election Commission of India, which oversees the conduct of free and fair elections. ❖ Provisions for electoral processes, including the delimitation of constituencies, preparation of electoral rolls, and qualifications of voters. ❖ Mechanisms to ensure a democratic electoral system."},{"id":5,"txt":"Which of the following provisions of the Indian Constitution is most directly derived from the Government of India Act, 1935?","ref":"","opts":["Fundamental Duties","Secularism","Preamble","Public Service Commissions"],"ci":3,"exp":"Ex: Public Service Commissions under the Indian Constitution closely resemble the provisions contained in the Government of India Act, 1935, which served as the principal administrative blueprint for independent India. The Act introduced Federal and Provincial Public Service Commissions, a structure substantially retained in the present Constitution under Articles 315–323. Option (a) is incorrect: Fundamental Duties were inserted much later by the 42nd Constitutional Amendment (1976) and are inspired primarily by the USSR (Russian) Constitution, not by the 1935 Act. Option (c) is incorrect: The Preamble draws heavily from the American Constitution, particularly its ideals of justice, liberty, and equality. It has no substantive connection to the 1935 Act. Option (b) is incorrect: Secularism, though implicit from the beginning, was explicitly added to the Preamble by the 42nd Amendment (1976). It does not originate from the 1935 Act. Therefore, Public Service Commissions (Option d) is the provision most directly linked to the Government of India Act, 1935. SPP 22601 Additional Information: Other Important Borrowed Features from the Government of India Act, 1935 ❖ Provincial autonomy ❖ Office of the Advocate General ❖ Emergency administration in provinces ❖ Continuity of laws and administrative systems ❖ Provision for All-India Services ❖ Role and powers of the Auditor-General (continued as CAG) ❖ Three lists-Union List, State List, Concurrent List"},{"id":6,"txt":"Consider the following statements regarding the alteration of Indian territory:\n1. Cession of Indian territory to a foreign State requires a constitutional amendment under Article 368.\n2. Settlement of a boundary dispute with a foreign country requires a constitutional amendment as it involves alteration of Indian territory.\nWhich of the statements given above is/are not correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is correct:In theBerubari Union Case (1960), the Supreme Court held that Article 3 does not empower Parliament to cede any part of Indian territory to a foreign State. Cession of territory requires a constitutional amendment under Article 368, as it involves a reduction of the sovereign territory of India.Consequently, the 9th Constitutional Amendment Act, 1960 was enacted to transfer the Berubari Union to Pakistan. Statement 2 is not correct: The Supreme Court in 1969 clarified that settlement of a boundary dispute is not the same as cession of territory. It only determines the actual boundary and does not involve transfer of sovereign territory. Therefore, such a settlement does not require a constitutional amendment and can be carried out through executive action. Additional Information: Article 3 deals only with internal adjustment of State boundaries and does not apply to international cession. Hence, Article 368 is required for anytransfer of territory to a foreign State The 1969 ruling distinguishes between: 4 ❖ Ascertainment of an existing boundary - Executive action ❖ Actual transfer/cession of territory - Constitutional amendment This distinction was reaffirmed during the India–Bangladesh Land Boundary Agreement (LBA) process, where: ❖ Boundary clarification required no amendment, ❖ Exchange of territories required the 100th Constitutional Amendment Act, 2015."},{"id":7,"txt":"Arrange the following events in chronological order:\n1. Creation of Nagaland as the 16th state of India\n2. Formation of Uttarakhand (then Uttaranchal)\n3. Goa attaining statehood\n4. Bifurcation of Andhra Pradesh to create Telangana\nSelect the correct answer using the codes below:","ref":"","opts":["1 – 3 – 2 – 4","1 – 3 – 4 – 2","3 – 1 – 2 – 4","1 – 2 – 3 – 4"],"ci":0,"exp":"Ex: 1. Creation of Nagaland as the 16th state of India — 1963: Nagaland became India’s 16th state on 1 December 1963. 3. Goa attaining statehood — 1987: Goa became the 25th state of India on 30 May 1987 (after being a Union Territory post- liberation in 1961). 2. Formation of Uttarakhand (then Uttaranchal) — 2000: Uttaranchal (renamed Uttarakhand in 2007) was formed on 9 November 2000. 4. Bifurcation of Andhra Pradesh to create Telangana — 2014: Telangana became the 29th state of India on 2 June 2014. Hence, the order is 1 → 3 → 2 → 4."},{"id":8,"txt":"Consider the following statements regarding the term “Republic”:\n1. It means vesting of political sovereignty in the hands of the people.\n2. It means the absence of any privileged class and all public offices being opened to every citizen without any discrimination.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: A democratic polity can be classified into two categories–monarchy and republic. In a monarchy, the head of the state (usually king or queen) enjoys a hereditary position, that is, he comes into office through succession, e.g., Britain. In a republic, on the other hand, the head of the state is always elected directly or indirectly for a fixed period, e.g., USA. Therefore, the term‘republic’in our Preamble SPP 22601 indicates that India has an elected head called the president. He is elected indirectly for a fixed period of five years. The term Republic has two more things: ❖ Vesting of political sovereignty in the people and not in a single individual like a king. Hence, Statement 1 is correct. ❖ It means the absence of any privileged class and hence all public offices being opened to every citizen without any discrimination. Hence, Statement 2 is correct."},{"id":9,"txt":"Consider the following statements regarding Constitutional Amendment under Article 368:\n1. A Constitutional Amendment Bill requires no prior Presidential approval and must secure a special majority at every effective voting stage in each House.\n2. No joint sitting of Parliament is permitted if the Houses disagree on a Constitutional Amendment Bill.\n3. The President may withhold assent when the amendment concerns provisions requiring State ratification.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: Article 368 allows a Constitutional Amendment Bill to be introduced in either House without any prior approval of the President. TheLok Sabha Rules and constitutional commentary also clarify that the special majority requirement (majority of total membership + two-thirds of members present and voting) must be upheld at every effective stage of voting. This reflects the rigorous character of the amendment procedure. Hence, the statement is correct. Statement 2 is correct: Article 368 does not permit a joint sitting if the two Houses disagree on a Constitutional Amendment Bill. Each House must independently pass the Bill with the prescribed special majority. This restriction, unlike the provision for joint sittings under Article 108 for ordinary legislation, preserves the bicameral balance and acts as a federal safeguard. Therefore, the statement is correct. Statement 3 is incorrect: Following the 24th Constitutional Amendment (1971), the President is constitutionally bound to give assent to any Constitutional Amendment Bill. The President cannot withhold assent or return the Bill, even when the amendment touches federal provisions requiring State ratification. This amendment removed all discretion in this regard. Therefore,the statement is not correct. 5"},{"id":10,"txt":"Which one of the following best defines the term \"Citizen\"?","ref":"","opts":["A person who is a participatory member of a political community who enjoys the rights and assumes the duties of membership.","A person who is legally bound to a specific country but has no obligations toward its government or laws.","A person recognized by law as permanently living in a particular territory without necessarily being part of its political framework.","A person temporarily residing in a country for specific purposes, such as work, study, or asylum, without formal membership in the political community."],"ci":0,"exp":"Ex: Option (a) is correct: A citizen is a participatory member of a political community who enjoys the rights and assumes the duties of membership. ❖ A citizen enjoys fundamental rights like voting, freedom of speech, and equality. They also fulfil duties such as obeying laws, paying taxes, and contributing to the nation’s welfare. ❖ Citizenship means active participation in the political and social systems of a nation, shaping its policies and future. Unlike residents or refugees, citizens have full legal and political rights. ❖ The Indian Constitution grants single citizenship to ensure equality among all citizens, regardless of residence. Option (b) is incorrect: Citizenship inherently involves obligations toward the government and laws. A person legally bound to a country with noobligationswould not meet the definition of a citizen. Option (c ) is incorrect: This describes the status of a permanent resident, who lives in a territory and enjoys some legal rights but may not have full citizenship rights, such as voting or holding public office. Option (d) is incorrect: This describes a temporary resident or non-citizen who resides in a country for specific purposes but is not a part of its political structure and does not enjoy full rights of citizenship."},{"id":11,"txt":"Consider the following pairs:\nConstitutional Related Provision Amendment\n1. 38thConstitutionalAmendmentof 1975 — Act Placed the election ofthetheIndian courtsPresidentscrutiny ofbeyondthe\n2. 39thConstitutionalAmendmentof 1975 — Act President’s satisfactionfinalordinancein making an\n3. 42ndConstitutionalAmendmentof 1976 — Act President bound by theadvicecouncilheadedministerofby oftheministersprimethe\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Pair 1 is not correctly matched: Related to Ordinance making power, the 38th Constitutional The Amendment Act of 1975 made the President’s satisfaction final and conclusive and beyond judicial review. But, this provision was deleted by the 44th SPP 22601 Constitutional Amendment Act of 1978. Thus, the President’s satisfaction is justiciable on the ground of malafide. Pair 2 is not correctly matched: 39th Amendment of the Constitution of India, placed the election of the President, the Vice President, the Prime Minister and the Speaker of the Lok Sabha beyond the scrutiny of the Indian courts. Pair 3 is correctly matched: The 42nd Constitutional Amendment Act of 1976, made the President bound by the advice of the Council of Ministers headed by the Prime Minister. The 44th Constitutional Amendment Act of 1978, authorizedthe President to require the Council of Ministers to reconsider such advice."},{"id":12,"txt":"Consider the following statements:\nStatement I: Constitutionalism aims to ensure limited government by imposing restraints on the exercise of state power.\nStatement II: Constitutionalism necessarily requires a written constitution to limit governmental authority.\nStatement III: Separation of powers and an independent judiciary are central mechanisms through which constitutionalism enforces limitations on government.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I.","Both Statement II and Statement III are correct but only one of them explains Statement I.","Only one of the Statements II and III is correct and that explains Statement I.","Neither Statement II nor Statement III is correct."],"ci":2,"exp":"Ex: Constitutionalism is not merely the existence of a constitution, but the presence of effective restraints on governmental power. It embodiesthe ideathat all organs of government must operate within defined limits and in accordance with established procedures. Statement I is correct: The core meaning of constitutionalism is limited government. It seeks to prevent arbitrary or unchecked power by defining boundaries within which the government must operate. Constitutionalism emphasises rule of law, restraints on power, and non-arbitrary governance. Statement II is incorrect: A written constitution is not a mandatory requirement for constitutionalism. Countries like the United Kingdom have strong constitutionalist traditions despite having an unwritten constitution. Constitutionalism concerns the structure of restraints on power, not the physical form of the constitution. Therefore, Statement II is not correct. 6 Statement III is correct: Separation of powers and an independent judiciary are essential instruments to enforce constitutional limitations. These institutional arrangements prevent concentration of power, ensure checks and balances, and uphold rule of law. This directly supports the idea stated in Statement I that constitutionalism seeks to limit government. Hence, Statement III is correct and explains Statement I. Additional Information: ❖ Constitution vs Constitutionalism: ➢ A constitution may simply describe the structure of government. ➢ Constitutionalism ensures that rulers are bound and limited by rules. ➢ Authoritarian states may have constitutions but lack constitutionalism. ❖ Examples: ➢ UK: High constitutionalism with an unwritten constitution. ➢ North Korea: Written constitution but no constitutionalism."},{"id":13,"txt":"Consider the following pairs:\nCase Supreme Court’s ruling\n1. ShankariPrasad(1951) — ParliamentFundamental Rights underArticle 368 can amend\n2. Sajjan Singh(1965) Parliament’spower is subject to judicialreview — amending\n3. Golaknath(1967) — ParliamentFundamental Rightscannot amend\n4. KesavanandaBharati(1973) — Parliament’spower under Article 368 islimitedstructure. by theamendingbasic\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only three","All four","Only one","Only two"],"ci":0,"exp":"Ex: Pair 1 is correctly matched: Shankari Prasad (1951) upheld that Parliament’s power under Article 368 includes the power to amend Fundamental Rights, as constitutional amendments are not treated as “law” under Article 13. Pair 2 is incorrectly matched: Sajjan Singh (1965) reaffirmed Parliament’s power to amend Fundamental Rights but did not hold that the amending power is subject to judicial review; only individual judges expressed doubt, not the Court’s ruling. Pair 3 is correctly matched: Golaknath (1967) ruled that constitutional amendments are “law” under Article 13 and therefore cannot be used to amend or abridge Fundamental Rights. SPP 22601 Pair 4 is correctly matched: Kesavananda Bharati (1973) held that Parliament’s amendingpower under Article368is broad,but it cannot be used to alter or destroy the basic structure of the Constitution. The ruling introduced the basic structure limitation on constitutional amendments, even though the idea of inherent limits on Article 368 itself was elaborated more explicitly in later judgments such as Minerva Mills (1980)."},{"id":14,"txt":"With reference to the States Reorganisation Commission (SRC) 1953, consider the following:\n1. It recommended the ‘one language–one state’ formula.\n2. It identified linguistic and cultural homogeneity as one of the factors for reorganisation.\n3. It recommended the abolition of the four- fold classification of states.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is incorrect: The States Reorganisation Commission (SRC) explicitly rejectedthe idea of a rigid “one language–one state” formula. ❖ It argued that this principle was neither feasible nor desirable. ❖ Many linguistic groups were too small or too scattered to form viable states. Statement 2 is correct: The SRC considered linguistic and cultural homogeneity an important factor, but not the only factor, for state formation. Other key criteria included: ❖ administrative convenience ❖ economic viability ❖ geographical contiguity ❖ financial sustainability. Statement 3 is correct: The SRC recommended ending the colonial-era classification of Part A, B, C, and D states. This recommendation was accepted, and the States Reorganisation Act, 1956 abolished the classification and reorganised India into 14 states and 6 Union Territories."},{"id":15,"txt":"Which of the following features was explicitly included in the Objectives Resolution (1946)?","ref":"","opts":["A guarantee of separate political representation for minority communities","Protection of minority and tribal interests through adequate safeguards","Reservation of legislative seats for depressed classes","Assurance that provinces would enjoy exclusive control over all residuary subjects"],"ci":1,"exp":"Ex: Option (a) is not correct: The Resolution did not recommend separate electorates for minorities.By 1946, the Constituent Assembly had rejected separate electorates as divisive. The Resolution speaks of safeguards, not separate representation. 7 Option (b) is correct: The Objectives Resolution clearly stated that adequate safeguards shall be provided for minorities, backward and tribal areas, and depressed classes.This was one of the foundational commitments regarding social justice that influenced later provisions on Fundamental Rights and cultural protections. Option (c) is not correct: No reference to reserved seats or any specific political arrangement for depressed classes appears in the Resolution.Such questions were later handled by the Advisory Committee on Fundamental Rights and Minorities, not in the Resolution. Option (d) is not correct: The Resolution did mention autonomy of constituent units, but residuary powers were to remain with the units only except subjects vested or implied in the Union.It did not guarantee exclusive provincial control over residuary subjects as an absolute right."},{"id":16,"txt":"Consider the following committees/ commissions:\n1. Dhar Commission\n2. JVP Committee\n3. Fazal Ali Commission\n4. Sarkaria Commission\nWhich of the above is associated with the reorganization of states in post-independence India?","ref":"","opts":["1 and 2 only","1, 2, and 3 only","3, and 4 only","1, 2, 3, and 4"],"ci":1,"exp":"Ex: Post-independence, the reorganization of states in India was a significant step toward addressing linguistic, cultural, and administrative challenges. Various committees and commissions were formed to study and recommend the reorganization of states based on linguistic, cultural, and administrative considerations: Statement 1 is correct: Dhar Commission (1948) was appointed by the government to examine the feasibility of reorganizing states on linguistic lines. The commission opposed linguistic reorganization, citing risks to national unity. Instead, it advocated reorganization based on administrative convenience. Statement 2 is correct: The JVP Committee (1949) was formed to further study the demands for linguistic reorganization after the Dhar Commission's recommendations werenot SPP 22601 accepted by the public. Members of the committee include Jawaharlal Nehru, Vallabhbhai Patel, and Pattabhi Sitaramayya. It opposed immediate linguistic reorganization and emphasized national unity. However, it did not rule out futurereorganizationif theneed arose. Statement 3 is correct: Fazal Ali Commission (1953) was constituted after widespread protests, particularly for a separate Andhra state. It supported the creation of states based on linguistic lines but suggested safeguards to ensure national unity. As a result States ReorganisationAct, of 1956was enacted which created 14 states and 6 Union Territories. Statement 4 is incorrect: The Sarkaria Commission (1983) was not related to state reorganization but was established to examine Centre-State relations and recommend ways to strengthen the federal structure of India."},{"id":17,"txt":"Which of the following pair(s) is/are correctly matched?\n1. Amendment procedure of the Constitution: South African Constitution\n2. Philosophical foundations (FRs & DPSPs): American and Irish Constitutions\n3. Parliamentary Executive and Cabinet responsibility: Canadian Constitution\nChoose the correct answer from the codes below:","ref":"","opts":["None","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is correct: The procedure for amendment of the Constitution is borrowed from the South African Constitution.India adopted a flexible-cum-rigid amendment system inspired by South Africa, allowing different levels of amendment difficulty. Statement 2 is correct: The philosophical foundations of the Constitution derive from two sources: ❖ Fundamental Rights - American Constitution ❖ Directive Principlesof State Policy -Irish Constitution Statement 3 is incorrect: Parliamentary Executive, Cabinet system and collective responsibility are borrowed from the British Constitution, not from Canada. Canada influenced India’s federalism, not its parliamentary structure. 8"},{"id":18,"txt":"With reference to the Parliament’s power to reorganise the states under Article 3, consider the following statements:\n1. A Bill for altering the boundaries of any State can be introduced in Parliament only with the prior recommendation of the President.\n2. The President is bound to accept the views of the concerned State Legislature regarding the proposed reorganisation.\n3. Parliament can form a new State by uniting a part of one State with a part of a Union Territory.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2","2 and 3","1 and 3","1, 2 and 3"],"ci":2,"exp":"Ex: Statement 1 is correct: Article 3 mandates that any Bill for reorganisation of States can be introduced only with the President’s prior recommendation. Statement 2 is incorrect: When the President refers the Bill to the concerned State Legislature for its views, the State may give: support, suggestions, or objections. However, its opinion is NOT binding on either the President or Parliament. Even if the Legislature submits its views in time, the President/Parliament may accept or reject them. Statement 3 is correct: Article 3 empowers Parliament to: ❖ unite a part of one State with another State, ❖ unite parts of different States, ❖ unify a part of a State with a Union Territory, ❖ or even create a new State from a UT + part of a State. Example: ❖ Chandigarh was reorganised as a UT, with territory taken partly from Punjab. ❖ Goa, Daman & Diu reorganisation also involved State–UT adjustments."},{"id":19,"txt":"Consider the following statements:\n1. Source of Authority of the Constitution\n2. Nature of the Indian State\n3. Objectives of the Constitution\n4. Date of Adoption of the Constitution\nWhich of the above statements form elements of the Preamble?","ref":"","opts":["1, 2 and 3 only","1, 3, and 4 only","2 and 4 only","1, 2, 3, and 4"],"ci":3,"exp":"Ex: Statement 1 is correct: The Preamble begins with the phrase \"We, the people of India\", which clearly establishes that the source of the Constitution's authority is derived from the people of India. This signifies the democratic foundation of the Constitution. Statement 2 is correct: The Preamble describes the nature and character of the Indian State as a Sovereign, Socialist, Secular, and Democratic Republic. These terms reflect the core principles of India’s political and social SPP 22601 structure, ensuring inclusivity, equality, and independence. Statement 3 is correct: The Preamble outlines the objectives of the Constitution- ❖ Justice (social, economic, and political), ❖ Liberty (of thought, expression, belief, faith, and worship), ❖ Equality (of status and opportunity), and ❖ Fraternity (assuring the dignity of the individual and unity of the nation). ❖ These objectives serve as guiding goals for the Constitution. Statement 4 is correct: The Preamble mentions the date of adoption of the Constitution as 26th November 1949, marking it as a historical declaration of India’s commitment to constitutional governance."},{"id":20,"txt":"Consider the following provisions of the Indian Constitution:-\n1. Fundamental Rights\n2. Fundamental Duties\n3. Preamble\n4. Directive Principles of State Policy\nHow many of the above explicitly talk about “Equality of Opportunity“?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statement 1 is correct: Fundamental Rights under Article 16 provide for the equality of opportunity for all citizens in matters of employment or appointment to any office under the State. No citizen can be discriminated against or be ineligible for any employment or office under the State on grounds of only religion, race, caste, sex, descent, place of birth, or residence. Statements 2 and 4 are incorrect: Fundamental Duties and Directive Principles of State Policy does not explicitly talk about Equality of Opportunity. Statement 3 is correct: The preamble talks about equality of status and of opportunity as: “JUSTICE, Social, Economic, and Political; LIBERTY of thought, expression, belief, faith and worship; EQUALITY of status and of opportunity; and to promote among them all; FRATERNITY assuring the dignity of the individual and the unity and integrity of the Nation;” 9"},{"id":21,"txt":"Consider the following statements regarding the significance of the Preamble:\n1. The Preamble acts as the identity card of the Constitution, encapsulating its essence and purpose.\n2. It is described as the horoscope of the sovereign Indian democratic republic, reflecting its fundamental nature and aspirations.\n3. It serves as a guiding light for judicial interpretation, aiding courts in understanding and interpreting constitutional provisions.\n4. It is considered the keynote to the Constitution, summarizing its core principles and philosophy.\nWhich of the statements given above are correct?","ref":"","opts":["1, 2, and 3 only","2 and 4 only","1, 3, and 4 only","All of the above"],"ci":3,"exp":"Ex: The Preamble is an integral part of the Indian Constitution,reflectingthe vision andvalues of the Constitution makers. It serves as a concise introduction and guide to the document’s purpose and philosophy. Statement 1 is correct: Eminent jurist A. Palkhivala referred to the Preamble as the \"identity card of the Constitution\", signifying that it encapsulates the essence and purpose of the Constitution in a succinct form. Statement 2 is correct:M. Munshi,a member of the Constituent Assembly, described the Preamble as the\"horoscope of the Constitution”, highlighting its role in forecasting the aspirations and guiding the future vision of the nation as a sovereign democratic republic. Statement 3 is correct: In the Kesavananda Bharati case (1973), Chief Justice S.M. Sikri described the Preamble as a\"guiding light for judicial interpretation\", emphasizing its importance in interpreting the provisions of the Constitution in alignment with its intended objectives and spirit. Statement 4 is correct: Sir Ernest Barker referred to the Preamble as the \"keynote to the Constitution\", underscoring its role in summarizing its core principles and serving as a prelude to the detailed provisions."},{"id":22,"txt":"Consider the following provisions with reference to the Indian Constitution:\n1. Amendments done under Article 368 does come under the ambit of Article 13.\n2. Article 32 acts as limitation on amending powers of the Parliament.\n3. Basic Structure Doctrine acts as limitation on amending powers under Article 368\nWhich of the above statements is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","3 only","1, 2, and 3"],"ci":2,"exp":"Ex: Statement 1 is incorrect: Article 13(2) prohibits the State from making laws that abridge or take away Fundamental Rights. However, Article 13(4) explicitly states that Article 13 does not apply to constitutional amendments made under Article 368. In the Kesavananda Bharati case, Supreme Court changed it’s stance made in the Golaknath Case(1967) which held Constututional amendments using Article 368 to be under the ambit of Article 13. SPP 22601 Statement 2 is incorrect: Article 32 guarantees the right to constitutional remedies and provides for the enforcement of Fundamental Rights. However, it does not impose any limitation on Parliament's amending power under Article 368. Statement 3 is correct: The Basic Structure Doctrine, established in the landmark judgment of Kesavananda Bharati vs. State of Kerala (1973), serves as a substantive limitation on Parliament’s amending power.It ensures that the basic structure of the Constitution,suchas democracy,federalism, or judicial independence, cannot be altered or destroyed."},{"id":23,"txt":"Consider the following statements:\n1. Equality of status and equality of opportunity is mentioned in the text of the Preamble.\n2. The expression ‘unity and integrity of the Nation’ was not there in the Preamble since the beginning.\n3. The Preamble contains the basic structure of the Constitution of India.\n4. By itself, the Preamble is not enforceable in a Court of law.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: The Preamble of the Indian Constitution is an introductory statement that outlines the objectives and ideals enshrined in the Constitution. It reflects the aspirations of the people andprovides insight into the spirit of the Constitution. Statement 1 is correct: The Preamble explicitly mentions ‘equality of status’ and ‘equality of opportunity’ as fundamental goals to be achieved under the Indian Constitution. Statement 2 is correct: The expression\"unity and integrity of the Nation\" was not part of the original Preamble adopted in 1950. It was added later through the 42nd Constitutional Amendment Act, 1976, during the Emergency period, to emphasize the needfor national unity amidst rising divisive tendencies. Statement 3 is correct: In Kesavananda Bharati v. State of Kerala (1973) case, the Supreme Court held that the Preamble is an integral part of the Constitution and reflects its basic structure. It embodies essential principles like sovereignty, secularism, democracy, and justice, which Parliament cannot alter or destroy through amendments. 10 Statement 4 is correct: The Preamble is not legally enforceable, as reaffirmed in Union of India v. Dharam Dutt (2004) case and Berubari Union (1960) case. While it is significant in providing the intent and essence of the Constitution, it does not confer legal rights or duties that can be enforced in a court of law. Additional Information: Text of the Preamble: WE, THE PEOPLE OF INDIA, having solemnly resolved to constitute India into a SOVEREIGN SOCIALIST SECULAR DEMOCRATIC REPUBLIC and to secure to all its citizens: JUSTICE, social, economic and political; LIBERTY of thought, expression, belief, faith and worship; EQUALITY of status and of opportunity; and to promote among them all FRATERNITY assuring the dignity of the individual and the unity and integrity of the Nation; IN OUR CONSTITUENT ASSEMBLY this 26th day of November, 1949, do HEREBY ADOPT, ENACT AND GIVE TO OURSELVES THIS CONSTITUTION"},{"id":24,"txt":"Which one of the following would you accept as the most appropriate definition of ‘justice’?","ref":"","opts":["Absence of restraints on the activities of individuals.","Absence of special privileges to any section of the society.","Providing Universal Basic Income to all the citizens of the country.","Equal treatment of all citizens without any social, economic, and political distinction."],"ci":3,"exp":"Ex: Option (a) is incorrect: The term ‘liberty’ means the absence of restraints on the activities of individuals, and at the same time, providing opportunities for the development of individual personalities. Option (b) is incorrect: The term ‘equality’ means the absence of special privileges to any section of the society, and the provision of adequate opportunities for all individuals without any discrimination. Option (c) is incorrect: Universal basic income (UBI) is the concept of a government program in which every adult citizen receives a SPP 22601 set amount of money regularly. The goals of a basic income system are to alleviate poverty and replace other need-based social programs that potentially require greater bureaucratic involvement. Option (d) is correct:The term‘justice’in the Preamble embraces three distinct forms– social, economic, and political, secured through various provisions of Fundamental Rights and Directive Principles. Social justice denotes the equal treatment of all citizens without any social distinction based on caste, colour, race, religion, sex, and so on. It means the absenceof privilegesbeingextended to any particular section of society, and improvement in the conditions of backward classes (SCs, STs, and OBCs) and women. Economic justice denotes the non- discrimination between people on the basis of economic factors. It involves the elimination of glaring inequalities in wealth, income, and property. A combination of social justice and economic justice denotes what is known as ‘distributive justice’. Political justice implies that all citizens should have equal political rights, equal access to all political offices and equal voice in the government. The ideal of justice–social, economic, and political–has been taken from the Russian Revolution (1917)."},{"id":25,"txt":"With reference to Article 1 of the Constitution of India, consider the following statements:\n1. India is described as a “Union of States” because the states have the right to secede from the Union.\n2. The phrase “India, that is, Bharat” was adopted as a compromise between traditional and modern names.\n3. The term “Union of States” implies that the Indian Federation is not the result of an agreement among the states.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 and 3 only","1 and 2 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is incorrect: India is called a Union of States precisely because the states do not have the right to secede. Dr. B. R. Ambedkar clarified in the Constituent Assembly that India is a union to emphasize the indestructibility of the Union, not the indestructibility of the states. States cannot leave the Union; they exist only because the Constitution creates them. 11 Statement 2 is correct: The Constituent Assembly debated the national name: some preferred Bharat, others India. The phrase “India, that is, Bharat” was adopted as a compromise formula combining both traditional (Bharat) and historically international (India) names. Statement 3 is correct:Unlike federations like the USA, Indian states did not come together by agreement to form the Union. Instead, the Constitution created the states; hence the Indian federation is described as a Union. This means Parliament can alter state boundaries (Art. 3), something impossible in federations formed by state agreements."},{"id":26,"txt":"With reference to the Preamble as a part of the Constitution, consider the following statements:\n1. In the Berubari Union (1960) case, the Supreme Court held that the Preamble is a part of the Constitution.\n2. In the Kesavananda Bharati (1973) case, the Supreme Court declared that the Preamble forms an integral part of the Constitution.\n3. The Preamble is justiciable and its provisions are enforceable in courts of law.\n4. The LIC of India (1995) judgment reaffirmed that the Preamble is a part of the Constitution.\nWhich of the statements given above are correct?","ref":"","opts":["2 and 4 only","1 and 3 only","1, 2 and 4","2, 3 and 4"],"ci":0,"exp":"Ex: Statement 1 is incorrect: In the Berubari Union (1960) advisory opinion, the Supreme Court held that the Preamble is not a part of the Constitution. It said the Preamble can be used for interpretationbut has noconstitutional force of its own. Statement 2 is correct: In the landmark Kesavananda Bharati (1973) case, the Supreme Court overruled Berubari and held that the Preamble is a part of the Constitution and must guide constitutional interpretation. Statement 3 is incorrect: The Preamble is non-justiciable and not enforceable in courts. It neither grants power nor imposes restrictions on the legislature. Statement 4 is correct: In LIC of India vs. Consumer Education and Research Centre (1995), the Supreme Court reaffirmed that the Preamble is an integral part of the Constitution."},{"id":27,"txt":"In which case did the Supreme Court hold that Parliament has the power to reorganize states under Article 3 without the consent of the concerned state?","ref":"","opts":["Berubari Union Case","State of West Bengal vs. Union of India","Babulal Parate vs. State of Bombay","Reorganization of Andhra Pradesh Case"],"ci":2,"exp":"Ex: Article 3 of the Indian Constitution empowers the Indian Parliament to enact laws regarding he formation of new states, alteration of the SPP 22601 boundaries, or the names of existingstates.This article ensures flexibility in reorganizing states to address regional, linguistic, or administrative concerns. Option (a) is incorrect: In the Berubari Union Case (1960), the Supreme Court dealt with the transfer of a part of Indian territory to Pakistan following the Nehru-Noon Agreement. The Court held that such a cession of territory required a Constitutional Amendment under Article 368 as it altered the territory of India. It was not related to state reorganization under Article 3. Option (b) is incorrect: In the State of West Bengal vs. Union of India (1962),the Supreme Court clarified the distribution of legislative powers between the Union and states, asserting that India is a Union of stateswhereno state has the right to secede. The case did not address the issue of state reorganization under Article 3. Option (c) is correct: In the Babulal Parate vs. State of Bombay (1960), the Supreme Court ruled that Parliament has exclusive authority to reorganize states under Article 3 of the Constitution. It clarified that the opinion of the concerned state legislature, sought by the President, is not binding on Parliament. This judgment established that the reorganization process is a legislative process under the Union’s domain, without the need for state consent. This case directly addressed the reorganization of states under Article 3. Option (d) is incorrect: The Reorganization of Andhra Pradesh Case (2014) refers to the legislative process under Article 3 that led to the creation of Telangana. While this event demonstrated the application of Article 3, it was not a Supreme Court ruling that defined or clarified the powers under Article 3. 12"},{"id":28,"txt":"With reference to major political and constitutional events in early independent India, consider the following events:\n1. Adoption of the National Anthem\n2. Ratification of India's membership of the Commonwealth\n3. Establishment of the Drafting Committee of the Constituent Assembly\n4. Adoption of the National Flag\nWhich one of the following is the correct chronological order of the above events?","ref":"","opts":["3 – 4 – 1 – 2","4 – 3 – 2 – 1","3 – 2 – 4 – 1","2 – 4 – 1 – 3"],"ci":1,"exp":"Ex: In addition to making the Constitution and enacting ordinary laws, the Constituent Assembly also performed the following functions: ❖ It adopted the National Flag on July 22, 1947. ❖ It ratified India’s membership of the Commonwealth in May 1949. ❖ It adopted the National Anthem on January 24, 1950. ❖ It adopted the National Song on January 24, 1950. ❖ It elected Rajendra Prasad as the first President of India on January 24, 1950. Drafting Committee: ❖ The Drafting Committee was set up on August 29, 1947. Hence the correct order is 4-3-2-1.  SPP 22601"},{"id":29,"txt":"With reference to the contributors associated with the making of the Indian Constitution,\nwhich of the following pairs is incorrectly matched?","ref":"","opts":["B. N. Rau - Secretary to the Constituent Assembly","Nandalal Bose - Illustrated and decorated the original Constitution","Prem Behari Narain Raizada - Calligrapher of the original Constitution","Beohar Rammanohar Sinha - Ornamented and illuminated the Preamble"],"ci":0,"exp":"Ex: Option (a) is incorrect. B. N. Rau was not the Secretary to the Constituent Assembly. He served as the Constitutional Advisor (Legal Advisor) and prepared the initial draft that guided the Drafting Committee. The Secretary to the Constituent Assembly was H. V. R. Iyengar. Option (b) is correct. Nandalal Bose, along with other artists from Shantiniketan, illustrated and decorated the original Constitution with artistic motifs and designs. Option (c) is correct. Prem Behari Narain Raizada was thecalligrapherwhohand-wrote the originalEnglish versionof the Constitution in an elegant italic style. Option (d) is correct. Beohar Rammanohar Sinha ornamented and illuminated the Preamble page of the original Constitution manuscript.  13"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 63</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 63</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 63">PW ONLY IAS 2026 = 63</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the Global Refugee Forum (GRF), consider the following statements:\n1. The GRF is a periodic UNHCR-led forum to mobilize commitments for refugee protection and solutions.\n2. It provides legally binding agreements between host countries and refugees to determine resettlement quotas.\n3. The GRF emphasizes comprehensive refugee response frameworks (CRRFs), education access, livelihoods, and burden-sharing among states and non- state actors.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is correct: The Global Refugee Forum (GRF) is a periodic forum (every 4 years) established under the Global Compact on Refugees and led by the United Nations High Commissioner for Refugees. It brings together States, refugees, host communities, international organisations, civil society, the private sector, and other stakeholders every few years to mobilise political will, financial support, technical expertise, and policy commitments for refugee protection and solutions. The Forum functions as a platform to make concrete pledges that advance comprehensive responses to refugee situations and strengthen responsibility‑sharing globally. Statement 2 is incorrect: The Global Refugee Forum does not create legally binding agreements nor does it enforce resettlement quotas. Rather, it serves as a voluntary platform where participating actors announce pledges and contributions Statement 3 is correct: One of the principal emphases of the Forum is strengthening and implementing the Comprehensive Refugee Response Framework (CRRF), which is part of the Global Compact on Refugees. The CRRF aims to promote holistic approaches to refugee situations, including education access, livelihood opportunities, self‑reliance, protection capacity, and burden‑ responsibility sharing among states and other actors."},{"id":1,"txt":"Which of the following is correct regarding the Global Digital Compact (GDC)?","ref":"","opts":["It is a UN initiative aiming to establish global norms for digital governance, AI ethics, and cross-border data flows.","It is a UN-led framework mandating member states to adopt binding AI regulations and digital trade rules.","It is a UN proposal primarily focused on regulating misinformation and social media in developing countries.","It is a bilateral agreement between the USA and EU for standardizing AI and cybersecurity practices."],"ci":0,"exp":"Ex: The Global Digital Compact (GDC) is a landmark multi-stakeholder framework designed to ensure that the digital future is open, free, and secure for all. It was formally adopted during the Summit of the Future in September 2024. SPP 22664 Purpose and Origin: The GDC is an annex to the UN's broader \"Pact for the Future.\" It represents the first global consensus on how technology should be governed to promote human rights and sustainable development. Its primary mission is to bridge the digital divide—the gap between those who have access to high-speed internet and AI and those who do not (predominantly in the Global South). Core Objectives of the GDC: The Compact outlines five key objectives: 1. Closing the Digital Divide: Accelerating progress toward universal and affordable connectivity. 2. Expanding the Digital Economy: Ensuring all countries can benefit from digital transformation and e-commerce. 3. Fostering an Inclusive Space: Promoting an internet that respects human rights, protects children, and combats online harms (like hate speech and misinformation). 4. Advancing Data Governance: Developing international standards for data privacy and facilitating \"Data Free Flow with Trust\". 5. Governing AI: Establishing an International Scientific Panel on AI to provide a shared understanding of AI risks and opportunities Hence option A is correct"},{"id":2,"txt":"Consider the following statements regarding the Sweden-India Technology and Artificial Intelligence Corridor (SITAC):\n1. It operates under the \"Triple Helix\" model, involving the formal collaboration of government, academia, and the private sector from both nations.\n2. The programme specifically excludes defense-related AI to maintain focus on civilian and sustainable development goals.\n3. It serves as a foundational platform for the LeadIT (Leadership Group for Industry Transition) initiative to decarbonize heavy industries.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is correct: SITAC is built on the \"Triple Helix\" model of innovation. This is a framework where three distinct sectors— Government (Policy), Academia (Research), and the Private Sector (Commercialization)— work in a continuous loop to solve complex problems. In the SITAC context, this means 2 that an AI solution developed at a Swedish university could be tested at an Indian IIT and then scaled globally by a private company like Ericsson or an Indian startup. Statement 2 is incorrect: While SITAC places a heavy emphasis on civilian goals (healthcare, smart cities, and climate), it does not specifically exclude defense-related AI. India and Sweden have a robust defense relationship (e.g., the Saab-Adani partnership for Gripen). Strategic AI cooperation often involves \"dual-use\" technologies—such as autonomous navigation or secure communication—that have both civilian and defense applications. Therefore, claiming a \"specific exclusion\" is factually inaccurate in the context of their strategic partnership. Statement 3 is correct: Synergy with LeadIT: The Leadership Group for Industry Transition (LeadIT) was co- launched by India and Sweden at the UN Climate Action Summit. SITAC serves as the \"tech engine\" for LeadIT. Decarbonizing heavy industries (like steel and cement) requires massive amounts of data and AI- driven optimization. SITAC provides the platform where Swedish green-tech and Indian AI expertise converge to make these transitions economically viable. In early 2026, the SITAC framework was credited with the successful launch of the \"Green AI Dashboard,\" a tool that helps Indian SMEs (Small and Medium Enterprises) track their supply chain emissions using Swedish sensors and Indian software."},{"id":3,"txt":"Consider the following statements regarding the Blue Dot Network (BDN):\nStatement‑I: The Blue Dot Network certifies infrastructure projects based on quality, transparency, and sustainability but does not directly fund them. Statement‑II: The initiative is a trilateral partnership of the U.S., Japan, and Australia to promote high-standard infrastructure globally.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement‑I and Statement‑II are correct and Statement‑II explains Statement‑I.","Both Statement‑I and Statement‑II are correct, but Statement‑II does not explain Statement‑I.","Statement‑I is correct, but Statement‑II is incorrect.","Statement‑I is incorrect, but Statement‑II is correct."],"ci":1,"exp":"Ex: Statement I is correct: The Blue Dot Network (BDN) is not a funding agency. Its primary purpose is to evaluate and certify infrastructure projects according to criteria like financial transparency, environmental and social sustainability, and project quality. The certification acts as a signal to SPP 22664 investors and multilateral institutions that a project is trustworthy and meets high standards, thereby encouraging private investment and international participation. While it promotes high-quality infrastructure, it does not provide loans, grants, or direct financial support to projects. Statement II is correct: The BDN was launched as a collaboration between the United States, Japan, and Australia to promote global infrastructure projects that meet high standards of quality, transparency, and sustainability. The trilateral partnership provides diplomatic backing, international credibility, and alignment with shared development goals, ensuring that the BDN’s certification framework is recognized worldwide. While Statement‑II is true in describing who launched the initiative and its broad objective, it does not explain the specific mechanism described in Statement‑I."},{"id":4,"txt":"Which of the following correctly distinguishes between de-risking and decoupling?","ref":"","opts":["De-risking is primarily a military strategy, whereas decoupling is an economic strategy to isolate strategic competitors.","Decoupling focuses on mitigating risks in sensitive industries, while de-risking involves completely cutting off trade and investment links with strategic partners.","Both de-risking and decoupling imply a total severance of economic relations with partner countries to ensure national security.","De-risking limits risks in key sectors while keeping trade, whereas decoupling severs broad economic or technological ties."],"ci":3,"exp":"Ex: “De-risking” is a strategy where countries take selective measures to reduce vulnerabilities in critical industries or supply chains such as technology, energy, or finance, without cutting off overall trade and investment. It is aimed at mitigating risk while preserving mutually beneficial economic relationships. In contrast, “decoupling” refers to a broader separation of economic, technological, and sometimes financial systems from another country, often driven by strategic or geopolitical considerations. Decoupling entails reducing interdependence more comprehensively, which can affect multiple sectors and long- term supply chains. The distinction is especially relevant in the context of U.S.– China economic relations, where de-risking allows continued engagement in non-sensitive areas, while decoupling reflects a deliberate effort to limit reliance on critical technologies or industries. Hence option D is correct. 3 Feature De-risking Decoupling Scope Selective Broad (Targeted at (General critical sectors). economic separation). Trade Continued trade Severe Relation in non-sensitive reduction or areas. total cessation. Objective Resilience and Containment supply chain and total self- diversity. reliance. Main \"Friend- Tariffs, total Tools shoring,\" export bans, investment sanctions. screening."},{"id":5,"txt":"Which one of the following best explains the concept of grey‑zone warfare in international relations?","ref":"","opts":["Conventional military operations aimed at decisive battlefield victories","Coercive actions that exploit ambiguity and non-traditional tactics below the threshold of war","Diplomatic negotiations conducted under formal international legal frameworks","Economic sanctions applied uniformly across multiple countries to enforce global norms"],"ci":1,"exp":"Ex: Grey‑zone warfare is a form of conflict in which states or non-state actors employ coercive and strategic measures that fall below the threshold of conventional war, aiming to achieve political, economic, or military objectives without triggering open warfare or clear attribution. It includes:  Ambiguity and deniability: Actions are designed so that it is unclear whether they constitute acts of war.  Use of non-traditional tactics: Includes cyberattacks, proxy conflicts, hybrid operations, maritime militia deployments, and economic coercion.  Blurring of war and peace: These tactics operate in the “grey” area between peace and armed conflict, complicating traditional security responses. Grey-zone warfare challenges international security by exploiting gaps in legal norms and deterrence strategies, making conventional military retaliation risky or politically costly. SPP 22664 Real-World Examples:  South China Sea: The use of the \"Maritime Militia\"—civilian fishing vessels that act on behalf of the military to swarm disputed reefs—is a classic grey-zone tactic. It is difficult to attack a \"fishing boat\" without appearing as the aggressor.  Cyber Incursions: State-sponsored hacking of critical infrastructure (power grids, banks) that causes significant damage but stops short of a kinetic missile strike.  Disinformation Campaigns: Using social media and state media to polarize a rival country’s population or influence its elections."},{"id":6,"txt":"Which one of the following states the purpose of the Tallinn Manual 3.0 in the context of international law?","ref":"","opts":["A binding United Nations treaty defining cybercrime and prescribing criminal penalties for cyberattacks","A comprehensive set of rules interpreting how existing international law applies to cyber operations and conflicts","An agreement among NATO members to establish a joint cyber defence force for collective security","A multilateral pact establishing a global regulatory body for internet governance"],"ci":1,"exp":"Ex: The Tallinn Manual, including its latest iteration known as Tallinn Manual 3.0, is a widely respected academic and legal resource that sets out how existing international law norms — such as the law on the use of force, sovereignty, and state responsibility — apply to cyber operations and cyber conflict. It was developed by international legal experts under the auspices of the NATO Cooperative Cyber Defence Centre of Excellence and is intended to help states, legal advisers, militaries, and scholars understand how traditional legal principles govern actions in cyberspace. The manual is not a binding treaty or UN instrument, but rather a non‑binding interpretive guide that clarifies how established international law can be extended to cover cyber activities and conflicts. Hence option B is correct. 4"},{"id":7,"txt":"Which one of the following best explains the Pax Silica Initiative?","ref":"","opts":["A U.S.-led strategic initiative to build secure and resilient supply chains for critical technologies","A global pact to provide financial subsidies for semiconductor manufacturing worldwide","An international agreement to eliminate tariffs on semiconductor and electronics exports globally","A multilateral forum for establishing global standards on digital and AI governance"],"ci":0,"exp":"Ex: The Pax Silica Initiative is a U.S.-led strategic framework launched in December 2025 aimed at securing the entire \"silicon stack,\" including critical minerals, semiconductor fabrication, and AI infrastructure. Its primary goal is to build resilient, trusted supply chains and reduce coercive dependencies on single dominant producers (specifically China). As of February 2026, the coalition includes the United States, Japan, South Korea, Australia, Singapore, the United Kingdom, Israel, the UAE, Qatar, and India. India formally joined the initiative on February 20, 2026, signaling a major alignment in Indo-US strategic technology cooperation and positioning India as a key global hub for semiconductor manufacturing and AI talent. Hence option A is correct."},{"id":8,"txt":"Which one of the following best explains the idea of “strategic autonomy” in foreign policy?","ref":"","opts":["A policy of strict equidistance from major global powers to maintain the purity of sovereign decision-making.","The ability of a state to leverage diverse, issue-based partnerships while retaining the agency to make independent sovereign choices.","A state's commitment to institutionalized neutrality as a means to avoid entanglement in great-power rivalries.","The strategic prioritization of regional integration over global power dynamics to safeguard domestic economic interests."],"ci":1,"exp":"Ex: Strategic autonomy refers to the capacity of a state to take decisions in its foreign, security, and economic policy independently, based on its national interests, without being constrained by the preferences or pressure of major powers or alliance systems. Pragmatism over Ideology: Unlike Non- Alignment (which often sought \"equidistance\"), Strategic Autonomy allows a country to be \"equiproximity\"—meaning it can get very close to multiple, even rival, powers simultaneously. The core of this concept is sovereign agency. It means that while India may partner with the USA in the Quad for maritime security, it remains free to purchase S-400 missiles from Russia or participate in the BRICS bank, provided those actions serve its national interest. Alignment is not \"bloc-based\" but \"issue-based.\" For example: SPP 22664  On Climate Change, India might align with the Global South.  On Counter-terrorism, it aligns with the West.  On Energy Security, it pursues bilateral deals regardless of global sanctions. Hence option B is correct Why the other options are incorrect: Option A (Equidistance): This reflects the traditional Non-Aligned Movement (NAM) philosophy. Strategic Autonomy is more active; it doesn't mind being \"unequally close\" to different powers as long as the decision to do so is independent. Option C (Neutrality): Neutrality (like Switzerland's) implies a passive withdrawal from conflicts. India is not neutral; it is independent. India takes active stances on global issues but does so on its own terms rather than as a junior partner in a military alliance. Option D (Regional Prioritization): While regionalism is part of \"Neighborhood First,\" Strategic Autonomy is a global doctrine. It deals with how a state navigates the competition between \"Great Powers\" (like the US, China, and Russia)."},{"id":9,"txt":"Which one of the following best explains the term “Freedom of Navigation Operations (FONOPs)”?","ref":"","opts":["Military exercises conducted to enforce maritime blockades","Joint naval exercises conducted by allied countries","Naval patrols conducted to challenge excessive maritime claims under international law","Civilian maritime routes designated by the International Maritime Organization"],"ci":2,"exp":"Ex: Freedom of Navigation (FON) is a principle of the law of the sea enshrined in the United Nations Convention on the Law of the Sea (UNCLOS, 1982). It states that ships flying the flag of any sovereign state shall not suffer interference from other states while in international waters, except in cases specifically allowed by international law (e.g., enforcement of customs, safety, or environmental rules within territorial waters). Freedom of Navigation Operations (FONOPs) are practical naval operations conducted to uphold this principle. Countries, most notably the United States, 5 deploy naval vessels to assert navigational rights in areas where coastal states have made maritime claims that exceed limits allowed under international law. These patrols demonstrate that international norms, rather than unilateral claims, govern the seas. Key aspects:  FONOPs are conducted in disputed maritime regions, such as the South China Sea and East China Sea.  They protect global maritime commons, ensuring that commercial and military vessels of all nations can operate freely in international waters.  FONOPs are not aggressive military operations; they are legal assertions of rights under UNCLOS and challenge only excessive or unlawful maritime claims. Hence option C is correct"},{"id":10,"txt":"Which one of the following best explains the concept of “debt-for-nature swap”?","ref":"","opts":["A financial arrangement where countries provide loans in exchange for environmental protection projects","Forgiving part of a country’s debt in return for conservation commitments","An agreement requiring repayment of loans through natural resource management projects","A mechanism where debt relief is linked to promotion of sustainable development initiatives"],"ci":1,"exp":"Ex: A debt-for-nature swap is a financial instrument in which a portion of a country’s external debt is forgiven or repurchased at a discount by creditors, in exchange for commitments to fund environmental conservation projects. It allows countries to free up fiscal resources to build resilience against climate change and invest in protecting ecosystems. It enables governments to focus on other development priorities without triggering a fiscal crisis. It is facilitated by creditor countries, international financial institutions, or NGOs. Real-World Examples  Gabon (2023): Gabon completed a $500 million debt-for-nature swap to fund the protection of its marine ecosystems.  Belize (2021): Belize reduced its external debt by approximately $550 million in exchange for a commitment to protect 30% of its ocean territory. SPP 22664  Ecuador (2023): The Galapagos Islands swap remains the largest to date, converting $1.6 billion of commercial debt into an $18 million annual stream for conservation."},{"id":11,"txt":"India’s “Look East Policy” was launched under which of the following Prime Ministers?","ref":"","opts":["P. V. Narasimha Rao","H. D. Deve Gowda","Dr. Manmohan Singh","Narendra Modi"],"ci":0,"exp":"Ex: The Indian government, under P V Narasimha Rao, launched the Look East Policy in 1992 to enhance its relations with countries in East and Southeast Asia. It strives to advance, on various fronts, geopolitical, cultural, and economic ties with the large Asia-Pacific area. Strategic Dimensions of India’s Look East Policy:  Geostrategic Balance in the Asia- Pacific: The policy helped in mitigating the dominance of any single power and fostered a multipolar order, aligning with India’s vision of a stable and inclusive regional security architecture.  Maritime Security and Freedom of Navigation: It addressed concerns related to piracy, and terrorism, and ensured the freedom of navigation in critical sea lanes. India’s engagement with Southeast Asian nations enhances collective efforts to maintain regional stability, protect maritime interests, and respond to security challenges in the Indian Ocean and the South China Sea.  Counterbalancing China’s Influence: By strengthening partnerships with countries in Southeast Asia and East Asia, India aims to diversify its strategic options, ensuring that the region remains multipolar, free from undue hegemony, and supportive of India’s security interests.  Diplomatic and Defense Cooperation: Bilateral and multilateral defense engagements, joint military exercises, 6 and defense technology cooperation contribute to building strategic partnerships. These collaborations enhance India’s capabilities and reaffirm its commitment to regional security."},{"id":12,"txt":"Which among the following countries has launched the Millets And Other Ancient Grains International Research Initiative?","ref":"","opts":["Japan","Australia","India","USA"],"ci":2,"exp":"Ex: India launched the Millets And Other Ancient Grains International Research Initiative (MAHARISHI) at the 2023 G20 Meeting of Agricultural Chief Scientists (MACS) in Varanasi on April 19, 2023. The initiative was proposed by India to advance research in the field of millets and other ancient grains. The secretariat for the initiative is located at the Indian Institute of Millets Research (IIMR) in Hyderabad. The initiative's focus areas include: Connecting researchers and institutions, Establishing web platforms, Organizing capacity building activities, and Identifying and recognizing scientists."},{"id":13,"txt":"With reference to the India-US Transforming Relationship Utilizing Strategic Technology (TRUST) initiative, consider the following statements:\n1. It focuses on strengthening semiconductor supply chains.\n2. It includes the joint development of 6G wireless communication technology.\n3. It aims to enhance collaboration in defense technology and critical infrastructure security.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: The India-US Transforming Relationship Utilizing Strategic Technology (TRUST) initiative is a high-level strategic framework (often discussed in tandem with the iCET— Initiative on Critical and Emerging Technology) designed to deepen the technological and defense partnership between the two nations. Statement 1 is correct: A core pillar of TRUST is building a resilient semiconductor supply chain. This includes moving beyond just manufacturing to collaboration in IC design, R&D, and establishing \"trusted\" semiconductor fabrication facilities in India with US technological backing. Statement 2 is correct: The initiative specifically targets the next generation of wireless technology. Both countries have agreed to collaborate on 6G R&D, focusing SPP 22664 on \"Trusted Telecommunications\" and establishing open-source standards to ensure the security of future networks. Statement 3 is correct: TRUST aims to bridge the gap in defense innovation. It facilitates the co-development and co- production of jet engines, long-range artillery, and maritime security tech. Furthermore, it focuses on the security of critical infrastructure, especially against cyber threats to power grids and telecommunication hubs."},{"id":14,"txt":"Consider the following pairs:\nPlace in News Region (where it is located)\n1. Socotra — Persian Gulf\n2. Lampedusa — Mediterranean Sea\n3. Kerguelen Islands Pacific Ocean\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex:  Pair 1 is not correctly matched: Socotra is an archipelago in the Arabian Sea, part of Yemen, not in the Persian Gulf. Socotra Island in Yemen is known for its unique biodiversity, with a majority of its flora and fauna being endemic. The island's distinctive landscapes, including rugged mountains and pristine beaches, add to its allure. The most iconic among them is the Dragon's Blood Tree, with its umbrella- like canopy and blood-red sap, which has been used for centuries as a dye and medicine.  Pair 2 is correctly matched: Lampedusa is a small, idyllic Italian island in the Mediterranean Sea. It's also \"the door to Europe\" for migrants headed north from nearby Africa.  Pair 3 is not correctly matched: Kerguelen Islands is located in the southern Indian Ocean, not the Pacific Ocean. The Kerguelen Islands are an overseas territory of France. But their far- off location in the southern Indian Ocean places these islands far closer to Antarctica than to mainland Europe. In fact, the islands are so remote and the landscape so harsh that they have also been called the “Desolation Islands.” 7"},{"id":15,"txt":"With reference to the Munich Security Conference (MSC), consider the following statements:\n1. It is an annual high-level forum that brings together heads of state, policymakers, and security experts to discuss global security challenges and strategic stability.\n2. The conference is organized by the United Nations to address military conflicts and arms control.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The Munich Security Conference (MSC) is often referred to as the \"Davos of Defense.\" It serves as the world's leading platform for international security policy and debate. Statement 1 is correct: The MSC is an annual, independent high-level meeting held in Munich, Germany, since 1963. It brings together a diverse group of global leaders, including Heads of State, Foreign and Defense Ministers, heads of international organizations (like NATO and the UN), members of the intelligence community, and top security experts. The primary aim is to foster trust and contribute to the peaceful resolution of conflicts by providing a venue for informal, off-the-record discussions on global security challenges, strategic stability, and the future of the international order. Statement 2 is incorrect: The MSC is not organized by the United Nations. It is an independent, non-profit organization (the Munich Security Conference Foundation) supported by the German government. While high-ranking UN officials (like the Secretary- General) frequently attend the conference, it is not an official UN body or a formal intergovernmental treaty organization. It is a \"Track 1.5\" or \"Track 2\" diplomacy platform—an informal venue for dialogue rather than a formal decision-making body like the UN Security Council."},{"id":16,"txt":"Mayotte, a French overseas territory, was recently in the news. It is located in:","ref":"","opts":["Caribbean Sea","Gulf of Aden","Indian Ocean","South Atlantic Ocean","1, 2 और 3"],"ci":2,"exp":"Ex: Mayotte, a French territory in the Indian Ocean, is grappling with severe flooding and mudslides caused by Storm Dikeledi, just a month after Cyclone Chido devastated the region. The storm brought violent winds, flash floods, and landslides.  Mayotte is an overseas department of France comprising the two south-eastern most islands of the Comoros archipelago. SPP 22664  It is the poorest territory in both France and the European Union. Mayotte is situated in the Mozambique Channel of the western Indian Ocean, about 190 miles (310 km) northwest of Madagascar.  The capital, Mamoudzou, is located on the eastern coast of the main island, Mayotte (also called Grande Terre).  Most of the people are Mahorais of Malagasy origin and are Sunni Muslim and strongly influenced by French culture."},{"id":17,"txt":"Consider the following statements:\nStatement-II: India has not signed the Nuclear Non-Proliferation Treaty (NPT).\nStatement I: India is not a member of the Nuclear Suppliers Group (NSG).\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I","Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I","Statement-I is correct but Statement-II is incorrect","Statement-I is incorrect but Statement-II is correct"],"ci":0,"exp":"Ex: Both Statement-I and Statement-II are correct and Statement II is the correct explanation for Statement I: India is not a member of the Nuclear Suppliers Group (NSG) because it has not signed the Nuclear Non-Proliferation Treaty (NPT). The NPT defines nuclear weapons states as those that have tested devices before 1967, and India does not meet that definition. India also believes the NPT is unfair because nuclear weapon states are not required to give up their weapons, while non- nuclear states are banned from doing so. India applied for NSG membership in May 2016 but was denied by a joint decision from the member countries. China has also opposed India's membership bid, primarily because India is not a signatory to the NPT. The NSG operates on a consensus basis, making India's entry difficult. 8 EXTRA-EDGE BY PWOnlyIAS The NSG is a group of forty-eight nuclear supplier countries that seeks to contribute to the non-proliferation of nuclear weapons through the implementation of two sets of Guidelines for nuclear exports and nuclear- related exports.The aim of the NSG Guidelines is to ensure that nuclear trade for peaceful purposes does not contribute to the proliferation of nuclear weapons or other nuclear explosive devices, and that international trade and cooperation in the nuclear field is not hindered unjustly in the process."},{"id":18,"txt":"Consider the following statements regarding Lebanon:\n1. Lebanon shares a border with Jordan and Israel.\n2. Tripoli is the capital and largest city of Lebanon.\n3. The official currency of Lebanon is the Lebanese Pound.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 and 3 only","3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Lebanon is a country consisting of a narrow strip of territory on the eastern shore of the Mediterranean Sea. Statement 1 is incorrect: Lebanon shares borders with Syria and Israel, not Jordan. Statement 2 is incorrect: Beirut is the capital and largest city of Lebanon, not Tripoli. Statement 3 is correct: The Lebanese Pound (LBP) is the official currency of Lebanon. Additional Information:  Israeli Prime Minister Benjamin Netanyahu recently announced that the Israel Defense Forces (IDF) will not complete its full withdrawal from southern Lebanon by the 60-day deadline stipulated under the ceasefire deal with Hezbollah.  Under the ceasefire agreement that ended the war with Hezbollah in Lebanon, Israeli forces were supposed to have completed their withdrawal within 60 days. SPP 22664"},{"id":19,"txt":"With reference to the International North South Trade Corridor (INSTC), consider the following statements:\n1. Its foundation was laid by India, Iran and Russia in the year 2000.\n2. Its primary objective is to build air connectivity between India and West Asia.\n3. It originates from Mumbai, India and travels to St. Petersburg, Russia.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: The INSTC was initiated in 2000 by Russia, India and Iran, is a multi-modal transportation route linking the Indian Ocean and the Persian Gulf to the Caspian Sea via Iran, and onward to northern Europe via St Petersburg in Russia. It has been ratified by 13 countries namely, Azerbaijan, Belarus, Bulgaria, Armenia, India, Iran, Kazakhstan, Kyrgyzstan, Oman, Russia, Tajikistan, Turkey, and Ukraine Statement 2 is incorrect: The goal of the 7,200-kilometre-long INSTC multi-modal transport project is to make it easier to transfer cargo between Afghanistan, Armenia, Azerbaijan, Russia, Central Asia, Europe, India, and Iran. INSTC consists of sea routes, rail links, and road connections. Statement 3 is correct: The multimodal route originates from Mumbai, India and travels through Bandar Abbas and Bandar-e-Anzali, Iran, before crossing the Caspian Sea and arriving in Astrakhan, Moscow, and St. Petersburg, Russia. The corridor has several branches: 9  On the western side of the Caspian Sea, it would link Russia to Iran through Azerbaijan.  The eastern branch runs along the eastern coast of the Caspian Sea and links the main corridor to different road and rail networks of Central Asian countries such as Turkmenistan and Kazakhstan. (Fig: INSTC corridor) (Image source: The Hindu)"},{"id":20,"txt":"With reference to India-Qatar relations, consider the following statements:\n1. Qatar is among the top suppliers of liquefied natural gas (LNG) to India.\n2. India and Qatar conduct a joint naval exercise named Zair-Al Bahr.\n3. The Reserve Bank of India (RBI) has signed a currency swap agreement with the Central Bank of Qatar to facilitate trade in local currencies.\nWhich of the statements given above is/are correct?","ref":"","opts":["2 only","1 and 3 only","2 and 3 only","1 and 2 only"],"ci":3,"exp":"Ex: Statement 1 is correct: Qatar is India’s largest supplier of Liquefied Natural Gas (LNG). It traditionally accounts for nearly 40% to 45% of India's total LNG imports. In early 2024, India's Petronet LNG signed a massive $78 billion deal to extend its long- term LNG imports from Qatar for another 20 years (until 2048). Current Context (2026): As of March 2026, while geopolitical tensions in West Asia have temporarily disrupted supply lines in the Strait of Hormuz, Qatar remains the primary long- term anchor for India's transition toward a gas-based economy. Statement 2 is correct: Zair-Al Bahr (meaning \"Roar of the Sea\") is the bilateral naval exercise between the Indian Navy and the Qatar Emiri Naval Force. The exercise focuses on maritime security, anti-piracy operations, and counter-terrorism. It typically involves a \"Harbour Phase\" for professional interaction and a \"Sea Phase\" for tactical SPP 22664 maneuvers involving surface action and air defense. The inaugural edition was held in 2019, marking a significant upgrade in the defense ties between the two nations. Statement 3 is incorrect: The Reserve Bank of India (RBI) has not signed a currency swap agreement with the Central Bank of Qatar. While India has been promoting the Internationalization of the Rupee and has signed local currency settlement (LCS) agreements with the UAE (using the Jaywan- UPI link), no such formal currency swap or trade settlement framework in local currencies has been operationalized with Qatar as of early 2026. RBI's Current Swaps: India primarily maintains currency swap frameworks for SAARC countries (2024–2027) and a significant bilateral swap line with Japan."},{"id":21,"txt":"With reference to theSalami Slicing strategy, consider the following statements:\n1. It refers to a gradual and incremental approach to territorial expansion, avoiding outright war while achieving strategic objectives.\n2. The strategy is primarily associated with economic coercion rather than military maneuvers.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: The ‘Salami Slicing’ strategy involves gradual and incremental territorial expansion, often through small, seemingly minor actions that do not provoke immediate retaliation but cumulatively alter the status quo in favor of the aggressor. This Chinese strategy of building infrastructure in contested territories has been described as a “salami slicing tactic\", which involves making small and incremental encroachments into India's territory that don't escalate into war but, put together, give Beijing a strategic advantage. Each slice is intended to occupy a piece of the territory that does not belong to China, and upon occupation China will establish effective control over that territory and claim it as its own. Statement 2 is incorrect: While economic coercion can be a tool in broader strategic maneuvers, salami slicing is primarily associated with military and territorial advances rather than purely economic 10 actions. It often involves small-scale incursions, infrastructure development in contested areas or diplomatic maneuvers to change territorial claims."},{"id":22,"txt":"With reference to India's participation in United Nations Peacekeeping Operations, consider the following statements:\n1. India established the Centre for UN Peacekeeping (CUNPK) to provide specialized training for peacekeeping personnel.\n2. India has never provided Military Advisors to various UN missions.\n3. The first all-women contingent in a UN peacekeeping mission was deployed by India in 2007 to Liberia.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The idea of UN Peacekeeping stems from the UN having no military forces. Therefore, Member States voluntarily provide the military and police personnel that are periodically required for each peacekeeping operation from their national forces. Since the 1950s, India has contributed over 290,000 peacekeepers across more than 50 UN Peacekeeping missions. Statement 1 is correct: India established the Centre for UN Peacekeeping (CUNPK) in New Delhi. In order to encourage prospective female peacekeepers and to provide them with adequate skills, the Centre for United Nations Peacekeeping (CUNPK) in India, in partnership with UN Women organized a two week course dedicated to train the female officers from across the world. The course was conducted at Manekshaw Centre in New Delhi. Statement 2 is incorrect: India has so far provided 15 Force Commanders in various UN Missions. Besides the Force Commanders, India also had the honour of providing two Military Advisors and One Deputy Military Advisor to the Secretary General of the United Nations, two Divisional Commanders and seven Deputy Force Commanders. Statement 3 is correct: Indian Army contributed lady officers as Military Observers and Staff Officers apart from them forming part of Medical Units being deployed in UN Missions. The first all women contingent in the peacekeeping mission, a Formed Police Unit from India, was deployed in 2007 to the UN Operation in Liberia (UNMIL). SPP 22664"},{"id":23,"txt":"The BASIC group of countries, often seen in climate change negotiations, includes:","ref":"","opts":["Brazil, Australia, South Africa, China","Bangladesh, Argentina, South Africa, Canada","Brazil, South Africa, India, China","Belgium, Austria, Spain, Italy"],"ci":2,"exp":"Ex:  The BASIC group consists of Brazil, South Africa, India, and China, which coordinate their positions on climate negotiations. It was formed in 2009 before the Copenhagen Climate Summit (COP 15).  Together, the four BASIC countries represent roughly 40 percent of the world’s population. South Africa’s economy contributes around 31 per cent of Sub-Saharan Africa’s total GDP; Brazil accounts for 38 per cent of GDP in Latin America and the Caribbean, and India accounts for 80 per cent of GDP in South Asia. China has a 35 per cent contribution to GDP in the East Asia and Pacific region.  All four BASIC countries have substantial and fast-growing greenhouse gas emissions, and in absolute terms (total tonnes per year), China is now the world’s largest GHG emitter.  In 2005, the four BASIC countries collectively accounted for nearly 60 per cent of the total annual GHG emissions from non-Annex 1 countries and almost 29 per cent of total global emissions, of which China alone produced almost 17 per cent."},{"id":24,"txt":"“World Oil Outlook” is published by which of the following?","ref":"","opts":["The Organization of the Petroleum Exporting Countries (OPEC)","International Energy Agency (IEA)","Gulf Cooperation Council (GCC)","World Bank"],"ci":0,"exp":"Ex: Organization of the Petroleum Exporting Countries (OPEC’) released the World Oil Outlook (WOO) which is a part of this Organization’s commitment to market stability. The publication is a means to highlight and further the understanding of the many possible future challenges and opportunities that lie ahead for the oil industry. It is also a channel to encourage dialogue, cooperation and transparency between OPEC and other stakeholders within the industry. 11"},{"id":25,"txt":"With reference to the Gulf of Mexico, consider the following statements:\n1. The Gulf of Mexico is connected to the Atlantic Ocean through the Straits of Florida and to the Caribbean Sea via the Yucatán Channel.\n2. The Gulf of Mexico contains one of the world's largest hypoxic (low oxygen) zones, commonly known as the Dead Zone, primarily caused by agricultural runoff from the Mississippi River.\n3. The Gulf of Mexico was formed approximately 300 million years ago as a result of plate tectonic movements.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Statement 1 is correct: The Gulf of Mexico basin is roughly oval and is about 810 nautical miles (1,500 kilometers) wide. Its floor consists of sedimentary rocks and recent sediments. It is connected to part of the Atlantic Ocean through the Straits of Florida between the U.S. and Cuba, and with the Caribbean Sea via the Yucatán Channel between Mexico and Cuba. Because of its narrow connection to the Atlantic Ocean, the gulf has very small tidal ranges. Statement 2 is correct: The Gulf of Mexico experiences a large hypoxic zone, also called the \"Dead Zone\", which forms due to excess nutrient pollution from the Mississippi River. Excess nutrients that reach the Gulf of Mexico via the Mississippi-Atchafalaya River Basin stimulate an overgrowth of algae. When these algae die and decompose, they deplete oxygen in the water as they sink to the bottom. The resulting low oxygen levels (hypoxia) cause animals, like fish and shrimp, to leave the area. Exposure to hypoxic waters has been found to alter fish diets, growth rates, reproduction, habitat use and availability of commercially harvested species such as shrimp. Statement 3 is correct: The Gulf of Mexico originated around 300 million years ago due to tectonic plate movements, forming as part of the supercontinent Pangaea's breakup. Additional Information:  On January 20, 2025, U.S. president Donald Trump signed an executive order directing federal agencies to adopt the name \"Gulf of America\" for the northern part of the body of water bounded by the U.S. SPP 22664"},{"id":26,"txt":"Consider the following statements regarding a unique island:\n1. It is the only coral island of its country.\n2. It is located in the northeastern part of the Bay of Bengal.\n3. The island is geographically close to the maritime boundary of Myanmar. The above statements refer to:","ref":"","opts":["Bhola Island","St. Martin’s Island","Sandwip Island","Hatiya Island"],"ci":1,"exp":"Ex:  The 7.3 km long island is mostly flat and sits at an elevation of 3.6 metres above the mean sea level. It is Bangladesh’s only coral island, there are reefs from 10-15 km to the west-northwest and is also a breeding ground for sea turtles. The island has a permanent population of about 10,000 people. As it is a prominent tourist attraction, an average of 10,000 tourists stay there every day.  It is located in the northeastern Bay of Bengal.  The island was once part of the Teknaf peninsula (around 5,000 years ago) but gradually got submerged into the sea.  The Arab merchants were among the first ones to settle on the island. They began to arrive there in the 18th Century. The merchants initially named the island “Jazira” (meaning “the island” or “the peninsula”) and later changed it to “Narikel Jinjira” or “Coconut Island”.  In 1900, British India annexed the island during a land survey.  During the British occupation, the island came to be known as St Martin’s Island, named after then Deputy Commissioner of Chittagong Martin.  The island is situated close to the Bangladesh-Myanmar maritime boundary, making it strategically significant."},{"id":27,"txt":"Consider the following statements regarding Vladivostok-Chennai Maritime Corridor (VCMC):\n1. Vladivostok is a port city in Russia’s Far East, located on the Sea of Japan.\n2. The corridor is expected to significantly reduce shipping time between India and Russia compared to the traditional route via the Suez Canal.\n3. The VCMC is being developed under the framework of the Shanghai Cooperation Organisation (SCO) as part of its regional connectivity initiatives.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","Only three","None","1, 2 और 3"],"ci":1,"exp":"Ex: Statement 1 is correct: Vladivostok is a seaport and administrative centre of Primorsky kray (territory) located in extreme southeastern Russia. It is located around Zolotoy Rog (Golden Horn Bay) on the western side of a peninsula that separates Amur and Ussuri bays on the Sea of Japan. 12 Statement 2 is correct: The Chennai- Vladivostok sea route will cover a distance of about 5,600 nautical miles. The Eastern Maritime Corridor is estimated to reduce the time required to transport cargo between the Indian and Russian Ports of the Far East Region by up to 16 days. The time taken will come down to 24 days compared to more than 40 that it currently takes to transport goods from India to Far East Russia via Europe. Statement 3 is incorrect: The VCMC is a bilateral initiative between India and Russia, not part of the Shanghai Cooperation Organisation (SCO)."},{"id":28,"txt":"With reference to the China-Pakistan Economic Corridor (CPEC), consider the following statements:\n1. The CPEC includes the Karakoram Highway Phase II, which is one of the world’s highest paved roads.\n2. The Gwadar Port, a key component of CPEC, is leased to China for 99 years.\n3. The Kohala Hydropower Project, funded under CPEC, is proposed to be developed on the Jhelum River in Kashmir.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: China-Pakistan Economic Corridor (CPEC) is a massive bilateral project to improve infrastructure within Pakistan for better trade with China and to further integrate the countries of South Asia. It is part of the larger Belt and Road Initiative (BRI) to improve connectivity, trade, communication, and cooperation between the countries of Eurasia announced by China in 2013. Statement 1 is correct: The Karakoram Highway, often referred to as the Eighth Wonder of the World, is among the highest paved international roads, connecting Pakistan and China through the Khunjerab Pass. Statement 2 is incorrect: The Gwadar Port is leased to China for 40 years, not 99 years. It is managed by the China Overseas Port Holding Company (COPHC). Statement 3 is correct: China under the multi-billion-dollar CPEC will set up a 1,124- megawatt power project in Pakistan-occupied Kashmir. The Kohala Hydropower Project, a major CPEC-funded initiative will be built SPP 22664 on the Jhelum River and aims at annually providing more than five billion units of clean and low-cost electricity for consumers in Pakistan. Additional Information:  The goal of the CPEC is both to transform Pakistan’s economy by modernizing its road, rail, air, and energy transportation systems and to connect the deep-sea Pakistani ports of Gwadar and Karachi to the Xinjiang Uygur Autonomous Region in China and beyond by overland routes. (Xinjiang borders the countries of Mongolia, Russia, Kazakhstan, Kyrgyzstan, Tajikistan, Afghanistan, Pakistan, and India, and the ancient Silk Road ran through its territory.)  This aims to reduce the time and cost of transporting goods and energy such as natural gas to China by circumventing the Strait of Malacca and the South China Sea. The initiative was also set to open several special economic zones (SEZs), modeled on similar zones in China that offer incentives for investment and are intended to spur rapid economic growth. The announcement of joint space and satellite initiatives between Pakistan and China, spurred by the CPEC, followed in 2016."},{"id":29,"txt":"With reference to Greenland, consider the following statements:\n1. It is an autonomous territory of Denmark and a member of the European Union.\n2. The Thule Air Base, located in Greenland, is the northernmost U.S. military base.\n3. Greenland has one of the world's largest reserves of rare earth minerals.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Greenland is officially the world’s largest island that is not a continent. Home to 56,000 people, Greenland has its own extensive local government. Statement 1 is incorrect: Greenland is not a member of the European Union. It was part of the European Economic Community 13 (EEC) but withdrew in 1985 after gaining home-rule status. Greenland was ruled by Denmark from the early 18th century until 1979, when home rule began. In 2009, Greenland approved the Self-Government Act in a referendum. The act means that Greenland can assume additional areas of responsibility. However, foreign policy, defence policy, and security policy cannot be transferred to Greenland. Statement 2 is correct: Thule Air Base, the Department of Defense’s northernmost installation, has been renamed Pituffik Space Base. The renaming recognizes Greenlandic cultural heritage and better reflects its role in the U.S. Space Force. Statement 3 is correct: Greenland’s rare earths reserves total 1.5 million metric tons, but the island nation currently doesn't produce the metals. However, it does have two significant rare earths projects with large reserves, the Tanbreez project and the Kvanefjeld project.  SPP 22664 Additional Information:  US President-elect Donald Trump has once again expressed interest in buying Greenland, and Greenland has again stated it is not for sale. As global warming leads to melting of ice, new waterways can open in the Arctic region, and all major powers are keen to boost their presence here. The US wants to pre- empt a larger Russian or Chinese role in Greenland and its neighbourhood.  Before that, in 1946, just after the end of World War II, President Harry S Truman offered $100 million to Denmark for Greenland. Truman had earlier considered exchanging some portions of Alaska for certain parts of Greenland. The proposal did not progress. In 1867, the US State Department pointed to the fact that Greenland’s strategic location and abundant natural resources make it ideal for acquisition. However, no formal effort was made to move on the suggestion.  14"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 26</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 26</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 26">PW ONLY IAS 2026 = 26</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to Fiscal Deficit, consider the following statements:\n1. It equals total expenditure minus revenue receipts and non-debt capital receipts.\n2. It excludes market borrowings but includes recovery of loans.\n3. Persistent fiscal deficits can exert upward pressure on interest rates.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 3 only","1 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: Fiscal deficit is defined as the gap between the government’s total expenditure and its total receipts, excluding borrowings. Think of the Fiscal Deficit as the \"Shortfall Amount.\" It is the money the government must borrow because it spent more than it actually \"earned.\" To find this shortfall, you take everything the government spent and subtract only the money that doesn't have to be paid back. The Breakdown: ❖ Total Expenditure: Everything the government spends (Salary, Pensions, Roads, Bridges). ❖ Minus Revenue Receipts: \"Free\" money coming in (Taxes, Fees, Dividends). ❖ Minus Non-Debt Capital Receipts (NDCR): Money from selling assets (Disinvestment) or getting back old loans. This is \"Capital\" money that does not create a new debt. ❖ The Formula: Fiscal Deficit = Total Expenditure – (Revenue Receipts + Non-debt Capital Receipts) Statement 2 is incorrect: Fiscal deficit does not merely “exclude” market borrowings; rather, it represents the amount that needs to be financed through borrowings such as market loans and treasury bills. Recovery of loans is included as a non-debt capital receipt because it does not create a future liability. However, borrowings themselves are not part of receipts since the fiscal deficit is designed to measure the borrowing requirement. Statement 3 is correct: Persistent fiscal deficits imply sustained government borrowing from the market. This increases demand for loanable funds and can put upward pressure on interest rates, leading to the crowding-out of private investment. The FRBM Act, 2003: While the original target was 3% of GDP, the N.K. Singh Committee (2016) recommended a glide path. Post-pandemic, the government set a target to reach a fiscal deficit level below 4.5% of GDP by FY 2025-26."},{"id":1,"txt":"Consider the following statements:\n1. Revenue deficit arises when revenue expenditure exceeds revenue receipts, indicating dissaving by the government.\n2. Effective revenue deficit excludes grants given for the creation of capital assets from revenue expenditure.\n3. Effective revenue deficit is more than revenue deficit as it accounts for capital formation through grants.\nHow many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: Revenue deficit arises when the government’s revenue expenditure exceeds its revenue receipts, indicating that current revenues are insufficient to finance current consumption. This implies dissaving by the government and suggests that borrowed funds may be used for non-asset-creating expenditure, which is considered fiscally unsustainable in the long run. Statement 2 is correct: The concept of Effective Revenue Deficit (ERD) was introduced in the Union Budget 2011-12 following recommendations that the traditional Revenue Deficit was \"unfairly\" penalizing the Union Government. It is calculated by deducting grants given for the creation of capital assets from revenue expenditure, as such grants contribute to capital formation even though they are recorded under revenue expenditure in budget accounts. Effective Revenue Deficit = Revenue Deficit - Grants in aid for capital assets. Statement 3 is incorrect: Effective revenue deficit is always equal to or lower than the revenue deficit because it excludes capital-creating grants from revenue expenditure. Since no additional expenditure is added in its calculation, it cannot be higher than the revenue deficit. Indicator Budget Revised Estimate Estimate (RE) (BE) 2024-25 2025-26 Fiscal Deficit 4.4% 4.8% Revenue 1.5% 1.9% Deficit Effective 0.3% 1.0% Revenue Deficit Primary 0.8% 1.3% Deficit PW ONLYIAS SUPER HINT ● If you subtract a positive number from X, the result is always smaller than X. Therefore, Effective Revenue Deficit must be lower (or equal), never higher. This statement fails basic arithmetic logic. ● Eliminate Statement 3. Focus on the word “effective”. Why was this concept introduced at all? Most Probably to remove capital-creating grants from revenue expenditure so that the deficit reflects true consumption. This sounds purpose-aligned, not accidental. Hence S2 is likely correct. ● S1 is self explanatory. “Dissaving” simply means spending more on consumption than income. That fits cleanly. No exaggeration, no trap language. Hence obviously correct."},{"id":2,"txt":"Consider the following statements:\nStatement-I: Primary deficit reflects the fiscal imbalance of the government after excluding interest payments on past debt. Statement-II: Primary deficit indicates the impact of current fiscal policy decisions by excluding interest payments. Statement-III: A lower or negative primary deficit suggests that current government revenues are sufficient to meet non-interest expenditure.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-II and Statement-III are correct and both of them explain Statement-I","Both Statement-II and Statement-III are correct, but only one of them explains Statement-I","Only one of the Statements II and III is correct and that explains Statement-I","Only one of the Statements II and III is correct and that does not explain Statement-I"],"ci":0,"exp":"Ex: The Primary Deficit is often called the \"Real Fiscal health checkup.\" While the Fiscal Deficit shows how much the government is borrowing in total, it doesn't distinguish between \"new spending\" and \"paying for old mistakes.\" In the Union Budget 2025-26, India's interest payments reached approximately ₹12.76 lakh crore, making it the single largest component of expenditure. Statement I is correct: Primary deficit is defined as the difference between the fiscal deficit and interest payments, expressed as: Primary Deficit=Fiscal Deficit−Interest Payments Since interest payments are obligations arising from past borrowings, excluding them enables the primary deficit to capture the government’s current fiscal position. It shows whether present revenues and non-interest expenditure are aligned or whether fresh borrowing is required due to current policy choices. Statement II is correct: By removing interest payments from the fiscal deficit, the primary deficit isolates the effect of current fiscal policy decisions, such as present expenditure priorities and tax effort. It helps policymakers assess whether ongoing deficits are driven by current fiscal imbalance or merely by the burden of servicing accumulated public debt. Statement III is correct: A low or negative primary deficit indicates that the government’s current revenues are adequate to meet non-interest expenditure, implying that borrowing is largely undertaken to pay interest on existing debt. This is often interpreted as an indicator of improving fiscal discipline and sustainability. Statements II and III explain Statement I because Statement II explains the \"Concept\" (The Cause): ❖ Statement I says we subtract interest. ❖ Statement II tells us why we do that: To ignore \"old history\" (past debt) and see only \"new choices\" (current spending). It explains the purpose behind the definition. Statement III explains the \"Outcome\" (The Effect): Once you have the number from Statement I, how do you use it? Statement III tells us: If that number is low, your current \"daily earnings\" are enough to pay for your \"daily needs.\" It explains the real-world result of the definition."},{"id":3,"txt":"With reference to Capital Account and Revenue Account in government budgeting, consider the following statements:\n1. Revenue accounts record transactions not affecting government assets or liabilities.\n2. Capital account records transactions involving assets or liabilities.\n3. Interest payments on public debt are recorded under the capital account.\n4. Loans raised by the government are treated as capital receipts.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statement 1 is correct: The revenue account of the government records all transactions that do not result in the creation or reduction of assets or liabilities. This includes revenue receipts like taxes and non-tax revenue, and revenue expenditure such as salaries, subsidies, and interest payments. Revenue account transactions reflect the government’s day-to-day income and expenditure, rather than long-term investment or borrowing. Statement 2 is correct: Under government budgeting, the capital account tracks all transactions that lead to the creation of assets or change in liabilities. Examples include government borrowings (which increase liabilities) and capital expenditures such as spending on infrastructure or repayment of loans (which create or reduce liabilities). Statement 3 is incorrect: Interest payments on public debt are part of the government’s revenue expenditure because they are recurring payments and do not involve the creation of assets or reduction of liabilities. In budget accounting, such payments are included in the revenue account, not the capital account. Statement 4 is correct: Under government budgeting, capital receipts include transactions that create liabilities or reduce assets. Loans raised by the government from the public, banks, or foreign sources clearly generate a liability and are therefore classified as capital receipts in the capital account. PWOnlyIAS Extra Edge To solve any question on this topic, use this 2-Question Test: 1. Does it create/reduce an Asset? (e.g., building a highway, selling a PSU). 2. Does it create/reduce a Liability? (e.g., taking a loan, repaying a loan). \u0000 If the answer to EITHER is YES → it is a Capital transaction. \u0000 If the answer to BOTH is NO → it is a Revenue transaction. Data from Budget 2025-26: ❖ Revenue Expenditure: ₹39.44 lakh crore (Includes the massive ₹12.76 lakh crore interest payment). ❖ Capital Expenditure: ₹11.21 lakh crore (Targeted at 3.1% of GDP). ❖ Capital Receipts (Non-Debt): ₹76,000 crore (Money from disinvestment and loan recoveries). PW ONLYIAS SUPER HINT Ask: \"Is this a one-time thing or a regular habit?\" ❖ Regular/Recurring (Salaries, Interest, Subsidies, Pensions) →Revenue. Hence S3 is false ❖ One-time/Impactful (Buying a building, Taking a 10-year loan, Selling a company) → Capital. Hence S4 is true. S1 and S2 are self explanatory. No exaggeration, no trap language simple definition. Hence obviously correct."},{"id":4,"txt":"Consider the following statements regarding Public Debt and Debt to GDP ratio in India:\n1. Public debt includes both internal and external borrowings of the government.\n2. A rising debt to GDP ratio always indicates fiscal irresponsibility.\n3. Short-term borrowings are not included in the calculation of public debt.\nWhich of the above statements are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1 only"],"ci":3,"exp":"Ex: The debt–GDP ratio compares the total public debt of a country with the size of its economy as measured by GDP. It serves as an indicator of the government’s capacity to service and repay its debt by relating outstanding liabilities to the income generated in the economy. Statement 1 is correct: Public debt of the government comprises internal borrowings (from banks, financial institutions, and the public) as well as external borrowings (from foreign governments, multilateral institutions, and external commercial borrowings). It represents the total liabilities of the government that must be repaid with interest over time. Statement 2 is incorrect: A rising debt–GDP ratio does not always indicate fiscal irresponsibility. The increase may occur due to higher GDP growth, new borrowings for productive capital investment, or temporary fiscal measures. What matters is the purpose of borrowing and the ability to service debt, not just the ratio itself. Statement 3 is incorrect: Public debt includes short-term interest-bearing instruments such as Treasury Bills and Ways and Means Advances (WMA), which are used by the government to meet temporary mismatches in receipts and expenditure. Treasury Bills generally have a maturity of around 90 days, and WMA represents short-term borrowing from the central bank to cover temporary budgetary deficits. Since these instruments create liabilities for the government, they are included in the calculation of public debt. PW ONLYIAS SUPER HINT Look at the word \"Always\" in S2. If a country borrows heavily to build a high-speed rail network or a tech hub that triples its future income, is that \"irresponsible\"? No, that is an investment. Hence likely false. If you borrow ₹100 for 10 years or ₹100 for 10 days, do you still owe ₹100? Yes. Debt is defined by the obligation to pay, not the speed of payment. Hence S3 is likely false. Does it matter if the money was borrowed from a citizen in Delhi (Internal) or a bank in London (External)? No, it is all debt that the public \"bucket\" must eventually pay back. Hence S1 is obviously correct."},{"id":5,"txt":"Fiscal consolidation often faces resistance because it may require reducing public expenditure at a time when counter-cyclical fiscal support is needed to sustain economic growth. Which of the following best explains this challenge?","ref":"","opts":["It weakens automatic stabilizers","It increases revenue deficit","It limits fiscal space during downturns","It raises the debt-GDP ratio"],"ci":2,"exp":"Ex: The Union Budget 2025-26 perfectly illustrates this dilemma. While the government is committed to a Fiscal Consolidation path (targeting a deficit of 4.4% of GDP), it is simultaneously maintaining a record-high Capital Expenditure of ₹11.21 lakh crore. This \"balancing act\" is necessary because cutting spending too drastically during a slow growth phase can lead to a recession, while spending too much can lead to high inflation and debt. Finding the \"middle path\" is the core challenge of modern Indian fiscal policy. Fiscal consolidation aims to reduce deficits and stabilize public debt, but its implementation becomes challenging during economic slowdowns. In such periods, governments are expected to adopt counter-cyclical fiscal policy; that is, increase spending or cut taxes to support demand. Fiscal consolidation constrains this ability by reducing fiscal space, limiting the government’s capacity to expand expenditure without breaching deficit or debt targets. Hence option C is correct."},{"id":6,"txt":"With reference to Outcome Budget and Performance Budgeting, consider the following statements:\n1. Outcome Budget emphasizes post- expenditure assessment of outcomes rather than ex-ante allocation of resources.\n2. Performance Budgeting classifies government expenditure in terms of functions, programmes, and activities to assess efficiency.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: The Outcome Budget and Performance Budgeting represent a significant shift in Indian governance—moving away from a \"spending-oriented\" culture to a \"results-oriented\" one. Statement 1 is correct: Outcome Budgeting links government expenditure with actual outputs and measurable outcomes of programs. Unlike traditional budgets that focus on the allocation of funds, outcome budgets evaluate the effectiveness of spending after implementation, helping policymakers and legislators assess whether objectives were achieved. This post-expenditure evaluation strengthens accountability and evidence-based decision-making in public finance. Statement 2 is correct: Performance Budgeting reorganizes expenditures by functions, programmes, and activities, rather than merely line items. It allows assessment of efficiency, effectiveness, and economy in public spending, highlighting how resources are used to achieve specific goals. By providing structured information on programme performance, it helps improve resource allocation and management, making public spending more results-oriented. PWOnlyIAS Extra Edge 1. Performance Budgeting: Introduced based on the 1st Administrative Reforms Commission (ARC) in 1968. 2. Outcome Budgeting: Introduced in 2005-06 by P. Chidambaram. Since 2017-18, it has been a mandatory document tabled with the Union Budget following the removal of the Plan/Non-Plan distinction. 3. NITI Aayog monitors the Output-Outcome Monitoring Framework (OOMF), providing real-time data to help the Ministry of Finance identify non-performing schemes and reallocate funds. Feature Performance Outcome Budgeting Budgeting Primar Efficiency: Effectiveness: y Goal \"Are we doing \"Are we doing things right?\" the right things?\" Focus Processes, Results, Impact, Functions, and and Long-term Activities. change. Metric Work-cost Qualitative and measurement quantitative (Unit cost). development indicators."},{"id":7,"txt":"Consider the following statements:\n1. During a slowdown, increasing government expenditure on rural employment and infrastructure is an example of counter- cyclical fiscal policy.\n2. Counter-cyclical fiscal policy may involve temporarily exceeding fiscal deficit targets to support growth.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: In 2025-26, India is moving from a \"Counter-cyclical support phase\" back to a \"Consolidation phase.\" The government has reduced the fiscal deficit target from 4.8% (RE 2024-25) to 4.4% (BE 2025-26). This shows that as the economy has stabilized, the government is withdrawing the \"emergency\" support to ensure long-term health. Statement 1 is correct: Counter-cyclical fiscal policy is designed to counteract fluctuations in the business cycle. During an economic slowdown or recession, private consumption and investment decline, leading to lower aggregate demand. To stabilize the economy, the government can increase public spending, for example, on rural employment schemes (like MGNREGA) or infrastructure projects. These measures inject money into the economy, boost demand, and support growth and employment, which is precisely the essence of counter-cyclical fiscal policy. Statement 2 is correct: Implementing counter-cyclical measures may require temporary relaxation of fiscal rules, such as exceeding fiscal deficit targets. For instance, during slowdowns or crises, the government may borrow more or increase expenditure to stimulate demand. This short-term fiscal flexibility ensures that the counter-cyclical policy is effective in stabilizing output and employment, even if it temporarily worsens deficit figures. PW ONLYIAS SUPER HINT Think of Counter-cyclical policy as a \"Thermostat.\" If the economy is \"too cold\" (Slowdown), the policy turns up the Heat (Spending). Spending on rural jobs and roads during a slump is the most direct way to \"heat up\" the economy. Statement 1 is a perfect match for the \"Thermostat\" role. Hence S1 is likely true. The \"Priority\" Test: Imagine a house is on fire (Recession). Do you worry about the \"Water Bill\" (Fiscal Deficit) or do you \"Save the House\" (Support Growth)? Supporting growth is the primary goal. To do that, the government must spend money it doesn't have. Statement 2 is logically consistent with how an emergency intervention works."},{"id":8,"txt":"Consider the following statements:\nStatement-I: Zero-Based Budgeting requires all government expenditures to be justified from scratch in each budget cycle. Statement-II: In Zero-Based Budgeting, past expenditure patterns are ignored, and each program starts with a zero base. Statement-III: Zero-Based Budgeting eliminates the need for prioritization among government programs.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-II and Statement-III are correct and both of them explain Statement-I","Both Statement-II and Statement-III are correct, but only one of them explains Statement-I","Only one of the Statements II and III is correct and that explains Statement-I","Only one of the Statements II and III is correct and that does not explain Statement-I"],"ci":2,"exp":"Ex: In India, while ZBB was introduced in the late 1980s, its principles are increasingly relevant in the 2025-26 Budget cycle through \"Sunset Clauses.\" These clauses force a mandatory review of schemes to ensure they are still relevant, effectively preventing \"Zombie Schemes\" (old programs that continue without a purpose) from draining the treasury. Statement I is correct: Zero-Based Budgeting (ZBB) is a budgeting technique aimed at improving fiscal efficiency and resource allocation. Unlike traditional incremental budgeting, where last year’s allocations form the base and adjustments are made incrementally, it requires that every expense, regardless of past allocations, be justified anew. This ensures that funds are allocated based on current priorities, objectives, and cost-effectiveness, rather than historical spending patterns. Statement II is correct: Statement-II accurately describes the mechanism of Zero-Based Budgeting. Each program or scheme starts from a “zero base”, meaning that no previous allocation is automatically assumed. Decision-makers must justify the need for each expenditure for the current budget cycle, evaluating its relevance, effectiveness, and alternatives. This mechanism directly explains Statement-I, because it is through this “zero base” approach that all expenditures are justified from scratch. Statement III is incorrect: ZBB does not eliminate prioritization; in fact, it requires rigorous prioritization. Since resources are limited, programs are ranked based on cost-benefit analysis, necessity, and impact, and only those offering the highest value or efficiency receive funding. Ignoring prioritization would defeat the purpose of ZBB, which is to allocate resources rationally and efficiently. PWOnlyIAS Extra Edge 1. The Public Financial Management System (PFMS) now allows the Finance Ministry to see \"Unspent Balances\" with states. If a state hasn't spent its last year's money, the \"Zero-Base\" logic is applied to reduce the next installment. 2. Origin: Created by Peter Pyhrr and popularized by US President Jimmy Carter. 3. Implementation in India: First introduced in the Department of Science and Technology in 1983 and adopted across all ministries in 1986-87. 4. Sunset Clauses: This is a modern tool of ZBB. PW ONLYIAS SUPER HINT Simple Logic: If you must justify everything \"from scratch\" (Statement I), it automatically means you are \"ignoring past patterns\" and starting from \"zero\" (Statement II). Statement II is just a restatement of the logic in Statement I. Look at Statement III and the word \"Eliminates.\" \"Eliminating the need for prioritization\" is an administrative fantasy. In a world of limited resources, prioritization is the heart of the process. Hence S3 is likely false."},{"id":9,"txt":"Consider the following:\n1. Income tax and GST\n2. Government expenditure on MGNREGA and PM GatiShakti projects\n3. Repo rate and cash reserve ratio\n4. Public debt management through Ways and Means Advances (WMA)\n5. Subsidies on food, fertilizers, and fuel\nHow many of the above are generally considered instruments of fiscal policy in India?","ref":"","opts":["Only two","Only three","Only four","All five"],"ci":2,"exp":"Ex: The distinction between Fiscal Policy and Monetary Policy is fundamental to the Indian economy's \"Dual-Engine\" management. While the Reserve Bank of India (RBI) manages the \"cost of money\" (Monetary Policy) to control inflation, the Union Government manages the \"flow of money\" (Fiscal Policy) to drive growth and welfare. Income tax (direct tax) and GST (indirect tax) are the primary revenue-raising tools of the government. Influence aggregate demand (e.g., reducing taxes can increase disposable income). Provide resources for government expenditure on public goods and welfare. Taxation is a core instrument of fiscal policy, directly controlled by the government, not by the RBI. Hence Statement 1 is correct. MGNREGA supports employment, while PM GatiShakti improves infrastructure. Stimulate aggregate demand during slowdowns. Generate multiplier effects in the economy through wages and construction activity. Expenditure on schemes is a key fiscal tool for growth and employment stabilization, making it an instrument of fiscal policy. Hence Statement 2 is correct. Borrowing through bonds or WMA is used to finance government expenditure and manage budget deficits. Provides the fiscal space for government spending without immediately raising taxes. Supports deficit financing, especially during economic slowdowns or emergencies. Even though WMA is temporary borrowing from RBI, it is considered a short-term fiscal tool under government borrowing mechanisms, not a monetary policy instrument. Hence Statement 4 is correct. Subsidies are a form of government expenditure that influences prices, consumption, and welfare. Reduce the cost of living and support vulnerable populations. Stimulate aggregate demand indirectly by freeing up disposable income. Hence Statement 5 is correct. Statement 3 is incorrect: Repo rate and Cash Reserve Ratio (CRR) are monetary policy tools, controlled by the Reserve Bank of India. They influence money supply, credit availability, and liquidity in the economy and affect borrowing and lending rates indirectly. Fiscal policy is government-controlled taxation and expenditure, while repo/CRR are RBI tools, so they are not instruments of fiscal policy. PW ONLYIAS SUPER HINT Look at the list. Items 1, 2, 4, and 5 all deal with the \"In-flow\" and \"Out-flow\" of the National Budget. Item 3 is the only \"Odd One Out\" because it deals with \"Interest Rates,\" which is the exclusive playground of the RBI."},{"id":10,"txt":"With reference to the tax structure in India, consider the following statements:\n1. Direct taxes are levied on income or wealth, and their burden cannot be shifted.\n2. Indirect taxes are levied on goods and services, but their incidence necessarily falls on the producer.\n3. After the introduction of GST, the share of indirect taxes in India’s gross tax revenue has structurally declined.\n4. Cesses and surcharges are classified as direct or indirect taxes depending on the tax base.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Statement 1 is correct: Direct taxes are imposed directly on an individual’s or entity’s income or wealth, such as income tax and corporate tax. A defining feature of direct taxes is that the incidence and impact fall on the same person, meaning the taxpayer cannot transfer the burden to someone else. Statement 2 is incorrect: Although indirect taxes are levied on goods and services, their economic burden does not necessarily fall on the producer. In practice, producers or sellers collect the tax and pass it on to consumers through higher prices. The ability to shift the burden forward to the final consumer is the essential characteristic of indirect taxes such as GST and customs duties. Statement 3 is incorrect: The introduction of GST rationalized and unified the indirect tax system, but it did not lead to a structural decline in the share of indirect taxes in gross tax revenue. Improved compliance, widening of the tax base, and higher consumption have kept indirect taxes a major component of India’s revenue. Statement 4 is incorrect: Cesses and surcharges are not independently classified as direct or indirect taxes based on their base. Instead, they are treated as part of the parent tax under which they are levied. Their most important distinction lies in the fact that they are not shareable with states, rather than in any separate classification logic."},{"id":11,"txt":"Consider the following statements:\nStatement-I: A progressive tax system aims to reduce income inequality by imposing a higher average tax burden on individuals with higher income levels. Statement-II: In a progressive tax structure, the marginal tax rate increases as taxable income rises, leading to a rising average tax rate.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I","Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I","Statement-I is correct but Statement-II is incorrect","Statement-I is incorrect but Statement-II is correct"],"ci":0,"exp":"Ex: Statement I is correct: A progressive tax system is designed to promote vertical equity, meaning that individuals with a greater ability to pay should contribute a higher proportion of their income in taxes. By placing a higher average tax burden on higher-income groups, progressive taxation helps moderate income and wealth inequality and supports redistributive objectives of fiscal policy. This rationale underpins the use of progressive personal income tax structures in most modern economies, including India. Statement II is correct: In a progressive tax system, marginal tax rates increase as income rises, which implies that each additional unit of income is taxed at a higher rate for higher-income earners. As income increases, a larger share of total income is taxed at these higher marginal rates, causing the average tax rate to rise. This mechanical relationship between rising marginal rates and a rising average tax burden explains how progressive taxation achieves redistribution, thereby directly explaining Statement-I."},{"id":12,"txt":"Consider the following aspects:\n1. Responsiveness of tax revenue to changes in national income\n2. Automatic increase in tax collections without changes in tax rates\n3. Expansion of the tax base due to improved compliance and formalisation\nHow many of the above are associated with tax buoyancy?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Statement 1 is correct: Tax buoyancy measures the overall responsiveness of tax revenue to changes in national income (GDP). It captures how tax collections grow when the economy expands and contract when it slows. A buoyancy greater than one indicates that tax revenues are growing faster than GDP, which is generally desirable from a fiscal sustainability perspective. Statement 2 is correct: One of the key features of tax buoyancy is that it reflects revenue growth without discretionary changes in tax rates or tax structure. When tax collections rise automatically due to higher incomes, consumption, or profits during economic expansion, it indicates a buoyant tax system. This automaticity distinguishes buoyancy from revenue increases caused purely by policy interventions. Statement 3 is correct: Improved compliance, widening of the tax base, and increased formalisation of the economy contribute to higher tax collections even at unchanged rates. Since tax buoyancy captures the combined effect of economic growth and systemic improvements, such factors are integral to buoyant revenue performance. In contrast, tax elasticity isolates revenue response excluding discretionary policy changes."},{"id":13,"txt":"Consider the following statements:\nStatement-I: Input tax credit under the Goods and Services Tax seeks to neutralise taxes embedded in intermediate transactions. Statement-II: Eligibility for input tax credit depends not only on the transaction but also on compliance by upstream suppliers. Statement-III: Statutory exclusions and procedural conditions under the Goods and Services Tax can restrict full tax pass-through.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-II and Statement-III are correct and both of them explain Statement-I","Both Statement-II and Statement-III are correct, but only one of them explains Statement-I","Only one of the Statements II and III is correct and that explains Statement-I","Only one of the Statements II and III is correct and that does not explain Statement-I"],"ci":1,"exp":"Ex: Statement I is correct: The core objective of input tax credit under the Goods and Services Tax is to neutralise the tax element embedded in intermediate transactions so that tax is ultimately borne only on value addition at each stage. This design seeks to eliminate the cascading effect of taxes that existed under the pre-GST regime, thereby ensuring production efficiency and price transparency. Statement II is correct: Eligibility for input tax credit is linked not only to the nature of the transaction but also to compliance by upstream suppliers, such as correct invoice reporting and tax payment. This condition directly explains Statement-I because seamless neutralisation of intermediate taxes is possible only when credits flow uninterrupted through the supply chain. Any break in supplier compliance disrupts the credit chain, undermining the objective of tax neutrality. Statement III is correct: Statutory exclusions (such as blocked credits) and procedural requirements (time limits, documentation, matching) can indeed restrict full tax pass-through under GST. However, this statement highlights limitations of implementation, not the rationale or mechanism behind tax neutralisation itself. Therefore, while Statement-III is correct, it does not directly explain why input tax credit seeks to neutralise taxes in intermediate transactions."},{"id":14,"txt":"A government introduces higher marginal tax rates for top-income earners while reducing indirect taxes on essential goods. This policy primarily reflects which principle of taxation?","ref":"","opts":["Proportional taxation principle","Benefit principle","Regressive taxation principle","Ability-to-pay principle"],"ci":3,"exp":"Ex: The ability-to-pay principle is a foundational concept in public finance and taxation. It asserts that taxpayers should contribute to government revenue according to their capacity to bear the tax burden. In other words, individuals or entities with higher income or wealth should pay more, both in absolute terms and often as a higher percentage of their income, compared to those with lower income. This principle is central to achieving equity and fairness in taxation. In the given scenario the government increases marginal tax rates for top-income earners, meaning the more a person earns, the higher the percentage of tax they pay on additional income. At the same time, indirect taxes on essential goods are reduced, which eases the tax burden on lower-income groups who spend a larger share of their income on necessities. This is a classic application of the ability-to-pay principle, because: ❖ It ensures that those with greater financial resources contribute more. ❖ It protects vulnerable groups from disproportionate tax burdens, addressing social and economic equity. ❖ It progressively redistributes resources without directly changing income transfers, using taxation as a tool to moderate inequality."},{"id":15,"txt":"With reference to the Goods and Services Tax in India, consider the following statements:\n1. Central GST and State GST are levied together on all inter-state supplies of goods and services.\n2. Integrated GST is levied on inter-state supplies and collected by the central government.\n3. Compensation Cess is imposed on certain goods to offset states’ revenue loss from GST.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Statement 1 is incorrect: CGST and SGST apply only to intra-state supplies, not inter-state supplies. For intra-state transactions (within a single state), the tax is split between the centre (CGST) and the state (SGST). For inter-state transactions, CGST and SGST are not levied; instead, Integrated GST (IGST) applies. Statement 2 is correct: IGST applies on goods or services moving from one state to another. It is collected by the centre, but then apportioned between the centre and the consuming state as per GST rules. IGST ensures seamless inter-state movement of goods without cascading taxes and maintains uniformity in the tax system. Statement 3 is correct: The Compensation Cess is levied on items like luxury goods, tobacco, and sin goods. Its primary purpose is to compensate states for potential revenue losses during the transition from multiple indirect taxes to a unified GST regime. This mechanism is temporary (initially for five years), ensuring states are not financially disadvantaged."},{"id":16,"txt":"With reference to the Goods and Services Tax Council in India, consider the following statements:\nStatement-I: The GST Council recommends the model GST law but cannot unilaterally impose taxes on states. Statement-II: Decisions of the GST Council require a three-fourth majority, giving the Centre greater influence.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I.","Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I.","Statement-I is correct but Statement-II is incorrect.","Statement-I is incorrect but Statement-II is correct."],"ci":1,"exp":"Ex: Statement I is correct: The GST Council, established under Article 279A of the Constitution, is tasked with recommending the model GST law, rates, exemptions, and thresholds for goods and services to ensure uniformity across India. However, it cannot unilaterally impose taxes on the states, as the implementation of GST requires compliance and adoption by individual states. Its role is therefore primarily recommendatory, designed to facilitate consensus between the Centre and the states, rather than coercive enforcement. Statement II is correct: Decisions of the GST Council require a three-fourth majority, with the Centre having a one-third vote and states collectively having two-thirds votes (each state having equal weight). This gives the Centre significant influence in decision-making. While Statement-II describes the voting mechanism and Centre’s influence, it does not explain why the Council cannot unilaterally impose taxes on states. That limitation arises from constitutional design and the federal structure, not from the Council’s voting process."},{"id":17,"txt":"A government plan proposes providing subsidized ration and welfare benefits only to households whose monthly per capita consumption is below the official poverty line. The poverty line is revised periodically considering food, non-food, and calorie requirements. However, some rural households above the poverty line still face deprivation due to rising local prices.\n1. Poverty estimation using consumption\n2. The official poverty line incorporates both\n3. Targeted welfare schemes based on the\n4. Variations in local prices and cost of living\nWhich of the following statements can be inferred from the above scenario? expenditure may understate real deprivation in certain regions. calorie intake and expenditure patterns. poverty line always guarantee that all needy households receive benefits. affect the effectiveness of poverty targeting. Select the correct answer using the code given below:","ref":"","opts":["1, 3 and 4 only","2 and 3 only","1, 2 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Statement 1 is correct: The scenario mentions that some rural households above the official poverty line still face deprivation due to rising local prices. This highlights a limitation of poverty estimation based on consumption expenditure, which is the main method used in India (Tendulkar or Rangarajan methodology). Since it relies on average consumption and calorie norms, it may understate real deprivation in certain regions, especially where local prices or access to goods vary significantly. Statement 2 is correct: Official poverty lines in India are calculated considering both calorie requirements and expenditure patterns. The methodology looks at per capita consumption expenditure sufficient to meet minimum calorie norms, and then adjusts for non-food expenditure, reflecting the typical consumption basket of rural and urban households. This ensures that the poverty line reflects both nutrition and basic living standards. Statement 3 is incorrect: The statement claims that targeted welfare schemes based on the poverty line always guarantee benefits for all needy households. This is incorrect because: ❖ Targeting relies on household identification using consumption or income surveys, which may be outdated or inaccurate. ❖ Local price variations, informal income, and survey errors mean some genuinely needy households above the official poverty line may not receive benefits, as described in the scenario. Statement 4 is correct: The scenario mentions that rising local prices affect households even above the poverty line. This reflects that variations in local cost of living can significantly influence the effectiveness of poverty targeting, making it possible for some families to experience deprivation despite being above the official threshold."},{"id":18,"txt":"Consider the following pairs:\nCommittee Contribution /Commission\n1. TendulkarCommittee(2005) — Methodology for povertyestimationconsumption expenditurebased on\n2. Expert Group New calorie norms and on Estimation consumption baskets for of Poverty poverty measurement (2014)\n3. LakdawalaCommittee(1993) — Calorieandestimationurbannorms forpovertyrural\n4. RaoCommittee(1979) — Useguaranteepoverty alleviation toolsof schemesemploymentas\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Pair 1 is correctly matched: The Tendulkar Committee was constituted to revise the methodology of poverty estimation in India. It recommended using consumption expenditure as the primary measure and accounted for both food and non-food requirements. It replaced the previous calorie-only focus and introduced uniform poverty lines for rural and urban areas Pair 2 is correctly matched: This Expert Group, chaired by C. Rangarajan, was tasked with revising the poverty line and methodology after Tendulkar. It suggested new calorie norms, consumption baskets, and adjustments for inflation, particularly to reflect rising costs in both rural and urban areas. Pair 3 is incorrectly matched: The Lakdawala Committee did not propose new calorie norms for poverty estimation. Instead, it primarily focused on developing a methodology for measuring poverty in terms of per capita consumption, based on existing calorie norms. It recommended retaining the calorie requirement benchmarks from the 1970s. Pair 4 is correctly matched: The Rao Committee focused on poverty alleviation measures. It emphasized the use of employment guarantee schemes, rural development programs, and targeted interventions to reduce poverty in India."},{"id":19,"txt":"With reference to disinvestment in India, consider the following statements:\n1. Strategic disinvestment transfers management control along with government shares.\n2. Minority stake sale without management transfer is also strategic disinvestment.\n3. Disinvestment proceeds are fully used to finance the fiscal deficit.\n4. DIPAM implements the disinvestment policy.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statement 1 is correct: Strategic disinvestment involves the sale of a substantial portion of government equity in a public sector enterprise along with transfer of management control to a private entity. This is aimed at bringing in professional management, enhancing efficiency, and enabling private participation in decision-making. It is different from minor stake sales, which do not change the control structure of the enterprise. Statement 2 is incorrect: Minority stake sales without transferring management control are classified as non-strategic or minority disinvestments, not strategic. Such sales mainly aim to raise funds from the market, broaden ownership, and improve public accountability, but they do not give the buyer decision-making authority. Statement 3 is incorrect: While disinvestment proceeds can contribute to reducing the fiscal deficit, they are not entirely used for that purpose. The government may also use the funds for infrastructure development, social sector investments, or strengthening capital expenditure, depending on budgetary priorities. Treating disinvestment purely as a deficit-financing tool is a misconception. Statement 4 is correct: The Department of Investment and Public Asset Management (DIPAM), under the Ministry of Finance, is responsible for planning and executing both strategic and non-strategic disinvestments. DIPAM ensures valuation, transaction structuring, and sale processes follow regulatory and financial guidelines."},{"id":20,"txt":"Which of the following has the highest weight in horizontal devolution of finances according to the Fifteenth Finance Commission?","ref":"","opts":["Population","Area","Demographic Performance","Income Distance"],"ci":3,"exp":"Ex: The Fifteenth Finance Commission (XV FC)’s ToR(Term of Reference) was unique and wide-ranging in many ways. The Commission recommend on performance incentives for States in many areas like the power sector, adoption of DBT, solid waste management etc. Horizontal devolution: Based on principles of need, equity and performance, the overall devolution formula is as follows: Criteria Weight (%) Population 15.0 Area 15.0 Forest & ecology 10.0 Income distance 45.0 Tax & fiscal efforts 2.5 Demographic performance 12.5 Total 100 ❖ On horizontal devolution, while XVFC agreed that the Census 2011 population data better represents the present need of States, to be fair to, as well as reward, the States which have done better on the demographic front, XVFC has assigned a 12.5 per cent weight to the demographic performance criterion. ❖ Vertical devolution: It has recommended maintaining the vertical devolution at 41 per cent. It is at the same level of 42 per cent of the divisible pool as recommended by FC-XIV. However, it has made the required adjustment of about 1 per cent due to the changed status of the erstwhile State of Jammu and Kashmir into the new Union Territories of Ladakh and Jammu and Kashmir."},{"id":21,"txt":"Which of the following instruments are utilized by the government for deficit financing?\n1. Treasury Bills\n2. Small Saving Scheme\n3. Borrowings from International financial institutions\n4. Printing of money\n5. Borrowings from commercial banks\nSelect the correct answer from the codes given below:","ref":"","opts":["1 and 2 only","1, 2, 3 and 4 only","3 and 5 only","1, 2, 3, 4 and 5"],"ci":3,"exp":"Ex: Statement 1 is correct: Treasury Bills are used for deficit financing. They are short-term debt instruments issued by the government to meet its short-term liquidity needs. When the government issues treasury bills, it borrows money from investors (which can include the public and financial institutions), and this is a form of deficit financing. Statement 2 is correct: Funds from Small Saving Schemes can also be used for deficit financing. These schemes include various savings instruments like National Savings Certificates, Public Provident Funds, etc., where the public invests their savings. The government can use these accumulated funds to finance its deficit. Statement 3 is correct: External borrowings are a means of deficit financing. The government can borrow from external sources (like foreign governments, international financial institutions, etc.) to finance its deficit. Statement 4 is correct: In theory, printing money (or more broadly, monetary financing) is a way to finance a government deficit. This involves the central bank creating new money to purchase government securities or directly finance government spending. However, this method is typically avoided due to the risk of high inflation. Statement 5 is correct: Borrowings from commercial banks are also a means of deficit financing. The government can borrow directly from commercial banks to finance its deficit, often by issuing securities like government bonds."},{"id":22,"txt":"What does the term 'Twin Deficit' refer to in the context of an economy?","ref":"","opts":["A situation where both inflation and unemployment rise simultaneously.","A scenario where the government's fiscal deficit and current account deficit increase at the same time.","A situation where the economy faces high interest rates and slow GDP growth simultaneously.","A condition where both public sector and private sector debts reach unsustainable levels."],"ci":1,"exp":"Ex: Twin Deficit Problem: The Twin Deficit Problem refers to a situation where a country experiences both a fiscal deficit and a current account deficit simultaneously, creating financial instability. ❖ Why Does the Twin Deficit Occur? \u0000 High Government Spending: Increased subsidies and fiscal stimulus. \u0000 Rising Import Costs: Higher crude oil and commodity prices raise the trade deficit. \u0000 Weak Currency: A depreciating rupee increases external borrowing costs. \u0000 Geopolitical Events: Global crises (e.g., Russia-Ukraine War) disrupt trade and increase inflation. ❖ Impacts of the Twin Deficit Problem \u0000 Weaker Rupee: Persistent CAD leads to currency depreciation, making imports costlier. \u0000 Higher Inflation: Rising fiscal deficit increases government borrowing, causing inflationary pressures. \u0000 External Vulnerability: Increased foreign debt raises risks of a balance of payments crisis. \u0000 Reduced Economic Growth: High deficits limit fiscal space for growth-oriented spending."},{"id":23,"txt":"With reference to crowding in and crowding out effect of the government's policies, which of the following statements is/are correct?\n1. The crowding-in refers to the reduction in private sector investments caused by rising interest rates in the economy.\n2. The crowding-out phenomenon occurs when private sector investment rises due to increase in government’s public spending.\nSelect the correct answer using the code given below:","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: ❖ Statement 1 is incorrect: Crowding-in is a phenomenon that occurs when higher government spending leads to an increase in economic growth and therefore encourages firms to invest due to the presence of more profitable investment opportunities. The government borrowing, in a modern economy operating significantly below capacity, can actually increase demand by generating employment, thereby stimulating private spending as well. ❖ Statement 2 is incorrect: Crowding-out is a situation when increased interest rates lead to a reduction in private investment spending. Sometimes, government adopts an expansionary fiscal policy stance and increases its spending to boost the economic activity. This leads to an increase in interest rates. Increased interest rates affect private investment decisions. With higher interest rates, the cost for funds to be invested increases and affects their accessibility to debt financing mechanisms. The crowding out effect suggests rising public sector spending drives down private sector spending."},{"id":24,"txt":"Which of the following organizations released the Fiscal Health Index (FHI) in India?","ref":"","opts":["Reserve Bank of India (RBI)","NITI Aayog","Ministry of Finance","Comptroller and Auditor General of India (CAG)"],"ci":1,"exp":"Ex: NITI Aayog released the Fiscal Health Index (FHI) to assess and benchmark the fiscal performance of Indian states. Additional Information: The Fiscal Health Index (FHI) The Fiscal Health Index (FHI) is an assessment tool that evaluates the fiscal sustainability and financial health of Indian states. It provides insights into the debt levels, revenue mobilization, and expenditure quality of states to ensure long-term fiscal stability. 1. Released by: NITI Aayog 2. Objective of the Fiscal Health Index (FHI): \u0000 Assess fiscal sustainability of states. \u0000 Promote transparency in state finances. \u0000 Encourage best practices in revenue collection and expenditure management. \u0000 Help policymakers identify financially weak states and suggest corrective measures. 3. Key Indicators of the Fiscal Health Index: The index evaluates states using five sub-indices, each representing a crucial aspect of fiscal management: Sub-Index Description 1. Quality of Measures capital vs. Expenditure revenue spending and developmental vs. non-developmental expenditure. 2. Revenue Evaluates tax and non-tax Mobilization revenue collection efficiency. 3. Fiscal Assesses fiscal deficit, Prudence revenue deficit, and compliance with fiscal responsibility laws. 4. Debt Index Measures total debt burden, interest payments, and sustainability of debt. 5. Debt Analyzes a state’s ability Sustainability to manage its debt without financial distress. 4. Coverage of the Index: \u0000 The FHI covers 18 major Indian states (excluding North-Eastern and Himalayan states). \u0000 These states are selected based on their economic size and contribution to GDP"},{"id":25,"txt":"Which of the following statements correctly describe the characteristics of the Consolidated Fund of India (CFI), Contingency Fund of India (CFI), and Public Account of India (PAI)?\n1. No amount can be withdrawn from the Consolidated Fund of India, Contingency Fund of India, or Public Account of India without the authorization of the Parliament.\n2. The Contingency Fund of India is held by the Finance Secretary on behalf of the President.\n3. Payments from the Public Account of India are mostly in the nature of banking transactions.\nSelect the correct answer using the codes given below:","ref":"","opts":["1 and 3 only","2 and 3 only","1 and 2 only","1, 2, and 3"],"ci":1,"exp":"Ex: ❖ Statement 1 is incorrect: \u0000 Consolidated Fund of India (CFI): As per Article 266(1) of the Constitution, all government revenues (tax and non-tax) and borrowings are credited to the CFI. No withdrawal can be made from this fund without Parliamentary approval. \u0000 Contingency Fund of India (CFI): Established under Article 267(1), this fund is used for unforeseen expenditures. However, Parliamentary approval is required only after the expenditure has been made, not before. Hence, it does not require prior authorization. \u0000 Public Account of India (PAI): As per Article 266(2), this account includes deposits, advances, and other funds that the government is liable to repay. Parliamentary authorization is not required for payments made from this account, as the government is simply managing the funds on behalf of the people. ❖ Statement 2 is correct: \u0000 As per the Contingency Fund of India Act, 1950, Section 3 states that this fund is held by the Finance Secretary on behalf of the President of India. \u0000 The President can use this fund for unforeseen expenses, but Parliament must later approve the spending through supplementary grants under Article 115 or Article 116. ❖ Statement 3 is correct: \u0000 The Public Account of India (PAI) includes transactions such as Provident Fund deposits, Small Savings Schemes, Reserve Funds, and Deposits of Government Departments. \u0000 These funds do not belong to the government but are managed by it in a fiduciary capacity, meaning they must be repaid when claimed by the rightful owners. \u0000 All Public Money received by Government other than those which are for credit to the Consolidated Fund of India are accounted for under Public Account. The receipts into the Public Account and disbursements out of it are not subject to vote by the Parliament."},{"id":26,"txt":"Consider the following sources of government revenue:\n1. Grants-in-aid from foreign countries.\n2. Loans received from the International Monetary Fund (IMF).\n3. Receipts from fines like Traffic Challan.\n4. Dividend and profits on investments made by the central government.\nHow many of the above form part of the Revenue Receipts of the Government?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Revenue Receipts refer to the income generated by the government that neither creates a liability nor reduces the assets of the government. They are non-redeemable and are classified into Tax Revenue (like GST, Income Tax) and Non-Tax Revenue (like interest receipts, dividends from PSUs, and fines). ❖ Statement 1 is correct: Grants do not create any liability as they are not repayable. They are a source of non-tax revenue for the government and are classified as revenue receipts. Example: Aid from international organizations like the World Bank for disaster relief. ❖ Statement 2 is incorrect: Loans received from any external source, including IMF, create a liability as they have to be repaid. Thus, they are classified under capital receipts, not revenue receipts. ❖ Statement 3 is correct: Fines and penalties imposed by the government, such as traffic challans, are considered non-tax revenue receipts. They do not create any liability or reduce assets. Example: Penalties imposed under the Motor Vehicles Act. ❖ Statement 4 is correct: Any earnings from government investments (e.g., profits from PSUs) do not create a liability and hence are classified as non-tax revenue receipts. Example: Dividend received from ONGC, SBI, etc."},{"id":27,"txt":"With reference to Revenue Receipts of the government, which one of the following statements is incorrect?","ref":"","opts":["They do not create any liability nor cause a reduction in the assets of the government.","They are regular and recurring in nature.","They include both tax revenue and non-tax revenue.","Receipts from Goods and Services Tax (GST) are not part of Revenue Receipts."],"ci":3,"exp":"Ex: ❖ Statement (a) is correct: Revenue Receipts are those receipts of the government which neither creates a liability for the government nor reduces the assets (physical or financial) of the government. Revenue receipts are non-redeemable i.e., they cannot be reclaimed from the government. ❖ Statement (b) is correct: Revenue Receipts are regular and recurring in nature, and the Government receives them in the normal course of activities. ❖ Statement (c) is correct: Revenue receipts can be of two types: Tax Revenues which consists of direct and indirect taxes of the central government and Non-Tax Revenue which consists of interest receipts on account of loans given by central government, dividend and profits on investments made by the central government (i.e., PSUs), fees and fines and other receipts for services rendered by the government like passport fees etc. Cash grants-in-aid from foreign countries and international organisations are also part of the non-tax revenue. ❖ Statement (d) is incorrect: Goods and Services Tax (GST) is a type of indirect tax and receipts from GST form part of the tax revenue receipts."},{"id":28,"txt":"Which of the following are not sources of financing a budget deficit?\n1. Borrowing from the domestic market.\n2. Borrowing from international sources.\n3. Monetization of deficit.\n4. Increasing tax rates on businesses and individuals.\nSelect the correct answer using the codes given below:","ref":"","opts":["1 and 3 only","3 only","2 and 4 only","4 only"],"ci":3,"exp":"Ex: ❖ Statement 1 is incorrect: The government issues bonds in the domestic market to raise funds. Borrowing from domestic sources does not increase the money supply, but adds to public debt, affecting the Debt-to-GDP ratio. ❖ Statement 2 is incorrect: External borrowing comes from three major sources: \u0000 Soft loans from institutions like the IMF & World Bank \u0000 Commercial borrowing from foreign markets \u0000 Deposits from emigrants (e.g., Non-Resident Indians - NRIs) \u0000 However, external borrowing increases foreign debt, and repayment affects the Debt-Service Ratio. ❖ Statement 3 is incorrect: Monetization of the deficit occurs when the central bank prints new money and purchases government bonds. \u0000 This increases the money supply, leading to higher inflation. \u0000 The FRBM Act, 2003, restricts RBI from directly financing deficits, except in exceptional cases. The FRBM Act, 2003 prescribes that the Reserve Bank of India should not buy government bonds, except under exceptional circumstances. ❖ Statement 4 is correct: Increasing tax rates is not considered a financing method for a budget deficit. \u0000 Higher taxes generate more revenue, but they do not directly finance a deficit in the same way borrowing or monetization does. \u0000 Instead, taxes reduce the deficit by increasing government earnings, while borrowing fills the gap between expenditure and revenue. Hence, Option (d) is correct."},{"id":29,"txt":"Consider the following statements regarding Interest Rate Growth Rate Differential (IRGD):\nStatement-I: A negative IRGD occurs when the GDP growth rate is higher than the interest rate paid by the government on loans, indicating better debt sustainability. Statement-II: If IRGD is negative, the government should immediately reduce borrowing as high GDP growth could still lead to a debt crisis.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct, and Statement-II is the correct explanation of Statement-I.","Both Statement-I and Statement-II are correct, but Statement-II is not the correct explanation of Statement-I.","Statement-I is correct, but Statement-II is incorrect.","Statement-I is incorrect, but Statement-II is correct."],"ci":2,"exp":"Ex: ❖ Statement-I is correct: IRGD is the difference between (loan) interest rate (paid by Govt to investors) and GDP growth rate in an economy \u0000 A negative IRGD means the GDP growth rate is higher than the interest rate the government pays on its loans. \u0000 This indicates that the government can easily repay debt through increased tax revenue from economic growth. \u0000 In India's case, this has been the trend historically and is expected to continue for at least the next decade. ❖ Statement-II is incorrect: \u0000 A negative IRGD does not mean the government should immediately reduce borrowing. \u0000 Instead, it suggests that as long as GDP growth remains higher than the interest rate, the government can afford to borrow for development projects. \u0000 A debt crisis usually arises only when the interest rate surpasses the GDP growth rate, leading to increasing debt burdens. \u0000\u0000"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

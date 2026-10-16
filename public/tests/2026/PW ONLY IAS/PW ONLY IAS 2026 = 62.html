@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 62</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 62</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 62">PW ONLY IAS 2026 = 62</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following statements with reference to the outcomes of the 22nd ASEAN– India Summit:\n1. The ASEAN–India Plan of Action (2026– 2030) was endorsed to operationalise the Comprehensive Strategic Partnership announced in 2022.\n2. The year 2026 was designated as the ASEAN–India Year of Maritime Cooperation to strengthen collaboration in the Blue Economy and maritime governance.\n3. India announced that a Centre for Southeast Asian Studies will be established at Nalanda University as a joint initiative funded by the ASEAN Secretariat.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: At the Summit, leaders endorsed the ASEAN–India Plan of Action (2026–2030) as the official roadmap for implementing the Comprehensive Strategic Partnership (CSP) that had been elevated in 2022. The Plan of Action outlines cooperation in areas such as political-security cooperation, economic integration, connectivity, digital economy, education, and people-to-people exchanges. Statement 2 is correct: During the Summit, India announced that 2026 would be observed as the “ASEAN–India Year of Maritime Cooperation.” This initiative aims to expand collaboration in areas related to the Blue Economy, maritime connectivity, maritime security, and sustainable use of marine resources in the Indo-Pacific region. The initiative also complements principles contained in the ASEAN Outlook on the Indo-Pacific, which emphasises maritime cooperation and regional stability. Statement 3 is incorrect: While the establishment of a Centre for Southeast Asian Studies at Nalanda University was indeed discussed and welcomed, it is not funded by the ASEAN Secretariat. India is the sole primary funder of the Centre as part of its \"Act East\" commitment. The ASEAN Secretariat provides intellectual and diplomatic support, but the financial burden and administrative control lie with the Government of India. Furthermore, the scholarship programs for ASEAN students (1000 PhD fellowships) are funded through India's ASEAN-India Fund."},{"id":1,"txt":"Which one of the following statements correctly describes the geographical setting of Bahrain?","ref":"","opts":["It is a mountainous island country in the Persian Gulf whose highest peak exceeds 1000 metres.","It is a peninsular country on the northern coast of the Persian Gulf located between Kuwait and Saudi Arabia.","It is a single island country in the Persian Gulf situated south of Iran and connected to Qatar by a causeway.","It is an archipelago in the Persian Gulf, located east of Saudi Arabia and west of Qatar."],"ci":3,"exp":"Ex: Bahrain is not a single island but an archipelago consisting of about 30 natural and artificial islands, of which Bahrain Island is the largest and most populated. Geographically, the country lies in a bay on the southwestern coast of the Persian Gulf. It is located east of Saudi Arabia and west of SPP 22663 Qatar. Bahrain also shares a maritime boundary with Iran. In 2024–2026, the bilateral relationship has shifted towards the \"Green Economy\". India and Bahrain recently signed a memorandum to cooperate on Green Hydrogen and the digitalization of financial services, aiming to link India's UPI with Bahrain's \"BenefitPay\" system."},{"id":2,"txt":"Consider the following statements regarding MERCOSUR (Southern Common Market):\n1. It was established by the Treaty of Montevideo with the objective of creating a common market.\n2. The Protocol of Ouro Preto granted MERCOSUR legal personality and established it as a customs union with a common external tariff.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: MERCOSUR was actually established in 1991 by the Treaty of Asunción, signed by Argentina, Brazil, Paraguay, and Uruguay. The Treaty of Asunción explicitly aimed to create a common market allowing free movement of goods, services, capital, and people. Statement 2 is correct: The Protocol of Ouro Preto (1994) gave MERCOSUR legal personality in international law and established it as a customs union, enabling member states to coordinate trade policies and adopt a Common External Tariff (CET). Feature Details Full Argentina, Brazil, Paraguay, Members Uruguay, and Bolivia (admitted as a full member in 2024/2025). Suspended Venezuela (suspended since Member 2017 for failure to comply with democratic clauses). 2 India's India has a Preferential Relation Trade Agreement (PTA) with MERCOSUR, which both sides have been working to expand since 2023."},{"id":3,"txt":"With reference to India–Venezuela relations, consider the following statements:\n1. India imports oil and petroleum products from Venezuela and has signed agreements to explore renewable energy projects.\n2. India is a founding member of the Venezuelan-led Petrocaribe energy bloc.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2","1, 2 और 3"],"ci":0,"exp":"Ex: Statement 1 is correct: Venezuela possesses the world's largest proven oil reserves. Historically, India has been one of the top importers of Venezuelan crude. In late 2023 and throughout 2024, following the temporary easing of U.S. sanctions (via General License 44 and subsequent individual licenses), Indian refiners like Reliance Industries and HPCL- Mittal Energy resumed significant imports of Venezuelan heavy crude. Diversification: Beyond oil, the two nations have engaged in discussions regarding the \"Green Energy Transition.\" In early 2025, India and Venezuela signed a Memorandum of Understanding (MoU) to collaborate on Solar Energy and Biofuels, aligning with India's leadership in the International Solar Alliance (ISA). Statement 2 is incorrect: Petrocaribe is an alliance established by Venezuela in 2005 to provide crude oil to Caribbean and Central American nations at preferential payment terms (often involving long-term, low-interest credit). India is not a member of Petrocaribe. The membership is strictly regional, comprising countries like Cuba, Jamaica, Haiti, and Nicaragua. India's energy engagement with Venezuela is purely commercial/bilateral and does not fall under this regional Caribbean framework."},{"id":4,"txt":"With reference to the Digital Silk Road (DSR), consider the following statements:\n1. The Digital Silk Road is a China-led initiative under the Belt and Road Initiative to enhance digital infrastructure and technological connectivity in Eurasia and Africa.\n2. It includes projects such as fiber-optic cables, 5G networks, smart cities, and also aims to develop maritime ports and conventional transport infrastructure.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: The Digital Silk Road (DSR) is a key component of China’s Belt and Road Initiative (BRI) that emphasizes building digital infrastructure, promoting cross-border technological connectivity, and supporting digital economies across Eurasia and Africa. Its focus areas include telecommunications networks, 5G, e-commerce SPP 22663 platforms, data centers, and smart city projects. The initiative is aimed at strengthening China’s influence in global digital trade and connectivity, while also fostering integration of digital systems among participating countries. Statement 2 is incorrect: Although the DSR includes projects like fiber-optic cables, 5G networks, and smart cities, it does not extend to maritime ports or conventional transport infrastructure. Physical transport projects such as ports, roads, and railways fall under the broader BRI but are separate from the DSR’s digital and technological focus. Extra edge: For India, the DSR represents a significant national security challenge. India has largely \"de-risked\" its digital ecosystem from the DSR by banning Chinese apps (like TikTok), excluding Chinese vendors (Huawei/ZTE) from its 5G trials, and launching the \"Clean Network\"-style domestic policies to protect its data sovereignty."},{"id":5,"txt":"Which of the following is correct regarding the Middle Corridor?","ref":"","opts":["It passes through Turkey, Georgia, Azerbaijan, and the Caspian Sea to connect China with Europe.","It is part of the China–Pakistan Economic Corridor linking Gwadar port with Central Asia.","It primarily facilitates maritime trade between Southeast Asia and the Middle East via the Indian Ocean.","It is a joint initiative of the European Union and Russia to strengthen trade through the Arctic route."],"ci":0,"exp":"Ex: The Middle Corridor, formally known as the Trans-Caspian International Transport Route (TITR), is a multilateral multimodal transport project that has gained immense strategic importance as a faster and more reliable alternative to the traditional Northern Route (through Russia) and the Southern Route (via the Suez Canal). The Route Geography: The corridor starts in China, crosses through Kazakhstan, traverses the Caspian Sea by ferry to Baku (Azerbaijan), proceeds through Georgia and Turkey, and finally reaches Europe. It involves a complex integration of rail, road, and sea transport. Strategic Significance (2024–2026): ❖ The \"Russia Bypass\": Since the escalation of the Russia-Ukraine conflict, global logistics companies have increasingly shifted away from the \"Northern Corridor\" (Trans-Siberian Railway) due to sanctions and insurance risks. The Middle Corridor has emerged as the primary \"East-West\" land bridge. 3 ❖ Efficiency: It can reduce the transit time between East Asia and Europe to approximately 12–15 days, which is significantly faster than the 30–40 days required via the Suez Canal. ❖ Geopolitical Independence: For Central Asian nations like Kazakhstan and Uzbekistan, the Middle Corridor is a tool for \"Strategic Autonomy,\" allowing them to export their resources (oil, gas, and minerals) without being solely dependent on Russian pipelines or Chinese infrastructure. Hence option (a) is correct."},{"id":6,"txt":"Consider the following statements regarding India’s engagement with Afghanistan:\nStatement‑I: India has not recognised the Taliban but continues trade and key development projects, including Chabahar Port. Statement‑II: India closed its embassy in Kabul after 2021 and has no diplomatic or technical presence in Afghanistan.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement‑I and Statement‑II are correct and Statement‑II explains Statement‑I","Both Statement‑I and Statement‑II are correct, but Statement‑II does not explain Statement‑I","Statement‑I is correct, but Statement‑II is incorrect","Statement‑I is incorrect, but Statement‑II is correct"],"ci":2,"exp":"Ex: India's policy toward Afghanistan has shifted from total disengagement in 2021 to a model of \"Pragmatic Functionalism\" by 2025–2026. Statement I is correct: India has consistently maintained that it does not formally recognize the Taliban as the legitimate government of Afghanistan. It aligns with the international consensus that recognition is contingent on an inclusive government and the protection of human rights. ❖ Trade and Development: Despite the lack of recognition, India has increased its development aid (allocated ₹150 crore in the 2026–27 Budget). It continues to support over 500 small-scale projects across all 34 provinces. ❖ Chabahar Port: India views Afghanistan as a vital transit hub for the International North-South Transport Corridor (INSTC). It continues to utilize the Chabahar Port in Iran to send humanitarian aid (wheat, medicines, and vaccines) to Afghanistan, bypassing Pakistan. Statement II is incorrect: While India did close its embassy in August 2021, it returned in June 2022 by deploying a \"Technical Team\" to Kabul to coordinate humanitarian assistance. ❖ The 2025 Upgrade: In a major diplomatic shift in October 2025, following a visit by Afghan Foreign Minister Amir Khan Muttaqi to New Delhi, India upgraded its Technical Mission back to a full Embassy. SPP 22663 ❖ Current Status (2026): India now maintains a permanent diplomatic presence in Kabul headed by a Chargé d'Affaires (CDA). While it hasn't appointed a formal \"Ambassador\" (to avoid the implication of formal recognition), the embassy is fully operational for functional diplomacy, trade coordination, and consular services."},{"id":7,"txt":"With reference to the Asia–Africa Growth Corridor (AAGC), consider the following statements:\n1. It seeks to promote digital connectivity and communication infrastructure in African countries through collaboration between India and Japan.\n2. It identifies sectors such as agro-processing, pharmaceuticals, healthcare, skill development and disaster management as priority areas for cooperation.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: The Asia–Africa Growth Corridor (AAGC) is an economic cooperation agreement between the governments of India and Japan, launched in 2017 during the African Development Bank meeting in Gujarat. Statement 1 is correct: A primary pillar of the AAGC is to enhance connectivity between the two continents. While it emphasizes maritime links (the \"Sea Corridor\"), it specifically targets digital connectivity and the expansion of communication infrastructure to bridge the digital divide in Africa. It combines India’s deep civilizational ties and long-standing development experience in Africa with Japan’s high-quality technology and financial capital. Statement 2 is correct: The AAGC is not limited to physical infrastructure. It focuses heavily on human-centric development. The vision document identifies several key sectors: ❖ Agriculture & Agro-processing: Ensuring food security and value addition. ❖ Healthcare & Pharmaceuticals: Leveraging India's role as the \"Pharmacy of the World\" to provide affordable medicine and vaccines. ❖ Skill Development: Training the African youth population to enhance employability. ❖ Disaster Management: Sharing expertise in resilient infrastructure to combat climate-related disasters."},{"id":8,"txt":"Which of the following is correct regarding the Blue Pacific Strategy?","ref":"","opts":["It is a diplomatic and development framework led by Pacific Island countries to promote regional cooperation and global advocacy.","It is a military alliance of Pacific nations aimed at countering extra-regional influence.","It is a trade agreement between Pacific Island countries and the European Union for preferential market access.","It is a joint environmental treaty between Pacific Island nations and ASEAN for marine conservation."],"ci":0,"exp":"Ex: The Blue Pacific Strategy—formally known as the 2050 Strategy for the Blue Pacific Continent—is the foundational roadmap for the Pacific region's future. It was endorsed by 4 the leaders of the Pacific Islands Forum (PIF) to secure the region’s long-term environmental, economic, and strategic interests. Hence option (a) is correct. As of March 2026, the region is actively moving from \"planning\" to \"deployment.\" A key milestone reached in early 2026 is the \"Unlocking Blue Pacific Prosperity\" (UBPP) initiative, which aims to mobilize $500 million for 100% sustainable management of the Blue Pacific Continent. Geopolitical Leveraging: The strategy acts as a guardrail against great power competition. When outside powers (like the US, China, or India) engage with the region, the Pacific leaders demand that such partnerships align with the 2050 Strategy priorities rather than external agendas."},{"id":9,"txt":"With reference to the 17th BRICS Summit, consider the following statements:\n1. It supported expansion of the United Nations Security Council to enhance Global South representation.\n2. It launched a BRICS partnership to address tuberculosis linked to social determinants of health.\n3. It endorsed the Carbon Border Adjustment Mechanism of the European Union.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 only","1 and 3 only","1, 2 and 3","1, 2, 3, 4 और 5"],"ci":0,"exp":"Ex: The 17th BRICS Summit, held in 2025, was a landmark event as it was the first summit held under the chairmanship of Brazil following the major expansion of the bloc. The summit focused on institutionalizing the \"BRICS-Plus\" framework and strengthening the voice of the Global South. Statement 1 is correct: At the 17th BRICS Summit, the leaders reaffirmed the need for reform of global governance institutions, particularly the United Nations Security Council, so that they reflect contemporary geopolitical realities. The declaration emphasized increasing representation of developing countries from Asia, Africa, and Latin America, thereby amplifying the voice of the Global South in international decision- making. The summit also stressed broader reforms in the IMF and World Bank to ensure that Emerging Markets and Developing Countries (EMDCs) have greater influence in global economic governance. Statement 2 is correct: The summit launched the BRICS Partnership for the Elimination of Socially Determined Diseases. This initiative focuses on tackling diseases such as tuberculosis (TB) that are strongly influenced SPP 22663 by social determinants like poverty, malnutrition, poor housing, and limited healthcare access. Statement 3 is incorrect: BRICS countries rejected and condemned the Carbon Border Adjustment Mechanism introduced by the European Union. The leaders argued that CBAM and similar unilateral measures are protectionist trade policies disguised as climate action and could harm developing economies’ industrial competitiveness and energy transitions. CBAM effectively imposes a carbon tax on imports such as steel, cement, and aluminum entering the EU if they are produced with higher emissions. BRICS countries claim it penalizes developing economies that still rely on carbon-intensive industries."},{"id":10,"txt":"With reference to international treaty law,\nwhich of the following statements is correct regarding the term ‘abeyance’?","ref":"","opts":["It is a legally recognized concept under the Vienna Convention on the Law of Treaties, 1969 (VLCT) for suspending treaty obligations.","It refers to a state of temporary disuse or suspension but has no legal basis under Indus Water Treaty or VLCT.","It was introduced in the Indus Waters Treaty, 1960, to temporarily halt water- sharing obligations between India and Pakistan.","It allows a third-party signatory, such as the World Bank, to unilaterally suspend treaty obligations."],"ci":1,"exp":"Ex: The term \"abeyance\" entered the lexicon of Indian foreign policy in April 2025, following a strategic decision by the Indian government to pause the Indus Waters Treaty (IWT) in response to cross-border terrorism. In legal terms, \"abeyance\" signifies a state of temporary inactivity or dormancy. Following the Pahalgam terror attack in April 2025, India announced that the IWT would be held \"in abeyance\" until Pakistan takes credible action against terror. By using \"abeyance\" instead of \"suspension\" or \"termination,\" India chose a term that signals a profound pause in procedural cooperation (like data sharing and commission meetings) without formally exiting the treaty or stopping the physical flow of water. Legal Status (The \"Grey Zone\"): ❖ Indus Waters Treaty (IWT): The 1960 treaty contains no mention of the word \"abeyance.\" Furthermore, it does not have a provision for unilateral suspension. Article XII(4) states the treaty remains in force until terminated by a mutually ratified treaty. ❖ Vienna Convention on the Law of Treaties (VCLT): The VCLT is the \"treaty of treaties\" that governs 5 international law. It recognizes \"suspension\" and \"termination\" under specific grounds (like material breach or fundamental change of circumstances), but it does not recognize \"abeyance\" as a formal legal concept. ❖ Conclusion: Therefore, \"abeyance\" is a diplomatic and strategic term used by India to create strategic ambiguity, effectively operating in a legal grey zone outside the text of the IWT and the VCLT. Hence option (b) is correct"},{"id":11,"txt":"Consider the following countries:\n1. Bhutan\n2. France\n3. Mauritius\n4. Nepal\n5. Sri Lanka\nWhich of the above countries are included in the list of countries where international merchant payments are accepted at select merchant outlets using India’s UPI (Unified Payments Interface)?","ref":"","opts":["2 and 3 only","1 and 4 only","2, 3 and 5 only","1, 2, 3, 4 and 5"],"ci":3,"exp":"Ex: UPI (Unified Payments Interface) is India’s real-time payment system that facilitates inter- bank transactions through a mobile platform. It allows users to link multiple bank accounts to a single app, enabling quick, secure, and convenient transfers or merchant payments. Countries where India’s UPI-based international merchant payments are accepted at select outlets: ❖ Bhutan (Statement 1 is correct) ❖ France (Statement 2 is correct) ❖ Mauritius (Statement 3 is correct) ❖ Nepal (Statement 4 is correct) ❖ Sri Lanka (Statement 5 is correct) ❖ Singapore ❖ UAE This reflects UPI’s growing global reach, offering cross-border transaction capabilities to Indian travelers and expatriates in these countries. Therefore, option (d) is correct. 13. Ans. (c) India maintains that the McMahon Line, a 550- mile frontier that extends through the Himalayas, is the official legal border between China and India. China and India are the two neighboring countries in Asia. India shares 3488 km of border with China that runs along the states of: ❖ Jammu and Kashmir ❖ Himachal Pradesh SPP 22663 ❖ Sikkim ❖ Uttarakhand ❖ Arunachal Pradesh. Also, the Tibet Autonomous Region of China touched the border with India. The Indian administrative areas of Jammu and Kashmir from Aksai Chin are separated by a line known as the Line of Actual Control (LAC) which is one of the disputed border areas between India and China."},{"id":12,"txt":"Consider the following Indian states:\n1. Arunachal Pradesh\n2. Assam\n3. Sikkim\n4. Uttrakhand\n5. Himachal Pradesh\nHow many of the above states share boundaries with China?","ref":"","opts":["Only two","Only three","Only four","All five"],"ci":2,"exp":"No explanation provided."},{"id":13,"txt":"Consider the following statements:\n1. India has procured the S-400 Triumf air defence missile system from Russia.\n2. The Sukhoi Su-30MKI is a key component of the Indian Air Force and is manufactured under license in India.\n3. India operates the INS Vikramaditya which was originally a Russian naval vessel.\n4. The BrahMos supersonic cruise missile, developed jointly by India and Russia, is exclusively used by the Indian Navy.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: India and Russia share a long-standing defence relationship, with Russia being one of India’s largest suppliers of military equipment. Several key defence systems and platforms in India’s arsenal are of Russian origin or have been developed jointly. Statement 1 is correct: India has procured the S-400 Triumf air defence missile system from Russia. This advanced system is capable of intercepting aircraft, missiles, and drones at long ranges, significantly enhancing India’s air defence capabilities. The deal was signed in 2018 despite geopolitical pressures. Statement 2 is correct: The Sukhoi Su- 30MKI is a multi-role fighter aircraft that forms the backbone of the Indian Air Force. It is manufactured under license in India by Hindustan Aeronautics Limited (HAL) and is one of the most advanced fighter jets in India’s fleet. Statement 3 is correct: The INS Vikramaditya is a modified Kiev-class aircraft carrier originally commissioned by the Soviet Navy. After extensive refurbishment, it was inducted into the Indian Navy in 2013 and serves as a flagship carrier. 6 Statement 4 is incorrect: Brahmos is a universal long range supersonic cruise missile systemthat can be launched from land, sea and air. Brahmos has been jointly developed by DRDO, India, and NPOM, Russia. The system has been designed with two variants for Anti-Ship and Land-Attack roles. Brahmos Weapon Systems has been inducted and is operational with the Indian Navy (IN) as well as the Indian Army (IA)."},{"id":14,"txt":"With reference to the India-Middle East-Europe Economic Corridor (IMEC), consider the following statements:\n1. The corridor aims to connect the Indian port of Mumbai with the Mediterranean port of Haifa in Israel via the Arabian Peninsula. IMEC is an initiative under the Shanghai Cooperation Organisation (SCO) to enhance trade and connectivity.\n2. The corridor consists of both rail and shipping networks to facilitate seamless trade between Asia, the Middle East, and Europe.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: The India-Middle East- Europe Economic Corridor (IMEC) is a connectivity project that seeks to develop a seamless infrastructure of ports, railways, roads, sea lines and pipelines to enhance trade among India, the Arabian Peninsula, the Mediterranean region and Europe. The IMEC aims to capitalise on the existing trade routes between India and the Arab Gulf and the Eastern Mediterranean and Europe and build the missing infrastructure to link the Gulf and Mediterranean regions. The project was launched to bolster transportation and communication links between Europe and Asia through rail and shipping networks and is seen as a counter to China's Belt and Road Initiative. Statement 2 is incorrect: IMEC is not an initiative under the Shanghai Cooperation Organisation (SCO); it was launched during the G20 Summit in 2023, with participation from India, the UAE, Saudi Arabia, the EU, and the USA. In addition to the signatories of the MoU, Israel and Greece are two major nodal points in IMEC and have expressed enthusiasm about joining the project. SPP 22663 Statement 3 is correct: The corridor will include a multi-modal transport network, integrating rail, shipping, and road infrastructure to enhance global trade efficiency. Additional Information: ❖ The IMEC supplements the existing goal of developing Indo-Gulf economic relations. It further connects the other regional countries, especially Israel and Jordan, important regional partners of India, making it even more economically attractive. ❖ Secondly, the IMEC does not end in the Middle East. It promises to connect India with the Eastern Mediterranean and Western Europe with a shorter route bypassing the naval choke points of Bab al-Mandab and the Suez Canal. ❖ The mega offshore gas fields in the Eastern Mediterranean are an additional attraction as India’s appetite for energy and gas will continue to grow. Moreover, the EU and the GCC are India’s largest trading blocs, and the IMEC promises to connect both regions through one economic corridor, creating extraordinary opportunities for growth in trade and commercial activities."},{"id":15,"txt":"Consider the following countries:\n1. Saudi Arabia\n2. Iraq\n3. Jordan\n4. United Arab Emirates\n5. Qatar\n6. Bahrain\nHow many of the above-mentioned countries share a land border with Kuwait?","ref":"","opts":["Only two","Only three","Only four","Only five","1, 2 और 3","1, 2 और 3"],"ci":0,"exp":"Ex: Prime Minister Narendra Modi’s historic visit to Kuwait on December 21-22, 2024, marked the first visit by an Indian Prime Minister in 43 years and heralded a new era in bilateral relations. He was invited by Emir Sheikh Meshal Al-Ahmad Al-Jaber Al-Sabah, and the Ministry of External Affairs described the trip as “historic” and a fresh chapter in India- Kuwait ties. ❖ Kuwait shares a land border with Iraq (to the north) and Saudi Arabia (to the south and west). ❖ Jordan, United Arab Emirates, Qatar, and Bahrain do not have a direct land boundary with Kuwait. 7 Therefore, option (a) is correct. 17. Ans. (a) Statement 1 is correct: The I2U2 initiative is a new grouping of India, Israel, USA, and UAE. In the grouping’s name, ‘I2’ stands for India and Israel, whereas ‘U2’ stands for USA and the UAE. ❖ India will take advantage of the Abraham Accords to deepen engagement with Israel without risking its ties with the UAE and the other Arab states. Statement 2 is correct: India and the UAE signed the Comprehensive Economic Partnership Agreement (CEPA) on February 18, 2022. It came into force on May 1, 2022. This was India's first full-fledged FTA with a major trading partner in over a decade. It has significantly reduced tariffs on over 80% of product lines, helping bilateral trade cross the $100 billion mark in FY 2024-25. In January 2026, during the visit of UAE President Sheikh Mohamed bin Zayed Al Nahyan to India, both nations set a new ambitious target of $200 billion in annual trade by 2032. Statement 3 is incorrect: While the UAE is a major investor and has consistently been among the top 10 sources of FDI for India, it was not the largest contributor for the year 2025-26. According to official data from the Department for Promotion of Industry and SPP 22663 Internal Trade (DPIIT) for the fiscal year 2025-26, Singapore remained the largest source of Foreign Direct Investment (FDI) into India, accounting for nearly 30% of total equity inflows, followed by Mauritius and the USA. The UAE typically ranks between 4th and 7th among top FDI sources. However, it is a leading player in specific sectors like infrastructure (via DP World) and retail (via ADIA and QIA). Extra edge: In early 2026, India and the UAE signed a Letter of Intent (LoI) for a formal Strategic Defence Partnership. This marks a shift toward joint defense manufacturing (including drones and AI-driven systems) and technology transfer, moving beyond just military exercises like Desert Cyclone and Desert Eagle."},{"id":16,"txt":"Consider the following statements with reference to India-UAE relations:\n1. The I2U2 grouping includes both India and the UAE.\n2. India has signed a Comprehensive Economic Partnership Agreement with the UAE.\n3. UAE was India's largest contributor of Foreign Direct Investment for the year 2025-26.\nWhich of the above statements are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"No explanation provided."},{"id":17,"txt":"‘Gelephu Mindfulness City (GMC) is a Special Administrative Region envisioned to integrate economic growth with mindfulness, holistic living, and sustainability. The project will develop sectors such as finance, tourism, green energy, technology, healthcare, agriculture, logistics, and ecotourism. India is supporting GMC by extending its roads and railway network to the border, enhancing regional economic connectivity.’ GMC is located in\nwhich of the following country?","ref":"","opts":["Maldives","Nepal","Bhutan","Bangladesh"],"ci":2,"exp":"Ex: Recent discussions during PM Narendra Modi’s visit to Bhutan in November 2024 underscored the deepening India–Bhutan partnership. ❖ Both leaders reviewed progress in trade, infrastructure, and energy projects, including cross-border rail links and the 1,020 MW Punatsangchhu-II hydropower project. ❖ A significant highlight was the Gelephu Mindfulness City (GMC) initiative, a Special Administrative Region envisioned to drive economic growth and sustainability. ❖ GMC is designed as an economic corridor linking South Asia to Southeast Asia, integrating sectors such as finance, tourism, green energy, technology, healthcare, and more. Anchored on Bhutan’s Gross National Happiness principles, the project emphasizes sustainability and holistic well-being. ❖ India has committed support by extending its road and railway networks to connect with GMC, further solidifying bilateral ties. Therefore, Option (c) is correct. 8"},{"id":18,"txt":"Consider the following statements regarding the United Nations World Food Programme (WFP):\n1. It is the world’s largest humanitarian organization addressing hunger and food security.\n2. It relies entirely on voluntary contributions from governments, private entities, and individuals.\n3. Its headquarters is located in Rome, Italy.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: The United Nations World Food Programme (WFP) plays a crucial role in addressing global hunger and food insecurity. It was awarded the 2020 Nobel Peace Prize for its efforts to combat hunger and improve conditions in conflict- affected areas Statement 1 is correct: The WFP is indeed the world’s largest humanitarian organization dedicated to fighting hunger and ensuring food security. It works in over 80 countries, delivering food assistance and coordinating relief efforts to millions of people in emergency and development situations. Statement 2 is correct: The WFP operates without any core funding from the UN regular budget; instead, it relies entirely on voluntary contributions. These funds come from governments, private entities, and individuals, making it unique among UN agencies in that its budget is fully donor-funded. Statement 3 is correct: The headquarters of the WFP is located in Rome, Italy. This location serves as the central hub from which the organization coordinates its global humanitarian efforts and manages its operations around the world."},{"id":19,"txt":"Consider the following islands:\n1. Seychelles\n2. Comoros\n3. Fiji\n4. Réunion\n5. Canary Islands\nHow many of the above are located in the Indian Ocean?","ref":"","opts":["Only two","Only three","Only four","All of the above"],"ci":1,"exp":"Ex: Located in the Indian Ocean: 1. Seychelles: An archipelago of 115 islands in the Indian Ocean, off East Africa. It is a key partner in India's SAGAR (Security and Growth for All in the Region) initiative. 2. Comoros: An island nations located at the northern end of the Mozambique Channel in the Indian Ocean, between Madagascar and Mozambique. 3. Réunion: An overseas department and region of France. It is located in the Indian Ocean, east of Madagascar and southwest of Mauritius Located Outside the Indian Ocean: 1. Fiji: Located in theSouth Pacific Ocean. It is part of Melanesia and lies about 2,000 km northeast of New Zealand's North Island. SPP 22663 2. Canary Islands: Located in the Atlantic Ocean. While they are off the coast of Africa (Morocco), they are an autonomous community of Spain situated in the North Atlantic."},{"id":20,"txt":"Consider the following military exercises:\n1. Yudh Abhyas\n2. Sampriti\n3. Malabar\n4. Cope India\n5. Surya Kiran\nWhich of the above exercises involve both India and the United States?","ref":"","opts":["1, 3 and 4 only","1, 3 and 5 only","1, 2 and 3 only","2, 4 and 5 only"],"ci":0,"exp":"Ex: India and the United States have engaged in several joint military exercises to enhance defense cooperation and interoperability. Statement 1 is correct: Yudh Abhyas is a joint army exercise between India and the United States that focuses on enhancing operational interoperability, combined arms tactics, and counter-terrorism strategies. Recent editions have emphasized digital integration and real-time communication, reflecting evolving security challenges. Statement 2 is incorrect: Sampriti is typically a bilateral exercise conducted with Bangladesh to boost joint operational readiness and cultural ties. Statement 3 is correct: Malabar is a multilateral naval exercise that routinely includes India and the United States, along with Japan and Australia. The exercise concentrates on maritime security, anti-piracy, and disaster response, with its latest edition further enhancing interoperability in the Indo- Pacific region. Statement 4 is correct: Cope India is a bilateral air exercise between the Indian Air Force and the U.S. Air Force. It focuses on aerial combat readiness, technical skill exchange, and enhancing tactical coordination, with recent iterations incorporating advanced joint simulations and digital warfare techniques. Statement 5 is incorrect: Surya Kiran: Indo- Nepal joint military ex focuses on urban warfare, jungle survival. The 18th Indo-Nepal Joint Military Exercise Surya Kiran was held in Nepal in January,2025. The exercise includes counterterrorism, jungle survival, and urban warfare training. It aims to enhance military cooperation and mutual preparedness. 9 22. Ans. (d) The 2+2 Ministerial Dialogue is a strategic communication framework used by India to discuss bilateral security, defense, and foreign policy issues with its key global partners. Statement 1 is Incorrect: The \"2+2\" format involves the Ministers of Defense and the Ministers of External Affairs (Foreign Affairs) from both countries. The statement mentions the \"Minister of Home Affairs,\" who is responsible for internal security, whereas the 2+2 dialogue specifically focuses on External Strategic and Defense synergy. Statement 2 is Incorrect: India does not have this dialogue only with the UK and Japan. It currently engages in 2+2 ministerial-level dialogues with six key strategic partners: a. United States (India's oldest 2+2 partner, since 2018) b. Japan (Since 2019) c. Australia (Since 2021) d. Russia (Since 2021 - Notably the only non-Quad partner) e. United Kingdom (First ministerial dialogue held in 2023) f. Brazil (First dialogue held in April 2024)"},{"id":21,"txt":"With reference to the 2+2 ministerial dialogue, consider the following statements:\n1. Ministers of defense and home affairs of the two countries take part in these Dialogues.\n2. India has signed this dialogue only with the United Kingdom and Japan.\nWhich of the above statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 and 2","1, 2, 3 और 4","1, 2 और 3"],"ci":3,"exp":"No explanation provided."},{"id":22,"txt":"Consider the following statements regarding Lesotho:\n1. Lesotho is a landlocked country completely surrounded by South Africa.\n2. Lesotho's economy is largely dependent on textile exports and remittances from workers in South Africa.\n3. The entire country of Lesotho lies at an elevation of more than 1,000 meters above sea level, making it the only country in the world with such a distinction.\n4. Lesotho is the largest producer of platinum in the African continent.\nWhich of the statements given above are correct?","ref":"","opts":["2 and 4 only","1, 2 and 3 only","1, 3 and 4 only","1 and 3 only"],"ci":1,"exp":"Ex: India sent humanitarian assistance consignment to Lesotho comprising 1000 metric tonnes of rice to help in addressing the food security and nutritional requirements of people in Lesotho. Statement 1 is correct: Lesotho popularly known as the Kingdom of Lesotho, formerly known as Basutoland, is a landlocked country in Southern Africa. As an enclave of South Africa, with which it shares a 1,106 km (687 mi) border. It is the largest sovereign enclave in the world, and the only one outside of the Italian Peninsula. Statement 2 is correct: The textile industry and remittances from workers in South Africa play a crucial role in Lesotho’s economy. Lesotho gets most of its foreign exchange through earnings from water exports to South Africa, and remittances SPP 22663 from migrant laborers employed in South Africa. The economy is mostly export driven as international trade makes up a large percentage of GDP. Statement 3 is correct: Lesotho is the only country in the world where the entire territory lies above 1,000 meters (3,281 feet) in elevation, earning it the nickname ‘The Kingdom in the Sky.’ Statement 4 is incorrect: Lesotho is not a major producer of platinum. South Africa and Zimbabwe dominate the African platinum production. The major economic sectors of Lesotho are manufacturing, mining, agriculture, and services. Major export products are garments, diamonds, water, electricity, wool and mohair."},{"id":23,"txt":"With reference to the Shanghai Cooperation Organization (SCO), consider the following statements:\n1. It is an intergovernmental organisation founded in Shanghai in 2001.\n2. All the Central Asian countries are members of this group.\n3. The SCO has been an observer at the UN General Assembly.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: The Shanghai Cooperation Organization (SCO) is an intergovernmental organization founded in Shanghai on 15 June 2001. Statement 2 is incorrect: The SCO grouping now comprises China, India, Iran, Kazakhstan, Kyrgyzstan, Pakistan, Russia, Tajikistan and Uzbekistan. Turkmenistan is not a member of SCO. Hence, all the Central Asian countries are not members of SCO. Observer States interested in acceding to full membership (Afghanistan, Belarus, and Mongolia) and six “Dialogue Partners” (Armenia, Azerbaijan, Cambodia, Nepal, Sri Lanka and Turkey). In 2021, the decision was made to start the accession process of Iran to the SCO as a full member, and Egypt, Qatar as well as Saudi Arabia became dialogue partners. 10 Since its inception in 2001, the SCO has mainly focused on regional security issues and its fight against regional terrorism, ethnic separatism, and religious extremism. Statement 3 is correct: The SCO has been an observer in the UN General Assembly since 2005. In April 2010, the UN and SCO Secretariats signed a Joint Declaration on Cooperation. SCO Secretariat has also established partnerships with the UN Educational, Scientific and Cultural Organization (UNESCO), the World Tourism Organization (UNWTO), and the International Organization for Migration (IOM)."},{"id":24,"txt":"Which of the following statements about the Indian Ocean Rim Association (IORA) are correct?\n1. The vision for IORA originated during a visit by late President Nelson Mandela of South Africa to India in 1995.\n2. The Indian Ocean Rim Association includes 23 countries from Africa, West Asia, South Asia, Southeast Asia, Australia, and other littoral states.\n3. One of IORA’s objectives is to foster sustainable development and balanced growth by promoting maritime security, trade, and cultural exchanges.\n4. India assumed the role of the Chair of IORA for the years 2023–25.\nSelect the correct answer using the code given below:","ref":"","opts":["1, 2 and 3 only","2 and 4 only","3 and 4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: The Indian Ocean Rim Association (IORA) is a regional forum aimed at fostering cooperation among countries around the Indian Ocean. It addresses key issues such as economic growth, maritime security, and sustainable development. Statement 1 is correct: The vision for IORA originated during a visit by the late President Nelson Mandela of South Africa to India in 1995, which laid the groundwork for regional socio-economic cooperation. Statement 2 is correct: IORA comprises 23 member states from Africa, West Asia, South Asia, Southeast Asia, Australia, and other littoral regions around the Indian Ocean, reflecting its diverse and inclusive nature. Statement 3 is correct: One key objective of IORA is to promote sustainable growth and balanced development by facilitating economic cooperation through trade liberalization and lowering barriers for the free flow of goods, services, investment, and technology. Statement 4 is incorrect: During 2023-25, Sri Lanka assumed the Chairmanship, and India held the position of Vice-Chair, with India set to take over the Chairship in 2025-27. 26. Ans. (c) Statement 1 is correct: India is bordered by China, Bhutan, and Nepal in the north, while it is encircled by Myanmar and Bangladesh in the far east. Bangladesh shares the longest SPP 22663 border of all these nations. The length of the border between India and Bangladesh is 4096.7 kilometers. It is also the world's fifth-longest land boundary. Statement 2 is correct: India is indeed Bangladesh’s largest export destination in Asia. Trade Value: According to 2024–2025 trade data, while the majority of Bangladesh's exports (mainly Ready-Made Garments) go to the European Union and the USA, India stands as its primary market within the Asian continent. This growth has been supported by the South Asian Free Trade Area (SAFTA) agreement, which provides duty-free access to most Bangladeshi products in India. Major exports from Bangladesh to India include garments, jute products, and processed food."},{"id":25,"txt":"Consider the following statements:\n1. India shares its longest boundary with Bangladesh among its neighbouring countries.\n2. India is Bangladesh's largest export destination in Asia.\nWhich of the above statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"No explanation provided."},{"id":26,"txt":"Consider the following statements regarding the Free Movement Regime (FMR):\n1. The FMR was an arrangement between India and Myanmar.\n2. Under the original FMR, people residing within 50 km of the shared border were permitted to cross without visas.\n3. Recently, the Ministry of Home Affairs (MHA) introduced a new system requiring border passes effectively replacing the original FMR.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The Free Movement Regime (FMR) was a special arrangement between India and Myanmar that allowed local residents on both sides of the border to cross. Statement 1 is correct: The Free Movement Regime (FMR) existed specifically to allow local residents in border areas of India and Myanmar to travel across without visas. It did not involve any other country. Statement 2 is incorrect: The actual distance specified under the original FMR was 16 km (not 50 km). People residing within 16 km on either side of the border could cross without visas. Statement 3 is correct: In view of security concerns, the MHA scrapped the original FMR and introduced a new system that requires individuals to obtain border passes to cross, limiting travel to a 10 km radius and up to seven days. This new system replaces the earlier visa-free arrangement."},{"id":27,"txt":"Q.7) Consider the following:\n1. Indo-Pacific Economic Framework for Prosperity (IPEF)\n2. Asia-Pacific Economic Cooperation (APEC)\n3. Comprehensive and Progressive Agreement for Trans-Pacific Partnership (CPTPP) India is a member of which of the above?","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Various frameworks and agreements shape economic integration across the Indo-Pacific. Statement 1 is correct: In May 2022, the United States launched the Indo-Pacific Economic Framework for Prosperity (IPEF) 11 with Australia, Brunei Darussalam, Fiji, India, Indonesia, Japan, the Republic of Korea, Malaysia, New Zealand, Philippines, Singapore, Thailand, and Vietnam. ❖ This framework will advance resilience, sustainability, inclusiveness, economic growth, fairness, and competitiveness for our economies. ❖ The 14 IPEF partners represent 40 percent of global GDP and 28 percent of global goods and services trade. Statement 2 is incorrect: The Asia-Pacific Economic Cooperation (APEC) is a regional economic forum established in 1989 to leverage the growing interdependence of the Asia- Pacific. ❖ APEC's 21 members aim to create greater prosperity for the people of the region by promoting balanced, inclusive, sustainable, innovative and secure growth and by accelerating regional economic integration. ❖ India is not a member of APEC. Statement 3 is incorrect: The Comprehensive and Progressive Agreement for Trans-Pacific Partnership (CPTPP) is a Free Trade Agreement (FTA) signed on 8 March 2018 in Santiago, Chile between Australia, Brunei Darussalam, Canada, Chile, Japan, Malaysia, Mexico, New Zealand, Peru, Singapore, and Vietnam."},{"id":28,"txt":"The term ‘Yankti Kuti’, recently seen in the news, refers to which of the following?","ref":"","opts":["A glacier-fed river in Uttarakhand originating near the India-China-Nepal tri- junction.","A disputed mountain pass between India and Myanmar in the Patkai Hills.","A sacred pilgrimage route in Bhutan leading to the Jomolhari peak.","A coastal wetland system in Sri Lanka known for its rich biodiversity."],"ci":0,"exp":"Ex: ❖ The Yankti Kuti Valley is situated in the Kumaon Himalayas of Uttarakhand, India. ❖ It lies near the India-China-Nepal tri- junction and is part of the historic Lipu Lekh Pass route, used for trade and pilgrimage to Mount Kailash and Lake Mansarovar. ❖ The Yankti Kuti River, a tributary of the Kali River which flows through this valley.  SPP 22663 ❖ The events of glacial advances have been witnessed from the Yankti Kuti valley in the extreme eastern part of Pithoragarh district, Uttarakhand. ❖ The strong tectonic activities that occurred several thousands of centuries ago along a major tributary of Kali Ganga river in the present-day Pithoragarh district of Uttarakhand could have led to an abrupt change in the glacial flow direction."},{"id":29,"txt":"Consider the following ASEAN countries:\n1. Cambodia\n2. Lao PDR\n3. Myanmar\n4. Thailand\n5. Indonesia\nHow many of the above-mentioned countries are also part of the Mekong–Ganga Cooperation (MGC)?","ref":"","opts":["Only two","Only three","Only four","Only five"],"ci":2,"exp":"Ex: The Association of Southeast Asian Nations, or ASEAN, was established on 8 August 1967 in Bangkok, Thailand, with the signing of the ASEAN Declaration (Bangkok Declaration) by the Founding Fathers of ASEAN: ❖ Indonesia, ❖ Malaysia, ❖ Philippines, ❖ Singapore and Brunei Darussalam joined ASEAN on 7 January 1984, followed by Viet Nam on 28 July 1995, Lao PDR and Myanmar on 23 July 1997, and Cambodia on 30 April 1999, making up what is today the ten Member States of ASEAN. The Mekong-Ganga Cooperation (MGC) is an initiative by six countries – India and five ASEAN countries, namely, Cambodia, Lao PDR, Myanmar, Thailand, and Vietnam for cooperation in tourism, culture, education, as well as transport and communications. It was launched in November 2000 in Vientiane, Lao PDR with the signing of the Vientiane Declaration. From the listed ASEAN countries—Cambodia, Lao PDR, Myanmar, Thailand, and Indonesia—the first four are also members of the MGC. Indonesia is not part of MGC. Therefore, Option (c) is correct.  12"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

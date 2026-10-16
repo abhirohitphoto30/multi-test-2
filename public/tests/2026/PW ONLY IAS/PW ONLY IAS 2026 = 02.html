@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 02</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 02</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 02">PW ONLY IAS 2026 = 02</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"In the Indian context, how are Rights and Duties interconnected?","ref":"","opts":["Rights and Duties are interdependent and complementary to each other.","Rights are absolute and can exist independently of Duties.","Duties are secondary to Rights in promoting individual liberty.","Duties are superior to Rights for ensuring societal harmony."],"ci":0,"exp":"Ex: In the Indian Constitution, Rights and Duties are inherently linked. Fundamental Rights (Part III) provide citizens with essential freedoms, such as equality, freedom of speech, and protection of life. However, these Rights are not absolute; they come with reasonable restrictions and a corresponding responsibility to perform Fundamental Duties (Part IVA). The coexistence ensures a balance between individual liberty and the interests of society. ❖ Rights: Empower individuals to live with dignity and freedom. ❖ Duties: Encourage individuals to act responsibly and uphold constitutional principles, such as respecting national symbols and promoting harmony. This interdependence is crucial for a stable and progressive society, aligning individual aspirations with the nation’s collective welfare."},{"id":1,"txt":"Consider the following statements regarding Article 29 of the Constitution:\nStatement I: Article 29(1) can be invoked by any section of citizens, even if they are not a minority.\nStatement II: Article 29(2) applies to all educational institutions receiving aid from the State, including minority institutions.\nStatement III: Article 29(2) prohibits denial of admission only on grounds of religion, race, caste, language, or any of them.\nWhich of the above statements are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: Statement I is correct: Article 29(1) protects any section of citizens, irrespective of being minority or majority. This was affirmed in State of Madras v. Champakam Dorairajan (1951). Thus, Article 29(1) is not limited to minorities. Statement II is correct: Article 29(2) applies to: State-run institutions, State-aided institutions, Minority institutions receiving State aid. The Supreme Court held that aided minority institutions cannot deny admission solely on prohibited grounds. Example: St. Stephen’s College v. University of Delhi (1992), Champakam Dorairajan (1951). Thus, Article 29(2) applies universally to all aided institutions, including minority ones. SPP 22603 Statement III is correct: Article 29(2) prohibits denial of admission only on these grounds: Religion, Race, Caste, Language. The grounds are exhaustive, not illustrative. Any denial based solely on these grounds violates the Constitution."},{"id":2,"txt":"A State-aided Christian minority college refuses to admit a Hindu student even after considering merit, because it wants “100% Christian intake.” Which principle applies?","ref":"","opts":["Article 30 gives absolute autonomy hence denial to admit is valid.","Article 29(2) prevails hence denial to admit is unconstitutional.","The State can decide the percentage, even 100% reservation allowed.","Only the Supreme Court decides, not constitutional principles."],"ci":1,"exp":"Ex: A State-aided minority educational institution cannot deny admission purely on the ground of religion, even if it enjoys protection under Article 30(1). Article 29(2) states: “No citizen shall be denied admission into any educational institution maintained by the State or receiving aid out of State funds on grounds only of religion, race, caste, language or any of them.” This applies to all State-aided institutions, including minority institutions. Key Supreme Court rulings: St. Stephen’s College v. University of Delhi (1992): Minority colleges may have a limited preference (e.g., 50%) for their community but not 100% exclusion of others. T.M.A. Pai Foundation (2002): Minority rights cannot override the equality mandate of Article 29(2). Pramati Educational Trust (2014): Article 29(2) continues to apply to State-aided minority institutions. Therefore, 100% reservation for Christians in a State-aided college is unconstitutional. Hence option B is correct. Why the other options are incorrect: (A) Article 30 is NOT absolute: Minority institutions have autonomy, but cannot violate Article 29(2). They can prefer their community, not exclude all others. (C) The State cannot permit 100% reservation: Even if the State wanted to, it cannot override Article 29(2). (D) Constitutional principles already decide this: Courts interpret, but the principle is already clear: State-aided institutions cannot deny admission solely on religious grounds. 2"},{"id":3,"txt":"A State law restricting property rights of a community was inserted into the Ninth Schedule after 1973. Citizens challenge it for violating equality under Article 14. Which of the following is correct?","ref":"","opts":["The law is fully immune from judicial review","Only Parliament can review Ninth Schedule laws","All Ninth Schedule laws are automatically unconstitutional","A Ninth Schedule law after 1973 can still be tested on Basic Structure"],"ci":3,"exp":"Ex: Laws placed in the Ninth Schedule are often assumed to be immune from judicial review. But the Supreme Court has clarified limits on this immunity. In I.R. Coelho v. State of Tamil Nadu (2007) – Constitution Bench, the SC held: All laws inserted into the Ninth Schedule after 24 April 1973 (the date of Kesavananda Bharati) are NOT fully protected. They can be examined by courts and if they violate Basic Structure (especially Article 14, 19, 21), they can be struck down. Hence option D is correct. Why the other options are incorrect: (A) The law is fully immune from judicial review →This was true before 1973, not after IR Coelho. (C) All Ninth Schedule laws are automatically unconstitutional → Only those violating Basic Structure are unconstitutional, not all. (D) Only Parliament can review Ninth Schedule laws → Judicial review is the power of the Supreme Court/High Courts."},{"id":4,"txt":"A community of Marathi-speaking citizens in Delhi claims protection under Article 29(1) to preserve their language. The State argues they are not a “minority.” Which principle applies?","ref":"","opts":["They cannot invoke Article 29(1) since they are not a minority","They can invoke Article 29(1) only if they run an educational institution","They can invoke Article 29(1) because it protects any “section of citizens”","Article 29(1) protects only linguistic minorities at the national level"],"ci":2,"exp":"Ex: Article 29(1) states: “Any section of the citizens residing in the territory of India or any part thereof having a distinct language, script or culture of its own shall have the right to conserve the same.” Key points: ❖ It applies to “any section of citizens” — NOT only minorities. ❖ The group need not be a religious or linguistic minority. ❖ Even a majority group in a particular region can invoke Article 29(1). Case Law: In State of Bombay v. Bombay Education Society (1954), the Supreme Court held that Article 29(1) is not confined to minorities. Thus, Marathi-speaking citizens in Delhi can invoke Article 29(1) to preserve their language even though they are not a minority at the national or state level. Hence option C is correct. SPP 22603 Why other options are incorrect: (A) Article 29(1) is not limited to minorities. It protects any linguistic/cultural section. (B) Article 29(1) is a cultural right, not dependent on running an educational institution. (That requirement is relevant only for Article 30). (D) Article 29(1) does not use the term \"minority\" anywhere. It protects linguistic/cultural groups regardless of national or state minority status."},{"id":5,"txt":"A person files a petition under Article 32 claiming violation of “right to reputation” because of a newspaper editorial. He asks the Supreme Court to issue a writ of mandamus directing the newspaper to publish an apology.\nWhich of the following is correct?","ref":"","opts":["The petition is not maintainable because mandamus cannot be issued to private individuals","The petition is maintainable because Article 32 protects all fundamental rights including reputation","The petition is maintainable only if the newspaper receives government funding","The petition is maintainable because the Supreme Court has plenary powers under Article 142"],"ci":0,"exp":"Ex: A writ of mandamus can be issued against a public authority, public official, public corporation, tribunal, or inferior court to compel them to perform a legal duty they have failed or refused to perform. It cannot be issued against a private individual or body, the President or Governors, or the Chief Justice of a high court when they are acting in their judicial capacity. A private newspaper is not a State authority, nor does it perform a public statutory duty. Therefore, the Supreme Court cannot issue mandamus directing it to publish an apology. Hence, the Article 32 petition is not maintainable. Hence option A is correct. Why option (c) is incorrect: Even if the newspaper receives government funding, it does not automatically become “State” under Article 12. Funding alone is not enough; deep and pervasive State control is needed. Thus, Article 32 still does not apply."},{"id":6,"txt":"Consider the following statements regarding the Constitution (86th Amendment) Act, 2002:\n1. It inserted Article 21(A) into the Constitution, making education a fundamental right for children between the ages of 6-14.\n2. It introduced a directive principle under Article 45 to provide early childhood care and protection for children up to the age of 14.\n3. Article 51A (k) was added, imposing a duty on parents and guardians to provide education to their children between the ages of 6-14.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Statement 1 is correct: Article 21A was inserted into the Constitution by the 86th Amendment Act, 2002, making education a fundamental right for children aged 6-14 years. ❖ It mandates the State to provide free and compulsory education to this age group. ❖ The provision was later operationalized through the enactment of the Right of Children to Free and Compulsory Education (RTE) Act, 2009. 3 Statement 2 is incorrect: The 86th Amendment replaced the earlier Article 45, which directed the State to provide free and compulsory education to children up to 14 years of age. ❖ The amended Article 45 now reads: \"The State shall endeavor to provide early childhood care and education for all children until they complete the age of six years.\" ❖ Hence, this provision focuses only on children below six years of age, not up to 14 as claimed in the statement. Statement 3 is correct:The 86th Amendment Act also added Clause (k) to Article 51A, which is part of the Fundamental Duties. ❖ Article 51A(k) states: \"It shall be the duty of every citizen who is a parent or guardian to provide opportunities for education to their child or ward between the ages of 6 and 14 years.\" ❖ This duty emphasizes the active role of parents and guardians in ensuring education within this age group."},{"id":7,"txt":"Which one of the following correctly reflects Article 26?","ref":"","opts":["It grants religious denominations the right to manage their own affairs in all matters","It guarantees absolute autonomy in administration of property","It applies only to the minority religion","It is subject to public order, morality and health"],"ci":3,"exp":"Ex: Article 26 of the Constitution grants religious denominations certain rights such as: ❖ establishing and maintaining institutions ❖ managing affairs in matters of religion ❖ owning and acquiring property ❖ administering such property However, these rights are not absolute. They are expressly subject to public order, morality and health. This means the State may regulate or restrict these rights if needed to maintain social order or prevent harm. Hence option D is correct. Why other options are incorrect: (A): Article 26 does not allow management in all matters—only in religious matters. Secular aspects can be regulated by the State. SPP 22603 (C): Article 26 applies to all religious denominations, not just the minority religion. (D): Administration of property under Article 26(d) is not autonomous; it is subject to regulation by law."},{"id":8,"txt":"Rohan is arrested for a cybercrime. The police compel him to reveal his phone password. They also take his fingerprints to unlock the phone.\nWhich of the following is true?","ref":"","opts":["Both actions violate Article 20(3).","Only taking fingerprints violates Article 20(3).","Only compelling for password violates Article 20(3).","Neither action violates Article 20(3)."],"ci":2,"exp":"Ex: Article 20(3) states: “No person accused of an offence shall be compelled to be a witness against himself.” The key requirement is that the evidence must be testimonial in nature — meaning it must reveal the personal knowledge of the accused. A phone password is: ❖ a product of the accused's mind ❖ involves personal knowledge ❖ and is testimonial, not physical. The Supreme Court in Selvi v. State of Karnataka (2010) held that: Testimonial evidence includes any information that requires the application of mental faculties. Therefore: Forcing Rohan to reveal his password = Compelled testimony = Violates Article 20(3). Taking fingerprints → Does NOT violate Article 20(3): Fingerprints (and biometrics like facial scan, iris scan, handwriting, voice samples, blood samples) are: ❖ physical ❖ non-testimonial ❖ identifying material ❖ NOT a product of the accused’s mind. Selvi's judgment clearly states: Compulsion to provide fingerprints, handwriting samples, or bodily substances does not violate Article 20(3), since they do not involve testimonial responses. Thus: Using fingerprints to unlock the phone = Not testimonial = No violation of Article 20(3). Hence option C is correct."},{"id":9,"txt":"Parliament restricts the right of an Army officer to form associations. The officer challenges this under Article 19(1)(c). Which of the following is correct?","ref":"","opts":["Parliament cannot restrict fundamental rights of soldiers","Only the President can restrict rights of armed forces","Parliament can restrict rights of armed forces in the interest of discipline","Article 33 allows complete abolition of rights but only by State legislatures"],"ci":2,"exp":"Ex: Article 33 – Power of Parliament to modify Fundamental Rights. Parliament may restrict 4 or even abrogate the application of fundamental rights for: Armed Forces, Paramilitary forces, Police forces, Intelligence agencies, Similar disciplined forces. Purpose of this is to ensure discipline, duty, and proper discharge of functions essential to national security. Case Law: Ous Kutilingal Achudan Nair v. Union of India (1976), SC upheld restrictions on CRPF personnel. Why the other options are incorrect: (A) Parliament cannot restrict fundamental rights of soldiers → Article 33 explicitly authorises Parliament to restrict the rights of armed forces personnel. This is a constitutional exception to Article 19. (B) Only the President can restrict rights of armed forces → The President has no such power. Only Parliament can make such restrictions by law. (D) Article 33 allows complete abolition of rights but only by State legislatures → Article 33 authorizes Parliament, not State Legislatures. States have no power to modify fundamental rights."},{"id":10,"txt":"With reference to various judgments by the Supreme Court regarding Fundamental Rights, Consider the following statements:\n1. Delayed execution of the death sentence awarded by the Supreme Court due to the pendency of a mercy petition with the executive may lead to a violation of the Right to Life of the person.\n2. Rights emanating from Part III of the Constitution are protected against arbitrary legislation.\nWhich of the above statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: In the Shatrughan Chauhan vs. Union of India (2014) case, the Supreme Court held that prolonged delay in the execution of a death sentence, particularly when it is due to the pendency of a mercy petition, could violate the Right to Life under Article 21 of the Indian Constitution. The Court ruled that unexplained delays in the execution of the death sentence constitute cruel, inhuman, and degrading treatment. As a result, the death sentence can be commuted to a life sentence if the execution is unduly delayed. This judgment emphasizes the need for timely execution and protection of a person's Right to Life. Statement 2 is correct: Article 13 of the Constitution of India ensures that Fundamental Rights are protected against arbitrary legislation meaning if a law infringes SPP 22603 upon the fundamental rights that forms the part of Basic Structure of the Constitution would be void. This was propounded by the Supreme Court in the Kesavananda Bharati case (1973)."},{"id":11,"txt":"With respect to writ jurisdiction in India, consider the following statements:\n1. The writ of Habeas corpus is not issued where the proceeding is for the contempt of a legislature.\n2. The writ of prohibition is not available against private individuals.\nWhich of the above statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement (1) is correct: Habeas Corpus is an order issued by the court to a person who has detained another person, to produce the body of the latter before it. The court then examines the cause and legality of detention. It would set the detained person free, if the detention is found to be illegal. Thus, this writ is a bulwark of individual liberty against arbitrary detention. The writ of habeas corpus can be issued against both public authorities as well as private individuals. The writ, on the other hand, is not issued where the (a) detention is lawful, (b) the proceeding is for contempt of a legislature or a court, (c) detention is by a competent court, and (d) detention is outside the jurisdiction of the court. Statement (2) is correct: . It is issued by a higher court to a lower court or tribunal to prevent the latter from exceeding its jurisdiction or usurping a jurisdiction that it does not possess. Thus, unlike mandamus that directs activity, the prohibition directs inactivity. The writ of prohibition can be issued only against judicial and quasijudicial authorities. It is not available against administrative authorities, legislative bodies, and private individuals or bodies."},{"id":12,"txt":"With reference to Article 21 of the Constitution, consider the following statements:\n1. The right to be forgotten forms part of Article 21, but its enforcement depends on judicial balancing of privacy with public interest.\n2. The right to a speedy trial under Article 21 applies to any legal proceeding where delay causes prejudice.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Article 21 has evolved far beyond its original scope, with the Supreme Court recognising several derivative rights, particularly those linked to privacy and fair procedure, as integral to the right to life and personal liberty. Statement 1 is correct. The right to be forgotten is recognised as an aspect of the right to privacy under Article 21, flowing from K.S. 5 Puttaswamy (2017). However, it is not an automatic right; courts determine its enforcement by balancing privacy against competing values such as free speech, public records and legitimate public interest. Thus, the right exists under Article 21 but operates only through case-specific judicial assessment. Statement 2 is correct. Although originally discussed in the context of criminal trials in Hussainara Khatoon, the Supreme Court has held that delays in civil, administrative, and quasi-judicial proceedings may also violate Article 21 when they render the process unfair. It affirms that the right to speedy trial forms part of the broader requirement that the procedure under Article 21 must be just, fair and reasonable across all forms of legal processes."},{"id":13,"txt":"Consider the following criteria:\n1. Public order\n2. Health\n3. Morality\n4. Other provisions of Part III of the Constitution\nHow many of the above-mentioned criteria form a part of reasonable restrictions to the Right to Freedom of religion under Article 25?","ref":"","opts":["only one","only two","only three","All four"],"ci":3,"exp":"Ex: Article 25 provides for Freedom of conscience and free profession, practice and propagation of religion- Subject to public order, morality and health and to the other provisions of this Part, all persons are equally entitled to freedom of conscience and the right freely to profess, practise and propagate religion. Statement 1 is correct: Religious freedom can be curtailed to maintain public order, which includes peace, safety, and avoidance of unrest in society. Example: A religious procession that disrupts public order or causes rioting may be regulated by the government. Statement 2 is correct: The State can impose restrictions if a religious practice endangers public health or violates health and safety standards. Example:During a pandemic, restrictions on mass gatherings at places of worship can be enforced to prevent the spread of contagious diseases. Statement 3 is correct: Practices that violate public morality or ethical standards can be curtailed, even if they are rooted in religion. The term \"morality\" includes standards of decency, dignity, and ethical conduct SPP 22603 acceptable in society. Example: Abolition of the practice of sati, which was justified as a religious ritual in the past. Statement 4 is correct: The Article 25 is subject to other Fundamental Rights enshrined in Part III of the Constitution. This ensures that religious practices do not violate principles such as equality, non-discrimination, and individual dignity. Example: Article 17 (Abolition of Untouchability): Religious customs that uphold untouchability are invalid as they contradict this Fundamental Right."},{"id":14,"txt":"Which of the following is true regarding the scope of Article 21?","ref":"","opts":["Article 21 applies only to citizens, not foreigners","Expulsion of foreigners violates Article 21","Foreigners have Article 21 protection except with respect to entry and exit","Foreigners have full Article 21 rights"],"ci":2,"exp":"Ex: The Supreme Court has repeatedly held (e.g., Louis De Raedt v. Union of India, 1991) that Article 21 applies to “all persons”, including foreigners. However, the State can regulate their entry, stay, and exit, because foreigners do not have a right to reside or settle in India. The Court affirmed that the power of the Government to expel foreigners under the Foreigners Act, 1946 is absolute, and that a foreigner cannot claim a constitutional “right to remain” or “right to settle.” In addition, the Supreme Court in Hans Muller of Nuremberg v. Superintendent, AIR 1955 SC 367 clarified: “Foreigners are entitled to Article 21 once they are within India, but their entry and exit are governed by the Foreigners Act.” Thus, foreigners enjoy Article 21 protections such as: Right to life, Right to liberty, Protection against arbitrary detention, Protection against torture, Right to fair procedure But they do NOT have rights relating to: Entry into India, Exit from India, Residence or settlement. Hence option (C) is correct. Why the other options are wrong: (A) Article 21 applies only to citizens is Incorrect: Article 21 applies to all persons, including: Foreigners, Stateless individuals, Refugees. 6 (B) Expulsion of foreigners violates Article 21 is Incorrect: The government may expel foreigners as long as the procedure is fair, just, and reasonable, as held in Louis De Raedt. So expulsion itself does not violate Article 21. (D) Foreigners have full Article 21 and Article 19 rights is Incorrect: Foreigners do NOT have Article 19 rights"},{"id":15,"txt":"Consider the following statements:\nStatement I: The right to administer includes the right to choose the medium of instruction.\nStatement II: The State cannot impose a non- minority language as a compulsory medium of instruction in minority schools.\nStatement III: Article 30 gives minorities absolute freedom in educational management.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":2,"exp":"Ex: Statement I is correct: The Supreme Court (T.M.A. Pai Foundation, 2002; Sindhi Education Society, 2010) has held that “administration” under Article 30 includes: appointing staff, managing institutions, deciding the medium of instruction. So the right to choose the language/medium is part of the right to administer. Statement II is correct and explains Statement I: In Gujarat Education Society v. State of Gujarat, the Supreme Court held: The State cannot force minority institutions to adopt a particular medium of instruction. Imposing Gujarati/Hindi as a compulsory medium would violate Article 30(1). This directly explains Statement I, because it illustrates that choosing the medium is indeed part of administrative autonomy. Statement III is incorrect: Article 30 does NOT provide absolute or unrestricted freedom. Minority institutions are still subject to: ❖ regulatory measures ❖ academic standards ❖ teacher qualification norms ❖ public order, morality, health ❖ reasonable conditions for recognition Case law: T.M.A. Pai Foundation (2002), P.A. Inamdar (2005). Thus, Article 30 protects minority character but does not grant absolute immunity from all regulations."},{"id":16,"txt":"Which of the following rights has the Supreme Court NOT recognised as part of Article 21?","ref":"","opts":["Right to reputation","Right against handcuffing","Right to die","Right to privacy"],"ci":2,"exp":"Ex: Article 21 has been expansively interpreted by the Supreme Court to include numerous derivative rights essential for a life of dignity. SPP 22603 Option (A) – Right to reputation is Recognised as part of Article 21 in Subramanian Swamy v. Union of India (2016). The Court held that reputation is an integral part of personal dignity. Option (B) – Right against handcuffing is Recognised as part of Article 21 in Prem Shukla v. Delhi Administration and Sunil Batra v. Delhi Administration. Handcuffing without judicial approval violates human dignity and Article 21. Option (C) – Right to die (NOT part of Article 21) The Supreme Court in Gian Kaur v. State of Punjab (1996) held that Article 21 does not include the right to die. However, the right to die with dignity through passive euthanasia IS recognised (Common Cause v. Union of India, 2018). Therefore, this is the correct answer. Option (D) – Right to privacy is Recognised as a fundamental right under Article 21 in the landmark K.S. Puttaswamy (2017) judgment."},{"id":17,"txt":"Consider the following statements:\nStatement I: Article 24 imposes a complete prohibition on child labour below 14 in factories, mines, and hazardous employment.\nStatement II: The Supreme Court has held that hazardous child labour violates the fundamental right to life and dignity under Article 21.\nStatement III: The Child Labour Act of 1986 originally banned child labour in all occupations.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":2,"exp":"Ex: Statement I is correct: Article 24 states: “No child below fourteen years of age shall be employed in any factory or mine or engaged in any hazardous employment.” It is a complete prohibition on: factories, mines, hazardous occupations regardless of whether the employer is the State or a private individual. Statement II is correct: The Supreme Court in M.C. Mehta v. State of Tamil Nadu (1996) and subsequent cases held that Child labour in hazardous industries violates Article 21 (right to life with dignity). Children must not be exposed to conditions threatening life, health, or dignity. Therefore, Article 24’s complete prohibition is justified as essential for protecting the child’s dignity and development. Thus, Statement II directly explains WHY Article 24 is complete prohibition on child labour below 14 in factories, mines, and hazardous employment. 7 Statement III is Incorrect: The Child Labour (Prohibition & Regulation) Act, 1986 did NOT ban all child labour. Originally (before amendments): It banned child labour only in certain hazardous occupations and processes (Schedule). It allowed child labour in many non-hazardous occupations, with regulations."},{"id":18,"txt":"Consider the following phrases:\n1. Rule of Law\n2. Procedure established by law\n3. Due process of law\nWhich of the above phrases is/are not mentioned in the Constitution of India?","ref":"","opts":["1 and 2 only","2 and 3 only","1 only","1 and 3 only"],"ci":3,"exp":"Ex: Statement 1 is correct. Rule of Law: This phrase is not explicitly mentioned in the Constitution. However, it is an important principle derived from various provisions, such as equality before the law (Article 14) and protection of life and liberty (Article 21). Statement 2 is incorrect. Procedure established by law: This phrase is mentioned in Article 21 of the Constitution. It refers to the requirement that any deprivation of life or personal liberty must follow a procedure that is established by law, meaning a law passed by the legislature. Statement 3 is correct. Due process of law: This phrase is not explicitly mentioned in the Constitution. However, the Supreme Court introduced this concept into Indian law through judicial interpretation in Maneka Gandhi vs Union of India (1978). The Court ruled that \"due process of law\" is implied in Article 21, though it is not specifically written in the Constitution."},{"id":19,"txt":"Which of the following is true regarding “essential religious practices”?","ref":"","opts":["The community decides which practices are essential","The Supreme Court determines essential practices","Every religious practice automatically becomes essential","The State determines essential practices through legislation"],"ci":1,"exp":"Ex: The Essential Religious Practices (ERP) doctrine is a judicial test developed by the Supreme Court to identify which religious practices are protected under Articles 25 and 26 of the Constitution. It distinguishes between practices that are essential and integral to a religion (and therefore constitutionally protected) and those that are non-essential, secular, or socially harmful, which the State can regulate SPP 22603 The doctrine of Essential Religious Practices (ERP) was created by the Supreme Court in the Shirur Mutt Case (1954). The Court held: “What constitutes an essential part of a religion is to be decided by the Courts, not by the religious denomination.” This means the judiciary—not the community, legislature, or State—determines whether a practice is protected under Articles 25–26. This doctrine was later applied in cases like: Sabarimala (2018), Haji Ali (2016), Triple Talaq (2017). Hence option B is correct."},{"id":20,"txt":"Under Article 35, which of the following subjects is placed exclusively under Parliament’s legislative competence?\n1. Laws prescribing punishment for acts prohibited by Article 17.\n2. Laws related to preventive detention for reasons connected with national security\n3. Laws empowering the State to impose reasonable restrictions under Article 19\n4. Laws prescribing residency requirements for public employment\nSelect the correct answer using the code given below:","ref":"","opts":["1 and 4 only","1, 2 and 4 only","2 and 3 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Statement 1 is correct: Article 35(a)(ii) states: Parliament alone has power \"for prescribing punishment for those acts which are declared to be offences under this Part\" (Part III: Fundamental Rights). States are barred from legislating on these punishments. ❖ Article 17: Abolition of untouchability declares such acts offences → Parliament enacted Protection of Civil Rights Act, 1955 for punishments. ❖ Article 23(1): Traffic in human beings and forced labour declared offences → Covered under Bonded Labour System (Abolition) Act, 1976 and related penal laws by Parliament. ❖ Article 24: Employment of children below 14 in hazardous industries declared offence → Child Labour (Prohibition and Regulation) Act, 1986 (amended) by Parliamen Statement 2 is correct: Preventive detention is covered in List I (Union List) and List III (Concurrent List) of the Seventh Schedule of the Indian Constitution. Parliament has exclusive power under Entry 9 of List I to make laws on preventive detention related to the defense, foreign affairs, or security of India. Both Parliament and State Legislatures have the power under Entry 3 of List III to make laws on preventive detention concerning the maintenance of public order or the essential supplies and services of a community. 8 Statement 3 is Incorrect: Placing “reasonable restrictions” on Article 19 freedoms under Articles 19(2)–(6) is not reserved exclusively for Parliament. Both Parliament and State Legislatures may enact such laws, depending on their respective entries in the Union/State/Concurrent Lists. Article 35 does not mention Article 19. Hence, this subject is not within Parliament’s exclusive domain. Statement 4 is correct: Article 16(3) authorizes only Parliament to make laws prescribing residence requirements for “a class or classes of employment or appointment under the State.” States cannot impose domicile requirements unless authorized by a law made by Parliament. This power is placed exclusively under Parliament by Article 35(b)."},{"id":21,"txt":"Consider the following statements regarding martial law and Fundamental Rights:\n1. Martial law automatically suspends the enforcement of all Fundamental Rights.\n2. Parliament can pass a law validating actions of military authorities taken during martial law.\n3. Article 34 is the sole constitutional provision dealing with martial law.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","2 only","2 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Statement 1 is incorrect: Martial law does not automatically suspend Fundamental Rights. Rights remain enforceable unless restricted by law, and only Parliament—not the military— can restrict the operation of Fundamental Rights in an area where martial law is in force, under Article 34. Statement 2 is correct: Article 34 empowers Parliament to pass laws indemnifying (protecting) persons for acts done under martial law. This includes validating arrests, searches, seizures, or use of force by military or other authorities in the area where martial law was in force. Statement 3 is correct: The Constitution mentions martial law only once, in Article 34, which allows indemnity for military actions, and restricts the operation of Fundamental Rights in that area. No other Article outlines the declaration, scope, or procedure of martial law."},{"id":22,"txt":"Under Article 20 of the Constitution, which of the following protections apply only to “persons accused of an offence” and do NOT extend to preventive detainees?\n1. Protection against retroactive criminal laws\n2. Protection against double punishment\n3. Protection against self-incrimination\n4. Right to legal aid\nSelect the correct answer using the code given below:","ref":"","opts":["1, 2 and 3 only","1 and 2 only","2, 3 and 4 only","1, 3 and 4 only"],"ci":0,"exp":"Ex: Protections under Article 20 apply exclusively to persons who have been “accused of an offence.” Preventive detainees are not accused of any offence, and therefore Article 20 does not apply to them. SPP 22603 Statement 1 is correct: Article 20(1) prohibits ex post facto criminal laws. This protection applies only to persons charged with a criminal offence, not to those detained preventively under Article 22. Statement 2 is correct: Article 20(2) bars double punishment (double jeopardy). This protection is also restricted to persons formally accused or prosecuted. Preventive detention is not “punishment,” so Article 20(2) does not apply. Statement 3 is correct: Article 20(3) provides protection against self-incrimination, but only to a person: accused of an offence, and compelled to be a witness against himself. Preventive detention does not involve criminal accusation, Hence the protection does not apply. Statement 4 is Incorrect: Right to legal aid flows from Article 21, not Article 20. It applies to: accused persons, Undertrials, convicts, preventive detainees (as per SC in Khatri v. State of Bihar). Thus, it is not limited only to accused persons and is not an Article 20 protection. Additional Information: ❖ Article 20 applies only in cases of criminal prosecution, not preventive detention. ❖ Preventive detention is governed by Article 22, not Articles 20 or 21. ❖ Right to legal aid is now an essential element of “procedure established by law” under Article 21."},{"id":23,"txt":"Consider the following statements:\nStatement I: Article 23 prohibits forced labour in all forms, even when not imposed by the State.\nStatement II: Paying less than minimum wage amounts to forced labour.\nStatement III: Compulsory service for public purposes is unconstitutional if it applies only to a specific class of citizens.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I.","Both Statement II and Statement III are correct but only one of them explains Statement I.","Only one of the Statements II and III is correct and that explains Statement I.","Neither Statement II nor Statement III is correct"],"ci":0,"exp":"Ex: As per Article 23 of Indian constitution: 1. Traffic in human beings and beggar and other similar forms of forced labour are prohibited and any contravention of this provision shall be an offence punishable in accordance with law. 2. Nothing in this article shall prevent the State from imposing compulsory service for public purpose, and in imposing such service the State shall not make any discrimination on grounds only of religion, race, caste or class or any of them. 9 Statement I is correct: Article 23 prohibits Trafficking, Begar (forced labour), Any form of compulsory labour and this prohibition applies against both the State and private individuals. This was firmly established by the Supreme Court in PUDR v. Union of India (1982). Thus, Article 23 is a horizontal right, binding private persons also. Statement II is correct and it explains Statement I.In PUDR v. Union of India (1982), the Supreme Court held:“Any labour remunerated below the minimum wage is forced labour under Article 23. Because economic compulsion is equal to forced compulsion. Thus, this shows Article 23 covers non-State forced labour, directly supporting Statement I Statement III is correct and it also explains Statement I: Article 23(2) allows compulsory service only if it is imposed equally on all citizens. The Supreme Court clarified: If the State imposes compulsory service only on a specific caste/class/community, it becomes discriminatory forced labour, violating Article 23. Thus, selective compulsory service is equal to unconstitutional forced labour. This again supports Statement I, which says Article 23 prohibits forced labour “in all forms.”"},{"id":24,"txt":"With reference to Article 20 of the Constitution, consider the following statements:\n1. Compelling an accused to unlock a digital device using biometric authentication violates the protection against self- incrimination.\n2. A retrospective law increasing the punishment for an offence violates Article 20(1).\n3. Protection against double punishment applies only when both proceedings are criminal in nature.\n4. A person summoned merely as a witness cannot invoke Article 20(3) unless he is an accused.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Article 20 provides specific protections in criminal proceedings, especially relating to retrospective criminal laws, double jeopardy and self-incrimination. Each statement must be assessed in light of judicial interpretations and the constitutional scheme governing criminal liability. Statement 1 is not correct: Article 20(3) protects a person from being compelled to give testimonial evidence. The Supreme Court in Selvi v. State of Karnataka (2010) clarified that biometrics such as fingerprints or facial recognition are not testimonial in nature since they do not reveal personal knowledge. Therefore, compelling an accused to unlock a device using biometrics does not violate Article 20(3). SPP 22603 Statement 2 is correct: Article 20(1) prohibits the State from enacting any retrospective criminal law that increases punishment for an act already committed. Even if the offence remains the same, a retrospective enhancement of penalty, whether imprisonment or fine is unconstitutional. Statement 3 is correct: The protection against double punishment under Article 20(2) applies only when both proceedings are criminal in nature. The Supreme Court in Maqbool Hussain (1953) held that departmental or administrative actions do not amount to prosecution in a criminal court, and hence do not trigger Article 20(2). Only successive criminal prosecutions attract the safeguard. Statement 4 is correct: Article 20(3) is available only to a person formally accused of an offence. A person summoned merely as a witness cannot claim this protection unless he is placed in a situation where criminal liability is reasonably apprehended. This interpretation flows from Nandini Satpathy v. P.L. Dani (1978), where the Court clarified that the privilege is confined to accused persons or those likely to become accused."},{"id":25,"txt":"Under Article 22(4), preventive detention beyond 3 months requires:","ref":"","opts":["Approval of Parliament","Approval of the Supreme Court","Opinion of an Advisory Board","Executive satisfaction alone"],"ci":2,"exp":"Ex: Under Article 22(4) of the Constitution: Preventive detention cannot exceed 3 months unless: ❖ An Advisory Board, consisting of persons who are qualified to be High Court judges, ❖ Reports before the expiry of 3 months that there is sufficient cause for continued detention. Therefore, the Advisory Board’s opinion is mandatory for extending detention beyond 3 months. Hence option C is correct. Why other options are incorrect: (A) Approval of Parliament: Parliament may make laws prescribing longer periods without Advisory Board review, but this does not replace the Board’s requirement under Article 22(4) unless Article 22(7) law is enacted. Approval of Parliament is not required for extending an individual’s detention. 10 (B) Approval of the Supreme Court: Courts review legality but do not approve preventive detention extensions. (D) Executive satisfaction alone: Executive satisfaction is relevant only at the time of initial detention, not for extension beyond 3 months"},{"id":26,"txt":"Which of the following situations violates Article 21?","ref":"","opts":["Arresting a person under a valid law without giving reasons","Denial of legal aid to an indigent accused","Using narco-analysis with the accused’s written consent","Retaining a passport temporarily for national security"],"ci":1,"exp":"Ex: (A) Arresting a person under a valid law without giving reasons does NOT violate Article 21: This violates Article 22(1) (right to be informed of grounds of arrest), but not Article 21, because the arrest is: Under a valid law, and Procedure is “established by law.” Hence, NOT an Article 21 violation. (B) Denial of legal aid to an indigent accused violates Article 21: In Hussainara Khatoon (1979) and Khatri v. State of Bihar, the Supreme Court held: Legal aid is a fundamental right under Article 21. Denial of legal aid = denial of “fair procedure.” Thus, this is a clear violation of Article 21. (C) Using narco-analysis with written consent does NOT violate Article 21: In Selvi v. State of Karnataka (2010): Compulsory narco, polygraph, brain-mapping violates Article 21 & 20(3). Voluntary consent makes it constitutionally permissible. Since the accused gives written consent, no Article 21 violation. (D) Retaining a passport temporarily for national security does NOT violate Article 21: The Supreme Court (Maneka Gandhi v. Union of India) held: The State may impound or retain a passport if there is a fair, just, reasonable procedure. National security is a legitimate ground. Thus, not a violation of Article 21."},{"id":27,"txt":"Which of the following articles in Part III (Fundamental Rights) of the Indian Constitution explicitly mentions the term \"secular activity\" in relation to religious matters?","ref":"","opts":["Article 25","Article 26","Article 29","Article 30"],"ci":0,"exp":"Ex: Article 25 of the Indian Constitution guarantees freedom of conscience and the right to freely profess, practice, and propagate religion. However, it allows the SPP 22603 state to regulate or restrict secular activities associated with religious practices for public order, morality, and health. Option (a) is correct: Relevant Text of Article 25(2)(a): \"Nothing in this article shall affect the operation of any existing law or prevent the State from making any law— (a) regulating or restricting any economic, financial, political, or other secular activity which may be associated with religious practice.\" This clause underscores the secular nature of the Indian state by distinguishing between religious practices and non-religious (secular) activities. While religious freedom is protected, activities that are not purely religious, such as managing financial affairs of temples, can be regulated by the state. Hence, Article 25 explicitly uses the term \"secular activity\", making it the correct answer."},{"id":28,"txt":"In which of the following circumstances the Supreme Court must refuse to entertain a petition under Article 32?","ref":"","opts":["When an alternative remedy exists under statutory law","When the petition does not allege violation of any Fundamental Right","When the matter involves public importance","When the petitioner is a citizen residing abroad"],"ci":1,"exp":"Ex: Article 32 can be invoked only for the enforcement of Fundamental Rights. If the petition does not allege violation of a Fundamental Right, the Supreme Court will not entertain it. This principle was affirmed in: Romesh Thappar v. State of Madras (1950), A.K. Gopalan (1950), L. Chandra Kumar (1997) Hence, absence of an FR violation → petition not maintainable. Thus option B is correct. Why the other options are incorrect: (a) Alternative remedy exists under statutory law: The Supreme Court has consistently held that: Existence of an alternate remedy is not a bar to an Article 32 petition, because Article 32 itself is a Fundamental Right. (c) Matter involves public importance: Public importance does not bar Article 32. In fact, PILs under Article 32 often involve issues of high public importance. So this is not a valid ground for refusal. 11 (d) Petitioner is a citizen residing abroad: Residence is irrelevant. Any citizen or non- citizen (depending on the right involved) may approach the Supreme Court for enforcement of Fundamental Rights."},{"id":29,"txt":"Consider the following statements regarding Article 27:\n1. A citizen cannot be compelled to pay taxes used for promoting any religion.\n2. General welfare schemes benefiting all communities do not violate Article 27.\n3. Taxes used for maintaining places of worship violate Article 27.\nWhich of the above statements are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: As per Article 27 of Indian constitution: “No person shall be compelled to pay any taxes, the proceeds of which are specifically appropriated in payment of expenses for the promotion or maintenance of any particular religion or religious denomination.” Statement 1 is correct: Article 27 prohibits compelling any person to pay taxes specifically appropriated for the promotion or maintenance of any particular religion or religious denomination. The Constitution ensures that public funds collected through taxation cannot be used to favor or propagate a particular faith.  SPP 22603 Statement 2 is correct: The Supreme Court has clarified (notably in Prafull Goradia v. Union of India, 2011) that general welfare schemes—even if they incidentally benefit a religious community—do not violate Article 27, as long as the purpose of the taxation is secular, such as education, social welfare, health, or public infrastructure. What Article 27 forbids is exclusive use of tax money for promoting a religion, not incidental or general benefits. Statement 3 is incorrect: Using tax revenue for maintaining places of worship does not automatically violate Article 27. The Supreme Court has held that funds used for ❖ preservation of historical monuments, ❖ maintenance of religious places of cultural importance, or ❖ ensuring public order and safety around religious sites do not amount to “promotion” of religion. Only exclusive religious promotion—not maintenance for secular/public purposes—is prohibited. Thus, maintenance for heritage, safety, or tourism is permissible.  12"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

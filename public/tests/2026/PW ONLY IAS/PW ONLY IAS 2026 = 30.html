@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 30</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 30</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 30">PW ONLY IAS 2026 = 30</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to price indices in India, consider the following statements:\n1. CPI-Combined is derived by aggregating CPI-Rural and CPI-Urban.\n2. Wholesale Price Index includes services to reflect economy-wide price movements.\n3. The inflation target notified under the RBI Act is defined in terms of Consumer Price Index.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 3 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: CPI (Combined) is constructed as a weighted average of CPI (Rural) and CPI (Urban), with weights assigned according to their relative population shares (approximately 67% rural and 33% urban). This aggregation reflects the overall retail price movement faced by households across the country. Because of this nationwide representativeness, CPI-Combined is used as the headline inflation indicator for national-level analysis and policymaking, including monetary policy formulation. Statement 2 is incorrect: Wholesale Price Index does not include services. It tracks price changes only at the wholesale/producer level for: ❖ Primary articles ❖ Fuel and power ❖ Manufactured products Because services form a large and growing share of the Indian economy, their exclusion is a major limitation of WPI and one of the reasons it is not used as the inflation target index. Statement 3 is correct: Under the inflation-targeting framework introduced through amendments to the RBI Act, 1934, the Government of India notifies the inflation target in terms of CPI-Combined. The target is 4%, with a tolerance band of ±2 percentage points, implying that the Monetary Policy Committee is mandated to maintain CPI inflation within the range of 2% to 6%. CPI-Combined thus serves as the official nominal anchor for monetary policy in India. PWOnlyIAS Extra Edge ❖ Producer Price Index (PPI) measures average price changes received by producers for goods and services in domestic and export markets. ❖ Unlike WPI, it covers services (~55% of GDP), excludes indirect taxes, and avoids multiple counting, making it a more comprehensive and internationally recognized measure."},{"id":1,"txt":"With reference to the Consumer Price Index (CPI) in India, consider the following statements:\n1. CPI‑IW is compiled by the Labour Bureau and its base year is 2016.\n2. CPI‑RL (Rural Labourers) and CPI‑AL (Agricultural Labourers) are compiled by the Ministry of Finance using 2012 as the base year.\n3. CPI‑IW covers both rural and urban industrial households.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Different CPI types exist because a single index can't capture inflation for everyone; they segment the population (workers, rural/urban, laborers) and consumption patterns (food-heavy vs. broader basket) to provide specific insights for policy, wage adjustments (like Dearness Allowance), and monetary policy, with the CPI (Combined) serving as the headline retail inflation measure for India. Statement 1 is correct: The Consumer Price Index for Industrial Workers (CPI‑IW) is compiled by the Labour Bureau under the Ministry of Labour & Employment, and its current base year is 2016. This index tracks price changes experienced by urban industrial workers and is widely used for wage adjustments in the industrial sector. Statement 2 is incorrect: While it is true that CPI‑RL (Rural Labourers) and CPI‑AL (Agricultural Labourers) use 2012 as their base year, they are compiled by the Labour Bureau, under the Ministry of Labour & Employment, not the Ministry of Finance. The CPI‑RL tracks price changes experienced by rural labour households, while CPI‑AL focuses specifically on agricultural labour households. Statement 3 is incorrect: The Consumer Price Index for Industrial Workers (CPI‑IW) is compiled by the Labour Bureau and specifically covers urban industrial workers only. It does not include rural industrial households, as its purpose is to track the cost of living and retail price changes faced by workers employed in industrial establishments in urban areas. CPI‑IW is widely used for wage adjustments and dearness allowances for industrial workers in cities, but rural industrial populations are excluded from its coverage."},{"id":2,"txt":"Consider the following statements regarding Wholesale Price Index (WPI):\nStatement‑I: WPI gives more weight to manufactured goods than primary articles and fuel. Statement‑II: WPI does not fully reflect inflation relevant for monetary policy.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement‑I and Statement‑II are correct and Statement‑II explains Statement‑I","Both Statement‑I and Statement‑II are correct, but Statement‑II does not explain Statement‑I","Statement‑I is correct, but Statement‑II is incorrect","Statement‑I is incorrect, but Statement‑II is correct"],"ci":1,"exp":"Ex: Statement I is correct: The Wholesale Price Index (WPI) basket is composed of Manufactured Products (64.23%), Primary Articles (22.62%), and Fuel & Power (13.15%). This clearly shows that manufactured goods carry the largest weight in the index. The high weighting reflects the relative importance of manufactured goods in wholesale trade and emphasizes price movements in production and supply-side goods before they reach consumers. Statement II is correct: While WPI measures price changes at the wholesale level, it does not fully capture inflation relevant for monetary policy, as it excludes services and retail-level prices, and does not reflect core inflation, which is critical for policy decisions. The RBI therefore relies on CPI-Combined as its nominal anchor, since CPI better represents household consumption patterns and demand-side inflation. The limitation of WPI in capturing policy-relevant inflation does not explain Statement‑I, because the weighting of manufactured goods concerns the composition of the WPI basket, not its policy relevance. Hence, both statements are correct, but Statement‑II does not explain Statement‑I. PWOnlyIAS Superhint ❖ WPI tracks wholesale prices, which doesn't capture price changes at the consumer level, making it less relevant for monetary policy, which focuses on consumer inflation (CPI). Thus Statement II can be easily eliminated."},{"id":3,"txt":"Consider the following statements regarding Index of Industrial Production (IIP):\n1. The Index of Industrial Production (IIP) measures short-term changes in the volume of production of industrial goods in India.\n2. The IIP is compiled and released monthly by the Department for Promotion of Industry and Internal Trade (DPIIT)\n3. The current base year of IIP is 2011–12.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","Only three","None"],"ci":1,"exp":"Ex: The Index of Industrial Production (IIP) components are broadly categorized into Mining, Manufacturing, and Electricity, with the Eight Core Industries (Coal, Crude Oil, Natural Gas, Refinery Products, Fertilizers, Steel, Cement, Electricity) having significant weight, representing 40.27% of the total IIP. 1. Manufacturing (77.63%) – largest contributor, includes goods from factories across industries. 2. Mining (14.37%) – covers extraction of coal, minerals, and other natural resources. 3. Electricity (7.99%) – reflects electricity generation, essential for industrial activity. Together, these sectors form the entire IIP basket, making it a reliable indicator of industrial performance. The weights show manufacturing dominates, while mining and electricity ensure a broad industrial representation. Statement 1 is correct: The IIP is a short-term indicator that tracks fluctuations in industrial production across India. It does not measure long-term trends or the absolute level of production; rather, it captures month-to-month or year-on-year growth/decline in industrial output. The index includes changes in quantity produced, not prices, making it a volume-based measure. IIP is widely used to gauge industrial performance, inflationary pressures, and GDP growth trends. Statement 2 is incorrect: The Ministry of Statistics and Programme Implementation (MoSPI) is responsible for compiling and publishing the IIP. DPIIT (Department for Promotion of Industry and Internal Trade) focuses on industrial policy, investment promotion, and FDI facilitation, but does not compile statistical indices like IIP. MoSPI uses primary data collected from various factories, power utilities, and mines to calculate the IIP on a monthly basis. Statement 3 is correct: The base year of an index is the year against which production levels are compared. The IIP was originally calculated with a base year of 1993–94, later revised to 2004–05, and currently 2011–12. This revision aligns the index with current industrial structures and weights of various sectors, improving accuracy and representativeness."},{"id":4,"txt":"Consider the following statements regarding GDP at factor cost:\nStatement-I: GDP at factor cost measures the total value of goods and services produced in the economy, valued at factor prices. Statement-II: GDP at factor cost is calculated by subtracting net indirect taxes from GDP at market prices. Statement-III: GDP at factor cost reflects the income earned by factors of production in the economy.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-II and Statement-III are correct and both of them explain Statement-I","Both Statement-II and Statement-III are correct, but only one of them explains Statement-I","Only one of the Statements II and III is correct and that explains Statement-I","Only one of the Statements II and III is correct and that does not explain Statement-I"],"ci":0,"exp":"Ex: Statement I is correct: GDP at factor cost represents the total income earned by all factors of production in an economy — wages, rent, interest, and profits. It is measured at factor prices, meaning it excludes indirect taxes (like GST, excise duties) and includes subsidies on products. This distinguishes it from GDP at market prices, which reflects prices actually paid by consumers, including taxes and excluding subsidies. Statement II is correct: GDP at market prices includes all taxes on goods and services minus subsidies. To convert it to factor cost, we subtract net indirect taxes (indirect taxes − subsidies). GDP at factor cost=GDP at market prices− Net Indirect Taxes This calculation ensures that the value reflects the actual earnings of factors of production, not prices influenced by government taxes or subsidies. Statement III is correct: By measuring output at factor prices, we capture the total remuneration of labor, land, capital, and entrepreneurship. Essentially, GDP at factor cost is the aggregate income approach to GDP, showing how the production of goods and services translates into factor incomes. Factor cost includes only the payment to factors of production, it does not include any tax. In order to arrive at the market prices, we have to add to the factor cost the total indirect taxes less total subsidies. The basic prices lie in between: they include the production taxes (less production subsidies) but not product taxes (less product subsidies). Therefore in order to arrive at market prices we have to add product taxes (less product subsidies) to the basic prices. PWOnlyIAS Extra Edge Factor Cost: Value before any taxes or subsidies. Basic Price: Factor Cost + (Production Taxes - Production Subsidies). Market Price: Basic Price + (Product Taxes - Product Subsidies)."},{"id":5,"txt":"With reference to the GDP deflator, consider the following statements:\n1. If Nominal GDP increases faster than Real GDP in a given year, the GDP deflator will indicate a rise in the overall price level.\n2. The GDP deflator can fall even if some prices in the economy rise, depending on the weights of goods and services.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: The GDP deflator is calculated as the ratio of Nominal GDP to Real GDP multiplied by 100, and it reflects the overall change in prices of all goods and services produced domestically. When Nominal GDP grows faster than Real GDP, it means that the value of output at current prices is increasing more rapidly than the value of output at constant prices. This difference arises due to rising prices rather than an increase in the quantity of goods and services. Consequently, the GDP deflator rises, indicating that the general price level in the economy has increased, which is essentially the measure of inflation captured by the deflator. GDP Price Deflator = (Nominal GDP ÷ Real GDP) × 100 Statement 2 is correct: The GDP deflator is a weighted measure of prices for all goods and services produced in an economy, where each item’s contribution depends on its share in GDP. This means that high-weight goods and services have a greater impact on the deflator than low-weight ones. Therefore, even if the prices of some low-weight goods rise, a decline in the prices of high-weight goods can cause the overall GDP deflator to fall."},{"id":6,"txt":"A domestic manufacturing company notices that the prices it receives for steel, cement, and other inputs have been steadily rising over the past few months, even though consumer prices for finished goods have not yet changed significantly. Which of the following inflation indicators would best capture this early trend in costs?","ref":"","opts":["Consumer Price Index (CPI)","Producer Price Index (PPI)","GDP deflator","Wholesale Price Index (WPI)"],"ci":1,"exp":"Ex: In the given scenario, the company notices that the prices it receives for raw materials and intermediate goods like steel and cement are rising, even though consumer prices for finished goods have not yet changed. This situation reflects inflationary pressures at the production level, before they are passed on to consumers. The Producer Price Index (PPI) measures the average change in selling prices received by domestic producers for their goods and services. It captures inflationary trends at the production stage, including raw materials, intermediate goods, and finished goods before they reach consumers. In the scenario, the company observes rising prices for steel, cement, and other inputs, which represents cost pressures at the producer level. PPI is designed precisely for such situations, making it the most suitable indicator to detect early inflationary trends in production, even when consumer prices have not yet changed."},{"id":7,"txt":"With reference to inflation calculation, consider the following statements:\n1. Inflation indicates a rise in the general price level, but it does not distinguish between changes in essential and luxury goods.\n2. The percentage change in the Consumer Price Index (CPI) between two periods gives the rate of inflation.\n3. Inflation measured using WPI includes changes in prices of imported goods only.\n4. The GDP deflator captures price changes for all domestically produced goods and services, including government output.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 3 only","2, 3 and 4 only","1, 2 and 4 only","3 and 4 only"],"ci":2,"exp":"Ex: Statement 1 is correct: Inflation measures the overall increase in the prices of a selected basket of goods and services over time. Standard indices like the Consumer Price Index (CPI) track representative items, but they do not differentiate between essential goods, such as food and fuel, and luxury goods, such as premium electronics or automobiles. As a result, the reported inflation rate captures the average price change across all included items, which can sometimes mask the differential impact on households depending on their consumption patterns. Statement 2 is correct: the CPI is specifically designed to track changes in retail prices faced by households for a fixed basket of goods and services. The rate of inflation is calculated by comparing the CPI of a given period with that of a previous period. This measure reflects the percentage increase or decrease in consumer prices, allowing policymakers, economists, and businesses to assess how the cost of living is changing over time. It is the most widely used method for measuring retail or consumer inflation in India and globally. Statement 3 is incorrect: The Wholesale Price Index (WPI) measures price changes of goods at the wholesale or producer level, including domestic primary commodities, manufactured goods, and fuel. While imported goods that enter the wholesale market are included, they do not constitute the exclusive focus of WPI. WPI captures price movements at the production and wholesale stage, making it a measure of cost-side inflation in the economy rather than consumer-facing prices. Statement 4 is correct: The GDP deflator is a broad measure of inflation for the entire economy, calculated by comparing Nominal GDP, measured at current prices, with Real GDP, measured at constant prices. Unlike CPI or WPI, the GDP deflator includes all goods and services produced domestically, covering both private consumption and government services. This makes it a comprehensive indicator of inflation in the economy, reflecting price changes in all sectors of production, not just consumer goods or wholesale items."},{"id":8,"txt":"Consider the following statements regarding Green accounting in India:\nStatement-I: Green Accounting is used to integrate environmental costs into measures of national income. Statement-II: Green Accounting adjusts conventional GDP by deducting the economic costs of resource depletion and environmental degradation. Statement-III: Green Accounting treats all government spending on pollution control as a net addition to GDP.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-II and Statement-III are correct and both of them explain Statement-I","Both Statement-II and Statement-III are correct, but only one of them explains Statement-I","Only one of the Statements II and III is correct and that explains Statement-I","Only one of the Statements II and III is correct and that does not explain Statement-I"],"ci":2,"exp":"Ex: Statement I is correct: The primary purpose of Green Accounting is to adjust traditional national income measures, such as GDP or GNP, to reflect the economic cost of environmental degradation and depletion of natural resources. This allows policymakers and economists to understand whether economic growth is sustainable or achieved at the expense of environmental damage. Statement II is correct: Green Accounting works by quantifying the value of natural capital lost or environmental damage incurred and subtracting it from conventional GDP. For example, if a forest is cut down for timber, the value of lost ecosystem services (like carbon sequestration, water regulation) is deducted from GDP. This ensures the national income measure reflects net rather than gross economic output, aligning it with sustainability principles. Thus, Statement-II correctly explains the purpose described in Statement-I. Statement III is incorrect: In Green Accounting, defensive expenditures (like spending on pollution control, disaster mitigation, or environmental cleanup) do not necessarily count as net additions to GDP. They are considered compensatory measures that restore environmental quality lost elsewhere and may offset damages. Including them as GDP additions would overstate economic welfare, which is why Green Accounting carefully distinguishes between productive output and expenditures aimed at repairing damage. PWOnlyIAS Superhint ❖ In Statement III, focus on ‘all government spending’ - this sounds extreme as addition to GDP must have some qualifying criteria. We can eliminate it to reach at Option C or D."},{"id":9,"txt":"With reference to the Index of Industrial Production (IIP) in India, consider the following statements:\n1. The IIP is compiled and released by the National Statistical Office (NSO) under the Ministry of Statistics and Programme Implementation (MoSPI).\n2. The base year for IIP is 2011-12.\n3. The manufacturing sector has the highest weightage in the IIP calculation.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: The National Statistical Office (NSO) under the Ministry of Statistics and Programme Implementation (MoSPI) compiles and releases the IIP data. It is published monthly, providing a quick measure of industrial growth. Statement 2 is correct: The base year for the IIP was revised to 2011-12, ensuring it reflects the modern economic structure. The new base year aligns with other economic indicators like the Wholesale Price Index (WPI) and GDP calculations. Statement 3 is correct: The three major sectors in IIP and their weightages are: Manufacturing: 77. 63% (Highest)Mining: 14. 37% and Electricity: 7. 99%."},{"id":10,"txt":"Consider the following statements:\nStatement-I: Environmental Tax Reform (ETR) reduces income taxes while taxing polluting activities to encourage sustainability. Statement-II: Environmental Tax Reform’s effectiveness depends primarily on pollution tax rates.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II explains Statement-I","Both Statement-I and Statement-II are correct, but Statement-II does not explain Statement-I","Statement-I is correct, but Statement-II is incorrect","Statement-I is incorrect, but Statement-II is correct"],"ci":2,"exp":"Ex: Statement I is correct: Environmental Tax Reform (ETR) is designed to shift the tax burden away from productive activities, like labour and income, and onto environmentally harmful activities such as carbon emissions, pollution, and resource overuse. The dual objective is to reduce distortionary taxes (like income tax) while incentivizing cleaner production and consumption, aligning economic activity with environmental sustainability. Statement II is incorrect: The effectiveness of ETR does not depend solely on the level of pollution taxes. Complementary measures such as subsidies for clean technology, regulatory enforcement, and public awareness campaigns are crucial. Without these, high pollution taxes may lead to tax avoidance, relocation of polluting activities, or limited impact on actual environmental outcomes. PWOnlyIAS Superhint ❖ Think over the keyword in Statement II ‘effectiveness’ of any step towards sustainability- it must include complementary measures not just penalising pollution via tax. Thus, we can safely eliminate Statement II to reach at the answer C."},{"id":11,"txt":"Which of the following statements accurately explains Transition Finance?","ref":"","opts":["Funding exclusively for renewable energy projects to achieve net-zero emissions immediately.","Loans provided only for afforestation and carbon capture projects.","Grants and subsidies given to households for adopting electric vehicles.","Financial support provided to carbon- intensive industries to shift toward low- carbon practices."],"ci":3,"exp":"Ex: Transition finance is a financial mechanism designed to support the transition of the whole economy toward lower and net-zero emissions. It is explicitly intended to bridge the gap between the current high-carbon economy and the long-term climate goals of the Paris Agreement and the Sustainable Development Goals (SDGs). Unlike green finance, which supports only projects that are already environmentally “green” or low-carbon, transition finance recognizes that certain sectors are carbon-intensive today but can reduce emissions over time with proper financial and technological support. Examples of Transition Finance 4. Tata Power (Energy Sector) \u0000 Shift from coal-based power to renewables using green bonds and ESG-linked loans. \u0000 Renewable share increased to ~40%+ \u0000 Ensured energy security while reducing carbon intensity 2. JSW Steel (Steel Sector – Hard-to-abate) \u0000 Used sustainability-linked finance \u0000 Invested in green hydrogen and low-carbon steel \u0000 Reduced emission intensity per tonne of steel \u0000 Example of industrial decarbonisation without shutdown 3. Global Example: Indonesia – Just Energy Transition Partnership (JETP) \u0000 Multilateral transition finance for coal phase-down \u0000 Supports renewable energy and worker reskilling \u0000 Ensures climate action with social equity"},{"id":12,"txt":"With reference to Doughnut Economics, consider the following statements:\n1. It aims to balance human well-being with ecological limits.\n2. It integrates social foundations with planetary boundaries.\n3. Exceeding planetary boundaries is acceptable if social needs are met.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 only","1 and 3 only","1, 2, and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: Doughnut Economics emphasizes that economic activity should meet human needs while staying within ecological limits. It shifts the focus from traditional growth-centric models to one where human well-being, covering essentials like food, water, health, and education, is achieved without overshooting planetary boundaries, ensuring long-term sustainability. Statement 2 is correct: The framework integrates social foundations with planetary boundaries. The inner ring represents minimum standards for human well-being, while the outer ring represents ecological limits. The area between these rings, the “safe and just space for humanity,” is where sustainable development occurs, balancing social equity and environmental protection. Statement 3 is incorrect: Doughnut Economics explicitly states that exceeding planetary boundaries is never acceptable, even if social needs are met. Violating ecological limits can destabilize environmental systems that support life, ultimately undermining human welfare. Sustainability requires respecting both social foundations and ecological ceilings simultaneously. PWOnlyIAS Superhint ❖ Statement 1 seems correct as it aligns with our common wisdom of Sustainable development. ❖ Statement 3 seems doubtful as it allows exceeding planetary boundaries, we can guess it to be wrong as any school of thought generally tries to prevent exceeding planetary boundaries, so similarly doughnut economics must be doing the same."},{"id":13,"txt":"Consider the following statements regarding Sovereign Green Bonds (SGBs):\n1. They are government-issued debt instruments to fund environmentally sustainable projects.\n2. Proceeds from SGBs can be used for general budgetary purposes in case of high fiscal deficit.\n3. Investors receive financial returns while contributing to environmental objectives.\nWhich of the statements given above is/are correct?","ref":"","opts":["1, 2 and 3","1 and 3 only","1 only","2 and 3 only"],"ci":1,"exp":"Ex: Statement 1 is correct: Sovereign Green Bonds (SGBs) are debt instruments issued by the government to raise capital specifically for environmentally sustainable projects. These projects typically include renewable energy, energy efficiency, sustainable water management, climate adaptation, and other initiatives that contribute to ecological and climate goals. The bonds allow the government to finance these projects without relying solely on budgetary allocations. Statement 2 is incorrect: The proceeds from SGBs cannot be used for general budgetary purposes or non-environmental expenditures. They are earmarked exclusively for projects that have clear environmental benefits, ensuring that the capital raised is aligned with climate and sustainability objectives. Deficit is financed by issuing Government Securities, Treasury Bills etc. Statement 3 is correct: Investors in SGBs receive financial returns like any government bond, while their investment supports environmental objectives. This dual benefit makes SGBs an important mechanism for promoting sustainable finance, linking economic incentives with climate action."},{"id":14,"txt":"Consider the following statements regarding the impact of inflation on bonds:\nStatement I: When inflation rises, central banks typically increase interest rates, leading to the issuance of new bonds with higher yields.\nStatement II: The rise in bond yields due to increased interest rates makes existing bonds more attractive to investors, resulting in a surge in their market prices.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct, and Statement II is the correct explanation for Statement I","Both Statement I and Statement II are correct, but Statement II is not the correct explanation for Statement I","Statement I is correct, but Statement II is incorrect","Statement I is incorrect, but Statement II is correct"],"ci":2,"exp":"Ex: Statement I is correct: Inflation erodes the purchasing power of money, prompting central banks (such as the RBI) to raise interest rates to curb inflation.Higher interest rates mean that new bonds offer better returns (higher yields), making older bonds with lower interest rates less attractive.As a result, the market prices of existing bonds decline to align with the yields of newly issued bonds.This reflects the inverse relationship between bond prices and interest rates.Issuance of Bonds by Central Bank help to suck excess liquidity in the market and stabilise inflation. Statement II is incorrect: The statement incorrectly suggests that higher bond yields increase the prices of existing bonds.In reality, when interest rates rise, bond yields increase, but bond prices fall because investors prefer newly issued bonds that offer higher interest rates.The market adjusts by reducing the price of existing bonds so that their effective yield matches that of newly issued bonds.Example: If G-Sec yields rise from 7.46% (Feb 2023) to 6.987% (May 2023) due to inflation control, older bonds offering lower interest rates become less attractive, leading to a price correction."},{"id":15,"txt":"With reference to the Cap-and-Trade Mechanism, consider the following statements:\n1. It fixes an upper limit on total emissions while allowing flexibility in how individual entities comply.\n2. Emission allowances under this system represent a legal right to emit a specified quantity of pollutants.\n3. The market price of allowances is determined administratively by the government.\n4. Entities that reduce emissions below their allotted limit can monetise the surplus allowances.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Cap-and-trade is a market-based regulatory framework designed to reduce pollution, such as greenhouse gas emissions, by setting a firm limit on total environmental impact while providing economic flexibility to participants. Unlike a traditional Pigouvian tax, which fixes the price of pollution and allows the quantity to vary, cap-and-trade fixes the quantity (the \"cap\") and allows the market to determine the price. This mechanism internalizes external environmental costs by transforming the right to pollute into a tradable commodity. Statement 1 is correct: A cap-and-trade system begins by establishing a legal ceiling (“cap”) on total emissions for a group of regulated sources. This cap sets the upper bound on pollutants (including greenhouse gases) that can be emitted during a specified period. The goal is to ensure that aggregate emissions stay within an environmental limit while allowing firms flexibility in how they comply. Statement 2 is correct: Under this mechanism, emission allowances are tradable permits that represent the right to emit a specific amount of pollutants (usually one tonne of CO₂ or equivalent). These allowances can be bought and sold among regulated entities. A company that reduces its emissions below its allocation can sell excess permits; a company that emits above its cap must purchase additional allowances to comply. Statement 3 is incorrect: The market price of allowances is not set administratively by the government; rather, it is determined by supply and demand in the trading market. Because the total number of allowances is fixed by the cap, their scarcity creates a price signal, firms that find it expensive to reduce emissions may buy allowances, while firms that can cut emissions cheaply may sell them, with the resulting trading determining the price. Statement 4 is correct: The ability to monetise excess allowances creates a financial incentive for early or deeper emission reductions. Firms that emit less than their allocated cap can sell surplus allowances and thereby reward themselves for reducing emissions below the required level."},{"id":16,"txt":"With reference to Pigouvian Tax, consider the following statements:\nStatement-I: It is imposed to internalise negative externalities by aligning private costs with social costs. Statement-II: The tax rate is ideally set equal to the marginal social damage caused by the activity.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I","Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I","Statement-I is correct but Statement-II is incorrect","Statement-I is incorrect but Statement-II is correct"],"ci":0,"exp":"Ex: Statement I is correct: A Pigouvian tax is a government-imposed charge on activities that generate negative externalities, like pollution or smoking, to internalize the full social cost, making producers/consumers pay for the harm to third parties Statement II is correct: n Pigouvian theory, the tax acts as a bridge between private incentives and social welfare. By setting the tax rate equal to the Marginal Social Damage (MSD) at the socially optimal level of output, the tax effectively \"prices in\" the harm that was previously ignored by the market. Statement-II explains the mechanism through which Statement-I is achieved. By setting the tax rate equal to the marginal social damage, the Pigouvian tax ensures that the polluter faces the full social cost of their action."},{"id":17,"txt":"Consider the following statements regarding the GDP Deflator:\n1. The GDP Deflator measures the change in prices of all domestically produced final goods and services.\n2. Unlike the Consumer Price Index (CPI), the GDP Deflator is based on a fixed basket of goods and services.\n3. The GDP Deflator is considered a useful measure of inflation but is not used for short-term decision-making due to time lags in data availability.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2, and 3"],"ci":2,"exp":"Ex: Statement 1 is correct : The GDP Deflator measures the change in prices of all domestically produced final goods and services within an economy. Unlike the Consumer Price Index (CPI) and Wholesale Price Index (WPI), which focus on selected goods, the GDP Deflator provides a broad measure of price changes in the entire economy. Statement 2 is incorrect : Unlike CPI and WPI, which use a fixed basket of goods and services, the GDP Deflator is not based on a fixed basket. Instead, it accounts for price changes across all goods and services produced in the economy during a specific period. This makes it more comprehensive but also less useful for short-term inflation tracking. Statement 3 is correct : The GDP Deflator is not commonly used for short-term decision-making because its data is published after a significant time lag compared to CPI and WPI. However, it is useful for long-term inflation trends and macroeconomic policy formulation."},{"id":18,"txt":"“It is a situation often deliberately brought by the government to reduce unemployment and increase demand by going for higher levels of economic growth. Governments go for higher public expenditures, tax cuts, interest rate cuts, etc. Fiscal deficit rises, extra money is generally printed at higher level of growth, wages increase and there is a decline in unemployment rate.”\nWhich of the following type of inflation has been discussed in the above paragraph?","ref":"","opts":["Skewflation","Stagflation","Hyperinflation","Reflation"],"ci":3,"exp":"Ex: Option A is incorrect: In Skewflation there is a price rise of one or a small group of commodities over a sustained period of time, without a traditional designation. Option B is incorrect: Stagflation is a situation in an economy when inflation and unemployment both are at higher levels, contrary to conventional belief. Such a situation first arose in the 1970s in the US economy (average unemployment rate above 6 per cent and the average rate of inflation above 7 per cent) and in many Euro-American economies. Option c is incorrect: Hyperinflation is ‘large and accelerating’ which might have the annual rates in million or even trillion. In such inflation not only the range of increase is very large, but the increase takes place in a very short span of time, prices shoot up overnight. The best example of hyperinflation that economists cite is of Germany after the First World War—in early 1920s. At the end of 1923, prices were 36 billion times higher than two years earlier. This inflation was so severe that paper German currencies (the Deutsche Mark) were more valuable as stove fuel than as actual money. Option D is correct: Reflation is a situation often deliberately brought by the government to reduce unemployment and increase demand by going for higher levels of economic growth. Governments go for higher public expenditures, tax cuts, interest rate cuts, etc. Fiscal deficit rises, extra money is generally printed at higher level of growth, wages increase and there is a decline in unemployment rate."},{"id":19,"txt":"Consider the following pairs regarding different categories of Green Debt Securities in India:\nType of Bond Purpose\n1. TransitionBonds — Fundssustainableindustries,ocean energy and waterconservation.raisedincludingmaritimefor\n2. Blue Bonds Funds raised for projects related to water conservation and ocean sustainability.\n3. YellowBonds — Fundsfinancingprojects. raisedsolar energyfor\n4. CircularEconomyBonds — Fundspromotingrecyclable,refurbishedindustries. raisedmaterialsreusable,andforin\nHow many of the above pairs is/are correctly matched?","ref":"","opts":["Only one pair","Only two pairs","Only three pairs","All four pairs"],"ci":2,"exp":"Ex: ❖ Pair 1 is incorrect: Transition Bonds are not focused on maritime industries.They are issued to finance companies shifting from carbon-intensive operations to greener alternatives, aligning with India’s climate commitments (Intended Nationally Determined Contributions - NDCs).Funds raised for transitioning to sustainable industrial operations, reducing carbon emissions. ❖ Pair 2 is correct: Blue Bonds are dedicated to funding sustainable water management, clean water projects, and marine ecosystem conservation.These bonds also finance sustainable fisheries, ocean energy projects, and ocean biodiversity protection. ❖ Pair 3 is correct: Yellow Bonds are exclusively issued for solar energy projects, including solar power plants, solar grids, and solar-based infrastructure. ❖ Pair 4 is correct: These bonds finance waste reduction initiatives, eco-friendly production technologies, and sustainable manufacturing processes.They align with the India Cooling Action Plan (ICAP), focusing on energy efficiency and climate-friendly production."},{"id":20,"txt":"In the Indian economy, which of the following can contribute to demand-side inflation?\n1. Increased consumption due to higher income, tax cuts, or reduced savings.\n2. Business optimism boosting investment.\n3. Reduction in government spending.\n4. Expansionary fiscal and monetary policies.\n5. Rising interest rates.\nSelect the correct answer using the codes given below:","ref":"","opts":["1, 2 and 4 only","3, 4 and 5 only","2 and 4 only","1, 2, 4 and 5 only"],"ci":0,"exp":"Ex: Demand-pull inflation occurs when aggregate demand (C + I + G) exceeds aggregate supply at the full employment level of output, leading to a general rise in prices. It is caused by an increase in consumption, investment, or government spending. Statement 1 is correct: Demand-pull inflation occurs when consumption rises due to higher income, tax cuts, or lower savings, increasing aggregate demand. Statement 2 is correct: Business optimism leads to increased investment, contributing to greater economic activity and inflationary pressures. Statement 3 is incorrect: Reduction in government expenditure decreases aggregate demand, which would reduce inflation, not increase it. Statement 4 is correct: Expansionary policies (both fiscal & monetary), such as increased government spending and lower interest rates, boost aggregate demand, causing demand-pull inflation. Statement 5 is incorrect: Higher interest rates generally reduce borrowing and investment, leading to lower aggregate demand and inflation."},{"id":21,"txt":"Which of the following correctly describes the Environmental Kuznets Curve (EKC)?","ref":"","opts":["It represents a linear relationship between economic growth and environmental degradation.","It suggests that environmental degradation first increases with economic growth but declines after reaching a certain income level.","It states that environmental quality remains constant regardless of economic growth.","It argues that economic growth always leads to environmental improvement."],"ci":1,"exp":"Ex: ❖ The Environmental Kuznets Curve (EKC) is an inverted U-shaped hypothesis that describes the relationship between economic growth (income per capita) and environmental degradation (pollution levels). ❖ The EKC model divides economic development into three phases: a. Early Stage (Pre-Industrial Economy): i. Rapid industrialization leads to increased pollution due to resource exploitation, lack of regulations, and use of polluting technologies. ii. Environmental degradation rises sharply as countries prioritize economic expansion over sustainability. b. Turning Point (Middle-Income Economy): i. At a certain income threshold, countries experience increasing environmental awareness and public demand for stricter environmental regulations. ii. The economy shifts towards cleaner technologies, efficiency improvements, and stricter policies, leading to stabilization of pollution levels. c. Later Stage (Post-Industrial Economy): i. Economic growth continues, but environmental degradation declines due to technological innovation, regulatory enforcement, and adoption of green energy sources. ❖ A negative relationship between economic growth and pollution emerges, improving environmental quality."},{"id":22,"txt":"Which of the following measures can be used by the RBI to curb inflation?\n1. Selling government securities under Open Market Operations (OMO)\n2. Increasing the Loan-to-Value (LTV) ratio\n3. Reducing the Statutory Liquidity Ratio (SLR)\n4. Buying government securities under Open Market Operations (OMO)\n5. Increasing the Repo Rate\nSelect the correct answer using the code given below:","ref":"","opts":["1 and 5 only","1, 3, 4 and 5 only","2, 4 and 5 only","1, 2 and 4 only"],"ci":0,"exp":"Ex: To curb inflation, the Reserve Bank of India (RBI) employs various monetary policy tools aimed at reducing the money supply and controlling credit flow in the economy. Among the measures listed, the following are used by the RBI to address inflation: ❖ Option 1 is correct: Selling Government Securities under Open Market Operations (OMO): When the RBI purchases government securities, it sucks liquidity from the market, decreasing the money supply, which can counter inflation. ❖ Option 2 is incorrect: Increasing the Loan-to-Value (LTV) Ratio: Raising the LTV ratio allows borrowers to receive larger loans relative to the value of their collateral, which can increase money supply and potentially fuel inflation. ❖ Option 3 is incorrect: Reducing the Statutory Liquidity Ratio (SLR): Lowering the SLR means banks are required to hold a smaller portion of their deposits in liquid assets, freeing up more funds for lending. This can increase the money supply and may lead to higher inflation. ❖ Option 4 is incorrect: Buying Government Securities under Open Market Operations (OMO): When the RBI purchases government securities, it injects liquidity into the banking system, increasing the money supply, which can be inflationary. ❖ Option 5 is correct: Increasing the Repo Rate: This is synonymous with raising interest rates. An increase in the repo rate makes borrowing more expensive for banks, which in turn raises lending rates for consumers and businesses, helping to reduce spending and control inflation. PW ONLYIAS SUPER HINT S1 and S4 are clear opposites hence can't be simultaneosly true, thus eliminate option B and D. Also, inflation means need to curb money supply, Increasing the Loan for the same Value of asset(S2), increase the money supply hence increase inflation thus likely false, eliminate option C too."},{"id":23,"txt":"Consider the following statements regarding Stagflation:\n1. Stagflation refers to an economic condition where economic growth is stagnant while inflation continues to rise.\n2. Stagflation is typically associated with low unemployment rates due to increased inflationary pressure.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: Stagflation is a situation where economic growth slows down or remains stagnant while inflation continues to rise. It presents a unique challenge as typical anti-inflationary measures might further reduce growth. Statement 2 is incorrect: Stagflation is characterized by high unemployment, not low unemployment. As economic growth stagnates, job losses increase despite rising inflation. PW ONLYIAS SUPER HINT The term STAGFLATION can be broken into Stagnanat+Inflation. which plausibly stands for stagnant growth + high inflation. Thus statement 1 seems correct. Thus we can eliminate option B and D."},{"id":24,"txt":"In the context of inflation in India, which of the following statements is correct?","ref":"","opts":["Creditors gain more than debtors during inflation.","Individuals with fixed incomes benefit as prices rise.","Landlords gain from inflation due to fixed rental income.","Traders and producers benefit as the value of their inventory rises with increasing prices."],"ci":3,"exp":"Ex: ❖ Debtors vs. Creditors: Inflation benefits debtors as they repay loans with money that has lower purchasing power, while creditors lose because the value of money repaid is lower than when it was lent. ❖ Fixed-Income Earners: People earning fixed salaries and pensions suffer during inflation because their income does not rise in proportion to price increases. ❖ Landlords vs. Farmers: Landlords suffer as rents are fixed, but peasant proprietors and traders gain because the value of their goods and assets increases. ❖ Traders and Producers: Inflation increases the price of inventories (stocked goods), leading to higher profits for traders and producers."},{"id":25,"txt":"With reference to the Consumer Price Index (CPI) in India, consider the following statements:\n1. The Consumer Price Index (CPI) measures inflation by tracking the changes in the price of a selected basket of goods and services at the wholesale level.\n2. The Reserve Bank of India (RBI) uses CPI-Combined (CPI-C) as the primary inflation gauge for monetary policy decisions.\n3. The CPI covers price changes in both goods and services consumed by households.\n4. In CPI-Combined (CPI-C), the Food & Beverages category has the highest weightage among all components.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statement 1 is incorrect: The Consumer Price Index (CPI) tracks inflation at the retail level, not the wholesale level. The Wholesale Price Index (WPI) measures price changes at the wholesale level, while CPI reflects the cost of living for consumers. Statement 2 is correct: Since 2014, the RBI has adopted CPI-Combined (CPI-C) as the primary indicator for inflation targeting under its Monetary Policy Framework Agreement (MPFA). The Inflation Targeting Framework (set by RBI & Government of India) aims to keep inflation around 4% with a ±2% tolerance band, based on CPI-C. Statement 3 is correct: The Consumer Price Index (CPI) includes both goods (like food, clothing, fuel, etc.) and services (like healthcare, education, transport, etc.). This makes CPI a comprehensive measure of consumer inflation. Statement 4 is correct: The CPI-Combined (CPI-C) weightage distribution is as follows: Food & Beverages: 45. 86% (Highest), Miscellaneous: 28. 32%, Housing: 10. 07%, Fuel & Light: 6. 84% and Clothing & Footwear: 6. 53%."},{"id":26,"txt":"Which of the following indices is used as the basis for estimating poverty in urban areas in India?","ref":"","opts":["Wholesale Price Index (WPI)","Consumer Price Index for Industrial Workers (CPI-IW)","Consumer Price Index for Rural Labourers (CPI-RL)","Consumer Price Index for Agricultural Labourers (CPI-AL)"],"ci":1,"exp":"Ex: ❖ Option (a) is incorrect: The WPI tracks inflation at the wholesale level, reflecting producer and industry-level prices. It does not account for consumer-level price changes, making it irrelevant for poverty estimation. ❖ Option (b) is correct: The CPI-IW is the official index used to estimate poverty in urban areas in India. It reflects changes in the cost of living of industrial workers, making it relevant for urban poverty assessment. The Lakdawala Committee (1993) recommended using CPI-IW for updating urban poverty lines. The Tendulkar Committee (2009) endorsed it for measuring poverty consistently across India. ❖ Option (c) is incorrect: The CPI-RL measures price changes affecting rural workers. Since it represents rural areas, it is not used for urban poverty estimation. ❖ Option (d) is incorrect: The CPI-AL is used for estimating poverty in rural areas. It tracks the cost of living of agricultural laborers, making it unsuitable for urban poverty measurement."},{"id":27,"txt":"With reference to inflation, consider the following statements:\n1. Demand-pull inflation occurs when aggregate demand exceeds the economy’s productive capacity.\n2. Cost-push inflation is primarily caused by an increase in the money supply.\n3. Structural factors like foreign exchange scarcity and infrastructural bottlenecks contribute to inflation in developing countries.\n4. Inflation benefits fixed-income earners like pensioners and salaried workers by increasing their purchasing power.\nWhich of the statements given above are correct?","ref":"","opts":["1, 2 and 3 only","2 and 4 only","1 and 3 only","2, 3 and 4 only"],"ci":2,"exp":"Ex: Statement 1 is correct: Demand-pull inflation happens when the total demand for goods and services in an economy outpaces the economy’s ability to produce them. This leads to an increase in prices due to excessive demand. ❖ Example: When consumer spending increases rapidly due to economic growth, tax cuts, or higher wages, businesses struggle to meet demand, pushing prices upward. Statement 2 is incorrect: Cost-push inflation occurs when production costs (such as wages, raw materials, and fuel prices) rise, leading businesses to increase prices to maintain profitability. It is not directly caused by an increase in the money supply. An increase in money supply generally leads to demand-pull inflation rather than cost-push inflation. ❖ Example: A surge in oil prices due to supply chain disruptions increases transportation costs, leading to higher prices for goods. Statement 3 is correct: Structural factors such as poor infrastructure, inefficiencies in production and distribution, and foreign exchange shortages can drive inflation. In developing countries, inadequate roads, unreliable power supply, and weak logistics systems increase production and transportation costs, leading to higher prices. ❖ Example: In India, agricultural products often experience price fluctuations due to supply-chain issues and lack of proper storage facilities. Statement 4 is incorrect: Inflation reduces the purchasing power of fixed-income earners because their income remains constant while prices of goods and services rise. Who suffers from inflation? Fixed-income groups such as pensioners, teachers, and salaried workers suffer because their income does not increase at the same rate as inflation. ❖ Example: If a pensioner receives ₹20,000 per month, but inflation increases the cost of essential goods, the real value of their income decreases."},{"id":28,"txt":"Which of the following commodity groups has the highest weight in the Wholesale Price Index (WPI) of India?","ref":"","opts":["Primary Articles","Fuel & Power","Manufactured Products","Food items"],"ci":2,"exp":"Ex: The Wholesale Price Index (WPI) is a critical economic indicator in India, reflecting the average movement of wholesale prices for goods. It serves as a key measure to monitor inflation at the wholesale level and assists in policy formulation. The WPI is compiled and released by the Office of the Economic Adviser (OEA) under the Department for Promotion of Industry and Internal Trade (DPIIT), Ministry of Commerce & Industry. The current WPI series uses 2011-12 as the base year, effective from April 2017. This base year revision ensures that the index reflects the prevailing economic conditions and structural changes in the economy. From the WPI data provided as of January 2025, the weightage of major commodity groups is: Commodity Group Weight (%) in WPI Primary Articles 22. 62% Fuel & Power 13. 15% Manufactured 64. 23% Products Among these, Manufactured Products has the highest weight in WPI at 64. 23%."},{"id":29,"txt":"Consider the following statements regarding the Phillips Curve:\n1. The Phillips Curve depicts a direct relationship between inflation and unemployment.\n2. An increase in wage inflation without productivity growth leads to cost-push inflation.\n3. A rise in wages always reduces unemployment in the long run.\nWhich of the above statements are correct?","ref":"","opts":["1 and 3 only","2 only","1, 2 and 3","2 and 3 only"],"ci":1,"exp":"Ex: Statement 1 is incorrect: The Phillips Curve describes an inverse relationship between inflation and unemployment in the short run, meaning that when inflation rises, unemployment tends to fall, and vice versa. This is because higher inflation is often caused by increased demand for goods and services, leading to higher employment. Statement 2 is correct: When wages increase without a corresponding rise in productivity, firms face higher labor costs. Higher costs increase the prices of goods and services, leading to cost-push inflation. This aligns with Keynesian economic theory, where inflation occurs when rising input costs (such as wages) force businesses to charge higher prices. Statement 3 is incorrect: The Phillips Curve \u0000\u0000\u0000\u0000 holds true only in the short run. In the long run, the relationship between inflation and unemployment breaks down. This is explained by Milton Friedman and the Monetarist School, which argue that unemployment eventually returns to its \"natural rate\" (NAIRU – Non-Accelerating Inflation Rate of Unemployment), regardless of inflation. Wage increases may temporarily reduce unemployment, but in the long run, inflation expectations adjust, and unemployment returns to its equilibrium."}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

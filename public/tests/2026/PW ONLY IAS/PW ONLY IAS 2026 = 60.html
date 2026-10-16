@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 60</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 60</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 60">PW ONLY IAS 2026 = 60</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following statements regarding the Central Ground Water Authority (CGWA):\n1. It was constituted under the Water (Prevention and Control of Pollution) Act, 1974.\n2. It has the power to resort to penal provisions and mandate rainwater harvesting under the Environment (Protection) Act, 1986.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: The Central Ground Water Authority (CGWA) was not constituted under the Water (Prevention and Control of Pollution) Act, 1974. It was established under Section 3(3) of the Environment (Protection) Act, 1986 to regulate and control the development and management of groundwater resources in the country. Statement 2 is correct: Since CGWA derives its authority from the Environment (Protection) Act, 1986, it possesses regulatory and enforcement powers under this Act. These include: 1. Regulating and Controlling: Issuing \"No Objection Certificates\" (NOCs) for groundwater extraction by industries, infrastructure projects, and mining units. 2. Penal Provisions: The power to impose \"Environmental Compensation\" (fines) and take legal action against unauthorized water extraction. 3. Mandatory Measures: It can legally mandate the installation of Rainwater Harvesting systems and piezometers (to monitor water levels) as a condition for granting extraction permits."},{"id":1,"txt":"Consider the following statements regarding the use of cirrus cloud thinning and the injection of sulfate aerosol into the stratosphere for climate change mitigation:\n1. Cirrus cloud thinning can reduce the warming effect of cirrus clouds by allowing more infrared radiation to escape from the Earth's surface.\n2. The injection of sulfate aerosol into the stratosphere is aimed at mimicking the cooling effects of volcanic eruptions by reflecting sunlight back into space.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex:  Statement 1 is correct: Cirrus cloud thinning aims to reduce the warming effect of cirrus clouds by allowing more infrared radiation to escape from Earth's surface. Cirrus clouds, composed of high- altitude ice crystals, trap heat in the atmosphere. By injecting ice-nucleating substances into the upper troposphere, the formation and persistence of these clouds can be reduced, enhancing the emission of infrared radiation into space and potentially cooling the planet. SPP 22661  Cirrus clouds are high cold ice that, like other clouds, both reflect sunlight and absorb warming infrared radiation. However, they differ from other types of clouds in that, on average, infrared absorption outweighs sunlight reflection, resulting in a net warming effect on the climate.  Statement 2 is correct: The injection of sulfate aerosols into the stratosphere aims to mimic the cooling effects of volcanic eruptions by reflecting sunlight back into space. Volcanic eruptions release sulfur dioxide into the stratosphere, forming sulfate aerosols that increase Earth's albedo, leading to surface cooling. This geoengineering approach proposes deliberate introduction of similar aerosols to reflect a portion of incoming solar radiation, thereby reducing global temperatures. Thus, Option C is the correct answer."},{"id":2,"txt":"India’s first bamboo-based ethanol plant has been established at which one of the following locations?","ref":"","opts":["Golaghat, Assam","Dibrugarh, Assam","Itanagar, Arunachal Pradesh","Siliguri, West Bengal"],"ci":0,"exp":"Ex: India’s first bamboo-based ethanol plant was inaugurated at Numaligarh Refinery Limited (NRL) in Golaghat, Assam. It is described as the world’s first zero-waste second-generation (2G) bioethanol plant. Hence, option (A) is correct. The plant uses bamboo as a cellulosic feedstock, marking a shift from first- generation biofuels that rely on food crops. As a 2G ethanol facility, it converts non-food biomass into ethanol, thereby addressing concerns related to food security and land use. A key feature is its zero-waste technology, where all parts of bamboo are utilized to produce value-added industrial chemicals such as green furfural, acetic acid, and bio- coal. 2 The plant has a production capacity of 60,000 kilolitres of ethanol annually, intended for blending with petrol under India’s ethanol blending programme."},{"id":3,"txt":"A city is experiencing a pronounced temperature inversion during a clear summer afternoon, accompanied by intense vehicular traffic. Under such conditions, which one of the following phenomena is most likely to occur?","ref":"","opts":["A rapid increase in sulphur dioxide (SO₂) concentration leading to classical London smog.","Inhibition of Peroxyacetyl Nitrate (PAN) formation due to enhanced vertical atmospheric mixing.","Development of a light brownish haze associated with peak ground-level ozone concentrations.","Increased precipitation as the inversion layer enhances cloud condensation processes."],"ci":2,"exp":"Ex: A temperature inversion traps pollutants near the surface by preventing vertical air mixing. On a clear summer afternoon, strong sunlight drives photochemical reactions between nitrogen oxides (NOx) and volatile organic compounds (VOCs) emitted from vehicular traffic. These reactions produce secondary pollutants such as ground-level ozone (O₃) and peroxyacetyl nitrate (PAN), leading to the formation of photochemical smog, characterized by a light brownish haze and elevated ozone levels. Nitrogen dioxide (NO2), which is a key component of this process, is a reddish- brown gas. This gives the resulting smog its characteristic brownish haze. Hence, option (C) is correct."},{"id":4,"txt":"With reference to the AmazonFACE experiment, which one of the following statements is correct?","ref":"","opts":["It is a satellite-based project to monitor deforestation in the Amazon Basin.","It is a laboratory-based study simulating tropical forest ecosystems under controlled conditions.","It is a reforestation initiative aimed at increasing carbon sinks in degraded Amazon lands.","It is a field-based climate simulation experiment enriching forest plots with elevated CO₂."],"ci":3,"exp":"Ex: The AmazonFACE (Free-Air CO₂ Enrichment) experiment is a large-scale, field-based climate simulation project conducted in the Amazon rainforest near Manaus, Brazil. It is designed to study how intact tropical forests respond to elevated atmospheric CO₂ levels projected for the mid- 21st century. The experiment uses an open-air system in which selected forest plots are exposed to higher concentrations of CO₂, while comparable plots remain under natural ambient conditions. This design preserves real ecological processes—such as natural rainfall, biodiversity interactions, and soil dynamics— while allowing scientists to isolate the impact of rising CO₂. Hence, option (D) is correct. SPP 22661 The primary objective is to understand whether increased CO₂ enhances forest carbon uptake (carbon fertilization effect) and whether long-term storage is limited by factors such as nutrient availability, especially phosphorus in Amazon soils. The findings are critical for improving Earth System Models and refining projections of tropical carbon– climate feedbacks."},{"id":5,"txt":"Consider the following bioremediation techniques:\n1. Bioventing\n2. Biosparging\n3. Bioaugmentation\n4. Landfarming\n5. Bioreactors\n6. Composting\nHow many of the above are classified as in-situ bioremediation techniques?","ref":"","opts":["Only two","Only three","Only four","All six","1, 2 और 3"],"ci":1,"exp":"Ex: In-situ bioremediation refers to techniques applied directly at the contaminated site without excavating soil or removing groundwater. The objective is to stimulate or enhance natural microbial activity within the existing environment.  Bioventing: Involves supplying air or nutrients into contaminated soil through wells to stimulate indigenous microorganisms for degradation.  Biosparging: Air is injected below the water table to increase dissolved oxygen in groundwater, thereby enhancing microbial breakdown of pollutants.  Bioaugmentation: Specific microorganisms are introduced directly into the contaminated site to accelerate the degradation process. Hence, option (B) is correct. Ex-situ bioremediation, in contrast, involves removing contaminated soil or water and treating it outside its original site under controlled conditions.  Landfarming: Contaminated soil is excavated and spread over a prepared surface where it is aerated to promote microbial activity.  Bioreactors: Contaminated soil or water is processed in engineered containment systems for controlled biological treatment. 3  Composting: Excavated contaminated material is mixed with organic matter to enhance microbial degradation under managed conditions."},{"id":6,"txt":"Consider the following statements regarding the National Policy on Geothermal Energy 2025:\n1. Geothermal energy is considered a reliable baseload renewable source capable of complementing intermittent sources like solar and wind.\n2. The policy was unveiled by the Ministry of Power as part of India’s thermal power expansion strategy.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: The National Policy on Geothermal Energy 2025 recognizes geothermal energy—derived from the Earth’s internal heat—as a clean, reliable, and baseload renewable energy source. Unlike solar and wind power, which are intermittent and dependent on weather conditions, geothermal energy can provide continuous power generation. This makes it strategically important for stabilizing the grid and complementing variable renewable sources in India’s evolving energy mix. Statement 2 is incorrect: The policy was unveiled by the Ministry of New and Renewable Energy (MNRE), not the Ministry of Power. It is India’s first-ever national policy dedicated to geothermal energy and is aligned with broader clean energy and climate goals, including SDGs 7 (Affordable and Clean Energy) and 13 (Climate Action).. Geothermal Potential in India: India has an estimated geothermal potential of about 10,000 MW. The new 2025 policy focuses on several \"hotspots\" across the country: Region Key Location Puga Valley India's first-ever (Ladakh) geothermal power project is currently being developed by the ONGC (Oil and Natural Gas Corporation). Tattapani Part of the SONATA zone. (Chhattisgarh) Manikaran High-temperature springs. (Himachal Pradesh) Bakreshwar Part of the eastern (West Bengal) geothermal belt. SPP 22661"},{"id":7,"txt":"The concept of “Internalization of Externalities” in environmental economics is most closely associated with which of the following mitigation strategies?","ref":"","opts":["Direct air capture technology to remove atmospheric CO₂.","The implementation of a Carbon Tax to reflect the true social cost of pollution.","Providing government subsidies for the manufacturing of internal combustion engines.","Shifting from GDP to GNH (Gross National Happiness) as a measure of progress."],"ci":1,"exp":"Ex: In environmental economics, an externality refers to a cost or benefit arising from an economic activity that is not reflected in market prices. Pollution is a classic example of a negative externality, where producers and consumers do not bear the full social and environmental cost of their actions. The internalization of externalities means incorporating these hidden social costs into the decision-making process, typically through economic instruments. A Carbon Tax (often called a Pigouvian Tax) is the most direct way to do this. By taxing every ton of CO2 emitted, the government effectively attaches a price tag to the \"social cost of carbon.\" This incentivizes the factory to switch to cleaner energy or improve efficiency to avoid the tax, thereby reflecting the \"true cost\" of production. Hence, option (B) is correct."},{"id":8,"txt":"Which one of the following statements correctly explains why ocean acidification affects marine shell-forming organisms?","ref":"","opts":["Rising carbon dioxide levels increase seawater temperature, which directly dissolves calcium carbonate shells.","Dissolved carbon dioxide reduces carbonate ion availability needed for calcium carbonate shell formation.","Carbon dioxide directly reacts with shell surfaces to produce ozone.","Acidification enhances dissolved oxygen levels, thereby reducing shell strength in marine fauna."],"ci":1,"exp":"Ex: Ocean acidification occurs when excess carbon dioxide (CO₂) from the atmosphere dissolves in seawater. When CO₂ mixes with water, it forms a weak acid, which slightly lowers the pH of the ocean. This chemical change reduces the availability of carbonate ions in seawater. Marine organisms such as corals, molluscs, and certain plankton require carbonate ions along with calcium to form calcium carbonate, the main substance that makes up their shells and skeletons. When carbonate ions become less available, these organisms find it difficult to build and maintain strong shells. Over time, shells may become thinner, weaker, or even begin to dissolve under more acidic conditions. Thus, ocean acidification affects shell-forming organisms primarily because it limits the carbonate ions necessary for calcium carbonate formation, Hence, option (B) is correct. 4"},{"id":9,"txt":"The “#23for23 Initiative” was launched primarily to promote conservation of which one of the following?","ref":"","opts":["Himalayan Glaciers and Cryosphere Systems","Snow Leopard and its high-altitude mountain ecosystems","Trans-Himalayan Wetland Biodiversity","Endangered Vultures of the Indian Subcontinent"],"ci":1,"exp":"Ex: The #23for23 Initiative is a major conservation campaign linked to the Global Snow Leopard and Ecosystem Protection Program (GSLEP). The number 23 refers to the 23rd of October, which is celebrated annually as International Snow Leopard Day. The initiative aims to secure at least 23 critical landscapes across the 12 snow leopard range countries (including India, China, Bhutan, Nepal, and Mongolia). Unlike traditional conservation that focuses on individual parks, this initiative promotes a \"landscape-level\" approach. It recognizes that snow leopards have massive home ranges and move across international borders and outside protected areas. The GSLEP Framework: This is an intergovernmental alliance of the 12 range countries, supported by NGOs and international agencies, to address threats like habitat fragmentation, poaching, and climate change. Hence, option (B) is correct. Feature Details IUCN Vulnerable (formerly Status Endangered). Indian Jammu & Kashmir, Ladakh, States Himachal Pradesh, Uttarakhand, Sikkim, and Arunachal Pradesh. Flagship Project Snow Leopard Program (launched in 2009). Protected Hemis National Park (Ladakh) - Areas often called the \"Snow Leopard Capital of the World.\" WPA Schedule I of the Wildlife Listing (Protection) Act, 1972."},{"id":10,"txt":"Consider the following activities with respect to climate change mitigation:\n1. Increasing the alkalinity of oceans by adding lime.\n2. Capturing carbon dioxide released by various industries and pumping it into Subterranean deep saline formations.\n3. Pumping iron in oceans to enhance “carbon fertilization”.\nWhich of the above statements are carbon sequestration methods?","ref":"","opts":["1 and 3 only","2 and 3 only","2 only","1, 2 and 3"],"ci":3,"exp":"Ex:  Statement 1 is correct: Increasing the alkalinity of oceans by adding lime is a proposed carbon sequestration method. When you add lime to seawater, it reacts with that acid and neutralizes it, forming SPP 22661 a carbonate ion.This process enhances the ocean's ability to absorb and store atmospheric CO₂ by reducing ocean acidification and promoting the formation of stable carbonate minerals.  Statement 2 is correct: Capturing carbon dioxide released by various industries and pumping it into subterranean deep saline formations is a well-established method of carbon sequestration, known as Carbon Capture and Storage (CCS). It involves trapping CO₂ emissions from power plants and industrial sources and storing them underground to prevent their release into the atmosphere.  Statement 3 is correct: Pumping iron into oceans to enhance \"carbon fertilization\" is a proposed geoengineering technique to increase phytoplankton growth. Phytoplankton absorbs atmospheric CO₂ through photosynthesis, which then sinks to the ocean floor upon their death, effectively sequestering carbon. This process is known as Iron Fertilization.  Iron fertilization is the intentional introduction of iron-containing compounds (like iron sulfate) to iron-poor areas of the ocean surface to stimulate phytoplankton production. This is intended to enhance biological productivity and/or accelerate carbon dioxide (CO2) sequestration from the atmosphere. Iron is a trace element necessary for photosynthesis in plants. It is highly insoluble in sea water and in a variety of locations is the limiting nutrient for phytoplankton growth. Large algal blooms can be created by supplying iron to iron-deficient ocean waters. These blooms can nourish other organisms. 5  Ocean iron fertilization is an example of a geoengineering technique.Iron fertilization attempts to encourage phytoplankton growth, which removes carbon from the atmosphere for at least a period of time.This technique is controversial because there is limited understanding of its complete effects on the marine ecosystem, including side effects and possibly large deviations from expected behavior. Thus, Option D is the correct answer."},{"id":11,"txt":"Marine “dead zones” are primarily formed due to:","ref":"","opts":["Oil spills forming surface films","Coral bleaching events","Eutrophication and hypoxia","Increased salinity from evaporation"],"ci":2,"exp":"Ex: Marine “dead zones” are areas in oceans or coastal waters where dissolved oxygen levels become extremely low (a condition known as hypoxia), making it difficult or impossible for most marine life to survive. The primary cause is excess nutrient loading, particularly nitrogen and phosphorus, which usually enters marine systems through agricultural runoff, sewage discharge, and industrial effluents. These nutrients stimulate rapid growth of algae in a process called eutrophication. When the algal blooms die, they are decomposed by bacteria. This decomposition consumes large amounts of dissolved oxygen in the water. As oxygen levels drop, fish, crustaceans, and other marine organisms either migrate or die, leading to biologically “dead” areas. Hence, option (C) is correct. Region Famous Dead Zone Global The Gulf of Mexico (at the mouth of the Mississippi River) is one of the world's largest. India The Bay of Bengal has a massive \"Permanent Oxygen Minimum Zone\" (OMZ). Trend The number of dead zones has doubled every decade since the 1960s due to increased industrial farming. SPP 22661"},{"id":12,"txt":"Which of the following correctly explains the interaction of greenhouse gases with different types of radiation?","ref":"","opts":["Greenhouse gases absorb shortwave solar radiation and emit it back as longwave radiation.","Greenhouse gases allow shortwave solar radiation to pass through but absorb and re- radiate longwave infrared radiation emitted by the Earth.","Greenhouse gases block all shortwave radiation and only absorb ultraviolet radiation.","Greenhouse gases absorb longwave radiation directly from the Sun and trap it in the atmosphere. (neutralisation)"],"ci":1,"exp":"Ex:  Greenhouse gases allow shortwave solar radiation to pass through the atmosphere and reach the Earth's surface. However, when the Earth's surface absorbs this radiation and re-emits it as longwave infrared radiation, greenhouse gases absorb and re-radiate some of this energy, trapping heat in the atmosphere and leading to the greenhouse effect. This is the fundamental principle of global warming. Thus, Option B is the correct answer."},{"id":13,"txt":"Which one of the following best describes “Water Bankruptcy”?","ref":"","opts":["Seasonal water shortages due to erratic rainfall.","Temporary drought conditions reversible through emergency measures.","Long-term structural collapse where water withdrawals exceed renewable limits.","Increased water demand caused solely by population growth."],"ci":2,"exp":"Ex: Water Bankruptcy refers to a persistent, post-crisis condition in which long-term water withdrawals exceed renewable inflows and safe ecological depletion limits. It represents a structural breakdown of the previous hydrological baseline, meaning the system cannot naturally return to its earlier equilibrium even with short-term corrective actions. Hence, option (C) is correct. The Financial Analogy: Just as financial bankruptcy occurs when a person's debts exceed their assets and income, water bankruptcy occurs when the \"expenditure\" (total water withdrawals for agriculture, industry, and domestic use) consistently exceeds the \"income\" (recharge from rainfall, snowmelt, and natural inflow). Four Drivers of Water Bankruptcy (The \"4 Failures\") 1. Slow-Onset Depletion: Chronic over- pumping of groundwater and over- allocation of river water that go unnoticed until a tipping point is reached. 2. Infrastructure-Driven Overshoot: Large dams and inter-basin transfers that allow cities and farms to expand far beyond the local environment's carrying capacity. 6 3. Ecological Liquidation: Converting \"natural infrastructure\" (wetlands/forests) into agricultural or urban land, removing the earth's natural ability to store and filter water. 4. Climate-Amplified Stress: Climate change acts as a \"multiplier,\" accelerating glacier melt and causing \"hydrological whiplash\" (rapid shifts between extreme floods and droughts)."},{"id":14,"txt":"Why does global warming potentially reduce the pace of Antarctic ozone depletion?","ref":"","opts":["Warming increases the amount of water vapor in the stratosphere, which neutralizes active chlorine.","Higher temperatures increase the \"albedo\" of the Himalayas, cooling the global stratospheric circulation.","Global warming strengthens the Montreal Protocol's efficacy by accelerating the breakdown of CFCs in the troposphere.","Increased temperatures prevent the formation of Polar Stratospheric Clouds, thereby limiting the surfaces available to convert inactive chlorine into reactive species."],"ci":3,"exp":"Ex: Polar Stratospheric Clouds (PSCs) form under extremely low temperatures in the Antarctic stratosphere during winter. These clouds provide surfaces for heterogeneous chemical reactions that convert relatively inactive chlorine reservoir compounds (such as HCl and ClONO₂) into reactive chlorine species (Cl₂). When sunlight returns in spring, these reactive chlorine atoms are released and catalytically destroy ozone molecules. If stratospheric temperatures increase, the formation of PSCs becomes less favorable. Without sufficient PSC formation, there are fewer surfaces available for the conversion of inactive chlorine into reactive ozone- destroying forms. As a result, the pace of Antarctic ozone depletion may slow. Hence, option (D) is correct."},{"id":15,"txt":"Which one of the following parameters gives a more comprehensive estimate of overall water pollution, including non-biodegradable substances?","ref":"","opts":["Dissolved Oxygen (DO)","Biological Oxygen Demand (BOD)","Chemical Oxygen Demand (COD)","Total Suspended Solids (TSS)"],"ci":2,"exp":"Ex: Option C, Chemical Oxygen Demand (COD) is Correct. COD measures the total amount of oxygen required to chemically oxidize all organic material in water. It covers both biodegradable and non-biodegradable (chemically oxidizable) organic substances. Because it uses a strong chemical oxidizing agent (like potassium dichromate in sulfuric acid), it breaks down complex molecules that bacteria cannot, providing a more \"complete\" picture of organic pollution. SPP 22661 Biological Oxygen Demand (BOD) is Incorrect. BOD measures the amount of oxygen consumed by bacteria while decomposing organic matter. It only accounts for biodegradable substances. It does not account for synthetic chemicals, plastics, or complex industrial wastes that are \"refractory\" (resistant to biological decay). Dissolved Oxygen (DO) is Incorrect. DO is a measure of the \"health\" of the water for aquatic life. While low DO indicates pollution, it doesn't quantify the type or amount of the pollutants themselves—it only shows the effect they are having on the water's oxygen levels. Total Suspended Solids (TSS) is Incorrect. TSS measures the physical particles (silt, decaying plants, industrial waste) trapped by a filter. While important, it does not measure dissolved pollutants, which are often the most toxic \"non-biodegradable\" substances."},{"id":16,"txt":"Under India's Updated Nationally Determined Contributions (NDCs), what is the specific target for “Non-Fossil Fuel” based cumulative electric power installed capacity by 2030?","ref":"","opts":["33% of the total installed capacity.","40% of the total installed capacity.","50% of the total installed capacity.","70% of the total installed capacity."],"ci":2,"exp":"Ex: Under India’s Updated Nationally Determined Contributions (NDCs) submitted to the UNFCCC in 2022, India committed to achieving 50% of its cumulative electric power installed capacity from non-fossil fuel-based energy resources by 2030. Non-fossil fuel sources include renewable energy (solar, wind, hydro, biomass) as well as nuclear power. The target is expressed in terms of installed capacity, not actual electricity generation. This distinction is important because renewable sources like solar and wind have lower capacity utilization factors compared to coal-based plants. Hence option C is correct. The earlier commitment under the original NDC (2015) was 40% by 2030, which has now been enhanced to 50% under the updated submission. This reflects India’s scaling-up of renewable energy deployment and aligns with its broader long-term goal of achieving net- zero emissions by 2070. 7"},{"id":17,"txt":"In a thermally polluted river stretch downstream of a power plant, which of the following is most likely to occur first?","ref":"","opts":["Increase in dissolved oxygen due to enhanced aeration","Immediate neutralisation of heavy metals","Sudden decline in BOD because of enzyme inactivation","Decrease in dissolved oxygen due to reduced solubility at higher temperature"],"ci":3,"exp":"Ex: Thermal pollution occurs when heated water—commonly discharged from power plants—is released into nearby rivers or lakes. The immediate physical effect of increased temperature is a reduction in the solubility of gases in water. Since dissolved oxygen (DO) is a gas, its ability to remain dissolved decreases as water temperature rises. Therefore, the first and most direct consequence of thermal pollution is a decline in dissolved oxygen levels. Aquatic organisms, especially fish, depend on adequate DO for respiration. Even a moderate temperature rise can stress aquatic life because warmer water both holds less oxygen and increases the metabolic rate of organisms, thereby increasing their oxygen demand. Hence, option (D) is correct."},{"id":18,"txt":"Which one of the following best describes the primary objective of “Gothenburg Protocol”?","ref":"","opts":["Promoting renewable energy sources","Reducing air pollution and acidification","Fostering sustainable agriculture practises","Reducing light pollution"],"ci":1,"exp":"Ex: The Gothenburg Protocol was established to address pollutants that cause acidification and ground-level ozone, with the understanding that air pollutants cross borders and affect air quality far from where emitted. It sets limits on air pollutants, including sulphur dioxide, nitrogen oxide, ammonia and volatile organic compounds that are hazardous to human health and the environment. The Gothenburg Protocol is under the United Nations Economic Commission for Europe’s (UNECE). The objective of the amended Gothenburg Protocol is:to control and reduce emissions of sulfur dioxide (SO2), nitrogen oxides (NOx), ammonia(NH4), volatile organic compounds (VOCs), and PM that are caused by human activities and likely to cause adverse effects on human health and the environment, ecosystems, crops, materials and the climate, in the short- and long-term as a result of long- range atmospheric transport. SPP 22661"},{"id":19,"txt":"Consider the following statements:\n1. Agricultural soils can release sulphur dioxide into the environment.\n2. Cattles release methane into the environment.\n3. Copper smelting plants may release sulphur dioxide as a pollutant.\nWhich of the statements given above is/are incorrect?","ref":"","opts":["1 and 3 only","2 and 3 only","2 only","None"],"ci":3,"exp":"Ex: Statement 1 is correct: Sulphur dioxide (SO₂) release appears to be associated with the evaporation of soil water containing sulfite. Global sulphur emissions from acid sulfate soils are estimated at about 3 Tg/year (teragrams), which is similar in magnitude to emissions from terrestrial biogenic sources and biomass burning, and constitutes about 3% of known anthropogenic sulphur emissions. Statement 2 is correct: Cattle emit methane (CH₄) during their digestive process, particularly through enteric fermentation in ruminants. Microbes in the stomachs of these animals break down food, producing methane as a byproduct, which is then expelled into the atmosphere. Statement 3 is correct: Copper smelting plants can release sulfur dioxide (SO₂) as a pollutant. During the smelting process, sulfur- containing ores are heated, resulting in the emission of sulfur dioxide gas into the environment."},{"id":20,"txt":"Consider the following:\n1. Inland Salinity\n2. Coastal Salinity\n3. Fluoride\n4. Arsenic\n5. Iron\n6. Nitrate\nHow many of the above are recognized groundwater contaminants? PM 2.5 PM 10","ref":"","opts":["Only three","Only four","Only five","All six","1, 2 और 3"],"ci":3,"exp":"Ex: In India, groundwater contamination is a major public health and environmental concern. The Central Ground Water Board (CGWB) monitors these specific parameters, which are broadly categorized into \"Geogenic\" (natural) and \"Anthropogenic\" (human-made) contaminants. All the listed substances and conditions are recognized groundwater contaminants affecting different regions of India. Hence option D is correct  Inland Salinity: Caused by natural salinity, excessive irrigation, waterlogging, and evaporation, leading to accumulation of salts in groundwater.  Coastal Salinity: Occurs due to sea water intrusion into freshwater aquifers, especially in coastal regions with over- extraction. 8  Fluoride: Geogenic contaminant originating from fluoride-bearing minerals in rocks; excess causes fluorosis.  Arsenic: Primarily geogenic, released from sedimentary formations; long-term exposure causes severe health issues including arsenicosis.  Iron: Naturally present due to geological conditions and redox reactions; high concentration affects water quality and usability.  Nitrate: Mostly anthropogenic, arising from fertilizers, septic systems, livestock waste, and organic matter; high levels cause health problems like methemoglobinemia."},{"id":21,"txt":"Consider the following air Pollutants:\n1. PM2.5\n2. PM10\n3. Ammonia\n4. Ground level ozone\n5. Benzene\nHow many of the above pollutants are included in the Air Quality Index (AQI)?","ref":"","opts":["Only three","Only four","All five","None"],"ci":1,"exp":"Ex: As seen from the table below, only Benzene is not included in AQI from the given options."},{"id":22,"txt":"Consider the following statements:\nStatement–I: Proposals by certain Southern African nations to reopen trade in ivory stockpiles were rejected at CITES CoP20. Statement–II: The proposals were rejected because CITES has completely banned all forms of international wildlife trade since its inception.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I","Both Statement-I and Statement-II are correct but Statement-II is not the correct explanation for Statement-I","Statement-I is correct but Statement-II is incorrect","Statement-I is incorrect but Statement-II is correct"],"ci":2,"exp":"Ex: Statement–I is correct: At recent CITES Conferences of the Parties (CoPs), including the most recent ones (CoP19 in Panama and discussions leading into CoP20), several Southern African nations (such as Zimbabwe, Namibia, and Botswana) have consistently proposed to reopen the legal international trade in ivory stockpiles. They argue that the revenue generated would fund elephant SPP 22661 conservation and support local communities. However, these proposals have been repeatedly rejected by a majority of member nations who fear that any legal trade would provide a cover for illegal poaching. Statement–II is incorrect: CITES does not impose a blanket ban on all international wildlife trade. Instead, it regulates trade through a system of Appendices (I, II, and III), allowing controlled trade depending on the conservation status of species. Therefore, the rejection of the ivory trade proposals was not because CITES bans all wildlife trade, but due to conservation concerns and potential risks such as increased poaching. Key CITES Mechanisms for Elephants  MIKE (Monitoring the Illegal Killing of Elephants): A site-based system to track poaching levels.  ETIS (Elephant Trade Information System): A database managed by TRAFFIC that tracks illegal ivory seizures globally. One-off Sales: In 1999 and 2008, CITES allowed limited \"one-off\" sales of ivory from certain Southern African countries to Japan and China, but the results were highly controversial and led to the current moratorium."},{"id":23,"txt":"With respect to the Radioactive Pollution, consider the following statements:\n1. The primary sources of terrestrial radioactive radiation are natural deposits of uranium, potassium, and thorium.\n2. Radiation damages the cells in the body, resulting in long-lasting harm to various organs.\n3. High levels of radiation can render soil infertile.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Living organisms are continuously exposed to a variety of radiations called background radiations. If the When the level of the radioactive radiations becomes harmful, it is called radioactive pollution. Statement 1 is correct: The primary contributors to the terrestrial radiations are natural deposits of uranium, potassium, and thorium. These, in the process of natural decay, release small amounts of ionizing radiation. Naturally occurring radioisotopes such as radon-222 found in soil in small quantity is another source of radioactive radiations. 9 On the other hand, Cosmic Radiation consists of fast-moving particles that exist in space. It originates from a variety of sources, including the sun and other celestial events in the universe. Some of this radiation penetrates the earth's atmosphere and is absorbed by living organisms. Statement 2 is correct: High levels of radiation lead to damage to DNA strands leading to genetic breakup over time. Damage to DNA can lead to cancers, birth defects, and even death. Radiation distorts the cells of body present, leading to permanent damage of the various organs and organ systems. Statement 3 is correct: Exposure to high amounts of radiation destroy plants. When herbivores graze, radioactive substances deposited on land, gets accumulated in their bodies. High exposure of radiation also makes soil infertile. PW ONLYIAS SUPER HINT You can try, The \"NOT\" approach for S2 and S3, this tests the improbability of negating a statement—if denying its impact seems highly unlikely, the statement is plausibly true. For example: What if radiation did NOT damage cells or organs? Then Chernobyl victims wouldn’t suffer long-term effects. Cancer treatments wouldn’t rely on radiation to kill cells. Seems absurd hence both statements are likely true. Eliminate option A and B."},{"id":24,"txt":"Which one of the following statements best describes the phenomenon of ‘Blue Tide’?","ref":"","opts":["It is a rapid increase or accumulation in the population of algae in freshwater or marine water systems.","This phenomenon occurs when phytoplanktons commonly known as dinoflagellates produce blue light through chemical reactions in proteins.","These are areas of water bodies where aquatic life cannot survive because of low oxygen levels.","None of the above"],"ci":1,"exp":"Ex: Bioluminescence is the property of a living organism to produce and emit light. Animals, plants, fungi, and bacteria show bioluminescence. A remarkable diversity of marine animals and microbes are able to produce their own light. It is found in many marine organisms such as bacteria, algae, jellyfish, worms, crustaceans, sea stars, fish, and sharks. Luminescence is generally higher in deep-living and planktonic organisms than SPP 22661 in shallow species. The phenomenon is called ‘blue tide’, and appears when luminescent marine life makes the sea appear a deep shade of blue. The spectacle occurs when phytoplankton (microscopic marine plants), commonly known as dinoflagellates, produce light through chemical reactions in proteins. Waves disturb these unicellular microorganisms and make them release blue light. EXTRA-EDGE BY PWOnlyIAS What is a red tide? A \"red tide\" is a common term used for a harmful algal bloom. Harmful algal blooms, or HABs, occur when colonies of algae—plant-like organisms that live in the sea and freshwater—grow out of control while producing toxic or harmful effects on people, fish, shellfish, marine mammals, and birds. The human illnesses caused by HABs, though rare, can be debilitating or even fatal. While many people call these blooms 'red tides,' scientists prefer the term harmful algal bloom. One of the best known HABs in the nation occurs nearly every summer along Florida’s Gulf Coast. This bloom, like many HABs, is caused by microscopic algae that produce toxins that kill fish and make shellfish dangerous to eat. The toxins may also make the surrounding air difficult to breathe. As the name suggests, the bloom of algae often turns the water red."},{"id":25,"txt":"In the \"Nitrogen Domino Effect,\" what is the correct sequence of environmental impacts caused by a single atom of Reactive Nitrogen (Nᵣ)?","ref":"","opts":["Smog → Acid Rain → Eutrophication → Greenhouse Effect","Eutrophication → Smog → Ozone Depletion → Acid Rain","Greenhouse Effect → Acid Rain → Smog → Eutrophication","Acid Rain → Eutrophication → Smog → Stratospheric Cooling"],"ci":0,"exp":"Ex: The “Nitrogen Domino Effect” illustrates how one atom of reactive nitrogen (Nᵣ)—such as nitrogen oxides released from vehicles, power plants, or fertiliser use—can sequentially trigger multiple environmental problems as it moves through the atmosphere, land, and water systems. 10 Initially, reactive nitrogen in the atmosphere contributes to the formation of photochemical smog by participating in sunlight-driven reactions that produce ground- level ozone. Subsequently, nitrogen oxides can react with atmospheric moisture to form nitric acid, which falls as acid rain, affecting soil chemistry, vegetation, and freshwater bodies. After deposition, nitrogen compounds enter aquatic ecosystems, where they act as nutrients. Excess nitrogen loading causes eutrophication, leading to algal blooms and oxygen depletion. Finally, part of the reactive nitrogen cycle converts into nitrous oxide (N₂O), a potent greenhouse gas that contributes to the greenhouse effect and long-term climate change. Thus, the correct sequence is: Smog → Acid Rain → Eutrophication → Greenhouse Effect. Hence, option (A) is correct."},{"id":26,"txt":"Consider the following pairs:\nCarbon mitigation Description mechanism\n1. CleanDevelopmentmechanism — emissioncommitmentKyotoimplementreductiondeveloping countries.Allows a-reductioncountryProtocolanprojectunderemissionwith theantoin-\n2. Joint allows Industrialized Implementation countries to invest in emission reduction projects in other industrialized countries.\n3. Cap and Trade A type of carbon trading that allows for emission trading to meet target emission requirement.\nHow many of the above pair/s is/are correctly matched?","ref":"","opts":["only one pair","only two pairs","All three pairs","None","1, 2, 3, 4 और 5"],"ci":2,"exp":"Ex:  Pair 1 is correct: The Clean Development Mechanism (CDM) allows a country with an emission- reduction commitment under the Kyoto Protocol to implement an emission- reduction project in a developing country. This helps developed nations meet their emission targets while supporting sustainable development in developing nations.  Pair 2 is correct: Joint Implementation (JI) allows industrialized countries (Annex I countries under the Kyoto Protocol) to invest in emission reduction projects in other industrialized countries (mainly transition economies). This mechanism helps countries meet their targets cost-effectively. SPP 22661  Pair 3 is correct: Cap and Trade is a market-based approach where a limit (cap) is set on total emissions, and companies can trade emission allowances to stay within the limit. This system incentivizes reducing emissions while allowing flexibility in how reductions are achieved. Thus, Option C is the correct answer."},{"id":27,"txt":"“Black Carbon,” often found in soot from incomplete combustion, accelerates glacial melting primarily by:","ref":"","opts":["Reacting chemically with ice to turn it into water.","Lowering the albedo of snow","Increasing the acidity of the meltwater.","Blocking sunlight from reaching the valley floor."],"ci":1,"exp":"Ex: Black carbon is a fine particulate matter produced from incomplete combustion of fossil fuels, biomass, and biofuels. When it settles on snow and ice surfaces, particularly in polar regions and high mountain glaciers (such as the Himalayas), it darkens the surface. Snow and ice naturally have high albedo, meaning they reflect most incoming solar radiation back into space. However, when black carbon deposits accumulate, the surface becomes darker and less reflective. This reduces albedo, causing the snow or ice to absorb more solar radiation. The absorbed heat accelerates melting. This creates a reinforcing cycle: More black carbon deposition → lower reflectivity → more heat absorption → faster melting → exposure of darker surfaces → further warming. Hence, option (B) is correct."},{"id":28,"txt":"Which of the following best explains why permafrost thaw is a climate concern?","ref":"","opts":["It releases trapped greenhouse gases","It increases surface reflectivity","It enhances ocean alkalinity","It reduces atmospheric humidity"],"ci":0,"exp":"Ex: Permafrost refers to ground that remains frozen for at least two consecutive years, commonly found in Arctic and sub-Arctic regions. It contains large amounts of frozen organic matter—remnants of plants and animals accumulated over thousands of years. When global temperatures rise, permafrost begins to thaw. As it thaws, previously frozen organic material becomes exposed to microbial decomposition. This process 11 releases greenhouse gases such as carbon dioxide (CO₂) and, importantly, methane (CH₄). Methane is particularly concerning because it has a much higher global warming potential than CO₂ over shorter time horizons. This creates a positive feedback loop: warming causes permafrost thaw → thaw releases greenhouse gases → greenhouse gases cause further warming → leading to more thaw. Because of this self-reinforcing cycle, permafrost thaw is considered a major climate risk. Hence, option (A) is correct."},{"id":29,"txt":"Which of the following is/are the possible consequence/s of heavy sand mining in river beds?\n1. Altered river flow and increased vulnerability to floods\n2. Decreased salinity in the river\n3. Pollution of groundwater\n4. Lowering of the water-table\n5. Disruption of aquatic ecosystems and biodiversity\nSelect the correct answer using the code given below:","ref":"","opts":["1, 2 and 3 only","2, 4 and 5 only","1, 3, 4 and 5 only","1, 2, 3, 4 and 5"],"ci":2,"exp":"Ex: Statement 1 is correct: Heavy sand mining in riverbeds can alter river flow, leading to increased vulnerability to floods. Removing large quantities of sand destabilizes the river's natural equilibrium, causing erosion and changing its course, which can heighten flood risks.  SPP 22661 Statement 2 is incorrect: Heavy sand mining typically leads to increased salinity in rivers, especially in coastal areas. The removal of sand lowers the riverbed, allowing seawater to intrude further upstream, thus raising the salinity levels. Statement 3 is correct: Sand mining can pollute groundwater. The excavation process can introduce pollutants into the water table and disrupt natural filtration systems, leading to contamination of groundwater sources. Statement 4 is correct: Excessive sand mining results in the lowering of the water table. Excessive sand mining lowers the water table by reducing groundwater recharge, as the removal of sand diminishes the riverbed’s ability to store and filter water. Statement 5 is correct: Sand mining causes disruption of aquatic ecosystems and biodiversity. The extraction process destroys habitats, alters food chains, and can lead to the decline or extinction of various aquatic species. 12"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

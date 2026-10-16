@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 56</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 56</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 56">PW ONLY IAS 2026 = 56</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"He was elected as the first president of All India Trade Union Congress. He was the first to link capitalism with imperialism— “Imperialism and militarism are the twin children of capitalism”. He wrote a famous book “England’s Debt to India”. The above description is related to:","ref":"","opts":["Lala Lajpat Rai","Dadabhai Naoroji","Aurobindo Ghosh","Ramprasad Bismil"],"ci":0,"exp":"Ex: Lala Lajpat Rai was elected as the first president of All India Trade Union Congress. He was the first to link capitalism with imperialism— “Imperialism and militarism are the twin children of capitalism”. Important books written by him are:  Young India  Unhappy India  England’s Debt to India He founded:  Servants of the People Society (1921)  Associated with Punjab National Bank  Associated with Dayanand Anglo-Vedic (DAV) institutions"},{"id":1,"txt":"With reference to the first general election in India, consider the following statements\n1. The Communist Party of India (CPI) got the second highest percentage of votes.\n2. Shiromani Akali Dal won more seats than Bharatiya Jan Sangh.\n3. B.R. Ambedkar lost a reserved seat in Bombay.\nHow many of the above statements is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: General elections were held in India between 25 October 1951 and 21 February 1952, the first national elections after India attained independence in 1947.Voters elected the 489 members of the first Lok Sabha, the lower house of the Parliament of India. Elections to most of the state legislatures were held simultaneously Statement 1 is incorrect: In the first general election, the Congress polled close to 45 percent of the total vote. The Communist Party of India (CPI) got about 3.29 percent votes. The Socialist Party got 10.59 percent votes and got the second highest percentage of votes. Statement 2 is correct: Shiromani Akali Dal won four seats whereas Bharatiya Jan Sangh won three seats. So, Shiromani Akali Dal won more seats than Bharatiya Jan Sangh. Statement 3 is correct: Dr. B. R. Ambedkar was defeated in Bombay (North Central), which was a reserved constituency, as a candidate of the Scheduled Castes Federation SPP 22657 by his little-known former assistant and Congress candidate, Narayan Sadoba Kajrolkar."},{"id":2,"txt":"The Congress president in 1947 said, \"Rather than have a battle, we shall let them have their Pakistan provided you allow Bengal and Punjab to be partitioned in a fair manner.\" This statement refers to:","ref":"","opts":["C. Rajagopalachari","J. B. Kripalani","Maulana Abul Kalam Azad","Mahatma Gandhiji"],"ci":1,"exp":"Ex: The communal riots and the unworkability of the Congress-League coalition compelled many in early 1947 to think in terms of accepting the so far unthinkable idea of partition. On March 10, 1947, Nehru stated that the Cabinet Mission was the best solution if carried out; the only real alternative was the partition of Punjab and Bengal. In April 1947, the Congress president, Kripalani, communicated to the viceroy— “... rather than have a battle, we shall let them have their Pakistan provided you allow Bengal and Punjab to be partitioned in a fair manner.” Thus, Option B, is correct. 2"},{"id":3,"txt":"Consider the following:\nCommittee Chairman Union Powers Dr. Rajendra Prasad Committee Steering Committee Jawaharlal Nehru Provincial Constitution Sardar Patel Committee\nHow many of the following pairs are correct ?","ref":"","opts":["Only one","Only two","All Three","None"],"ci":0,"exp":"Ex: The Constituent Assembly appointed a number of committees to deal with different tasks of constitution-making. Out of these, eight were major committees and the others were minor committees. Pair 1 is incorrect: Union Powers Committee was headed by Jawaharlal Nehru Pair 2 is incorrect: Steering Committee was headed by Dr. Rajendra Prasad Pair 3 is correct: Provincial Constitution Committee was headed by"},{"id":4,"txt":"Which of the following personalities established the \"Indian Club at Tokyo\" to seek international support against British rule in India?","ref":"","opts":["Rash Behari Bose","Subhash Chandra Bose","Prem Kumar Sehgal","Mohan Singh"],"ci":0,"exp":"Ex: Option a is correct: Indian Club at Tokyo was established by Rash Behari Bose. It served as a meeting point for Indian nationalists and Japanese supporters, fostering collaboration and strategizing efforts to weaken British colonial power in India. Option b is incorrect: Subhas Chandra Bose, a prominent leader in India's independence movement, restored the Indian National Army (INA) in 1943. This army, known as the Provisional Government of Free India, attracted former prisoners and numerous civilian volunteers from the Indian communities in Malaya (now Malaysia) and Burma. Option c is incorrect: Prem Kumar Sehgal was an officer in the Indian National Army led by Subhas Chandra Bose. He significantly contributed to India's independence movement and was one of the officers tried in the Red Fort Trials, which drew widespread attention and support for the INA. Option d is incorrect: Captain Mohan Singh was an Indian Army officer, proposed forming an Indian National Army along with Indian prisoners of war captured in Malaya. Despite initial success with 40,000 recruits, conflicts with the Japanese over the INA's role led to his detention. Subhas Chandra Bose later took over the INA. SPP 22657"},{"id":5,"txt":"Arrange the following events and organizations associated with Subhas Chandra Bose in chronological order:\n1. Formation of the All India Forward Bloc.\n2. Formation of the Indian National Army (INA) under Bose's command.\n3. Establishment of the Provisional Government of Free India (Azad Hind).\n4. Establishment of the Free India Centre.\nSelect the correct answer from the code given below:","ref":"","opts":["1-4-2-3","2-1-3-4","1-2-3-4","2-1-4-3","1, 2 और 3","1, 3 और 4","2, 3 और 4","1, 2 और 4"],"ci":0,"exp":"Ex:  Formation of the All India Forward Bloc (1939): After resigning as Congress President in April 1939, Subhas Chandra Bose formed the Forward Bloc in May 1939 as a faction within the Indian National Congress to consolidate leftist and progressive forces.  Establishment of the Free India Centre (1942): While in Germany, Bose established the Free India Centre in Dresden with the support of the Axis powers, particularly Germany. The centre aimed to mobilize Indian prisoners of war in Europe to fight for India's independence.  Formation of the Indian National Army (INA) under Bose's command (1943): Subhas Bose assumed leadership of the Indian National Army (INA) in July 1943 in Singapore after Rash Behari Bose transferred its control to him.  Establishment of the Provisional Government of Free India (Azad Hind) (1943): On October 21, 1943, Bose proclaimed the Provisional Government of Free India in Singapore, aiming to lead the struggle for India’s liberation from British colonial rule. C. Chatterjee (Finance portfolio), M.A. Aiyar (Broadcasting), Lakshmi Swaminathan (Women Department) etc. were some of the key portfolios under the provisional government. Additional Information:  Bose met Hitler under the pseudo name, “Orlando Mazzotta”. With the help of Hitler, the ‘Freedom Army’ (Mukti Sena) was formed which consisted of all the prisoners of war of Indian origin captured by Germany and Italy. Dresden, Germany was made the office of the 3 Freedom Army. Bose came to be called ‘Netaji’ by the people of Germany. He gave the famous slogan, ‘Jai Hind’ from the Free India Centre, Germany 1942 Thus, Option A, is correct."},{"id":6,"txt":"Which pact was signed to resolve the problems of refugees and restore communal peace in the two countries - India and Pakistan in 1950?","ref":"","opts":["Delhi Pact on Minorities","Lahore Declaration","Shimla Treaty","Poona Pact"],"ci":0,"exp":"Ex: The Delhi Pact on Minorities (1950), also known as the Nehru-Liaquat Pact, was signed between Indian Prime Minister Jawaharlal Nehru and Pakistani Prime Minister Liaquat Ali Khan. It aimed to address the issues of communal violence and protect the rights of minorities in both countries following the partition of 1947. Key provisions included:  Ensuring the security of religious minorities in both countries.  Protecting their cultural and property rights. Thus, Option A is the correct answer."},{"id":7,"txt":"Liaquat- Nehru Pact was related to:","ref":"","opts":["Protection of minorities in India and Pakistan","Division of military assets between India and Pakistan","Settlement of Kashmir dispute between India and Pakistan","Evacuation of British troops from India and Pakistan"],"ci":0,"exp":"Ex: To resolve the problems of refugees and restore communal peace in the two countries, especially in Bengal (East Pakistan as well as West Bengal), the Indian prime minister, Jawaharlal Nehru and the Pakistani prime minister, Liaquat Ali Khan, signed an agreement on April 8, 1950. The agreement, known as the Delhi Pact on Minorities or Liaquat- Nehru Pact, envisaged the appointment of ministers from minority communities in both Pakistan and India at both central and provincial levels. Under the pact, minority commissions were to be set up, together with the Commissions of Inquiry to look into the probable causes behind the communal riots on both sides of the border (in Bengal), and to recommend steps to prevent recurrence of such incidents. Under the pact, SPP 22657 India and Pakistan also agreed to include representatives of the minority community in the cabinets of East Pakistan and West Bengal and decided to depute two central ministers, one from each government, to remain in the affected regions for such a period as might be necessary."},{"id":8,"txt":"In March 1940, an Anti-Compromise Conference at Ramgarh was organized under the leadership of which one of the following personalities?","ref":"","opts":["Mahatma Gandhi","M. A Jinnah","JL Nehru","Subhash Chandra Bose"],"ci":3,"exp":"Ex: In March 1940, Subhas Chandra Bose organized the Anti-Compromise Conference at Ramgarh. This conference was a joint effort by the Forward Bloc (which Bose had founded after breaking away from the Indian National Congress) and the Kisan Sabha. The conference resolved to launch a worldwide struggle starting on April 6, the first day of the National Week, urging the people of India to refuse any assistance to the British imperialist war efforts in terms of men, money, or materials Thus, Option D is correct"},{"id":9,"txt":"Consider the following statements regarding Attlee’s Statement of February 20, 1947:\n1. It declared that the British government would transfer power to responsible Indian hands by 15 August 1947.\n2. It announced that Lord Mountbatten would replace Lord Wavell as the Viceroy of India.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Clement Attlee, the British prime minister, sensing the trouble all around, made an announcement on February 20, 1947. The British House of Commons declared the British intention of leaving the Indian subcontinent. Statement 1 is incorrect: A deadline of June 30, 1948 was fixed for transfer of power even if the Indian politicians had not agreed by that time on the constitution. The British would relinquish power either to some form of central government or in some areas to the existing provincial governments if the constituent assembly was not fully representative, i.e., if the Muslim majority provinces did not join. Statement 2 is correct: It announced that Lord Mountbatten would replace Lord Wavell as the Viceroy of India. 4"},{"id":10,"txt":"Consider the following statements regarding the INA agitation:\n1. The INA agitation was marked by unprecedented nationwide participation from diverse social groups and political parties.\n2. Pro-INA sentiments were limited to Congress supporters and excluded other political organizations like the Ahrar and Akalis.\n3. The agitation questioned Britain’s right to decide matters concerning Indians and became a symbol of ‘Indian versus British’ sentiment.\n4. The INA agitation saw support even from traditional supporters of the British Raj, including loyalists and government employees.\nWhich of the statements given above are correct?","ref":"","opts":["1, 2 and 3","1, 3 and 4","2, 3 and 4","1, 2 and 4"],"ci":1,"exp":"Ex:  Statement 1 is correct: The INA agitation was marked by unprecedented nationwide participation from diverse social groups and political parties. The campaign spread over a wide area of the country and witnessed the participation of diverse social groups and political parties.  Statement 2 is incorrect: Pro-INA sentiments were widespread and not limited to Congress. Many other groups, such as the Muslim League, Communist Party, Akalis, Ahrars, Rashtriya Swayamsevak Sangh (RSS), and Hindu Mahasabha, also supported the cause.  Statement 3 is correct: The INA agitation symbolized a larger struggle against British authority, questioning their right to impose decisions on Indians. It became a powerful embodiment of the \"Indian versus British\" conflict.  Statement 4 is correct: Pro-INA sentiments surfaced in traditional bulwarks of the Raj. Government employees collected funds. The loyalists—the gentlemen with titles— appealed to the government to abandon the trials for good Indo-British relations. Thus, Option B, is correct."},{"id":11,"txt":"Consider the following statements with respect to the Indian provincial elections of 1946.\n1. There was more communal voting in contrast to the strong anti-British unity shown in various preceding upsurges like naval rating upsurges.\n2. The Muslim League got a majority in Punjab, Sindh, and Bengal in the provincial elections.\n3. The Congress got a majority in most provinces except in Bengal, Sindh, and Punjab.\n4. A Unionist-Congress-Akali coalition under Liaqat Ali Khan assumed power in Punjab.\nWhich of the statements given above is/are correct?","ref":"","opts":["1, 2 and 3 only","1 and 3 only","1, 3 and 4 only","2 and 4 only","1, 2 और 3"],"ci":1,"exp":"Ex: The 1946 elections were a watershed moment in Indian history, serving as a \"virtual referendum\" on the Pakistan demand. They revealed a starkly polarized electorate, where the spirit of unity seen during the INA trials and the RIN Revolt vanished at the ballot box. Statement 1 is correct: While the preceding months saw massive \"Indian versus British\" unity (such as the RIN Revolt and INA SPP 22657 agitations), the elections saw a shift toward communal voting. The Congress swept the general seats, while the Muslim League captured the overwhelming majority of Muslim reserved seats. The middle ground was effectively wiped out. Statement 2 is incorrect: While the Muslim League emerged as the single largest party in these provinces, it did not get an absolute majority in all of them. In Bengal, it was the largest party and formed the government with the support of some independents. In Sindh, it was the largest party but faced a stiff challenge. In Punjab, it was the largest party but was kept out of power by a coalition of other parties. Statement 3 is correct: The Congress won a thumping majority in almost all the \"General\" (largely Hindu-majority) provinces, including the United Provinces, Bihar, Madras, C.P. & Berar, Orissa, and Bombay. It also formed the government in the North-West Frontier Province (NWFP) and Assam, despite the Muslim League's claims. Thus, it was absent from the leadership in Bengal, Sindh, and Punjab. Statement 4 is incorrect: A Unionist- Congress-Akali coalition did indeed assume power in Punjab, but it was led by Khizr Hyat Khan Tiwana (the leader of the Unionist Party), not Liaqat Ali Khan. Liaqat Ali Khan was a top leader of the Muslim League and was not part of this \"anti-League\" coalition. This coalition government in Punjab deeply frustrated the Muslim League, leading to civil disobedience movements in the province."},{"id":12,"txt":"Which of the following statements is correct regarding ‘The Commonwealth of India Bill’?","ref":"","opts":["It was drafted by a committee led by Wavell.","Annie Besant and Tej Bahadur Sapru made important contributions to the drafting of the bill.","The bill was never introduced in the British Parliament.","It specified that India shall not be placed on an equal footing with the self-governing dominions."],"ci":1,"exp":"Ex: Option (a) is incorrect: The Commonwealth of India Bill 1925 was first drafted by the ‘National Convention’ in April 1924 in the context of the Indian nationalist movement that believed it was time for Indians to be governed by a Constitution framed by Indians. Lord Wavell was not associated with it. 5 Option (b) is correct: The National Convention, with Tej Bahadur Sapru as the Chairman, consisted of 256 members, the majority of whom were legislators and ex- legislators with some representation from the Home Rule League, 1921 Club, and the India Women’s Association. The Convention sat again in December 1924 in Bombay and submitted an amended draft of the Bill to a sub-committee appointed by the All Parties Conference, 1925 of which Annie Besant was the Chairwoman. This sub-committee made a number of amendments and these were considered by the National Convention in April 1925. Option (c) is incorrect: The Bill was presented in the British Parliament by Mr George Lansbury, a leading member of the Labour Party, in December 1925. However, it did not go beyond the first reading stage as the Labour Party had been defeated in the elections. While the Bill failed to pass through the British Parliament, it was very influential on constitutional antecedent documents that came after it. It was accepted unanimously by the executive committee of the Parliamentary Labour Party. Option (d) is incorrect: According to the bill, It is necessary for the dignity, peace, and contentment of the People of India and also for the welfare and continued amity of the British and Indian Nations, that India should be placed on an equality with the Self- Governing Dominions."},{"id":13,"txt":"Who among the following personalities was known as “Lakshmibai of Bihar”?","ref":"","opts":["Usha Mehta","Savitri Devi","Ramswarup Devi","Sarla Devi Chaudharani"],"ci":2,"exp":"Ex: Bahuria Ramswarup Devi, who was also called “Laxmibai of Bihar '', led the Quit India movement in Saran district Bihar in 1942. She was born in Bhagalpur in a rich family and was married to Harmadhav Prasad at the age of 9 Years. When her husband was arrested, she became active in the freedom movement. On 19 August 1942, she was addressing a gathering in the Madhaura police SPP 22657 station area of Chapra district where the British started indiscriminate firing. Ramswarup Devi, who believed in Gandhi's thoughts, stood the ground. She also won the first assembly elections in Bihar."},{"id":14,"txt":"Which of the following statements is correct with reference to Atlee’s statement of 1947?","ref":"","opts":["It fixed a deadline for the transfer of power only if concurrence was achieved among Indian leaders.","It proposed that the British could transfer power to the provincial government in some areas if Constutuent Assembly was not fully representative.","It had the provision of transferring powers and obligations of princely states to the successor government of India after the transfer of power.","It made provision for the appointment of Wavell as viceroy of India for an interim period."],"ci":1,"exp":"Ex: Clement Attlee, the British prime minister, sensing the trouble all around, made an announcement on February 20, 1947. The British House of Commons declared the British intention of leaving the Indian subcontinent.  The statement fixed the deadline of June 30, 1948, for the transfer of power even if the Indian politicians had not agreed by that time on the constitution. Hence, Option (a) is incorrect.  The statement proposed that the British would relinquish power either to some form of central government or in some areas to the existing provincial governments if the constituent assembly was not fully representative. It means if the Muslim majority provinces did not join the constituent assembly. Hence, Option (b) is correct.  One of the provisions of the statement was that British powers and obligations vis-a-vis the princely states would lapse with the transfer of power, but these would not be transferred to any successor government in British India. Hence, Option (c) is incorrect.  The statement contained clear hints of partition and even the Balkanisation of the country into numerous states and was, in essence, a reversion of the Cripps Offer. As per the statement, Mountbatten would replace Wavell as the viceroy of India. Hence, Option (d) is incorrect. 6"},{"id":15,"txt":"Consider the following statements:\n1. In 1940, Netaji Subhas Chandra Bose lobbied energetically to remove the Holwell Monument.\n2. The Holwell Monument was erected by John Zephaniah Holwell in 1760 to commemorate the victims of the Black Hole of Calcutta incident.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex:  Statement 1 is correct: In 1940, Netaji Subhas Chandra Bose lobbied energetically to demand the removal of the Holwell Monument in Calcutta. The protest was rooted in nationalist sentiment, as the monument was seen as a symbol of British colonial propaganda. Bose viewed it as an attempt to justify colonial rule by overemphasizing the tragedy of the Black Hole incident.  Statement 2 is correct: The Holwell Monument was erected by John Zephaniah Holwell in 1760 to commemorate the victims of the Black Hole of Calcutta incident of 1756. Holwell was a survivor of the incident, where a large number of British prisoners were allegedly confined in a small chamber, leading to suffocation and death. Lord Curzon later commissioned a new monument in 1901, mentioning the original monument erected by Holwel Additional Information:  The Holwell Monument Removal Movement was a significant part of the nationalist struggle, as it directly challenged colonial narratives.  The monument stood at Dalhousie Square (now B. B. D. Bagh) in Calcutta and was removed post-independence. Thus, Option C, is correct."},{"id":16,"txt":"Consider the following statements regarding the All India Kisan Sabha:\n1. It was formed in 1936 to organize peasants and demand agrarian reforms.\n2. Subhash Chandra Bose was the first president of the All India Kisan Sabha.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: The All India Kisan Sabha (AIKS) was formed in 1936 at Lucknow to mobilize peasants and demand:  Reduction of land revenue  Protection of peasants’ rights SPP 22657 Statement 2 is incorrect: Swami Sahajanand Saraswati was the first president of the All India Kisan Sabha and a prominent peasant leader. N.G. Ranga was the first general secretary. A kisan manifesto was issued and a periodical under Indulal Yagnik started. The AIKS and the Congress held their sessions in Faizpur in 1936."},{"id":17,"txt":"The idea of a Constituent Assembly for India was put forward for the first time by which of the following leaders?","ref":"","opts":["Mahatma Gandhi","Jawaharlal Nehru","M.N. Roy","B.R. Ambedkar"],"ci":2,"exp":"Ex: The idea of a Constituent Assembly was first proposed by M.N. Roy in 1934. He was a radical nationalist and communist thinker. Later, the Indian National Congress officially demanded a Constituent Assembly in 1935. The Constituent Assembly was finally formed in 1946 under the Cabinet Mission Plan."},{"id":18,"txt":"With reference to the Mountbatten Plan, June 3, 1947 consider the following statements:\n1. Referendums would be held in Sindh, NWFP, and Sylhet district of Bengal to decide their fate.\n2. The formula was to Balkanize India, leading to its complete division into smaller regions.\n3. The independence for princely states was ruled out—they would join either India or Pakistan.\nWhich of the statements given above is/are correct?","ref":"","opts":["3 only","1 and 3 only","1, 2 and 3","2 only","1, 2 और 3"],"ci":0,"exp":"Ex: The Mountbatten Plan, also known as the June 3rd Plan, was the final blueprint for the partition of India and the transfer of power. It sought to provide a quick and acceptable solution to the deadlock between the Congress and the Muslim League. Statement 1 is incorrect: The plan proposed different mechanisms for different provinces. While referendums were indeed held in the North-West Frontier Province (NWFP) and the Sylhet district of Assam (to decide if it would join East Bengal), the decision for Sindh was different. In Sindh, the decision was left to the Provincial Legislative Assembly, not a referendum. Similarly, the provincial assemblies of Punjab and Bengal were to meet in two sections (Muslim- majority and non-Muslim majority) to vote on partition. Statement 2 is incorrect: The Mountbatten Plan was actually a reversal of a previous proposal (the \"Plan Balkan\" or Ismay Plan). The initial \"Plan Balkan\" had suggested that 7 provinces should be allowed to become independent first before deciding to join a union, which would have led to a fragmented, \"Balkanized\" India. Nehru vehemently opposed this. The final June 3rd Plan instead proposed the partition into two Dominions (India and Pakistan), thereby avoiding the fragmentation of the country into numerous smaller independent regions. Statement 3 is correct: The plan made it clear that the British would not accept the independence of any Princely State. They were given the choice to join either the Dominion of India or the Dominion of Pakistan. The option of remaining independent was explicitly ruled out, as the British Paramountcy was to lapse, and the states were expected to integrate based on geographical contiguity and the wishes of their people. Key Features of the Plan  Date of Transfer: The date for the transfer of power was moved forward from June 1948 to August 15, 1947.  Boundary Commission: A commission led by Sir Cyril Radcliffe was to be appointed to demarcate the international borders in Punjab and Bengal.  Dominion Status: Both nations would initially be granted Dominion Status within the British Commonwealth."},{"id":19,"txt":"Consider the following statements regarding the accession of princely states after Independence:\n1. Hyderabad acceded to India after a plebiscite was conducted in 1948.\n2. Junagadh acceded to India after a military operation known as Operation Polo.\n3. The Maharaja of Jammu and Kashmir signed the Instrument of Accession to India in October 1947.\nWhich of the statements given above are incorrect?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is incorrect: The Nawab of Junagadh acceded to Pakistan in 1947, but India intervened and conducted a plebiscite in 1948, where people voted in favor of India. Statement 2 is incorrect: Hyderabad wanted a sovereign status. It signed a Standstill Agreement with India in November 1947. Indian troops withdrew and the Nizam’s police and stormtroopers (Razakkars) took over. The Nizam wanted an outlet to the sea SPP 22657 (Goa). The violence and supply of foreign arms prompted Indian troops to move in again in 1948— described as “a police action to restore law and order”. Thus, Hyderabad was annexed to India in 1948 through Operation Polo, a military action ordered by the Indian government. Statement 3 is correct: The Maharaja of Jammu and Kashmir signed the Instrument of Accession to India in October 1947 after tribal invaders from Pakistan attacked Kashmir."},{"id":20,"txt":"In the context of Indian freedom struggle, consider the following statements about ‘Plan Balkan’\n1. It was formulated by Lord Mountbatten.\n2. The plan envisaged the transfer of power to separate provinces.\n3. It was opposed by J.L. Nehru.\nHow many of the above statements is/are incorrect?","ref":"","opts":["Only one","Only two","All three","None"],"ci":3,"exp":"Ex: Statement 1 is correct: Between March and May of 1947, Lord Mountbatten decided that the Cabinet Mission Plan had become untenable and formulated an alternative plan known as ‘Plan Balkan’. Statement 2 is correct: This plan envisaged the transfer of power to separate provinces with Punjab and Bengal given the option to vote for partition of their provinces. The various units thus formed along with the princely states would have the option of joining India or Pakistan or remaining separate. Statement 3 is correct: This plan was abandoned as J.L. Nehru had opposed it and reacted violently against it."},{"id":21,"txt":"Consider the following statements regarding the Drafting Committee of the Constituent Assembly:\n1. Alladi Krishnaswami Iyer was the Chairman of the Drafting Committee.\n2. The Drafting Committee was appointed to prepare the final draft of the Constitution based on the reports of various committees.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: Dr. B.R. Ambedkar was appointed as the Chairman of the Drafting CommitteeThe other members were: Alladi Krishnaswami Iyer, N. Gopalaswami Ayyangar, K.M. Munshi, Saiyad Mohammad Saadulla, Sir B.L. Mitter and D.P. Khaitan. After the first meeting Sir B.L. Mitter resigned and in his place N. Madhava Rao was nominated, and T.T. Krishnamachari took the place of D.P. Khaitan on the latter’s death in 1948. 8 Statement 2 is correct: The Drafting Committee was responsible for preparing the final draft of the Constitution, using recommendations from other committees like the Union Powers Committee, Fundamental Rights Committee, etc."},{"id":22,"txt":"Consider the following personalities associated with the Indian freedom struggle:\n1. Bhulabhai Desai\n2. Tej Bahadur Sapru\n3. Jawaharlal Nehru\n4. Asaf Ali\n5. Kailash Nath Katju\nHow many of the above were members of the Indian National Army (INA) Defence Committee of 1945 which was set up by the Indian National Congress for providing legal defence to INA prisoners?","ref":"","opts":["Only two","Only three","Only four","All five"],"ci":3,"exp":"Ex: In 1945, following the trials of Indian National Army (INA) prisoners, the Indian National Congress strongly supported the INA cause. The Congress passed a resolution at the first post-War Congress session in September 1945 in Bombay, declaring its full support for the INA. To provide legal defense for the INA prisoners, the Congress formed a Defence Committee. The following personalities were part of this Defence Committee: 1. Bhulabhai Desai 2. Tej Bahadur Sapru 3. Kailash Nath Katju 4. Jawaharlal Nehru 5. Asaf Ali Together, these five played a significant role in the legal defense of the INA prisoners during their trials. Additionally, the INA Relief and Enquiry Committee was set up to assist the affected, including providing funds, food, and employment to the families of the prisoners. Thus, Option D, is correct."},{"id":23,"txt":"Lord Birkenhead’s challenge was related to\nwhich of the following?","ref":"","opts":["Drafting a constitution acceptable to all sections of Indians","Formation of the Indian National Congress","Granting dominion status to India immediately","Abolition of separate electorates"],"ci":0,"exp":"Ex: In 1927, Lord Birkenhead, the Secretary of State for India, challenged Indian leaders to produce a constitution acceptable to all communities. He believed Indians were incapable of agreeing on a common constitutional framework. In response, Indian leaders prepared the Nehru Report (1928) under Motilal Nehru, which became the first major Indian effort to draft a constitutional framework. SPP 22657"},{"id":24,"txt":"What was the resolution introduced by Motilal Nehru in February 1924, which emphasized constitutional reforms and minority rights, popularly known as?","ref":"","opts":["The Nehru Report","The National Demand","The Poorna Swaraj Resolution","The Delhi Proposal"],"ci":1,"exp":"Ex: In February 1924, Motilal Nehru presented a resolution in the Central Legislative Assembly, later called National Demand. It advocated constitutional reforms with attention to minority rights and interests. This marked the first explicit demand for a constitution and its adoption procedure. The resolution led Britain to appoint the Simon Commission in 1927 to explore further constitutional changes. Thus, Option B is the correct answer."},{"id":25,"txt":"Which of the following acts provided for the bilingual solution for any official communication between the Union government and states and recognised regional languages in provincial administration?","ref":"","opts":["Indian Independence Act","First Constitutional Amendment Act","Official Languages Act, 1963","Official Languages (Amendment) Act of","1, 2, 3 और 4"],"ci":3,"exp":"Ex: The language issue was further clarified by Parliament in 1963 through the Official Languages Act, which stated that Hindi was to become the official language in India from 1965. But as a concession to the non-Hindi speakers, English was accorded the status of ‘associate additional official language. But resentment against Hindi continued and the Official Languages (Amendment) Act of 1967 provided a bilingual (English and Hindi) solution for any official communication between the Centre and states, and gave a concession to the diverse multiplicity of languages by recognising regional languages in provincial administration and in public service examinations. Hence, option D is the correct answer."},{"id":26,"txt":"The Butler Committee (1927) was appointed to examine the relationship between the British Government and which of the following?","ref":"","opts":["Indian National Congress","Provincial Governments","Princely States","Local Self-Government Institutions"],"ci":2,"exp":"Ex: The Butler Committee (1927) was set up to examine the nature of relationship between the princely states and government. It gave the following recommendations— 1. Paramountcy must remain supreme and must fulfil its obligations, adopting and defining itself according to the shifting necessities of time and progressive development of states. 9 2. States should not be handed over to an Indian Government in British India, responsible to an Indian legislature, without the consent of states."},{"id":27,"txt":"Consider the following personalities:\n1. Bal gangadhar tilak\n2. Ashwini Coomar Banerjea\n3. Subramaniya Siva\n4. C.F. Andrews\nWhich of the following personalities were associated with organising strikes for the labour class during colonial India?","ref":"","opts":["3 and 4 only","1 and 2 only","2, 3 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: In 1899, the first strike by the Great Indian Peninsular Railways took place, and it got widespread support. Tilak’s Kesari and Maharatta had been campaigning for the strike for months. During swadeshi upsurges, workers participated in wider political issues. Strikes were organised by Ashwini Coomar Banerjea, Prabhat Kumar Roy Chaudhuri, Premtosh Bose and Apurba Kumar Ghosh. These strikes were organised in the government press, railways and the jute industry. There were attempts to form trade unions but these were not very successful. Subramaniya Siva and Chidambaram Pillai led strikes in Tuticorin and Tirunelvelli and were arrested. C.F. Andrews supported Mahatma Gandhi during the Ahmedabad textile mill workers’ strike of 1918. The strike was against the withdrawal of the plague bonus and demand for wage increase. Andrews helped by:  Mediating between workers and mill owners  Supporting peaceful negotiation  Strengthening workers’ morale  SPP 22657"},{"id":28,"txt":"With reference to the following quote, identify the person who said it:\n\"I felt that if we did not accept partition, India would be split into many bits and would be completely ruined. My experience of office for one year convinced me that the way we have been proceeding would lead us to disaster. We would not have had one Pakistan but several. We would have had Pakistan cells in every office.\"","ref":"","opts":["C. Rajagopalachari","Maulana Azad","Jawaharlal Nehru","Sardar Vallabhbhai Patel"],"ci":3,"exp":"Ex: This quote underscores the challenges faced by the Congress leadership in balancing national unity with the practical realities of growing communal tensions and the Muslim League's demand for Pakistan. Patel’s pragmatic stance was driven by his experience in office, where he observed firsthand the increasing communal polarization and the risk of widespread instability. As Sardar Patel explained “I felt that if we did not accept partition, India would be split into many bits and would be completely ruined. My experience of office for one year convinced me that the way we have been proceeding would lead us to disaster. We would not have had one Pakistan but several. We would have had Pakistan cells in every office”. Thus, Option D, is correct"},{"id":29,"txt":"With reference to the Constituent Assembly, consider the following statements:\n1. The strength of the constitution-making body was to be 500.\n2. Rajendra Prasad moved the ‘Objectives Resolution’ in the Constituent Assembly.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is incorrect: The strength of the constitution-making body was to be 389. Of these, 296 representatives were to be from British India, (292 representatives drawn from the eleven Governors’ Provinces of British India and a representative each from the four Chief Commissioners’ Provinces of Delhi, Ajmer- Merwara, Coorg and British Baluchistan) and 93 representatives from the Indian states. Statement 2 is incorrect: The Objectives Resolution was moved by Jawaharlal Nehru, not Rajendra Prasad on 13 December 1946. Rajendra Prasad was the President (Chairman) of the Constituent Assembly. 10"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 36</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 36</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 36">PW ONLY IAS 2026 = 36</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the administrative structure of the Mahajanapada period, consider the following pairs:\nOfficial Function\n1. Senanayaka Military commander\n2. Ayukta Special administrative officer\n3. Bali Sadhaka Voluntary religious donor\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is Correct: As the Mahajanapadas transitioned into powerful monarchies (like Magadha and Kosala), the need for a standing army arose. Senanayaka emerged as the commander of the forces, responsible for military strategy and leadership under the King. This marked a shift from the Senani of the Vedic period, as the role became more professionalized and central to the state's expansion. Statement 2 is Correct: The Ayuktas were a class of officers who functioned as special administrative personnel. They were often tasked with diverse responsibilities, ranging from managing state resources to overseeing local administration. They represent the early development of a \"civil service\" that allowed the king to exercise authority over territories beyond the immediate capital. Statement 3 is Incorrect: In the Vedic period, Bali was indeed a voluntary offering or religious donation. However, during the Mahajanapada period, Bali became a mandatory tax (often 1/6th of the produce). The Bali Sadhakas were the tax collectors specifically appointed to realize these compulsory payments. They were not \"donors\" but the officials responsible for ensuring the state's revenue."},{"id":1,"txt":"With reference to the Mahajanapadas and their distinctive features, consider the following pairs:\nMahajanapada Distinctive feature /Region\n1. Anga Capital at Champa with access to riverine trade\n2. Assaka Only Mahajanapada located south of the Vindhyas\n3. Gandhara Associated with the Uttarapatha trade route\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Pair 1 is correctly matched: Located in modern-day Munger and Bhagalpur districts of Bihar, its capital Champa was a renowned center of commerce. Situated at the confluence of the Ganga and Champa rivers, it served as a major riverine port. Trade ships from Champa frequently traveled down the Ganga to the coastal regions, and it eventually became an important gateway for trade with Southeast Asia (Suvarnabhumi). SPP 22637 Pair 2 is correctly matched: It is historically significant as the only Mahajanapada located south of the Vindhyas, specifically in the Dakshinapatha (Southern route) region. Its capital was Potali (or Podana), situated on the banks of the Godavari River in modern- day Telangana and Maharashtra. Pair 3 is correctly matched: Located in the northwestern part of the subcontinent (modern Peshawar and Rawalpindi), Gandhara was the western terminus of the Uttarapatha (the Great Northern Road). This strategic position made its capital, Taxila, a cosmopolitan hub where Indian, Persian, and Greek influences converged, facilitating both commerce and scholarship."},{"id":2,"txt":"With reference to Gana-Sanghas, consider the following statements:\n1. The chief office was hereditary and vested in a single ruling family.\n2. Decision-making involved discussion and voting in an assembly hall.\n3. Voting was conducted using wooden pieces known as salakas.\n4. Gana-sanghas were predominantly located in the fertile alluvial plains of the middle Ganga valley.\nWhich of the statements given above are correct?","ref":"","opts":["2 and 3 only","1, 2 and 4 only","2, 3 and 4 only","1 and 3 only"],"ci":0,"exp":"Ex: Statement 1 is Incorrect: In Gana–Sanghas, the chief (often styled raja or ganapati) was not hereditary in the monarchical sense. Authority rested with a collective of ruling kshatriya clans, and leadership was elective/rotational within the oligarchic group, not vested permanently in a single family. Statement 2 is Correct: Decision-making in Gana–Sanghas involve deliberation in an assembly hall (santhagara). Matters of policy, justice, and war were discussed collectively, reflecting corporate governance rather than royal fiat. Statement 3 is Correct: Jain and Buddhist texts (particularly the Vinaya Pitaka) provide detailed accounts of the voting procedure. Salakas (wooden sticks or slips) were used as voting ballots. An official called the Salaka- gahapaka (stick-collector) was appointed to ensure the integrity of the vote and to count the slips to determine the majority opinion. 2 Statement 4 is Incorrect: Gana–Sanghas were not predominantly located in the fertile alluvial plains of the middle Ganga valley. They were largely concentrated in the Himalayan foothills and north-western regions (e.g., Vajji/Licchavi, Mallas), areas less suited to intensive wet-rice agriculture that supported centralized monarchies."},{"id":3,"txt":"With reference to Ajatasatru, consider the following statements:\n1. He initially followed Jainism and later embraced Buddhism.\n2. He recognised the strategic importance of Pataligrama.\n3. He founded Pataliputra as the capital of Magadha.\n4. He fought prolonged wars against Kosala and the Vrijji confederacy.\nWhich of the statements given above are correct?","ref":"","opts":["2, 3 and 4 only","1 and 3 only","1, 2 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Statement 1 is Correct: According to Jain traditions (specifically the Aupapatika Sutra), Ajatashatru was a follower of Jainism and a contemporary of Mahavira. However, Buddhist sources (like the Samaññaphala Sutta) highlight his later remorse for the parricide of his father, Bimbisara, and his subsequent embrace of Buddhism after meeting Gautama Buddha. Both traditions claim him, indicating his pragmatic patronage of various Sramana sects. Statement 2 is Correct: Ajatashatru recognized the strategic importance of Pataligrama (a village on the banks of the Ganga). To counter the threat from the Vrijji confederacy to the north, he fortified this village, turning it into a military outpost (Jaladurga or water-fort). Statement 3 is Incorrect: While Ajatashatru fortified Pataligrama, he did not found Pataliputra as the capital. The credit for building the city of Pataliputra and formally shifting the capital there from Rajgriha goes to his son and successor, Udayin. Statement 4 is Correct: Ajatashatru’s reign was marked by aggressive expansion. He fought a long-drawn war with Kosala (ruled by his uncle Prasenajit) and a 16-year-long conflict with the Vrijji confederacy. In the war against the Vrijjis, he famously used two new military weapons: the Mahashilakantaka (a catapult for throwing large stones) and the Rathamusala (a chariot with attached blades). SPP 22637"},{"id":4,"txt":"Alexander crossed into the Indian subcontinent by:","ref":"","opts":["Khyber Pass and crossed the Indus near Taxila","Khyber Pass and crossed the Indus near Ohind","Bolan Pass and crossed the Indus near Attock","Gomal Pass and crossed the Indus near Hund"],"ci":1,"exp":"Ex: Alexander the Great entered the Indian subcontinent through the Khyber Pass in the Hindu Kush mountains. After spending several months subduing the tribes of the Kunar and Swat valleys (the Aspasioi and Assakenoi), his army reached the Indus River. The crossing of the Indus did not happen at Taxila itself (which was the capital of King Ambhi and lay further east), but at a place called Ohind (also known as Und or Udabhandapura), located about 16 miles above Attock. Alexander's generals, Hephaestion and Perdiccas, had been sent ahead to construct a bridge of boats at this location to facilitate the movement of the heavy Macedonian phalanx and cavalry. Hence option B is correct."},{"id":5,"txt":"Which one of the following is NOT a consequence of Persian–Greek contacts with India?","ref":"","opts":["Introduction of Kharosthi script","Bell-shaped Mauryan pillar capitals","Issue of punch-marked coins","Opening of land and sea trade routes"],"ci":2,"exp":"Ex: Option A is incorrect: Kharoshthi script was derived from Aramaic, the administrative script of the Achaemenid Persian Empire. It spread in north-western India (Gandhara region) due to Persian control and later Indo- Greek usage. It remained the dominant script of the Northwest for centuries and was famously used by Ashoka for his rock edicts in that region. Option B is incorrect: The bell-shaped lotus capital and highly polished stone technique show Achaemenid–Hellenistic inspiration. Mauryan pillars (e.g., Sarnath, Lauriya Nandangarh) reflect West Asian imperial art traditions, adapted locally. While the Mauryan pillars were monolithic (carved from a single stone) and the Persian ones were built in segments, the aesthetic inspiration and technical masonry skills are widely attributed to the cross-pollination of craftsmen following the fall of the Persian Empire. 3 Option c is correct: Punch-marked coins pre- date Persian and Greek contact. They originated in the 6th century BCE, linked to Mahajanapadas and Early monetisation of the Ganga plain. Their technology is indigenous, not borrowed from Greek coinage (which used die-struck coins). The early Indian coins were irregular pieces of silver or copper with symbols (sun, tree, mountain, etc.) \"punched\" into them. It was only later, during the Indo- Greek period, that Indian coinage adopted the die-striking technique and portraits of rulers. Option D is incorrect: The Persian Empire integrated the Indus valley into a vast administrative network stretching to the Mediterranean. Alexander’s subsequent expedition and the establishment of Greek satrapies and cities (like Alexandria- Arachosia) further cleared and documented routes. This led to a massive increase in commercial exchange between the Indian heartland and the Western world via the Persian Gulf and the overland Silk Road."},{"id":6,"txt":"In the Arthashastra, the term ‘Vyasanas’ refers to:","ref":"","opts":["Ethical lapses of the king","Natural disasters affecting agriculture","Calamities weakening the state","Espionage failures in wartime"],"ci":2,"exp":"Ex: In the Arthashastra, Kautilya dedicates an entire book (Book VIII) to the subject of Vyasanas. While the literal meaning of the word in modern Hindi often implies a \"vice\" or \"addiction,\" in the administrative and political context of the Arthashastra, it refers to calamities, misfortunes, or deficiencies that afflict the various elements of the state (Saptanga). Kautilya categorizes Vyasanas into two broad types: 1. Daiva (Providential/Natural): Fire, floods, pestilence, and famine. 2. Manusha (Human-made): Policy errors, administrative corruption, or the vices of the ruler. SPP 22637 Kautilya argues that a Vyasana is dangerous because it weakens one or more of the seven limbs of the state (Saptanga). For instance, a calamity affecting the Kosha (Treasury) would naturally weaken the Danda (Army), eventually leading to the collapse of the Swami (Sovereign). He meticulously ranks these calamities by their severity to help the ruler prioritize which \"weakness\" to fix first. Hence option C is correct PWOnlyIAS Extra Edge The Arthashastra remained largely unknown to modern scholarship until R. Shamasastry discovered a Grantha script manuscript in 1905 at the Oriental Research Institute, Mysore. Critically edited and published shortly after, its earliest layers date to the 4th– 3rd century BCE, firmly associating the text with the Mauryan era."},{"id":7,"txt":"Which of the following sources explicitly mentions Chandragupta Maurya as “Mauryaputra”?","ref":"","opts":["Vishnu Purana","Divyavadana","Mudrarakshasa","Mahavamsa"],"ci":2,"exp":"Ex: The term “Mauryaputra” (son of the Mauryas) for Chandragupta Maurya is explicitly used in the Sanskrit political drama Mudrārākṣasa, attributed to Viśākhadatta. Mudrārākṣasa is a courtly Sanskrit play focused on the fall of the Nandas, the political strategy of Chanakya (Kautilya), the legitimisation of Chandragupta’s rule. The term Mauryaputra appears in a dramatic–political context, emphasising dynastic legitimacy rather than genealogy in a puranic sense. The play suggests a connection between the Mauryas and the Nandas, implying that the Mauryas were a subordinate or even a cadet branch of the ruling Nanda family. Hence option C is correct."},{"id":8,"txt":"According to Megasthenes’ account of municipal administration in ancient India, the city was governed through several boards. These boards performed which of the following functions?\n1. Supervision of crafts, including regulation of wages and quality of materials\n2. Registration of births and deaths\n3. Regulation of foreigners and protection of their property\n4. Assessment and collection of land revenue from cultivators\nSelect the correct answer using the code below:","ref":"","opts":["1, 2, 3 and 4 only","1 and 4 only","2 and 3 only","1, 2, and 3"],"ci":3,"exp":"Ex: Megasthenes provides a detailed description of the city administration of Pataliputra, which was governed by a municipal commission consisting of 30 members, divided into six boards (committees) of five members each: 4 1. First Board (Supervision of Crafts): This board looked after industrial arts and artisans. It regulated wages and ensured the quality of materials used by craftsmen. (Statement 1 is correct) 2. Second Board (Regulation of Foreigners): It oversaw the well-being of foreigners, ensuring they were provided with accommodation, medical care, and proper burials. It also protected their property. (Statement 3 is correct) 3. Third Board (Registration of Births and Deaths): This was essentially a census department. It recorded births and deaths for taxation purposes and to monitor the population. (Statement 2 is correct) 4. Fourth Board (Trade and Commerce): It supervised weights and measures and controlled the sale of commodities. 5. Fifth Board (Manufactured Goods): It supervised the sale of manufactured goods and ensured that new goods were sold separately from second-hand ones. 6. Sixth Board (Collection of Tithes): It collected a 10% tax (tithe) on the price of goods sold. Statement 4 is incorrect: The assessment and collection of land revenue from cultivators was an agrarian function managed by the central/rural administrative machinery (overseen by the Agronomoi in Megasthenes' terms), not the municipal boards of the city."},{"id":9,"txt":"With reference to Ashokan inscriptions, consider the following statements:\n1. In most of his inscriptions, Ashoka referred to himself by titles such as Devanampiya and Piyadasi, rather than by his personal name.\n2. The personal name “Ashoka” is explicitly mentioned at Maski, Gujarra, Nittur and Udegolam in the context of Minor Rock Edicts.\n3. The site of Kanganahalli provides epigraphic evidence of the name “Ashoka” in association with Buddhist imagery, though not as a Minor Rock Edict.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Statement 1 is correct: In the vast majority of his 33 inscriptions (Major Rock Edicts, Pillar Edicts, and Cave Inscriptions), Ashoka uses the titles Devanampiya (Beloved of the Gods) and Piyadasi (Of Gracious Aspect). For centuries, these titles were the only indicators of the ruler's identity until modern decipherment linked them to the historical Ashoka. SPP 22637 Statement 2 is correct: There are four specific Minor Rock Edict (MRE) sites where the personal name Ashoka is used in the text of the proclamation. These are: 1. Maski (Karnataka): The first site discovered (1915) that settled the \"Piyadasi-Ashoka\" identity. 2. Gujarra (Madhya Pradesh): Uses the phrase \"Devanampiya Piyadasi Asokaraja\". 3. Nittur (Karnataka): 4. Udegolam (Karnataka): Statement 3 is correct.: The site of Kanganahalli (part of the Sannati Buddhist complex in Karnataka) is a major archaeological breakthrough. It features a unique relief sculpture of the King with his queen, accompanied by an inscription that reads \"Rayo Asoka\" (King Ashoka). This is a commemorative label attached to a Buddhist relief/sculpture, distinguishing it from the formal administrative text of a Minor Rock Edict."},{"id":10,"txt":"With reference to the Lagman Aramaic inscriptions of Ashoka, consider the following statements:\n1. They provide information on royal roads and officials responsible for their upkeep.\n2. They contain references to distances and directions between administrative centres.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2 only","Neither 1 nor 2"],"ci":2,"exp":"Ex: The Lagman (Laghman) inscriptions were discovered in the 1960s and 70s in eastern Afghanistan. Written in the Aramaic script and language, they served the population of the former Achaemenid provinces. Statement 1 is correct:The inscriptions mention the existence of a \"Royal Road\" (karapathi). They identify specific officials, such as the \"overseer of the roads,\" who were responsible for maintaining these vital trade and military arteries. This reflects a high degree of administrative sophistication in the frontier provinces. Statement 2 is correct:Unlike the Major Rock Edicts which focus on Dhamma, the Lagman edicts act almost like ancient signposts. They explicitly state distances to important places. For example, one inscription mentions the distance to Tadmor (Palmyra) and other western locations, providing directions and measurements in bow-lengths or similar units. 5"},{"id":11,"txt":"Which one of the following statements about Major Rock Edict XIII of Ashoka is NOT correct?","ref":"","opts":["It refers to named Hellenistic rulers beyond India","It introduces the idea of dhamma-vijaya","It reflects Ashoka’s remorse after the Kalinga war","It was issued immediately after the conclusion of the Kalinga war"],"ci":3,"exp":"Ex: Statement a is correct. Major Rock Edict XIII is famous for mentioning five contemporary Greek (Yona) kings: Antiochus (Syria), Ptolemy (Egypt), Antigonus (Macedonia), Magas (Cyrene), and Alexander (Epirus). This provides a vital chronological anchor for Mauryan history. Statement b is correct. In this edict, Ashoka formally renounces Dig-vijaya (military conquest) and introduces the concept of Dhamma-vijaya (victory through Dhamma/righteousness), claiming it to be the best form of conquest. Statement c is correct The edict contains a moving description of the suffering caused by the Kalinga war (100,000 killed, 150,000 deported). It explicitly states the King's profound sorrow and regret (anutapa) for the violence. Statement d is is incorrect. The Kalinga war took place in the 8th year of Ashoka's reign (c. 261 BCE). However, the Major Rock Edicts (including MRE XIII) were issued as a complete set later in his reign, approximately in his 12th to 14th regnal years. While the edict describes the war from the 8th year, it was not \"issued immediately\" after the conflict ended."},{"id":12,"txt":"Consider the following pairs regarding Mauryan provinces and capitals:\nProvince Capital\n1. Uttarapatha — Taxila\n2. Avantipatha — Ujjain\n3. Prachyapatha — Tosali\n4. Dakshinapatha — Suvarnagiri\nWhich of the pairs given above are correctly matched?","ref":"","opts":["1 and 3 only","1, 2 and 3 only","2 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: The Mauryan Empire was divided into several provinces to ensure effective governance over its vast territory. Each province was typically headed by a prince of royal blood, known as a Kumara or Aryaputra. 1. Uttarapatha (Northern Province): The capital was Taxila. This province was strategically vital as it served as the gateway to the Northwest and the Silk Road. It was a major center for education and commerce. SPP 22637 2. Avantipatha (Western Province): The capital was Ujjain. Located in modern- day Madhya Pradesh, it was a crucial junction for trade routes connecting northern India to the western coast and the Deccan. 3. Prachyapatha (Eastern/Kalinga Province): The capital was Tosali. Following the conquest of Kalinga, Ashoka established this administrative center (located near modern-day Bhubaneswar) to govern the eastern coast. 4. Dakshinapatha (Southern Province): The capital was Suvarnagiri (literally \"the Gold Mountain\"). Located in modern-day Andhra Pradesh/Karnataka, it oversaw the resource-rich southern regions, particularly those famous for gold and precious stones."},{"id":13,"txt":"With reference to types of spies mentioned in ancient Indian statecraft, consider the following pairs:\nSpy type Characteristic\n1. Samstha Stationary spies placed in fixed locations\n2. Sanchar Mobile agents operating across regions\n3. Vishakanya Female agents used for covert assassinations\n4. Gudhapurusha Generic term for secret agents\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: The Arthashastra provides a highly classified and organized hierarchy for the secret service, referring to the entire establishment of secret agents as the Gudhapurushas (Pair 4 is correct). These agents were broadly divided into two categories based on their operational nature: Samstha (Stationary Spies): These were \"establishment\" spies who operated from fixed locations within the kingdom. They often posed as students, monks, farmers, or merchants to gather internal intelligence and monitor the loyalty of officials. (Pair 1 is correct) Sanchara (Mobile Spies): As the name suggests, these were \"wandering\" or mobile agents who moved between regions and even into foreign kingdoms. They included various types of undercover operatives such as Satri (classmates/associates), Tikshna (brave/desperate agents), and Rasada (poisoners). (Pair 2 is correct) 6 Vishakanya (Poison Girls): These were a specialized and lethal class of female secret agents. According to ancient texts, these women were allegedly raised on small, gradual doses of poison until they became \"poisonous\" themselves, and were used for the covert assassination of enemy kings or high- ranking dissidents. (Pair 3 is correct)"},{"id":14,"txt":"With reference to officials mentioned in the Arthashastra and their functions, consider the following pairs:\nOfficer Function\n1. Panyadhyaksha Supervision of state- controlled sale and price fixation of goods\n2. Samaharta Chief authority over collection and expenditure of state revenue\n3. Paudavadhyaksha Regulation of weights and measures\n4. Rupadarsaka Inspection and standardisation of metallic currency\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only three","All four","Only one","Only two"],"ci":1,"exp":"Ex: The Arthashastra describes an elaborate administrative structure with approximately 27 different superintendents (Adhyakshas) overseeing the commercial and social life of the empire. 1. Panyadhyaksha (Superintendent of Commerce): This official was responsible for managing state-controlled trade. They fixed the prices of various commodities to prevent excessive profit- making and ensured the smooth distribution of goods. (Pair 1 is correct) 2. Samaharta (Collector General): This was one of the most powerful positions in the Mauryan administration. The Samaharta was the chief tax collector responsible for maintaining the state accounts and overseeing the income and expenditure from various sources like land, mines, forests, and customs. (Pair 2 is correct) 3. Paudavadhyaksha (Superintendent of Weights and Measures): To ensure fair trade and prevent fraud in the markets, this officer was tasked with the standardization and periodic inspection of weights and measuring instruments used by merchants. (Pair 3 is correct) 4. Rupadarsaka (Inspector of Coins): In a monetized economy, this official served as the examiner of currency. They were responsible for regulating the issue of coinage and checking the purity and weight of metallic coins to maintain the integrity of the currency system. (Pair 4 is correct) SPP 22637"},{"id":15,"txt":"With reference to early Indian texts and inscriptions, consider the following pairs:\nPerson / Text / Information / Inscription Association\n1. Divyavadana Buddhist text alleging destruction of Buddhist monuments\n2. Malavikagnimitram Mentions conflict between Shunga authority and Vidarbha rulers\n3. Besnagar Pillar Evidence of royal Inscription Vaishnava devotion under a Shunga ruler\n4. Harshacharita Source mentioning overthrow of a dynasty by a minister\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only two","Only three","Only one","All four"],"ci":3,"exp":"Ex: Pair 1 is correct: This Buddhist Sanskrit text contains the Ashokavadana and the Pushyamitravadana. It portrays the first Shunga king, Pushyamitra Shunga, as a persecutor of Buddhism who allegedly destroyed many Buddhist monuments (including the 84,000 stupas built by Ashoka) and offered a reward for the heads of Buddhist monks. While historians debate the literal truth of these accounts, the text is a primary source for the allegation of Buddhist persecution. Pair 2 is correct: This play by Kalidasa is historically significant because it depicts the life of Agnimitra (the son of Pushyamitra Shunga). It provides details about the political landscape of the time, specifically the conflict between the Shungas and the kingdom of Vidarbha (led by Yajnasena), and the eventual Shunga victory. Pair 3 is correct: This Heliodorus Pillar (Vidisha, Madhya Pradesh) is a critical piece of evidence for the religious atmosphere under the Shungas. It was erected by Heliodorus, a Greek ambassador from King Antialcidas of Taxila, to the court of the Shunga king Bhagabhadra. It identifies Heliodorus as a Bhagavata (devotee of Vishnu/Vasudeva), proving that Vaishnavism had gained royal and even international patronage during the Shunga period. Pair 4 is correct: Written by Banabhatta in the 7th century CE, this biography of Harshavardhana provides retrospective historical data. It explicitly mentions the overthrow of the last Mauryan king, Brihadratha, by his commander-in-chief (Senapati) Pushyamitra Shunga during a military parade. It also mentions the downfall of the Shungas themselves when the last Shunga king, Devabhuti, was killed by a conspiracy involving his minister Vasudeva Kanva. 7"},{"id":16,"txt":"Consider the following statements:\n1. Early Sanskrit texts sometimes identified foreign groups through visible bodily practices.\n2. The Śakas are described in some literary sources as ardha-muṇḍana (half-shaven head).\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: Early Sanskrit literature, including the Dharmashastras, Puranas, and epics, often distinguished foreign groups (Yavanas, Sakas, Pahlavas, etc.) not just by language or geography, but by their \"deviant\" social and physical customs. This included their diet, clothing, and specifically their grooming habits. These bodily markers were used to define the boundaries between the Arya (civilized) and the Mleccha (barbarian). Statement 2 is correct: There is a specific tradition in the Puranas (notably the Vishnu Purana and the Harivamsa) that recounts how the legendary King Sagara of the Ikshvaku dynasty defeated various foreign tribes. According to the legend, instead of killing them, he compelled them to adopt specific physical appearances to mark their degraded status. The Śakas were ordered to keep their heads half-shaven (ardha-muṇḍana)."},{"id":17,"txt":"With reference to Indo-Scythian and Western Kshatrapa rulers, consider the following pairs:\nRuler Key associated feature\n1. Maues Extensive issue of copper (Moga) coins and control of territories on both sides of the Indus\n2. Azes II Coins depicting both Greek and Indian deities, including Abhisheka–Lakshmi\n3. Nahapana Identified with “Mambarus” in the Periplus of the Erythraean Sea\n4. Chashtana Use of Greek, Kharoshthi and Brahmi scripts together on coins\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Pair 1 is Correct: Maues was the first Indo- Scythian king to rule in the subcontinent (c. 90–60 BCE). He is known for an extensive issue of copper and silver coins and for establishing control over a vast territory, including Gandhara and Taxila, which effectively spanned both sides of the Indus river. Pair 2 is Correct: Azes II is a significant Indo-Scythian ruler whose coinage reflects a deep syncretism of Greek and Indian elements. His coins are famous for depicting a variety of deities, including the Indian goddess Abhisheka–Lakshmi (Lakshmi being anointed by elephants), alongside Greek deities like Zeus or Pallas. Pair 3 is Correct: Nahapana was a prominent ruler of the Kshaharata dynasty of Western Kshatrapas. He is widely identified by SPP 22637 historians as the ruler \"Mambarus\" mentioned in the Periplus of the Erythraean Sea, a 1st-century CE Greek maritime logbook that describes the trade and political conditions of the western Indian coast. Pair 4 is Correct: Chashtana was the founder of the Kardamaka dynasty of Western Kshatrapas. His coinage is unique and technologically significant because it often employed three scripts together: Greek (on the obverse) and a combination of Kharoshthi and Brahmi (on the reverse). This reflected the diverse linguistic and cultural demographic of his territories in Malwa and Gujarat."},{"id":18,"txt":"With reference to the Shunga dynasty and related figures, consider the following pairs:\nRuler / Authority Most precise association\n1. Pushyamitra Viceroy at Vidisha; Shunga protagonist of a Sanskrit drama\n2. Bhagabhadra Greek ambassador (Bhagavata) Heliodorus and the Garuda pillar inscription\n3. Devabhuti Murdered by his own minister, leading to dynastic change\n4. Agnimitra Revival of Vedic sacrifices; contemporary of Patanjali\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: The Shunga dynasty (c. 185–73 BCE) represents a pivotal period of Brahmanical revival and political transition in North India following the collapse of the Maurya Empire. Pair 1 is incorrect: As the founder of the dynasty and a former Mauryan Senapati, Pushyamitra Shunga is associated with the revival of Vedic rituals. Both the Ayodhya Inscription of Dhanadeva and the Mahabhashya of the grammarian Patanjali (his contemporary) mention the performance of Ashvamedha (horse) sacrifices. This marked a shift back toward Brahmanical orthodoxy. Pair 2 is Correct: In the 14th regnal year of this Shunga king, the Greek ambassador Heliodorus (sent by the Indo-Greek king Antialcidas of Taxila) arrived at the court of Vidisha. He erected the famous Garuda pillar at Besnagar, declaring himself a Bhagavata (devotee of Vasudeva/Vishnu). Pair 3 is Correct: He was the tenth and final ruler of the Shunga line. According to the Harshacharita of Banabhatta and the Puranas, Devabhuti was a dissolute ruler murdered in a conspiracy orchestrated by his Brahmin minister, Vasudeva Kanva, who then established the Kanva dynasty. 8 Pair 4 is incorrect: The son of Pushyamitra, Agnimitra served as the viceroy at Vidisha. He is the protagonist of Kalidasa's play Malavikagnimitram, which dramatizes his love for Malavika and provides details on the Shunga conflict with the kingdom of Vidarbha"},{"id":19,"txt":"With reference to post-Mauryan administrative structures, consider the following statements:\n1. The Kushanas used the title Devaputra, implying divine kingship.\n2. Mahakshatrapas emerged during the Kushana period as provincial governors.\n3. Indo-Greeks introduced the office of Kshatrapa into Indian administration.\n4. The Kushana polity marked a transition from decentralised to highly centralised bureaucracy.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1, 2 and 3 only","2 and 4 only","1, 3 and 4 only"],"ci":0,"exp":"Ex: Statement 1 is Correct: The Kushana rulers, particularly Kanishka I and his successors, adopted the title Devaputra (Son of God). This was likely influenced by the Chinese imperial title \"Son of Heaven\" and was a deliberate attempt to project an aura of divine kingship to legitimize their rule over a vast and diverse empire. Statement 2 is Correct: During the Kushana period, the empire was divided into provinces governed by Kshatrapas and Mahakshatrapas. Inscriptions (such as the Sarnath Buddhist Image Inscription of Kanishka I) mention officials like Kharapallana and Vanaspara holding these titles, indicating that the Kushanas utilized this hierarchical governorship system. Statement 3 is Incorrect: The office of Kshatrapa (derived from the Old Persian khshathrapavan or Satrap) was originally a Persian administrative feature. It was introduced into the Indian subcontinent by the Indo-Scythians (Sakas) and Indo-Parthians, rather than the Indo-Greeks. The Indo-Greeks typically used the title Strategos (military governor). Statement 4 is Incorrect: The Kushana polity actually represented a decentralized or \"feudal-like\" structure rather than a highly centralized bureaucracy. The system of \"dual governorship\" (where a Kshatrapa and a Mahakshatrapa ruled together) and the granting of significant autonomy to local hereditary chiefs and subordinate rulers marked a shift away from the centralized model of the Mauryas. SPP 22637"},{"id":20,"txt":"Which one of the following early medieval ports was located on the eastern coast of India?","ref":"","opts":["Sopara","Kalyana","Motupalli","Bharukachchha"],"ci":2,"exp":"Ex: Option C is correct: Motupalli was a major seaport located in the modern-day Prakasam district of Andhra Pradesh (Eastern Coast). It rose to great prominence during the early medieval period under the Kakatiya dynasty. The famous Italian traveler Marco Polo visited Motupalli in the late 13th century and wrote about its thriving trade in delicate muslins, diamonds, and spices. The Kakatiya king Ganapatideva issued the famous Motupalli Abhaya Shasanam (an edict granting protection to foreign merchants) to encourage maritime trade. Option A is incorrect: Sopara, Known as Shurparaka in ancient texts. It is located near modern-day Nala Sopara (Maharashtra) on the Western Coast. It was a vital port from the Mauryan era through the Satavahana period. Option B is incorrect: Located in the Thane district of Maharashtra (Western Coast), Kalyana was a significant commercial hub mentioned in the Periplus of the Erythraean Sea and later served as a key port for the Western Chalukyas and the Yadavas. Option B is incorrect: Bharukachchha was Known as Barygaza to the Greeks and modern-day Bharuch (Gujarat), it was the most important port on the Western Coast for centuries, serving as the primary outlet for trade from the North Indian heartland."},{"id":21,"txt":"Which one of the following statements about Kushana coinage is NOT correct?","ref":"","opts":["Deities from Greek, Iranian and Indian traditions appear on Kushana coins","Kushana rulers attempted doctrinal fusion by placing multiple gods on a single coin","Some Kushana coins depict the Buddha","Iranian deities continued to appear even during Kanishka’s reign"],"ci":1,"exp":"Ex: Option B is correct. While the entire series of Kushana coins represents a fusion of cultures, individual coins typically featured only one deity on the reverse. There are extremely rare exceptions (like the \"Skanda- Kumara and Vishakha\" type), but \"doctrinal fusion by placing multiple gods on a single coin\" was not a standard feature or an \"attempted\" policy of their administration. 9 Option A is incorrect. Kushana coins are a \"numismatic museum\" of ancient religions. You find Greek gods (Helios, Selene), Iranian/Zoroastrian deities (Mithra/Miiro, Nana, Pharro), and Indian deities (Oesho/Shiva, Skanda-Kumara, Vishakha). Option C is incorrect: Kanishka I issued the famous \"Bodo\" (Buddha) coins, depicting both the standing Shakyamuni and the seated Maitreya. These are among the earliest anthropomorphic representations of the Buddha. Option D is incorrect: Kanishka I's reign actually saw a shift toward the use of Bactrian (an Iranian language) and Iranian deities like Nana and Pharro in his inscriptions and coins, particularly after his famous Rabatak inscription where he declared the adoption of the \"Aryan\" (Bactrian) language."},{"id":22,"txt":"Consider the following statements regarding Satavahana revenue system:\n1. Land revenue constituted the principal source of state income and was collected in both cash and kind.\n2. The term deya-meya denoted the royal share of agricultural produce.\n3. Karu-kara was levied exclusively on urban merchants and traders.\n4. Mineral resources such as salt legally belonged to the king.\nWhich of the statements given above are correct?","ref":"","opts":["1, 2 and 4 only","1 and 3 only","2 and 3 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Statement 1 is Correct: Like most early historic polities, the Satavahana economy was agrarian. Land revenue formed the core fiscal base and was collected In kind (share of produce), and In cash, especially in monetised regions linked to trade. Statement 2 is Correct: The term deya-meya appears in several land grant inscriptions. Deya refers to that which is to be given (often cash/taxes) and meya refers to that which is to be measured (grain/produce). Together, they signify the total royal dues or the king's share of the agricultural output. Statement 3 is Incorrect: While kara is a general term for tax, the specific category of karu-kara (or taxes on artisans/craftsmen) was not \"exclusively\" for urban merchants. The Satavahanas had a highly developed system of taxing various professional guilds (shrenis), including weavers, potters, and oil-pressers, regardless of a strictly urban or rural divide. Furthermore, the phrasing \"exclusively on urban merchants\" is too restrictive for the broad fiscal base of the Satavahanas. SPP 22637 Statement 4 is Correct: Under the Satavahanas, the state maintained a monopoly over specific resources. Inscriptions granting land to monks often explicitly mention that the donee is being given the land \"along with the salt\" or \"exempt from the state's right to dig for salt,\" confirming that mineral resources like salt and mines legally belonged to the king."},{"id":23,"txt":"With reference to Yajna Sri Satakarni, consider the following statements:\n1. He was the ruler of the Satavahana dynasty.\n2. His inscriptions are found at Nasik, Kanheri and Guntur.\n3. He issued silver coins imitating western Kshatrapa coinage.\n4. His reign marked the end of Satavahana rule.\nWhich of the statements given above are correct?","ref":"","opts":["1, 2 and 3 only","2, 3 and 4 only","1 and 3 only","1, 2 and 4"],"ci":0,"exp":"Ex: Statement 1 is correct: Yajna Sri Satakarni (c. 165–194 CE) was one of the last major rulers of the Satavahana dynasty. He is often credited with a final, successful revival of Satavahana power before the empire's eventual fragmentation. Statement 2 is correct: His inscriptions are widely distributed across the Deccan and South India, found at sites including Nasik and Kanheri (in modern Maharashtra) and Guntur (in modern Andhra Pradesh). This wide geographic spread proves he maintained a vast empire stretching from the western coast to the eastern coast. Statement 3 is correct: Yajna Sri Satakarni issued a rare silver coinage that imitated the style of the Western Kshatrapas (Sakas). These coins were bilingual and biscriptual, featuring the king's portrait in the Saka style on the obverse and a combination of Brahmi and Southern Brahmi (for the Prakrit/Old Tamil/Telugu dialect) on the reverse. This indicates a period of intense cultural and political interaction—and often conflict—with the Sakas of Malwa and Gujarat. Statement 4 is Incorrect: While he was the last great ruler of the dynasty, his reign did not mark the end of Satavahana rule. He was followed by a few successor kings (such as Madhariputra Svami Sakasena and Pulumavi IV). The dynasty finally collapsed and fragmented into smaller kingdoms like the Ikshvakus, Abhiras, and Vakatakas in the early 3rd century CE. 10"},{"id":24,"txt":"Consider the following statements:\n1. It became the second capital of the Kushanas.\n2. It was also a religious centre having the presence of Jainism, Buddhism and Hinduism.\nWhich of the following cities has been described in the above statements?","ref":"","opts":["Dwarka","Mathura","Vrindavan","Vijayapuri"],"ci":1,"exp":"Ex: The Kushanas, also known as the Yuechis or Tocharians, were a prominent clan of the Yuechi tribe that rose to power after the Scythians and Parthians. Among their rulers, Kanishka I stands out as one of the most significant ruler, known for his military conquests and patronage of art and culture. Under Kanishka’s rule, the Kushan Empire became a thriving centre of trade and cultural exchange, leaving a lasting impact on the history and art of ancient India. ❖ Khujula Kadphises was the first Kushan king who conquered Afghanistan. He was followed by Wima Kadphises. These two kings extended their territory to Gandhara, Punjab, and as far east as the Ganga-Jumna doab up to Mathura. The first Capital of Kushana was Purushpura or Peshawar. Around 2000 years ago, Mathura became the second capital of the Kushanas. It was also a religious centre— there were Buddhist monasteries and Jaina shrines, and it was an important centre for the worship of Krishna."},{"id":25,"txt":"With reference to the features of the Buddha sculptures in the Mathura School of Art, consider the following statements:\n1. The Buddha is often depicted in Padmasana (seated posture).\n2. The sculptures feature a profusely decorated halo with geometrical motifs.\n3. The Buddha is shown with a beard and moustache, representing maturity.\n4. The sculptures lack the spiritual expression seen in Gandhara art.\n5. Standing Buddhas from Sravasti and Kausambhi are prominent examples.\nWhich of the statements given above are correct?","ref":"","opts":["1, 2, 4, and 5 only","2, 3 and 4 only","1, 3, and 5 only","1, 2, 3, 4 and 5"],"ci":0,"exp":"Ex: ❖ Statement 1 is correct: The Buddha is often depicted in the Padmasana posture in Mathura art. ❖ Statement 2 is correct: Mathura art features a profusely decorated halo with geometrical motifs. ❖ Statement 3 is incorrect: The Buddha in Mathura art is clean-shaven, with no beard or moustache. ❖ Statement 4 is correct: The sculptures lack the spiritual depth characteristic of Gandhara art. ❖ Statement 5 is correct:Standing Buddhas from Sravasti and Kausambhi are notable examples of Mathura art. SPP 22637 Additional information: Mathura School of Art Mathura exhibited the influence of all three religions: Buddhism, Jainism, and Brahmanism. It was renowned for producing exquisite stone images of Buddha, Mahavira, and Brahmanical deities. During the Kushana period, several sculptures of Brahmanical deities were created, including Kartikeya, Vishnu, Kubera, and the headless erect statue of Kanishka. Mathura also produced a significant number of Jain sculptures, such as the ayagapatas (stone slabs for placing worship objects) and the Sarvatobhadrika image depicting four Jain Jinas. Other notable examples of the Mathura school of art include figures of yakshas, yakshis, nagas, naganis, and sensual females. Chief Characteristics of the Mathura School of Art: 1. Delighted Mood. 2. Lacking Spiritual Look. 3. Energetic. 4. Strong Muscular Structure. 5. Less Detailed Sculpting. 6. Less Expressive Images. Features of Buddha Sculpture: Delighted Buddha. Lacking Spiritual Look. No Beard or Moustache. Shaven Head and Face. Graceful Posture. Seated in Padmasana. Halo around Buddha: ❖ Profusely decorated with geometrical motifs."},{"id":26,"txt":"Consider the following pairs regarding terms used in Mauryan taxation:\nTerm Meaning\n1. Hiranya Tax paid in cash, though its exact nature is unclear.\n2. Pranaya A tax often amounting to 1/3rd or 1/4th of the produce according to nature of the soil.\n3. Sita — Crown land held by the rulerand designated as his own land(svabhumi).\n4. Pindakara Tax paid in kind by individual farmers assessed on the produce of a single village.\nHow many of the above pairs is/are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: ❖ Pair 1 is correct: There was a tax called hiranya. Its nature is not clear. It was paid in cash. 11 ❖ Pair 2 is correct: Pranaya was a tax which literally means gift of affection. Panini mentions it first but Kautilya elaborates upon it. It amounted to 1/3rd or 1/4th of the produce according to the nature of soil. Over time it may have become obligatory. ❖ Pair 3 is correct: Crown land called sita which was held by the ruler and designated as his own land (svabhumi). These crown lands were cultivated under the supervision of the State, by sharecroppers or tenant cultivators who paid a tax, or even by wage labour. In the Arthashastra, a Sitadhyaksa or superintendent of agriculture is mentioned who probably supervised the cultivation of sita lands. ❖ Pair 4 is incorrect:The peasants paid a tax called pindakara. It was assessed on a group of villages. This was customary in nature."},{"id":27,"txt":"Match List-I with List-II and select the correct answer using the codes given below:\nList-I List-II (Significance) (Edict/Inscription)\nSelect the correct answer using the codes below:","ref":"","opts":["Allahabad - 1. Mentions the Sudarshan Kosam Lake constructed by /Queen's Pushyagupta during Edict Chandragupta Maurya's reign.","Girnar Rock 2. Ashoka warns against Inscription causing division in the ranks of the Sangha.","Nigali Sagar 3. Records tax Inscription concessions for the villagers of Lumbini.","Rummindei 4. Enlarged stupa and Inscription Ashoka's visit to the site.","a-3, b-2, c-1, d-4","a-1, b-4, c-2, d-3","a-4, b-1, c-3, d-2","a-2, b-1, c-4, d-3"],"ci":3,"exp":"Ex: ❖ A-2: Allahabad - Kosam/Queen's Edict: Ashoka warns members of the Sangha against causing division in the ranks. Samudragupta's inscription is on this edict itself. ❖ B-1: Girnar Rock Inscription: Mentions the Sudarshan Lake constructed by Pushyagupta, a rashtriya (means provincial governor) of Saurashtra during Chandragupta Maurya's reign. ❖ C-4: Nigali Sagar Inscription: To record the first enlargement of stupa (14 years after his consecration) and later Ashoka's visit to the site (20 years after his consecration). ❖ D-3: Rummindei Inscription: To commemorate the birthplace of the Buddha, Ashoka visited Lumbini, SPP 22637 worshipped here and gave tax concessions to the villagers. It records that the village of Lumbini was exempted from bali and was to pay only one-eighth of bhaga. Edict / Remarks Inscription Allahabad – Ashoka warns members of Kosam / the Sangha against causing Queen’s Edict / division in the ranks. Kausambi or Samudragupta’s Schism Edict inscription is on this edict itself. Jahangir was probably responsible for its removal to the fort at Allahabad. Gimar Rock Mentions the Sudarshana Inscription of Lake constructed by Rudradaman Pushyagupta, a rashtriya (Kathiawar) (means provincial governor) of Saurashtra during Chandragupta Maurya’s reign. Kandahar Bilingual Greek and Inscription Aramaic inscription. Nigali Sagar To record the first Inscription enlargement of stupa (14 (Nepal) years after his consecration) and later Ashoka’s visit to the site (20 years after his consecration). Rummindei To commemorate the Inscription birthplace of the Buddha, (Nepal) Ashoka visited Lumbini, worshipped here and gave tax concessions to the villagers. It records that the village of Lumbini was exempted from bali and was to pay only one-eighth of bhaga. Sannati Site of all 14 major rock Inscription edicts as well as two (Karnataka) separate Kalinga edicts. 12 Kalinga Edict Mentions “All men are my (Bhauli and children”. Jaugada) Saugara Copper Mentions relief measures Plate adopted during famine in Inscription and Magadha. Mahasthan Inscription of Chandragupta Maurya Minor Rock Indicates that Ashoka Edict 1 turned towards Buddhism gradually (nearly after 2.5 years in power), not suddenly. Minor Rock Ashoka greets the Sangha, Edict 3 professes his deep faith in the Buddha, dhamma and Sangha and recommends six Buddhist texts for monks, nuns and the general laity. Inscriptions at Written in Kharosthi Shahbazgarhi script. and Manshera Brahmagiri Talks about local Minor Rock administration. Edicts I and II"},{"id":28,"txt":"This ruler, also known by the epithet \"Amitraghata,\" maintained diplomatic relations with Greek rulers and requested the Syrian king Antiochus I to send fine wine, figs, and a sophist. He is credited with maintaining the vast empire he inherited and faced a revolt in Taxila during his reign due to rogue administrators. Which Mauryan ruler is being described?","ref":"","opts":["Chandragupta Maurya","Bindusara","Ashoka","Brihadratha"],"ci":1,"exp":"Ex: ❖ Greek writers address Bindusara as Amitrochates (destroyer of foes), while the Mahabhasya refers to him as Amitraghat (killer of enemies). It is notable that Buddhist sources are silent about Bindusara, but stories from the Ajivika sect mention a fortune teller who prophesied Bindusara about his son Ashoka's future greatness. ❖ Bindusara is believed to have conquered \"the land between the two seas\", referring to the Arabian Sea and the Bay of Bengal. The Tibetan monk Taranatha SPP 22637 (17th-century historian of Indian Buddhism) states that one of Bindusara's great lords, Chanakya, destroyed the nobles and kings of 16 towns, making Bindusara master of all the territory between the eastern and western seas. ❖ Greek sources highlight Bindusara's diplomatic relations with western kings. According to Strabo, Antiochus (the Syrian king) sent Deimachus as an ambassador to Bindusara's court. Similarly, Pliny mentions that King Ptolemy II Philadelphus of Egypt sent Dionysius as an ambassador to India. ❖ The Divyavadana mentions that during his reign, his son Ashoka quelled a rebellion against wicked ministers at Taxila. ❖ Bindusara is believed to have joined the Ajivika sect. ❖ Under Bindusara's rule, almost the entire subcontinent (extending as far south as Karnataka) came under Mauryan suzerainty."},{"id":29,"txt":"With reference to the Nanda Dynasty, consider the following statements:\n1. Mahapadma Nanda was referred to as \"Ugrasena\" in Pali texts.\n2. The Nanda rulers were of Kshatriya lineage as per Brahmanical texts.\n3. Dhanananda is credited with the invention of Nandopakramani, a specific measure.\n4. Alexander refrained from advancing towards Magadha during Dhanananda's reign due to the formidable size of the Nanda army.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1, 3 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: ❖ Statement 1 is correct: Mahapadma Nanda was called \"Ugrasena\" in Pali texts due to his massive army.He was the first empire builder of India, and claimed to be the ekarat, the sole sovereign who destroyed all other ruling princes, and sarva-kshatrantaka, uprooter ofthe Kshatriyas ❖ Statement 2 is incorrect: According to the Brahmanical texts, he belonged to a low caste or at least a non-Kshatriya caste, while according to the Puranas, he was the son of a king of the Shishunaga dynasty by a Shudra woman, and thus the Nandas were considered adharmika (those who do not follow the norms of Dharma). Buddhist texts describe the Nandas as belonging to annatakula (of unknown lineage). 13 ❖ Statement 3 is correct: Dhanananda is credited with the invention of Nandopakramani, a specific measure. ❖ Statement 4 is correct: Alexander did not advance towards Magadha during Dhanananda's reign due to the formidable size of the Nanda army.  SPP 22637  14"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

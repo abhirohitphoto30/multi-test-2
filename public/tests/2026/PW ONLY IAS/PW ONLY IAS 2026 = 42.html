@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 42</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 42</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 42">PW ONLY IAS 2026 = 42</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the trade and commerce during Mughal empire, consider the following statements:\n1. Bohra or Modi communities specialized in long-distance and inter-regional trade.\n2. Baniks were primarily engaged in local and retail trade.\n3. Banjaras were traders who specialized in the transportation of bulk goods.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: These were affluent merchant groups, particularly active in Western India (Gujarat). They specialized in long- distance and inter-regional trade. The Bohras (specifically the Ismailis) were famous for their maritime trade connections with the Red Sea and Persian Gulf. The term Modi was often used for large-scale wholesalers or suppliers. Statement 2 is correct: The term Banik (or Bania) was a generic category for the mercantile caste. While many were wealthy, a vast majority operated as local and retail traders within towns and villages. They acted as the crucial link between the rural producer and the urban consumer, often doubling as money-lenders (shroffs). Statement 3 is correct: The Banjaras were the \"lifeline\" of the Mughal logistics system. They were nomadic traders who specialized in the bulk transportation of essential commodities like grain, salt, and sugar. Moving in massive caravans called tandas (sometimes consisting of 20,000 to 30,000 oxen), they followed the imperial armies and supplied the large urban centers."},{"id":1,"txt":"Consider the following features of a medieval Indian ruler:\nHe led extensive military campaigns in Rajasthan and defeated Maldeo of Marwar in the famous Battle of Samael. He also suppressed rebellious Afghan chiefs in Bengal and constructed the Rohtas Fort (now a UNESCO World Heritage Site in Pakistan) The ruler described above is:","ref":"","opts":["Babur","Humayun","Sher Shah Suri","Akbar"],"ci":2,"exp":"Ex: The description clearly corresponds to Sher Shah Suri, the founder of the Sur Empire. Sher Shah conducted extensive military campaigns in Rajasthan, targeting key Rajput strongholds such as Marwar, Ranthambhore, Nagor, Ajmer, Jodhpur, and Bikaner. His most notable Rajput encounter was against Rao Maldeo of Marwar, whom he defeated in the Battle of Samel (c. 1544 CE) near Ajmer, establishing Afghan dominance in western India. In eastern India, Sher Shah suppressed Afghan rebellions in Bengal, thereby consolidating his control over the eastern provinces. His reign is also marked by significant architectural activity. SPP 22643 He built the Rohtas Fort in present-day Pakistan, a strategic military fort now recognized as a UNESCO World Heritage Site and undertook construction work at the Rohtasgarh Fort in Bihar, reflecting his emphasis on defense and administrative control. Sher Shah was also a patron of learning and literature. The famous Sufi poet Malik Mohammad Jaysi completed his epic work Padmavat during Sher Shah’s reign, highlighting the ruler’s support for scholars and cultural activities despite his short rule. His last military campaign was against Kalinjar in Bundelkhand, a strategically important fort. Although Sher Shah successfully captured Kalinjar, he died in 1545 CE due to an accidental explosion of gunpowder during the siege. These combined military, administrative, architectural, and cultural achievements firmly identify the ruler described as Sher Shah Suri. Hence option C is correct."},{"id":2,"txt":"With reference to the Mughal-Maratha conflict, consider the following statements:\nStatement-I: Sambhaji was captured by Mughal forces in 1689 at Sangameshwar. Statement-II: Sambhaji's execution by Aurangzeb ended Maratha resistance and consolidated Mughal power in the Deccan.\nWhich one of the following is correct in respect of the above statements:","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II explains Statement-I","Both Statement-I and Statement-II are correct but Statement-II does not explain Statement-I","Statement-I is correct but Statement-II is incorrect","Statement-I is incorrect but Statement-II is correct"],"ci":2,"exp":"Ex: Statement-I is correct: After the downfall of Bijapur and Golconda, Aurangzeb was able to concentrate all his forces against the Marathas. In 1689, Sambhaji was surprised at his secret hide-out at Sangameshwar by a Mughal force. Sambhaji and his advisor, Kavi Kalash, were captured and brought to Aurangzeb's camp at Bahadurgarh. He was paraded before Aurangzeb and executed. Statement-II is incorrect: Aurangzeb believed that the brutal execution of Sambhaji (March 1689) would demoralize the Marathas and end the war. The opposite happened. The execution was seen as a martyrdom, uniting the Maratha sardars who had previously been divided. The conflict transformed from a war between two kings into a decentralized \"war of independence.\" Under Rajaram and later Tarabai, Maratha commanders like Santaji Ghorpade and Dhanaji Jadhav launched a 2 relentless guerrilla war that exhausted the Mughal treasury. Far from consolidating power, Aurangzeb spent the last 27 years of his life in the Deccan, dying in Ahmednagar in 1707 with the Marathas stronger than when he had first arrived. The \"Deccan Ulcer,\" as described by historians like Jadunath Sarkar, ruined the Mughal economy. The constant warfare led to the breakdown of the Jagirdari system. When the Maratha capital Raigarh fell and Shahu (Sambhaji's son) was captured, the Maratha generals began operating independently. This made it impossible for Aurangzeb to win a \"decisive\" battle because there was no single head to strike."},{"id":3,"txt":"Which one of the following taxes was explicitly abolished by Jahangir in his early ordinances?","ref":"","opts":["Tamgha","Jizya","Zakat","Ushr"],"ci":0,"exp":"Ex: Upon his accession in 1605, Jahangir issued twelve edicts (known as Dastur-al-Amal) to be observed throughout his empire. These ordinances were designed to establish his image as a just and benevolent ruler, distinct from the rigorous administrative experiments of his father, Akbar. Tamgha (and Mir-Bahri): These were inland transit duties or tolls collected on the transport of goods. Jahangir explicitly forbade the levy of Tamgha and Mir-Bahri (river tolls), along with other illegal cesses that the jagirdars and officials used to extract for their own profit. He declared that no one should forcibly open a merchant's bales or collect taxes on roads. The Intent: By abolishing these duties, Jahangir sought to encourage trade and commerce, ensuring the free movement of goods across the empire without the burden of localized toll collection. Hence option A is correct."},{"id":4,"txt":"With reference to Mughal emperor Aurangzeb, consider the following statements:\n1. Aurangzeb was a proficient Veena player and promoted music in his courts.\n2. An additional rank, 'mashrut' was added by him to the Mansabdari system.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: Although he was proficient in playing Veena, Aurangzeb forbade music in the court. Even though he personally appreciated it, the sixth and final great Mughal SPP 22643 emperor Aurangzeb forbade music in the tenth year of his rule, or 1668. Niccolao Manucci, a contemporary historian from Italy, describes Aurangzeb's directive to a government official to suppress all music: \"If in any house or elsewhere he heard the sound of singing and instruments, he should forthwith hasten there and arrest as many as he could, breaking the instruments.\" Thus, there was a significant loss of musical instruments. Statement 2 is correct: Aurangzeb introduced the 'Mashrut' (conditional) rank to the Mansabdari system. This was a temporary increase in the Sawar (cavalry) rank of a Mansabdar, granted specifically when they were appointed to a difficult or strategic post (like a frontier faujdari) that required more troops than their permanent rank allowed. Once the official left that specific post, the additional 'Mashrut' rank was withdrawn. This gave the Emperor the flexibility to bolster military strength in specific areas without permanently increasing the salary burden of the state."},{"id":5,"txt":"Consider the following statements:\nStatement-I: Humayun’s authority as Mughal ruler was weak in the initial years of his reign. Statement-II: At his accession, Humayun lacked the support of Chaghatai and Indian nobles and faced hostility from Afghan and provincial rulers. Statement-III: The Timurid practice of distributing territories among brothers created multiple power centres under Humayun, including Qandahar, Alwar and Mewat.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-II and Statement-III are correct and both of them explain Statement-I","Both Statement-II and Statement-III are correct, but only one of them explains Statement-I","Only one of the Statements II and III is correct and that explains Statement-I","Only one of the Statements II and III is correct and that does not explain Statement-I"],"ci":0,"exp":"Ex: Statement I is correct: Humayun’s authority was indeed weak in the early years of his reign. Unlike Babur, he inherited an empire that was politically fragile, financially strained, and administratively unconsolidated, making effective control difficult from the outset. Statement II is correct: At the time of his accession, Humayun did not enjoy the loyalty of the Mughal nobility. The Chaghatai nobles were indifferent or hostile, and many Indian nobles who had served Babur deserted the Mughals. Simultaneously, he faced active opposition from Afghan and provincial rulers, including Sher Khan of Bihar and Bahadur Shah of Gujarat. Statement III is correct: Following the Timurid tradition of power-sharing, Humayun distributed territories among his brothers—Kamran controlling Kabul, Qandahar and Punjab; Hindal ruling Alwar and Mewat; and Mirza Askari holding Sambhal. This arrangement created multiple centres of power, weakened central control, and further diluted Humayun’s authority. 3 Humayun’s authority was weak because he lacked noble support and faced opposition from Afghan and provincial rulers, while simultaneously the Timurid system of sharing power with his brothers created multiple centres of authority. These factors prevented effective centralisation and directly explain the weakness mentioned in Statement-I. Thus, both Statement-II and Statement-III are correct and both of them explain Statement-I."},{"id":6,"txt":"In Mughal administrative usage, the term Shaikhzada most accurately referred to:","ref":"","opts":["Nobles of Persian origin serving in the imperial court","Indian-born Muslims recruited into Mughal service","Afghan military leaders commanding tribal contingents","Hereditary custodians of Sufi shrines outside state administration"],"ci":1,"exp":"Ex: The term Shaikhzada (literally \"son of a Sheikh\") was used in the Mughal administrative and social hierarchy to distinguish indigenous Muslim elites from the Turani (Central Asian) and Irani (Persian) nobles who had traditionally dominated the Mughal court. Who they were: The Shaikhzadas were primarily members of the Indian Muslim landed gentry, often claiming descent from distinguished families that had settled in India during the Sultanate period. They were frequently associated with the \"Sayyids of Barha\" or families from the qasbahs (townships) of North India. Hence option B is correct. Akbar’s Policy of Indianization: Under Akbar, the Mughal state sought to broaden its social base to reduce the empire's dependence on fickle Central Asian clans. To do this, he actively recruited two major indigenous groups into the Mansabdari system: the Rajputs and the Shaikhzadas. The \"Hindustani\" Faction: Over time, the Shaikhzadas formed a powerful \"Hindustani\" (Indian) faction within the nobility. They were often valued for their local knowledge, administrative experience, and their roots in Indian soil, which made them perceived as more \"loyal\" than foreign nobles who might harbor ambitions in Persia or Transoxiana. SPP 22643"},{"id":7,"txt":"Consider the following pairs:\nBook Writer and Patron historian\n1. BadshahNama Abdul HamidLahori — JahanShah\n2. Ain-i — Abbas Khan Akbar Akbari Sherwani\n3. Munkhtab- Khafi Khan Aurangzeb ul-Lubab\nWhich of the pairs given above are correctly matched?","ref":"","opts":["1 and 3 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Pair 1 is correct: Padshahnama or Badshah Nama (. 'The Book of the Emperor') is a group of works written as the official history of the reign of the Mughal Emperor Shah Jahan I. Jalaluddin Tabatabai wrote another Badshahnama, but the extant portion of the text covers only four years, from fifth to eighth regnal year of the emperor. The project was later given to Abdul Hamid Lahori, who wrote his Badshahnama in two volumes. The first volume of this work is based on Qazvini’s work but has more details. The second volume covers the next ten (lunar) years of Shah Jahan’s reign. He completed his work in 1648. Lahori died in 1654. Muhammad Waris, a pupil of Lahori was given the responsibility to complete the task and his Badshahnama (completed in 1656) covers the rest of the period of Shah Jahan’s reign. Pair 2 is incorrect: The Ain-i-Akbari or the \"Administration of Akbar\", is a 16th-century detailed document regarding the administration of the Mughal Empire under Emperor Akbar, written by his court historian, Abul Fazl in the Persian Language. It forms Volume III and the final part of the much larger document, the Akbar Nama (Account of Akbar), also by Abu'l-Fazl, and is itself in three volumes. The Ain-i-Akbari is divided into five books. The first book called Manzil-Abadi deals with the imperial household and its maintenance, and the second called Sipah-abadi, with the servants of the emperor, military and civil services. The third entitled Mulk-abadi deals with imperial administration, containing judiciary and executive regulations. The fourth contains information on Hindu philosophy, science, social customs, and literature. The fifth contains sayings of Akbar, along with an account of the ancestry and biography of the author. 4 Pair 3 is correct: Muntakhab-al Lubab is a Persian language book about the history of India. Completed around 1732, it was written by Khafi Khan in the Mughal Empire of present- day India. The title of the book is also transliterated as Muntakhab ul-Lubab or Muntakhab-i-Lubab; it is also known as Tarikh- i Khafi Khan. he book is divided into three volumes: ❖ Volume 1 deals covers local dynasties up to the Lodis. ❖ Volume 2 covers the Timurid dynasty and the Mughals up to Emperor Akbar, including the Sur interregnum. ❖ Volume 3 covers the Mughal period after the death of Akbar (1605)"},{"id":8,"txt":"Which of the following statements are correct regarding the Mughal paintings?\n1. In Jahangir's reign, figures acquired more expression and greater individuality, and there was an emphasis on portraiture on European lines.\n2. Under the reign of Shahjahan Jharokha paintings became popular.\nSelect the correct answer using the code given below:","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Mughal painting reached its peak of naturalism and ceremonial grandeur during the reigns of Jahangir and Shah Jahan, transitioning from the action-oriented illustrations of Akbar's time to highly detailed portraiture and courtly displays. Statement 1 is correct: Jahangir was a great connoisseur of art and pushed Mughal painting toward a new level of naturalism. Unlike the stylized figures of earlier periods, paintings under Jahangir focused on the distinct psychological state and physical features of the subjects. European Influence is visible through contact with the Portuguese and English (such as Sir Thomas Roe), European techniques like foreshortening, shading (to create a 3D effect), and the use of the halo (nimbus) around the Emperor's head became standard. Naturalism: This period is also famous for the exquisite paintings of birds, animals, and flowers, led by the legendary artist Ustad Mansur. Statement 2 is correct: During Shah Jahan’s reign, the focus shifted from nature and wildlife toward the glory of the court and the person of the Emperor. The Jharokha Darshan (the Emperor's public appearance at a balcony) SPP 22643 became a central theme. These paintings depicted the Emperor framed by the architectural Jharokha, often looking down upon his nobles. Portraits became more rigid and formal, emphasizing the \"majesty\" of the ruler. There was an increased use of gold, silver, and bright colors (lapiz lazuli) to reflect the opulence of the era. The Padshahnama contains numerous illustrations of Shah Jahan in the Jharokha or seated on the Peacock Throne, surrounded by a symmetrical and disciplined court."},{"id":9,"txt":"Babur’s religious outlook is best described by\nwhich one of the following?","ref":"","opts":["Strict enforcement of Sunni orthodoxy in governance","Dependence on orthodox ulema for political legitimacy","Personal adherence to Sunni Islam with Sufi influence","Formal patronage of multiple religious orders"],"ci":2,"exp":"Ex: Babur, the founder of the Mughal Empire, was a man of complex intellectual and spiritual layers. While he was a committed Sunni Muslim, his religious outlook was shaped more by Central Asian mysticism and pragmatism than by rigid clerical orthodoxy. Sufi Influence: Babur was a deep admirer of the Naqshbandi Sufi order. He was a devotee of Khwaja Ubaidullah Ahrar, a famous Naqshbandi saint of Central Asia. In his memoirs, the Baburnama, he frequently attributes his victories to divine grace and the blessings of Sufi pirs. Personal Faith vs. Statecraft: Babur viewed his religion as a personal moral compass. While he used religious rhetoric (like declaring Jihad before the Battle of Khanwa to galvanize his exhausted troops), historians generally agree this was a political tool to unify his soldiers rather than a mission to convert the subcontinent. Pragmatic Tolerance: Coming from the Timurid tradition, Babur was relatively liberal in his social interactions. He was more interested in the military and cultural potential of his subjects than their theology. He did not let the Ulema (the orthodox clergy) dictate his state policies or military strategy. Hence option C is correct. 5"},{"id":10,"txt":"With reference to the Bhakti movement, consider the following pairs:\nHistorical person Saints Contemporary of\n1. Tukaram Babur\n2. Ahmad Sirhindi Jahangir\n3. Guru Nanak Dev Akbar\nHow many pairs given above are correctly matched?","ref":"","opts":["Only one pair","Only two pairs","None of the pairs","All three pairs"],"ci":0,"exp":"Ex: Pair 1 is incorrectly matched: Tukaram, a 17th-century Marathi saint and poet, was a contemporary of the Mughal king Aurangzeb. Pair 2 is correctly matched:Shaikh Ahmad Sirhindi was a contemporary of the Mughal emperors Akbar and Jahangir. Pair 3 is incorrectly matched:Guru Nanak Dev Ji, the founder of Sikhism, was a contemporary of the Mughal King Babur. Guru Nanak Dev Ji's teachings and life spanned the early 16th century, coinciding with the time when Babur established the Mughal Empire in India. PW ONLY IAS SUPER HINT Match 1, \"Tukaram\" is associated with Shivaji and Shiavaji was contemporary of Aurangjeb. Hence Logically Tukaram can't be contemporary of Babar. Hence likely false, eliminate option D. Match 3 about guru Nanak is a PYQ of year 2013."},{"id":11,"txt":"Shivaji’s formal coronation as Chhatrapati took place in which one of the following year– place combinations?","ref":"","opts":["1674 — Pratapgad","1668 — Satara","1674 — Raigarh","1680 — Raigarh"],"ci":2,"exp":"Ex: Shivaji’s formal coronation (Rajyabhishek) was a monumental event in Indian history, as it marked the birth of a sovereign Maratha state that challenged the legitimacy of the Mughal Empire and the Deccan Sultanates. Historical Context of the Coronation The Venue: Shivaji chose Raigarh (the \"Gibraltar of the East\") as his capital. It was an impregnable hill fort that symbolized the strength and independent spirit of the Maratha Navy and Army. The Date: The ceremony took place on June 6, 1674. Hence option C is correct The Rituals: The coronation was performed according to Vedic rites by Gaga Bhatt, a renowned Brahmin scholar from Varanasi. Shivaji was bestowed with the titles of Kshatriya Kulavantas (Head of the Kshatriyas) and Chhatrapati (Paramount Sovereign). SPP 22643 Symbolism: He started a new era, the Rajyabhishek Shaka, and issued new coins called Hon (gold) and Shivrai (copper) to assert his fiscal sovereignty. Why the Coronation was Necessary Legal Legitimacy: Despite his vast conquests, Shivaji was technically seen as a \"rebel\" or a zamindar by the Mughals and Bijapur. The coronation established him as a de jure King, equal in status to any Sultan or Emperor. Administrative Authority: It gave him the legal right to sign treaties with foreign powers like the British and the Dutch on equal terms. The Ashtapradhan: Following his coronation, he formalized his council of eight ministers, the Ashtapradhan, to ensure efficient governance of the Swarajya."},{"id":12,"txt":"With reference to the Maratha-Mughal conflicts, consider the following battles:\n1. Battle of Pratapgarh\n2. Battle of Salher\n3. Battle of Pavankhind Arrange the above battles in chronological order:","ref":"","opts":["1– 2 – 3","2 – 1– 3","1 – 3 – 2","3 – 1 – 2"],"ci":2,"exp":"Ex: 1. Battle of Pratapgarh (November 10, 1659): This was the most famous early encounter between the Marathas and the Adil Shahi Sultanate of Bijapur. The Bijapur general Afzal Khan arrived with a massive army to crush Shivaji. During a diplomatic meeting at the foot of Pratapgarh Fort, Afzal Khan attempted to assassinate Shivaji, who in turn killed the general with Wagh Nakh (tiger claws). The Maratha forces then routed the leaderless Bijapur army in the surrounding dense forests of Javli. 2. Battle of Pavankhind (July 13, 1660: Shortly after the victory at Pratapgarh, Shivaji was besieged at Panhala Fort by the forces of Siddi Johar. Shivaji managed to escape under the cover of a rainy night. While he raced toward Vishalgad, his commander Baji Prabhu Deshpande and 300 soldiers fought a legendary \"last stand\" at a narrow mountain pass called Ghodkhind (later renamed Pavankhind, the \"Sacred Pass\") to block the pursuing Bijapur army. This sacrifice allowed Shivaji to reach safety. 6 3. Battle of Salher (February 1672): Unlike the previous two which were fought against Bijapur, this was a significant open-field battle against the Mughal Empire. Following the Treaty of Purandar and Shivaji's escape from Agra, he began recapturing his forts. A massive Mughal army led by Ikhlas Khan and Bahlol Khan was sent to retake Salher. In a rare instance of Marathas fighting a conventional battle on open ground rather than using pure guerrilla tactics, the Maratha commanders Moropant Pingle and Prataprao Gujar decisively defeated the Mughal forces."},{"id":13,"txt":"With reference to the architectural developments during Akbar's reign, consider the following statements:\n1. Indigenous elements of art were promoted through the use of sandstone, arches and intricate patterns.\n2. Influence of Gujarati and Bengali architectural styles in building of Fatehpur Sikri complex.\n3. The Panch Mahal was built based on the design of a Buddhist Vihara.\n4. Akbar commissioned the construction of the temple of Govind Deva at Vrindavan.\nWhich of the statements given above is/are correct?","ref":"","opts":["1, 2 and 3 only","2 and 4 only","1, 3 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: Akbar’s architectural style is characterized by a \"National Style\" that synthesized diverse regional and religious traditions into a cohesive imperial aesthetic. His reign marked a departure from the strictly Persian styles of his predecessors toward a more inclusive, Indo- Islamic architecture. Statement 1 is correct: Akbar predominantly used red sandstone with insertions of white marble. While he retained the arch and dome (Persian/Islamic), he heavily incorporated indigenous Indian elements such as brackets, chhatris (kiosks), and jalis (perforated screens). The intricate carving patterns on sandstone often mirrored traditional Indian wood and stone carving techniques. Statement 2 is correct: Akbar brought craftsmen from across his empire. The Jodha Bai Palace in Fatehpur Sikri shows distinct Gujarati influences (similar to temple architecture), while the Birbal’s House and several pavilions show the influence of the curved roofs of Bengal (the Bangla roof style). The most magnificent building in it is the Jama Masjid and the gateway to it called Buland Darwaza (the Lofty Gate), It was built in 1572 CE to commemorate Akbar’s victory over Gujarat. SPP 22643 Statement 3 is correct: The Panch Mahal (Five-Storey Palace) at Fatehpur Sikri is an extraordinary open-pavilion structure. Each successive floor is smaller than the one below, supported by a forest of varied columns. This design is widely recognized by architectural historians as being inspired by the traditional layout of a Buddhist Vihara or monastery. Statement 4 is correct: This is a significant fact regarding Akbar’s religious policy. Akbar not only provided the red sandstone but also sanctioned the construction of the massive Govind Deva Temple in Vrindavan (dedicated to Krishna). The temple's architecture is unique because it uses the same \"Imperial Style\" seen in Fatehpur Sikri—incorporating the vaulted arch into a Hindu temple structure. Additional Information: Akbar built his own tomb at Sikandra (near Agra), which was completed by Jahangir. He also built the Jahangiri Mahal in Agra fort, according to Hindu design based on Man Mandir. PW ONLY IAS SUPER HINT For S1 and S2 , Akbar was a ruler known for attempting to unify diverse cultures. Promoting indigenous architectural elements would align with his inclusive governance style. Sandstone is a material commonly found in India, making it a practical and symbolic choice. Similar is the Influence of Gujarati and Bengali architectural styles. Hence both S1 and S2 are likely true. eliminating option B and C."},{"id":14,"txt":"With reference to the administrative roles during the Mughal Empire, consider the following pairs:\nRole Function\n1. Sadr-us Sudur Protected the laws of Shariat\n2. Mir Saman Head of the intelligence and information agencies\n3. Muhtasibs Examined weights and measures\nWhich of the pairs given above is/are correct?","ref":"","opts":["2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Pair 1 is correctly matched: Chief Qazi/Sadr- us Sudur- The judicial department was headed by the chief qazi. This post was sometimes combined with that of the Sadr-us Sudur (Chief Sadar) was the head of the ecclesiastical department. His chief duty was to protect the laws of the Shariat and he was also responsible for all charitable and religious endowments. 7 Pair 2 is not correctly matched: Mir Saman- The officer in-charge of the royal household and royal karkhanas. He was responsible for all kinds of purchases, manufacturing of different articles for the use, and their storage for the royal household. Only nobles who enjoyed the complete confidence of the emperor were appointed to this office. The maintenance of etiquette at the court, the control of the royal body guard, etc., were all under his supervision. Pair 3 is correctly matched: Muhtasibs (censors of public morals) were also appointed to ensure the general observance of the rules of morality. He also used to examine weights and measures and enforce fair prices, etc. Additional Information: Mir Bakshi- head of the intelligence and information agencies of the empire. Barids (intelligence officers) and Waqia-navis (news reporters) were posted to all the parts of the empire"},{"id":15,"txt":"With reference to revenue administration under Akbar, consider the following statements:\n1. The Zabt system was a fifteen-year average-based revenue assessment, which allowed periodic revision by the state.\n2. The Nasaq system continued to operate in regions where detailed land measurement was not feasible.\n3. Taccavi loans were provided by the state to cultivators to support agricultural production.\nWhich of the statements given above is/are correct?","ref":"","opts":["1, 2 and 3","1 only","2 and 3 only","1 and 3 only"],"ci":2,"exp":"Ex: Akbar’s revenue reforms, largely spearheaded by Raja Todar Mal, were designed to bring stability to the imperial treasury while protecting the peasantry from the fluctuations of the market. Statement 1 is incorrect: The Zabt (or Dahsala) system was based on a ten-year (not fifteen-year) average. Under this system, the state calculated the average produce and the average prices of various crops over the preceding ten years (1570–1580CE). One-third of this average was fixed as the state's share, and it was converted into cash. Unlike previous systems, this provided the state with a stable income and the farmer with certainty, but the \"ten-year\" duration is a specific defining characteristic. Statement 2 is correct: While the Zabt system was the preferred method in the heart of the empire (Delhi, Agra, Lahore), it was not universal. In regions where detailed SPP 22643 measurement was difficult or the local traditions were too strong—such as in parts of Bengal or mountainous areas—the Nasaq system was used. Nasaq was a \"group assessment\" or a rough calculation based on past payments, requiring less rigorous measurement. Statement 3 is correct: Akbar’s administration was remarkably proactive in agricultural welfare. The state provided Taccavi (or Taqavi) loans to cultivators. These were emergency advances given for buying seeds, cattle, or digging wells during times of distress or to bring new land under cultivation. These loans were usually recovered in easy installments during harvests."},{"id":16,"txt":"With reference to Peshwa Balaji Vishwanath, consider the following statements:\n1. He helped Shahu become Maratha ruler by rallying support during the civil war.\n2. He secured the right to collect chauth and sardeshmukhi from Mughal emperor Bahadur Shah.\n3. He won over Kanhoji Angre to become the Sarkhel of Shahu’s navy.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only One","Only two","All three","None"],"ci":1,"exp":"Ex: Balaji Vishwanath hailed from the Bhatt family of Shri Vardhan in the Konkan region. He is credited with transforming the Peshwa post into a hereditary and powerful position within the Maratha administration. Statement 1 is correct: After the death of Rajaram and the subsequent struggles for succession, there was a civil war between Shahu (grandson of Shivaji) and other claimants to the Maratha throne. Balaji Vishwanath played a crucial role in securing the support of Maratha leaders, ensuring that Shahu emerged victorious at the Battle of Khed (1707). This not only consolidated Shahu’s authority but also elevated Balaji’s own political influence. Statement 2 is incorrect: While Balaji Vishwanath did secure the rights to Chauth (25% of revenue) and Sardeshmukhi (an additional 10%) from the Mughal territories in the Deccan, he did not get them from Bahadur Shah. These rights were secured through the famous Treaty of 1719 with the Sayyid Brothers (Husain Ali and Abdulla Khan), during the brief reign of the Mughal Emperor Farrukhsiyar (and formally confirmed by Rafi- ud-Darajat). Bahadur Shah (who reigned 1707– 1712) had released Shahu but refused to grant these formal revenue rights. 8 Statement 3 is correct: During the early reign of Shahu I, the Maratha state needed to consolidate control over its navy to secure the Konkan coast and counter threats like the Muslim Siddis of Janjira. Kanhoji Angre, a highly skilled naval commander and initially an ally of Tarabai, controlled the Maratha naval forces in the Konkan. Balaji Vishwanath, the newly appointed Peshwa, personally negotiated with Kanhoji, appealing to his patriotism for the Maratha cause. Through diplomacy and persuasion, Balaji succeeded in securing Kanhoji’s allegiance. Following this, Kanhoji accepted the position of Sarkhel (grand admiral) of Shahu’s navy, giving Shahu formal influence over the Konkan coast while still allowing Kanhoji operational autonomy."},{"id":17,"txt":"With reference to the history of medieval India, Daswant and Basawan were famous:","ref":"","opts":["Playwrights","Musicians","Painters","Philosophers"],"ci":2,"exp":"Ex: Akbar invited a large number of painters from different parts of the country to his court. Both Hindus and Muslims joined in this work. Mir Sayyid Ali, Abdal Samad, Farukh Beg, Bhusrau Kuli, Miskina, Jamshed Basawan, and Daswant (painted Razim Namah, the Persian Mahabharata) were the prominent painters. Hence option C is correct Additional Information: The origin of the Mughal School of Painting is considered to be a landmark in the history of painting in India. This school originated during the reign of Akbar in 1560 AD. Emperor Akbar was keenly interested in painting and architecture. Mir Sayyed Ali and Abdul Samad Khan, initially employed by his father, Humayun. He recruited numerous Indian artists from various regions to work under these Persian mentors. This collaboration led to a distinctive Mughal style, characterized by a harmonious blend of indigenous Indian art and the Safavid school of Persian painting. The style is noted for its naturalistic representations, fine and delicate drawing, and a high degree of aesthetic sophistication. It is primarily aristocratic and secular in nature. SPP 22643"},{"id":18,"txt":"With reference to the administrative and agrarian measures of Sher Shah Suri, consider the following statements:\n1. High administrative offices during his reign were reserved exclusively for Muslims.\n2. The army was organised into units based on sawars.\n3. The empire was systematically divided into sarkars as intermediate administrative units.\n4. A state-prescribed schedule of crop rates was introduced to regulate land revenue assessment.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statement 1 is not correct: Sher Shah Suri followed a merit-based and pragmatic administrative policy. While he was a devout Muslim, he did not restrict high offices to Muslims alone. His most famous general, Brahmajit Gaur, was a Hindu. He also employed Hindus in his revenue and administrative departments to ensure continuity and local cooperation. Statement 2 is correct: Sher Shah maintained a powerful standing army. He organized his cavalry into units of Sawars (horsemen). He revived Alauddin Khalji’s system of Dagh (branding of horses) and Chehra (descriptive rolls of soldiers) to prevent corruption and ensure that only high-quality troops and horses were maintained at the state's expense. He maintained his personal royal force called Khasa Kail. Statement 3 is correct: The empire was divided into forty seven sarkars. Chief Shiqdar (law and order) and Chief Munsif (judge) were the two officers in charge of the administration in each sarkar. Each sarkar was divided into several parganas. Shiqdar (military officer), Amil (land revenue), Fotedar (treasurer), and Karkuns (accountants) were in charge of the administration of each pargana. Mauza (village) was the lowest level of administration. Statement 4 is correct: Sher Shah introduced a revolutionary land revenue system. He established a Rai (a schedule of crop rates) based on the measurement of land. This allowed the state to determine its share (usually one-third of the produce) more accurately and gave farmers clarity on their dues. This system was the precursor to Akbar’s Zabti system."},{"id":19,"txt":"Consider the following statements in reference to Sher Shah Suri:\n1. He introduced a new silver coin called Dirham which was in circulation till 1835.\n2. He built a city near Yamuna of which the sole survivor is Purana Quila.\n3. Malik Muhammad Jayasi was the contemporary of Sher Shah Suri. Which of the statement given above is/are correct:","ref":"","opts":["1 and 2 only","1, 2 and 3","3 only","2 and 3 only"],"ci":3,"exp":"Ex: On 26 June 1539, the army led by Sher Shah Suri destroyed the Mughal forces which were led by Humayun at the Battle of Chausa. After the battle, Sher Shah Suri founded the Sur Dynasty. 9 System of Administration under Sher Shah Suri: He organized a brilliant administrative system dividing his empire into sarkars further into parganas. Shiqdar (military officer), Amin (land revenue), Fotedar (treasurer) and Karkuns (accountants) were in charge of administration in Parganas. Statement 1 is incorrect: Sher Shah Suri introduced a new silver coin called the Rupiya, not Dirham. The Rupiya became a standard coin in India and was later adopted by the Mughals. It remained in circulation in various forms until British India adopted the modern rupee in 1835. Statement 2 is correct: Purana Qila (Old Fort) and its mosque, Mausoleum at Sasaram were constructed during this period. Purana Quila, which means \"Old Fort,\" is one of the remnants of this city and is one of the oldest forts in Delhi. It was constructed by Sher Shah Suri between 1533 and 1540. The fort stands as a significant architectural and historical monument from his time. Statement 3 is correct: Malik Muhammad Jayasi was a notable poet of the 16th century, best known for his epic poem \"Padmavat.\" He lived during the time of Sher Shah Suri, who ruled from 1540 to 1545. He insisted on measurement of sown land and tax could be paid in both cash and kind. He improved communication system and built the famous Grand Trunk Road (Sarak- iAzam) extending from Sonargaon (now in Bangladesh) to Attock (now in Pakistan) and running through Delhi and Agra a distance of 1500 KMs. EXTRA-EDGE BY PWOnlyIAS Jagirdari It is a land tenure system developed during the Delhi Sultanate. Under the system the collection of the revenue of an estate and the power of governing it were bestowed upon an official of the state. SPP 22643 Zamindari The term refers to another land tenure system. The word zamindar means landowner in Persian. In Mughal times the zamindars were drawn from the class of nobles. Akbar granted land to the nobles as well as to the descendents of old ruling families and allowed them to enjoy it hereditarily. Zamindars collected revenue from the tenants and cultivators and remitted a fixed amount to the state."},{"id":20,"txt":"In medieval Indian administration, a mauza primarily denoted:","ref":"","opts":["A revenue-paying village or group of villages","A judicial circuit under royal officials","A military cantonment for cavalry troops","A police jurisdiction under a faujdar"],"ci":0,"exp":"Ex: In the administrative and fiscal hierarchy of the Delhi Sultanate and the Mughal Empire, the mauza was the fundamental unit of rural administration and revenue assessment. To understand the position of a mauza, it is helpful to look at the territorial divisions of the Mughal Empire: 1. Subah (Province) – Headed by a Subahdar. 2. Sarkar (District) – Headed by a Faujdar (military/police) and Amalguzar (revenue). 3. Pargana (Sub-district) – Headed by a Shiqdar and Amil. 4. Mauza (Village) – The basic unit. Role of the Mauza in Revenue Taxation: Each mauza had a specific revenue demand (jama) assessed against it. While the Pargana was the primary administrative hub, the actual collection happened at the mauza level. Hence option A is correct Village Officials: The administration of a mauza was typically managed by local hereditary officials who acted as intermediaries between the state and the peasantry: ❖ Muqaddam: The village headman responsible for law and order and revenue collection. ❖ Patwari: The village accountant who maintained detailed records of land ownership and crop yields. Settlement Patterns: A mauza did not always consist of a single cluster of houses. It often included the central village (asli) and several small satellite hamlets (dakhili). 10"},{"id":21,"txt":"With reference to the religious policy of Akbar, consider the following statements:\n1. Abolition of Jizya\n2. Issuance of the Decree of Infallibility\n3. Promulgation of Divine Monotheism.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2, and 3"],"ci":3,"exp":"Ex: Akbar’s religious policy evolved over three decades, moving from traditional Islamic orthodoxy to a liberal, syncretic philosophy known as Sulh-i-kul (Universal Peace). Statement 1 is correct: Early in his reign, Akbar took the revolutionary step of abolishing Jizya, the tax traditionally imposed on non- Muslim subjects (dhimmis). He also abolished the Pilgrim Tax (1563). These moves were strategic masterstrokes aimed at winning the loyalty of the Rajput chiefs and the Hindu majority, signaling that the state would treat all subjects equally regardless of faith. Statement 2 is correct: Commonly known as the Mahzar, this decree of Infallibility was drafted by Sheikh Mubarak (father of Abul Fazl). It empowered Akbar to act as the supreme arbiter in case of conflicting interpretations of Islamic law among the Ulema (clergy). While it did not claim divine status, it placed the Emperor's political authority above the sectarian disputes of the religious scholars, effectively making him the Imam-i-Adil (Just Ruler). Statement 3 is correct: In 1582 CE, he promulgated a new religion called Din-i- Ilahi/Tauhind-i- Ilahi (Divine Monotheism), which believes in one God and in Sul-i- Kul/peace to all. It contained the good points of all religions and the basics were rational. However, his new faith proved to be a failure. It fizzled out after his death. Even during his lifetime, it had only followers including Birbal, Abul Fazl, and Abul Faizi. Its primary goal was to create a loyal class of nobles who placed their devotion to the Emperor above their ancestral religious identities. Additional Information: In c.1575 CE, he constructed the Ibadat Khana (Hall of prayers) at his new capital Fatehpur Sikri wherein Akbar invited learned scholars from all religions like Hinduism, Jainism, Christianity, and Zoroastrianism and used to conduct religious discussions with them. SPP 22643"},{"id":22,"txt":"Consider the following statements regarding the Mughal Empire after Aurangzeb:\nStatement-I: The Mughal Empire weakened rapidly after Aurangzeb’s death, leading provincial governors and formerly subjugated kingdoms to assert independence. Statement-II: A war of succession broke out among Aurangzeb’s sons, Muazzam, Muhammad Kam Bakhsh, and Muhammad Azam Shah. Statement-III: Muazzam defeated his brothers and ascended the throne with the title of Bahadur Shah I.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-II and Statement-III are correct and both of them explain Statement-I","Both Statement-II and Statement-III are correct, but only one of them explain Statement-I","Only one of the Statements II and III is correct and that explains Statement-I","Only one of the Statements II and III is correct and that does not explains Statement-I"],"ci":0,"exp":"Ex: Statement I is correct: After 1707, the central authority of the Mughals evaporated. Powerful governors (Subahdars) began to rule their provinces as independent monarchs—specifically Nizam-ul-Mulk in Hyderabad, Saadat Khan in Awadh, and Murshid Quli Khan in Bengal. Simultaneously, groups like the Marathas, Sikhs, and Jats asserted their sovereignty. Statement II is correct: Aurangzeb died without clearly nominating a successor. His three sons—Muazzam (the eldest), Muhammad Azam Shah, and Muhammad Kam Bakhsh— immediately engaged in a brutal civil war. ❖ Azam Shah was defeated and killed at the Battle of Jajau (1707). ❖ Kam Bakhsh was defeated and killed near Hyderabad (1709). Statement III is correct: Muazzam emerged victorious and took the title Bahadur Shah I (also known as Shah Alam I). Though he was a capable ruler, he was already 63 years old at his accession and inherited a bankrupt treasury and a fractured nobility. The war of succession (Statement II) and the eventual victory of Bahadur Shah I (Statement III) explain the weakening of the empire (Statement I) in several ways: 1. Destruction of the Nobility: These wars killed off the most experienced Mughal generals and administrators, who were forced to pick sides and died in battle. 2. Financial Ruin: To win the support of the remaining nobles, Bahadur Shah I granted Jagirs and titles recklessly (earning him the nickname Shah-i-Bekhabar or the Heedless King). This exhausted the royal treasury. 3. Loss of Prestige: The spectacle of the royal family killing one another signaled to provincial governors that the \"Aura of the Peacock Throne\" was gone, encouraging them to stop sending revenue to Delhi and start acting as independent kings. 11 4. Muazzam was 63 when he ascended. By the time he won the war (S3), he was an elderly man who lacked the vigor to discipline the ambitious provincial governors. His victory resulted in a short, five-year reign, which ensured that the central authority remained in a state of constant transition. 5. S3 is the catalyst. It identifies the start of the \"Later Mughal\" era—characterized by elderly rulers, empty treasuries, and factionalism—which directly caused the weakening in S1."},{"id":23,"txt":"Arrange the following events related to the early career of Shivaji in chronological order:\n1. Death of Shivaji's guardian, Dadaji Kondadeo.\n2. Shivaji seized key hill forts of Rajgarh, Kondana, and Torna.\n3. Shivaji conquered Javli from the Maratha chief, Chandra Rao More.\nSelect the correct chronological order using the codes given below:","ref":"","opts":["1-2-3","2-1-3","1-3-2","2-3-1"],"ci":1,"exp":"Ex: The early career of Chhatrapati Shivaji Maharaj was marked by a strategic transition from a local jagirdar's son to an independent ruler, focused on consolidating the \"Mawal\" region. 2. Shivaji seized key hill forts of Rajgarh, Kondana, and Torna (1246–1247 CE): While his father, Shahaji Raje, was serving in the Bijapur Sultanate, a young Shivaji began his \"Swarajya\" mission by capturing strategic forts. Torna was the first major fort he captured (1246), where he reportedly found a hidden treasure that funded the construction of Rajgarh. 1. Death of Shivaji's guardian, Dadaji Kondadeo (1247 CE): Dadaji Kondadeo was the manager of Shahaji's Pune Jagir and Shivaji's mentor. His death in 1247 left Shivaji in direct control of the Pune estate. This gave Shivaji the administrative freedom to expand his activities without the restraining influence of the cautious elder guardian. 3. Shivaji conquered Javli from Chandra Rao More (1256 CE): This was a turning point in his career. Javli was a strategic region located at the gateway to the Konkan. It was held by the More family, who were loyal feudatories of the Bijapur Sultanate. By conquering Javli, Shivaji not only eliminated a powerful local rival but also gained access to the vast wealth and resources of the region, doubling the size of his territory. SPP 22643"},{"id":24,"txt":"Which one of the following statements correctly reflects Mughal recruitment policy?","ref":"","opts":["Ethnic origin alone determined appointment","Religious affiliation was the main criterion","Nobility was restricted to elite aristocratic families","Service loyalty and rank determined advancement"],"ci":3,"exp":"Ex: Mughal recruitment and promotion were governed by the Mansabdari system, a meritocratic and bureaucratic framework that prioritized imperial service over almost all other factors. The Mansabdari Framework: Every officer in the Mughal service held a Mansab (rank), divided into Zat (personal status/salary) and Sawar (number of cavalrymen they were required to maintain). Advancement was not automatic; it depended on the officer’s performance in military campaigns, administrative efficiency, and, above all, personal loyalty to the Emperor. Broad-Based Nobility: To prevent any single ethnic group from becoming powerful enough to challenge the throne, the Mughals followed a \"balance of power\" policy. They recruited a diverse mix of Turanis (Central Asians), Iranis (Persians), Afghans, Indian Muslims (Shaikhzadas), and Rajputs. Hence option D is correct. Open Entry (Theoretical): While the Khanazads (sons of existing nobles) had an advantage, the system was technically open to \"men of the sword\" and \"men of the pen\" regardless of their background. Even a commoner could rise to the highest ranks through exceptional service."},{"id":25,"txt":"Consider the following statements regarding architectural and artistic developments during Shah Jahan’s reign:\n1. The architectural design of the Taj Mahal was prepared by Ustad Isa and Muhammad Effendi.\n2. Shah Jahan constructed the Sheesh Mahal and Mussaman Burj at Agra.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Shah Jahan’s reign is widely considered the \"Golden Age\" of Mughal architecture, marked by a shift from the robust red sandstone of Akbar’s era to the refined elegance of white marble and intricate inlay work. Statement 1 is correct: While the \"Master Architect\" is generally recognized as Ustad Ahmad Lahori (who also designed the Red Fort), the project was a massive collaborative effort involving experts from across the Islamic world. Ustad Isa (Isa Muhammad Effendi) is often described in historical manuscripts as the principal designer or coordinator (naksha- 12 navis). Muhammad Effendi, a specialist in dome construction from the Ottoman Empire. He was a pupil of the famous Ottoman architect Koca Mimar Sinan. His specific task was to ensure the structural integrity of the massive double-dome, a signature feature of the Taj. This collaboration between Persian, Indian, and Ottoman talent gave the Taj Mahal its unique, symmetrical perfection. Statement 2 is correct: Shah Jahan commissioned several buildings within the Agra Fort, including the Sheesh Mahal (Mirror Palace) and the Mussaman Burj (Octagonal Tower). The Mussaman Burj, in particular, is historically significant as the place where Aurangzeb imprisoned Shah Jahan later in his life. These constructions reflect the refinement and ornamental richness characteristic of Shah Jahan’s architectural style."},{"id":26,"txt":"Arrange the following battles in chronological order:\n1. Battle of Chausa\n2. Battle of Bilgrama\n3. Battle of Chanderi\n4. Battle of Khanwa\nSelect the correct answer using the code given below:","ref":"","opts":["2-3-1-4","4-3-1-2","3-4-1-2","4-3-2-1"],"ci":1,"exp":"Ex: These battles represent the critical transition period between the collapse of the Lodi Sultanate, the arrival of Babur, and the subsequent struggle between the early Mughals and the Afghan Suri dynasty. 4- Battle of Khanwa: 1527 CE, Babur and Rana Sanga of Mewar and his allies fought in the battle. Rana Sanga was defeated and Babur’s position in the Delhi–Agra region was secured. Babur declared the war against Rana Sanga to be a jihad and adopted the title of Ghazi after the victory. Babur strengthened his position further by conquering the chain of forts in Gwalior, Dholpur, east of Agra, and large parts of Alwar from Hasan Khan Mewati. 3- Battle of Chanderi: 1528 CE, This battle was fought between Babur and Medini Rai, the Rajput ruler of Malwa. In spite of the great valour with which the Rajputs fought, Babur faced little difficulty in overcoming Medini Rai. With his defeat, resistance across Rajputana was completely shattered. SPP 22643 1- Battle of Chausa: near Buxar, c.1539 CE, Humayun was defeated by Sher Khan and he adopted the title of Sher Shah. Humayun barely escaped with his life from the battle field, swimming across the river with the help of a water carrier. 2- Battle of Bilgrama/Battle of Kannauj:1540 CE, After the defeat at Chausa, only the fullest unity among the Timurid princes and the nobles could have saved the Mughals. The battle of Kannauj was bitterly contested. Both the younger brothers of Humayun, Askari and Hindal, fought valiantly, but Humayun was still thoroughly defeated by Sher Shah. This battle decided the issue between Sher Shah and the Mughals. Humayun now became a prince without a kingdom and he had to flee from Delhi, becoming an exile for the next fifteen years (c.1540–1555 CE)."},{"id":27,"txt":"With reference to the office of Peshwas during the Maratha empire, which one of the following statements is correct?","ref":"","opts":["The position of Peshwas was created during the reign of Shahuji Maharaj","The office of Peshwa was made the hereditary post by Maratha ruler Shahuji","Baji Rao I was appointed as the first hereditary Peshwa in Maratha kingdom","The seat of Peshwas was situated at Gwalior"],"ci":1,"exp":"Ex: This shift in the 18th century marked the transition of the Maratha Empire from a monarchy centered on the Chhatrapati to a confederacy dominated by the Peshwa. Option A is incorrect: The position of Peshwa (Prime Minister) was not created by Shahuji; it existed during the time of Shivaji Maharaj. Moropant Trimbak Pingle was the first Peshwa and was a member of the Ashtapradhan (Council of Eight). However, under Shivaji, it was a ministerial post, not a hereditary or supreme one. Option B is correct: In 1713, Chhatrapati Shahuji appointed Balaji Vishwanath as the Peshwa. Due to Balaji's exceptional diplomatic success in securing the Sanads (rights) for Chauth and Sardeshmukhi from the Mughals and stabilizing the throne, Shahuji was extremely pleased. Upon Balaji Vishwanath's death in 1720, Shahuji appointed his son, Baji Rao I, to the post. This established the hereditary principle, where the Peshwaship stayed within the Bhat family. 13 Option C is incorrect: While Baji Rao I was the first to benefit from the hereditary precedent, the \"first\" Peshwa of this lineage was his father, Balaji Vishwanath. Baji Rao I is celebrated for expanding the empire into North India, but he was the second in the hereditary line. Option D is incorrect: The seat of the Peshwas was Pune. Following the shift of power from the Chhatrapati (who remained at Satara), Pune became the de facto capital of the Maratha Empire. Gwalior was the seat of the Scindias (Shinde), one of the powerful members of the Maratha Confederacy."},{"id":28,"txt":"Consider the following statements:\n1. Radical changes occurred during the Mughal period in Agriculture technology.\n2. Babur was the first to initiate and utilise metal cylinder rockets.\n3. Use of saltpetre for water cooling was discovered during this period.\nHow many of the above statements is/are correct with reference to the contribution to science and technology during the Mughal period?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is incorrect: No radical change happened during the Mughal period in agriculture technology in so far as the plough, iron ploughshare, irrigational devices, methods of sowing, harvesting, threshing and winnowing are concerned. However, for sowing, apart from broadcasting and seed-drill, we get evidence for dibbling also. Statement 2 is incorrect: It was Akbar who was the first to initiate and utilize metal cylinder rockets against war elephants during the battle of Sambal. The art reached its zenith during the rule of Haider Ali and Tipu Sultan of Mysore. Statement 3 is correct: In the chemical sector, rose-scent and the use of saltpetre for water- cooling were entirely new discoveries. Abul Fazl comments that saltpetre, which in gunpowder produces the explosive heats, is used as a means for cooling water. He also gives the details of how to do so. This discovery has been attributed to Emperor Akbar.  SPP 22643"},{"id":29,"txt":"Consider the following pairs:\nTerm Associated with\n1. Mashrut Jagir — Givennobles in their familytowns or place of birthto Muslim\n2. Watan Jagir — Givensalaries in lieu of\n3. Altamgha Jagir Assigned to zamindars or rajas in their local dominions\nWhich of the pairs given above are correctly matched?","ref":"","opts":["1 only","2 and 3 only","3 only","None"],"ci":3,"exp":"Ex: Pair 1 is incorrectly matched: Mashrut Jagirs were conditional grants given to nobles or officials by the Mughal state. The conditions attached could include performance of specific services, military campaigns, or administrative duties. The revenue from these jagirs was not permanent and could be revoked if the conditions were not met. Pair 2 is incorrectly matched: Watan Jagirs were hereditary and non-transferable grants assigned to zamindars, rajas, or local chieftains within their ancestral domains. These jagirs were tied to the land and local authority of the family, ensuring continuity of governance and revenue collection in rural areas. The holder of a Watan Jagir enjoyed long-term rights and responsibilities over the territory, which reinforced the Mughal administration’s stability in local regions. Pair 3 is incorrectly matched: Altamgha Jagirs were assigned specifically to Muslim nobles in their family towns or places of birth. These grants ensured that nobles could maintain influence and control in their native regions, thereby consolidating Mughal authority through loyalty and local support. Altamgha Jagirs were generally hereditary but were linked to the noble’s background and community rather than to a particular rank or service.  14"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 03</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 03</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 03">PW ONLY IAS 2026 = 03</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the Fundamental Duties in the Indian Constitution, consider the following statements:\n1. The Fundamental Duties were added to the Constitution based on the recommendations of the Justice Verma Committee.\n2. Fundamental Duties are non-justiciable in nature.\n3. Fundamental Duties apply to all individuals residing in India, including foreigners.\n4. The idea of Fundamental Duties was inspired by the Constitution of the USA.\nHow many of the above statements are incorrect?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statement 1 is incorrect: The Fundamental Duties were not added on the recommendations of the Justice Verma Committee. They were added by the 42nd Constitutional Amendment Act, 1976, based on the recommendations of the Sardar Swaran Singh Committee. The Verma Committee came much later in 1999 and only reviewed ways to operationalize these duties. Statement 2 is correct: Fundamental Duties are non-justiciable, meaning they cannot be enforced by any court of law. They serve as moral obligations and guiding principles for citizens rather than enforceable legal commands. Statement 3 is incorrect: Fundamental Duties apply only to citizens, not to foreigners. This is explicitly stated in Article 51A, which begins with the words “It shall be the duty of every citizen of India…”. Hence, foreigners residing in India are not bound by these duties. Statement 4 is incorrect: The concept of Fundamental Duties in the Indian Constitution was inspired by the Constitution of the former USSR, not the USA. The idea was borrowed from socialist constitutions that included explicit duties for citizens."},{"id":1,"txt":"Which of the following Constitutional Amendment Acts are related to the Directive Principles of State Policy?\n1. 97th Amendment Act\n2. 86th Amendment Act\n3. 61st Amendment Act\n4. 103rd Amendment Act\nSelect the correct answer using the codes given below:","ref":"","opts":["1 and 2 only","2, 3, and 4 only","3 and 4 only","1, 2 and 3 only"],"ci":0,"exp":"Ex: Option 1 is correct: The 97th Amendment Act of 2011 added a new Directive Principle relating to cooperative societies. It requires the state to promote voluntary formation, autonomous functioning, democratic control, and professional management of co-operative societies (Article 43B). Option 2 is correct: The 86th Amendment Act of 2002 changed the subject-matter of Article 45 and made elementary education a fundamental right under Article 21 A. The amended directive requires the State to provide SPP 22604 early childhood care and education for all children until they complete the age of six years. Option 3 is incorrect: The 61st Amendment Act of 1988 lowered the voting age from 21 years to 18 years. The amendment aimed to enhance political participation and representation for young adults in India. Option 4 is incorrect: The 103rd Amendment Act of 2019 provides 10% reservation for Economically Weaker Sections (EWS). The amendment aims to address economic disparities and promote access to education and employment opportunities for economically disadvantaged sections of society."},{"id":2,"txt":"Which one of the following is not included among the Fundamental Duties listed under Article 51A of the Constitution?","ref":"","opts":["Upholding and protecting the unity and integrity of India","Casting votes regularly to strengthen democratic governance","Safeguarding public property and avoiding acts of violence","Developing a scientific temper, humanism, and the spirit of inquiry and reform"],"ci":1,"exp":"Ex: The Constitution does not mandate citizens to vote or participate in elections as a legally enforceable duty. Voting is considered an important civic responsibility, but it has never been listed under Article 51A. In contrast, the other options represent duties that are explicitly mentioned in the Constitution. Upholding the unity and integrity of the nation, protecting public property and avoiding violence, and developing scientific temper and humanism are all clearly stated obligations under Article 51A. These duties reflect the expectations placed on citizens to contribute to national harmony, social responsibility, and intellectual progress. Therefore, the only choice that does not belong to the list of Fundamental Duties is participation in elections. Hence, option (B) is correct."},{"id":3,"txt":"With reference to the aims of the Directive Principles of State Policy (DPSPs), consider the following:\n1. To promote social and economic justice for creating a more equitable society.\n2. To guide the State in establishing institutions that uphold welfare and human dignity.\n3. To provide a roadmap for reducing inequalities in income, status, and opportunities.\n4. To enable the State to pursue policies that strengthen democratic values and improve quality of life.\nHow many of the above are the aims of the DPSPs?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Statement 1 is correct: Promoting social and economic justice is a central aim of the DPSPs. Articles 38(1) and 39(a)–(f) direct the State to secure a social order based on justice— economic, social, and political. These provisions aim to minimise inequalities and ensure fairness in access to resources. Statement 2 is correct: The DPSPs aim to build institutions that uphold welfare and human dignity. Articles such as 41 (right to work, education & public assistance), 42 (humane working conditions), and 47 (nutrition & public health) reflect the intention to create systems that preserve human dignity and promote welfare. Statement 3 is correct: Reducing inequalities in income, status, and opportunities is explicitly mentioned in Article 38(2). It directs the State to remove disparities and ensure equal opportunities for individuals and groups, reinforcing the DPSP objective of equitable development. Statement 4 is correct: Strengthening democratic values and improving quality of life is an overarching aim of multiple DPSPs. Articles 43 (living wage), 45 (education), and 47 (health & nutrition) guide the State to enhance living standards and support a vibrant democratic society through inclusive development."},{"id":4,"txt":"With reference to the basic structure doctrine in India, consider the following statements:\n1. Judicial review of constitutional amendments was recognised even before the basic structure doctrine was formally declared.\n2. The doctrine allows Parliament to modify Fundamental Rights only to the extent that their essential character is preserved.\n3. The doctrine prevents Parliament from enlarging its own amending power under Article 368.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Statement 1 is correct: Even before the Kesavananda Bharati (1973) verdict, the Supreme Court had upheld the idea that constitutional amendments are subject to judicial review. In Golaknath (1967), the Court ruled that Parliament could not amend Fundamental Rights at all ,implying that amendments were not immune from judicial scrutiny. Cases such as Sajjan Singh (1965) also questioned the scope of Parliament’s amending power, laying the groundwork for later development. Thus, judicial review of amendments was recognized before the explicit formulation of the basic structure doctrine. Statement 2 is correct: The Kesavananda SPP 22604 Bharati judgment (1973) held that Parliament may amend any part of the Constitution, including Fundamental Rights, as long as the essential features of those rights are not destroyed. The Court allowed modifications but prohibited amendments that would abrogate the core of the rights.This position was reaffirmed in Minerva Mills (1980). The Supreme Court has consistently held that Parliament cannot enlarge its own amending power under Article 368. Statement 3 is correct: In Minerva Mills (1980), the Court struck down provisions of the 42nd Amendment that attempted to give Parliament unlimited power to amend the Constitution. Enlarging the amending power would effectively destroy the basic structure, particularly: ❖ Limited government ❖ Judicial review ❖ Supremacy of the Constitution"},{"id":5,"txt":"Consider the following statements:\nStatement-I: The power to create new states and alter the boundaries of existing states lies with the Parliament. Statement-II: No Bill for the purpose shall be introduced in either House of Parliament except on the recommendation of the President.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I","Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I","Statement-I is correct but Statement-II is incorrect","Statement-I is incorrect but Statement-II is correct"],"ci":1,"exp":"Ex: In the Indian Constitution, the process of creating new states or altering the boundaries of existing states is vested in the Union Parliament. Statement-I is correct: The power to create new states, change names of existing states and alter the boundaries of existing states lies with the Union Parliament, under Article 3 of the Indian Constitution. The process requires Parliament to pass a law enabling such changes. Statement-II is incorrect: No Bill for the purpose (alteration of areas, boundaries or names of existing States) shall be introduced in either House of Parliament except on the recommendation of the President and unless, where the proposal contained in the Bill affects the area, boundaries or name of any of the States, the Bill has been referred by the President to the Legislature of that State for expressing its views thereon within such period as may be specified in the reference or within such further period as the President may allow and the period so specified or allowed has expired. Here, clearly the Statement 2 is does not explain Statement 1 though both are correct."},{"id":6,"txt":"Consider the following Directive Principles of State Policy:\n1. Advancing the overall welfare of the people.\n2. Ensuring equal access to justice and extending free legal assistance to economically weaker sections.\n3. Securing humane working conditions and guaranteeing maternity-related safeguards.\n4. Enhancing environmental protection and conserving forests and wildlife resources.\nHow many of the above provisions were inserted through the 42nd Constitutional Amendment Act, 1976?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statement 1 is incorrect: Promoting the welfare of the people under Article 38 was part of the original Constitution of 1950. It was not added by the 42nd Amendment. Although Article 38(2) was added later by the 44th Amendment in 1978, the main directive already existed. Statement 2 is correct: It relates to Article 39A, which directs the State to ensure equal justice and provide free legal aid. This provision was added by the 42nd Constitutional Amendment Act, 1976 to improve access to justice for economically weaker sections and strengthen the principle of equality before law. Statement 3 is incorrect: Article 42, which mandates humane working conditions and maternity relief, existed prior to the 42nd Amendment. It was part of the original Constitution adopted in 1950. Statement 4 is correct: It corresponds to Article 48A, which requires the State to protect and improve the environment and safeguard forests and wildlife. This article was introduced by the 42nd Amendment Act, 1976 when environmental protection became an important constitutional priority."},{"id":7,"txt":"The Directive Principles of State Policy aim to establish a “welfare state.” However, their implementation often conflicts with economic and administrative constraints.\n1. They encourage the State to address socio- economic issues in a phased manner.\n2. They acknowledge resource limitations by providing flexibility in implementation.\n3. They avoid legal enforceability, focusing on guiding state policy without litigation risks.\nWhich of the above statements best explains how DPSPs balance ideals and practicality?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2, and 3"],"ci":3,"exp":"Ex: The Directive Principles of State Policy (DPSPs) serve as broad guidelines for governance aimed at achieving a welfare state. However, their non-justiciable nature and the practical challenges of implementation (such as economic constraints, resource limitations, and SPP 22604 administrative capacity) require a balance between the ideal goals and the realities of governance. Statement 1 is correct: The DPSPs often encourage a phased approach to implementing social welfare policies. For example, the provision for early childhood care and education to children below the age of six years (Article 45) does not demand immediate action but encourages the State to progressively work toward achieving this goal.. Statement 2 is correct: DPSPs provide flexibility in their implementation, allowing the government to prioritize welfare programs based on the resources available. For instance, policies like land reforms, poverty alleviation, and healthcare are gradually introduced and adapted to the country's evolving economic landscape. Statement 3 is correct: Since DPSPs are non- justiciable, they are not enforceable by law, reducing the likelihood of judicial interference or litigation risks. This allows the State to focus on formulating and executing policies without being held accountable for specific failures in implementation, which is crucial given the economic and administrative challenges in realizing all the goals in the DPSPs. Additional Information: Despite the economic and administrative constraints, DPSPs have played a significant role in shaping transformative policies, such as land reforms, social welfare schemes, and labor rights legislation. While the implementation may take time, the guiding principles in the DPSPs have had a substantial impact on India’s development trajectory."},{"id":8,"txt":"With reference to the Basic Structure doctrine, consider the following statements:\n1. The President is the final authority to decide whether a constitutional amendment violates the Basic Structure after consulting Supreme Court judges.\n2. The Basic Structure doctrine does not automatically invalidate constitutional amendments enacted before 1973.\nWhich of the statements given above is/are not correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is incorrect: The President has no power to determine the constitutional validity of an amendment. Key points: ❖ The President must give assent to a Constitutional Amendment Bill (after the 24th Amendment). ❖ The President cannot refuse assent, cannot review the amendment, and cannot consult judges regarding its validity. ❖ Only the Supreme Court, through judicial review, can strike down an amendment violating the Basic Structure. Statement 2 is correct: The Basic Structure doctrine, laid down in Kesavananda Bharati (1973), does not automatically invalidate earlier amendments. Amendments passed before 1973 remain valid unless challenged and found violative of Basic Structure. The doctrine applies prospectively, but earlier amendments can still be reviewed when brought before the Court."},{"id":9,"txt":"Among the Directive Principles listed below, how many reflect the Gandhian vision?\n1. Organising village panchayats as units of self-government.\n2. Ensuring equal pay for equal work for both men and women.\n3. Prohibiting the consumption of intoxicating drinks and drugs harmful to health\n4. Promoting cottage industries through State support.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statement 1 is correct: The idea of organising village panchayats as units of self-government comes from Article 40. This reflects Gandhi’s emphasis on decentralisation and empowering local communities, making it a Gandhian directive. Statement 2 is incorrect: Equal pay for equal work under Article 39(d) is categorised under socialist principles, not Gandhian ones. It is aimed at reducing inequality and ensuring distributive justice, which is not specific to Gandhian philosophy. Statement 3 is correct: Prohibition of intoxicating drinks and harmful drugs under Article 47 aligns with Gandhi’s emphasis on personal morality, discipline, and social reform, making it a key Gandhian directive. Statement 4 is correct: Article 43 directs the State to promote cottage industries on an SPP 22604 individual or cooperative basis. This reflects Gandhi’s emphasis on self-reliant villages, local production, and small-scale rural industries, making it a key Gandhian Directive Principle."},{"id":10,"txt":"Which of the following is the underlying primary philosophical aim of the Directive Principles of State Policy (DPSPs) in the Indian Constitution?","ref":"","opts":["Establishing a secular and democratic state.","Ensuring economic justice and equitable distribution of resources.","Encouraging citizens to uphold national pride and unity.","Protecting individual freedoms over collective welfare."],"ci":1,"exp":"Ex: The Directive Principles of State Policy (DPSPs), outlined in Part IV of the Indian Constitution, reflect the vision of the framers to establish a welfare state by addressing socio- economic inequalities and fostering justice. They serve as guidelines for the state to frame policies and laws that contribute to the socio- economic development of the nation and the well-being of its citizens. ❖ The establishment of a secular and democratic state is indeed a core value of the Indian Constitution. However, it is primarily enshrined in the Preamble and the Fundamental Rights (Part III). The DPSPs primarily focus on socio-economic justice and welfare policies rather than addressing the political framework directly.Hence, option a is incorrect. ❖ The primary purpose of the DPSPs is to achieve economic justice and equitable resource distribution. For example, Article 39 emphasizes ensuring adequate livelihood, equal pay for equal work, and preventing the concentration of wealth. These principles are aimed at fostering a welfare state by reducing socio-economic disparities and promoting inclusive growth.Hence, option b is correct. ❖ While promoting social harmony and justice indirectly contributes to national unity, the DPSPs do not explicitly emphasize notions like national pride or unity. Hence, option c is incorrect. ❖ The DPSPs aim at collective welfare rather than prioritizing individual freedoms over collective social welfare. They balance individual rights with societal needs, encouraging measures like education, social justice, and economic equality.Hence, option d is incorrect."},{"id":11,"txt":"Which constitutional case established that ensuring a balance between Fundamental Rights and the Directive Principles is essential, and that maintaining this balance forms an inseparable component of the Constitution’s basic structure?","ref":"","opts":["State of Madras v. Champakam Dorairajan","I.C. Golaknath v. State of Punjab","Kesavananda Bharati v. State of Kerala","Minerva Mills v. Union of India"],"ci":3,"exp":"Ex: The Minerva Mills (1980) judgment is a landmark decision in constitutional jurisprudence dealing with the limits of Parliament’s amending power. The case examined amendments made through the 42nd Constitutional Amendment, which sought to expand Parliament’s authority to implement Directive Principles even at the cost of restricting Fundamental Rights. The Supreme Court held that the Constitution is founded upon a delicate balance between Part III (Fundamental Rights) and Part IV (Directive Principles). The Court ruled that the harmony and balance between Fundamental Rights and DPSPs is itself a basic feature. This means Parliament cannot amend the Constitution in a way that disturbs this balance. The judgment reaffirmed that both Parts III and IV are essential to India’s constitutional philosophy: Fundamental Rights safeguard individual liberty, while DPSPs express social and economic goals. Thus, Minerva Mills established the principle that both rights and directives must coexist harmoniously, and this equilibrium is a core element of the Constitution’s basic structure. Hence, option (D) is correct."},{"id":12,"txt":"With reference to the significance of the Directive Principles of State Policy (DPSPs), consider the following statements:\n1. They serve as a common political manifesto regardless of the party's ideology.\n2. They assist the courts in interpreting laws and exercising the power of judicial review.\n3. They serve as a crucial test for evaluating the performance of the government.\n4. Fundamental Rights establish social and economic democracy while DPSPs establish political democracy.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statement 1 is correct: DPSPs provide a consistent set of constitutional goals—such as welfare, justice, and equality—that any government must strive toward. They serve as a guiding philosophy for governance, giving continuity to state policy regardless of which political party is in power SPP 22604 Statement 2 is correct: Courts often rely on the DPSPs while interpreting constitutional provisions and laws. They help guide judicial review by indicating the broader socio-economic objectives the Constitution aims to realise. Statement 3 is correct: DPSPs serve as an important benchmark for judging the performance of the government. Citizens can evaluate whether government policies align with these constitutional aims and ideals. Statement 4 is incorrect: The relationship is the opposite. Fundamental Rights primarily aim to secure political democracy by protecting individual liberties, while DPSPs strive to build social and economic democracy through welfare-oriented governance. Hence, the statement reverses their actual roles."},{"id":13,"txt":"Consider the following Directive Principles of State Policy:\n1. To promote equal justice and to provide free legal aid to the poor.\n2. To protect and improve the environment and to safeguard forests and wildlife.\n3. To make provision for just and humane conditions of work and maternity relief.\n4. To take steps to secure the participation of workers in the management of industries.\nWhich of the above Directive Principles of State Policy (DPSPs) were added by the 42nd Constitutional Amendment Act, 1976?","ref":"","opts":["1 and 3 only","2 and 4 only","1, 2, and 4 only","1, 2, 3, and 4"],"ci":2,"exp":"Ex: The 42nd Constitutional Amendment Act, 1976, is often called the \"Mini-Constitution\" for its significant changes, including the inclusion of four new DPSPs under Part IV of the Constitution. These provisions aimed to strengthen socio-economic rights and align governance with emerging welfare objectives. Statement 1 is correct: Article 39A was added by the 42nd Amendment, directing the State to ensure justice by providing free legal aid to the poor. It aims to reduce barriers arising from economic disparities, ensuring access to justice for all citizens. Statement 2 is correct: Article 48A, also added by the 42nd Amendment, emphasizes protecting and improving the environment and safeguarding forests and wildlife. This provision reflects India’s commitment to sustainable development and ecological conservation. Statement 3 is incorrect: Article 42, which mandates humane working conditions and maternity relief, existed prior to the 42nd Amendment. It was part of the original Constitution adopted in 1950. Statement 4 is correct: Article 43A was introduced by the 42nd Amendment to secure the participation of workers in the management of industries. This promotes industrial democracy by encouraging a collaborative approach to decision-making in workplaces."},{"id":14,"txt":"Which one of the following provisions is mentioned in Part IV A of the Constitution of India?","ref":"","opts":["To pay taxes promptly and honestly.","To safeguard public property.","To contest in national and local elections.","To participate in cultural and educational activities."],"ci":1,"exp":"Ex: The Fundamental Duties in the Indian Constitution are inspired by the Constitution of erstwhile USSR. The 42nd Constitutional Amendment Act in 1976 added a new part, namely, Part IVA to the Constitution. This new part consists of only one Article, that is, Article 51A which for the first time specified a code of ten fundamental duties of the citizens. Some of them are: According to Article 51A, it shall be the duty of every citizen of India: (a) to abide by the Constitution and respect its ideals and institutions, the National Flag and the National Anthem; (b) to cherish and follow the noble ideals that inspired the national struggle for freedom; (c) to uphold and protect the sovereignty, unity and integrity of India; (d) to defend the country and render national service when called upon to do so; (e) to promote harmony and the spirit of common brotherhood amongst all the people of India transcending religious, linguistic and regional or sectional diversities and to renounce practices derogatory to the dignity of women; (f) to value and preserve the rich heritage of the country’s composite culture; (g) to protect and improve the natural environment including forests, lakes, rivers and wildlife and to have compassion for living creatures; SPP 22604 (h) to develop scientific temper, humanism and the spirit of inquiry and reform; (i) to safeguard public property and to abjure violence; (j) to strive towards excellence in all spheres of individual and collective activity so that the nation constantly rises to higher levels of endeavour and achievement; and (k) to provide opportunities for education to his child or ward between the age of six and fourteen years. This duty was added by the 86th Constitutional Amendment Act, 2002."},{"id":15,"txt":"Consider the following legal provisions that support the implementation of Fundamental Duties:\n1. The Indian Penal Code provisions penalising acts that disturb public harmony and national integration.\n2. The Unlawful Activities (Prevention) Act, 1967 declaring organisations promoting communal disharmony as unlawful.\n3. The Protection of Civil Rights Act, 1955 prohibiting caste-based offences.\n4. The Forest (Conservation) Act, 1980 restricting diversion of forest land for non- forest use.\nHow many of the above help in giving effect to the Fundamental Duties?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: The Verma Committee on Fundamental Duties of the Citizens (1999) identified the existence of legal provisions for the implementation of some of the Fundamental Duties. They are mentioned below: 1. The Protection of Civil Rights Act, 1955 prohibits and penalises offences related to untouchability (caste-based discrimination). It supports the Fundamental Duty under Article 51A(e) to promote harmony and renounce practices derogatory to human dignity. Hence statement 3 is correct. 2. The Indian Penal Code (IPC) declares the imputations and assertions prejudicial to national integration as punishable offences. Hence statement 1 is correct. 3. The Unlawful Activities (Prevention) Act of 1967 provides for the declaration of a communal organisation as an unlawful association. Hence statement 2 is correct. 4. The Forest (Conservation) Act of 1980 checks indiscriminate deforestation and diversion of forest land for non-forest purposes. Article 51A(g): to protect and improve the natural environment including forests, lakes, rivers and wild life, and to have compassion for living creatures; Hence statement 4 is correct."},{"id":16,"txt":"Which of the following recommendations made by the Swaran Singh Committee were not incorporated into the Constitution?\n1. Parliament may provide for penalties or punishments for non-compliance with any Fundamental Duty.\n2. No law imposing penalties for non- compliance with any Fundamental Duty shall be questioned in any court on the ground of violation of Fundamental Rights.\n3. Payment of taxes should be included as a Fundamental Duty of citizens.\nSelect the correct answer using the code given below:","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: The Swaran Singh Committee suggested that Parliament should be empowered to impose penalties or punishments on citizens who fail to observe Fundamental Duties. However, this recommendation was not accepted by the government and was not included in the Constitution. Statement 2 is correct: The Committee also proposed that any law imposing penalties for violating Fundamental Duties should not be challenged in any court on the grounds that it violates Fundamental Rights or any other constitutional provision. This recommendation was also rejected and not incorporated. Statement 3 is correct: The Committee recommended that paying taxes should itself be added as a Fundamental Duty. This suggestion was not accepted by the Constituent authorities and was not added to Article 51A."},{"id":17,"txt":"Which one of the following provisions is mentioned in Part IV A of the Constitution of India?","ref":"","opts":["To promote the welfare of the people","To organise village panchayats as units of self–government","To abide by the Constitution and respect its ideals.","To secure a uniform civil code for the citizens"],"ci":2,"exp":"Ex: Part IVA contains a set of moral and civic obligations (Fundamental Duties) expected from every citizen to strengthen national discipline and responsibility. Among these duties, one explicitly requires citizens to uphold the Constitution, honour its principles, and preserve the spirit on which the democratic framework rests. This includes showing respect for institutions, national symbols, and values that form the core of the constitutional order. The other options relate to Directive Principles or goals assigned to the State, not individual duties."},{"id":18,"txt":"Consider the following provisions under the Part IV of the Indian Constitution:\n1. Article 43\n2. Article 39(d)\n3. Article 40\n4. Article 48\nWhich of the above provisions fall under \"Gandhian Principles”?","ref":"","opts":["1 and 2 only","1, 2, 3, and 4","1, 3, and 4 only","3 and 4 only"],"ci":2,"exp":"Ex: The \"Gandhian Principles\" under the Directive Principles of State Policy (DPSPs) reflect Mahatma Gandhi’s vision for rural development, socio-economic justice, and ethical governance. SPP 22604 These principles emphasize decentralized self- governance, protection of rural industries, and the moral welfare of society. Statement 1 is correct: Article 43 entails promotion of cottage industries in rural areas aligns with Gandhi’s emphasis on self-sufficient villages and decentralized economic growth. Statement 2 is incorrect: Article 39(d), which mandates equal pay for equal work for men and women, falls under Socialist Principles, emphasizing economic justice rather than Gandhian ideals. Statement 3 is correct: Article 40, which provides for the organization of village panchayats, directly represents Gandhi’s idea of Gram swaraj (village self-governance). Statement 4 is correct: Article 48, which prohibits the slaughter of cows, calves, and other milch and draught cattle, reflects Gandhi’s advocacy for animal protection and ethical living as symbols of rural sustainability and spiritual well-being."},{"id":19,"txt":"Which of the following statements are correct with regard to the role of Fundamental Duties?\n1. Promoting a sense of patriotism\n2. Ensuring respect for national symbols\n3. Encouraging social justice through affirmative action\n4. Guarding against disruptive activities like terrorism\nSelect the correct answer using the code given below:","ref":"","opts":["1, 2, and 4 only","1 and 2 only","3 and 4 only","1, 2, 3, and 4"],"ci":0,"exp":"Ex: The Fundamental Duties enshrined in the Part IVA of the Constitution are designed to ensure the holistic well-being of the nation, focusing on responsible citizenship, respect for diversity, and safeguarding national integrity. Statement 1 is correct: Promoting patriotism strengthens national unity and ensures the welfare of the country. This aligns with the duties to respect the Constitution and safeguard its values. Statement 2 is correct: Ensuring respect for national symbols helps maintain the dignity of the nation and fosters respect for its democratic ideals. Statement 3 is incorrect: Encouraging social justice through affirmative action is not part of the Fundamental Duties; rather, it is a mandate under the Directive Principles of State Policy (DPSP) and Fundamental Rights like Articles 14, 15, 16, and 21A which aims to promote social justice by ensuring equality, non- discrimination, and access to education and opportunities. Statement 4 is correct: Guarding against terrorism is implicit in the duty to promote national security and safeguard public property and harmony."},{"id":20,"txt":"Consider the following statements about the significance of Fundamental Duties:\n1. They help the courts in examining and determining the constitutional validity of a law.\n2. They serve as a warning against the anti national and antisocial activities.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: The Fundamental Duties help the courts in examining and determining the constitutional validity of a law. In 1992, the Supreme Court ruled that in determining the constitutionality of any law, if a court finds that the law in question seeks to give effect to a Fundamental Duty, it may consider such law to be ‘reasonable’ in relation to Article 14 (equality before law) or Article 19 (six freedoms) and thus save such law from unconstitutionality. Statement 2 is correct: The Fundamental Duties serve as a warning against the anti national and antisocial activities like burning the national flag, destroying public property, and so on. They also serve as a source of inspiration for the citizens and promote a sense of discipline and commitment among them."},{"id":21,"txt":"With reference to Supreme Court rulings on elections and democracy, consider the following statements:\n1. Kihoto Hollohan (1992) affirmed that the integrity of the electoral process is part of the Basic Structure.\n2. Kuldip Nayar (2006) upheld that democracy and free and fair elections form part of the Basic Structure.\n3. Kuldip Nayar (2006) judgments upheld the abolition of the domiciliary requirement for Rajya Sabha candidates.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Statement 1 is Correct: Kihoto Hollohan (1992) upheld the constitutional validity of the Tenth Schedule but emphasised that free and fair elections and the integrity of the electoral process form part of the Basic Structure. The Court reasoned that preventing political defections preserves the purity of the electoral mandate and ensures democratic stability. Therefore, the judgment expressly linked the electoral process with Basic Structure values, making the statement correct. SPP 22604 Statement 2 is Correct: In Kuldip Nayar (2006), the Supreme Court upheld electoral reforms to the Rajya Sabha, including the open ballot system. While doing so, the Court reaffirmed that democracy and free and fair elections are essential features of the Basic Structure and that transparency-enhancing reforms do not violate these principles. Statement 3 is Correct: The Kuldip Nayar (2006) judgment also upheld the amendment abolishing the domiciliary requirement for Rajya Sabha candidates. The Court observed that the Constitution does not mandate state residency as a condition for membership in the Upper House, and Parliament is competent to modify such qualifications. It held that removing the domicile condition does not undermine federalism or democratic values. Thus, the statement is correct."},{"id":22,"txt":"Which one of the following observations was made by the Verma Committee (1999) regarding the implementation of Fundamental Duties?","ref":"","opts":["Many Fundamental Duties already find support in existing laws, enabling their practical implementation.","Fundamental Duties remain entirely unenforceable due to the absence of any legal backing.","The implementation of Fundamental Duties requires drafting a new chapter of compulsory legislation.","Fundamental Duties can be activated only after a constitutional amendment expanding their scope."],"ci":0,"exp":"Ex: The Verma Committee (1999) analysed how the Fundamental Duties could be implemented in real terms. It found that several duties already have operational backing through existing laws. For example, environmental protection laws support the duty to safeguard the environment, various public order and criminal laws reinforce the duty to maintain harmony and prevent violence, and laws relating to public property give effect to the duty to protect it. Because these duties are already reflected in ordinary legislation, the committee noted that their implementation does not require new constitutional amendments or fresh legislation. This demonstrates that Fundamental Duties are not merely moral appeals but have practical legal support within the existing legal framework. Hence, option (A) is correct."},{"id":23,"txt":"Consider the following statements regarding the Objectives Resolution (1946):\n1. It declared India’s resolve to constitute itself as an Independent Sovereign Democratic Republic founded on the will of the people.\n2. It pledged to preserve India’s territorial integrity and sovereign rights over land, sea, and air in accordance with international law.\nWhich of the above statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: The Objectives Resolution, moved by Jawaharlal Nehru on 13 December 1946, laid down the philosophical foundation and guiding principles of the Indian Constitution. It declared India to be an independent, sovereign republic, guaranteed justice, equality, and freedom to its people, and emphasized federalism, democracy, and protection of minorities. Adopted on 22 January 1947, it later became the Preamble of the Constitution. Statement 1 is not correct: The Objectives Resolution, moved on 13 December 1946, proclaimed India’s resolve to constitute itself as an Independent Sovereign Republic. It did not use the term Democratic in this declaration. While the Resolution affirmed that all authority would be derived from the people, the specific term Democratic was added later in the Preamble of the Constitution, not in the Resolution itself. Statement 2 is correct: The Resolution explicitly pledged that the future Republic would maintain the integrity of its territory, and exercise sovereign rights over land, sea, and air,according to justice and the law of civilized nations. This reflected India’s intended adherence to international legal norms while asserting territorial sovereignty."},{"id":24,"txt":"“The Fundamental Duties were added to the Indian Constitution as part of the broader aim to shift the focus towards responsibility alongside rights.” In the context of this statement, which of the following statements below best explains the primary reason behind this shift?","ref":"","opts":["To curb growing political corruption.","To ensure greater moral and civic responsibility among citizens.","To put reasonable restrictions on civic rights and liberty.","To integrate socialist ideas within the Constitution."],"ci":1,"exp":"Ex: The Fundamental Duties were introduced as part of the 42nd Amendment Act of 1976, marking a shift toward emphasizing not just rights but also responsibilities. Statement (a) is incorrect: While political corruption is an issue, the Fundamental Duties were not primarily aimed at curbing corruption but at encouraging moral and civic responsibility among citizens. Statement (b) is correct: The primary aim was to promote moral and civic responsibility, aligning with the vision of a mature democratic society where citizens not only enjoy rights but also contribute to the greater good. Statement (c) is incorrect: Fundamental duties SPP 22604 do not put reasonable restrictions rather they put moral obligations on the citizens by conferring duties on them who enjoy a multitude of rights and liberties. Statement (d) is incorrect: While the Constitution incorporates some socialist principles, the Fundamental Duties are focused primarily on individual responsibility and national unity. Additional Information: ❖ The Justice Verma Committee in 2012 recommended educating citizens on their Fundamental Duties, particularly to youth to promote responsible citizenship from an early age."},{"id":25,"txt":"With reference to the Minerva Mills judgment (1980), which one of the following was explicitly upheld as a part of the Basic Structure of the Constitution?","ref":"","opts":["Judicial review cannot be taken away or diluted by Parliament","Parliament’s power to amend the Constitution is absolute and unrestricted","Directive Principles have primacy over Fundamental Rights","The Preamble is not a part of the Constitution"],"ci":0,"exp":"Ex: Option (a) is correct. In Minerva Mills vs Union of India (1980), the Supreme Court reviewed Sections 4 and 55 of the 42nd Constitutional Amendment, which attempted to: ❖ give unlimited amending power to Parliament (by inserting clauses 4 & 5 in Article 368), and ❖ bar any challenge to laws implementing Directive Principles. The Court held that: ❖ Judicial review is an integral part of the Basic Structure, as it ensures the supremacy of the Constitution and acts as a check on the legislature and executive. ❖ Parliament cannot restrict or remove judicial review, as doing so would destroy the Basic Structure itself. Thus, judicial review was explicitly reaffirmed as a Basic Structure feature. Option (b) is incorrect.The Court clearly ruled that Parliament’s amending power is not unlimited.Parliament cannot damage or destroy the Basic Structure.Hence unlimited amending power itself violates the Basic Structure. Option (c) is incorrect. Minerva Mills held that there must be a balance between Fundamental Rights and Directive Principles.Neither has supremacy over the other.The attempt in the 42nd Amendment to give DPSPs overriding priority was struck down. Option (d) is incorrect. In Kesavananda Bharati (1973), the Supreme Court already held that the Preamble is part of the Constitution and can be amended (without destroying its basic features). Minerva Mills did not challenge this position."},{"id":26,"txt":"“The Directive Principles of State Policy are a vision of what the State aspires to be, rather than what it currently is.” In this context, which of the following best describes the role of DPSPs in Indian democracy?\n1. They act as a complement to the Fundamental Rights, ensuring a holistic framework for governance.\n2. They allow the State to gradually achieve socio-economic justice without immediate enforceability.\n3. They provide a moral framework for the judiciary to interpret rights and laws dynamically.\n4. They serve as a tool for political accountability, reflecting promises made in the Constitution.\nSelect the correct answer using the code given below:","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2, 3, and 4"],"ci":3,"exp":"Ex: DPSPs outline the aspirational goals of the State, offering a blueprint for a just and equitable society. They complement Fundamental Rights and reflect the dynamic relationship between ideals and governance. Statement 1 is correct: Directive Principles of State Policy (DPSPs) guide the state to work towards social and economic justice. They complement Fundamental Rights by outlining the state's positive duties to create a just society. While Fundamental Rights protect individual liberties, DPSPs ensure holistic governance by the State and that it actively works towards social and economic welfare in a holistic manner. Statement 2 is correct: Non-enforceability allows the State to progressively achieve welfare goals based on resource availability and administrative capacity. For example, the phased implementation of the right to education shows the gradual realization of Article 45. Statement 3 is correct: The judiciary has often interpreted laws and rights in alignment with DPSPs. For instance: In Vishaka vs. State of Rajasthan (1997), guidelines for workplace harassment were inspired by DPSPs advocating gender equality. Statement 4 is correct: DPSPs encourage governments to demonstrate their commitment to constitutional ideals, fostering accountability SPP 22604 through welfare-oriented policies."},{"id":27,"txt":"In the context of parliamentary democracies,\nwhich of the following best describes the concept of a Shadow Cabinet?","ref":"","opts":["A group of senior civil servants who assist the Prime Minister in policy supervision during emergencies..","A body of ministers appointed secretly by the ruling party to manage sensitive national security decisions.","A team of opposition members assigned to monitor the work of each government ministry and present alternative policies.","A confidential advisory council formed by the President to review executive decisions before assent 🔿🔿🔿🔿"],"ci":2,"exp":"Ex: A Shadow Cabinet is a feature of the Westminster model, most prominently seen in the United Kingdom. It consists of senior members of the opposition who “shadow” each minister in the government. Their role is to scrutinise policies, offer alternative proposals, and hold the government accountable. They do not have executive authority but serve as a ready- to-go alternative government if the opposition comes to power. Hence, option (C) is correct."},{"id":28,"txt":"Consider the following statements regarding the Directive Principles of State Policy (DPSPs):\nStatement I: They were incorporated to guide the State in establishing a social and economic order based on wider principles of justice.\nStatement II: They confer binding constitutional obligation on the State to implement them through compulsory legal means.\nStatement III: They can be enforced through writ petitions in the Supreme Court and High Courts.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one of them explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":3,"exp":"Ex: Statement I is correct: The framers introduced the DPSPs to outline the broad goals the State must pursue to build a welfare-oriented society. They reflect socio-economic ideals such as reducing inequalities, ensuring social justice, improving living standards, and promoting human dignity. DPSPs thus form the guiding philosophy for governance, supplementing the framework of political democracy with social and economic aims. Statement II is incorrect: Even though DPSPs lay down essential objectives, they do not impose legally enforceable or binding obligations on the State. Article 37 explicitly states that these principles are “fundamental in the governance of the country,” but they are not enforceable by any court. Their implementation depends on political will, legislative action, and availability of resources. Therefore, the State is not compelled through law to implement them. Statement III is incorrect: Since DPSPs are non-justiciable, citizens cannot approach the Supreme Court or High Courts through writ petitions to demand their enforcement. Courts may refer to DPSPs while interpreting statutes or while striking a balance between Fundamental Rights and social objectives, but they cannot direct the State to implement any particular Directive Principle."},{"id":29,"txt":"With reference to the objectives of the Fundamental Duties in the Indian Constitution, consider the following:\n1. To promote a sense of discipline and commitment among citizens.\n2. To strengthen the spirit of national unity and integrity.\n3. To provide legally enforceable mechanisms for ensuring social justice.\n4. To encourage citizens to uphold and protect the sovereignty of the nation.\nHow many of the above are objectives of the Fundamental Duties?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statement 1 is correct: An important objective of the Fundamental Duties is to cultivate discipline, responsibility, and commitment among citizens. These duties act as a moral code of conduct, encouraging individuals to perform actions that support national development and democratic functioning. They aim to build civic consciousness so that citizens become more aware of their obligations towards society, the nation, and the Constitution. Statement 2 is correct: The duties explicitly seek to strengthen national unity and integrity. Several duties—such as respecting the Constitution, promoting harmony, and safeguarding public property—are designed to prevent divisive tendencies and promote a cohesive national identity. By encouraging citizens to rise above barriers of religion, race, caste, or language, the duties contribute directly to maintaining the unity and integrity of India. Statement 3 is incorrect: Fundamental Duties do not provide legally enforceable mechanisms for ensuring social justice. They are non- justiciable, meaning they cannot be enforced by 🔿🔿🔿🔿 SPP 22604 courts. Their purpose is moral and educational rather than punitive. While some laws may indirectly support the realisation of these duties, the duties themselves were never intended to create enforceable legal rights or obligations. Hence, providing legal enforcement is not an objective of Fundamental Duties. Statement 4 is correct: One of the core objectives of the Fundamental Duties is to encourage citizens to uphold and protect the sovereignty, unity, and integrity of India. This reflects the responsibility of every citizen to defend national security and maintain the constitutional order. By fostering loyalty to the nation and respect for its institutions, the duties aim to ensure that citizens actively contribute to safeguarding the country’s sovereignty."}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

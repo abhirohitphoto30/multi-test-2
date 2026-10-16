@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 40</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 40</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 40">PW ONLY IAS 2026 = 40</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following regarding the text Chachnama:\n1. It provides details of Raja Dahir’s administration.\n2. It was originally written in Arabic and later translated into Persian.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: The Chachnama is the most significant historical chronicle regarding the Arab conquest of Sindh in the early 8th century. Statement 1 is Correct: The text is named after Chach of Alor, the father of Raja Dahir. It provides a detailed account of the history of Sindh prior to and during the Arab invasion. It describes the socio-political structure, the administration of Raja Dahir (the last Hindu ruler of the Brahman dynasty of Sindh), and the military strategies used during the conflict with Muhammad bin Qasim. It serves as a primary source for understanding the \"frontier\" dynamics between the Indian kingdoms and the Umayyad Caliphate. Statement 2 is Correct: The Chachnama was originally written in Arabic (likely by an anonymous author close to the family of the conquerors). In the early 13th century (c. 1216 CE), it was translated into Persian by Muhammad Ali bin Hamid bin Abu Bakr Kufi during the reign of Nasir-ud-din Qabacha. Most modern historical understandings of the text are based on this Persian translation, as the original Arabic manuscript is no longer extant."},{"id":1,"txt":"In the Delhi Sultanate administration, the Diwan-i-Mustakhraj was mainly concerned with:","ref":"","opts":["Preventing future tax evasion through rate revision","Auditing military expenditure","Maintaining land records and cadastral surveys","Recovering outstanding revenue arrears after investigation"],"ci":3,"exp":"Ex: The Diwan-i-Mustakhraj was a specialized department created by Alauddin Khalji to address a chronic problem in the Sultanate's fiscal administration: the accumulation of unpaid taxes and the corruption of local intermediaries. Purpose of Creation: Alauddin Khalji introduced the most rigorous land revenue system in the history of the Sultanate, raising the state’s share to 50% of the produce. However, he realized that a high tax rate was useless if the revenue remained with the local officials or if the Muqtis (provincial SPP 22641 governors) underreported their collections. The Role of the Department: The primary function of the Diwan-i-Mustakhraj was to investigate the accounts of the revenue collectors and \"extract\" (Mustakhraj literally means \"the extractor\") the arrears. If an official was found to have withheld the Sultan's share or if there was a discrepancy between the estimated revenue and the actual amount remitted, this department was authorized to recover the balance, often through coercive means. Hence option D is correct. Targeting the Intermediaries: This department specifically targeted the local hereditary officials—the Khuts, Muqaddams, and Chaudharies. Alauddin had abolished their traditional privileges (like tax exemptions on their own lands), and the Diwan-i- Mustakhraj ensured that these powerful local elites did not misappropriate the revenue meant for the central treasury."},{"id":2,"txt":"Consider the following statements regarding officials in Alauddin Khilji’s market reforms:\n1. Shahna-i-Mandi supervised market functioning.\n2. Barids and munhiyans acted as intelligence agents.\n3. Naib-i-Riyasat fixed prices of commodities.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 and 3 only","1, 2 and 3","1 and 2 only"],"ci":2,"exp":"Ex: Alauddin Khalji’s market reforms were a unique experiment in medieval economic history. To ensure his vast standing army could survive on low cash salaries, he didn't just fix prices—he created a rigorous, multi-layered regulatory bureaucracy to prevent hoarding, black-marketing, and corruption. Statement 1 is Correct: Each market (Grain, Cloth/Sugar, and Horses/Slaves) was under the direct control of a high-ranking official called the Shahna-i-Mandi. His primary responsibility was to ensure that the market functioned smoothly, that traders followed the royal price list, and that supplies were maintained. He held a register of all merchants and possessed the power to punish those who cheated on weights or prices. Statement 2 is Correct: To ensure that the Shahna-i-Mandi and the merchants weren't colluding, Alauddin utilized a dual-layer spy system. ❖ Barids: Official intelligence officers who provided formal reports. ❖ Munhiyans: Secret agents or \"undercover\" spies who mingled with the common people and reported even the smallest infractions or rumors of price hikes directly to the Sultan. This \"fear factor\" was the primary reason the market regulations remained effective throughout his reign. Statement 3 is correct: The entire market department was overseen by a central ministry known as the Diwan-i-Riyasat, headed by the Naib-i-Riyasat (a position famously held by Malik Yaqub). This office was the \"brain\" of the market reforms. It was responsible for fixing the prices of all commodities, issuing licenses to merchants, and coordinating between the various specialized markets. The \"Zawabit\" (Regulations): These were a set of specific royal decrees that overrode traditional market laws. The Naib-i-Riyasat ensured these Zawabit were displayed publicly so that no consumer could be overcharged."},{"id":3,"txt":"Which of the following author–work pairs is/are correctly matched?\n1. Ziauddin Barani – Tarikh-i-Firoz Shah\n2. Ziauddin Barani – Futwa-i-Jahandari\n3. Khwaja Abdul Malik Islami – Futah-us- Sultin\nSelect the correct answer using the code below:","ref":"","opts":["1 and 3 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: The reign of Firoz Shah Tughlaq (1351–1388 CE) was a prolific period for Persian historiography and political theory, dominated largely by the works of Ziauddin Barani. 1. Ziauddin Barani — Tarikh-i-Firoz Shahi is correct: This is Barani's most famous work. It provides a history of the Delhi Sultanate starting from the reign of Ghiyasuddin Balban up to the first six years of Firoz Shah Tughlaq's reign. Barani wrote it to gain the favor of the Sultan after he had fallen out of grace following the death of Muhammad bin Tughlaq. 2. Ziauddin Barani — Fatawa-i- Jahandari is correct: This work is a treatise on political theory and the \"ideal\" Muslim ruler. In it, Barani outlines his SPP 22641 views on statecraft, the role of the nobility, and the importance of maintaining the purity of Turkish lineage. It is often described as the Islamic counterpart to Chanakya’s Arthashastra or Machiavelli’s The Prince. 3. Khwaja Abdul Malik Islami — Futuh- us-Salatin is correct: Written in 1350, this is an epic history in verse (resembling the style of Firdausi’s Shah Nama). It covers the history of the Muslim conquest of India from the Ghaznavids to the mid- 14th century. Isami wrote this under the patronage of Alauddin Hasan Bahman Shah (the founder of the Bahmani Kingdom) and is notably critical of Muhammad bin Tughlaq."},{"id":4,"txt":"With reference to the Chahalgani system, consider the following statements:\n1. It consisted of forty loyal nobles personally bound to the Sultan.\n2. It functioned as a counterweight to hereditary aristocracy.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: The Chahalgani (also known as Turkan-i- Chahalgani or \"The Forty\") was a crucial political institution established by Iltutmish, the real consolidator of the Delhi Sultanate. Statement 1 is Correct: After the death of Qutb-ud-din Aibak, the Sultanate faced intense internal rivalries and external threats from the Mongols and the Ghurid nobility. To stabilize his rule, Iltutmish hand-picked forty of his most talented and loyal Turkish slave-officers (Ghulams). These individuals were personally bound to him by ties of gratitude and servitude, forming an elite corps that held the most important civil and military posts in the empire. Statement 2 is Correct: Iltutmish faced a significant challenge from the old Ghurid and Tazik (non-Turkish) nobility, who viewed themselves as equals to the Sultan and often held hereditary claims to power. By creating the Chahalgani, Iltutmish established a new elite whose status depended entirely on the Sultan's favor. This allowed him to bypass the traditional, often rebellious aristocracy and ensure that the key administrative and military machinery remained in the hands of those loyal to his person."},{"id":5,"txt":"The invitation to Babur by Afghan nobles during the Lodhi period was primarily triggered by:","ref":"","opts":["confiscation of jagirs and curtailment of noble autonomy by the Sultan","the decline of Afghan peerage under Bahlul Lodhi","the rigid enforcement of Islamic law by Ibrahim Lodhi","Babur’s prior military victories in Central Asia"],"ci":0,"exp":"Ex: The invitation to Babur was the culmination of a deep-seated structural conflict within the Lodi Sultanate between the concept of Afghan tribal monarchy and the centralizing ambitions of Ibrahim Lodi. The Conflict of Theories: Under Bahlul Lodi and Sikandar Lodi, the Sultan was seen as a \"first among equals\" (primus inter pares). Nobles sat on carpets with the Sultan rather than standing. Ibrahim Lodi, however, attempted to establish a formal, absolute monarchy where the nobles were treated as mere servants. Economic and Power Grievances: Ibrahim Lodi began replacing old, established commanders with younger, loyalist officers. He confiscated the Jagirs (land grants) of powerful nobles and imprisoned those who showed even a hint of independence. The Invitation: Facing imprisonment or death, prominent nobles like Daulat Khan Lodi (the Governor of Punjab) and Alam Khan (the Sultan’s uncle) invited Babur, the ruler of Kabul, to invade India. They incorrectly assumed Babur would behave like his ancestor Timur—plunder Delhi and leave—allowing them to install a puppet ruler or seize power themselves. Hence option A is correct."},{"id":6,"txt":"With reference to the Lodi dynasty, consider the following statements:\n1. The Lodis were the last ruling family of the Sultanate period and the first to be headed by the Afghans.\n2. Ibrahim Lodi wrote Persian verses under the name 'Gulrakhi'.\n3. Sikander Lodi shifted the capital from Delhi to Agra.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: ❖ Statement 1 is correct: The Lodhis were the last ruling family of the Sultanate period and the first to be headed by the Afghans who were ruling over Sirhind when the Sayyids were in India. ❖ Statement 2 is incorrect: Sikander Lodi (1489–1517) wrote Persian verses under the name 'Gulrakhi'. ❖ Statement 3 is correct: Sikander Lodi (1489–1517) shifted the capital from Delhi to Agra in 1504. Additional information: Sikander Lodhi (1489–1517 CE) was the SPP 22641 greatest of the three Lodhi rulers, He extended his empire from Punjab to Bihar, including regions like Dholpur, Narwar, parts of Gwalior, and Nagor. ❖ As a capable administrator, he developed infrastructure, laid roads, and improved irrigation facilities for peasants. His reign ensured low commodity prices and emphasized justice. ❖ He introduced reforms such as the Gazz- i-Sikandari (new measurement yardstick) and a system for auditing accounts.However, he was intolerant towards non-Muslims, destroying temples, re-imposing jaziya, and imposing restrictions on Hindus. ❖ He asserted the Sultan’s superiority over nobles, demanding formal respect and treating them harshly both in and outside the darbar. ❖ Sikander Lodhi founded Agra in 1504 CE and wrote Persian poetry under the pen name Gulrakhi. Ibrahim Lodhi (c. 1517-1526 CE) Succession: Eldest son of Sikander Lodhi; known for arrogance and oppressive rule. ❖ Defeat by Rana Sanga: Suffered a significant defeat against Rana Sanga of Mewar. ❖ Relations with Nobles: ⮚ Frequently insulted and humiliated nobles in court. ⮚ His uncle, Alauddin, and Daulat Khan Lodhi, the governor of Punjab, revolted against him. ❖ Babur's Invitation: ⮚ Daulat Khan Lodhi invited Babur to invade India due to Ibrahim's arrogance and insults.Babur marched against Delhi. ❖ First Battle of Panipat (1526): Ibrahim Lodhi was defeated and killed by Babur in this historic battle.Marked the end of the Afghan kingdom and the Delhi Sultanate. ❖ The Delhi Sultanate, which began with the Battle of Tarain (1192 CE), ended with the Battle of Panipat (1526 CE). ⮚ The Afghan kingdom lasted only 75 years."},{"id":7,"txt":"Which of the following pairs is incorrectly matched?","ref":"","opts":["Kharaj – 10-20% of produce","Zakat – alms for Muslims","Khams – 20% spoils of war","Sharb – land revenue tax"],"ci":3,"exp":"Ex: In the fiscal system of the Delhi Sultanate, taxes were categorized based on Islamic law (Sharia) and local administrative requirements. Option (a) Kharaj — 10% of produce is Correct: Kharaj was the land tax primarily paid by non-Muslim peasants. While the rate varied significantly depending on the ruler (for example, Alauddin Khalji famously raised it to 50%), in traditional Islamic fiscal theory, it often hovered around 10% (Ushr for Muslim-owned land) to 20%. Option (b) Zakat — Alms for Muslims is Correct: Zakat is one of the Five Pillars of Islam. It was a religious tax levied only on Muslims who possessed property beyond a certain limit (Nisab). The revenue was earmarked for specific charitable purposes, such as helping the poor, the orphaned, and the wayfarer. Option (c) Khams — 20% spoils of war is Correct: Under Islamic law, Khams (literally \"one-fifth\") was the state's share of the booty captured during a military campaign. The remaining 80% was traditionally distributed among the soldiers. Note: Alauddin Khalji and Muhammad bin Tughlaq famously reversed this ratio, taking 80% for the state and leaving only 20% for the soldiers to fund their massive standing armies. Option (d) Sharb — Land revenue tax is incorrect: Haqq-i-Sharb (or Sharb) was actually an Irrigation Tax. It was introduced by Firoz Shah Tughlaq. After he constructed an extensive network of canals (like the one from the Yamuna to Hisar), he consulted the Ulema and levied this tax on those farmers who used state-provided canal water to irrigate their fields. The rate was typically 10% of the SPP 22641 produce. PWOnlyIAS Extra Edge The Tughlaq Innovation:Firoz Shah Tughlaq was particularly concerned with religious legitimacy. He abolished nearly 28 \"unlawful\" cesses (Abwabs) but introduced Haqq-i-Sharb to recoup the massive investment he made in public works like canals and reservoirs. Jizya: It is also important to remember that under Firoz Shah Tughlaq, Jizya was levied as a separate tax on Brahmins for the first time, whereas previously it was often clubbed with the land revenue (Kharaj)."},{"id":8,"txt":"\"This historian while discussing Raziya Sultan, expressed the belief that her rule went against the ideal social order created by God. He questioned how a woman, whose account did not fall under the column of men, could possess all the excellent qualities that allowed her to rule.\" This description most likely corresponds to:","ref":"","opts":["Ibn Battuta","Al-Biruni","Minhaj-i Siraj","Amir Khusrau"],"ci":2,"exp":"Ex: ❖ Minhaj-i Siraj Juzjani (13th century), a historian and scholar, authored the Tabaqat-i Nasiri, dedicated to Sultan Nasiruddin Mahmud. Born in Firuz Kuh, his family had strong ties with the Caliphate and the ruling houses of Ghazna and Ghor. Minhaj served in various administrative roles in Delhi, including as imam, qazi, and khatib. ❖ His work, focused on dynastic history, covers the Delhi Sultanate and Mongol invasions, reflecting his political affiliations and biases. While his account is detailed, it omits certain events, such as the rise of non-Turkish nobles and the early impact of Turkish conquest in India. ❖ He described Raziya Sultan and praised her for her qualities of a ruler."},{"id":9,"txt":"Regarding the Somnath temple and its plunder by Mahmud of Ghazni, consider the following statements:\n1. The present temple was reconstructed in Chalukya style of Hindu temple architecture.\n2. The temple was rebuilt by the Chalukyan ruler Bhima I. Which of the given above statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: The present structure (the seventh reconstruction, completed in 1951) was designed in the Kailash Mahameru Prasad style, which is a modern revival of the classical Chalukya style (also known as the Solanki style) of temple architecture. Characteristic features include the ornate shikhara, the mandapa (assembly hall), and the intricate stone carvings typical of medieval Gujarat. Statement 2 is correct: Following the devastating raid by Mahmud of Ghazni in 1025–1026 CE, the temple was in ruins. Historical records and inscriptions confirm that the Chalukya (Solanki) ruler Bhima I of Gujarat, along with King Bhoja of Malwa, undertook the immediate task of rebuilding the temple in stone to replace the earlier wooden structure."},{"id":10,"txt":"Consider the following characteristics:\n1. Sloping walls\n2. Minimal decoration\n3. Extensive use of decorative Arabic script\n4. Combination of arch, lintel, and beam principles\nHow many of the above are consistent with Tughlaq architecture as described?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Tughlaq architecture (1320–1414 CE) represents a shift away from the opulent, ornate style of the Khaljis toward a more functional, austere, and \"fortress-like\" aesthetic. This was driven partly by the personal preferences of the Sultans and partly by the economic strain of the era. 1. Sloping Walls (Consistent): One of the most distinctive features of Tughlaq architecture, particularly under Ghiyasuddin and Muhammad bin Tughlaq, is the sloping wall (also known as batar). This gave the buildings an appearance of great strength and solidity, reminiscent of Seljuk military architecture. 2. Minimal Decoration (Consistent): Unlike the Khalji period, which used rich carvings and intricate marble inlays (as seen in the Alai Darwaza), the Tughlaqs preferred simplicity. They used cheaper materials like grey sandstone and rubble covered with thick plaster. Decoration was sparse, giving the structures a somber and puritanical feel. 3. Extensive use of decorative Arabic script (Inconsistent): While Arabic calligraphy was used, it was not a defining or \"extensive\" characteristic compared to other periods. In fact, because the Tughlaqs moved away from surface ornamentation, they relied less on the SPP 22641 dense epigraphic programs seen in earlier Mamluk or later Mughal buildings. Their focus was on structural mass rather than calligraphic embellishment. 4. Combination of Arch, Lintel, and Beam (Consistent): Tughlaq architecture is famous for its structural synthesis. They combined the \"True Arch\" (Islamic) with the \"Lintel and Beam\" (Indigenous Indian) principles. This is best seen in the Tughlaqabad Fort and various mosques where arched openings are often topped with a flat stone lintel for added structural support and aesthetic variety."},{"id":11,"txt":"Which one of the following best distinguishes the nature of Muhammad Ghori’s Indian campaigns from those of Mahmud of Ghazni?","ref":"","opts":["Greater reliance on mounted cavalry","Emphasis on religious iconoclasm","Objective of establishing lasting political authority","Use of military slaves as commanders"],"ci":2,"exp":"Ex: While both rulers were Turkish in origin and utilized similar military technologies, their long-term strategic visions for the Indian subcontinent were fundamentally different. Mahmud of Ghazni (The Raider): Mahmud's primary objective was the acquisition of wealth and prestige. His 17 raids were designed to plunder the immense riches of Indian temples and cities to fund his imperial ambitions in Central Asia and maintain his magnificent capital at Ghazni. While he annexed the Punjab as a strategic base, he showed no interest in governing the heartland of India (the Doab or the Gangetic plains). Muhammad Ghori (The Empire Builder): Ghori’s campaigns were driven by the need for a permanent territorial empire. After being squeezed out of Central Asia by the Khwarazmian Empire, he looked toward India not just for loot, but for settlement and sovereignty. Following his victory at the Second Battle of Tarain (1192 CE), he systematically appointed governors (like Qutb- ud-din Aibak) to administer conquered territories, leading directly to the foundation of the Delhi Sultanate. Hence option C is correct."},{"id":12,"txt":"Consider the following pairs:\nPerson Contribution\n1. AmirKhusrau CompilationNama — of Tughlaq\n2. Raja Man Consolidation of Dhrupad Singh Tomar\n3. FiruzTughlaq — Translation of Rag Darpaninto Persian\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: 1. Amir Khusrau — Compilation of Tughlaq Nama is Correct: Amir Khusrau, known as the Tuti-i-Hind (Parrot of India), was the court poet for seven successive Sultans. His last major historical poem, the Tughlaq Nama, was written to celebrate the victory of Ghiyasuddin Tughlaq over Khusrau Khan in 1320 CE. It is an essential primary source for the rise of the Tughlaq dynasty. 2. Raja Man Singh Tomar — Consolidation of Dhrupad is Correct: Raja Man Singh Tomar of Gwalior (reigned 1486–1516 CE) was a pivotal figure in Indian classical music. He is credited with the consolidation and promotion of the Dhrupad style, making it more accessible by encouraging compositions in the local Braj Bhasha instead of Sanskrit. He also compiled a seminal musical treatise titled Man Kautuhal. 3. Firuz Tughlaq — Translation of Rag Darpan into Persian is Incorrect: While Firoz Shah Tughlaq was a patron of learning, the translation of the Sanskrit musical work Rag Darpan into Persian occurred later. It was actually translated during the reign of Firoz Shah's successor or associated with the regional Sultanates. Specifically, most historians attribute the Persian translation of Rag Darpan to the era of the Lodis or the Mughals (later reworked by Faqirullah). Firoz Shah Tughlaq is better known for the translation of 1,300 Sanskrit manuscripts found at Jwalamukhi Temple into Persian, categorized as Dalail-i-Firoz Shahi (mainly related to philosophy and astronomy, not specifically music)."},{"id":13,"txt":"Which of the following court practices was introduced by Balban to reinforce royal authority?","ref":"","opts":["Rajasuya sacrifice","Public land grants to nobles","Mansabdari system","Sijda and Paibos"],"ci":3,"exp":"Ex: SPP 22641 Ghiyasuddin Balban (reign: 1266–1287 CE) was the first Sultan of Delhi to articulate a comprehensive Theory of Kingship, designed to elevate the status of the monarch from a \"first among equals\" to a divinely ordained, absolute ruler. After the death of Iltutmish, the prestige of the Sultan had been severely eroded by the \"The Forty\" (Chahalgani) nobles. To restore this authority, Balban introduced several Persian court etiquettes: ❖ Sijda (Prostration): Requiring people to kneel and touch the ground with their forehead before the Sultan. ❖ Paibos (Kissing the Feet): Requiring visitors to kiss the feet of the Sultan as a mark of total submission. Hence option D is correct. ❖ Navroz: He also introduced the Persian New Year festival (Navroz) to surround the court with an aura of ancient imperial grandeur. ❖ Divine Right: He claimed to be the Zil-i- Ilahi (Shadow of God on Earth) and the Niyabat-i-Khudai (Vicegerent of God), asserting that the King’s heart is the mirror of God’s will."},{"id":14,"txt":"With reference to Balban’s administrative measures, consider the following statements:\n1. Separation of military and finance departments aimed at tighter control.\n2. Diwan-i-Arz handled military affairs.\n3. Diwan-i-Inzarāt was responsible for revenue assessment.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 only","1, 2 and 3","1 only"],"ci":0,"exp":"Ex: Ghiyasuddin Balban’s administrative reforms were primarily designed to strengthen the central monarchy and ensure that the military remained a loyal, efficient tool of the state, independent of the influence of powerful ministers or provincial governors. Statement 1 is Correct: Before Balban, the military department was often a sub-division of the Diwan-i-Wizarat (Finance/Prime Minister's office). Balban realized that if the Wazir (Finance Minister) controlled both the purse and the sword, they could easily challenge the Sultan. By separating the military from the finance department, he created a system of checks and balances that allowed him tighter central control. Statement 2 is Correct: Balban established (or significantly elevated) the Diwan-i-Arz as an independent military department. It was headed by Ariz-i-Mamalik. This department was responsible for: ❖ Recruitment of soldiers. ❖ Inspection of troops and horses (the Dag or branding system was a later refinement, but regular muster started here). ❖ Disbursement of pay, ensuring soldiers were not exploited by their commanders. Statement 3 is Incorrect: There was no significant department by the name of Diwan- i-Inzarāt in the early Delhi Sultanate. Revenue assessment and general financial administration remained the responsibility of the Diwan-i-Wizarat, headed by the Wazir. Under Balban, the finance department’s role in military matters was restricted strictly to providing the funds requested by the Diwan-i- Arz."},{"id":15,"txt":"With reference to the economic and urban development during the Delhi Sultanate period, consider the following statements:\n1. Multanis and Afghan Muslims controlled overseas trade where as Gujarat Marwari and Bohra merchants dominated inland trade.\n2. Sericulture was introduced on a large scale during this period which made India less dependent on the import of raw silk.\nWhich of the statements given above is/are incorrect?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is correct: During the Delhi Sultanate period, trade and commerce flourished significantly, both inland and overseas. Multanis (merchants from Multan) and Afghan Muslims were actively involved in overseas trade, particularly in regions like the Persian Gulf, West Asia, and SouthEast Asia. These traders established strong networks for exporting commodities such as textiles, spices, and other goods. On the other hand, Gujarat Marwari merchants and Bohra Muslims dominated the inland trade. Gujarat, being a coastal region, was not only a hub for overseas trade but also played a crucial role in the internal distribution of goods across the Indian SPP 22641 subcontinent. Marwaris and Bohras were known for their business acumen, and their presence ensured efficient movement of goods through roads, sarais (rest houses), and markets. The inland trade routes they controlled connected various regions of India, enhancing urbanization and economic activity. Statement 2 is correct: Sericulture, or silk farming, refers to the cultivation of silkworms to produce silk. During the Delhi Sultanate period, sericulture was introduced on a large scale, which significantly boosted the silk industry in India. Prior to this, India relied on the import of raw silk from other regions, particularly China. The large-scale introduction of sericulture during this period allowed India to become more self-sufficient in silk production. This not only reduced dependence on foreign imports but also gave rise to a thriving silk textile industry, which became an important part of the economy. The growth of the silk industry also contributed to the flourishing of crafts and the production of luxury goods, which were in high demand, especially among the nobility and ruling elites of the Delhi Sultanate."},{"id":16,"txt":"Arrange the following dynasties of the Delhi Sultanate in chronological order of their reign:\n1. Khalji Dynasty\n2. Sayyid Dynasty\n3. Slave Dynasty\n4. Lodi Dynasty\n5. Tughlaq Dynasty Choose the correct chronological order using the codes given below:","ref":"","opts":["1-2-3-5-4","1-3-5-4-2","3-5-2-3-4","3-1-5-2-4"],"ci":3,"exp":"Ex: ❖ 3- Slave Dynasty (1206-1290): The Slave dynasty was also called the Mameluk dynasty. 'Mameluk' was the Arabic word meaning 'owned', used to distinguish the important Turkish slaves chiefly meant for military service from the lower slaves, who were used as domestic labour or artisans. In fact, three dynasties were established during this period. They were: ⮚ Qutbi dynasty (c. 1206-1211 CE) founded by Qutbuddin Aibak ⮚ First Ilbari dynasty (c. 1211-1266 cE) founded by Iltutmish. ⮚ Second Ilbari dynasty (c. 1266- 1290 CE) founded by Balban ❖ 1- Khalji Dynasty (1290-1320): It followed the Slave Dynasty.The Khilji dynasty was a Turco-Afghan dynasty that ruled the Delhi Sultanate from 1290 to 1320. The dynasty was known for its military conquests, economic reforms, and expansion of the empire.Important rulers: ⮚ Jalal-ud-din Firoz Khilji: 1290 to 1296 ⮚ Alauddin Khilji: Ruled from 1296 to 1316. ❖ 5- Tughlaq Dynasty (1320-1414): The Tughlaqs were also known as the Qaraunah Turks.Important rulers: ⮚ Ghiyas-ud-din Tughluq or Ghazi Malik (1320 – 1325 A.D.) ⮚ Muhammad-bin-Tughlaq (1325- 1361A.D.) ⮚ Firoz Tughlaq (1351-1388 A.D.) ❖ 2- Sayyid Dynasty (1414-1451): Timur appointed Khizr Khan as his deputy to oversee Timurid interests in the Punjab marche Khizr Khan (1414-21) went on to seize Delhi and establish the Sayyid dynasty (1414–51). The Sayyid dynasty was established by Khizr Khan had four sultans ruling up to 1451. ❖ 4- Lodi Dynasty (1451-1526): The Lodi Dynasty was established by Bahlul Lodi (1451 – 1489) whose reign witnessed the conquest of Sharqi Kingdom of Jaunpur. It was his son Sikander Lodi (1489– 1517) who shifted the capital from Delhi to Agra in 1504. The last Lodi ruler Ibrahim Lodi was defeated by Babur in the First Battle of Panipat (1526), which resulted in the establishment of Mughal Dynasty."},{"id":17,"txt":"The conflict between Prithviraj Chauhan and Muizzuddin Muhammad became inevitable primarily due to rival claims over:","ref":"","opts":["Delhi","Ajmer","Thanesar","Tabarhinda"],"ci":3,"exp":"Ex: The immediate casus belli for the First Battle of Tarain (1191 CE) was the strategic dispute over the fortress of Tabarhinda (identified by most historians as modern-day Bathinda in Punjab). The Flashpoint: By 1189–1190 CE, Muhammad Ghori (Muizzuddin) had SPP 22641 consolidated his hold over the Punjab by eliminating the last of the Ghaznavids in Lahore. Seeking to expand further into the heart of India, he captured the strategic fortress of Tabarhinda, which was situated on the frontier of Prithviraj Chauhan’s kingdom. Hence option D is correct. Strategic Significance: Tabarhinda was the gateway to the fertile plains of the Saraswati and Yamuna rivers. For Prithviraj, the fall of this fortress was a direct threat to his sovereignty and a breach of his defensive perimeter. For Ghori, it was an essential supply base for any further push toward Delhi and Ajmer. The Military Response: Upon hearing of the fortress's capture and the stationing of a Ghurid garrison there under Zia-ud-din Tolak, Prithviraj Chauhan marched north with a massive coalition of Rajput forces. The two armies eventually met at Tarain (near Thanesar), leading to the historic First Battle of Tarain."},{"id":18,"txt":"With reference to Alauddin Khilji’s military reforms, consider the following statements:\n1. Alauddin Khilji maintained a large permanent standing army under direct state control.\n2. The shift to revenue assignments of soldiers was intended to replace the earlier practice of remuneration through cash payment.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Alauddin Khalji’s military reforms were a watershed moment in the history of the Delhi Sultanate, marking the transition from a decentralized feudal levy to a professional, centrally controlled war machine. Statement 1 is Correct: Alauddin Khalji was the first Sultan to establish a massive, permanent standing army (Hashm-i-Qalb) that was directly recruited, trained, and commanded by the central government. Faced with the existential threat of Mongol invasions and the need for rapid expansion into South India, he could not rely on the inconsistent and often rebellious contingents provided by provincial governors. He personally reviewed the soldiers and ensured they were battle-ready at all times. Statement 2 is incorrect: Statement 2 describes the exact opposite of what Alauddin did. He actually abolished the system of revenue assignments (Iqtas) for his soldiers and replaced it with payment in cash. He believed that giving land to soldiers made them too rooted in local politics and agriculture, which reduced their mobility and discipline. To make cash payments viable in an era of inflation, he famously introduced his Market Control Policy to keep the prices of essential commodities low, ensuring his soldiers could live comfortably on their state salaries."},{"id":19,"txt":"With reference to the diwan-i-arẓ, consider the following statements:\n1. Ariz was the supreme commander of the Sultanate army.\n2. Recruitment, equipment, and payment of soldiers fell within the ariz’s responsibilities.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: The Diwan-i-Arz (Military Department) was one of the most vital pillars of the Delhi Sultanate's administration. While it managed the \"mechanics\" of the army, the distribution of power was carefully balanced to prevent military coups. Statement 1 is incorrect: The Ariz-i- Mamalik (the head of the Diwan-i-Arz) was not the supreme commander of the army. In the Delhi Sultanate, the Sultan himself was the supreme commander of all armed forces. While Ariz accompanied the Sultan on campaigns and often commanded specific wings of the army, he did not hold ultimate operational command. His role was primarily administrative and logistical. Statement 2 is correct: The Ariz was essentially the \"Paymaster General\" and \"Quartermaster General\" of the empire. His department was responsible for: ❖ Recruitment: Enrolling soldiers and maintaining descriptive rolls (huliya). ❖ Equipment: Overseeing the supply of arms, armor, and horses (including the branding of horses or dagh). ❖ Payment: Organizing the muster-roll and ensuring soldiers were paid, whether in cash or through the iqta ❖ Inspection: Periodically reviewing the fitness and readiness of the troops."},{"id":20,"txt":"With reference to key political and administrative developments in early medieval North India, arrange the following events in reverse chronological order (latest to earliest):\n1. Introduction of the Chehra–Dagh system for military regulation\n2. Transfer of the imperial capital from Delhi to Daulatabad\n3. Issue of khutba and coins in the name of a foreign ruler\n4. Defeat of the last Afghan ruler of Delhi\nSelect the correct answer using the code below:","ref":"","opts":["4 – 3 – 2 – 1","4 – 2 – 1 – 3","3 – 4 – 2 – 1","3 – 2 – 1 – 4"],"ci":1,"exp":"Ex: Event 4: Defeat of the last Afghan ruler of Delhi (1526 CE) This refers to the First Battle of Panipat, where Babur defeated Ibrahim Lodi, the last ruler of the Lodi dynasty (the only truly Afghan dynasty of the Sultanate). This event marked the end of the Delhi Sultanate and the birth of the Mughal Empire. Event 2: Transfer of the imperial capital from Delhi to Daulatabad (1327 CE) This was one of the \"ambitious projects\" of Muhammad bin Tughlaq. He attempted to move the entire population of Delhi to Devagiri (renamed Daulatabad) in the Deccan to better govern South India and escape Mongol threats. Event 1: Introduction of the Chehra–Dagh system (c. 1300–1305 CE) Alauddin Khalji introduced these military regulations (branding of horses and descriptive rolls of soldiers) to prevent corruption and ensure his large standing army was battle-ready. Event 3: Issue of khutba and coins in the name of a foreign ruler (1210–1229 CE) This refers to Iltutmish. Before receiving the Manshur (Letter of Investiture) from the Abbasid Caliph of Baghdad in 1229, early rulers like Aibak and Iltutmish often technically acknowledged the suzerainty of the Ghorid or Central Asian rulers."},{"id":21,"txt":"Which of the following works are correctly associated with Mahmud of Ghazni’s reign?\n1. Shah Nama\n2. Kitab-ul-Hind\n3. Kitab-ul-Yamini\nSelect the correct answer using the code below:","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Mahmud of Ghazni’s reign (998–1030 CE) was not only defined by military conquests but also by his role as a massive patron of Persian and Arabic scholarship. His court at Ghazni became one of the most brilliant cultural centers of the Islamic world. 1. Shah Nama is Correct: Firdausi is often called the \"Homer of the East.\" He composed the Shah Nama (The Book of Kings), an epic poem of nearly 60,000 verses that chronicles the history of the Persian Empire. Although the relationship between Mahmud and Firdausi later soured over the promised reward, the work remains the definitive literary masterpiece produced under Mahmud's patronage. 2. Kitab-ul-Hind is Correct: Al-Beruni accompanied Mahmud of Ghazni on several expeditions to India. His Kitab-ul- Hind (also known as Tahqiq-i-Hind) is an encyclopedic work on Indian philosophy, mathematics, astronomy, and social customs. It is considered one of the most objective and scholarly accounts of India ever written by a foreign observer during the medieval period. 3. Kitab-ul-Yamini is Correct: Al-Utbi was Mahmud’s court historian. His work, Kitab-ul-Yamini (named after Mahmud’s title, Yamin-ud-Daula), provides a detailed contemporary history of the reigns of Sabuktigin and Mahmud of Ghazni. Unlike Al-Beruni’s objective tone, Utbi’s work is written in a more flowery, celebratory style typical of court chronicles."},{"id":22,"txt":"Arrange the following events from Mahmud of Ghazni's invasions of India in chronological order:\n1. The Second Battle of Waihind between Mahmud of Ghazni and Anandapala.\n2. Sacking of Kannauj by defeating the Chandella king, Vidhyadhara.\n3. The plunder of the Somnath temple in Kathiawar, Saurashtra.\n4. Defeated the Hindu Shahi ruler Jayapala I. Choose the correct chronological order from the codes given below:","ref":"","opts":["1-2-4-3","1-4-2-3","1-2-3-4","4-1-2-3"],"ci":3,"exp":"Ex: ❖ 4 -Defeat of the Hindu Shahi ruler Jayapala: this occurred in 1000 CE, marking Mahmud of Ghazni's first major invasion of India. ❖ 1-The Second Battle of Waihind:It was fought between Mahmud of Ghazni and Hindu Shahi ruler Anandapala in 1008 CE near Peshawar in Pakistan ❖ 2-The sack of Kannauj by defeating the Chandella king, Vidhyadhara: Mahmud attacked Kannauj in 1018 CE. ❖ 3-The plunder of the Somnath temple in Kathiawar: This happened during his 16th expedition in 1025 CE."},{"id":23,"txt":"Consider the following statements regarding the emergence of the ghazi institution in Central and West Asia:\n1. The ghazi emerged primarily as a response to continuous frontier warfare faced by Iranian dynasties against non-Muslim Turkish tribes.\n2. The ghazi functioned as a salaried component of the standing army maintained by the early Ghaznavid rulers.\n3. The fusion of religious zeal and material plunder was a defining feature of the ghazi ethos.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: The institution of the Ghazi (warrior for the faith) played a transformative role in the military and political history of Central Asia, eventually providing the ideological and manpower foundation for the Ghaznavid and Seljuk empires. SPP 22641 Statement 1 is Correct: The Ghazi institution emerged along the \"marches\" or frontiers of the Islamic world, particularly in Transoxiana and Khurasan. Iranian dynasties like the Samanids faced constant pressure from the pagan Turkish tribes of the Central Asian steppes. The Ghazis were volunteer fighters who gathered at frontier posts (ribats) to defend the territory and launch counter-raids, viewing their struggle as a religious duty. Statement is Incorrect: The Ghazis were traditionally not part of the salaried standing army. In the early Ghaznavid period, they were volunteers who operated on the periphery of the professional military. While rulers like Mahmud of Ghazni utilized them extensively, they were paid through a share of the war booty rather than regular state salaries. This distinguished them from the Ghulams (elite slave soldiers), who were the salaried, core professional component of the Ghaznavid forces. Statement 3 is correct: The Ghazi ethos was a unique \"fusion of the spiritual and the temporal.\" They were driven by religious zeal (the concept of Jihad), but this was inextricably linked to the pursuit of material plunder (spoils of war). This dual motivation made them an extremely potent and cost-effective force for ambitious rulers, as the promise of plunder attracted thousands of volunteers for expeditions into the Indian subcontinent."},{"id":24,"txt":"With reference to the Rajput response to Mahmud of Ghazni’s early invasions, consider the following statements:\n1. Medieval chronicler Ferishta records that multiple Rajput rulers extended support to Jayapala during his confrontation with Mahmud in 1001 CE.\n2. Political centres such as Ajmer and Delhi had not yet emerged as dominant powers at the time of Jayapala’s resistance.\n3. The Gurjara-Pratiharas of Kanauj were in a weakened condition and were unable to offer effective military assistance.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: The early 11th century was a period of transition in North Indian politics, characterized by the fragmentation of the old imperial order and the rise of decentralized regional powers. Statement 1 is Correct: The medieval historian Ferishta (writing much later, but based on earlier accounts) notes that Jayapala, the Hindu Shahi ruler of the Punjab and Kabul region, recognized the existential threat posed by the Ghaznavids. In his confrontation with Mahmud in 1001 CE at Peshawar, he is said to have received military contingents from various neighboring Rajput houses. While the effectiveness of this \"confederacy\" is debated by modern historians, the recording of such support highlights the awareness of the Turkish threat among North Indian elites. Statement 2 is Correct: At the time of Mahmud’s early invasions (c. 1000–1010 CE), the political map of India looked very different from the time of Muhammad Ghori (late 12th century). Ajmer was not yet a major power; the Chahamanas (Chauhans) were still relatively minor local lords. Similarly, Delhi was a small town recently founded by the Tomaras and had not yet become the strategic \"key to India.\" The dominant powers were the Shahis in the northwest and the Pratiharas in the center. Statement 3 is Correct: The Gurjara- Pratiharas of Kanauj, who had once served as a \"bulwark against the Arabs,\" were in a state of terminal collapse by 1000 CE. Weakened by internal revolts and devastating raids by the Rashtrakutas in the 10th century, the Pratihara king Rajyapala held only nominal authority. When Mahmud eventually marched on Kanauj in 1018 CE, Rajyapala fled without a fight, leading to the final dissolution of the dynasty."},{"id":25,"txt":"Which of the following contributed to the success of Turkish forces under Muhammad Ghori in battles against Indian forces?\n1. The use of horseshoes to protect the hooves of their cavalry horses.\n2. The use of iron stirrups, enhancing the striking power of horse riders.\n3. Superior organisation and skill of the Turkish cavalry.\n4. Numerical superiority of the Turkish forces over Indian forces.\nSelect the correct answer using the codes given below:","ref":"","opts":["1 and 2 only","3 and 4 only","1, 2 and 3 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: ❖ Statement I is correct: This protected the hooves of their cavalry horses, increasing the endurance of the horses during long campaigns. ❖ Statement 2 is correct: This gave the horse riders better stability and striking power in battles. ❖ Statement 3 is correct: The Turkish forces were better organised and strategically superior, which gave them an edge over the Indian forces. ❖ Statement 4 is incorrect: Indian forces were numerically larger compared to Turkish forces, but they lacked the SPP 22641 organisation and speed of the Turkish cavalry. Additional information: ❖ The Indian forces were more in number but Turkish forces under Ghori were well organised with swift-moving cavalry. The bulky Indian forces were no match against the superior organisation, skill and speed of the Turkish cavalry. ❖ It is pertinent to note that the Turkish cavalry used two superior technologies, namely the use of horse shoes (which gave their horses a long life and protected their hooves) and the use of iron stirrups (which gave a good hold to the horse rider and a better striking power in the battle). A large number of Indian soldiers were killed."},{"id":26,"txt":"Under the early Delhi Sultanate’s Iqta system, the revenue rights assigned to a Muqti were generally:","ref":"","opts":["Temporary and subject to performance of service","Hereditary and freely transferable","Religious endowments protected from state interference","Detached from military and administrative obligations"],"ci":0,"exp":"Ex: The Iqta system was the administrative and fiscal backbone of the early Delhi Sultanate, introduced by Iltutmish to provide a stable military foundation for the newly conquered territories. Non-Hereditary Nature: Unlike the feudal systems of medieval Europe or the later Rajput estates, the Iqta (a grant of the right to collect land revenue from a specific territory) was not hereditary. The Sultan maintained absolute ownership of the land. The holder of the Iqta, known as the Muqti or Wali, was essentially a state official whose \"tenure\" in a specific region was temporary. Performance-Linked: The grant was conditional. In exchange for the revenue rights, the Muqti was required to: 1. Maintain a specified number of troops for the Sultan's service. 2. Maintain law and order within the assigned territory. 3. Remit the surplus revenue (Fawazil) to the central treasury after meeting administrative and military expenses. Frequent Transfers: To prevent Muqtis from developing deep local roots and becoming independent warlords, the early Sultans (especially Iltutmish and later Balban) practiced a policy of frequent transfers. A Muqti might be moved from an Iqta in Punjab to one in the Doab after a few years. Hence option A is correct."},{"id":27,"txt":"Arrange the following administrative divisions of the Delhi Sultanate in descending order of hierarchy:\n1. Pargana\n2. Iqta\n3. Village\n4. Shiq Choose the correct order from the codes given below:","ref":"","opts":["1-4-3-2","2-4-1-3","2-3-1-4","4-1-2-3"],"ci":1,"exp":"Ex: ❖ 2: Iqta (Province) was the largest administrative unit and was headed by muqtis or walis. ❖ 4: Shiq (District) came next, encompassing multiple Parganas. It was headed by shiqdar. ❖ 1: Pargana (Sub-district) was further subdivided into villages and was headed by ❖ 3: Village was the smallest administrative unit and was headed by muqaddams or chaudhri."},{"id":28,"txt":"The Alai Darwaza is significant in Indian architectural history because it:","ref":"","opts":["Represents the first use of corbelled arches in Sultanate architecture","Marks the earliest example of true arch and true dome construction in India","Was the earliest structure built entirely in marble","Introduced temple-style superstructures into Islamic buildings"],"ci":1,"exp":"Ex: The Alai Darwaza, built by Alauddin Khalji in 1311 CE as a magnificent entrance to the Quwwat-ul-Islam Mosque at the Qutub Minar complex, is considered a masterpiece of the \"Early Indo-Islamic\" style. True Arch vs. Corbelled Arch: Before this period, Indian builders used the corbelled method (where stones are layered horizontally to narrow the gap). The Alai Darwaza is the SPP 22641 first surviving structure where the true arch (using a central keystone to distribute weight) and the true dome were executed with scientific precision. Hence option B is correct. It is one of the earliest examples where Islamic architectural forms (the dome and arch) were seamlessly integrated with Indian decorative motifs. The use of red sandstone contrasting with white marble inlays, along with intricate lattice work (jaali), set the aesthetic standard for future Sultanate and Mughal buildings. Proportions and Geometry: The structure is famous for its perfect proportions. The height of the dome and the width of the facade are mathematically balanced, reflecting the advanced engineering skills brought in by craftsmen who had fled the Mongol invasions in Central Asia."},{"id":29,"txt":"With reference to Muhammad bin Tughlaq’s approach towards non-Islamic religious communities, consider the following statements:\n1. He extended patronage to Jain scholars as part of his administrative and political strategy.\n2. He sanctioned the construction of a Jain basadi (upasraya), indicating royal support to non-Islamic institutions.\n3. His participation in the festival of Holi amounted to the adoption of Hindu rituals as official state practice.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 only","1, 2 and 3"],"ci":0,"exp":"Ex: Muhammad bin Tughlaq is often described as one of the most complex and controversial figures of the Delhi Sultanate. Unlike many of his predecessors, he was a rationalist who sought to base his administration on intellectual merit rather than purely religious or ethnic identity. Statement 1 is correct: Muhammad bin Tughlaq maintained close ties with several prominent Jain scholars, most notably Jinaprabha Suri. He frequently invited them to his court to engage in philosophical and theological debates. This was not merely a personal interest; it was a deliberate strategy to integrate influential non-Islamic communities into the socio-political fabric of his expanding empire. Statement 2 is correct: Records from Jain chronicles (like the Vividha-tirtha-kalpa) confirm that the Sultan granted a farman (royal decree) for the construction of a new upasraya (monastery/rest house) for Jain monks in Delhi. He also granted land and protected Jain pilgrimage sites, such as Palitana and Girnar, demonstrating a level of institutional support that was rare for the period. Statement 3 is incorrect: While Muhammad bin Tughlaq was the first Sultan of Delhi known to have participated in the festival of 🔿🔿🔿🔿 SPP 22641 Holi, it is historically inaccurate to say this amounted to the \"adoption of Hindu rituals as official state practice.\" His participation was an act of personal curiosity and a gesture of social inclusivity (part of his \"rationalist\" approach), but he never integrated these rituals into the formal administrative or religious protocols of the Sultanate, which remained Islamic."}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

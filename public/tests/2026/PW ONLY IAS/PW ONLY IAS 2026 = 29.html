@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 29</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 29</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 29">PW ONLY IAS 2026 = 29</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following statements:\nStatement-I: In an open economy, the current account balance reflects the gap between domestic saving and domestic investment. Statement-II: External imbalances arise when domestic absorption diverges from domestic production.\nWhich one of the following is correct?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I","Both Statement-I and Statement-II are correct but Statement-II is not the correct explanation for Statement-I","Statement-I is correct but Statement-II is incorrect","Statement-I is incorrect but Statement-II is correct"],"ci":0,"exp":"Ex: Statement I is correct:in an open economy,the current account balance (CAB) equals the difference between national savings (S) and domestic investment (I), represented as CAB = S - I, meaning a deficit (S < I) means borrowing from abroad, while a surplus (S > I) means lending abroad, reflecting the gap between what a country produces/saves and what it spends/ invests. Statement II is correct: External imbalances occur when a country's domestic absorption— the total spending by households, businesses, and government on goods and services— diverges from its domestic production (Gross Domestic Product, or GDP). Statement-II correctly explains Statement-I because a divergence between absorption and production implies a divergence between saving and investment. Since saving is the part of incomenot absorbed domestically, anyexcess of absorption over production necessarily reduces saving relative to investment, producing a current account deficit and vice versa. Hence, the absorption framework provides the behavioural explanation for the saving- investment identity reflected in the current account."},{"id":1,"txt":"Consider the following statements:\n1. In an open economy, monetary policy effectiveness depends on the degree of capital mobility.\n2. Fiscal expansion in a small open economy necessarily worsens the current account.\n3. External sector adjustments can offset domestic demand shocks.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: In an open economy, domestic interest rates are linked to global interest rates through cross-border capital flows. When capital mobility is high, even small interest rate differentials trigger large capital inflows or outflows, which in turn affect exchange rates and domestic liquidity conditions. As a result, the autonomy of SPP 22630 monetary policy is constrained, particularly under fixed or managed exchange rate regimes. This relationship is a core insight of the Mundell–Fleming framework and is formally captured by the Impossible Trinity. Statement 2 is incorrect: Although fiscal expansion tends to increase domestic demand and imports, the current account outcome depends on mediating factors such as the exchange rate response, degree of capital mobility, and trade elasticities. In certain conditions, fiscal expansion may lead to higher output without significant exchange rate appreciation or may be accompanied by capital inflows that stabilise external balances. Statement 3 is correct: In an open economy, the external sector acts as an adjustment mechanism for domestic macroeconomic disturbances. A negative domestic demand shock can result in import compression and exchange rate depreciation, leading to an improvement in net exports. Similarly, positive demand shocks may be moderated through higher imports or exchange rate movements. Thus, net exports function as an automatic stabiliser, a feature absent in a closed economy. PWOnlyIAS Extra Edge ❖ The Mundell-Fleming Trilemma (or Impossible Trinity) states that a country cannot simultaneously achieve three key economic goals: monetary autonomy, a fixed exchange rate, and free capital flows (financial integration). ❖ A nation must choose only two of these three, sacrificing the third; for example, free capital and a fixed rate mean giving up monetary control, while monetary independence and capital flow require a floating exchange rate. 2"},{"id":2,"txt":"Consider the following statements regarding macroeconomic relationships in an open economy:\n1. Rising output without higher consumption increases national savings relative to investment.\n2. Financial deepening can shift resources between consumption and investment even if income is constant.\n3. Net capital inflows can occur even when domestic saving equals investment.\n4. A sustained rise in business investment over household and government savings can increase reliance on foreign financing.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","2 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct:When output (income) rises and consumption does not increase proportionately, the residual income is saved. If investment remains unchanged, national saving rises relative to investment. This directly affects the economy’s external financing requirement and is a standard implication of national income accounting in an open economy. Statement 2 is correct: Financial deepening improves access to credit, risk-sharing, and intermediation efficiency. As a result, households and firms can reallocate resources between consumption and investment without any change in aggregate income. Thus, the composition of saving and investment can change independently of income growth. Statement 3 is correct:Even if domestic saving equals domestic investment in net terms, gross capital inflows and outflowscan still take place simultaneously. Balance of payments identities allow for offsetting capital movements, so equality of saving and investment does not rule out international capital mobility. PWOnlyIAS Extra Edge ❖ National Savings (S) = GDP (Y) - Consumption (C) -Government Spending (G), or equivalently, S = (Private Savings) + (Public Savings) ❖ Private savings are household income after taxes minus consumption, while public savings are government tax revenueminus spending(budget surplus)"},{"id":3,"txt":"The Twin Deficits Hypothesis suggests that fiscal and external balances are interconnected such that:\n1. A rise in the government budget deficit can lead to a deterioration in the current account balance.\n2. The linkage between fiscal deficit and current account deficit operates through changes in national saving.\n3. Capital inflows generated by a fiscal deficit always prevent any current account imbalance.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","Only three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: The Twin Deficits Hypothesis argues that when the government runs a larger fiscal deficit, government saving becomes negative, reducing overall national saving if private saving and investment do not SPP 22630 fully adjust. This saving shortfall increases reliance on foreign savings, whichis reflected as a current account deficit. Hence, a worsening fiscal balance can translate into a deterioration of the external balance. Statement 2 is correct: From national income accounting, the current account equals the difference between national saving and investment. A higher fiscal deficit implies government dissaving, which lowers national saving. If investment remains unchanged, the reduced saving–investment balance leads directly to acurrent account deficit. Therefore, changes in national saving form the core transmission channel in the twin deficits framework. Statement 3 is incorrect:Capital inflows may financea current account deficit, but theydo not eliminate it. In fact, capital inflows can appreciate the exchange rate, making exports less competitive and imports cheaper, which can worsen the current account balance in the long run."},{"id":4,"txt":"Consider the following statements with reference to the impact of globalization on macroeconomic stability:\nStatement-I: Globalization can increase macroeconomic volatility in an economy. Statement-II: Greater integration with global financial markets can prevent external economic shocks to the domestic economy. Statement-III: Higher trade openness can reduce the effectiveness of domestic macroeconomic policy autonomy.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-II and Statement-III are correct and both of them explain Statement","Both Statement-II and Statement-III are correct, but only one of them explains Statement-I","Only one of the Statements II and III is correct and that explains Statement-I","Only one of the Statements II and III is correct and that does not explain Statement-I"],"ci":3,"exp":"Ex: Statement I is correct: Greater integration with the global economy exposes domestic output, prices, capital flows, and exchange rates to external shocks originating outside national control. As a result, fluctuations in global demand, financial conditions, or commodity prices can amplify domestic macroeconomic instability. Statement II is incorrect: Financial globalization increases cross-border capital mobility. Changes in global interest rates, risk sentiment, or liquidity conditions can trigger sudden capital inflows or outflows, affecting domestic exchange rates, asset prices, and credit conditions. Such shock transmission is a major channel through which globalization raises macroeconomic volatility. 3 Statement III is correct: Higher trade openness, when accompanied by capital mobility, reduces domestic macroeconomic policy autonomy because the Impossible Trinity (Monetary Policy Trilemma) implies that an economy cannot simultaneously maintain independent monetary policy, exchange ratestability,and free capital flows. As globalization deepens, policy choices become constrained, limiting the ability of authorities to stabilise output and prices. Thus, Statements II is incorrect and Statement III explains Statement I because it explains constraints on policy autonomy, thereby increasing macroeconomic volatility."},{"id":5,"txt":"India’s current account deficit in a particular year widened despite a merchandise trade surplus. Which of the following factors could be responsible for this situation?","ref":"","opts":["A decline in software export receipts and remittances from Indians abroad","An increase in gold imports","A rise in domestic consumption of imported goods","A slowdown in agricultural output"],"ci":0,"exp":"Ex: Current Account tracks trade in goods and services, net income, and transfers. Balance of Trade (Goods/Visibles): Exports minus imports of physical products (Gold, cars, electronics). Balance of Trade (Services/Invisibles): Exports minus imports of services (software, tourism, consulting). Net Factor Income:Incomeearnedby residents from abroad minus income earned by foreigners domestically (dividends, wages). Net Current Transfers: Foreign aid and gifts (unrequited transfers) In foreign trade, invisibles refer to transactions that do not involve physical goods. They mainly include: ❖ Services (e.g., software exports, tourism, IT-enabledservices,banking, andinsurance services) ❖ Income from abroad (e.g., wages, dividends, interest) ❖ Unilateral transfers (e.g., remittances, foreign aid) SPP 22630 Option (a) is correct: A merchandise trade surplus indicates that India earned more from exports of goods than it spent on imports. However, the current account also includes invisibles. ❖ Even with a merchandise trade surplus, a drop in invisibles can widen the overall current account deficit. ❖ If receipts from services (like software exports) or remittances from Indians abroad decline, the invisible account worsens."},{"id":6,"txt":"Consider the following:\n1. Petroleum products, gems and jewellery and pharmaceuticals constitute a major share of India’s merchandise exports.\n2. Services exports, particularly IT and software services, contribute significantly to India’s foreign exchange earnings.\n3. India’s import basket is dominated by food grains and textiles.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: India’s merchandise export basket is dominated by: ❖ Petroleum products – refined petroleum exports form a significant portion. ❖ Gems and jewellery – India is a major exporter of cut and polished diamonds and gold jewellery. ❖ Pharmaceuticals – India is one of the largest suppliers of generic drugs globally. These sectors together account for a large share of India’s merchandise exports. Statement 2 is correct: India’s services exports are a major source of foreign exchange, with IT and software services being the largest contributors, followed by business process outsourcing (BPO), consulting, and other professional services. Statement 3 is incorrect: India’s imports are mostly crude oil, petroleum products, gold, electronics, and machinery. Food grains and textiles make up a very small proportion of total imports."},{"id":7,"txt":"With reference to Trade Balance and Current Account Balance, consider the following statements:\n1. Currency depreciation can improve the trade balance.\n2. Higher global commodity prices can worsen the current account even without an increase in import volumes.\n3. Capital goods imports widen the trade deficit in the short run but do not affect the future current account.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","Only three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: Depreciating currency can make exports competitiveas it will make our goods cheaper for foreign buyers since value of our currency has decreased w.r.t their currency. 4 For E.g: Value of 1 dollar changing from 70 rupees to 80 rupees- the same dollar can buy more goods. Statement 2 is correct: For commodity- importing countries, an increase in international prices (e.g., crude oil) raises the import bill even if the quantity imported remains unchanged. This increases the trade deficit and can deteriorate the current account balance. Statement 3 is incorrect: While imports of capital goods do widen the trade deficit in the short run, they can expand productive capacity, enhance competitiveness, and boost future exports. Hence, they can affect the future current account position, often positively."},{"id":8,"txt":"Consider the following statements:\nStatement-I: A sustained Current Account Deficit (CAD) can heighten an economy’s exposure to external sector instability. Statement-II: Financing a CAD through volatile capital flows increases the risk of sudden reversals during global financial tightening. Statement-III: A higher CAD always indicates excessive consumption rather than productive investment in the domestic economy.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-II and Statement-III are correct and both of them explain Statement-I","Both Statement-II and Statement-III are correct, but only one of them explains Statement-I","Only one of the Statements II and III is correct and that explains Statement-I","Only one of the Statements II and III is correct and that does not explain Statement-I"],"ci":2,"exp":"Ex: Statement I is correct: A persistent CAD means the country is spending more foreign exchange than it earns, makingit dependent on external financing. Such dependence increases vulnerability to exchange rate pressures, capital flow volatility, and balance-of- payments stress, especially during global shocks. Statement II is correct: When a CAD is financed by short-term or portfolio capital flows, rather than stable long-term inflows like FDI, the economy becomes sensitive to changes in global interest rates, risk sentiment, and monetary tightening in advanced economies. Sudden capital outflows can destabilize the exchange rate and foreign exchange reserves, directly increasing external vulnerability. Statement II explains Statement I because a sustained CAD requires external financing, and if this financing comes from volatile capital flows, sudden reversals can occur during global tightening, leading to exchange rate instability and external sector stress. SPP 22630 Statement III is incorrect: A CAD may arise due to import-intensive investment, such as capital goods or infrastructure imports, which can raise future productive capacity and exports. Therefore, a higher CAD does not necessarily reflect consumption-driven imbalances; its impact depends on the quality and composition of imports and financing."},{"id":9,"txt":"Consider the following:\n1. Foreign Direct Investment (FDI)\n2. Portfolio investment by Foreign Institutional Investors (FIIs)\n3. External Commercial Borrowings (ECBs)\n4. Workers’ remittances from abroad\n5. Banking capital, including NRI deposits\nHow many of the above are components of India’s Capital Account?","ref":"","opts":["Only two","Only three","Only four","All five"],"ci":2,"exp":"Ex: Statements 1, 2, 3 and 5 are correct: ❖ Foreign Direct Investment (FDI) represents long-term foreign investment with ownership or control in Indian enterprises. Since it creates lasting capital flows and external liabilities, it is recorded in the Capital Account. ❖ Portfolio investment by FIIs involves foreign investment in Indian shares and bonds without management control. These cross-border financial asset transactions are therefore part of the Capital Account. ❖ External Commercial Borrowings (ECBs) are loans raised by Indian entities from foreign lenders, creatingexternal debt. As they bring foreign capital into the country, they are recorded in the Capital Account. ❖ Banking capital, including NRI deposits, consists of deposits by non-residents in Indian banks, creating liabilities to foreigners. Hence, these flows are included in the Capital Account. Statement 4 is incorrect: Workers’ remittances from abroad are income transfers by Indians working overseas to residents in India. As they do not create assets or liabilities, they are recordedin the Current Account, not the Capital Account. 5"},{"id":10,"txt":"Consider the following regarding FDI in India in FY 2024–25:\n1. The Government allows 100% FDI under the automatic route in coal mining and contract manufacturing.\n2. The services sector was the top recipient of FDI equity.\n3. Maharashtra and Karnataka together attracted more than 50% of India’s FDI equity.\n4. The number of source countries for FDI into India decreased.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1, 2 and 3 only","2 and 4 only","1, 3 and 4 only"],"ci":1,"exp":"Ex: Statement 1 is correct: India’s FDI policy has been progressively liberalised, permitting 100% FDI under the automatic route in sectors such as coal, contract manufacturing and insurance intermediaries without prior government approval, as part of efforts to attract more investment. Statement 2 is correct: The services sector emerged as the top recipient of FDI equity in FY 2024–25, attracting 19% of total inflows, followed by computer software and hardware (16%) and trading (8%). FDI into the services sector rose by 40.77% to USD 9.35 billion from USD 6.64 billion in the previous year. Statement 3 is correct: Government data show that Maharashtra (39% share) and Karnataka (13% share) together accounted for around 51% of total FDI equity inflows in FY 2024–25, reflecting concentrated capital flows in these leading states. Statement 4 is incorrect: Official data indicate that India’s FDI inflows continued to come from a diverse and increasing set of source countries (including Singapore, Mauritius, the United States, the UAE, and the Netherlands), and there is no indication of a contraction in the number of source countries; in fact, long‑term trends show expanding geographical diversification of investors."},{"id":11,"txt":"With reference to Foreign Institutional Investors (FIIs) in India, consider the following statements:\nStatement‑I: FIIs bring short‑term investment flows into India, which can lead to volatility in the capital markets. Statement‑II: FIIs are permitted to invest in Indian securities, but all such investments require government approval before entry.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement‑I and Statement‑II are correct and Statement‑II is the correct explanation for Statement‑I","Both Statement‑I and Statement‑II are correct but Statement‑II is not the correct explanation for Statement‑I","Statement‑I is correct but Statement‑II is incorrect","Statement‑I is incorrect but Statement‑II is correct"],"ci":2,"exp":"Ex: Statement I is correct: Foreign Institutional Investors (FIIs) bring short-term capital into India by investing in equities, debt, and derivatives. These flows are largely portfolio- based and highly sensitive to global financial conditions, investor sentiment, and geopolitical events. As a result, large inflows or sudden withdrawals by FIIs can create volatility in SPP 22630 Indian capital markets and also impact the exchange rate, making the domestic financial system susceptible to short-term fluctuations. Statement II is incorrect: FIIs can invest in Indian securities either by registeringwith SEBI or through the Portfolio Investment Scheme (PIS). Most investments, including in equities and debt, do not need prior government approval, except in certain restricted sectors."},{"id":12,"txt":"With reference to Foreign Portfolio Investment (FPI) in India, consider the following statements:\n1. FPIs can invest in government bonds, corporate debt, and derivatives, but cannot acquire controlling stakes in companies.\n2. FPIs can route investments through SEBI-registered custodians but are subject to RBI limits on foreign inflows.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: Foreign Portfolio Investors (FPIs) are primarily financial investors who participate in the capital markets by investingin equity shares,corporatebonds, government securities, and derivatives. However, they are not allowed to take management control or strategic decisions in the companies they invest in. This is a fundamental distinction between FPIs and Foreign Direct Investment (FDI), where investors can acquire controlling stakes and have a say in management. The purpose of FPI is to bring short-term or medium-term financial capital into the market without influencing company governance, whereas FDI is meant for long-term strategic investment. Statement 2 is correct: FPIs are not permitted to invest directly in Indian financial markets. All FPI investments must be routed through SEBI-registered intermediaries, such as custodians or brokers, who ensure compliance with regulatory norms. Additionally, the Reserve Bank of India (RBI) monitors and regulates FPI inflows under FEMA regulations, whichincludesectoral caps,limits on foreign investment, and reporting requirements. These regulations are aimed at maintaining financial stability and preventing excessive speculative capital flows, which could lead to market volatility. 6"},{"id":13,"txt":"With reference to Foreign Portfolio Investment (FPI) in India, consider the followingstatements:\n1. Category I FPIs include hedge funds and private equity funds.\n2. Category II FPIs are regulated funds such as mutual funds and insurance companies.\n3. Category III FPIs consist of government and sovereign wealth funds.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 3 only","2 only","1, 2 and 3"],"ci":2,"exp":"Ex: Statement 1 is incorrect: According to SEBI’s classification, Category I FPIs are low-risk, highly regulated investors such as sovereign governments, pension funds, multilateral institutions, and well-regulated funds. Hedge funds and private equity funds are generally high-risk or unregulated, and therefore do not qualify as Category I FPIs. The key feature of Category I FPIs is stability and low risk, which hedge funds and private equity do not typically provide. Statement 2 is correct: Category II FPIs include regulated financial institutions, corporate bodies, family offices, limited partnerships, and other entities that do not qualify as Category I. They are subject to SEBI regulations and are considered moderately regulated investors. This category can include entities like mutual funds and insurance companies, which are formally regulated and permitted to invest in Indian capital markets. Statement 3 is incorrect: Category III FPIs primarily include unregulated entities, such as corporate bodies, foundations, trusts, and other investors that do not meet the criteria for Category I or II. Government and sovereign wealth funds are highly regulated and low- risk, and therefore fall under Category I, not Category III. Category III FPIs are associated with higher risk and less regulatory oversight compared to Category I and II."},{"id":14,"txt":"Which of the following is a key reason for an increase in India’s REER even when the nominal exchange rate remains stable?","ref":"","opts":["India experiences lower inflation than its trading partners, raising its currency’s real value.","India’s exports decline sharply, reducing demand for its currency.","A rise in domestic interest rates attracts short-term foreign capital, strengthening REER.","The nominal exchange rate is kept fixed by the RBI through intervention in the forex market."],"ci":0,"exp":"Ex: REER = NEER × (Domestic Price Index ÷ Foreign Price Index) The Real Effective Exchange Rate (REER) measures the value of a country’s currency adjusted for inflation differences relative to a SPP 22630 basket of its trading partners, and weighted by trade volumes. It reflects the true purchasing power of a currency in international trade, unlike the nominal exchange rate, which only shows the market price of one currency against another. REER appreciates when a country’s inflation is lower than that of its trading partners, even if the nominal exchange rate is stable. This is because the domestic currency retains more purchasing power, making it “stronger” in real terms. This is the primary factor that can cause REER appreciation without nominal movement."},{"id":15,"txt":"Consider the following statements:\nStatement-I: Exchange Traded Funds (ETFs) generally trade close to their Net Asset Value (NAV). Statement-II: The value of an ETF is directly linked to the market value of its underlying basket of securities. Statement-III: ETFs can be bought and sold throughout the trading day like equity shares.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-II and Statement-III are correct and both of them explain Statement-I","Both Statement-II and Statement-III are correct, but only one of them explains Statement-I","Only one of the Statements II and III is correct and that explains Statement-I","Only one of the Statements II and III is correct and that does not explain Statement-I"],"ci":1,"exp":"Ex: Statement I is correct: The Net Asset Value of an ETF represents the aggregate market value of the underlying securities held by the fund, adjusted for expenses. Since an ETF is designed to mirror the value of this underlying basket, its market price normally remains aligned with the NAV. Large and persistent deviations are uncommon under normal market conditions, making proximity to NAV a defining feature of ETFs. Statement II is correct: An ETF derives its value from the prices of the securities it holds, such as equities, bonds, or commodities. As the market value of theseunderlyingassets changes, the NAV of the ETF changes correspondingly, and the ETF’s price adjusts in response. This direct valuation linkage is the fundamental reason why ETFs tend to trade close to their Net asset value. Statement II explains Statement I because an ETF’s value is derived directly from the market prices of the securities it holds. Since the Net Asset Value (NAV) is calculated using these same underlying market prices, any change in the value of the basket is reflected almost immediately in the ETF’s price. This 7 direct valuation linkage ensures that the ETF’s market price remains aligned with its NAV, which is why ETFs generally trade close to their NAV. Statement III is correct: Intraday trading merely describes the trading mechanism and liquidity feature of ETFs. While it allows investors to transact at any time during market hours, it does not, by itself, ensure that ETF prices remain aligned with NAV. Statement III only describes how ETFs are traded, that they can be bought and sold throughout the trading day like equity shares. Intraday tradability improves liquidity and convenience,but it does not establishany causal link between the ETF’s market price and its Net Asset Value (NAV). Thus, statement III does not directly explain statement I."},{"id":16,"txt":"Consider the following statements regarding FEMA, 1999:\n1. FEMA treats violations as civil offences, not criminal.\n2. It regulates both current and capital account transactions.\n3. NRIs can invest in Public Provident Fund (PPF) under FEMA\nHow many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: Unlike the earlier FERA (Foreign Exchange Regulation Act, 1973), FEMA was designed to liberalize foreign exchange management and treat violations as civil or administrative offences. Under FEMA, the focus is on penalties and regularization, rather than criminal prosecution, except in cases where other laws are also violated. Statement 2 is correct:FEMA covers twotypes of foreign exchange activities: Current Account Transactions: These are everyday payments for things like trade, travel, and services.They donot change howmuchyou own or owe, and they are generally easy to complete. Capital Account Transactions: These are activities that change your assets or liabilities (what you own or owe) across borders. Examples include buying property in another country or taking out an international loan. These transactions move capital between India and the rest of the world. SPP 22630 Statement 3 is incorrect: Under FEMA rules, NRIs cannot open or invest in small savings schemes such as PPF or other similar government savings instruments. NRIs can, however, invest in equities, mutual funds, bonds, and certain bank deposits like NRE/NRO accounts."},{"id":17,"txt":"Which of the following reflects the applied impact of the Foreign Exchange Regulation Act (FERA), 1973 on Indian businesses?","ref":"","opts":["Foreign investment in Indian companies required prior government approval, and non-compliance could lead to imprisonment.","Minor violations of foreign exchange rules were mostly regularized with penalties.","Businesses could freely remit profits abroad without any approval under FERA.","Both current and capital account transactions were fully liberalized to encourage foreign trade."],"ci":0,"exp":"Ex: Under the Foreign Exchange Regulation Act, 1973, all foreign exchange transactions, including raising foreign investment, were strictly controlled. Businesses had to obtain prior approval from the Reserve Bank of India (RBI) or the government for most foreign capital inflows and outflows. Violating these rules was considered a criminal offence, and could lead to imprisonment and heavy penalties. This made compliance a central concern for Indian companies dealing with foreign exchange. The Foreign Exchange Regulation Act (FERA) was replaced by the Foreign Exchange Management Act (FEMA), 1999, which came into effect in 2000 to replace the more restrictive FERA of 1973, shifting India's economic policy towards facilitating foreign exchange transactions, trade, and investment with a more liberal approach."},{"id":18,"txt":"With reference to the level of economic integration between countries, consider the following provisions :\n1. Complete abolition of tariff on the movement of goods and services among the members.\n2. Common external tariff on goods imported from outside the union.\n3. Free movement of labor and capital among the member states.\n4. Common economic and monetary policies\nHow many of the above provisions is/are applicable to a 'Common Market'?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: The term \"common market\" refers to a type of trade bloc that allows for the free movement of goods, services, capital, and labor among member countries. Essentially, it's a step beyond a free trade area, as it not only eliminates tariffs and other trade barriers but also harmonizes regulations and policies to facilitate deeper economic integration. One of the most well- known examples of a common market is the European Single Market, which is part of the European Union (EU). 8 Seven stages lead to complete economic integration: ❖ Preferential Trading Area ❖ Free Trade Area ❖ Customs Union ❖ Common Market ❖ Economic Union ❖ Monetary Union ❖ Economic Integration In the Customs Union, the member countries abolish barriers to trade and service among them, and as a whole, they maintain a common tariff against third parties. Customs Union = Complete abolition of barriers + Common external tariff In addition to the provisions of the customs union, a free flow of labour and capital is also allowed in the Common Market. Common Market = Customs Union + Free movement of labour and capital Hence, the following provisions are applicable in a ‘common market’ mechanism: ❖ Complete abolition of tariffs on the movement of goods and services among the members. Hence, Option 1 is correct. ❖ Common external tariff on goods imported from outside the union. Hence, Option 2 is correct. ❖ Free movement of labor and capital among the member states. Hence, Option 3 is correct. In the Economic and Monetary Union, the monetary and fiscal policies are harmonised among member countries in addition to the common Market's provision. The common currency is an important feature of this union. Economic and Monetary Union = Common Market + Common economic policies. Hence, Option 4 is not correct. SPP 22630"},{"id":19,"txt":"With reference to the Balance of Payments (BoP), consider the following statements :\nStatement-I:When a country's capital account balance is surplus in the present year, it could create current account deficits in the years ahead. Statement-II: When a country attracts foreign investments and borrows from abroad, it will have to pay the returns on them in the form of profits, dividends, and interest.\nWhich of the following is correct with respect to the above statements ?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-Il is the correct explanation for Statement-I","Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I","Statement-l is correct but Statement-ll is incorrect","Statement-I is incorrect but Statement-II is correct"],"ci":0,"exp":"Ex: Balance Of Payment (BOP) is a statement that records all the monetary transactions made between residents of a country andthe rest of the world during any given period. The balance of payments includes both the current account and capital account. The current account is the sum of net income from abroad, net current transfers, and the balance of trade. The capital account records the flow of assets and liabilities between a country and the rest of the world. A capital account surplus means that there is an inflow of capital into the country. This capital can be used to finance investments, such as buying foreign assets or building new factories. However, the country will have to pay the returns on these investments in the form of profits, dividends, and interest. If the country's exports do not grow enough to cover these payments, it will run a current account deficit. Thus, When a country attracts foreign investments andborrowsfrom abroad,it leads to a surplus in capital accounts where it will have to pay the returns on them in the form of profits, dividends, and interest, which might lead to current account deficits in the years ahead. So, Both Statement-l and Statement-II are correct and Statement-II is the correct explanation for Statement-I.So, Option (a) is correct."},{"id":20,"txt":"Consider the following :\n1. Appreciation of Indian Rupee\n2. Increase in the competitiveness of Indian exports\n3. Inflation in the indian economy In the context of the Indian economy, how many of the above could be the possible impacts of the unsterilized surplus forex market?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Central banks may be able to weaken a currency by selling their own reserves on the market. They can also strengthen it by buying more and selling their own currency. Option 1 and 3 are correct: Central banks use sterilization as a way to insulate or protect their economies against any negative impact from things like currency appreciation or inflation- 9 both of which can reduce a country's place in export competitiveness in the global market. It allows foreign exchange markets to function without manipulating the supply of the domestic currency, which means that a country's monetary base is allowed to change. In the unsterilized surplus market economy, the supply of dollars will be high. RBI will have to increase the money supply while absorbing the excess dollars. Also, the inflow of foreign capital increases the monetary base in the economy without a corresponding increase in production, which may lead to inflation if left unsterilized. Option 2 is not correct: The competitiveness term in the equation for a given country's manufactured export volumes is the differential between the country's export price and that of its competitors in their common markets. During unsterilized foreign exchange intervention, the rupee might be appreciated, and the exports became costlier. Thus, it will reduce the competitiveness of Indian exports."},{"id":21,"txt":"What is the primary difference between currency devaluationand currency depreciation?","ref":"","opts":["Devaluation is a deliberate action by the central bank under a fixed exchange rate, while depreciation occurs in a market- driven exchange rate system.","Devaluation and depreciation both occur only in a floating exchange rate system due to external market forces.","Depreciation occurs when a country's central bank lowers the exchange rate to boost exports, whereas devaluation happens naturally due to market forces.","Devaluation strengthens a currency, whereas depreciation weakens a currency in international markets."],"ci":0,"exp":"Ex: Option (a) is correct: Devaluation is deliberate and occurs under a fixed or pegged exchange rate system when the central bank officially lowers the value of its currency to make exports cheaper and imports costlier. Depreciation happens under a market- determined exchange rate system, where demand and supply fluctuations in the forex market cause the currency to weaken."},{"id":22,"txt":"Consider the following statements regarding Special Non-Resident Rupee (SNRR) and Non-Resident Ordinary (NRO) accounts:\n1. SNRR accounts are primarily used for business transactions in India by foreign residents, whereas NRO accounts are meant for NRIs/PIOs to manage their Indian income.\n2. Unlike NRO accounts, SNRR accounts earn interest on deposits and can be maintained indefinitely without any restrictions.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: SNRR accounts are used by foreign residents for business transactions in India. NRO accounts are used by NRIs/PIOs to manage their earnings in India (such as rent, dividends, pension). SPP 22630 Statement 2 is incorrect: SNRR accounts do NOT earn interest (they are non-interest- bearing accounts). NRO accounts earn interest and can be in the form of Savings, FD, Recurring Deposits, etc. SNRR accounts have a tenure limit, generally linked to the contract period or business purpose. Key Differences Between SNRR and NRO Accounts Feature SNRR Account NRO Account Who can Any person Any NRI/PIO open? resident outside for managing India with Indian income business transactions in India Approval Yes, for Yes, for Required? Pakistan/ Pakistan/ Bangladesh Bangladesh nationals/entities nationals/entities Type of Non-interest Savings, Account bearing Current, Recurring, FD (earns interest) Permissible Business-related Inward Transactions transactions only remittances, local payments, credit card settlements Tenure Linked to No restriction contract/business tenure Repatriability Fully repatriable Restricted repatriability (current income & USD 1 million per year allowed) 10"},{"id":23,"txt":"Consider the following statements:\nStatement I: Cumulative Foreign Direct Investment (FDI) inflows, including equity inflows, reinvested earnings, and other capital, surpassed USD 1 trillion in the last 20 years.\nStatement II: The increase in FDI inflows was primarily driven by the services sector, which accounted for the largest share of total FDI inflows.\nWhich one of the following is correct?","ref":"","opts":["Both Statement I and Statement II are correct, and Statement II is the correct explanation for Statement I.","Both Statement I and Statement II are correct, but Statement II is not the correct explanation for Statement I.","Statement I is correct, but Statement II is incorrect.","Statement I is incorrect, but Statement II is correct."],"ci":1,"exp":"Ex: Statement I is correct: Cumulative Foreign Direct Investment (FDI) inflows in India, includingequity inflows, reinvested earnings, and other capital, surpassed USD 1 trillion from April 2000 to September 2024. ❖ This indicates that India has remained a major investment destination for foreign investors due to its stable economic policies, improved ease of doing business, and infrastructure development. Why is Statement II not the correct explanation for Statement I? ❖ FDI inflows surpassing USD 1 trillion is a cumulative trend over 20+ years, driven by multiple sectors, policy reforms, and investor confidence, not just the services sector. ❖ While the services sector has played a major role, other industries like manufacturing, IT, infrastructure, and energy have also significantly contributed to this milestone. ❖ Hence,Statement II does not fully explain the USD 1 trillion cumulative FDI inflows, as they are a result of broader economic policies, global investment trends, and long-term investor confidence. SPP 22630 Statement II is also correct: The increase in FDI inflows was primarily driven by the services sector, which accounted for the largest share of total FDI inflows in India. ❖ In H1 FY25, the services sector attracted 19. 1% of total FDI. ❖ Other key sectors include computer software & hardware (14. 1%), trading (9. 1%), non-conventional energy (7%), and cement & gypsum products (6. 1%)."},{"id":24,"txt":"Which of the following are possible impacts of U. S. Federal Reserve tapering on the Indian economy?\n1. Capital Outflows from India’s financial markets.\n2. Appreciation of the Indian Rupee against the U. S. Dollar.\n3. Increase in bond yields and borrowing costs in India.\n4. Lower inflation in India due to reduced import costs.\nSelect the correct answer using the codes given below:","ref":"","opts":["1 and 3 only","2 and 4 only","1, 2 and 3 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Statement 1 is correct:WhentheS. Fed begins tapering or increases interest rates, foreign investors often withdraw money from emerging markets like India to invest in safer, high-return U. S. assets. This reduces foreign portfolio investment (FPI) in Indian markets, leading to market volatility. Statement 2 is incorrect: Fed tapering usually strengthens the U. S. dollar, causingtheIndian Rupee to depreciate due to increased demand for dollars. A weaker rupee makes imports costlier and increases India’s trade deficit. 11 Statement 3 is correct: Higher U. S. interest rates make Indian bonds less attractive, leading to capital outflows from Indian debt markets. This results in higher bond yields in India, making borrowing more expensive for businesses and the government. Statement 4 is incorrect: A weaker rupee leads to higher import costs, especially for crude oil, electronics, and other essential commodities. This raises inflation instead of reducing it, impacting businesses and consumers."},{"id":25,"txt":"Consider the following statements regarding the Current Account in the Balance of Payments (BOP):\n1. The Current Account consists of the Balance of Trade (BOT) and the Balance of Trade in Services.\n2. A Current Account Surplus occurs when a country's imports exceed its exports, leading to an increase in foreign exchange reserves.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: The Current Account of the BOP records all transactions related to trade in goods, services,income, and transfers between a country and the rest of the world. It is composed of: a. Balance of Trade (BOT)→ The difference between exports and imports of goods (merchandise trade). b. Balance of Trade in Services (BOS) → Includes services trade (e. g. , banking, insurance, tourism, shipping), investment income (profits, dividends, interest payments), remittances, and transfers. c. The sum of BOT and BOS represents the net foreign exchange earnings or expenditure of a country. Statement 2 is incorrect: A Current Account Surplus occurs when exports exceed imports, not the other way around. This means the country isearningmore foreign exchangethan it is spending. A surplus can lead to: a. Higher foreign exchange reserves. b. Repayment of external debt. c. Providing loans or investments to other countries. However, if imports exceed exports, it results in a Current Account Deficit, not a surplus. SPP 22630"},{"id":26,"txt":"What does the term \"Reserve Tranche Position (RTP)\" refer to?","ref":"","opts":["The portion of a country's foreign exchange reserves that is held in gold with the International Monetary Fund (IMF).","A country's liquid claim on the IMF, which is the difference between its IMF quota and the IMF’s holdings of its currency, excluding credit usage.","A special fund created by the IMF for developing countries to borrow during economic crises.","The total amount of foreign currency a country holds in its central bank, including Special Drawing Rights (SDRs)."],"ci":1,"exp":"Ex: The Reserve Tranche Position (RTP) is a member country’s liquid claim on the IMF, forming part of its foreign exchange reserves. It represents the difference between the country’s IMF quota and the IMF’s holdings of its currency, excluding amounts acquired through IMF credit and minimal No. 2 Account holdings (less than 0. 1% of the quota). RTP allows countries to access funds unconditionally during economic needs."},{"id":27,"txt":"With reference to exchange rate systems, consider the following statements:\n1. Under a floating exchange rate system, the central bank actively intervenes in the foreign exchange market to stabilize the currency value.\n2. A fixed exchange rate system requires the central bank to maintain a declared parity by buying or selling foreign reserves to counter market fluctuations.\n3. A fixed exchange rate system eliminates the risk of currency depreciation and inflation in an economy.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is incorrect: A floating exchange rate system allows the currency’s value to be determined by market forces (supply and demand). The central bank does not actively intervene unless there is extreme volatility, in which case it might use foreign exchange reserves for stability. In contrast, managed floating exchange rates involve occasional central bank intervention, but a purely floating system does not rely on intervention. Statement 2 is correct: In a fixed exchange rate system, the currency is pegged to another currency or commodity (e. g., gold, US dollar) at a predetermined rate.To maintainthis rate, the central bank must intervene in the forex market by: a. Buying domestic currencywhen its supply is high (to prevent depreciation). b. Selling foreign reserves when demand for foreign currencyrises (to maintain the fixed rate). c. This system was historically used under the Bretton Woods Agreement, where currencies were pegged to the US dollar. Statement 3 is incorrect: A fixed exchange rate does not eliminate the risks of currency depreciation or inflation; instead, it shifts the burden to the central bank. If a country 12 maintains an overvalued fixed exchange rate, it may face foreign exchange shortages and capital flight, forcing depreciation through a sudden devaluation. If the central bank prints more money to maintain the peg, inflation can rise. Many economies with fixed exchange rates have experienced inflation or balance- of-payment crises due to unsustainable currency pegs(e. g., Argentina’s currency crisis in 2001)."},{"id":28,"txt":"Consider the following statements regarding Nominal Effective Exchange Rate (NEER) and Real Effective Exchange Rate (REER):\n1. An increase in NEER indicates an appreciation of the Indian Rupee relative to a basket of foreign currencies.\n2. An increase in REER indicates that India's trade competitiveness has improved, making exports more competitive in the global market.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct:NEERis the weighted average of India's exchange rates with its major trading partners, without adjusting for inflation.If NEER increases, it means the Rupee has strengthened (appreciated) against other currencies in the basket. Statement 2 is incorrect: REER is NEER adjusted for inflation differences between India and its trading partners. If REER increases, it suggests the Rupee has appreciated in real terms, making Indian exports more expensive and less competitive. Conversely, a declining REER means depreciation, making exports more competitive. 𝐶𝑃𝐼𝑊 𝑖 𝑅𝐸𝐸𝑅𝑖 = 𝑁𝐸𝐸𝑅𝑖 𝐻𝑜𝑚𝑒 𝐶𝑃𝐼𝑖 Here, CPIwis inflation of combined basket of currencies with which REER is calculated."},{"id":29,"txt":"With reference to the Foreign Exchange Regulation Act (FERA), 1973, consider the following statements:\n1. FERA was enacted to regulate foreign exchange transactions and limit cross- border inflows and outflows to protect the Indian economy from external influences.\n2. Under FERA, all foreign-owned companies operating in India were subject to strict regulations similar to MRTP Act companies.\n3. FERA was replaced by the Foreign Exchange Management Act (FEMA) in 1999.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: FERA was introduced in 1973 during India's period of economic insulation when the government had a strong control over foreign exchange transactions. It aimed to restrict foreign currencyinflows and  SPP 22630 outflows, ensuring that foreign exchange reserves were strictly regulated. Cross-border transactions were highly restricted, and only a limited number of foreign exchange transactions were permitted, often requiring prior approval. Statement 2 is correct: FERA designated foreign-owned companies operating in India as “FERA companies” and placed them under strict monitoring and regulation. Similar to MRTP (Monopolies and Restrictive Trade Practices) Act companies, which controlled domestic monopolies, FERA companies were regulated for fear of unethical business practices and foreign exploitation. Statement 3 is correct: With economic liberalization in the 1990s, FERA was replaced by FEMA in 1999 to facilitate a more open economy. FEMA shifted the focus from controlling foreign exchange transactions to managing them efficiently, encouraging foreign investments and allowing easier capital flows. Unlike FERA, which treated violations as criminal offenses, FEMA treated them as civil offenses, making it more investor-friendly.  13"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

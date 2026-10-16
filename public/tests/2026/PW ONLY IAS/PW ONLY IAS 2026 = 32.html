@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 32</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 32</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 32">PW ONLY IAS 2026 = 32</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the Food Corporation of India (FCI), consider the following statements:\n1. FCI’s direct procurement accounts for a small percentage of total foodgrain procurement in India.\n2. Under decentralised procurement, foodgrains procured by States must necessarily be transferred to FCI-owned godowns.\n3. Refusal to procure foodgrains at procurement centres can legally occur even if produce conforms to Fair Average Quality (FAQ) norms.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 2 only","1 and 3 only","2 and 3 only"],"ci":0,"exp":"Ex: Statement 1 is Correct: While the FCI is the \"apex\" body,it has largely delegated the actual task of buyingto StateGovernment Agencies (SGAs). Today, the vast majorityof wheat and paddy is bought by state agencies. FCI only steps in directly in specific pockets or for strategic reasons. This allows the FCI to focus on its primary mandate: maintaining the Central Pool and moving grain from surplus states (like Punjab) to deficit states (like Kerala). Statement 2 is Incorrect: In the Decentralized Procurement (DCP) scheme, the State Government itself procures, stores, and distributes foodgrains under NFSA within the state. They onlysurrender the \"surplus\" grain to the FCI for the Central Pool. If the state is \"deficit,\" it doesn't send anything to the FCI; instead, the FCI provides thebalance needed to meet the state's PDS requirements. Statement 3 is Incorrect: The Fair Average Quality (FAQ) norms are the \"Gold Standard\" for procurement. If a farmer brings producethat meets these moisture, luster, and cleanliness standards, the government is obligated to procure it at MSP. Refusal to buy FAQ- compliant grainwould defeat the very purpose of a \"Support Price\" and is considered a violation of procurement policy. PW ONLYIAS SUPER HINT What is the point of \"Decentralized Procurement\" (DCP)?If you procure grain in a state and must send it to an \"FCI-owned godown\" far away, you are centralizing the storage. Forcing it into FCI godowns would defeat the entire purpose of the word \"Decentralized.\" Hence S2 is likely false. If an agency could \"legally\" say no to high- quality grain, the MSP would not be a \"Support\" price—it would be a \"Lottery.\" Hence S3 is likely false. SPP 22633"},{"id":1,"txt":"Consider the following statements regarding India’s foodgrain storage capacity:\n1. India’s total foodgrain production exceeds its storage capacity by more than 150 million metric tonnes.\n2. Under-utilisation of FCI-owned storage facilities has led to excessive dependence on hired storage.\n3. Hiring private storage is preferred over owned storage due to lower operational costs.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","1 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is Correct:India’s total foodgrain production has crossed 330 million metric tonnes (MT), while the total functional storage capacity (including FCI, CWC, and State Agencies) hoversaround 145–150 million MT. This leaves a massive gap of over 150 million MT. Much of this \"surplus\" remains with farmers in non-scientific storage or is stored in suboptimal Cover and Plinth (CAP) facilities where it is exposed to rain and pests. Statement 2 is Correct: While it sounds contradictory, many FCI-owned godowns are under-utilised because of their centralised locations, which are far from new production hubs. Consequently, during peak procurement in states like MP or Chhattisgarh, the FCI is forced to hire space from CWC (Central Warehousing Corporation), SWCs (State Warehousing Corporations), and private players underthe PEG (PrivateEntrepreneur Guarantee) scheme. Statement 3 is Incorrect: Hiring private storage is not preferred due to lower costs. Hiringis almost always more expensive in the long run. The FCI has to pay \"rent\" and \"guarantee\" payments to private owners. The government’s preference, as seen in the \"World's Largest Grain Storage Plan in the Cooperative Sector,\" is to build owned, decentralized storage at the PACS level to eliminate theserecurringrental costs and reduce the \"Economic Cost\" of foodgrains. PW ONLYIAS SUPER HINT There is a difference between doing something because it is Better and doing it because you are Desperate. The \"Internal Contradiction\" Rule: You cannot logically be \"Dependent\" (Statement 2) on something you \"Prefer\" (Statement 3).If it were cheaper and better, you wouldn't call it \"Excessive Dependence\"; you would call it \"Smart Outsourcing.\" Thus both 2 and 3 can’t be true together and one should be true, this leaves us with option A only. 2"},{"id":2,"txt":"Fuel costs constitute ~45% of operating expenses of Indian cold storage facilities, compared to ~10% in Western countries. This difference primarily implies:\n1. Higher breakeven storage prices for Indian operators.\n2. Reduced viability of small and decentralised cold chains.\n3. Lower incentive for technological upgradation.\n4. Structural dependence on subsidised electricity.\nSelect the correct answer:","ref":"","opts":["1, 2, 3 and 4","1, 2 and 4 only","2 and 3 only","1 and 2 only"],"ci":3,"exp":"Ex: Statement 1 is Correct: When fuel/energy costs form ~45%of operatingexpenses, Indian cold storage operators face much higher breakevenstorage prices. Indianoperators must charge significantly higher rental rates just to cover their electricitybills, makingcold storage an expensive luxury for many small farmers. Statement 2 is Correct:High energy intensity disproportionately hurts small anddecentralised cold chains, which lack scale economies and bargaining power for energy procurement, reducing their commercial viability. Statement 3 is Incorrect: In fact, the logic is usually the opposite. Whenfuel is your biggest expense, you have a higher incentive to invest in energy-efficient technologies (like Solar- powered cooling, VFD compressors, or Phase Change Materials) to protect your margins. High costs drive the search for efficiency. Statement 4 is Incorrect: Structural dependence on subsidised electricity is not universal across India. Access, tariffs, and subsidy regimes vary widely by State and operator. Hence, it cannot be inferred as a primary implication. While manystates provide subsidized power for agriculture, cold storage is often classified as an Industrial or Commercial activity, meaning they pay full market tariffs. PWOnlyIAS Extra Edge The \"Potato\" Domination: Almost 75% of India's cold storage capacity is dedicated to a single crop: Potatoes.This is because potatoes are \"bulk\" commodities that can bear the high energy-cost-to-value ratio. Solar Cold Storage: To fix the 45 fuel cost issue, the government is heavily promoting Solar-powered Micro-Cold Rooms at the farm gate under the PM-KUSUM and MIDH (Mission for Integrated Development of Horticulture) schemes. Reefer Vans: India's biggest bottleneck isn't just static storage but Refrigerated Transport (Reefer Vans). Fuel costs for moving cold goods are even higher due to the \"Reefer Engine\" running on diesel. SPP 22633 PW ONLYIAS SUPER HINT The \"Contradiction\" Rule: High pain leads to high desire for a cure. Saying there is a \"Lower incentive\" for tech upgradeswhen the current tech is costing you 45% of your revenue is logically backwards. Hence S3 is likely false. If power is 45% of expenses, a large facility can spread that cost over 10,000 tons of potatoes, but a small \"decentralized\" shed with only 100 tons will be crushedbythe bill. Thus, S2 is likely true. You cannot be \"structurally dependent\" on a subsidy while simultaneously payinga world- leading45% in operatingcosts. The high cost confirms a dependenceon expensive backup, not cheap government help. Hence S4 is likely false."},{"id":3,"txt":"Consider the following pairs:\nScheme Primary Focus\n1. Gramin Bhandaran Rural godowns, Yojana grading and quality assurance\n2. PM Kisan SampadaYojana — Onlycoldinfrastructurehorticulturalstorage\n3. MissionIntegratedDevelopmentHorticulture(MIDH) — forof Cold storage up to5000 MT\n4. Pradhan Mantri Cold chain limited Matsya Sampada to inland fisheries Yojana\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Pair 1 is correctly matched: Gramin Bhandaran Yojana also known as the Rural Godown Scheme, its primary objective is to create scientific storage capacity with allied facilities in rural areas. This includes support for grading, standardization, and quality control of agricultural produce to prevent distress sales and improve marketability Pair 2 is incorrectly matched: PM Kisan Sampada Yojana is an \"umbrella\" scheme for the entire food processing sector. While it includes the\"Integrated Cold Chain and Value Addition Infrastructure,\" it covers horticulture AND non-horticulture produce, including dairy, meat, poultry,and marine products. It is not limited to horticulture. Pair 3 is correctlymatched: Under the MIDH sub-schemes (like National Horticulture Mission), financial assistancefor settingup new cold storage units is specifically promoted for capacities up to 5000 MT. For capacitiesabove 5000 MT and up to 10,000 MT, the project is typically promotedunder the sub-scheme of the National Horticulture Board (NHB). Pair 4 is incorrectly matched: PMMSY is a flagship scheme for theentirefisheries sector. It supports cold chain and post-harvest 3 infrastructure for both Inland and Marine fisheries. It includes ice plants, cold storages, and refrigerated/insulated vehicles to reduce post-harvest losses across the entire fish value chain. PW ONLYIAS SUPER HINT The word \"Only\" is a major structural red flag. A massive national schemelike PMKSY is designed for \"Agro-Processing Clusters,\" which includes grains, dairy, and meat, not just horticulture. \"Only\" is too restrictivefor a flagship \"Wealth\" scheme. (Pair 2 is likely Incorrect). Restricting a national \"Fisheries\" scheme to \"Limited to inland\" is logically inconsistent with India's geographyand theblue economy goals. A \"Wealth\" scheme for fish would naturally cover both the sea and the rivers. Hence pair 4 is likely incorrect. This eliminates option C and D. Rural storage is uselessif the grainis rotten or unidentifiable. Therefore, a storage scheme must logically include\"Grading\" and\"Quality Assurance\" to make the stored goods marketable. The name and the focus are perfectly aligned. (Pair 1 is likely Correct)"},{"id":4,"txt":"Consider the following:\n1. In states with low mandi density, marginal increase in transport distance has a higher elasticity of loss.\n2. Tractor-based last-mile transport exacerbates transit losses compared to rail-based long haul.\n3. Distance is a statistically insignificant determinant of losses in high- procurement states.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Statement 1 is Correct: Fewer mandis mean longer average travel distances, poorer aggregation, repeated handling and weak logistics. Hence, even a small increase in distance causes disproportionately higher quantitative and qualitative losses, especially for perishables. \"Elasticity of loss\" means that for every additional kilometer traveled, the damage increases at an accelerating rate. Statement 2 is Correct: Although tractors are the backbone of rural India, they are mechanically suboptimal for long-distance grain transport. ❖ Tractors:Lackof high-quality suspension leads to \"grain bruising\" or spillage. They are often open-top, exposing grain to rain and moisture. SPP 22633 ❖ Rail (Kisan Rail): Provides a stable, bulk, and often covered/ refrigerated environment. Despitebeing a \"long haul,\" the per-unit loss in rail is statistically lower than multiple \"short-distance\" tractor trips. Statement 3 is Correct: In \"Procurement Surplus\" states like Punjab and Haryana, the mandi infrastructure is so dense (roughly one mandi every 5–10 km) that the transport distance is minimized and standardized. Because thesupplychain is highly streamlined and the \"Lead Time\" (harvest-to-storage) is very short, the physical distance ceases to be the \"primary driver\" of loss."},{"id":5,"txt":"Which of the following best explains why transit losses continue to impose high fiscal costs despite a decline in loss percentage?","ref":"","opts":["Increased efficiency gains are offset by declining MSP growth","Reduction in open storage increases reported transit losses","Shift from road to rail increases value- weighted losses","Rising procurement volumes amplify the absolute loss base"],"ci":3,"exp":"Ex: In the last decade, India's foodgrain procurement has hit record highs (exceeding 100 million tonnes in some years). ❖ The Math: If you procure 50 million tonnes with a 1%loss, the total loss is 0.5 million tonnes. If youprocure 100 million tonnes andreduce your loss efficiency to 0.7%, your absolute loss still rises to 0.7 million tonnes. ❖ Fiscal Impact: Since the Economic Cost (MSP + procurement incidentals) has also risen, every grain lost today costs the exchequer much morethanit did a decade ago. Option (a) is Incorrect: MSP growth affects fiscal cost, not physical transit losses. Option (b) is Incorrect: Open storage relates to storage losses, not transit losses. Option (c) is Incorrect: Rail transport generally reduces, not increases, losses"},{"id":6,"txt":"Contract farming can weaken open-market price discovery primarily because it:","ref":"","opts":["Fixes prices in advance","Reduces spot market arrivals","Transfers risk entirely to farmers","Increases market fragmentation"],"ci":1,"exp":"Ex: Effective price discovery in an economy depends on Market Depth (the volume of buy/sell orders). ❖ The \"Thin Market\" Problem: When large quantities of premium produce are diverted directly from the farm gate to corporatebuyers via contracts, theybypass the local APMC Mandis. 4 ❖ The Result: The \"Spot Market\" (Mandi) is left with lower volumes and often lower- quality produce. This makes the Mandi price less representative of the true value of the crop,leadingto distorted or \"weak\" price signals for therest of the ecosystem. Hence option B is correct. Why other options are incorrect: Option (a) is Incorrect: Prices may be pre- agreed in contracts, but price fixation alone does not weaken overall market discovery unless it reduces participation in spot markets. Option (c) is Incorrect: Actually, contract farmingis often designed to transfer risk away fromthe farmer (price risk) to the buyer. Even if it did transfer riskto the farmer,it would be a \"Terms of Trade\" issue, not a \"Price Discovery\" issue. Option (d) is Incorrect: Fragmentation (having many small, disconnected markets) does hurt discovery, but contract farming is more about disintermediation (cutting out the middleman) than fragmentation. The primary mechanism remains the reduction of the\"Public Pool\" of produce available for open bidding. PWOnlyIAS Extra Edge Model Contract Farming Act, 2018: To prevent the weakening of discovery, some states propose that contract prices should be linked to a \"Mandi-plus\" formula, ensuring that the open market remains a relevant reference. PW ONLYIAS SUPER HINT The \"Open Market\" is like a public poll. If most people stop voting because they made private deals,the poll results no longer reflect the will of the people. Reduction in arrivals is the physical reasonthe \"pricesignal\" fades. Hence option B is likely true. If I buy your penfor ₹10today for a delivery next week, does that stop the shop next door from selling pens at the daily market price? No! \"Fixingprices\" is a feature of a contract, but it isn't the cause of a market-wide failure. Hence option A is likely false. Whether the farmer is \"Safe\" or \"At Risk\" doesn't change the mathematical calculation of the market price. You are looking for a Market Signal issue, not a Social Justice issue. Hence option C is likely false. SPP 22633"},{"id":7,"txt":"Consider the following statements:\nStatement I: The Model APMC Act, 2003 sought to shift agricultural marketing from regulated control to competitive facilitation.\nStatement II: It enabled farmers to sell produce directly to contract sponsors, private markets and consumers.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement–I and Statement–II are correct and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct but Statement–II is not the correct explanation for Statement–I","Statement–I is correct but Statement–II is incorrect","Statement–I is incorrect but Statement–II is correct"],"ci":0,"exp":"Ex: Statement I is correct: Before 2003, the original APMC Acts of the 1960s/70s were \"restrictive\"—they mandated that all agricultural produce must be brought to and sold only in government-notified mandis. The 2003 Model Act was a \"reformist\" templatethat aimed to end this monopoly and create a \"facilitative\" environment where the government acts asa regulator rather thana sole gatekeeper. Its objective was to increase efficiency, competition, and farmer choice. Statement II is correct and explains Statement I: For a market to be \"competitively facilitative,\" theremust bemultiple channels for sale. By enablingDirect Marketing, Contract Farming, and Private Mandis, the Act providedthe practical mechanismto bypass the traditional mandi system. The removal of the \"monopoly of the state\" (Statement II) is precisely how the \"competitive facilitation\" (Statement I) was achieved. Therefore, Statement II is the logical bridge that explains the philosophy of Statement I."},{"id":8,"txt":"The Model APMC Act, 2017 primarily seeks to correct which structural distortion in agricultural markets?","ref":"","opts":["Absence of price discovery mechanisms","Information asymmetry between farmers and traders","Concentration of regulatory and commercial power in the same institution","Low physical density of regulated markets"],"ci":2,"exp":"Ex: Historically, under the older APMC Acts (like the 2003 version),the Market Committees hada monopoly over agricultural trade. This led to several structural distortions: 1. Conflict of Interest: The APMCs were responsible for regulatingthe verymarkets they operated. This allowed local traders and commission agents—whooften sat on these committees—to createentry barriers for new competitors. 2. The Nexus: Since the \"umpire\" was also a \"player,\" it led to the formation of cartels and restrictedthe entryof private players, which suppressed prices for farmers. 3. The 2017 Solution: The Model Act of 2017 separates these powers. It moves the regulatory authority (licensing, mediation,and policy) to an independent Director of Agricultural Marketing, while the APMC remains merely one of many service providers (market operators). This \"arms-length\" regulation is the most fundamental structural correction. 5 Option (a) is incorrect: APMCs dohave price discovery (via open auctions). The problem wasn't the absence of the mechanism, but the fact that it was often manipulated by cartels. Option (b) is incorrect: While a problem, this is being addressed more by technological tools like e-NAM rather than the institutional restructuring of the 2017 Act itself. Option (d) is incorrect: While the 2017 Act suggests a market every 80 km, the primary structural distortion it fixes is the institutional monopoly, not just the physical distance."},{"id":9,"txt":"Which reform combination most directly addresses price realization, wastage reduction, and competition simultaneously?","ref":"","opts":["eNAM + MSP expansion","APMC fee rationalisation + private mandis","Contract farming + warehouse recognition as markets","Single licence system + inter-state trade liberalisation"],"ci":2,"exp":"Ex: Contract farming + warehouse recognition as a market combination creates a \"Value-Chain\" solution rather than just a \"Marketing\" solution. 1. Price Realization (Contract Farming): By signing a contract before sowing, the farmer is insulated from the harvest-time price crash (the Cobweb cycle). They get a guaranteed buyer and often a premium price for meeting specific quality standards. 2. Wastage Reduction (Warehouse Recognition): When a warehouse is recognized as a \"Market,\" the farmer doesn't have to load, transport, and unload their grain at a distant Mandi. They simply deposit it in a local scientific warehouse. This eliminates Transit Losses and Mandi- handling wastage. 3. Competition (Both): These reforms break the physical and legal monopoly of the APMC Mandi. By creating a \"Farm-gate Market\" (Contract) and a \"Storage-point Market\" (Warehouse), the farmer has multiple bidders, forcing traditional commission agents to offer better services. Option (a) is incorrect: eNAM + MSP expansion improves price signals, but does not reduce physical wastage. Option (b) is incorrect: Fee rationalisation + private mandis lowers transaction costs, but does not address storage or production linkages. Option (d) is incorrect: Single licence + inter- state trade improves market integration, but leaves post-harvest losses untouched. SPP 22633 PW ONLYIAS SUPER HINT MSP is a \"safety net,\" not a \"competition\" tool. If the government is the only buyer (MSP), competition actually decreases. Also, MSP expansion does not directly reduce wastage; in fact, as we saw in the FCI logic, it often leads to overflowing, rotting stocks. Hence option A is likely false. Changing a \"Fee\" or adding a \"Private Mandi\" doesn't change the Physics of the crop. If it’s still a traditional mandi, the grain is still sitting in the open air. (Fails on Wastage reduction). Hence option B is likely false."},{"id":10,"txt":"Consider the following pairs:\nList-I Explanation (Government Interventions / Institutions)\n1. AGMARKNET Addresses information asymmetry by creating a centralized public good for price and arrival data\n2. GraminAgriculturalMarkets(GrAMs) — Enablesaggregationoperating outside theAPMCstructure firstfeewhile--milelevy\n3. AgricultureInfrastructureFund (AIF) — Correctsgestationinvestmentharvestinfrastructureand inlogisticsunderlongpost---\n4. AgriculturalMarketingInfrastructure(AMI) — Improvesviabilitymarketingthroughsubsidizationcapitalof projectassetsruralcost\nHow many of the above pair/s is/are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Pair 1 is correctly matched: AGMARKNET (Agricultural Marketing Information Network) is a G2C (Government to Citizen) portal that links over 3,500 mandis across India. The \"Public Good\": By providing real-time data on prices and arrivals, it creates a \"centralized public good.\" This reduces the power of local traders who previously profited from the fact that farmers didn't know the price in the neighboring district. Pair 2 is correctly matched: Gramin Agricultural Markets (GrAMs) are local village markets (often upgraded Haats) that act as the \"first-mile\" aggregation point. Under the APLM 2017 framework, GrAMs are designed to be \"outside\" the traditional APMC yard's physical control. This allows farmers to aggregate produce locally and sell to bulk buyers without necessarily paying the heavy Mandi fees associated with regulated yards. Pair 3 is correctly matched: Post-harvest infrastructure (silos, cold chains) has long- gestation periods (takes years to turn a profit). AIF provides a ₹1Lakh Crore credit line with a 3% interest subvention and credit guarantee. This makes long-term projects viable for startups, FPOs, and PACS, effectively correcting the historical under-investment in the \"mid-stream\" of the supply chain. Pair 4 is correctly matched: The Agricultural Marketing Infrastructure (AMI) is a sub-scheme of the Integrated Scheme for Agricultural Marketing (ISAM). It provides Capital 6 Investment Subsidy for the construction or renovation of marketing infrastructure (like godowns or grading units). By reducing the initial \"Capital Expenditure\" (CAPEX), it makes it easier for private entrepreneurs and cooperatives to build assets."},{"id":11,"txt":"With reference to Food Processing Industries (FPI) in India, consider the following statements:\n1. The location of food processing units is influenced more by raw material availability than by proximity to consumer markets.\n2. The concentration of food processing units in coastal states is driven mainly by export orientation and port-based logistics.\n3. The food processing sector generates relatively lower employment compared to its share in manufacturing GVA.\n4. Expansion of food processing reduces post-harvest losses but does not significantly raise farm-level prices without marketing reforms.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","1, 2 and 4 only","2 and 4 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Statement 1 is Correct: Food Processing Industries (FPI) in India are largely raw- material oriented, especially in segments like sugar, rice milling, fruits & vegetables, dairy and marine processing. Perishability, bulkiness and transport costs make location near production zones more important than proximity to final consumers. Statement 2 is Correct:Coastal states such as Gujarat, Maharashtra, Andhra Pradesh, Tamil Nadu and Kerala show high concentration of FPI mainly dueto export orientation, access to ports, cold-chain logistics andmarineresources. This concentration is driven more by port-led trade advantages than domestic consumption demand. Statement 3 is Incorrect: The foodprocessing sector is not highly capital-intensive across the board. In fact,it is considered labour-absorbing, especially in segments like fruits & vegetables, meat, fisheries and traditional processing. Employment generation is relatively high comparedto its manufacturing GVA share, not lower. Statement 4 is Correct: While FPI helps reduce post-harvest losses through processing, storage and value addition, its impact on farm- level price realisation remains limited without complementary marketing reforms (APMC liberalisation,grading, market access, contract enforcement). PWOnlyIAS Extra Edge Sunrise Sector: The Government of India classifies FPI as a \"Sunrise Sector\" due to its potential for high growth and huge impact on rural livelihoods. FDI in FPI: 100% FDI is allowed under the automatic route in food processing, and 100% FDI is allowed through the government approval route for trading (including e- commerce) of food products manufactured/produced in India. SPP 22633"},{"id":12,"txt":"With reference to the spatial pattern of Food Processing Industries (FPI) in India), consider the following pairs:\nList-I (State / List-II (Primary driver Region) of food-processing specialisation) A. Punjab– Cereal-based bulk Haryana belt processing B. Andhra Horticulture-linked Pradesh coast value addition C. Maharashtra Export-oriented marine plateau processing D. North-Eastern Logistics-constraint– states induced under- processing\nWhich of the pairs given above are correctly matched?","ref":"","opts":["Only two","Only three","All four","Only one"],"ci":1,"exp":"Ex: Pair 1 is correctlymatched: Punjab–Haryana belt is the \"Granary of India.\" Due to the massive surplusof Wheat andPaddy generated through intensive irrigation and green revolution infrastructure, the region has specialized in high-volume, bulk processing like Rice Milling, Flour Mills, and Cattle Feed industries. Pair 2 is correctly matched: Andhra Pradesh is a leading producer of fruits like mango, papaya, and citrus. The coastal and Rayalaseemabelts have seen a significant rise in Fruit Pulping, Juice Concentrate, and Integrated Cold Chains. The state is often called the \"Fruit Bowl of South India.\" Pair 3 is incorrectly matched: The Maharashtra Plateau (Deccan) is inlandandis famous for Sugar Mills and Grapes/Wine (Nasik). Export-oriented marine processing is concentrated in the Konkan Coast (Mumbai, Ratnagiri) or the Andhra/Gujarat coasts. A plateau region lacks the primary raw material (fish) for marine processing. Pair 4 is correctly matched: Despite having immense potential for organic fruits, ginger, and pineapple, the NE region suffers from \"under-processing.\" The primary reason is the High Logistics Cost, difficult terrain, and lack of a continuouscoldchain connecting the hills to the mainland markets. This is a classic example of Supply-side constraints stifling a high-potential zone."},{"id":13,"txt":"The Agriculture Infrastructure Fund (AIF) is best characterised as an intervention aimed at strengthening the segment of the agri-value chain that lies","ref":"","opts":["before crop sowing and input application","within price stabilisation and buffer stocking operations","at the level of final retail distribution","between the farm gate and formal processing or marketing"],"ci":3,"exp":"Ex: The Agriculture Infrastructure Fund (AIF) is designed to bridgethe \"infrastructure gap\" that exists specifically after the harvest but before the final processingor consumer sale. The AIF targets the Mid-streamof the agricultural value chain. ❖ The \"Farm Gate\" Infrastructure: Immediately after harvest, crops are vulnerable to spoilage and price crashes. The AIF provides cheap credit to build warehouses, cold storages, and primary processing units (cleaning, grading) right at the farm gate. 7 ❖ The Bridge: By strengthening this segment, the AIF ensures that produce reaches \"Formal Processing\" (factories) or \"Marketing\" (e-NAM, export hubs) without significant wastage. It empowers farmers to hold their produce rather than being forced into a distress sale. Hence option D is correct."},{"id":14,"txt":"Consider the following statements:\n1. Upstream reforms primarily influence capacity utilisation of food processing units.\n2. Downstream reforms primarily influence farm-gate price realisation.\n3. Transport infrastructure operates as a neutral connector across the value chain.\n4. Absence of downstream markets can neutralise upstream productivity gains.\nWhich of the statements given above are correct?","ref":"","opts":["2 and 3 only","1, 3 and 4 only","1 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Statement 1 is correct: Upstream activities involve everything\"before the factory gate\"— seeds, irrigation,andaggregation. In India,food processing units often run at only 40–50% capacity becausethey cannot get a consistent, high-quality supply of raw materials year- round. Upstream reforms (like Contract Farmingor FPO strengthening) ensure a steady \"flow\" of raw material, which directly allows the machines to run at full capacity. Statement 2 is Incorrect: This is a conceptual reversal. Downstream reforms (marketing, branding, retail, andconsumer access) primarily influence Consumer Prices and the Processor's Margin. Farm-gate price realization is actuallya functionof Backward Linkages (Upstream/Midstream). If there is no competition at the farm gate or no storage facility (Upstream), thefarmer gets a low price regardless of howwell the product is branded in a city (Downstream). Statement 3 is incorrect: In supply chain economics, transport is never neutral. It is a Value-Added (or Value-Subtracted) component. ❖ If transport is efficient (Cold Chain), it adds value by preserving quality. ❖ If transport is poor (bumpy roads, slow trucks), it subtracts value through \"transit loss\" and spoilage. ❖ Therefore, it doesn't just \"transmit\" value; it actively changes the final value of the product. It is a Strategic Link, not a neutral one. Statement 4 is correct: This is the \"Bumper Harvest Paradox.\" If a farmer uses better seeds and irrigation (Upstreamsuccess) to produce 2x the crop, but there are no processing units or SPP 22633 retail chains to buy it (Downstream absence), the local market will crash. The farmer will be forcedinto a distress sale, andthe productivity gain will result in a financial loss."},{"id":15,"txt":"Which one of the following most accurately distinguishes upstream from downstream requirements in the food processing value chain?","ref":"","opts":["Coordination of raw material supply versus market access and distribution","Provision of farm inputs versus generation of consumer demand","Primary agricultural activity versus secondary industrial activity","Predominance of public investment versus private investment"],"ci":0,"exp":"Ex: The core distinction between upstream and downstream requirements in food processing lies in what problem each stage solves in the value chain. Upstream requirements focus on raw material coordination: Ensuring adequate quantity, quality, timing, and consistency of farm produce through aggregation, contract farming, input alignment, and logistics to the factory gate. Downstream requirements focus on market access and distribution: Storage, cold chains, branding, certification, transport to consumption centres, export logistics, and integration with retail and consumer markets. Hence option A is correct. Option (b) is incorrect: While \"consumer demand\" is downstream, \"farm inputs\" (seeds/fertilizers) are technically \"Pre- upstream\" or input-side activities. The upstream of a processing chain starts with the crop already grown and ready for harvest. Option (c) is incorrect: This defines the Sectors (Agriculture vs. Industry), not the Requirements of a specific value chain. Option (d) is incorrect: Both upstream (e.g., FPOs, Mandis) and downstream (e.g., Retail, Cold storage) involve a mix of public and private investment. There is no such strict binary rule."},{"id":16,"txt":"With reference to supply-chain digitisation in agriculture, consider the following statements:\n1. Information symmetry does not necessarily eliminate market power asymmetries.\n2. Small farmers often remain price takers despite access to digital platforms.\n3. Digitisation substitutes the need for physical infrastructure and credit.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: Evenif a small farmer in Churu knows that the price of Mustard is ₹7,000/quintal in Jaipur via an app, they may still be forced to sell for ₹6,000 locally. This is becauseMarket Power is derivedfrom factors beyond information, such as: ❖ Debt Bondage: Being tied to a local moneylender/trader. 8 ❖ Urgency: Theneed forimmediate cash to pay for the next crop or a family emergency. ❖ Logistics: Lack of a truck to reach the higher-paying market. ❖ Information reduces the\"knowledge gap,\" but it doesn't solve the\"financial/logistical gap.\" Statement 2 is correct: Access to e-NAM or other digital platforms allows a farmer to see bids, but a \"Price Taker\" is someone who has no choice but to accept the prevailing price because small farmers have low Holding Capacity (cannot store the grain and wait for prices to rise), they are still \"price takers.\" Furthermore, digital platforms oftenfavor those who can provide standardized quality and large volumes,whichindividual small farmers struggle to do without FPO-led aggregation. Statement 3 is incorrect: Digitization is a complement, not a substitute. An app (digital) cannot move grain; you still need roads and trucks (physical). An app cannot prevent rot; you still need a warehouse (physical). In fact, digitization often increasesthe need for credit, as farmers needmoney to buy the high-quality inputs required to meet the standards set on digital platforms"},{"id":17,"txt":"Consider the following statements:\nStatement I: India’s livestock sector exhibits low average productivity despite high aggregate output.\nStatement II: A fragmented production structure dominated by smallholders limits economies of scale, technology adoption, and genetic upgradation.\nStatement III: Higher livestock population density inherently leads to proportionate gains in per-animal productivity.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one of them explains Statement I","Only one of the Statements II and Statement III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":2,"exp":"Ex: Statement I is correct: India is the world's largest producer of milk and has one of the largest livestock populations. However, the average milk yieldof an Indian cow is roughly 3–5 liters per day, compared to 25–30 liters in Israel or the US. We producemore because we have more animals,not because each animal is highly efficient. Statement II is correct and explains Statement I: Unlike the \"Industrial Farming\" models of the West,80%of India's livestock is owned bysmall and marginal farmers (owning 1–3 animals) leadingto fragmented herd sizes, weak economies of scale, limited access to modern technology, veterinary services, and scientific feeding, slow genetic upgradation. These structural constraints directly explain why productivity per animal remains low despite high total output. SPP 22633 Statement III is incorrect: Higher livestock population density does not inherently lead to proportionate gains in per-animal productivity. Productivity depends on breed quality, nutrition, health care, and management, not sheer numbers. In fact, excessive population without inputs often depresses productivity."},{"id":18,"txt":"With reference to livestock-related schemes in India, consider the following pairs:\nList I (Scheme) List II (Most appropriate distinguishing feature) A. National Mission-mode Animal eradication of Disease economically Control significant zoonotic Programme diseases (NADCP) B. National Umbrella framework Livestock integrating Mission entrepreneurship, breed, (NLM) feed and extension C. Rashtriya Conservation and Gokul Mission scientific management (RGM) of indigenous bovine germplasm D. Nationwide Campaign-mode genetic Artificial upgradation with digital Insemination animal traceability Programme (NAIP)\nWhich of the pairs given above are correctly matched?","ref":"","opts":["Only two","Only three","All four","Only one"],"ci":2,"exp":"Ex: Pair 1 is correctly matched: The National Animal Disease Control Programme (NADCP), launched in 2019, is a 100% centrally funded scheme. It targets two specific diseases: Foot and Mouth Disease (FMD) and Brucellosis. While FMD is primarily an economic threat (loss of milk and trade embargoes), Brucellosis is a significant zoonotic disease that spreads to humans (causingundulant fever). The \"Mission-mode\" refers to the target of eradicating theseby 2030 through 100% vaccination coverage. Pair 2 is correctly matched: The National Livestock Mission (NLM) was revamped in 2021-22 to move beyond simple subsidies. It acts as an umbrella that consolidates diverse needs. It includes sub-missions on: ❖ Breed Improvement: Focus on non- bovine species (sheep, goat, poultry, pigs). ❖ Feed and Fodder: Solving the critical fodder deficit. ❖ Entrepreneurship: Providing50% capital subsidies for livestock businesses. Pair 3 is correctly matched: Launched in 2014, the RashtriyaGokul Mission (RGM) is the dedicated scheme for cattle and buffaloes. Its \"Primary Focus\" is the Indigenous Breed. It promotes thedevelopment of nativebreeds (like Gir, Sahiwal, and Murrah) through scientific management, setting up \"Gokul Grams,\" and using sex-sorted semen to increase the population of female calves. Pair 4 is correctly matched: The Nationwide Artificial Insemination Programme (NAIP) is a campaign-driven subset of RGM. It is implemented in districts with less than 50% AI coverage. Every animal covered under NAIP must be identified via \"Pashu Aadhaar\" (12- 9 digit UID ear-tags). The data is uploaded to the Bharat Pashudhan (formerly INAPH) portal, ensuring real-time digital traceability from insemination to calf birth."},{"id":19,"txt":"With reference to livestock-related programmes and digital initiatives, consider the following pairs:\nList I (Programme / List II (Associated Component) Scheme / Mission) A. e-Pashuhaat Rashtriya Gokul B. Nakul Swasthya Animal wellness Patra and health identity framework C. Information Nationwide Network for Artificial Animal Insemination Productivity and Programme Health Database\nWhich of the pairs given above are correctly matched?","ref":"","opts":["Only two","All three","None","Only one"],"ci":1,"exp":"Ex: Pair 1 is correctly matched: Launched under the Rashtriya Gokul Mission (RGM), e- Pashuhaat is a dedicatedwebportal that acts as an e-market forbovinegermplasm and animals. It connects farmers directly with breeders and semen stations. Before this, there was no organized market to buy/sell certified high- genetic-merit bulls or frozen semen. It eliminates middlemen and ensures the farmer knows the \"pedigree\" of the animal they are buying. Pair 2 is correctly matched: This is a component of the Pashu Sanjivani (Animal Wellness) program. Function: It is essentially a \"Health Card\" for bovines. It contains the 12-digit unique ID (UID) of the animal, its breed details, vaccination records, andtreatment history. This card is crucial for farmers during the sale of animals and for claiming insurance, as it provides a verified \"Health Identity.\" Pair 3 is correctlymatched: TheInformation Network for Animal Productivityand Health (INAPH) is the digital platform developed by NDDB (National Dairy Development Board). It is the mandatory reporting tool for the Nationwide Artificial Insemination Programme (NAIP). Every AI technician must enter the animal's ear-tag number, the semen dose details, and follow-up data (pregnancy diagnosis and calving) into this database. This ensures real-time monitoring of genetic upgradation across the country."},{"id":20,"txt":"With reference to fisheries governance in India, consider the following statements:\n1. Inland fisheries fall exclusively under State jurisdiction, whereas marine fisheries involve concurrent responsibilities.\n2. Overcapacity in territorial waters is a constraint unique to inland fisheries.\n3. Fisheries contribute a higher share to agricultural GVA than to total national GVA.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","2 and 3 only","1 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is Correct:Inland Fisheries: Fall under Entry 21 of the State List (Fisheries). States have exclusive power to regulate fishing in rivers, lakes, and ponds. Marine Fisheries: Jurisdiction is divided. States control the Territorial Waters (up to 12 nautical miles). The Union Government SPP 22633 controls the Exclusive Economic Zone (EEZ) (from 12 to 200 nautical miles) under Entry 57 of the UnionList (Fishingandfisheriesbeyond territorial waters). Statement 2 is Incorrect: Marine Fisheries: Suffer from Overcapacity and Overfishing, particularly in near-shore territorial waters where thousands of mechanized trawlers compete with traditional artisanal boats. Inland Fisheries: The problem is usually Under-utilization or low productivity. For example,India's reservoirs havethe potential to producemuch morefish, but theylackscientific stocking and management. Statement 3 is Correct: Fisheries contribute roughly 6.5% to 7% of the Agricultural GVA. Their contributionto the Total National GVA is much smaller, hovering around 1.1% to 1.2%. Therefore, its \"relative weight\" within the agriculture sector is significantly higher than its weight in the overall economy. PWOnlyIAS Extra Edge Marine Products Export Development Authority (MPEDA): While the Ministry of Fisheries handles production, the Ministry of Commerce (via MPEDA) handles the high- value export segment, which accounts for over ₹60,000 crore annually."},{"id":21,"txt":"Consider the following statements:\n1. Pradhan Mantri Bharatiya Janaushadhi Kendras are administered by the Department of Pharmaceuticals.\n2. Pashu Aushadhi Initiative is administered by the Ministry of Fisheries, Animal Husbandry and Dairying.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is Correct: Pradhan Mantri Bharatiya Janaushadhi Kendras (PMBJKs) are implemented under the Pradhan Mantri Bhartiya Janaushadhi Pariyojana(PMBJP). The scheme is administered by the Department of Pharmaceuticals, Ministry of Chemicals & Fertilizers. The project is implemented by the Pharmaceuticals& Medical Devices Bureau of India (PMBI) (formerly known as BPPI). Statement 2 is Correct: The Pashu Aushadhi Initiative aims to provide affordable generic veterinary medicines for livestock. It is administered by the Ministry of Fisheries, Animal HusbandryandDairying, aligning with livestock health and productivity objectives. These stores (Pashu Aushadhi VikrayKendras) are run through Pradhan Mantri Kisan Samriddhi Kendras (PMKSK) and cooperative societies. 10 PWOnlyIAS Extra Edge ❖ Ethnoveterinary Medicines (EVM): A unique feature of Pashu Aushadhi is the inclusion of traditional remedies (using ingredients like turmeric, garlic, and aloe vera) validated by the National Dairy Development Board (NDDB). ❖ Target Diseases: The medicines at these centers primarily target major economic diseases like Foot and Mouth Disease (FMD), Brucellosis, and Mastitis."},{"id":22,"txt":"Which one of the following livestock species is most strongly associated with arid and semi- arid agro-ecological conditions in India?","ref":"","opts":["Cattle","Buffalo","Goat","Pig"],"ci":2,"exp":"Ex: While all these species exist in various parts of India, the Goat is considered the \"Poor Man's Cow\" and is the most resilient and dominant livestock species in arid and semi-arid regions like Rajasthan,Gujarat, andparts of the Deccan Plateau. Economic and Ecological Logic: ❖ Resilience to Scarcity: Goats are \"browsers\" (unlike cattle and buffaloes which are \"grazers\"). They can survive on a wide variety of vegetation, including thorny bushes, shrubs, and weeds that other livestock cannot consume. This makes themperfectlysuitedfor the sparse vegetation of arid zones. ❖ Low Water Footprint: Goats require significantly less water compared to bovines (Cattle/Buffalo), whichis a critical survival trait in water-stressed regions. ❖ Small Initial Investment: For small and marginal farmers in drought-prone areas, goats act as a \"moving bank.\" They are easy to buy, sell, andmanagecompared to larger, more expensive cattle. ❖ Heat Tolerance: Goats have high physiological tolerance to extreme temperature fluctuations typical of semi- arid climates. Hence option C is correct. Why other options are less associated with arid zones: ❖ Buffalo: These are semi-aquatic animals. They have poor sweat glands and require frequent wallowing in water or high- moisture fodder to maintain body temperature. Hence, theyare concentrated SPP 22633 in high-rainfall or canal-irrigated areas (like the Indo-Gangetic plains). ❖ Cattle: While hardy, high-yielding cattle require significant amounts of green fodder and water, which arescarce in strictly arid conditions. ❖ Pig: Pig farmingis traditionallyassociated with regions having high humidity and access to organic waste or forest cover, such as North-East India and certain coastal pockets."},{"id":23,"txt":"With reference to the Mega Food Park Scheme (MFPS), consider the following statements:\n1. The initiative focuses primarily on assisting small and medium enterprises.\n2. The scheme aims to provide infrastructure facilities for food processing along the value chain from farm to market.\n3. The scheme follows a cluster-based approach to food processing.\n4. The scheme is supply-driven and depends on international prices of produce.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statement 1 is correct: The initiative to developfoodparkswas takenprimarily in order to assist the small and medium enterprises which are unable to invest in capital intensive activities. So far, twenty-two food parks havecome intooperation which provide common facilities such as cold storage, food testing and analysis labs. Statement 2 is correct: The primary objective of the MFPS is to provide adequate/excellent infrastructure facilities for food processing along the value chain from the farm to market. It will include creation of infrastructure near the farm, transportation, logistics and centralized processing centres. Statement 3 is correct: The main featureof the scheme is a cluster-based approach. Statement 4 is incorrect: The scheme will be demand-driven; pre-marketed and would facilitate food processing units to meet environmental,safetyandsocial standards. The expected outcome results in increased realization for farmers, creation of high quality rural processing infrastructure, reduction in wastage, capacitybuildingof the producers and processors and creation of an efficient supply chain alongwith significant direct and indirect employment generation."},{"id":24,"txt":"With reference to agroforestry, consider the following statements:\n1. It helps in reducing the dependence on natural forests.\n2. It enhances nutrient recycling through deep-rooted trees.\n3. It can influence soil stability and nutrient retention through root interactions.\n4. It contributes to soil moisture retention by reducing evaporation.\nHow many of the statements given below is/are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: As natural vegetation is cut for agriculture and other types of development, the benefits that trees provide are best sustained by integrating trees into the agricultural system. This practice is known as agroforestry. 11 Statement 1 is correct: Agroforestry reduces pressure on forests by providing alternative sources of timber and fuelwood. Statement 2 is correct: Deep-rooted trees in agroforestry systems help recycle nutrients from deeper soil layers. Statement 3 is correct: Tree roots stabilize the soil and reduce nutrient loss, indirectly improving soil fertility and preventing degradation. Statement 4 is correct: Trees in agroforestry systems help retain soil moisture by reducing evaporation through shading and mulching."},{"id":25,"txt":"With reference to Multi-Purpose ArtificiaI Insemination Technicians in Rural India (MAITRIs), consider the following statements:\n1. MAITRIs are selected from unemployed rural youth and trained to provide artificial insemination services for livestock.\n2. Only individuals with a veterinary degree are eligible to become MAITRIs.\n3. The initiative aims to generate employment opportunities while improving livestock productivity in rural areas.\nWhich of the statements given above is/are correct?","ref":"","opts":["1, 2 and 3","1 and 2","1 and 3","3 only"],"ci":2,"exp":"Ex: Statement 1 is correct: MAITRIs are selected from unemployed rural youth and trained to deliver artificial insemination (AI) services so as to generate employment and support livestock development. Thus, statement 1 is correct. Statement 2 is incorrect: The minimum educational qualificationrequiredfor MAITRIs is 10+2, not a veterinary degree and minimum age for AI workersmaybe fixedat 18 years by EIA. Thus, statement 2 is incorrect. Statement 3 is correct: The initiative not only enhances livestockproductivity but also creates self-employment opportunities in rural areas. Thus, statement 3 is correct. Additional Information: In the last 4 years, 38736 MAITRIs have been inducted under Rashtriya Gokul Mission (Economic Survey data) ❖ MAITRIs are trained at accredited AI training institutes (evaluated and accredited by CMU). They are trained usinguniform training module developed by Government of India ❖ MAITRIs are trained at the accredited training institutes for a duration of 3 months (1 monthclassroomtraining and 2 month trainingin the fieldwith AI service provider). ❖ After completion of training certificate and Unique Identification Number (UID) will be issued by the training institute. SPP 22633 ❖ MAITRIs to be established under National Programme for Bovine Breeding component of the scheme National Programme for Bovine Breeding and Dairy Development (NPBBDD) will be multipurpose workers along with AI they will take up: ➢ veterinary first aid, ➢ Vaccination, ➢ agent for livestock insurance, ➢ ration balancing, ➢ milk recording, ➢ data entry in national database ➢ agent for distributionof fodder seeds root slips and stem slips etc. ➢ Demonstration on feed management, health management breeding management will also be conducted through MAITRIs under NPBB"},{"id":26,"txt":"Which of the following is not a function of Marine Products Export Development Authority (MPEDA)?","ref":"","opts":["Implementation of schemes vital to the fishing industry.","Providing subsidies to import seafood to encourage domestic seafood consumption.","Imparting training to fishermen, fish processing workers and aquaculture farmers.","Registration of infrastructural facilities for seafood export trade."],"ci":1,"exp":"Ex: Providing subsidies to import seafood to encourage domestic seafoodconsumption is not an objectiveof MPEDA. Functions of MPEDA include: ❖ Registration of infrastructural facilities for seafood export trade. ❖ Collection and dissemination of trade information. ❖ Promotion of Indian marine products in overseas markets. ❖ Implementation of schemes vital to the industry by extending assistance for infrastructure development for better preservation and modernized processing following a quality regime. ❖ Promotion of aquaculture for augmenting export production through hatchery development, new farm development, diversification of species and up gradation of technology ❖ Promotion of deep-sea fishing projects through test fishing, joint ventures and up gradation & installation of equipment to increase the efficiency of fishing. 12 ❖ Market promotional activities and publicity. ❖ To carry out inspection of marine products, its raw material, fixing standards and specifications, training, regulating as well as to take all necessary steps for maintaining the qualityof seafood that are marketed overseas. ❖ Impart training to fishermen, fish processing workers, aquaculture farmers and other stakeholders in the respective fields related to fisheries; promotion of modernization of fishing harbours. ❖ Conduct researchanddevelopment for the aquaculture of aquatic species having export potential through Rajiv Gandhi Centre for Aquaculture (RGCA). ❖ Conduct extension and awareness activities, training etc. through Network for Fish Quality Management and Sustainable Fishing (NETFISH) & National Centre for Sustainable Aquaculture (NaCSA). ❖ To prescribe for itself anymattersrequired for protectingandaugmentingthe seafood exports from the country in the future."},{"id":27,"txt":"With reference to India's fisheries sector, consider the following statements:\n1. India is the second largest producer of fish and aquaculture globally.\n2. The Union Budget 2025 increased the Kisan Credit Card (KCC) lending limit from ₹3 lakh to ₹5 lakh.\n3. The Union Budget 2025-26 proposed the highest-ever total annual budgetary support of ₹20,703.67 crore for the fisheries sector.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: Termed as one of the key ‘sunrisesectors’ of theIndianeconomy,the Indian Fisheries sector continues to make its mark and grow at a very healthy pace registering the highest average annual decadal growth of 9.08% in value of output (FY 2014-15 to 2022-23) amongst allied sectors under Agriculture (Niti Aayog Report 2024). This growth story is marked by India’s global ranking as 2nd largest fish producing country with 8% share in global fish production and a record high fish production of 184.02 lakh tonnes (2023-24). India also stands 2nd in aquaculture production with 139.07 lakh tonnes in 2023-24 and is one of the top shrimp producing and seafood exporting nations in the world with a total export value of Rs 60,524 crore (2023-24). SPP 22633 Statement 2 is correct: In the Union Budget 2025, the Government of India increased the Kisan Credit Card (KCC)lending limit from ₹3 lakh to ₹5 lakh to enhance credit accessibility forfishers, farmers, processors and other fisheries’ stakeholders. This move aims at streamlining the flow of financial resources ensuring that necessary funds are easily accessible for fulfilling working capital requirements of the sector. Statement 3 is incorrect: The Union Budget 2025-2026, proposed the highest ever total annual budgetary support of Rs. 2,703.67 crores for the fisheries sector. This overall allocation for the financial year 2025-26 has increased by 3.3% in comparison to the allocation of Rs. 2,616.44 crore made during last year 2024-25. Thisincludes the allocation of Rs. 2,465 crore for Pradhan Mantri Matsya Sampada Yojana during the year 2025-26 that has increased by 4.8% in comparison to the allocation made for the scheme during the year 2024-25 (Rs. 2,352 crore)."},{"id":28,"txt":"Agri Stack is a digital initiative aimed at transforming agriculture in India. Which of the following statements about it is correct?","ref":"","opts":["It is a blockchain-based system designed exclusively for agricultural commodity trading in India.","It is a centralized platform that replaces all state-level agricultural policies with a single national framework.","It includes registries like the Farmers' Registry and Crop Sown Registry to enhance agricultural data management.","It mandates private agritech firms to provide digital services to farmers at no cost."],"ci":2,"exp":"Ex: Agri Stack is the digital foundation beingset up by the government to enable rollout of data centric digital services to improve Indian agriculture and enable farmer empowerment. It is an effort to bring together high-quality data and to make this data easily available to the stakeholders that need it so that they can create new services using the data. Agri Stack is being implemented by the Ministry of Agriculture and Farmer Welfare at the Centre in close collaboration with the Revenue and Agriculture departments of State governments. Objectives of Agri Stack: ❖ Improve Government benefits/schemes delivery so they reach all Indian farmers faster and more easily. ❖ Create a presence-less layer for quick identification and authentication of the farmers. 13 ❖ Lower the cost and risk of agricultural services for farmers and agri-credit, finance, inputs, and other service providers. ❖ Enabler easier scheme convergence between agri-allied Ministries and State Governments to better serve the Indian farmers. ❖ Accelerate innovation in products & services by Agri-Techs with easier access to high-quality data."},{"id":29,"txt":"With reference to India's Floriculture Industry,\n1. It is considered a sunrise industry with a\n2. Essential oils are a part of commercial\n3. Key export destinations include the USA,\nwhich of the following statements is/are correct? 100 percent export orientation. floriculture. Netherlands, UAE, and UK. Select the correct answer from the codes given below:","ref":"","opts":["1 and 3 only","2 and 3 only","1 and 2 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: India's floriculture industry has grown into a high-performing sector, earning its status as a sunrise industry with a 100 percent export orientation. The industry is driven bya growing global demand for flowers,floriculturehas evolved into a key commercial venture within agriculture. Statement 2 is correct: Commercial floriculture is particularly lucrative, offering higher returns per unit area than many traditional field crops. Profitable avenues in commercial floriculture include cut-flower production, loose-flower production, dry flowers, cut greens, pot plants, flower seeds, perfumes and essential oils.  SPP 22633 Statement 3 is correct: Indiaexported 19,678 metric tonnesof floriculture products, earning ₹717.83 crore(USD 86.63million). Key export destinations include the USA, Netherlands, UAE, UK, Canada, and Malaysia. With its high growth trajectory and promising export potential, India’s floriculture industry is bloomingas a vital player in the global flower trade.  14"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

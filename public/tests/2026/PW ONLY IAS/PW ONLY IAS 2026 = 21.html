@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 21</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 21</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 21">PW ONLY IAS 2026 = 21</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Which one of the following statements best explains why soils derived from the same parent rock may differ significantly across regions in India?","ref":"","opts":["Minor regional variations in mineral composition within the same parent rock","Local differences in relief and slope affecting soil depth and stability","Long-term climatic controls influencing weathering, leaching, and soil horizons","Region-specific patterns of human-induced erosion and land-use pressure"],"ci":2,"exp":"Ex: Option (c) is correct: Soils derived from the same parent rock can differ significantly across regions primarily due to long-term climatic controls. Climate governs weathering intensity, leaching, organic matter accumulation, soil moisture regime, and horizon development, which can override lithological similarity over time. Hence, identical parent material can yield contrasting soil types under different climatic regimes (e.g., laterisation vs calcareous profiles). Example: Basaltic rocks in humid tropical regions undergo intense chemical weathering and leaching, resulting in the formation of lateritic soils, whereas the same basalt under semi-arid to arid climates develops shallow, calcareous or black soils (regur) due to limited leaching and accumulation of calcium carbonates. Option (a) is incorrect: If the parent rock is the same, mineral composition does not vary significantly. Option (b) is incorrect: Relief and slope influence soil depth and erosion, but alone they cannot account for regional-scale soil differentiation across India. Option (d) is incorrect: Human-induced erosion affects soil quality and thickness, but it modifies existing soils rather than explaining systematic regional differences in soils derived from the same parent rock."},{"id":1,"txt":"Consider the following statements regarding alluvial soils of India:\n1. They are not strictly controlled by the mineral composition of any single parent rock\n2. Their fertility is uniformly high across both Bhangar and Khadar regions.\n3. Their depth and texture are influenced by fluvial deposition dynamics.\nWhich of the above statements are correct?","ref":"","opts":["1 and 3 only","2 and 3 only","1 only","1, 2 and 3"],"ci":0,"exp":"Ex: Alluvial soils constitute one of the most widespread and agriculturally significant soil groups in India, formed through riverine deposition and shaped by fluvial processes over time. Alluvial soil is formed by the deposition of sediments brought by rivers. Weathering of SPP 22622 rocks in the upper catchment areas produces sand, silt, and clay, which are eroded and transported downstream by running water. When river velocity decreases in plains and floodplains, these sediments are deposited in layers. Repeated flooding spreads fresh alluvium, making the soil deep and highly fertile over time. Statement 1 is correct: Alluvial soils are largely independent of the mineral composition of a single parent rock because they are formed from transported and mixed sediments brought by rivers from diverse source regions. This heterogeneity weakens direct lithological control. Statement 2 is incorrect: Fertility is not uniformly high across Bhangar and Khadar regions. Khadar (new alluvium) is generally more fertile due to annual replenishment of fresh silt, whereas Bhangar (old alluvium) often contains kankar (calcareous nodules) and shows relatively lower fertility. Statement 3 is correct: The depth and texture of alluvial soils are strongly influenced by fluvial deposition dynamics, including river velocity, flood frequency, sediment load, and channel migration. These processes determine whether soils are sandy, loamy, or clayey and how deep the profiles are."},{"id":2,"txt":"Consider the following pairs:\nSoil Type Dominant Controlling Factor\n1. Laterite soil Alternating wet — dry climate\n2. Black soil — Degreeweathering of chemical\n3. Desert soil — Capillaryevaporation action and\n4. Alluvial soil Aeolian deposition\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Pair 1 is correctly matched: Laterite soils form under conditions of alternating wet and dry climate, which promotes intense leaching and laterisation. Seasonal rainfall followed by dry periods is the key controlling factor. Pair 2 is incorrectly matched: Black soils (regur) are not controlled primarily by chemical weathering intensity alone. Their formation is strongly linked to parent material (basaltic lava of Deccan Trap) combined with climatic conditions, especially moisture regime. 2 Pair 3 is correctly matched: Desert soils are dominated by capillary action and evaporation, leading to accumulation of soluble salts and calcareous material near the surface. This is a defining pedogenic process in arid regions. Pair 4 is incorrectly matched: Alluvial soils are formed by fluvial deposition (river action), not by aeolian processes. Aeolian deposition is characteristic of loess or desert sands, not alluvium."},{"id":3,"txt":"Consider the following statements regarding laterite soils:\nStatement I: Laterite soils are poor in lime, magnesia, and nitrogen due to intense leaching under high rainfall.\nStatement II: Laterite soils are agriculturally unproductive primarily because they are derived from acidic crystalline rocks.\nWhich one of the following is correct?","ref":"","opts":["Both Statement I and II are correct and II explains I","Both Statement I and II are correct but II does not explain I","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct"],"ci":2,"exp":"Ex: Statement I is correct: Laterite soils are poor in lime, magnesia, and nitrogen due to intense leaching under conditions of high rainfall and temperature. Prolonged leaching removes basic cations and nutrients, leaving behind iron and aluminium oxides—this is the defining pedogenic process of laterisation. Statement II is incorrect: Laterite soils are not agriculturally unproductive merely because they are derived from acidic crystalline rocks. Their low fertility is primarily a process outcome (intense leaching and nutrient loss), not a necessary consequence of parent material alone. With manuring, irrigation, and fertilizer inputs, laterite soils can support crops like cashew, rubber, tea, and coffee."},{"id":4,"txt":"Consider the following pairs:\nSoil Type Characteristic Region\n1. Black soil — LeewardGhats side of Western\n2. Red soil — Chota Nagpur Plateau\n3. Laterite soil Eastern Rajasthan\nHow many of the above pairs are incorrectly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Pair 1 is correctly matched: Black soil is characteristically found on the leeward (rain- shadow) side of the Western Ghats, especially over the Deccan Trap basalt. Low rainfall and basaltic parent material together favour the formation of regur (black cotton) soil. Pair 2 is correctly matched: Red soil is widespread over the Chota Nagpur Plateau, where it develops from ancient crystalline rocks under conditions of moderate rainfall and prolonged weathering. Pair 3 is incorrectly matched: Laterite soil requires high rainfall and alternating wet–dry conditions for intense leaching. Eastern Rajasthan is semi-arid to arid and does not provide the climatic conditions necessary for lateritisation. SPP 22622"},{"id":5,"txt":"Which one of the following crop–soil–climate combinations is MOST likely to fail despite fertile soil conditions?","ref":"","opts":["Wheat grown on alluvial soils under cool winters with low evapotranspiration","Cotton grown on black soils under short- duration high-intensity rainfall","Tea cultivated on laterite soils under humid tropical climate","Rice cultivated on deltaic alluvial soils under monsoonal rainfall"],"ci":1,"exp":"Ex: Option (b) is correct: Cotton grown on black soils under short-duration high-intensity rainfall is most likely to fail despite fertile soil. Although black soils (regur) are ideal for cotton due to high moisture retention, cotton requires Moderate, well-distributed rainfall, and a long dry spell during boll formation and harvesting. Short-duration, high-intensity rainfall leads to waterlogging, poor aeration, pest incidence, and boll rot, which undermines cotton productivity. Thus, climatic mismatch overrides soil fertility. Option (a) is incorrect: Wheat thrives on alluvial soils under cool winters and low evapotranspiration, which favour grain filling. Option (c) is incorrect: Tea is well-suited to laterite soils under humid tropical climate, provided drainage is good. High rainfall and humidity are essential for tea. Option (d) is incorrect: Rice cultivation on deltaic alluvial soils under monsoonal rainfall represents an optimal crop–soil–climate match, as rice tolerates standing water."},{"id":6,"txt":"Consider the following the rows:\nSoil Type Crop Climatic Limitation\n1. Black soil Soybean Frost during flowering\n2. Red soil Groundnut Excess soil moisture\n3. Laterite soil Coffee Low rainfall variability\n4. Alluvial soil Jute Low humidity\nHow many of the above rows are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Row 1 is incorrectly matched: Soybean on black soil is not primarily limited by frost during flowering in Indian conditions. Soybean is more sensitive to temperature range, day length, and moisture stress rather than frost, which is not a dominant constraint in major soybean belts (Madhya Pradesh, Maharashtra). Row 2 is correctly matched: Groundnut on red soil is indeed constrained by excess soil moisture. Groundnut requires well-drained soils, and waterlogging leads to poor pegging and pod development, making excess moisture a clear climatic limitation. Row 3 is incorrectly matched: Coffee on laterite soil is not limited by low rainfall variability. In fact, coffee requires well- distributed rainfall with distinct wet and dry phases. It is high rainfall variability or moisture stress, not low variability, that becomes limiting. 3 Row 4 is correctly matched: Jute on alluvial soil faces limitation under low humidity. Jute is a hot, humid climate crop, and inadequate humidity adversely affects fibre quality and growth, making low humidity a genuine climatic constraint."},{"id":7,"txt":"Which of the following statements is most consistent with soil-forming processes under low-temperature regimes?","ref":"","opts":["Accelerated conversion of litter into stable humus","High rates of nitrification and mineralisation","Persistence of partially decomposed organic material","Rapid turnover of soil organic carbon"],"ci":2,"exp":"Ex: Soil formation in low-temperature regimes is dominated by suppressed biological activity, which strongly affects organic matter dynamics. Option (c) is correct: Low temperatures inhibit microbial metabolism and enzyme activity, resulting in slow decomposition of plant residues. Consequently, soils in cold regions show persistence of partially decomposed organic material, often forming peat-like layers or thick humus horizons. Option (a) is incorrect: The conversion of litter into stable humus is slow, not accelerated, under cold conditions due to reduced microbial activity. Option (b) is incorrect: Nitrification and mineralisation are biologically mediated processes and occur at low rates in cold soils. Option (d) is incorrect: Cold environments are characterised by slow organic carbon turnover, not rapid cycling."},{"id":8,"txt":"Which of the following changes would MOST likely reduce soil erosion during the monsoon?","ref":"","opts":["Greater variability in monsoonal rainfall intensity and distribution","Conversion of natural forests into managed plantation systems","Wider expansion of canal-based irrigation networks in rural areas","Transition from short intense rainfall to longer low-intensity rainfall"],"ci":3,"exp":"Ex: Option (d) is correct: A shift from short- duration, high-intensity rainfall to long- duration, low-intensity rainfall would most likely reduce soil erosion during the monsoon. Soil erosion is primarily driven by rainfall intensity, not total rainfall. High-intensity showers exceed the soil’s infiltration capacity, generating surface runoff that causes sheet, rill, and gully erosion. Long-duration rainfall allows greater infiltration, reduces runoff velocity, and therefore minimizes erosive force, even if total rainfall remains the same. Option (a) is incorrect: Increased rainfall variability usually means more extreme events, which increase erosion risk, not reduce it. SPP 22622 Option (c) is incorrect: Canal irrigation affects water availability but does not directly control rainfall-induced erosion during monsoon events. Option (b) is incorrect: Replacing forests with plantations generally reduces canopy cover, root binding, and litter protection, thereby increasing erosion, especially on slopes."},{"id":9,"txt":"Which of the following correctly represents the progressive sequence of water erosion forms in India under unchecked conditions?","ref":"","opts":["Sheet erosion → Rill erosion → Ravine formation → Gully erosion","Rill erosion → Sheet erosion → Gully erosion → Ravine formation","Sheet erosion → Rill erosion → Gully erosion → Ravine formation","Gully erosion → Rill erosion → Sheet erosion → Ravine formation"],"ci":2,"exp":"Ex: The progressive sequence of water erosion under unchecked conditions follows a clear intensification pathway: Sheet erosion → Rill erosion → Gully erosion → Ravine formation 1. Sheet erosion: Initial, widespread removal of thin topsoil layers by surface runoff; often unnoticed but most extensive. 2. Rill erosion: Concentration of runoff into small, shallow channels as sheet erosion intensifies. 3. Gully erosion: Enlargement and deepening of rills into large channels that cannot be removed by normal tillage. 4. Ravine formation: Advanced stage where deep, wide gullies develop into ravine systems, rendering land permanently unfit for cultivation (e.g., Chambal basin). Hence Option C is correct."},{"id":10,"txt":"Yield increases in semi-arid alluvial plains due to bunding and levelling were highest for:","ref":"","opts":["Zaid crops","Kharif crops","Rabi crops","Plantation crops"],"ci":2,"exp":"Ex: Option (c) is correct: In semi-arid alluvial plains, bunding and levelling primarily improve soil moisture conservation by reducing runoff and enhancing infiltration.These benefits are most effectively utilised by Rabi crops, which depend on stored soil moisture and residual moisture rather than direct monsoon rainfall. Option a is incorrect: Zaid crops rely largely on irrigation, not conserved soil moisture from bunding. Option b is incorrect: Kharif crops receive direct monsoon rainfall, so the marginal benefit of bunding and levelling is lower. 4 Option d is incorrect: Plantation crops are perennial and less responsive to short-term moisture conservation practices."},{"id":11,"txt":"Consider the following statements regarding natural vegetation in India:\n1. Tropical wet evergreen forests are confined only to areas receiving more than 250 cm annual rainfall.\n2. Tropical semi-evergreen forests represent a transitional zone between wet evergreen and moist deciduous forests.\n3. Tropical moist deciduous forests shed leaves for a short period due to moisture stress rather than temperature stress.\nWhich of the above statements are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: India’s natural vegetation is closely linked to variations in rainfall regime, seasonal moisture availability, and length of the dry season, resulting in distinct forest types across regions. Statement 1 is incorrect: Tropical wet evergreen forests are not confined only to areas receiving more than 250 cm of annual rainfall. While very high rainfall is a typical condition, these forests can also occur in regions with slightly lower rainfall where humidity is high and dry season is negligible (e.g., windward slopes of the Western Ghats). The absolute qualifier “only” makes the statement incorrect. Statement 2 is correct: Tropical semi- evergreen forests form a transitional zone between wet evergreen and moist deciduous forests. They exhibit mixed characteristics— some evergreen species persist, while deciduous species appear due to a short dry season. Statement 3 is correct: Tropical moist deciduous forests shed leaves for a short period due to moisture stress, not temperature stress. Leaf fall coincides with the dry season, helping plants reduce transpiration when soil moisture availability declines."},{"id":12,"txt":"Which one of the following combinations is correctly matched? Region Dominant Natural Vegetation A. Western Ghats Tropical wet evergreen (windward) B. Shiwalik Tropical thorn foothills C. Eastern Tropical semi- Himalayas evergreen (lower slopes) D. Rajasthan Tropical dry evergreen (eastern margin)\nSelect the correct answer using the code below:","ref":"","opts":["A and C only","A, B and C only","A and D only","B and D only"],"ci":0,"exp":"Ex: A. Western Ghats (windward) — Tropical wet evergreen is correct: The windward slopes of the Western Ghats receive very high orographic rainfall (often >250 cm) with negligible dry season. This supports tropical wet evergreen forests, characterised by dense, multi-layered vegetation and year-round leaf cover. B. Shiwalik foothills — Tropical thorn is incorrect: The Shiwalik foothills receive moderate rainfall and are dominated by tropical moist deciduous forests, not thorn forests.Tropical thorn forests are typical of arid and semi-arid regions (western Rajasthan, parts of Gujarat). SPP 22622 C. Eastern Himalayas (lower slopes) — Tropical semi-evergreen is correct: The lower slopes of the Eastern Himalayas experience high rainfall with a short dry season, producing a transitional vegetation type between evergreen and deciduous forests, i.e., tropical semi-evergreen forests. D. Rajasthan (eastern margin) — Tropical dry evergreen is incorrect: Tropical dry evergreen forests are not a desert or semi-arid formation. They are restricted to the Coromandel Coast (Tamil Nadu) under specific coastal climatic conditions.The eastern margin of Rajasthan supports dry deciduous, not dry evergreen forests."},{"id":13,"txt":"The highest overlap of moist deciduous forests, black soils, and tiger reserves is found in:","ref":"","opts":["Western Ghats","Eastern Himalayas","Central Indian Highlands","Indo-Gangetic Plain"],"ci":2,"exp":"Ex: India has 55 notified tiger reserves, largely concentrated in forested landscapes shaped by distinct soil types and monsoonal climate regimes. Option (c) is correct: The Central Indian Highlands (covering parts of Madhya Pradesh, Chhattisgarh, Maharashtra, and eastern Rajasthan) show the maximum spatial overlap of moist deciduous forests (dominated by teak and sal), black soils (regur) derived from Deccan Trap basalts, and major tiger reserves such as Kanha, Bandhavgarh, Pench, Satpura, Tadoba, etc. This region combines seasonal monsoonal climate (ideal for moist deciduous vegetation), basaltic geology (supporting black soils), and large contiguous forest tracts with moderate human density, making it India’s core tiger landscape. Option (a) is incorrect: While rich in forests and biodiversity, the Western Ghats are dominated by laterite soils and evergreen/semi- evergreen forests, not black soils, and tiger reserves are fewer and fragmented. Option (b) is incorrect: Characterised by evergreen and semi-evergreen forests, mountain soils, and high rainfall; black soils are absent. Option (d) is incorrect: Dominated by alluvial soils and intensive agriculture, natural forests and tiger habitats are highly fragmented. 5"},{"id":14,"txt":"Which of the following pairs is correctly matched? Forest type Dominant soil process Tropical wet evergreen Podzolisation Tropical moist Laterisation deciduous Tropical dry deciduous Calcification Alpine forest Gleisation\nHow many of the above pairs are correctly matched?","ref":"","opts":["1 only","2 and 3 only","3 only","None"],"ci":2,"exp":"Ex: Different forest types in India are associated with distinct soil-forming (pedogenic) processes, depending on climate, moisture regime, and drainage conditions. Pair 1 is incorrect: Podzolisation is a soil- forming process in cold, humid climates where organic acids cause leaching of iron, aluminium, and bases from upper horizons and their accumulation below.Podzolisation occurs under cold, humid climates with coniferous vegetation (typically alpine or boreal conditions). In tropical wet evergreen regions, the dominant soil-forming process is laterisation due to high temperature and intense leaching, not podzolisation. Pair 2 is incorrect: Laterisation is a soil- forming process in hot, wet tropical climates involving intense leaching that removes silica and bases, leaving iron and aluminium oxides. Laterisation requires very high rainfall with prolonged leaching, characteristic of wet evergreen zones, not moist deciduous regions where rainfall is seasonal and leaching is moderate. Pair 3 is correct: Calcification is a soil- forming process in semi-arid to sub-humid climates where limited leaching leads to accumulation of calcium carbonate in the soil profile. Calcification occurs under moisture- deficit conditions, where calcium salts accumulate in the soil profile due to limited leaching—typical of dry deciduous and semi- arid environments. Pair 4 is incorrect: Gleysation is a soil- forming process under waterlogged conditions where poor drainage causes reduction of iron compounds, producing grey or bluish soils. Gleysation is associated with waterlogged, poorly drained lowland soils, not alpine regions. Alpine and cold temperate forests are instead linked with podzolisation due to low temperatures and organic acid accumulation. SPP 22622"},{"id":15,"txt":"Which of the following land-use practices would be MOST effective in restoring soil fertility, biodiversity linkage, and livelihood sustainability at the margin of a degraded tropical moist deciduous forest, without accelerating further forest fragmentation?","ref":"","opts":["Seasonally irrigated paddy cultivation with high-yielding varieties","Commercial monoculture plantation with periodic clear-felling cycles","Multi-storey agro-forestry integrating nitrogen-fixing species and native trees","Rotational shifting cultivation with extended fallow period"],"ci":2,"exp":"Ex: In India, a significant proportion of forest degradation occurs at forest–agriculture interfaces, where land-use choices directly influence soil health, biodiversity connectivity, and rural livelihoods. Option (c) is correct: Multi-storey agro- forestry integrating nitrogen-fixing species and native trees best meets all three objectives simultaneously: 1. Soil fertility: Nitrogen-fixing trees (e.g., legumes) enhance nutrient cycling, add organic matter, and reduce erosion. 2. Biodiversity linkage: Native, layered vegetation creates habitat continuity and buffer zones, reducing edge effects without fragmenting forests. 3. Livelihood sustainability: Diversified outputs (fuelwood, fodder, fruits, minor forest produce) provide stable, risk-spread incomes for local communities. This approach restores ecological functions while maintaining landscape connectivity—a core conservation principle. Option (a) is incorrect: Promotes monoculture, high water and chemical inputs, and increases edge pressure on forests. Option (b) is incorrect: Periodic clear-felling disrupts habitats, lowers biodiversity, and accelerates fragmentation despite short-term economic gains. Option (d) is incorrect: Even with extended fallows, it risks renewed fragmentation and fire pressure at forest margins under present demographic constraints."},{"id":16,"txt":"Which forest type acts as a transition between wet evergreen and deciduous forests and shows buttressed trunks, heavy climbers and epiphytes?","ref":"","opts":["Tropical Moist Deciduous","Tropical Dry Evergreen","Tropical Semi-Evergreen","Sub-tropical Broad-leaved Hill Forest"],"ci":2,"exp":"Ex: Tropical semi-evergreen forests act as a transitional zone between tropical wet evergreen and tropical moist deciduous forests. They retain several evergreen structural features such as buttressed trunks, heavy climbers 6 (lianas), epiphytes (orchids, ferns, mosses) while also showing partial leaf fall during a short dry season. Such forests are typically found in parts of the Western Ghats, Andaman– Nicobar Islands, and the Eastern Himalayan foothills. Typical species include white cedar (Dysoxylum malabaricum), rosewood (Dalbergia latifolia), jamun (Syzygium cumini). Hence, Option (c) is correct."},{"id":17,"txt":"Which species association is CORRECT?","ref":"","opts":["Sal – Tropical Dry Evergreen","Teak – Tropical Thorn","Deodar – Himalayan Moist Temperate","Rhododendron – Tropical Moist Deciduous"],"ci":2,"exp":"Ex: Distinct forest types in India are identified by characteristic tree species that reflect specific altitude, temperature, and moisture regimes. Option (c) is correct: Deodar (Cedrus deodara) is a characteristic species of Himalayan Moist Temperate forests.It thrives in cool, moist conditions at mid-altitudes (roughly 1,500–3,000 m), along with oak, blue pine, and spruce. Option (a) is incorrect: Sal (Shorea robusta) is a dominant species of tropical moist deciduous forests, not dry evergreen forests. Option (b) is incorrect: Teak (Tectona grandis) belongs to tropical moist and dry deciduous forests, not thorn forests which are dominated by acacia, babul, and xerophytes. Option (d) is incorrect: Rhododendron is a temperate to alpine species of the Himalayas, not a tropical deciduous one."},{"id":18,"txt":"Which state group has high absolute forest area but lower forest prosperity index?","ref":"","opts":["Arunachal Pradesh & Mizoram","Madhya Pradesh & Maharashtra","Kerala & Uttarakhand","Nagaland & Meghalaya"],"ci":1,"exp":"Ex: The Forest Prosperity Index (also referred to as forest condition or forest quality indicators) is a composite measure that goes beyond forest cover to assess forest health, incorporating factors such as canopy density, biodiversity value, carbon stock, regeneration status, and degree of anthropogenic pressure. Option (b) is correct: Madhya Pradesh and Maharashtra have very high absolute forest area (among the highest in India), but their Forest Prosperity / Forest Condition Index is relatively lower because: SPP 22622 1. Large forest tracts are dry deciduous in nature, which are more vulnerable to degradation. 2. High anthropogenic pressure (fuelwood extraction, grazing, mining, infrastructure). 3. Fragmentation and quality degradation outweigh the sheer aerial extent. In states like Madhya Pradesh and Maharashtra, a large share of forests falls under open and moderately dense forest categories, which lowers composite forest quality scores despite high total area. Frequent forest fires, invasive species (e.g., Lantana), and linear infrastructure further depress forest condition indicators in these states."},{"id":19,"txt":"Consider the following statements regarding the geographical distribution of forests in India:\n1. Peninsular Plateaus and Hills together account for more than half of India’s forest area.\n2. The Himalayan region has a higher share of forest cover than both the Western and Eastern Coastal Plains combined.\n3. The Great Plains of India contribute less than one-tenth of India’s total forest area.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","2 and 3 only","1 only","1, 2 and 3"],"ci":3,"exp":"Ex: As per the Forest Survey of India (FSI), forest cover constitutes about 21.7% and tree cover about 2.9% of India’s geographical area, taking the total forest and tree cover to approximately 24.6% of the country. Statement 1 is correct: The Peninsular Plateaus and Hills together account for more than half of India’s total forest area. This includes extensive tracts across Central Indian Highlands, Deccan Plateau, Eastern Ghats, and parts of the Western Ghats, dominated largely by deciduous forests. In absolute terms, this region is India’s largest forest holder. Statement 2 is correct: The Himalayan region has a higher share of forest area than the Western and Eastern Coastal Plains combined. While the Himalayas have significant altitudinal forest diversity and large contiguous tracts, the coastal plains are narrow and highly urbanised/agricultural, limiting their forest extent. Statement 3 is correct: The Great Plains of India (Indo-Gangetic Plain) contribute less than one-tenth of India’s forest area. Intensive agriculture, dense population, and early deforestation have resulted in very low forest cover in this region. Much of the existing forest cover in the Great Plains is confined to riverine belts, plantations, and protected patches. 7"},{"id":20,"txt":"Which of the following combinations is MOST logically consistent?","ref":"","opts":["Sabai grass – Paper pulp – Sub-Himalayan tract","Chir pine – Resin – Western Ghats","Tendu leaves – Wrappers – North-East India","Lac – Plant secretion – Deccan Plateau"],"ci":0,"exp":"Ex: Option (a) is correct: Sabai grass – Paper pulp – Sub-Himalayan tract is a logically consistent triad across botany, industry, and geography. ❖ Botanical linkage: Sabai grass (Eulaliopsis binata) is a fibrous grass species suited to moist sub-tropical conditions. ❖ Geographical linkage: It is naturally distributed along the Sub-Himalayan belt (foothills of Odisha, West Bengal, Jharkhand, and Uttarakhand), where rainfall and soil conditions favour its growth. ❖ Industrial linkage: Owing to its high cellulose content and tensile strength, sabai grass is a recognised raw material for paper pulp, besides rope and cordage. Option (b) is incorrect: Chir pine does yield resin, but it is found in the Himalayan region not the Western Ghats. Option (c) is incorrect: Tendu leaves are used as wrappers (beedi), but they are primarily associated with Central India, not the North- East. Option (d) is incorrect: Lac is not a plant secretion; it is secreted by the lac insect (Kerria lacca). While it occurs in parts of the plateau. Thus, the biological source is wrong."},{"id":21,"txt":"Consider the following statements regarding Minor Forest Products:\n1. Tendu leaves production is geographically concentrated in states that also dominate lac production.\n2. Oils extracted from forest plants contribute more to industrial diversification than to food security.\n3. Gums and resins are predominantly extracted from evergreen forests.\nWhich of the above is/are correct?","ref":"","opts":["1 only","2 only","1 and 2 only","2 and 3 only"],"ci":1,"exp":"Ex: Minor Forest Products include all non-wood forest produce such as leaves, fruits, seeds, flowers, gums, resins, fibres, medicinal plants, and animal-based products that are collected without felling trees. Statement 1 is incorrect: Production of tendu leaves and lac shows partial overlap but not geographical coincidence. Tendu leaves are concentrated mainly in Central Indian states (Madhya Pradesh, Chhattisgarh, Maharashtra, Odisha). Lac production, although present in SPP 22622 parts of central India, is more strongly associated with Jharkhand, Chhattisgarh, West Bengal, and parts of eastern India and depends on host trees rather than tendu belts. Hence, the overlap is not dominant or defining, making the statement incorrect. Statement 2 is correct: Oils extracted from forest plants (e.g., neem, karanja, mahua) contribute more to industrial diversification— such as soaps, cosmetics, pharmaceuticals, lubricants, and bio-products—than to direct food security. Their economic role is therefore industrial and commercial, not staple nutritional. Statement 3 is incorrect: Gums and resins are predominantly extracted from dry deciduous forests, not evergreen forests.Species like Acacia, Palash, Sal, and Boswellia—typical of dry and moist deciduous regions—are the principal sources. Evergreen forests are not the main suppliers."},{"id":22,"txt":"Match the following with correct option:\nList I (Forest List II (Primary emphasis) Policy) A. 1894 1. Ecological stability & people’s participation B. 1952 2. Revenue & timber extraction C. 1988 3. Functional classification & protection–production balance\nSelect the correct code below:","ref":"","opts":["A-2, B-3, C-1","A-3, B-2, C-1","A-2, B-1, C-3","A-1, B-3, C-2"],"ci":0,"exp":"Ex: India has adopted three major National Forest Policies—in 1894, 1952, and 1988—each reflecting a distinct shift in the objectives of forest management over time. A is matched with 2: 1894 → Revenue & timber extraction; Colonial forest policy treated forests as a commercial asset for railways, shipbuilding, and administration. The 1894 policy prioritised state control over forests, subordinating customary community rights to commercial and administrative needs. B is matched with 3: 1952 → Functional classification & protection–production balance: Post-Independence policy introduced protection, national, and village forests, aiming to balance ecological needs with economic use. The 1952 Forest Policy also laid down a target of bringing 33% of India’s geographical area under forest cover (and about 60% in hilly regions) to maintain ecological balance. 8 C is matched with 1: 1988 → Ecological stability & people’s participation; Marked a paradigm shift—forests viewed as life-support systems, with community involvement and conservation at the core. The 1988 Forest Policy provided the ideological basis for Joint Forest Management (JFM), formally recognising the role of local communities in forest protection and regeneration."},{"id":23,"txt":"Consider the following statements regarding classification of industries based on inputs:\nStatement I: Agro-based industries are necessarily labour-intensive.\nStatement II: The degree of labour intensity in an industry depends on the stage of processing involved.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement I and II are correct and Statement II explains I","Both Statement I and II are correct but Statement II does not explain I","Statement I is incorrect but Statement II is correct","Both Statement I and Statement II are incorrect"],"ci":2,"exp":"Ex: Industries are commonly classified on the basis of raw material inputs and the nature of processing, but factor intensity varies with technology and production stage. Statement I is incorrect: Agro-based industries are not necessarily labour- intensive.While some agro-based industries (e.g., handloom, small-scale food processing) may be labour-intensive, many others—such as sugar mills, edible oil refineries, dairy processing plants, and agro-chemicals—are capital- and technology-intensive. Statement II is correct: The degree of labour intensity depends on the stage of processing involved. Primary or initial processing stages (sorting, grading, basic processing) often use more labour. Advanced or downstream stages (refining, packaging, automation-driven processing) tend to be capital-intensive. This holds true across agro-based as well as mineral- based industries."},{"id":24,"txt":"Which one of the following industries best illustrates a shift from raw-material orientation to market orientation in India over time?","ref":"","opts":["Iron and steel","Fertiliser","Cotton textiles","Aluminium"],"ci":0,"exp":"Ex: Option (b) is correct: The fertiliser industry in India best illustrates a shift from raw-material orientation to market orientation over time. Earlier phase: Fertiliser plants were seen as raw-material-oriented, located near coal (for nitrogenous fertilisers), phosphates, or natural gas sources to minimise input transport costs. Later phase: With the expansion of gas pipelines, import of raw materials, and strong SPP 22622 government distribution controls, fertiliser plants increasingly shifted closer to major agricultural markets to reduce distribution costs and ensure timely availability during cropping seasons. Option (a) is incorrect: The iron and steel industry remains predominantly raw-material- oriented due to weight-losing characteristics and dependence on iron ore and coking coal, despite some coastal or market-facing plants. Option (c) is incorrect: Cotton textiles have historically been market- and labour-oriented rather than showing a clean shift from raw material to market orientation. The locational logic diversified, not transformed. Option (d) is incorrect: Aluminium smelting remains fundamentally power-oriented, with electricity cost overriding both raw material and market considerations. No meaningful shift to market orientation has occurred."},{"id":25,"txt":"Consider the following statements:\nStatement I: Capital-intensive industries are generally less sensitive to wage fluctuations.\nStatement II: In capital-intensive industries, labour cost forms a smaller proportion of total production cost.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement I and II are correct and Statement II explains I","Both Statement I and II are correct but Statement II does not explain I","Statement I is incorrect but Statement II is correct","Both Statement I and Statement II are incorrect"],"ci":0,"exp":"Ex: Statement I is correct: Capital-intensive industries are generally less sensitive to wage fluctuations because labour is not the dominant cost component in their production process. Examples include steel, petrochemicals, cement, and power generation, where output costs are driven mainly by machinery, energy, and depreciation rather than labour. Statement II is correct and explains Statement I: In capital-intensive industries, labour cost constitutes a relatively small proportion of total production cost, which is dominated by capital costs (machinery, technology, depreciation, energy). Therefore, changes in wages have a limited impact on overall cost structure, directly explaining why wage sensitivity is lower."},{"id":26,"txt":"Consider the following statements regarding Konkan and Malabar Coasts:\n1. Both receive annual rainfall exceeding 200 cm.\n2. The Malabar Coast receives higher rainfall than the Konkan Coast.\n3. The Konkan Coast has a higher mean annual temperature than the Malabar Coast.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 only","1 and 3 only","2 and 3 only"],"ci":0,"exp":"Ex: Statement 1 is correct: Both the Konkan Coast (Maharashtra–Goa) and the Malabar Coast 9 (Kerala) receive very high rainfall, generally exceeding 200 cm annually, due to the direct impact of the Southwest Monsoon and orographic uplift along the Western Ghats. Much of this rainfall occurs during June– September, with sharp west–east gradients due to the Western Ghats. Statement 2 is correct: The Malabar Coast receives higher rainfall than the Konkan Coast. Kerala lies more directly windward to the monsoon flow and experiences longer monsoon duration, often recording 300–400 cm in several pockets, whereas Konkan rainfall is relatively lower though still heavy. The Malabar Coast also receives significant post-monsoon rainfall from retreating monsoon systems, further increasing annual totals. Statement 3 is incorrect: The Konkan Coast does NOT have a higher mean annual temperature than the Malabar Coast. In fact Malabar Coast is closer to the equator → slightly higher mean temperatures. Konkan Coast lies further north and benefits from marginally greater seasonal moderation.Thus, Latitudinal position, rather than proximity to the sea, explains the small but consistent temperature difference between the two coasts."},{"id":27,"txt":"Consider the following statements:\n1. Stamp’s classification gives primacy to rainfall, while Köppen’s classification gives primacy to temperature–precipitation ratios.\n2. Regions classified as “Very Heavy Rainfall” by Stamp must necessarily fall under Af climate of Köppen.\n3. Köppen’s classification allows global comparability, whereas Stamp’s classification is India-specific.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","2 and 3 only","1 only","1, 2 and 3"],"ci":0,"exp":"Ex: Climatic regions can be classified either through globally standardised systems such as Köppen’s classification, based on temperature– precipitation thresholds, or through region- specific schemes like Stamp’s classification, which was developed to capture India’s monsoonal rainfall patterns. Statement 1 is correct: Stamp’s climatic classification (used in Indian geography) gives primary emphasis to rainfall amount and seasonality, especially monsoonal distribution. In contrast, Köppen’s classification is based on empirical thresholds of temperature and precipitation together (i.e., temperature– precipitation relationships), making it more systematic and climatic-process oriented. SPP 22622 Statement 2 is incorrect: Regions classified as “Very Heavy Rainfall” by Stamp do not necessarily fall under the Af (Tropical Rainforest) climate in Köppen’s system. For example, North-East India has very high rainfall but includes Am (Tropical Monsoon) and Cw (Warm temperate with dry winter) transitional climates due to seasonality and winter dryness. Statement 3 is correct: Köppen’s classification is globally applicable, allowing inter-regional and international comparison. Stamp’s classification, however, is India-specific, designed to reflect Indian monsoonal diversity rather than global climates."},{"id":28,"txt":"Which of the following pairs is NOT correctly matched? Stamp Region Köppen Climate (1) Arid Lowland BWh (2) Malabar Coast Am (3) Himalayan Region ET (4) Konkan Coast Am\nSelect the correct answer using the code given below:","ref":"","opts":["1 only","3 only","2 and 4 only","1 and 3 only"],"ci":1,"exp":"Ex: Pair 3 is incorrectly matched: The Himalayan region is climatically heterogeneous. Only the highest reaches (permanent snowline areas) show ET (Tundra) or EF (Ice-cap) climates. The Lower and Middle Himalayas experience temperate climates, such as: Cwb (warm temperate, dry winter, mild summer), Cfb (marine west coast–type temperate climate). Pair 1 is correctly matched: Hot desert regions of western India (Thar) fit BWh (hot desert climate). Pair 2 is correctly matched: : Very high rainfall with a short dry season → classic Tropical Monsoon (Am) climate. Pair 3 is correctly matched: Heavy monsoonal rainfall and brief dry period → also Am, though rainfall is slightly less than Malabar."},{"id":29,"txt":"Which of the following climatic sequences is most logically arranged from west to east across northern India?","ref":"","opts":["BWhw → Cwg → Dfc","BShw → Aw → ET","BWhw → Aw → Cwg","Cwg → BWhw → Dfc"],"ci":0,"exp":"Ex: Köppen’s climatic classification system groups regions on the basis of observed temperature and precipitation patterns, using lettered categories to represent major climate types and their seasonal characteristics. In Köppen notation, the first letter denotes the major climate group, the second indicates precipitation seasonality, and the third reflects temperature characteristics. 10 For example, in Köppen classification, BWh denotes a hot desert climate (B = arid, W = desert, h = hot), while Cwg denotes a warm temperate monsoonal climate with dry winters (C = warm temperate, w = dry winter, g = hot summer). 1. BWhw (Hot desert, dry winter) — Western Rajasthan / Thar Desert: It is the westernmost part of northern India. It has extremely low rainfall, high continentality. It fits BWhw: hot desert with winter dryness. 2. Cwg (Warm temperate monsoon climate, dry winter) — Indo-Gangetic Plain (Punjab–Haryana–UP belt): On moving eastward, monsoonal influence increases. It has moderate rainfall, distinct dry winters, and warm summers. Its characteristic of Cwg, not tropical Aw due to cooler winters. In Köppen notation, the suffix ‘w’ in both BWhw and Cwg denotes dry winters, reflecting the dominance of the southwest monsoon and minimal influence of winter precipitation over most of northern India.  SPP 22622 3. Dfc (Cold temperate / subarctic-type conditions) — Higher Himalayas (north- eastward & upward): With further eastward movement and especially altitudinal rise, temperatures drop sharply. Cold winters, short cool summers → Dfc in higher Himalayan regions. This sequence reflects increasing moisture + decreasing temperature from desert plains to high mountains. Hence the correct order is BWhw → Cwg → Dfc, thus option A is correct.  11"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

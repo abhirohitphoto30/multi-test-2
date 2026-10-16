@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 55</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 55</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 55">PW ONLY IAS 2026 = 55</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the C. Rajagopalachari (CR) Formula, 1944, consider the following statements:\n1. It proposed a plebiscite in Muslim- majority areas of the North-West and North-East after the war.\n2. It required the Muslim League to first endorse the Congress demand for independence.\n3. It accepted that only Muslims would vote in the proposed plebiscite.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 iscorrect:TheC. Rajagopalachari (CR) Formula, 1944 proposed that after the end of the Second World War, a plebiscite would be conducted in the Muslim-majority areas of the North-West and North-East India to decide whether they wished to form a separate sovereign state. This provision amounted to a tacit acceptance of the principle of Pakistan, subject to democratic approval. It marked a significant shift because a senior Congress leader was willing to concede the possibility of partition through a constitutional and peaceful method. Statement 2 is correct: The CR Plan required that the Muslim League first endorse the Congress demand for independence. It also proposed that the League should cooperate with the Congress in forming a provisional government at the Centre. Thus, the formula attempted to link the question of Pakistan with the larger objective of Indian independence, ensuring that freedom from British rule remained the primary step. Statement 3 is incorrect: The CR Formula clearly stated that the entire population of the Muslim-majority areas would participate in the plebiscite. However, M.A. Jinnah objected to this and demanded that only Muslims should vote, since the League based its claim on the two-nation theory. This disagreement became one of the central reasons for the failure of the negotiations."},{"id":1,"txt":"Gandhi’s General Instructions to Different Sections on the eve of the Quit India Movement.\n1. Asked Government servants to resign.\n2. Asked the soldiers to leave their posts.\n3. Asked the Princess of the Princely states to accept the sovereignty of their people.\n4. Asked the students to leave studies if they are confident.\nWhich of the above given statements is/are correct?","ref":"","opts":["1 and 2 only","3 and 4 only","1 and 3 only","2 and 4 only"],"ci":1,"exp":"Ex: During the Quit India Movement of 1942, Mahatma Gandhi issued specific instructions to various sections of society to ensure a united and effective mass movement against British rule Statement 1 is incorrect: He asked government servants not to resign but declare their allegiance to the Congress. Statement 2 is incorrect: He asked soldiers not to leave the Army but do not fire on compatriots. SPP 22656 Statement 3 is correct: He asked princes to support the masses and accept the sovereignty of their people. Statement 4 is correct: He asked the students if they are confident, leave studies. He asked the peasants to pay mutually agreed rent if zamindars are anti-government, and not pay the rent if zamindars are pro-government. Thus, Option B is correct, Additional Information: The Quit India Resolution was ratified at the Congress meeting at Gowalia Tank, Bombay, on August 8, 1942. The meeting also resolved to: ❖ demand an immediate end to British rule in India. ❖ declare commitment of free India to defend itself against all types of Fascism and imperialism. ❖ form a provisional Government of India after British withdrawal. ❖ sanction a civil disobedience movement against British rule. ❖ Gandhi was named the leader of the struggle."},{"id":2,"txt":"Who was the Indian army officer who first proposed the formation of the Indian National Army (INA) from Indian prisoners of war in Malaya in 1942?","ref":"","opts":["Subhas Chandra Bose","Rashbehari Bose","Mohan Singh","Bhagat Ram"],"ci":2,"exp":"Ex: The origins of the Indian National Army (INA) lie in the aftermath of the British defeat in the Malayan Campaign during World War II. When the British surrendered Singapore in February 1942, thousands of Indian soldiers became prisoners of war (POWs) under the Japanese, creating the opportunity for a revolutionary force. Option (c) is correct: Captain Mohan Singh, an officer of the 1/14th Punjab Regiment of the British Indian Army, was the first to conceive and propose the idea of the INA. Following the British retreat in Malaya, he decided not to remain loyal to the British Crown and instead sought Japanese assistance to raise an army from fellow Indian POWs to fight for India's independence. He was the General Officer 2 Commanding (GOC) of the first INA before it was disbanded due to disagreements with the Japanese military administration. Option (a) is incorrect: Subhas Chandra Bose is the most famous leader of the INA, but he did not found it. He arrived in Southeast Asia from Germany in 1943 (over a year after the initial formation) at the invitation of Rashbehari Bose. He subsequently revitalized the organization, established the Provisional Government of Free India (Azad Hind Fauj), and led the second phase of the INA. Option (b) is incorrect: Rashbehari Bose was a veteran revolutionary living in exile in Japan. He founded the Indian Independence League and chaired the Bangkok Conference in June 1942, which formally resolved to constitute the INA. While he provided the political framework and invited Subhas Chandra Bose to take over, the original military proposal for the army itself came from Mohan Singh in the field. Option (d) is incorrect: Bhagat Ram (Bhagat Ram Talwar) was a revolutionary and a double agent who played a crucial role in helping Subhas Chandra Bose escape from India to Afghanistan and eventually to Europe. He was not an officer of the Indian Army and was not involved in the military formation of the INA in Malaya."},{"id":3,"txt":"With reference to the Quit India Movement (1942), consider the following statements:\n1. The Congress ministries in provinces played a leading administrative role in conducting the movement.\n2. The Muslim League and the Communist Party of India officially participated in and supported the movement.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is Incorrect: The Congress ministries in the provinces did not play an administrative role in the movement because they had already resigned in late 1939. This mass resignation was in protest against the British government's decision to involve India in World War II without the consent of the Indian people. By August 1942, the provinces were under the direct rule of British Governors using emergency powers (Section 93 of the Government of India Act, 1935). Statement 2 is Incorrect: Both the Muslim League and the Communist Party of India (CPI) officially stayed away from the movement, though for different reasons: SPP 22656 ❖ Muslim League: A. Jinnah and the League opposed the movement, fearing that if the British left India before a settlement on Pakistan was reached, the Congress would dominate the minorities. ❖ CPI: After Nazi Germany attacked the Soviet Union in 1941, the CPI shifted its stance to support the \"People's War.\" Since the British were allies of the Soviets, the CPI chose to support the British war effort and opposed the Quit India Movement. ❖ Additionally, the Hindu Mahasabha and the Princely States also largely refrained from official participation."},{"id":4,"txt":"Under the Cabinet Mission Plan (1946), the proposed Union of India was to deal with\nwhich of the following subjects","ref":"","opts":["Defence, Foreign Affairs and Communications","Defence and Foreign Affairs only","Defence, Foreign Affairs, Communications and Currency","Defence, Foreign Affairs and Internal Security","1 – 2 – 3 – 4 – 5","2 – 1 – 3 – 4 – 5","2 – 3 – 1 – 4 – 5","1 – 3 – 2 – 4 – 5","1, 2 और 3"],"ci":0,"exp":"Ex: The Cabinet Mission Plan was sent to India in March 1946 with the goal of preserving the unity of India while addressing the Muslim League's demand for autonomy. To achieve this, it proposed a very loose federal structure with a weak Center and strong Provinces. Option (a) is correct: The Cabinet Mission proposed a three-tier administrative structure. At the top was the Union of India, which was to be given jurisdiction over only three specific subjects: Defence, Foreign Affairs, and Communications. All other subjects (residuary powers) were to be vested in the Provinces. The Union also had the power to raise the finances required for these subjects. This limited scope was intended to reassure the Muslim-majority provinces that they would have maximum autonomy over their internal affairs."},{"id":5,"txt":"With reference to the Indian National Movement during the Second World War, consider the following events:\n1. Cripps Mission\n2. August Offer\n3. Quit India Movement\n4. Wavell Plan\n5. Cabinet Mission Plan\nWhich one of the following is the correct chronological order of these events?","ref":"","opts":["1 – 2 – 3 – 4 – 5","2 – 1 – 3 – 4 – 5","2 – 3 – 1 – 4 – 5","1 – 3 – 2 – 4 – 5"],"ci":1,"exp":"Ex: 2. August Offer (1940): The August Offer was announced by the British government in 1940, soon after India was dragged into the Second World War. It proposed an expansion of the Viceroy’s Executive Council and promised a future constitution-making body after the war, but it refused immediate transfer of power. 3 1. Cripps Mission (March 1942): The Cripps Mission arrived in India in March 1942 to secure Indian support for the war. It offeredDominion Status after the war and allowed provinces the option to opt out of the Indian Union, which led to its rejection by the Congress. Sir Stafford Cripps was sent with a \"Take it or Leave it\" proposal. While it promised a post-war Constituent Assembly and the \"Right to Secede\" for provinces, Gandhi famously called it a \"Post-dated cheque on a crashing bank.\" 3. Quit India Movement (August 1942): The Quit India Movement was launched in August 1942 following the failure of the Cripps Mission. It marked a shift from negotiation to open mass struggle, demanding an immediate end to British rule. The Congress, led by Gandhi, passed the \"Quit India\" resolution at Gowalia Tank, Bombay. It was the first time the leadership was willing to risk an \"orderly British withdrawal\" even if it meant temporary chaos, under the slogan \"Do or Die.\" 4. Wavell Plan (June 1945): Proposed as the war in Europe ended. Lord Wavell sought to break the political deadlock by reconstituting the Executive Council with an equal number of \"Caste Hindus\" and \"Muslims.\" The plan collapsed because Jinnah insisted that the Muslim League be the sole nominator of all Muslim members. 5. Cabinet Mission Plan (May 1946): Sent by the new Labour government in Britain after the war ended. Its goal was to preserve a \"United India\" through a complex three-tier grouping system (A, B, and C). While both the Congress and the League initially accepted it, disagreements over the interpretation of \"compulsory grouping\" eventually led to its collapse and the move toward Partition. Hence the correct chronology will be: August Offer → Cripps Mission → Quit India Movement → Wavell Plan → Cabinet Mission Plan SPP 22656"},{"id":6,"txt":"With reference to Indian freedom struggle, Usha Mehta is well-known for:","ref":"","opts":["Leading a contingent of the Indian National Army.","Participating in the second round Table Conference.","Running the secret Congress Radio in the wake of Quit India Movement.","Assisting in the formation of Interim Government under Pandit Jawaharlal Nehru"],"ci":2,"exp":"Ex: Usha Mehta was a prominent Gandhian freedom fighter and a key figure during the Quit India Movement of 1942. At the young age of 22, she played a pivotal role in establishing and running the Secret Congress Radio, an underground radio station that broadcast nationalist messages, speeches by leaders, and updates on the freedom struggle, bypassing British censorship. The radio functioned for a few months before being shut down by the British authorities, and Usha Mehta was arrested. Her work in running the secret radio remains one of the most remarkable contributions to the Indian freedom movement, as it kept the spirit of resistance alive during a time of heavy repression. Thus, Option C is correct"},{"id":7,"txt":"With reference to Subhas Chandra Bose and his activities during 1940–43, consider the following statements:\n1. The Anti-Compromise Conference at Ramgarh (March 1940) was organised solely by the Indian National Congress to oppose participation in the Second World War.\n2. The ‘Freedom Army’ (Mukti Sena) in Germany was formed mainly from Indian prisoners of war captured by Germany and Italy.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: While the Indian National Congress (INC) did hold its annual session at Ramgarh in March 1940, the Anti- Compromise Conference held at the same venue was not organized by the INC. Instead, it was organized by Subhas Chandra Bose and the All India Forward Bloc, in collaboration with the Kisan Sabha. The purpose of this rival conference was to oppose the Congress's perceived \"vacillation\" and to demand an immediate launch of a mass movement against British rule, rather than offering conditional cooperation for the war effort. Statement 2 is correct: During his stay in Germany (1941–1943), Subhas Chandra Bose established the Free India Centre in Berlin and formed the Free India Legion (also known as the Indische Legion or Mukti Sena). The legion was primarily composed of Indian prisoners of war (POWs) who had been serving in the British Indian Army and were captured by the German and Italian forces in North Africa. The soldiers of this 'Freedom Army' were trained in German military tactics and took an oath of loyalty to Bose as their leader and to the cause of Indian independence. 4"},{"id":8,"txt":"With reference to the events of 1945–46 in British India, consider the following statements:\n1. The INA trials began in November 1945 and generated widespread public sympathy.\n2. The Royal Indian Navy revolt began in February 1946, at HMIS Talwar in Bombay.\n3. The Royal Indian Air Force personnel also went on strike in early 1946, mainly over service conditions.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: The INA (Indian National Army) trials began in November 1945 at the Red Fort in Delhi. The British chose to prosecute P.K. Sehgal, Shah Nawaz Khan, and G.S. Dhillon (a Hindu, a Muslim, and a Sikh), which inadvertently united all sections of Indian society against the government. The trials triggered massive demonstrations across the country, with the Congress setting up an INA Defence Committee including leaders like Jawaharlal Nehru and Bhulabhai Desai. Statement 2 is correct: The Royal Indian Navy (RIN) Revolt started on February 18, 1946, on the training ship HMIS Talwar in Bombay. The ratings (sailors) protested against racial discrimination, unpalatable food, and the arrest of B.C. Dutt for scrawling \"Quit India\" on the ship's walls. The revolt quickly spread to other ships and shore establishments in Karachi, Calcutta, and Madras, involving over 20,000 sailors. Statement 3 is correct: While the RIN revolt is more famous, the Royal Indian Air Force (RIAF) personnel also engaged in significant strikes in January and February 1946. These strikes occurred in stations like Karachi, Bombay, and Kanpur. Although they were primarily triggered by grievances over service conditions and pay disparity compared to British personnel, they were deeply influenced by the nationalist fervor surrounding the INA trials."},{"id":9,"txt":"In the context of Quit India Movement, the “Karnataka Method” refers to:","ref":"","opts":["A tactic where part-time peasant squads engaged in farming during the day and revolutionary activities at night.","A method adopted by the British administrators to suppress the movement.","A crowdfunding initiative, where funds were gathered to support the Quit India Movement throughout India.","A unique initiative of women of Karnataka for the promotion of Khadi and Village industries","1, 2 और 3"],"ci":0,"exp":"Ex: The Karnataka method was a phase of the Quit India Movement in which citizens of Karnataka acted as part-time peasant squads: ❖ Daytime: Citizens would act as normal farmers ❖ Nighttime: Citizens would carry out sabotage operations The Karnataka method was characterized by guerrilla warfare, terrorist activities, and formation of parallel governments in isolated pockets Thus, Option A is correct SPP 22656"},{"id":10,"txt":"With reference to the Ramgarh session of the Indian National Congress (1940), consider the following statements:\n1. Maulana Abul Kalam Azad presided over the session.\n2. Jawaharlal Nehru reiterated Britain’s engagement in war was to be seized as India’s opportunity for freedom.\n3. All agreed that a battle must be waged but there was disagreement over the form.\n4. The Congress finally declared to accept dominion status as a step toward complete independence.\nWhich of the statements given above is/are correct?","ref":"","opts":["2 and 4 only","1 and 3 only","1 and 4 only","2 and 3 only"],"ci":1,"exp":"Ex: The Ramgarh session of the Congress was held in March 1940 with Maulana Abul Kalam Azad in the president’s chair. Statement 1 is correct: The Ramgarh session of the Congress was held in March 1940 with Maulana Abul Kalam Azad in the president’s chair. Statement 2 is incorrect: Subhash Bose continued with his strong militant. Once again he pointed out that Britain’s difficulty was to be seized as India’s opportunity. Thus a full- fledged movement needed to be launched against the British government. Statement 3 is correct: All agreed that a battle must be waged but there was disagreement over the form. It was decided to leave the form and timing to Gandhi. Statement 4 is incorrect: The Congress finally declared at the session that the people of India would accept nothing short of complete independence. Thus, Option B is the correct answer. Additional Information: Views of Leaders on Support to British during WW2: ❖ Gandhi was in favour of continued cooperation at the provincial level. He said that he would offer the British moral support during the war but on a non- violent basis. ❖ However, Jawaharlal Nehru reiterated that complete independence for India must be a precondition for Congress support to the British war effort. ❖ Subhas Bose continued with his strong militant stand of direct action against the colonial government forcing it to agree to the grant of freedom. Once again he pointed out that Britain’s difficulty was to be seized as India’s opportunity."},{"id":11,"txt":"With reference to the background of the Cabinet Mission (1946), consider the following:\n1. The Cabinet Mission was dispatched to India in February 1946 exclusively in response to the naval uprising that had already spread across Bombay and Karachi.\n2. By 1945–46, factors such as Indianisation of the civil services, economic exhaustion after the war, and unrest in the armed forces had weakened the foundations of British rule in India.\nWhich of the above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: The Cabinet Mission was dispatched by the British Prime Minister Clement Attlee to find a final solution for the transfer of power to Indian hands. While the political climate was tense, the 5 reasons for its dispatch involve a combination of domestic British constraints and shifting dynamics within India. Statement 1 is incorrect: While the Royal Indian Navy (RIN) Revolt of February 1946 was a major alarm for the British, it was not the \"exclusive\" reason for the Mission. The British government had already announced its intention to send a high-level mission to India in January 1946, before the naval uprising began. The mission was a response to the overall breakdown of the Wavell Plan, the results of the 1945–46 general elections, and the mounting pressure from the Indian National Congress for immediate independence. Statement 2 is correct: By the end of World War II, the pillars of British rule had significantly eroded. Weakened Bureaucracy: The Indianisation of the Civil Services meant that there were no longer enough British officers to maintain the \"steel frame\" of the empire. Economic Exhaustion: Britain emerged from the war as a debtor nation, unable to afford the massive military and administrative costs of holding a rebellious India. Unrest in Armed Forces: The trials of the Indian National Army (INA) prisoners and the subsequent RIN Mutiny proved that the British could no longer rely on the absolute loyalty of the Indian soldiers to suppress their own countrymen."},{"id":12,"txt":"Consider the following statements regarding Individual Satyagraha during World War II?\n1. The aim of launching was to give another opportunity to the government to accept Congress Demands peacefully.\n2. The demand of satyagrahi would be the freedom of speech against the war through an anti-war declaration.\n3. The movement came to be known as the ‘Delhi Chalo Movement’.\n4. Vinoba Bhave was the first to offer the satyagraha and Nehru, the second.\nHow many of the above statements is/are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: In October 1940 Congress launched individual satyagraha. Statement 1 is correct: The aims of launching individual satyagraha were—(i) to show that nationalist patience was not due to weakness; (ii) to express people’s feeling that they were not interested in the war and that they made no distinction between Nazism and the double autocracy that ruled India; and (iii) to give another opportunity to the government to accept Congress’ demands peacefully. Statement 2 is correct: The demand of the satyagrahi would be the freedom of speech against the war through an anti-war declaration. SPP 22656 Statement 3 is correct: If the government did not arrest the satyagrahi, he or she would not only repeat it but move into villages and start a march towards Delhi, thus precipitating a movement which came to be known as the ‘Delhi Chalo Movement’. Statement 4 is correct: Vinoba Bhave was the first to offer the satyagraha and Nehru, the second. By May 1941, 25,000 people had been convicted for individual civil disobedience. Thus, Option D is the correct answer."},{"id":13,"txt":"With reference to the failure of the Cripps Mission (March 1942), consider the following statements:\n1. The Congress rejected Dominion Status and demanded immediate transfer of power.\n2. The Muslim League opposed the idea of a single Indian Union and felt Pakistan was not assured.\n3. The Liberals supported the provinces’ right to secede.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 and 3 only","1 and 2 only","1, 2 and 3"],"ci":2,"exp":"Ex: The failure of the Cripps Mission in 1942 resulted from the inability of various Indian political groups to find common ground with the British War Cabinet's proposals. The mission attempted to balance the immediate needs of the war effort with post-war constitutional promises, but its \"take-it-or- leave-it\" nature led to widespread rejection. Statement 1 is correct: The Indian National Congress rejected the proposal primarily because it offered Dominion Status instead of full independence. Furthermore, the Congress demanded the immediate establishment of a national government with a cabinet that had real power, particularly over Defence. Mahatma Gandhi famously dismissed the post-war promise of Dominion Status as a \"post-dated cheque on a crashing bank.\" Statement 2 is correct: The Muslim League, led by M.A. Jinnah, rejected the mission because it primarily envisioned a single Indian Union. Although the mission included a \"non- accession clause\" (the right for provinces to opt out), the League felt this was too indirect and did not explicitly concede the creation of Pakistan. They also objected to the proposed composition of the Constituent Assembly. Statement 3 is incorrect: The Liberals (and most other non-League parties like the Hindu Mahasabha) were actually opposed to the provinces' right to secede. They viewed the \"non-accession clause\" as a threat to the unity and integrity of India, fearing it would lead to the \"Balkanization\" of the country into 6 numerous independent units. Only the Muslim League supported the principle of secession, though they found the specific Cripps mechanism for it insufficient."},{"id":14,"txt":"Consider the following pairs with personalities with their respective responses to the British war effort during World War II:\nPersonality Response\n1. MahatmaGandhi — Advocatedsupport to Allied powers dueto dislike of fascist ideology.unconditional\n2. AcharyaNarendraDev — Advocatedparticipationtime, no advantage was to betaken of Britain’sandnodifficulty.at sameIndian\n3. JawaharlalNehru — Unwilling to support eitherside,wereadvocated launching a civildisobedience movement.believedimperialistboth sidesand\nHow many of the above pairs is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":3,"exp":"Ex: Pair 1 is incorrect: While Mahatma Gandhi had a profound moral dislike for Fascism and Nazism, he did not advocate unconditional support. Initially, he offered his \"sympathy\" to the British but maintained that India could not participate in a war for democratic freedom while she herself was denied that same freedom. He eventually led the Individual Satyagraha and the Quit India Movement against the British effort. Pair 2 is incorrect: Acharya Narendra Dev, along with other Socialists like Jayaprakash Narayan, belonged to the \"Left Wing\" of the Congress. They believed the war was an imperialist struggle on both sides. Unlike the description in the pair, they advocated taking full advantage of Britain's difficulty by launching an immediate mass struggle for independence. The stance of \"not taking advantage of Britain's difficulty\" was actually the initial position of Mahatma Gandhi. Pair 3 is incorrect: Jawaharlal Nehru held the most complex position. He was a staunch anti-fascist and did not want to see the Axis powers win. However, he also believed that India could only fight as a free nation. Unlike the Socialists, he was initially unwilling to launch a civil disobedience movement that might lead to a British defeat against Nazi Germany. He sought a middle path: no support without independence, but no immediate sabotage of the war effort. The description in the pair (viewing both as equally imperialist and wanting immediate movement) better describes the stance of the Socialists or Subhas Chandra Bose."},{"id":15,"txt":"Which one of the following statements regarding the All India Forward Bloc is NOT correct?","ref":"","opts":["It was founded in 1939 by Subhas Chandra Bose after ideological differences within the Congress leadership","It initially functioned as a grouping within the Indian National Congress before evolving into an independent political organisation","It supported the idea of mobilising peasants and workers as part of a broader anti-imperialist front","It formally endorsed the Cabinet Mission Plan and participated in the Interim Government of 1946"],"ci":3,"exp":"Ex: The All India Forward Bloc was a left-wing nationalist political party established during a period of intense ideological friction within the SPP 22656 Indian National Congress. It aimed to consolidate radical and socialist elements to push for a more uncompromising struggle against British imperialism. Option (a) is correct: Subhas Chandra Bose founded the Forward Bloc in May 1939 at Makur, Unnao. This followed his resignation from the presidency of the Congress after the Tripuri Session, where he faced significant opposition from the \"Right Wing\" of the party and Mahatma Gandhi's supporters over his desire to set a six-month ultimatum for the British to leave India. Option (b) is correct: Initially, the Forward Bloc was intended to be a faction within the Congress rather than a separate party. It aimed to bring together all left-leaning groups (Socialists, Communists, and Kisan Sabha members). However, after Bose was disqualified from holding office in the Congress and the party was later banned during the Quit India Movement, it transitioned into a fully independent political entity. Option (c) is correct: The Forward Bloc had a strong socialist orientation. It worked closely with the All India Kisan Sabha and trade unions to mobilize the masses. Bose believed that a successful revolution required a \"broad anti-imperialist front\" consisting of the youth, the peasantry, and the working class. Option (d) is NOT correct: The Forward Bloc rejected the Cabinet Mission Plan of 1946. True to Bose’s militant legacy, the party viewed the Plan as a British trap to \"Balkanize\" India and a compromise that fell short of \"Purna Swaraj\" (Total Independence). Consequently, the party did not participate in the Interim Government. Instead, it continued to call for a mass revolutionary struggle to achieve full sovereignty."},{"id":16,"txt":"With reference to British constitutional initiatives in India between 1940 and 1946, consider the following statements:\nStatement 1: The constitutional proposals from the August Offer (1940) to the Cabinet Mission Plan (1946) reflect a shift from conditional wartime assurances to a structured scheme for the transfer of power. Statement 2: This shift was marked by the increasing acceptance of the principle that India’s future Constitution would be framed by a Constituent Assembly composed predominantly of Indian representatives.\nWhich of the statements given above is/are correct?","ref":"","opts":["Statement 1 only","Statement 2 only","Both Statement 1 and Statement 2 are correct, and Statement 2 is the correct explanation of Statement 1","Both Statement 1 and Statement 2 are correct, but Statement 2 is not the correct explanation of Statement 1"],"ci":2,"exp":"Ex: The period between 1940 and 1946 represents the final evolutionary phase of British policy in India. This era was defined by a transition from the British attempt to stall Indian independence through vague promises to the eventual necessity of planning a full withdrawal. 7 Statement 1 is correct: The August Offer (1940) was a reactive, conditional measure intended to secure war support by promising \"Dominion Status\" at an unspecified future date. By contrast, the Cabinet Mission Plan (1946) was a \"structured scheme\" that moved away from general assurances toward a concrete administrative blueprint, including a three-tier grouping system and a plan for an Interim Government to facilitate the actual transfer of power. Statement 2 is correct: A defining characteristic of this shift was the British concession on the \"who\" and \"how\" of constitution-making. In 1940, the British still insisted on their \"special responsibilities\" in framing India's future. However, starting with the Cripps Mission (1942) and culminating in the Cabinet Mission (1946), the principle was accepted that the future Constitution would be drafted by an elected Constituent Assembly composed solely of Indian representatives. Relationship Between the Statements: The shift toward a structured transfer of power (Statement 1) was possible precisely because the British finally accepted that Indians themselves, through a representative Constituent Assembly, should decide their own political destiny (Statement 2). The acceptance of the Constituent Assembly was the procedural backbone of the transfer of power scheme."},{"id":17,"txt":"Which of the following correctly describes the main feature of the Desai–Liaqat Pact (1945) regarding the proposed interim government at the Centre?","ref":"","opts":["Acceptance of the two-nation theory as the basis of interim governance","Complete transfer of power to a Constituent Assembly elected on adult franchise","Equal representation of the Congress and the Muslim League with 20% seats reserved for minorities","Immediate partition of India before formation of an interim government","1, 2 और 3"],"ci":2,"exp":"Ex: Following the failure of the Gandhi-Jinnah talks in 1944, Bhulabhai Desai (leader of the Congress party in the Central Legislative Assembly) and Liaquat Ali Khan (Deputy leader of the Muslim League) met to find a middle ground for an interim administrative arrangement. This pact was an unofficial attempt to bridge the divide without waiting for a final settlement on the issue of Pakistan. Option (c) is correct: The core of the Desai– Liaquat Pact was a proposal for a transitional government at the Centre. It suggested that the Congress and the Muslim League would have parity (equal number of representatives) in the Central Executive. Specifically, it proposed: SPP 22656 ❖ An equal number of persons nominated by the Congress and the League. ❖ 20% of the seats reserved for minorities (such as Scheduled Castes and Sikhs). ❖ The Government would function within the framework of the existing Government of India Act, 1935, but the Executive Council would be entirely Indian, except for the Commander-in-Chief."},{"id":18,"txt":"Consider the following statements regarding Cabinet Mission 1946:\n1. Rejection of the demand for a full- fledged Pakistan.\n2. Proposed a three-tier system for executive and legislature.\n3. Provinces were to have full autonomy and residual powers.\nHow many of the above statements are incorrect?","ref":"","opts":["Only one","Only two","All three","None"],"ci":3,"exp":"Ex: Statement 1 is correct: The Cabinet Mission explicitly rejected the demand for a full- fledged, sovereign Pakistan as demanded by the Muslim League. The Mission argued that a separate state of Pakistan would not solve the communal minority problem and would create massive administrative, communication, and military complications. Instead, it offered a \"limited Pakistan\" within a united India through the \"Grouping\" scheme. Statement 2 is correct: The Mission proposed a complex three-tier administrative and legislative structure: 1. The Union (Top Tier): Dealing only with Defence, Foreign Affairs, and Communications. 2. The Groups/Sections (Middle Tier): Provinces were to be grouped into three sections (A, B, and C). These groups could have their own legislatures and executives to manage common subjects. 3. The Provinces (Bottom Tier): Responsible for all subjects not handled by the Union or the Group. Statement 3 is correct: To satisfy the demand for regional self-determination, the Plan proposed that the Provinces would have full autonomy. Crucially, unlike the 1935 Act where residual powers rested with the Governor-General, the Cabinet Mission Plan vested all residuary powers in the Provinces. This meant any subject not specifically assigned to the Union belonged to the Provincial governments. 8"},{"id":19,"txt":"Which one of the following statements regarding the Parallel Government at Ballia during the Quit India Movement is correct?","ref":"","opts":["It functioned for nearly two years with an organised revenue administration","It was formally recognised by the Indian National Congress Working Committee","It introduced people’s courts known as Nyayadan Mandals","It briefly assumed administrative authority under the leadership of Chittu Pandey"],"ci":3,"exp":"Ex: The Quit India Movement of 1942 was characterized by the spontaneous emergence of \"Prati Sarkar\" or Parallel Governments in several parts of India. These local administrations temporarily displaced British authority, with Ballia in Uttar Pradesh being one of the first and most significant locations to do so. Option (d) is correct: In August 1942, the people of Balliasucceeded in overthrowing the colonial administration for a short period. Chittu Pandey, popularly known as the \"Sher- e-Ballia\" (Lion of Ballia), led the movement and briefly assumed administrative authority. Under his leadership, the district administration was taken over, and political prisoners were released from the local jails. However, this government was short-lived as British reinforcements suppressed it within a week. Option (a) is incorrect: The description of a parallel government functioning for nearly two years with an organized revenue administration applies to the \"Prati Sarkar\" in Satara (Maharashtra), led by Y.B. Chavan and Nana Patil. The Satara government was the most long-lived and structured of all the parallel governments, lasting until 1945. In contrast, the Ballia government lasted only for a few days. Option (b) is incorrect: The Indian National Congress (INC) could not formally recognize these parallel governments because almost the entire Congress leadership was in prison (Operation Zero Hour) during this period. While the Congress later praised the heroism of these local leaders, there was no formal administrative recognition by the Working Committee at the time of their functioning. Option (c) is incorrect: The introduction of people’s courts, such as Nyayadan Mandals, was a hallmark of the Satara Parallel Government. These courts provided cheap and speedy justice to the villagers, effectively bypassing the British judicial system. The Ballia government was too brief to establish such elaborate judicial machinery. SPP 22656"},{"id":20,"txt":"Which one of the following statements regarding the Cripps Mission (1942) is correct?","ref":"","opts":["It proposed immediate establishment of a fully responsible national government with complete control over defence","It offered dominion status to India after the war and permitted provinces to opt out of the proposed Union","It introduced universal adult franchise for the election of a post-war Constituent Assembly","It guaranteed immediate transfer of executive authority to the elected provincial ministries"],"ci":1,"exp":"Ex: In March 1942, the British government sent Sir Stafford Cripps to India with a set of constitutional proposals designed to secure Indian cooperation during World War II. These proposals addressed both the post-war constitutional status of India and immediate interim arrangements for governance. Option (b) is correct: The Cripps Mission proposed that immediately after the war, an Indian Union with Dominion Status would be established. A crucial and controversial part of this offer was the \"non-accession clause,\" which allowed any province that was not prepared to accept the new constitution the right to refuse to join the Union. These provinces could then form their own separate Union with a status equal to the Indian Union, a provision often seen as a blueprint for the \"Balkanization\" of India. Option (a) is incorrect: The British explicitly refused to grant immediate responsible government. Crucially, they insisted that the Defence of India must remain the sole responsibility of the British government for the duration of the war. This was a major reason for the rejection of the plan by the Indian National Congress. Option (c) is incorrect: The mission proposed a post-war Constituent Assembly where members from British provinces would be elected by existing provincial legislatures through proportional representation, not universal adult franchise. Furthermore, representatives from Princely States were to be appointed by the Rulers, completely bypassing the people. Option (d) is incorrect: No immediate transfer of executive authority was offered. The Viceroy was to remain the supreme head, retaining all his existing powers and \"special responsibilities,\" and the proposed Executive Council was merely an expansion of his existing advisory body rather than a cabinet with collective responsibility. 9"},{"id":21,"txt":"With reference to the August Offer (1940), consider the following statements:\n1. It declared dominion status as the long- term objective for India after the war.\n2. It proposed the expansion of the Viceroy’s Executive Council with a majority of Indian members drawn from major political parties.\n3. It assured that no future Indian constitution would be framed without the consent of minority communities.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is Correct: The August Offer was announced in August 1940 by Viceroy Lord Linlithgow in the context of World War II, after the fall of Belgium, Holland and France had weakened Britain’s position. The offer explicitly stated that dominion status would be the objective for India after the war, not immediate independence. This was strongly criticised by Congress leaders, with Jawaharlal Nehru famously remarking that “Dominion status is dead as a doornail.” Statement 2 is Correct: One of the key provisions of the August Offer was the expansion of the Viceroy’s Executive Council, with the assurance that it would have a majority of Indian members. These Indians were to be drawn from major political parties, though real power—especially over defence— would remain with the British. This limited concession was seen by the Congress as inadequate and cosmetic. Statement 3 is Correct: The August Offer clearly stated that no future constitution for India would be adopted without the consent of minorities. This clause effectively granted a veto to minority groups, a provision that was welcomed by the Muslim League, as it strengthened its bargaining position. The League reiterated that partition was the only solution, while Gandhi argued that the offer had only widened the gulf between nationalists and British rulers."},{"id":22,"txt":"Which one of the following best distinguishes the Tamluk (Midnapore) Parallel Government from that of Ballia during the Quit India Movement?","ref":"","opts":["It sustained its authority for a longer period and developed organised welfare and volunteer structures","It was formed after prior approval from the Indian National Congress leadership","It operated primarily as a symbolic protest without exercising local administrative control","It secured recognition from provincial political authorities under wartime arrangements","1, 2 और 3","1, 2 और 3"],"ci":0,"exp":"Ex: The parallel governments of 1942 represented the peak of mass defiance during the Quit India Movement. While the government in Ballia was a spontaneous, short-lived burst of revolutionary energy, the Jatiya Sarkar (National Government) in Tamluk, Midnapore district of Bengal, was characterized by its high degree of organizational maturity and resilience. Option (a) is correct: The primary distinction lies in the duration and administrative depth. While the Ballia government under Chittu SPP 22656 Pandey was suppressed by British forces within a week, the Tamluk Jatiya Sarkar functioned for nearly two years (from December 1942 to September 1944). It developed a sophisticated structure that included a Vidyut Vahini (Lightning Army) for defense, organized relief work during the devastating 1943 famine, and established departments for justice, education, and revenue. It even published its own newspaper, Biplabi."},{"id":23,"txt":"With reference to the developments immediately after the launch of the Quit India Movement (August 1942), consider the following statements:\n1. The Congress organisations were declared unlawful under the Criminal Law Amendment Act.\n2. Aruna Asaf Ali presided over the Congress session on 9 August 1942 and hoisted the national flag.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The launch of the Quit India Movement on August 8, 1942, was followed by a swift and severe crackdown by the British colonial administration. Operation Zero Hour was initiated in the early hours of August 9, resulting in the arrest of the entire top leadership of the Indian National Congress. Statement 1 is correct: Immediately following the ratification of the Quit India Resolution at Gowalia Tank, the British government launched a massive offensive to suppress the movement. On August 9, 1942, the Congress Working Committee, the All India Congress Committee (AICC), and Provincial Congress Committees were declared unlawful associations under the Criminal Law Amendment Act. This legal maneuver allowed the police to seize Congress offices, freeze their funds, and arrest any individual associated with the organization. Statement 2 is incorrect: While it is true that Aruna Asaf Ali famously hoisted the Indian National flag at the Gowalia Tank Maidan on August 9, 1942, she did not \"preside over a Congress session.\" No formal session could be held that day because the top leadership (including Gandhi, Nehru, and Azad) had already been arrested. Aruna Asaf Ali’s act was a defiant response to the arrests and the police crackdown, earning her the title \"Grand Old Lady\" of the Independence movement, but it was a revolutionary act rather than a formal presiding over a session. 10"},{"id":24,"txt":"Consider the following statements regarding Individual Satyagraha:\n1. The Congress launched Individual Satyagraha under the leadership of Vinoba Bhave to affirm the right to free speech.\n2. The Mass Satyagraha was deliberately avoided on the advice of Gandhiji.\n3. The first three Satyagrahis were Vinoba Bhave, Jawaharlal Nehru, and Brahma Dutt.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2, and 3"],"ci":1,"exp":"Ex: The government had taken the adamant position that no constitutional advance could be made till Congress came to an agreement with the Muslim leaders. It issued ordinance after ordinance taking away the freedom of speech and that of the press and the right to organise associations. The aims of launching individual satyagraha were: ❖ To how that nationalist patience was not due to weakness ❖ To express people’s feelings that they were not interested in the war and that they made no distinction between Nazism and the double autocracy that ruled India ❖ To give another opportunity to the government to accept Congress’ demands peacefully. Statement 1 is incorrect: While the Individual Satyagraha was indeed initiated to affirm the right to free speech, it was Mahatma Gandhi who led the movement, with Vinoba Bhave being the first Satyagrahi. Statement 2 is correct: Gandhi advised against a Mass Satyagraha to mitigate the risk of violence, opting instead for a more controlled approach through Individual Satyagraha. Statement 3 is correct: Acharya Vinoba Bhave was the first Satyagrahi, followed by Jawaharlal Nehru as the second, and Brahma Dutt as the third."},{"id":25,"txt":"With reference to the ‘Quit India’ Resolution (1942), consider the following statements:\n1. It was first adopted by the Congress Working Committee at Wardha in July 1942 authorising Gandhi to lead a non- violent mass movement.\n2. The resolution was proposed by Sardar Patel and seconded by Jawaharlal Nehru at the Bombay session.\n3. It was ratified by the All India Congress Committee at Gowalia Tank, Bombay, on 8 August 1942.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is correct: In July 1942, the Congress Working Committee (CWC) met at Wardha after the failure of the Cripps Mission (March–April 1942). The CWC resolved to authorise Mahatma Gandhi to launch a mass civil disobedience movement on non-violent lines. This marked a decisive shift from earlier conditional cooperation (as seen during the August Offer, 1940, and the Cripps proposals) to a direct demand for the immediate withdrawal of British rule. SPP 22656 Statement 2 is incorrect: The Quit India Resolution was actually proposed by Jawaharlal Nehru and seconded by Sardar Vallabhbhai Patel, not the other way round. This detail is factually important because Nehru, who had earlier shown reservations about mass struggle during wartime, now fully endorsed the call for British withdrawal. Statement 3 is Correct: The resolution was ratified by theAll India Congress Committee (AICC) at Gowalia Tank Maidan, Bombay, on 8 August 1942. At this historic session, Gandhi delivered his famous “Do or Die” speech. The resolution demanded: ❖ Immediate end of British rule, ❖ Formation of a Provisional Government of Free India after withdrawal, ❖ Commitment of free India to resist Fascism and imperialism, and ❖ Launch of a nationwide civil disobedience movement."},{"id":26,"txt":"Consider the following members:\n1. Pethick Lawrence\n2. Stafford Cripps\n3. Clement Attlee\n4. A.V. Alexander Who were the member of Cabinet Mission of 1946?","ref":"","opts":["1, 2 and 3 only","1, 3 and 4 only","2 ,3 and 4 only","1, 2 and 4 only"],"ci":3,"exp":"Ex: Clement Attlee announced in February 1946 the decision to send a high-powered mission of three British cabinet members (Pethick Lawrence, Secretary of State for India; Stafford Cripps, President of the Board of Trade; and A.V. Alexander, First Lord of Admiralty) Thus, Option D is correct."},{"id":27,"txt":"With regards to Indian Freedom Struggle, The National Defence Council was set up as a result of Which of the following events?","ref":"","opts":["Indian National Congress Session of Haripura 1938","Cripps Mission 1942","August Offer 1940","Indian National Congress Session of Faizpur 1936","1, 2 और 3"],"ci":2,"exp":"Ex: ❖ On 8 August 1940, the Viceroy Lord Linlithgow made a proposal called the August Offer which expanded the Executive Council to include more Indians. ❖ In July 1941, the viceroy’s executive council was enlarged to give the Indians a majority of 8 out of 12 for the first time, but the British remained in charge of defence, finance, and home. 11 ❖ Also, a National Defence Council was set up with purely advisory functions. The National Defence Council’s main purpose was to bring the war effort in the Provinces and States, as well as in the ranks of commerce, industry and labour, into more effective touch with the Central Government. Thus, Option C is the correct answer. Additional Information: Evaluation of August Offer For the first time, the inherent right of Indians to frame their constitution was recognised and the Congress demand for a constituent assembly was conceded. Dominion status was explicitly offered."},{"id":28,"txt":"Where and by whom was the INA flag first hoisted on the Indian mainland during the 1944 Imphal campaign?","ref":"","opts":["Kohima — Subhas Chandra Bose","Moirang — Colonel Shaukat Malik","Imphal — Captain Mohan Singh","Chittagong — Rashbehari Bose"],"ci":1,"exp":"Ex: The Imphal Campaign of 1944 was a major offensive launched by the Japanese forces and the Indian National Army (INA) to capture the British military base at Imphal and enter the Indian heartland. During this operation, the INA achieved its most significant symbolic victory on Indian soil. Option (b) is correct: On April 14, 1944, Colonel Shaukat Malik of the Indian National Army hoisted the INA Tricolour (the Azad Hind flag) at Moirangin Manipur. This marked the first time the flag of free India was raised on the Indian mainland by the INA. Moirang subsequently served as the headquarters for the INA in India for several months before the tide of the war turned in favor of the Allied forces.  SPP 22656"},{"id":29,"txt":"With reference to the Wavell Plan (1945), consider the following statements:\n1. All members of the Executive Council, except the Governor-General and Commander-in-Chief, were to be Indians.\n2. It proposed parity between Caste Hindus and Muslims in the Executive Council.\n3. The Shimla Conference was held in June 1945 to discuss the Plan.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: The plan proposed that the Viceroy’s Executive Council would be completely \"Indianized,\" with the sole exceptions being the Governor-General (Viceroy) and theCommander-in-Chief (who would retain responsibility for the armed forces). All other portfolios, including Home, Finance, and External Affairs, were to be held by Indian members. Statement 2 is correct: A pivotal and controversial feature of the plan was the introduction of Communal Parity. It proposed that \"Caste Hindus\" and \"Muslims\" would have equal representation (parity) in the Council. This was a shift from the Desai-Liaquat Pact, which had proposed parity between political parties (Congress and League). Statement 3 is correct: To discuss these proposals, Lord Wavell invited 21 Indian political leaders to a conference at Shimla in June 1945. The conference included leaders like Mahatma Gandhi, M.A. Jinnah, and Maulana Azad.  12"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

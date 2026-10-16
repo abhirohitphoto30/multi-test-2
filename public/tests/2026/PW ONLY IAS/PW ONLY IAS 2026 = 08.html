@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 08</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 08</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 08">PW ONLY IAS 2026 = 08</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following statements:\nStatement I: The Supreme Court has held that the power to punish for contempt under Article 129 is an integral part of being a Court of Record and cannot be abrogated even by an Act of Parliament.\nStatement II: While Article 129 recognizes the Supreme Court as a Court of Record, it also specifically authorises Parliament to prescribe by law the substantive limits of contempt punishment.\nWhich of the following is correct?","ref":"","opts":["Both Statement–I and Statement–II are correct and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct but Statement–II is not the correct explanation for Statement–I","Statement–I is correct but Statement–II is incorrect","Statement–I is incorrect but Statement–II is correct"],"ci":2,"exp":"Ex: Article 129 declares the Supreme Court a Court of Record with the power to punish for contempt. Statement–I is correct: The Supreme Court has ruled that its power to punish for contempt arises from its status as a Court of Record under Article 129. In cases such as Supreme Court Bar Association v. Union of India (1998), it was held that this power is inherent and cannot be abrogated by ordinary legislation. Parliament may regulate procedure, but cannot remove or dilute the constitutional power. Statement–II is Incorrect: Article 129 does not expressly authorise Parliament to set substantive limits on punishment for contempt. The Article only recognises the Supreme Court as a Court of Record with power to punish for contempt. While Parliament has enacted the Contempt of Courts Act, 1971, it deals mainly with procedure and classification, not with controlling the inherent power given by the Constitution."},{"id":1,"txt":"Which court is the principal court of original civil jurisdiction in a district?","ref":"","opts":["Munsiff court","Sessions court","District court","Magistrate court"],"ci":2,"exp":"Ex: The District Court is the principal court of original civil jurisdiction in a district. It is the highest civil court at the district level and deals with all major civil matters. As per the constitutional scheme and judicial hierarchy: ❖ Civil cases of higher value or importance begin at the District Court. ❖ Subordinate civil courts like Munsiff Courts or Civil Judge (Junior Division) handle matters of lower pecuniary jurisdiction. ❖ Appeals from subordinate civil courts also lie to the District Court. Therefore, Option (c) is correct. SPP 22609 Additional Information: ❖ Munsiff Court / Civil Judge (Junior Division): This is the lowest civil court in the district. It deals with civil cases of small monetary value and everyday disputes. Appeals from this court go to the District Court, which supervises it. ❖ Sessions Court (Court of Session): This is the highest criminal court in the district. It tries serious offences, including those punishable with life imprisonment or death. The Sessions Judge heads the court, and appeals from here go to the High Court. ❖ Magistrate Courts: Magistrate Courts deal with less serious criminal cases. They are supervised by the Chief Judicial Magistrate or Chief Metropolitan Magistrate. Most routine criminal cases are handled here before they go to higher courts."},{"id":2,"txt":"With reference to Public Interest Litigation (PIL), consider the following statements:\n1. Locus standi is relaxed to permit any public-spirited person to move the Court.\n2. PIL jurisdiction of the Supreme Court arises only under Article 32.\n3. In PIL, the Court may issue directions even in areas where no legislation exists to protect fundamental rights.\n4. Only the Supreme Court may initiate suo motu PIL.\nWhich of the above statements are correct?","ref":"","opts":["1 and 3 only","2 and 4 only","1, 2 and 3 only","1, 3 and 4 only"],"ci":0,"exp":"Ex: Public Interest Litigation (PIL) developed through judicial interpretation (pioneered by Supreme Court Justices V.R. Krishna Iyer and P.N. Bhagwati in the late 1970s and early 1980s) to make access to justice easier in matters affecting the community or vulnerable groups. Statement 1 is Correct: A defining feature of PIL is that the court allows cases to be filed by individuals who may not themselves be directly affected. The emphasis is on the protection of public interest rather than the personal rights of the petitioner. This relaxation enables concerned citizens and groups to raise issues affecting disadvantaged sections. 2 Statement 2 is Incorrect: PIL is not a constitutional jurisdiction, it is a procedural innovation Public Interest Litigation (PIL) is not mentioned anywhere in the Constitution. It is a judge-made procedural device, developed to relax: locus standi, procedure, evidentiary rules, Therefore, PIL does not “arise” from a specific Article in the strict sense. Also, Supreme Court entertains PILs not only under Article 32, While it is true that Most PILs in the Supreme Court are filed under Article 32, it is constitutionally incorrect to say that PIL jurisdiction arises only under Article 32, because PILs are entertained: By High Courts under Article 226, By the Supreme Court using its inherent and plenary powers, including: Article 32, Article 136 (in some converted matters), Article 142 (for complete justice, remedial directions) Statement 3 is Correct: In PIL matters, constitutional courts often frame directions to ensure the effective enjoyment of rights even where detailed legislation is absent. These directions have been issued in areas such as environmental protection, prison reforms, and workplace safety. Such orders remain within the constitutional framework of Articles 32 and 226, and aim to fill gaps to safeguard rights. Statement 4 is Incorrect: Initiation of suo motu proceedings is not confined to the Supreme Court. High Courts have frequently initiated such actions on their own information or on the basis of media reports, especially where local issues of public concern are involved. There is no constitutional provision restricting this power to the Supreme Court alone."},{"id":3,"txt":"With reference to Judicial Activism consider the following statements:\n1. Judicial activism necessarily involves the Court striking down a law or executive action.\n2. Judicial activism may include the Court evolving new principles where existing law is silent.\n3. Judicial activism is partly justified because the Constitution permits an active judicial role when other organs fail.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Judicial activism refers to the proactive role of the courts in protecting rights and promoting justice, especially where legislation is absent or state action is inadequate. SPP 22609 Statement 1 is Incorrect: Judicial activism does not require striking down a law or executive action.Courts may be activist even without invalidating anything, for example, by: issuing guidelines,expanding interpretation of rights, or evolving new principles.Therefore, striking down laws is a possible outcome, not a defining requirement. Statement 2 is Correct: When legislation is silent, courts may formulate new principles to make constitutional rights meaningful. This is a recognised form of judicial activism, where judges: interpret broadly,create standards, or give practical effect to constitutional values. Hence, the statement is correct. Statement 3 is Correct: One justification for judicial activism is the failure of other organs to perform their constitutional duties. The Constitution gives enough scope for courts to act, especially to protect rights where legislature or executive are inactive or ineffective. This functional reasoning supports an active judicial role."},{"id":4,"txt":"With reference to Permanent Lok Adalats, consider the following statements:\n1. They are established under the Legal Services Authorities Act, 1987, as amended in 2002.\n2. They can decide disputes relating to public utility services even if no settlement is reached between the parties.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is Correct: Permanent Lok Adalats were created by amending the Legal Services Authorities Act, 1987 in 2002. The institution was added to handle disputes relating to public utility services and to provide quicker, cost-effective resolution. Statement 2 is Correct: Unlike ordinary Lok Adalats that only settle disputes, Permanent Lok Adalats have adjudicatory power. If conciliation fails, they can decide the dispute on merits relating to public utility services. This makes them part conciliation forum and part adjudicatory body. Additional Information: Permanent Lok Adalats deal exclusively with disputes relating to public utility services as defined under the Act. They first attempt 3 conciliation and, if it fails, decide the dispute on merits. Their pecuniary jurisdiction is as notified by the Central Government. They do not have jurisdiction over criminal matters. Awards are final, binding, deemed to be civil court decrees, and are passed by majority. A Permanent Lok Adalat consists of a Chairman qualified to be a District Judge and two members with experience in public utility services."},{"id":5,"txt":"Under the Commercial Courts Act, 2015, the authority competent to constitute Commercial Courts at the District level is:","ref":"","opts":["Parliament, by notification under the Act","Central Government, in consultation with the Chief Justice of India","State Government, by issuing a notification in the Official Gazette","Chief Justice of the concerned High Court under the Rules framed by the High Court"],"ci":2,"exp":"Ex: The Commercial Courts Act, 2015 creates a clear division of responsibility between the State Government and the Chief Justice of the High Court. While the State Government constitutes courts at the District level, the Chief Justice constitutes Divisions in High Courts. Understanding this separation is essential to identify the correct authority. Option (a) is Incorrect: Parliament only enacts the legislation and has no role in constituting individual Commercial Courts. Establishing such courts is an executive function, not a legislative one. Option (b) is Incorrect: The Central Government’s role is limited to notifying the specified value of commercial disputes and empowering authorities for pre-institution mediation. It does not constitute Commercial Courts at the District level. Option (c) is correct: As per the Act, Commercial Courts at the District level are constituted by the State Government through notification in the Official Gazette, especially in States where the High Court lacks ordinary original civil jurisdiction. Option (d) is Incorrect: The Chief Justice of the High Court is responsible for constituting the Commercial Division and Commercial Appellate Division in High Courts. This authority does not extend to constituting District-level Commercial Courts. SPP 22609"},{"id":6,"txt":"Consider the following statements:\n1. Free legal services are available to persons in custody, even if their annual income exceeds the prescribed limit.\n2. Free legal services are available to women only if their annual income is below ₹1 lakh.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The Legal Services Authorities Act, 1987 provides free legal services to certain categories of persons as a matter of entitlement. Some categories are eligible regardless of income, while others are covered based on income criteria. Statement 1 is Correct: Under the Legal Services Authorities Act, 1987, persons in custody are an eligible category for free legal services regardless of income. Eligibility is based on class of persons, not income in such cases. Statement 2 is Incorrect: Women are an eligible category for free legal services irrespective of their income. The income limit (₹1 lakh generally; ₹5 lakh before the Supreme Court Legal Services Committee) applies to those who do not fall under a special category."},{"id":7,"txt":"With reference to tribunals in India, consider the following statements:\n1. Tribunals under Article 323A are established only by Parliament and deal exclusively with service matters.\n2. Tribunals under Article 323B can be established only by Parliament as State Legislatures have no competence in matters covered under this Article.\n3. Under Article 323B, a hierarchy of tribunals may be created, whereas under Article 323A such hierarchy is not provided for.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Articles 323A and 323B were introduced through the 42nd Amendment to provide for tribunals. The scope of establishment and hierarchy under these two provisions is different, and the Chandra Kumar judgment clarified the role of High Courts in judicial review. Statement 1 is Correct: Article 323A empowers only Parliament to establish tribunals for service matters. These tribunals are limited to disputes relating to recruitment and conditions of service. No other legislature is competent under this Article. Statement 2 is Incorrect: Under Article 323B, both Parliament and State Legislatures can establish tribunals, depending on their legislative competence over the subject. Therefore, it is wrong to say that only Parliament can do so. 4 Statement 3 is correct: Article 323B permits a hierarchy of tribunals. Article 323A, on the other hand, contemplates only one tribunal for the Centre and one for each State; there is no provision for a hierarchical structure."},{"id":8,"txt":"Consider the following statements:\nStatement I: According to the Supreme Court, the transfer of High Court judges can be judicially reviewed, but only the judge who is transferred can challenge such transfer.\nStatement II: Since Article 222 does not explicitly mention consultation with the Chief Justice of India, the transfer of a High Court judge can be validly made by the President without any involvement of the judiciary.\nWhich of the following is correct?","ref":"","opts":["Both Statement–I and Statement–II are correct and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct but Statement–II is not the correct explanation for Statement–I","Statement–I is correct but Statement–II is incorrect","Statement–I is incorrect but Statement–II is correct"],"ci":2,"exp":"Ex: Transfers of High Court judges are governed by Article 222. The Supreme Court has clarified that transfers must be supported by proper consultation and serve public interest. They are not beyond judicial scrutiny, but the scope of challenge is limited. Statement–I is Correct: The Supreme Court has held that although the decision to transfer a judge is an executive order, it is open to judicial review to check arbitrariness, mala fide or violation of procedure. However, only the judge who has been transferred has the standing to challenge such an order. Third parties cannot question a transfer. Statement–II is Incorrect: Even though Article 222 does not detail the consultation mechanism, consultation with the Chief Justice of India is mandatory. In the Third Judges Case (1998), the Supreme Court held that consultation must include: ❖ the Chief Justice of India, ❖ a collegium of senior-most judges, and ❖ the Chief Justices of both the concerned High Courts. Therefore, a transfer cannot be validly made without involving the judiciary. A unilateral order of the President without consultation would be constitutionally defective."},{"id":9,"txt":"With reference to the S.R. Bommai judgment, consider the following statements:\n1. A proclamation issued under Article 356 is subject to judicial review, and the Court may examine whether there was relevant material to justify the President’s satisfaction.\n2. Even when a proclamation under Article 356 is held unconstitutional, the Supreme Court has no power to revive the dismissed Council of Ministers.\n3. The existence of majority support of a State Ministry must be proved by a floor test in the Legislative Assembly and not on the personal assessment of the Governor.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 3 only","2 only","1 and 2 only","1, 2 and 3"],"ci":0,"exp":"Ex: The S.R. Bommai decision is central to the constitutional control of Article 356. It clarified the scope of judicial review and established that the determination of majority support of a State Ministry must be made in the Legislature. SPP 22609 Statement 1 is Correct: The Court held that a proclamation under Article 356 is not immune from judicial scrutiny. The existence of relevant material may be examined to ensure that the satisfaction of the President is not arbitrary, mala fide or based on irrelevant grounds. Statement 2 is Incorrect: The Court clarified that if the proclamation is unconstitutional, the dismissed Ministry may be restored. The Supreme Court is not barred from ordering reinstatement. Revival of the Council of Ministers is permissible where the action under Article 356 lacked a constitutional basis. Statement 3 is Correct: The judgment stated that the majority of the Ministry must be determined only on the floor of the House. The Governor’s personal assessment cannot substitute a floor test. This principle has become a constitutional convention in matters of government formation and dismissal."},{"id":10,"txt":"Which one of the following is NOT a ground for review of a Supreme Court judgment under Article 137?","ref":"","opts":["Discovery of new important matter","Apparent error on the face of the record","Violation of natural justice","On the advice or direction of the President"],"ci":3,"exp":"Ex: Article 137 empowers the Supreme Court to review its own judgments.However, review is permitted on very limited grounds. It is not an appeal and cannot be used to re-argue the case. Option (a) is Incorrect: This is a valid ground for review. When a party discovers new facts or evidence which could not be presented earlier despite reasonable efforts, and such material is relevant to the case, the Supreme Court may review its judgment to avoid injustice. The emphasis is on the importance of the newly discovered matter and the fact that it was genuinely unavailable earlier. Option (b) is Incorrect: This is also a recognised ground. If the earlier judgment contains an obvious or self-evident mistake, either in fact or law, the Court may correct it through review. The error must be so clear that it does not require long reasoning or re- argument. The review jurisdiction is meant to prevent injustice arising from such manifest error. 5 Option (c) is Incorrect: This is again a valid ground for review. Where the judgment has been delivered without giving a fair hearing to a party, or where principles like audi alteram partem are violated, the Court may review its own decision. The objective is to ensure that the judicial process remains fair and that no party suffers from procedural unfairness. Option (d) is correct: This is not a ground for review under Article 137. The President has no authority to direct or demand that the Supreme Court reconsider its judgment. Although the President may seek the Court’s advisory opinion under Article 143, that is entirely different from review jurisdiction. Review can only be sought on limited judicial grounds, not on executive direction. Additional Information: ❖ A review is allowed only on limited judicial grounds and not to reopen the entire case. It is meant for error correction, not for re-arguments. ❖ A review petition must be filed within 30 days and is normally heard by the same bench that delivered the original judgment. This ensures consistency and prevents misuse. ❖ If a review petition is dismissed, the Supreme Court may still examine the case through a curative petition in rare situations where there is gross miscarriage of justice, including violation of natural justice or likelihood of bias. This mechanism exists to preserve the credibility of the Court. ❖ A review cannot be demanded by the President or the executive. The President may seek an advisory opinion under Article 143, but that has nothing to do with the review jurisdiction under Article 137."},{"id":11,"txt":"Consider the following statements:\nStatement I: Article 127 provides a mechanism to ensure that the Supreme Court can function even when its normal quorum is not available.\nStatement II: Under Article 127, a High Court judge may be requested to sit in the Supreme Court only when the quorum of the Court cannot be formed.\nStatement III: Article 128 permits retired Supreme Court judges to sit and act in the Supreme Court, but such judges are not treated as ad hoc judges.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one of them explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":1,"exp":"Ex: Article 127 and Article 128 together provide mechanisms to ensure that the functioning of the Supreme Court does not halt because of SPP 22609 temporary shortages in judge strength or the absence of a quorum. While both provisions allow additional judges to sit in the Supreme Court, they serve distinct constitutional purposes and operate under different conditions. Statement I is Correct: The purpose of Article 127 is precisely to ensure that the Supreme Court does not become non- functional when the required quorum of judges is unavailable. This provision allows the Court to continue performing its constitutional duties despite temporary shortages in its judge strength. Thus, the statement accurately reflects the constitutional intent behind Article 127. Statement II Correct: It states the condition under which Article 127 can be invoked. A High Court judge may be requested to sit in the Supreme Court only when the Court is unable to meet its quorum requirement. This is a constitutionally specified condition and is not related to workload or pendency. Therefore, Statement II directly explains Statement I by specifying when and how Article 127 operates. Statement III is Correct: Article 128 enables the Chief Justice of India to request a retired Supreme Court judge to sit again in the Court. Such judges are not ad hoc judges, and the mechanism under Article 128 is independent of Article 127. This statement does not explain Statement I because it deals with a different constitutional provision unrelated to quorum shortages."},{"id":12,"txt":"A pre-constitutional law that becomes inconsistent with a Fundamental Right after the commencement of the Constitution:","ref":"","opts":["Becomes void for all purposes and cannot operate thereafter","Remains inoperative only against citizens but continues to operate against non- citizens","Stands impliedly repealed and cannot revive even after removal of the inconsistency","Requires re-enactment by Parliament to become enforceable again"],"ci":1,"exp":"Ex: The Doctrine of Eclipse applies only to pre- constitutional laws that conflict with Fundamental Rights. Under this doctrine, such laws are not void ab initio; they are merely eclipsed, meaning they are overshadowed and remain dormant to the extent of inconsistency. They continue to exist in the statute book and may regain enforceability if the inconsistency is later removed. 6 Option (b) is Correct: A pre-constitutional law inconsistent with a Fundamental Right becomes inoperative only against citizens, because Fundamental Rights are enforceable primarily by citizens in cases such as Article 19. However, the same law continues to operate against non-citizens, since the inconsistency does not affect rights available only to citizens. This is the core feature of the Doctrine of Eclipse. Option (a) is Incorrect: “Void for all purposes” describes post-constitutional laws violating Fundamental Rights under Article 13(2). Pre-constitutional laws are NOT void; they are only in a state of eclipse. Option (c) is Incorrect: Implied repeal does not apply here. The law is not repealed; it is simply dormant until the inconsistency is removed (e.g., through a constitutional amendment). Option (d) is Incorrect: Once the constitutional inconsistency is removed, the law revives automatically. No re-enactment is required."},{"id":13,"txt":"Consider the following statements:\n1. Tribunals created under parliamentary law fall within the High Court’s supervisory jurisdiction unless the Constitution itself excludes them.\n2. A tribunal established under legislation relating to the Armed Forces is outside the High Court’s power of superintendence under Article 227.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Article 227 gives the High Court supervisory authority over all courts and tribunals within its territorial jurisdiction, except where the Constitution specifically excludes a category of tribunals. The primary constitutional exclusion relates to bodies established under Armed Forces laws. Statement 1 is Correct: Tribunals constituted under ordinary parliamentary laws generally fall within the High Court’s supervisory jurisdiction because Article 227 is a constitutional power that cannot be removed by statute. Examples include labour tribunals, industrial tribunals, consumer forums and various administrative tribunals operating within the State. Since none of these are constitutionally exempt from Article 227, the above statement is correct. SPP 22609 Statement 2 is Correct: The Constitution expressly excludes courts and tribunals constituted under laws relating to the Armed Forces from the High Court’s superintendence. These include courts-martial under the Army Act, 1950, tribunals under the Air Force Act, 1950, and bodies created under the Navy Act, 1957. Such tribunals deal with discipline, service matters and offences within the Armed Forces and are not subject to High Court oversight under Article 227. It correctly reflects the constitutional exception."},{"id":14,"txt":"Consider the following statements:\n1. Judicial overreach may arise when the Court substitutes its own policy preferences for those of the executive.\n2. Expanding the meaning of Fundamental Rights through interpretation constitutes judicial overreach.\n3. Judicial overreach is implied when courts issue continuing mandamus that effectively places long-term administrative supervision under judicial control.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Judicial overreach is generally understood as a departure from the constitutionally assigned adjudicatory function, occurring when courts move from reviewing executive action to directing or controlling governance. The distinction between activism and overreach lies not in the breadth of interpretation but in the assumption of non-judicial responsibilities. Statement 1 is Correct: Overreach arises when courts replace executive policy choices with their own. Such substitution is a direct encroachment on executive competence and violates the principle of separation of powers, which forms part of the basic structure of the Constitution. Statement 2 is Incorrect: Widening or deepening the interpretation of Fundamental Rights is a recognised aspect of judicial activism. Courts remain within their constitutional role as long as they interpret rights rather than undertake policy formulation or administration. Therefore, expanded interpretation does not by itself constitute overreach. Statement 3 is Correct: A continuing mandamus is used to ensure compliance in matters requiring sustained oversight. However, when such judicial monitoring effectively assumes long-term administrative control or supervisory authority, it crosses into overreach. The court then performs executive functions rather than merely ensuring legality. 7"},{"id":15,"txt":"Consider the following statements:\n1. Even allegations of criminal misconduct against a sitting High Court judge cannot proceed through a routine FIR without prior scrutiny under the in-house mechanism.\n2. All forms of misconduct, whether judicial, civil, or criminal, are institutionally examined only through the in-house procedure or the parliamentary removal process.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: High Court judges are protected from ordinary criminal and administrative processes so that judicial independence is not compromised. Allegations against a sitting judge must therefore pass through constitutionally insulated mechanisms. Statement 1 is Correct: Criminal allegations, including corruption, cannot directly lead to registration of a routine FIR followed by police investigation. Such complaints must first be examined by the Chief Justice through the in- house mechanism. This prevents misuse of the criminal process to influence or intimidate judges. In K. Veeraswami v. Union of India (1991), the Supreme Court held that: No criminal case / FIR (especially under corruption laws) can be registered against a sitting judge without prior consent of the Chief Justice of India. Statement 2 is Correct: Allegations against judges are not examined through ordinary executive or police channels at the threshold. The recognised constitutional/institutional routes are: ❖ In-house mechanism → preliminary examination and fact-finding ❖ Parliamentary removal process → under Articles 124(4)/217 and the Judges (Inquiry) Act, 1968 Even in cases of alleged criminal misconduct institutional scrutiny precedes ordinary prosecution. This preserves separation of powers and judicial independence"},{"id":16,"txt":"A District Judge can be removed from service only:","ref":"","opts":["By the State Government, since district judges belong to the State Judicial Service","By the High Court, since control over subordinate courts vests exclusively in it","By the Governor, but only after a recommendation from the High Court","By the Governor on the advice of the State Cabinet without judicial involvement"],"ci":2,"exp":"Ex: Article 235 vests control over district courts and courts subordinate thereto exclusively in the High Court. This control includes: ❖ Disciplinary proceedings ❖ Suspension ❖ Compulsory retirement SPP 22609 ❖ Recommendation for removal However, the formal order of removal is issued by the Governor, as a matter of constitutional form. While the High Court exercises investigative and disciplinary authority, the final order of removal must be issued by the Governor. This structure prevents executive interference while preserving constitutional formality. Hence, Option (c) is Correct"},{"id":17,"txt":"With reference to judges of the High Courts in India, which of the following statements is correct?","ref":"","opts":["The Constitution prescribes both a minimum and maximum age for appointment","The Constitution prescribes only the age of retirement not a fixed term of office","A High Court judge holds office for a fixed tenure.","A High Court judge continues in office during the pleasure of the President"],"ci":1,"exp":"Ex: Option (b) is correct: Under Article 217 of the Constitution of India: A Judge of a High Court does not have a fixed tenure. The Constitution prescribes only the age of retirement, which is 62 years. A High Court judge holds office until attaining the age of 62, unless he/she resigns or is removed earlier through the constitutional process. Thus, the Constitution fixes the retirement age, not a term of years. Option (a) is incorrect: The Constitution does not prescribe a minimum age for appointment as a High Court judge. It only prescribes the retirement age (maximum age for holding office). Option (c) is incorrect: There is no fixed tenure such as 5 or 10 years. Tenure depends solely on the age of retirement. Option (d) is incorrect: Judges do not hold office at the pleasure of the President. They enjoy security of tenure and can be removed only by impeachment under Articles 124(4) and 217(1)(b)."},{"id":18,"txt":"Which of the following is NOT a constitutional requirement for appointment as a judge of a High Court?","ref":"","opts":["Citizenship of India","Judicial or advocate experience as prescribed","Attainment of a specified minimum age","Appointment by the President after constitutional consultation"],"ci":2,"exp":"Ex: Option (c) is correct: The Constitution of India does not prescribe any minimum age for appointment as a judge of a High Court. Therefore, attainment of a specified minimum age is not a constitutional requirement. 8 Option (a) is incorrect: Article 217(2) mandates that a High Court judge must be a citizen of India. Option (b) is incorrect: Under Article 217(2), a person must have: ❖ held a judicial office in India for at least 10 years, or ❖ been an advocate of a High Court (or two or more such courts) for at least 10 years. Option (d) is incorrect: High Court judges are appointed by the President after consultation with: ❖ the Chief Justice of India ❖ the Governor of the State, and ❖ the Chief Justice of the High Court concerned (Article 217(1))."},{"id":19,"txt":"The doctrine that judicial review forms part of the basic structure of the Constitution was most clearly affirmed in:","ref":"","opts":["A.K. Gopalan v. State of Madras","Kesavananda Bharati v. State of Kerala (1973)","Indira Nehru Gandhi v. Raj Narain","Minerva Mills v. Union of India"],"ci":3,"exp":"Ex: Option (d) is correct: In Minerva Mills v. Union of India, the Supreme Court explicitly and unequivocally held that: ❖ Judicial review is an essential feature of the Basic Structure, and ❖ Parliament cannot, through constitutional amendment, exclude or curtail judicial review. The Court struck down sections of the 42nd Constitutional Amendment that attempted to give Parliament unlimited amending power, and exclude judicial review of constitutional amendments. This case clearly linked judicial review itself—not merely rule of law or democracy—to the Basic Structure doctrine, making it the most authoritative affirmation. Option (a) is incorrect: A.K. Gopalan v. State of Madras is a pre-Basic Structure era case. It was concerned with interpretation of Article 21, not constitutional amendments or judicial review as a basic feature. Option (b) is incorrect: Kesavananda Bharati v. State of Kerala (1973) introduced SPP 22609 the Basic Structure doctrine. Some judges recognised judicial review as important, but the judgment focused primarily on limits on Parliament’s amending power, not on a clear declaration that judicial review itself is a basic feature. Hence, not the clearest affirmation. Option (c) is incorrect: Indira Nehru Gandhi v. Raj Narain (1975) applied the Basic Structure doctrine to strike down the 39th Constitutional Amendment. It emphasised rule of law and free & fair elections. Judicial review was implicit, not explicitly declared as a standalone basic feature."},{"id":20,"txt":"Consider the following statements regarding judicial review:\n1. The scope of judicial review in India is narrower than in the United Kingdom\n2. Judicial review enables courts to test laws on the touchstone of Fundamental Rights.\n3. Judicial review is exercised only by the Supreme Court and not by High Courts.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is incorrect: The scope of judicial review in India is wider than in the United Kingdom, not narrower. India has a written Constitution, Fundamental Rights, and constitutional supremacy, enabling courts to review both legislative and executive actions. In contrast, the UK follows parliamentary sovereignty, where courts cannot strike down primary legislation of Parliament. Statement 2 is correct: Judicial review empowers courts to test laws and executive actions on the touchstone of Fundamental Rights. Under Articles 13, 32, and 226, courts can invalidate laws that violate Fundamental Rights. Statement 3 is incorrect: Judicial review is exercised by both the Supreme Court and the High Courts.The Supreme Court exercises it under Article 32. High Courts exercise it under Article 226, which has an even wider writ jurisdiction."},{"id":21,"txt":"With reference to the seat of the Supreme Court of India, which of the following statements is correct?","ref":"","opts":["The seat of the Supreme Court can be altered only by amending the Constitution","The Chief Justice of India may appoint another place with the approval of the President","Parliament may determine the location of the Supreme Court through legislation","The President may independently notify a different seat for the Supreme Court"],"ci":1,"exp":"Ex: Article 130 of the Constitution provides that: ❖ The seat of the Supreme Court shall be at Delhi, or 9 ❖ Such other place as the Chief Justice of India (CJI) may, with the approval of the President, appoint. This clearly authorises the CJI, subject to presidential approval, to designate another place for sittings of the Supreme Court. Hence option B is correct."},{"id":22,"txt":"Consider the following statements:\nStatement-I: A Senior Advocate appearing before the Supreme Court must be instructed through an Advocate-on-Record. Statement-II: The Supreme Court Rules assign procedural accountability for filings and conduct of cases exclusively to Advocates-on-Record.\nWhich one of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement–I and Statement–II are correct, and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct, but Statement–II is not the correct explanation for Statement–I","Statement–I is correct, but Statement–II is incorrect","Statement–I is incorrect, but Statement–II is correct"],"ci":0,"exp":"Ex: Statement-I is correct: Under the Supreme Court Rules, a Senior Advocate cannot file pleadings, affidavits, or directly conduct procedural acts before the Supreme Court. A Senior Advocate must be instructed through an Advocate-on-Record (AoR), who alone is entitled to act and plead in procedural matters before the Court. Statement-II is correct: The Supreme Court Rules, 2013 place exclusive procedural responsibility on the Advocate-on-Record, including: filing of petitions, affidavits, and applications, compliance with procedural requirements, and overall conduct of the case from a procedural standpoint. Because this procedural accountability rests solely with the AoR, a Senior Advocate is required to appear only through an AoR, explaining why Statement–I follows from Statement–II."},{"id":23,"txt":"Which of the following correctly distinguishes practice before the Supreme Court from that before High Courts?","ref":"","opts":["Only in the Supreme Court is filing restricted to a specific category of advocates","Senior Advocates cannot appear independently in any court in India","Advocates-on-Record exist for High Courts as well","Oral arguments in the Supreme Court can be made only by Advocates-on-Record"],"ci":0,"exp":"Ex: Option (a) is correct: The Supreme Court of India follows a distinct procedural system under the Supreme Court Rules, whereby only Advocates-on-Record (AoRs) are entitled to file pleadings, petitions, and applications before the Supreme Court. Other advocates, including Senior Advocates, must act through an AoR for filing and procedural compliance. In contrast, High Courts do not have an AoR system. Any advocate enrolled with a State Bar Council and permitted by the High Court rules may file and argue cases directly. Thus, the restriction of filing to a specific category of advocates is a unique feature of Supreme Court practice SPP 22609 Option (b) is incorrect: Senior Advocates can appear independently in High Courts (subject to High Court rules). The restriction of appearing only through an AoR applies only in the Supreme Court. Option (c) is incorrect: The AoR system exists only in the Supreme Court. High Courts do not recognise Advocates-on-Record as a separate category. Option (d) is incorrect: Senior Advocates frequently make oral arguments before the Supreme Court. The AoR’s role is procedural, not exclusive to oral advocacy."},{"id":24,"txt":"Consider the following cases:\n1. A judgment passed by the National Consumer Disputes Redressal Commission.\n2. A determination made by a tribunal for which a statutory appeal mechanism is provided.\n3. A decree issued by the National Green Tribunal. In which of the above cases can the Supreme Court of India entertain a Special Leave Petition (SLP)?","ref":"","opts":["1 only","2 and 3 only","1, 2 and 3","1 and 3 only"],"ci":2,"exp":"Ex: Article 136 of the Indian Constitution grants the Supreme Court discretionary power to entertain Special Leave Petitions (SLPs) against any judgment, decree, or order passed by any court or tribunal in India. However, this power is subject to certain exceptions and limitations outlined in the Constitution. Statement 1 is correct: The Supreme Court can entertain an SLP against judgments passed by the National Consumer Disputes Redressal Commission (NCDRC). This tribunal is not exempt from the SLP jurisdiction of the Supreme Court. Statement 2 is correct: Even if a statutory appeal mechanism is available for a tribunal's decision, the Supreme Court retains the power to entertain an SLP if there are substantial questions of law or constitutional issues involved. The presence of an appeal mechanism does not bar the Court from exercising its discretion under Article 136(1). Statement 3 is correct: The Supreme Court can entertain SLPs against orders or decree issued by the National Green Tribunal (NGT), as these decisions are not excluded under Article 136(2)."},{"id":25,"txt":"Consider the following pairs:\nUnion Territory High Court Jurisdiction\n1. AndamanNicobar — and Madras High Court\n2. Lakshadweep — Kerala High Court\n3. DadraHaveliand Diu andand DamanNagar BombayCourt — High\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one pair","Only two pairs","All three pairs","None of the pairs"],"ci":1,"exp":"Ex: The jurisdiction of High Courts over Union Territories is based on historical, geographical, and administrative factors, ensuring efficient legal administration. 10 Pair 1 is incorrect: The Andaman and Nicobar Islands do not fall under the jurisdiction of the Madras High Court. Instead, they fall under the jurisdiction of the Calcutta High Court. This is because of the geographical and historical ties between the Andaman and Nicobar Islands and Kolkata, which was the colonial capital during the British Raj. Pair 2 is correct: Lakshadweep is indeed under the jurisdiction of the Kerala High Court. This is due to the proximity of Lakshadweep to the state of Kerala and the administrative arrangement in place for these island territories. The legal jurisdiction is aligned with Kerala for practical and logistical reasons. Pair 3 is correct: Dadra and Nagar Haveli and Daman and Diu are under the jurisdiction of the Bombay High Court. This is consistent with their historical connection to the state of Bombay (now Maharashtra and Gujarat). These territories were governed by the Portuguese until their annexation in 1961, after which they were placed under the Bombay High Court's jurisdiction."},{"id":26,"txt":"Consider the following statements:\n1. When the Chief Justice of a High Court acts in an administrative capacity, their decisions are subject to the writ jurisdiction of other judges within the same High Court.\n2. No High Court shall have the jurisdiction to declare any central law to be constitutionally invalid.\n3. The administrative expenses of a High Court, including all salaries, allowances, and pensions payable to or in respect of the officers and servants of the Court, shall be charged upon the Consolidated Fund of India.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","1 and 3 only","1, 2, and 3"],"ci":0,"exp":"Ex: High Courts play a pivotal role in ensuring justice and upholding constitutional provisions. Their powers, jurisdiction, and financial administration are derived from the Constitution, which ensures independence and accountability. Statement 1 is correct:. According to judicial principles, even decisions made by the Chief Justice of a High Court in an administrative capacity are not beyond review. These decisions can be challenged under the writ jurisdiction of other judges in the same High Court. ❖ This mechanism ensures accountability within the judiciary, safeguarding against arbitrary administrative actions. ❖ The writ jurisdiction grants High Court judges the power to review and correct administrative decisions, reinforcing judicial oversight over administrative functions. SPP 22609 Statement 2 is incorrect: High Courts, under Article 226 of the Indian Constitution, do, in fact, have the jurisdiction to declare central laws unconstitutional if those laws are found to violate the Constitution. ❖ The High Court's power of judicial review allows it to examine whether a central law conflicts with constitutional provisions and, if it does, declare it invalid. ❖ This statement is factually incorrect because it misrepresents the judicial powers of High Courts. Judicial review is a fundamental feature of the Constitution, and it is vested in both High Courts and the Supreme Court. Statement 3 is incorrect: The administrative expenses of High Courts, including salaries, allowances, and pensions of officers and servants, are charged to the Consolidated Fund of the State, not the Consolidated Fund of India. ❖ According to Article 229(3), these funds come from the state's treasury, ensuring that the state governments are responsible for the financial support of their respective High Courts. ❖ This is an important distinction in understanding the financial autonomy of High Courts and the division of financial responsibility between the state and the central government. Therefore, this statement is inaccurate. ❖ Note - The pension of a High Court judge is given from the Consolidated Fund of India, not from the Consolidated Fund of the State."},{"id":27,"txt":"Consider the following pairs:\nCase Known for\n1. First Judges Primacy of executive in Case (1982) judicial appointments\n2. Second Judges Struck down the NJAC Case (1993) as unconstitutional\n3. Third Judges Defined the Collegium Case (1998) system's composition\n4. FourthCase (2015)Judges ReaffirmedCollegiumprimacy — systemthe\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Under Article 124 (2), the President appoints Chief Justice of India after consulting as many Supreme Court and High Court judges as he may think fit. While appointing a judge other than Chief Justice of India, he shall consult the Chief Justice of India. 11 Pair 1 is correctly matched: In the First Judges Case (1982) or S.P. Gupta v. Union of India, the Supreme Court ruled that the President is not bound by the opinion of the Chief Justice of India (CJI). ❖ The consultation with the CJI was deemed non-binding, giving primacy to the executive in judicial appointments. ❖ This judgment also stated that judges could be transferred against their will. Pair 2 is incorrectly matched: The Second Judges Case (1993) did not address the NJAC but rather overturned the First Judges Case. ❖ It established the \"Primacy of Judiciary\" in judicial appointments and introduced the Collegium system. ❖ The CJI’s opinion became binding on the President, provided it was formulated in consultation with two senior-most judges of the Supreme Court. ❖ The judgment emphasized that judicial appointments are an integrated participatory consultative process between the judiciary and the executive, with the judiciary having primacy. Pair 3 is correctly matched: In the Third Judges Case (1998), the Supreme Court clarified the composition and functioning of the Collegium system. The CJI was required to consult four senior-most judges (instead of two) for Supreme Court appointments and transfers of High Court judges. Pair 4 is correctly matched: In the Fourth Judges Case (2015) or Supreme Court Advocates-on-Record Association v. Union of India, the Supreme Court struck down the National Judicial Appointments Commission (NJAC) as unconstitutional and reaffirmed the collegium system primacy. The Court ruled that the NJAC violated the Law of Primacy of Judiciary, which is integral to judicial independence, a part of the basic structure doctrine. SPP 22609"},{"id":28,"txt":"In reference to the removal of Judges of the Supreme Court, Consider the following statements:\n1. The details of the process of removal of the judges of the Supreme Court of India are given in the Judges (Inquiry) Act, 1968.\n2. A motion to remove a judge of the Supreme Court of India cannot be rejected by the Speaker of the Lok Sabha as per the Judges (Inquiry) Act, 1968.\n3. The motion is investigated by a committee of three (two judges of the Supreme Court and a distinguished jurist).\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: he impeachment process for the removal of judges of the Supreme Court of India is a complex and rigorous procedure established to uphold judicial independence and integrity. It is governed by Article 124(4) of the Constitution and detailed in the Judges (Inquiry) Act, 1968. This ensures that only serious cases of \"proved misbehaviour\" or \"incapacity\" can result in the removal of a judge. Statement 1 is correct: The Judges (Inquiry) Act, 1968 lays down the detailed procedure for the removal of judges, including the formation of a committee for investigation, its functioning, and the subsequent process in Parliament. Statement 2 is incorrect : The Speaker of the Lok Sabha or the Chairman of the Rajya Sabha has the power to admit or reject the motion after examining its validity. There is no binding provision requiring the Speaker/Chairman to accept the motion. Statement 3 is incorrect: Once the motion is admitted, an investigative committee is constituted. This committee includes: ❖ As per the Judges (Inquiry) Act, 1968, an investigation committee is formed, comprising: ➢ One judge from the Supreme Court ➢ One Chief Justice of a High Court ➢ One distinguished jurist ❖ The committee investigates the allegations and submits a report: ➢ If the report finds the judge guilty of proved misbehaviour or incapacity, the motion proceeds to debate and voting in Parliament. ➢ If the report exonerates the judge, the motion is dropped."},{"id":29,"txt":"Consider the following statements:\nStatement I: The Supreme Court (Number of Judges) Amendment Act, 2019 fixes the maximum number of judges in the Supreme Court at 31 judges, including the Chief Justice of India.\nStatement II: Under Article 124, Parliament by law prescribes the number of judges of the Supreme Court.\nWhich of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II is the correct explanation for Statement I.","Both Statement I and Statement II are correct and Statement II is not the correct explanation for Statement I.","Statement I is correct but Statement II is incorrect.","Statement I is incorrect but Statement II is correct."],"ci":3,"exp":"Ex: The composition and strength of the Supreme Court are critical for ensuring the efficient functioning of the judiciary. The Constitution empowers Parliament to determine the number of judges in the Supreme Court through legislative amendments. 12 Statement I is incorrect: The Supreme Court (Number of Judges) Amendment Act, 2019 fixes the maximum number of judges in the Supreme Court at 33 judges, excluding the Chief Justice of India. This means the total sanctioned strength of the Supreme Court is 34 judges, including the Chief Justice of India. The amendment was introduced to address the increasing backlog of cases in the judiciary and enhance the Court's efficiency. Statement II is Correct: Under Article 124(1) of the Constitution, Parliament has the power to prescribe the number of judges in the Supreme Court through legislation. ❖ When the Supreme Court was established in 1950, it had a sanctioned strength of 8 judges, including the Chief Justice of India. ❖ Over time, Parliament has amended the number to meet the growing demands of the judiciary. ❖ Notable amendments include: ➢ 1956 Amendment: Increased the strength to 11 judges. ➢ 1986 Amendment: Raised the number to 26 judges.  SPP 22609 ➢ 2009 Amendment: Fixed the strength at 30 judges, excluding the Chief Justice of India. ➢ 2019 Amendment: Raised the number to 33 judges, excluding the Chief Justice of India, reflecting the evolving needs of the judiciary. Additional Information: The 2019 Amendment was passed to address two major issues: 1. Rising backlog of cases: The Supreme Court has witnessed an exponential increase in the number of cases being filed. Increasing the number of judges is an essential step toward expediting the disposal of pending cases. 2. Improving judicial efficiency: With an enhanced bench strength, the Court can effectively handle constitutional benches, writ petitions, and other significant matters simultaneously, ensuring timely justice delivery.  13"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

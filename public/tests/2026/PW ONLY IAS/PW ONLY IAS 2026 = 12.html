@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 12</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 12</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 12">PW ONLY IAS 2026 = 12</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Regarding the Citizenship Amendment Act (CAA), 2019, consider the following statements:\n1. The Act provides fast-track citizenship to persecuted religious minorities from Pakistan, Bangladesh, and Sri Lanka, who entered India on or before December 31, 2014.\n2. The Act reduces the naturalisation residency requirement to 5 years for the eligible communities.\n3. The Act applies to all religious communities from Pakistan, Bangladesh, and Sri Lanka.\nWhich of the statements given above is/are incorrect?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","All of the above"],"ci":1,"exp":"Ex: ❖ Statement 1 is incorrect: The CAA provides fast-track citizenship to persecuted minorities (Hindus, Sikhs, Buddhists, Jains, Parsis, and Christians) from Pakistan, Bangladesh, and Afghanistan who entered India on or before December 31, 2014, and have resided in India for at least 5 years. ❖ Statement 2 is correct: The Act reduces the naturalisation residency requirement for the eligible communities from 11 years to 5 years. However, it explicitly excludes tribal areas under the Sixth Schedule of the Indian constitution and areas covered under the Inner Line Permit (ILP). ❖ Statement 3 is incorrect: The Act does not apply to Muslims from the specified countries (Pakistan, Bangladesh, and Afghanistan) or to illegal migrants of any religion."},{"id":1,"txt":"With reference to the Constitutional Articles relating to Citizenship (Articles 5–11), consider the following statements:\n1. Article 7 deals with the rights of citizenship of certain persons who migrated from India to Pakistan.\n2. Article 8 provides citizenship rights to persons of Indian origin residing outside India.\n3. Article 9 allows Indian citizens to retain citizenship even after voluntarily acquiring citizenship of a foreign State.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Citizenship under the Indian Constitution defines the legal membership of individuals in the Indian state and determines who enjoys full civil and political rights. Part II (Articles 5–11) lays down provisions relating to citizenship at the commencement of the Constitution, while future acquisition and termination of citizenship are governed by the Citizenship Act, 1955. Statement 1 is correct. Article 7 deals with citizenship rights of persons who migrated from India to Pakistan but later returned for resettlement. Their citizenship status was specifically addressed due to large-scale Partition migrations. Statement 2 is correct. Article 8 grants citizenship to persons of Indian origin residing outside India who register with diplomatic or consular authorities. SPP 22613 Statement 3 is incorrect. Article 9 clearly states that a person who voluntarily acquires citizenship of a foreign State shall not be a citizen of India. India does not allow dual citizenship in this sense."},{"id":2,"txt":"Which of the following is the most appropriate\nreason behind the Prime Minister often being referred to as the \"dominant\" figure in modern Parliamentary systems like that of the UK and India?","ref":"","opts":["The Prime Minister is considered ‘first among equals’ and has equal influence to the cabinet members.","The Prime Minister holds significant power and influence, surpassing the role of the cabinet.","The Prime Minister’s power has decreased over time, with more emphasis on the cabinet.","The Prime Minister is the Head of the State."],"ci":1,"exp":"Ex: The Prime Minister in modern parliamentary systems, such as those in the UK and India, plays a dominant role in the political system. This increased power of the Prime Minister is particularly evident in recent times. Option (a) is incorrect: While the phrase ‘primus inter pares’ or ‘first among equals’ was once used to describe the Prime Minister's role, modern political analysis suggests that the Prime Minister now holds a dominant position over the cabinet, particularly in terms of influence and decision-making power. Hence option a is incorrect. Option (b) is correct: Over time, especially in the UK and India, the Prime Minister's role has evolved to become more powerful, with Governments often referred to as \"Prime Ministerial government.\" This reflects the growing centralization of power in the office of the Prime Minister. Hence option b is correct. Option (c) is incorrect: The power of the Prime Minister has actually increased over time, rather than decreased. The cabinet still plays a key role, but the Prime Minister often holds the dominant influence in the government. Hence option c is incorrect. Option (d) is incorrect: In both the UK and India, the Prime Minister is not the Head of the State. President is Head of the State in India while in UK The Queen is the Head of the State. Hence option d is incorrect."},{"id":3,"txt":"In the context of Indian polity, which of the following statements best describes the term “Quasi Federal”?","ref":"","opts":["It is a political structure in which the central government has complete authority over all of its subordinate governments.","A federal system of government where the central government has no control over the states.","A federal setup where despite having two clear sets of government – central and the states, more powers are given to the Central Government.","None of the above"],"ci":2,"exp":"Ex: Option (c) is correct: Quasi Federal is a federal set up where despite having two clear 2 sets of government – central and the states, more powers are given to the Central Government. For example, The makers of the Indian Constitution while providing for two sets of government at the centre and in the states provided for division of powers favouring the Central Government. For example, ❖ Appointment of the Head of the State government by the Central Government ❖ Single unified judiciary ❖ Single citizenship indicates the unitary nature of our federalism. Therefore, it is said that India has a quasi- federal set up."},{"id":4,"txt":"Under the Cabinet Mission Plan, the distribution of seats among communities in the Constituent Assembly from British Indian Provinces was determined on the basis of:","ref":"","opts":["The electoral performance of major political parties","Discretionary allocation by the Governor- General","Relative population shares of Muslims, Sikhs and the General category","Recommendations of the Simon Commission"],"ci":2,"exp":"Ex: The Cabinet Mission Plan (1946) was sent by the British Government to India to negotiate the transfer of power and devise a constitutional framework. It proposed a Union of India with limited powers, grouping of provinces, and a Constituent Assembly to frame the Constitution. The Mission rejected the demand for Pakistan but allowed provinces to opt out later, becoming a key turning point before independence. Option (a) is incorrect. The relative strength of political parties (Congress, Muslim League, etc.) was irrelevant in determining the number of seats for each community.Seat allocation was decided before the provincial assembly elections were held, making political performance immaterial. Option (b) is incorrect. The Governor- General had no discretionary authority in fixing community-wise seats. The entire formula allocation to provinces and division among communities was pre-determined in the Cabinet Mission Plan itself. Option (c) is correct. The Cabinet Mission Plan explicitly stated that seats in the Constituent Assembly allotted to each British Indian Province would be divided among Muslims, Sikhs and the General category strictly in proportion to their population. SPP 22613 This ensured demographic representation rather than political or administrative discretion. Hence, population proportion was the sole basis for community-wise seat allocation. Option (d) is incorrect. The Simon Commission (1927) had no connection with the community-wise seat distribution in 1946."},{"id":5,"txt":"Consider the following statements:\n1. NRIs do not require permission from the Foreign Regional Registration Office (FRRO) for any length of stay in India while OCIs need to obtain permission for stay over 120 days in India.\n2. NRIs can vote in elections to the Parliament and State assemblies while OCIs do not have any voting rights.\n3. NRIs can acquire any immovable property including agricultural land while OCIs cannot acquire agricultural land in India.\nWhich of the statements given above is/are correct regarding the differences between the Non-Resident Indians (NRI) and Overseas Citizens of India (OCI)?","ref":"","opts":["1 and 2 only","2 only","1 and 3 only","3 only"],"ci":1,"exp":"Ex: An Indian citizen living outside India for a period due to employment, business, education, or any other purpose indicating an indefinite stay abroad is known as an NRI. Individuals with NRI status maintain their Indian citizenship, and they are primarily governed by the Foreign Exchange Management Act (FEMA) and the Income Tax Act of India. Overseas Citizens of India (OCIs) are individuals from foreign countries with ancestral ties to India. Introduced in 2005, this relatively recent status aims to enhance the integration of the Indian diaspora into the global community while preserving their individual connections with India Statement 1 is incorrect: Overseas Citizens of India (OCIs) hold a lifelong multiple-entry visa and are not required to register with the Foreigners Regional Registration Office (FRRO) irrespective of the duration of their stay in India. In contrast, any foreign national, including an NRI entering India on a visa valid for 180 days or less, must register with the FRRO/FRO if they intend to stay longer than 180 days. Therefore, the claim that OCIs must obtain permission for stays beyond 120 days is factually wrong. Statement 2 is correct: NRIs, being Indian citizens, have the right to vote—but only if they are physically present in their constituency on polling day. OCIs, on the other hand, are foreign nationals, and hence cannot vote, hold constitutional posts, or apply for government jobs in India. 3 Statement 3 is incorrect: Both NRIs and OCIs are barred from purchasing agricultural land, plantation property, or farmhouses. NRIs can buy all other types of immovable property, but agricultural land is prohibited. OCIs enjoy economic and educational parity with NRIs, but the restriction on agricultural land applies to both categories."},{"id":6,"txt":"A person can register himself/herself as a citizen of India by the process of registration.\nWhich of the following statements is incorrect regarding this?","ref":"","opts":["A person who is married to a citizen of India and is ordinarily resident in India for seven years before making an application for registration","Minor children of persons who are citizens of India","A person of full age and capacity whose parents are registered as citizens of India","A person who has adequate knowledge of a language specified in the Eighth Schedule to the Constitution"],"ci":3,"exp":"Ex: The Central Government may, on an application, register as a citizen of India any person (not being an illegal migrant) if he belongs to any of the following categories, namely:- ❖ A person of Indian origin who is ordinarily resident in India for seven years before making an application for registration ❖ A person of Indian origin who is ordinarily resident in any country or place outside undivided India ❖ A person who is married to a citizen of India and is ordinarily resident in India for seven years before making an application for registration. Hence, Option (a) is correct ❖ A minor child of persons who are citizens of India. Hence, Option (b) is correct. ❖ A person of full age and capacity whose parents are registered as citizens of India. Hence, Option (c) is correct. ❖ A person of full age and capacity who, or either of his parents, was earlier citizen of independent India, and is ordinarily resident in India for twelve months immediately before making an application for registration. ❖ A person of full age and capacity who has been registered as an overseas citizen of India cardholder for five years, and who is ordinarily resident in India for twelve months before making an application for registration. SPP 22613 Option (d) is incorrect: A person who has an adequate knowledge of a language specified in the Eighth Schedule to the Constitution can get Indian Citizenship by Naturalisation."},{"id":7,"txt":"With reference to the Parliamentary system of government in India, consider the following statements:\n1. The ministers operate on the principle of secrecy of procedure.\n2. A person cannot be appointed as a minister unless they are already a member of Parliament.\n3. The Prime Minister of India is always directly elected by the people.\nHow many of the above statements are incorrect?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: Article 75(4) requires every minister to take the oath of secrecy, which obligates them to keep confidential the matters they deal with in office. This constitutional requirement ensures secrecy of Cabinet deliberations and supports the principle of collective responsibility. Statement 2 is incorrect: A person who is not a member of Parliament can still be appointed as a minister, provided they get elected to either House within six months. This is permitted under Article 75(5). Therefore, being an MP at the time of appointment is not mandatory. Statement 3 is incorrect: The Prime Minister of India is not directly elected by the people. The PM is chosen by the majority party or coalition in the Lok Sabha. Citizens vote for MPs, not for the PM directly."},{"id":8,"txt":"Regarding the principles of Indian citizenship, consider the following statements:\n1. The Jus Soli principle determines a person’s citizenship through the citizenship of one or both parents, referred to as the principle of descent.\n2. The Jus Sanguinis principle determines a person’s citizenship based on the place of birth, also referred to as birthright citizenship\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Citizenship in India is governed by the Citizenship Act of 1955, which incorporates principles of jus soli (right of soil) and jus sanguinis (right of blood) for determining citizenship Statement 1 is incorrect: Jus soli (Latin for \"right of soil\") grants citizenship based on a person’s place of birth. Historically, this principle was part of Indian citizenship laws but has been modified over time. Statement 2 is incorrect: Jus sanguinis (Latin for \"right of blood\") grants citizenship through the descent of one or both parents. This principle is currently a key determinant in Indian citizenship laws, particularly for those born outside India. 4"},{"id":9,"txt":"Under the Citizenship Act, 1955, which of the following situations can lead to loss of Indian citizenship?\n1. Obtaining Indian citizenship by fraud\n2. Voluntarily acquiring citizenship of a foreign country\n3. Remaining outside India for seven continuous years\n4. Making a declaration renouncing Indian citizenship during wartime\nSelect the correct answer using the code given below:","ref":"","opts":["1, 2 and 3","1, 3 and 4","1, 2, 3 and 4 only","2 and 4 only"],"ci":0,"exp":"Ex: Statement 1 is correct: If citizenship is acquired through fraud, false representation, or concealment of facts, the Government of India can compulsorily deprive the person of Indian citizenship under Section 10 of the Act. Statement 2 is correct: If a person voluntarily acquires citizenship of another country, their Indian citizenship automatically terminates under Section 9. Statement 3 is correct: If an Indian citizen, especially by registration or naturalization, stays continuously abroad for 7 years without maintaining ties such as working in Indian services or registering annually with the Indian consulate, the government can initiate deprivation of citizenship. Statement 4 is incorrect: Renunciation is voluntary, not compulsory. Moreover, if India is at war, the government does not accept declarations of renunciation. Hence, it does not result in loss of citizenship during wartime."},{"id":10,"txt":"Which one of the statements given below is incorrect with respect to the India Independence Act of 1947?","ref":"","opts":["It granted freedom to the Indian princely states to remain independent.","It abolished the office of the Governor- General of India and deprived the British monarch of his right to veto bills.","It discontinued the appointment to civil services and reservation of posts by the secretary of state for India.","None of the above"],"ci":1,"exp":"Ex: On February 20, 1947, British Prime Minister Clement Atlee declared that the British rule in India would end by June 30, 1948; after which the power would be transferred to the responsible Indian hands. For this, an act was enacted by the British Parliament on July 5, 1947, which received royal assent on July 18, 1947. It is based on the Mountbatten Plan. The Act entered into effect on August 15, 1947. Some features of the act are: ❖ It ended British rule in India and declared India as an independent and sovereign state on August 15, 1947. It provided for the partition of India and the creation of two independent dominions of India and Pakistan with the right to secede from the British Commonwealth. ❖ It abolished the office of the Viceroy and provided, for each dominion, a governor general, who was to be appointed by the British King on the advice of the dominion cabinet. SPP 22613 ❖ It abolished the office of the Secretary of State for India and transferred his functions to the Secretary of State for Commonwealth Affairs. ❖ It granted freedom to the Indian princely states either to join the Dominion of India or the Dominion of Pakistan or to remain independent. Hence, Option A is correct. ❖ It provided for the governance of each of the dominions and the provinces by the Government of India Act of 1935, till the new Constitutions were framed. ❖ It deprived the British Monarch of his right to veto bills or ask for reservation of certain bills for his approval. But, this right was reserved for the Governor General. The Governor General would have full power to assent to any bill in the name of His Majesty. ❖ It designated the Governor-General of India and the provincial governors as constitutional (nominal) heads of the states. They were made to act on the advice of the respective council of ministers in all matters. Hence, Option B is incorrect. ❖ It discontinued the appointment to civil services and reservation of posts by the secretary of state for India. Hence, Option C is correct."},{"id":11,"txt":"Consider the following statements regarding the Nehru Report (1928):\n1. The Nehru Report proposed dominion status for India, similar to self-governing dominions like Canada and Australia.\n2. The report advocated for separate electorates for Muslims in areas where they were in the minority, but not in areas where they were in the majority, like Punjab and Bengal.\n3. The Nehru Report recommended the creation of linguistic provinces to address India’s diverse language groups.\n4. The report included nineteen fundamental rights, including equal rights for women, the right to form unions, and universal adult suffrage.\n5. The Nehru Report called for a responsible government at the Centre and in the provinces, with a 500-member House of Representatives and a 200-member Senate.\nHow many of the above statements are correct?","ref":"","opts":["Only Two","Only Three","Only Four","All Five"],"ci":2,"exp":"Ex: Statement 1 is correct: The Nehru Report proposed dominion status for India, similar to self-governing dominions like Canada and Australia. This was a step toward self- governance within the British Empire, but it was not fully supported by the more radical sections of the INC. Statement 2 is incorrect: The Nehru Report rejected separate electorates and instead proposed joint electorates with reservations for Muslims only in the provinces where they 5 were in the minority. The report emphasized unity between Hindus and Muslims, hence the rejection of separate electorates for the Muslim community in majority provinces like Punjab and Bengal. Statement 3 is correct: The Nehru Report recommended linguistic provinces to accommodate the diversity of India's languages and ensure better representation at the provincial level. This was seen as a progressive step to address India's cultural diversity. Statement 4 is correct: The Nehru Report included nineteen fundamental rights, which included equal rights for women, the right to form unions, and universal adult suffrage. These provisions highlighted the INC's progressive approach to securing individual rights and promoting social justice. Statement 5 is correct: The Nehru Report called for a responsible government at both the Centre and the provinces, with a 500- member House of Representatives elected by universal adult suffrage with 5 year tenure and a 200-member Senate with 7 year tenure elected by provincial councils. This structure aimed at creating a more inclusive and democratic system of governance."},{"id":12,"txt":"With reference to citizenship and alien status in India, consider the following statements:\n1. Enemy aliens in India do not enjoy protection against arrest and detention under Article 22.\n2. Friendly aliens enjoy all the civil and political rights available to citizens of India.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct. Enemy aliens — i.e., citizens of a country that is at war with India — are specifically excluded from the protections provided under Article 22, which normally guarantees safeguards against arbitrary arrest and preventive detention. This means enemy aliens can be detained without the procedural protections such as: ❖ the right to be informed of grounds of arrest ❖ the right to consult and be defended by a legal practitioner ❖ production before a magistrate within 24 hours. This constitutional exception exists due to national security considerations. SPP 22613 Statement 2 is incorrect. Friendly aliens (nationals of countries that are not at war with India) enjoy more rights than enemy aliens, but they do not enjoy all civil and political rights that citizens do. They are entitled to many fundamental rights such as: ❖ Article 14 (equality before law), ❖ Article 20 (protection in criminal offences), ❖ Article 21 (right to life and liberty), ❖ Article 25 (freedom of religion). However, they do not enjoy: ❖ the right to vote, ❖ the right to contest elections, ❖ the right to hold certain constitutional offices, ❖ Article 16(1) (equality of opportunity in public employment), ❖ certain freedoms reserved for citizens under Article 19."},{"id":13,"txt":"With reference to Citizenship in India, consider the following statements:\n1. Citizenship entitles a person to all political rights and to all civil rights available under the Constitution.\n2. Only citizens have the right to vote in elections to the Lok Sabha and State Legislative Assemblies.\n3. Only citizens are eligible to become Members of Parliament and State Legislatures.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Citizenship under the Indian Constitution defines the legal membership of individuals in the Indian state and determines who enjoys full civil and political rights. Part II (Articles 5–11) lays down provisions relating to citizenship at the commencement of the Constitution, while future acquisition and termination of citizenship are governed by the Citizenship Act, 1955. Statement 1 is correct: Citizenship ensures complete enjoyment of civil and political rights under the Constitution. Citizenship in India confers: Civil rights (e.g., freedom of speech, equality, protection of law). Political rights (e.g., right to vote, right to contest elections). Non-citizens enjoy only limited civil rights and no political rights. Statement 2 is correct: Only citizens are entitled to the right of suffrage (Right to vote (Art. 326)) for Lok Sabha and State Assembly elections. Voting in Parliamentary and Assembly elections is a political right exclusive to Indian citizens. NRIs have this right, but foreign nationals do not. 6 Statement 3 is correct: Only citizens can contest elections to Parliament or State Legislatures [Right to contest elections (Art. 84, 173), subject to age and qualifications. Non- citizens cannot hold these elected offices."},{"id":14,"txt":"With reference to the Saint Helena Act 1833, consider the following statements:\n1. Company’s monopoly over trade with China and in tea ended.\n2. This Act deprived the Governor of Bombay and Madras of their legislative powers.\n3. It attempted to introduce the system of Open competition for selection of civil servants.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Saint Helena Act is another name for the Charter Act of 1833. Statement 1 is correct: As per the Charter Act of 1813 company’s monopoly over trade in India was already ended. But the company retained trade with China & trade in tea, which was also ended via Charter Act of 1833 or Helena Act. Statement 2 is correct: This Act deprived the Governor of Bombay and Madras of their legislative powers and the Governor-General of Bengal became the Governor-General of India with exclusive legislative powers of entire British India. Statement 3 is correct: It attempted to introduce the system of open competition for selection of Civil Servants and stated that the Indians should not be debarred from holding any office and employment under the Company whereas, Charter Act of 1853 introduced an Open competition system for selection & recruitment of civil servants."},{"id":15,"txt":"With reference to the Government of India Act, 1919, consider the following statements:\n1. It introduced bicameralism at the Centre for the first time in India, with both Houses having directly elected majorities.\n2. It introduced dyarchy in the Central government.\n3. It created the office of the High Commissioner for India in London, distinct from the Secretary of State for India.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is incorrect: Although the Government of India Act, 1919 did introduce bicameralism at the Centre for the first time, it did not provide that both Houses would have directly elected majorities. The Council of State had only a minority of elected members and a substantial portion nominated by the Governor-General. The Legislative Assembly, while more representative, still did not have a fully directly elected majority because of limited franchise and nominated members. SPP 22613 Statement 2 is incorrect: The Act did not introduce dyarchy at the Centre. Dyarchy was implemented only in the Provinces, where subjects were divided into Transferred subjects (handled by Indian Ministers) and Reserved subjects (handled by the Governor and his Executive Council). At the Central level, the Executive remained fully under the Governor-General and the Secretary of State, with no dual scheme of administration. Statement 3 is correct: The Government of India Act, 1919 created the office of the High Commissioner for India in London, replacing the earlier Indian Store Department. This office was distinct from the Secretary of State for India, who retained political control. The High Commissioner handled administrative and financial matters such as procurement, shipping, and management of Indian government stores in Britain."},{"id":16,"txt":"It elevated the Governor-General of Bengal into the Governor-General of India with full civil and military authority, centralized all legislative power in his council by withdrawing the law- making powers of Bombay and Madras, and ended the East India Company’s commercial functions while holding its territories in trust for the Crown. Which Act is described in the passage above?","ref":"","opts":["Pitt’s India Act, 1784","Charter Act, 1813","Charter Act, 1833","Government of India Act, 1858"],"ci":2,"exp":"Ex: Charter Act of 1833 marked a major stage in the constitutional centralisation of British India. Features of the Act: Governor-General of India ❖ It elevated the office of the Governor- General of Bengal to the Governor- General of India and vested in him full civil and military authority over all British territories in India. ❖ Lord William Bentinck became the first Governor-General of India. Centralisation of Legislative Power ❖ It withdrew the legislative powers of the Governors of Bombay and Madras. ❖ It vested exclusive all-India legislative authority in the Governor-General’s Council. ❖ Laws enacted after this Act were called Acts, unlike earlier Regulations. End of the Company’s Commercial Activities ❖ It ended the East India Company’s role as a commercial body, making it purely administrative. 7 ❖ It declared that Company territories were held in trust for His Majesty, marking Crown supervision over Indian territories. Hence option C is correct. Attempt to Introduce Open Competition in Civil Services ❖ The Act proposed that Indians should not be debarred from holding any post under the Company. ❖ It attempted to introduce an open competition system, but this was opposed by the Court of Directors and not implemented at this stage."},{"id":17,"txt":"Consider the following statements:\nStatement I: The Government of India Act, 1935 aimed to introduce responsible government at the provincial level.\nStatement II: The Act abolished dyarchy in the provinces and introduced provincial autonomy.\nStatement III: Provincial autonomy introduced under the Act continued uninterrupted till 1947.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I.","Both Statement II and Statement III are correct but only one of them explains Statement I.","Only one of the Statements II and Statement III is correct and that explains Statement I.","Neither Statement II nor Statement III is correct."],"ci":2,"exp":"Ex: The Government of India Act, 1935 was the most comprehensive constitutional statute enacted by the British Parliament for governing colonial India. Statement I is correct: The Government of India Act, 1935 aimed to introduce responsible government at the provincial level by transferring executive authority over provincial subjects to Indian ministers accountable to elected provincial legislatures. This marked a decisive departure from colonial bureaucratic control toward representative governance in provinces. Statement II is correct: The Act abolished dyarchy in the provinces, which had existed under the Government of India Act, 1919, and replaced it with provincial autonomy. Provincial subjects were brought under the control of ministers responsible to the legislature, with Governors normally acting on ministerial advice, subject to limited discretionary powers. This institutional change directly explains how responsible government at the provincial level was introduced, as stated in Statement I. Statement III is incorrect: Provincial autonomy did not continue uninterrupted till 1947. Following the outbreak of the Second World War in 1939, Congress ministries in SPP 22613 most provinces resigned, and Governors assumed direct control, effectively suspending provincial autonomy."},{"id":18,"txt":"Consider the following statements:\nStatement I: The Indian Councils Act, 1861 strengthened the emergency powers of the Viceroy.\nStatement II: The Act empowered the Viceroy to issue ordinances without the concurrence of the legislative council during emergencies.\nStatement III: Ordinances issued by the Viceroy under the Act were valid for a period of six months.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I.","Both Statement II and Statement III are correct but only one of them explains Statement I.","Only one of the Statements II and Statement III is correct and that explains Statement I.","Neither Statement II nor Statement III is correct."],"ci":0,"exp":"Ex: Statement I is correct: The Indian Councils Act, 1861 strengthened the emergency powers of the Viceroy by formally authorising him to legislate independently in situations requiring immediate action. This marked a consolidation of executive authority, reinforcing the dominance of the Governor- General (Viceroy) over the legislative process during emergencies. Statement II is correct: The Act empowered the Viceroy to issue ordinances without the concurrence of the legislative council when the council was not in session and circumstances required urgent legislation. This provision clearly enhanced the discretionary and emergency authority of the executive, thereby directly explaining Statement I. Statement III is correct: Ordinances promulgated by the Viceroy under the Indian Councils Act, 1861 were temporary in nature and remained valid for a maximum period of six months unless replaced earlier by an Act of the legislature. This temporal limitation was a statutory feature of the ordinance-making power. Since both Statement II and Statement III are correct, and both explain how the emergency powers of the Viceroy were strengthened, the correct answer is (a)."},{"id":19,"txt":"Consider the following statements:\nStatement I: The Objectives Resolution articulated a commitment to secure justice, liberty and equality for the people of India.\nStatement II: It explicitly assured social, economic and political justice, along with equality of status and equality before the law.\nStatement III: It provided that the exercise of these freedoms and guarantees would be subject to the authority of law and considerations of public morality.\nWhich of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I.","Both Statement II and Statement III are correct but only one of them explains Statement I.","Only one of the Statements II and Statement III is correct and that explains Statement I.","Neither Statement II nor Statement III is correct."],"ci":0,"exp":"Ex: The Objectives Resolution (1946), moved by Jawaharlal Nehru in the Constituent Assembly, laid down the philosophical and moral framework of the Indian Constitution. Statement I is correct: The Objectives Resolution (1946) explicitly envisaged guarantees of justice, liberty and equality to 8 the people of India. These values formed the normative core of the Resolution and later found expression in the Preamble of the Constitution. Statement II is correct: The Resolution guaranteed social, economic and political justice, along with equality of status and opportunity. These are direct textual guarantees contained in the Resolution and clearly explain the commitment to justice and equality referred to in Statement I. Statement III is correct: The Resolution assured liberty of thought, expression, belief, faith and worship, explicitly stating that these liberties would be subject to law and public morality. This clause does not negate liberty, rather it defines the manner in which liberty is guaranteed. Hence, it also explains the guarantee of liberty mentioned in Statement I."},{"id":20,"txt":"The system of “double government” introduced in India refers to:","ref":"","opts":["Division of powers between the British Crown and Parliament","Separation of judicial and executive powers","Division of commercial and political control between two authorities","Concurrent authority of Governors and Governor-General"],"ci":2,"exp":"Ex: The system of “double government” in India refers to the administrative arrangement introduced after the Regulating Act of 1773 and formalised under Pitt’s India Act, 1784. What “double government” meant: Under this system commercial (administrative) functions were handled by the Court of Directors of the East India Company, and Political and civil governance was supervised by the Board of Control, representing the British Government. Thus, authority over Indian affairs was divided between two parallel bodies, creating a dual system of governance. Hence option C is correct."},{"id":21,"txt":"Consider the following statements regarding the Act of 1786:\nStatement–I: It strengthened the position of the Governor-General vis-à-vis his Council. Statement–II: It marked the first instance of concentrating military and civil authority in one office.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement–I and Statement–II are correct and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct but Statement–II is not the correct explanation for Statement–I","Statement–I is correct but Statement–II is incorrect","Statement–I is incorrect but Statement–II is correct"],"ci":1,"exp":"Ex: The Act of 1786 (also known as the Amending Act of 1786) was passed primarily to address administrative weaknesses that had emerged under earlier regulations, especially the Regulating Act of 1773 and Pitt’s India Act, 1784. SPP 22613 Statement–I is correct: The Act of 1786 strengthened the position of the Governor- General vis-à-vis his Council by: ❖ Allowing the Governor-General to override the Council in matters he considered urgent or vital, and ❖ Enhancing his authority to ensure decisive executive action. This was intended to correct the earlier system where the Governor-General was often constrained by a powerful Council. Statement–II is correct: The Act of 1786 marked the first clear instance of concentrating both civil and military authority in a single office, by enabling the Governor-General to also serve as the Commander-in-Chief of British forces in India. This step aimed to improve coordination between civil administration and military command. Although both statements are factually correct, Statement–II does not explain Statement–I: The strengthening of the Governor-General’s authority over the Council was achieved through decision-making powers and override provisions, Whereas the concentration of civil and military authority relates to administrative efficiency and command unity, not directly to Council dominance. Thus, the two statements address different dimensions of reform, not a cause– effect relationship."},{"id":22,"txt":"Consider the following statements regarding the Act of 1781:\nStatement–I: The Amending Act of 1781 significantly reduced judicial interference in Company administration. Statement–II: It excluded revenue matters and official acts of Company servants from the jurisdiction of the Supreme Court.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement–I and Statement–II are correct and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct but Statement–II is not the correct explanation for Statement–I","Statement–I is correct but Statement–II is incorrect","Statement–I is incorrect but Statement–II is correct"],"ci":0,"exp":"Ex: The Act of Settlement, 1781—commonly referred to as the Amending Act of 1781—was enacted to resolve the serious jurisdictional conflict between the Supreme Court at Calcutta and the East India Company’s administration that had arisen after the Regulating Act of 1773. Statement–I is correct: The Amending Act of 1781 significantly reduced judicial interference in the Company’s administration. Prior to this Act, the Supreme Court frequently intervened in executive and revenue matters, which disrupted governance and created administrative paralysis. 9 Statement–II is correct: The Act achieved this objective by: ❖ Excluding revenue matters from the jurisdiction of the Supreme Court, and ❖ Exempting official acts of Company servants, performed in their official capacity, from judicial scrutiny by the Court. This statutory exclusion directly limited the Court’s reach over Company administration. However, the Supreme Court’s jurisdiction was curtailed, not abolished; it continued to exercise authority over British subjects in Calcutta and over non-official acts of Company servants. Statement–II correctly explains Statement–I: Statement–I describes the effect → reduction of judicial interference. Statement–II explains the mechanism → jurisdictional exclusion of revenue matters and official acts"},{"id":23,"txt":"Consider the following pairs:\nCharter Act Feature\n1. 1793 — Assertionsovereignty of Crown\n2. 1813 — Payment of Board of Controlfrom Indian revenues\n3. 1833 — Endcommercial functionsof Company’s\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Pair 1 is incorrectly matched: As established, assertion of Crown sovereignty belongs to the Charter Act of 1813, not 1793. The Charter Act of 1793 dealt mainly with: ❖ Renewal of Company charter ❖ Payment of Board of Control salaries from Indian revenues ❖ Private trade by Company servants Pair 2 is incorrectly matched: The provision regarding payment of the Board of Control from Indian revenues was introduced by the Charter Act of 1793, not 1813. The Charter Act of 1813 is known for: ❖ Ending the Company’s trade monopoly with India (except tea and China trade) ❖ Permitting missionaries to operate in India ❖ Introducing a ₹1 lakh grant for education Pair 3 is correctly matched: The Charter Act of 1833: ❖ Ended the East India Company’s commercial activities entirely ❖ Made the Company a purely administrative and political body ❖ Centralised legislative power in the Governor-General of India SPP 22613"},{"id":24,"txt":"The Charter Act of 1833 is best described as:","ref":"","opts":["A measure primarily concerned with commercial regulation","A constitutional step towards administrative decentralisation","A constitutional measure completing administrative centralisation","A statutory attempt to introduce provincial self-government"],"ci":2,"exp":"Ex: The Charter Act of 1833 represents a decisive constitutional turning point in British Indian administration. It is best understood not as a commercial or decentralising measure, but as one that completed the process of administrative and legislative centralisation. Option (c) is correct: The Act of 1833 ended all commercial activities of the East India Company, making it a purely administrative and political authority. Centralised legislative power by vesting exclusive legislative authority in the Governor-General of India (for the first time, not merely Bengal). Reducing the legislative role of the Governors of Madras and Bombay, who became subordinate. Created a single, centralised law- making authority for British India. Thus, it completed the shift from fragmented Company rule to a unitary, centralised colonial state. Option (a) is incorrect: Commercial regulation had already been substantially addressed earlier (especially in 1813). The 1833 Act abolished Company trade altogether. Option (b) is incorrect: The Act did the opposite, it curtailed provincial autonomy and strengthened central authority. Option (d) is incorrect: Provincial self- government came much later (e.g., Acts of 1861, 1892, 1909, 1919). The 1833 Act was centralising, not representative."},{"id":25,"txt":"Consider the following statements regarding the Inter-Parliamentary Group (IPG):\n1. The IPG functions as India’s National Group of the Inter-Parliamentary Union.\n2. The IPG represents India as a member- state government in the United Nations General Assembly.\nWhich of the above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: The Inter- Parliamentary Group (IPG) functions as India’s National Group of the Inter- Parliamentary Union (IPU). It comprises members of the Indian Parliament. Its purpose is to facilitate parliamentary diplomacy, legislative exchange, and India’s participation in IPU meetings and assemblies. 10 Statement 2 is incorrect: The IPG does not represent India as a member-state government in the United Nations General Assembly (UNGA). Representation in the UNGA is the function of the Executive (Government of India), primarily through the Ministry of External Affairs and accredited diplomats. The IPG is a parliamentary body, not an executive or diplomatic mission, and has no role in intergovernmental representation at the UN."},{"id":26,"txt":"With reference to the membership of the Inter- Parliamentary Group (IPG), consider the following:\n1. All sitting Members of Parliament are eligible for membership.\n2. Former Members of Parliament may become associate members.\n3. Associate members can represent India at IPU conferences.\nHow many of the above statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The Inter-Parliamentary Group (IPG) is India’s National Group of the Inter- Parliamentary Union (IPU). Its membership rules distinguish between members and associate members. Statement 1 is correct: All sitting Members of Parliament (Lok Sabha and Rajya Sabha) are eligible for membership of the IPG. Statement 2 is correct: Former Members of Parliament may be admitted as associate members of the IPG, allowing continued association with parliamentary diplomacy. Statement 3 is incorrect: Associate members do not represent India at IPU conferences. Official representation is undertaken by serving MPs designated as members/delegates; associate members may attend or be associated, but do not represent India."},{"id":27,"txt":"Who among the following holds the position of ex officio President (Chairperson) of the Inter- Parliamentary Group (IPG)?","ref":"","opts":["Chairman of the Rajya Sabha","Deputy Speaker of the Lok Sabha","Speaker of the Lok Sabha","Secretary-General of the Lok Sabha"],"ci":2,"exp":"Ex: The Speaker of the Lok Sabha is the ex officio President (Chairperson) of the Inter- Parliamentary Group. The Deputy Speaker of the Lok Sabha and the Deputy Chairman of the Rajya Sabha serve as ex officio Vice- Presidents. The Secretary-General of the Lok Sabha acts as the ex officio Secretary-General of the IPG. Hence option C is correct. SPP 22613"},{"id":28,"txt":"Consider the following statements:\nStatement–I: The Maneka Gandhi judgment transformed the interpretation of Article 21. Statement–II: It held that any procedure depriving personal liberty must be just, fair, and reasonable.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement–I and Statement–II are correct and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct but Statement–II is not the correct explanation for Statement–I","Statement–I is correct but Statement–II is incorrect","Statement–I is incorrect but Statement–II is correct"],"ci":0,"exp":"Ex: Statement–I is correct: The Maneka Gandhi v. Union of India (1978) judgment marked a transformational shift in the interpretation of Article 21 (Right to Life and Personal Liberty). It overturned the narrow, formalistic approach adopted earlier in A.K. Gopalan and expanded Article 21 into a substantive guarantee of human dignity. Statement–II is correct: The Court held that any “procedure established by law” that deprives a person of life or personal liberty must be Just, Fair, Reasonable, Non- arbitrary. This imported the due process–like standard into Article 21, even though the Constitution uses the phrase “procedure established by law”. Statement–II correctly explains Statement–I: ❖ Statement–I describes the effect → transformation of Article 21 ❖ Statement–II identifies the core doctrinal change → requirement of just, fair, and reasonable procedure. The transformation of Article 21 occurred precisely because the Court redefined “procedure” in this substantive manner."},{"id":29,"txt":"With reference to the S.R. Bommai case, consider the following:\n1. It made the President’s satisfaction under Article 356 justiciable.\n2. It strengthened the principle of federalism.\n3. It prohibited the use of Article 356 in all circumstances.\nHow many of the above statements are correct?","ref":"","opts":["Only two","All three","None","Only one"],"ci":0,"exp":"Ex: The S.R. Bommai v. Union of India (1994) judgment is a landmark ruling on the misuse of Article 356 (President’s Rule) and the protection of federalism. Statement 1 is correct: The Supreme Court held that the President’s satisfaction under Article 356 is not immune from judicial scrutiny. Courts are empowered to examine whether the proclamation is based on relevant material, and whether it is mala fide, arbitrary, or based on extraneous considerations. 11 Statement 2 is correct: The judgment explicitly recognised federalism as a part of the basic structure of the Constitution. By restricting the indiscriminate use of Article 356, the Court strengthened the autonomy of States and reaffirmed the constitutional balance between the Union and the States.  SPP 22613 Statement 3 is incorrect: The Court did not prohibit the use of Article 356 in all circumstances. It clarified that President’s Rule may still be imposed in cases of a genuine breakdown of constitutional machinery, but must be exercised sparingly and as a measure of last resort.  12"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

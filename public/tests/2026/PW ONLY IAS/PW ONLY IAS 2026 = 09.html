@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 09</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 09</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 09">PW ONLY IAS 2026 = 09</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the 74th Constitutional Amendment Act, consider the following statements:\n1. All members of a Municipality are directly elected by the people, including the Chairperson.\n2. Members with special knowledge or experience in municipal administration are full voting members of the Municipality.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: The 74th Constitutional Amendment Act, 1992 constitutionalised Urban Local Bodies (Municipalities) by inserting Part IXA (Articles 243P–243ZG) and the Twelfth Schedule into the Constitution Statement 1 is incorrect: Article 243R mandates direct election only for ward members, not for Chairpersons. The method of choosing the Chairperson is left entirely to the State Legislature. Different states follow different systems—some have direct elections and some indirect. Statement 2 is incorrect: Article 243R(2)(a) allows states to nominate members with expertise in municipal administration. However, it clearly states that such nominated members have no voting rights. This ensures technical input without compromising democratic control of elected representatives."},{"id":1,"txt":"With reference to the creation of Union Territories, consider the following statements:\n1. The Seventh Constitutional Amendment Act, 1956 introduced the category of Union Territories in India.\n2. All territories acquired from the Portuguese and the French were granted full statehood immediately after their accession to India.\n3. The 2020 merger of Dadra & Nagar Haveli with Daman & Diu was done to reduce administrative duplication and ensure efficient governance.\n4. Lakshadweep was originally known as the Laccadive, Minicoy and Amindivi Islands until 1973.\nWhich of the statements given above are correct?","ref":"","opts":["1, 3 and 4 only","1 and 3 only","2 and 4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Statement 1 is correct: The 7th Constitutional Amendment reorganised states and introduced the modern category of Union Territories, replacing the earlier \"Part C\" and \"Part D\" classifications. Statement 2 is incorrect: Territories acquired from Portuguese and French rule first became UTs, not states. Goa gained statehood only in 1987, while Puducherry remains a UT even today. Statement 3 is correct: The 2020 merger was intended to streamline administration, remove duplicated departments, reduce government expenditure, and improve governance effectiveness. Statement 4 is correct: The islands were collectively called the Laccadive, Minicoy and Amindivi Islands until they were officially renamed Lakshadweep in 1973. SPP 22610"},{"id":2,"txt":"Consider the following administrative features of Union Territories with examples:\nFeature Example / Provision A. UT with 1. Lakshadweep, legislature but Andaman & Nicobar limited powers Islands, Ladakh B. UT fully 2. Delhi under Article governed by 239AA Administrator C. President can 3. Lakshadweep, A&N legislate by Islands, Dadra & regulations Nagar Haveli and Daman & Diu D. UT with its 4. Delhi High Court own High Court\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only three","All four","Only one","Only two"],"ci":3,"exp":"Ex: Pair 1 is not correctly matched: Delhi has a legislative assembly and council of ministers, but its powers are restricted on public order, police, and land; Parliament retains overriding authority. Pair 2 is not correctly matched: UT fully governed by Administrator are Lakshadweep, A&N Islands, Ladakh). These UTs have no legislature; administration is directly under the President through an appointed Administrator/Lt. Governor. Pair 3 is correctly matched: For UTs like Lakshadweep, A&N Islands, Dadra & Nagar Haveli and Daman & Diu, and Ladakh, the President can make regulations, which have the force of law like Acts of Parliament. Pair 4 is correctly matched: Delhi is the only UT with its own High Court; other UTs are placed under the jurisdiction of neighboring state High Courts."},{"id":3,"txt":"With reference to officers of the All India Services, which of the following statements is correct?","ref":"","opts":["Resignation of an All India Service officer is accepted only by the Cabinet Secretary","Acceptance of resignation depends on whether the officer is serving under the Union or a State","Disciplinary proceedings against All India Service officers can be initiated only by the Union","Removal from service of an All India Service officer can be ordered independently by a State Government"],"ci":1,"exp":"Ex: Option (b) correct: All India Service officers serve both the Union and the States, and their service conditions are governed by Article 312 and rules made thereunder. If an AIS officer is serving under the Union, the Central Government is the competent authority to accept the resignation. If the officer is serving under a State, the resignation is routed through and accepted by the State Government, subject to the applicable AIS rules. Thus, the authority depends on the cadre posting at the time. Option A is incorrect: There is no such exclusive role for the Cabinet Secretary in accepting AIS resignations. Acceptance is governed by service rules, not by a single constitutional office. 2 Option C is incorrect: Both the Union and the State Governments can initiate disciplinary proceedings, depending on where the officer is serving. However, final penalties (like dismissal or removal) require Central Government / Presidential approval. Option D is incorrect: A State Government cannot independently remove an AIS officer. Major penalties require action by the Central Government acting in the name of the President."},{"id":4,"txt":"Under the 73rd Constitutional Amendment:","ref":"","opts":["Both State Election Commission and State Finance Commission are optional","Only the State Election Commission is compulsory","Only the State Finance Commission is compulsory","Both are compulsory constitutional bodies"],"ci":3,"exp":"Ex: The 73rd Constitutional Amendment Act, 1992 made the creation of both bodies mandatory for States. State Election Commission (SEC): Article 243K mandates the establishment of a State Election Commission. The SEC is responsible for the superintendence, direction, and control of elections to Panchayats. Hence, it is a compulsory constitutional body. State Finance Commission (SFC): Article 243I mandates the constitution of a State Finance Commission every five years. The SFC recommends fiscal devolution—tax sharing, assignment of taxes, and grants-in-aid to Panchayats. Thus, it is also a compulsory constitutional body."},{"id":5,"txt":"Consider the following statements:\nStatement I: Panchayats require an assured flow of financial resources to effectively perform the functions assigned to them under Part IX of the Constitution.\nStatement II: The State Finance Commission recommends principles governing tax devolution, assignment of taxes, and grants-in- aid to Panchayats.\nStatement III: The State Finance Commission is responsible for monitoring and auditing the utilisation of funds by Panchayats.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and Statement II explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Both Statement II and Statement III are correct and both of them explain Statement I","Neither Statement II nor Statement III is correct"],"ci":1,"exp":"Ex: Statement I is correct: Under Part IX of the Constitution (Articles 243–243O), Panchayats are entrusted with functions relating to economic development and social justice (Article 243G). Effective discharge of these functions necessarily requires an assured and predictable flow of financial resources. Statement II is correct: Article 243I mandates the constitution of a State Finance Commission (SFC) to recommend: ❖ principles for tax devolution between the State and Panchayats, ❖ assignment of taxes, duties, tolls, and fees to Panchayats, and SPP 22610 ❖ grants-in-aid from the Consolidated Fund of the State. These recommendations create a rule-based fiscal framework, directly addressing the financial requirement highlighted in Statement I. Hence, Statement II correctly explains Statement I. Statement III is incorrect: The State Finance Commission does not monitor or audit the utilisation of funds by Panchayats. Its role is recommendatory, not supervisory. Monitoring/audit functions lie with State governments, the CAG, and departmental mechanisms, not the SFC."},{"id":6,"txt":"Consider the following statements:\nStatement-I: Panchayati Raj Institutions (PRIs) are heavily dependent on scheme-specific grants, limiting their discretionary spending. Statement-II: The Eleventh Schedule of the Constitution emphasizes financial autonomy for PRIs by focusing solely on unconditional transfers from the Union and State Governments.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement-I and Statement-II are correct and Statement-II is the correct explanation for Statement-I","Both Statement-I and Statement-II are correct and Statement-II is not the correct explanation for Statement-I","Statement-I is correct but Statement-II is incorrect","Statement-I is incorrect but Statement-II is correct"],"ci":2,"exp":"Ex: The financial position of Panchayati Raj Institutions (PRIs) is defined by the provisions in the Constitution, primarily through Part IX, Article 243-I, and the Eleventh Schedule, but it remains a challenge due to structural limitations. Statement-I is correct: PRIs depend significantly on scheme-specific grants allocated by the Union and State Governments. These grants are tied to specific programs or schemes, such as rural development, health, education, and infrastructure, as outlined in the Eleventh Schedule. Statement-II is incorrect: The Eleventh Schedule of the Constitution lists 29 functional areas that Panchayats are expected to address, such as agriculture, health, education, rural housing, drinking water, and infrastructure. However, it does not mandate unconditional transfers from the Union or State Governments to the PRIs."},{"id":7,"txt":"With reference to the classical languages consider the following statements:\n1. Recognition as a Classical Language primarily aims at preservation and promotion of linguistic heritage.\n2. Such recognition confers academic and institutional support but does not alter the official language policy of the Union or States.\nWhich of the above statements is/are correct?","ref":"","opts":["Only 1","Only 2","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: In India, the status of Classical Language is accorded by the Union Government to languages with a rich ancient literary tradition and historical continuity. India has six Classical Languages: Tamil, Sanskrit, Telugu, Kannada, Malayalam, and Odia. 3 Statement 1 is correct: Recognition as a Classical Language is intended to preserve, promote, and study India’s ancient linguistic heritage. The objective focuses on safeguarding classical texts, traditions, and scholarly research associated with the language. Statement 2 is correct: Classical Language status provides academic and institutional incentives, such as: ❖ establishment of Centres of Excellence ❖ funding for research, translations, and critical editions, and ❖ creation of professional chairs in universities. This recognition does not alter official language policy or confer administrative or legislative privileges."},{"id":8,"txt":"Which of the following statements regarding the election of Panchayat members and chairpersons under the 73rd Amendment Act of 1992 is/ are correct?\n1. Members of Panchayats at the village, intermediate, and district levels are directly elected by the people.\n2. The chairperson of a Panchayat at the village level is constitutionally mandated to be elected directly by the people.\n3. The chairperson of the Panchayats at the district level is constitutionally mandated to be elected directly by the people.\n4. The elections to Panchayats are conducted by the State Election Commission.\nSelect the correct answer using the code below:","ref":"","opts":["1 and 4 only","1, 2, and 3 only","2, 3, and 4 only","1,2, 3, and 4"],"ci":0,"exp":"Ex: The 73rd Amendment Act of 1992, which amended the Indian Constitution, brought about significant reforms in the structure and functioning of Panchayati Raj Institutions (PRIs). The Act defines the powers, structure, and functioning of PRIs and provides detailed provisions for the election of their members and chairpersons. Below is the evaluation of each statement based on the provisions in the Constitution: Statement 1 is correct: As per Article 243C(2), \"All the seats in a Panchayat shall be filled by persons chosen by direct election from territorial constituencies in the Panchayat area.\" Hence, the members of Panchayats at the village, intermediate, and district levels are to be directly elected by the people. This is a key provision of the 73rd Amendment, ensuring democratic representation at the grassroots level and promoting participatory governance. Statement 2 is incorrect: According to Article 243C(5), \"The Chairperson of a Panchayat at the village level shall be elected in such manner as the Legislature of a State may, by law, provide.\" SPP 22610 ❖ Hence, the election of the chairperson at the village level is not necessarily elected directly by the people. The necessary direct election of the chairperson at this level is not a constitutional requirement and is left to state discretion. ❖ While some states may opt for direct election of the sarpanch (village-level chairperson), the Constitution allows states the discretion to decide whether the chairperson should be directly elected or elected indirectly by the Panchayat members themselves. Statement 3 is incorrect: Similarly, Article 243C(5), \"The Chairperson of a Panchayat at the intermediate level or district level shall be elected by, and from amongst, the elected members thereof.\" ❖ Hence, the chairperson at the district level is elected indirectly by the members of the Panchayat. The necessary direct election of the chairperson at this level is not a constitutional requirement and is left to state discretion. Statement 4 is correct: According to Article 243K, \"The superintendence, direction, and control of the preparation of electoral rolls for, and the conduct of, all elections to the Panchayats shall be vested in a State Election Commission.\" ❖ Hence, the elections to Panchayats are conducted by the State Election Commission. The role of the State Election Commission is crucial in ensuring the free, fair, and timely conduct of Panchayat elections, similar to the role of the Election Commission at the national level for Parliamentary elections."},{"id":9,"txt":"With reference to the Language of the Judiciary and Texts of Laws, consider the following statements:\n1. Judgements of High Courts may be delivered in Hindi or any other state language without an accompanying English translation.\n2. Parliament has authorised the use of Hindi in the Supreme Court for filing petitions and appeals.\n3. The authoritative text of all Central laws continues to be in English unless Parliament provides otherwise.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is incorrect – Under Article 348(2), the Governor of a State may, with the previous consent of the President, authorise the use of Hindi or any other official 4 language of the State in judgments, decrees, or orders of the High Court. However, such judgments must be accompanied by an English translation, which alone is treated as the authoritative text. Therefore, delivering judgments without an accompanying English translation is not permitted. Statement 2 is incorrect –The language of the Supreme Court is governed by Article 348(1)(a), which mandates that all proceedings in the Supreme Court shall be in English. Parliament has not authorised the use of Hindi for filing petitions and appeals in the Supreme Court. Statement 3 is correct – Under Article 348(1)(b), the authoritative text of all Central laws, including Acts, ordinances, rules, regulations, and bye-laws, shall be in English, unless Parliament otherwise provides."},{"id":10,"txt":"Consider the following statements:\nStatement-I: The Union Government can issue executive directions to States regarding the administration of Scheduled Areas. Statement-II: Article 339 empowers the Union to oversee and guide the administration of Scheduled Areas to ensure tribal welfare. Statement-III: The Governor of a State has discretionary powers in respect of Scheduled Areas\nWhich one of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one of them explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":1,"exp":"Ex: Statement–I is correct: The Union Government can issue executive directions to States regarding the administration of Scheduled Areas. This flows from the constitutional supervisory role of the Union in tribal administration, particularly where national standards of tribal welfare are involved. Statement–II is correct and explains Statement–I: Article 339(1) empowers the President to appoint a Commission to report on the administration of Scheduled Areas and the welfare of Scheduled Tribes. Further, Article 339(2) authorises the Union Government to give directions to States regarding the administration of Scheduled Areas. This provision is the direct constitutional basis for Union executive directions, and therefore Statement II correctly explains Statement I. Statement III is correct but does NOT explain Statement I: Under the Fifth Schedule, the Governor is vested with discretionary powers in respect of Scheduled Areas, including: SPP 22610 ❖ making regulations for peace and good governance, and ❖ restricting or modifying the application of State laws. However, the Governor’s discretionary role is distinct from the Union’s power to issue directions. Thus, while Statement III is factually correct, it does not explain Statement I."},{"id":11,"txt":"Consider the following statements regarding Panchayats (Extension to the Scheduled Areas) Act, 1996 (PESA):\nStatement-I: State legislatures are required to modify their Panchayati Raj laws in Scheduled Areas after the enactment of PESA. Statement-II: The PESA Act prohibits States from enacting provisions inconsistent with its mandate in Scheduled Areas.\nWhich one of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement–I and Statement–II are correct, and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct, but Statement–II is not the correct explanation for Statement–I","Statement–I is correct, but Statement–II is incorrect","Statement–I is incorrect, but Statement–II is correct"],"ci":0,"exp":"Ex: Statement–I is correct: The Panchayats (Extension to the Scheduled Areas) Act, 1996 (PESA) was enacted to extend the provisions of Part IX of the Constitution to Scheduled Areas, subject to specific safeguards for tribal self-governance. Accordingly, State legislatures are required to amend or modify their existing Panchayati Raj laws so as to make them applicable to Scheduled Areas in conformity with PESA. Statement–II is correct and explains Statement–I: PESA clearly lays down that State laws applicable to Scheduled Areas must be consistent with the provisions of the Act. States cannot enact or retain provisions in their Panchayati laws that are inconsistent with PESA’s mandate, such as those relating to the powers of the Gram Sabha, management of minor forest produce, or control over local resources. This statutory prohibition is precisely why States are obliged to modify their Panchayati Raj laws after the enactment of PESA. Thus, Statement–II provides the legal basis and explanation for Statement–I."},{"id":12,"txt":"What was one of the key recommendations of the L.M. Singhvi Committee regarding the Panchayati Raj system?","ref":"","opts":["To establish a three-tier system of Panchayati Raj at the national level","To grant constitutional recognition to Panchayati Raj institutions","To limit the participation of political parties in Panchayati Raj elections","To centralize the control of Panchayati Raj institutions under the state government"],"ci":1,"exp":"Ex: The L.M. Singhvi Committee, formed in 1986, made crucial recommendations to strengthen and streamline the Panchayati Raj system in India. Here's an evaluation of the key aspects: Option (a) is incorrect: The committee did not 5 recommend establishing a three-tier system of Panchayati Raj at the national level. Instead, its focus was on strengthening the existing system and providing constitutional recognition to Panchayati Raj institutions. Option (b) is correct: One of the key recommendations of the L.M. Singhvi Committee was to grant constitutional recognition to Panchayati Raj institutions. This was done to ensure their permanence and authority within the Indian political structure. This led to the 73rd Constitutional Amendment Act in 1992, which granted these institutions constitutional status. Option (c) is incorrect: The committee did not advocate for limiting the participation of political parties in Panchayati Raj elections. In fact, the committee emphasized the role of political parties in the process. Option (d) is incorrect: The committee did not recommend centralizing the control of Panchayati Raj institutions under the state government. Instead, it recommended more decentralization, empowering Panchayati Raj institutions to function independently at the grassroots level. Additional Information: The L.M. Singhvi Committee played a pivotal role in shaping the framework for the 73rd Constitutional Amendment Act, 1992, which: ❖ Introduced constitutional recognition for Panchayati Raj institutions. ❖ Established the Gram Sabha as the foundation of local self-governance. ❖ Mandated a three-tier system of Panchayats in states (except for those with a population under 20 lakh). ❖ Provided for regular elections and financial autonomy for Panchayati Raj institutions. The committee also stressed the role of Panchayati Raj in promoting participatory democracy and suggested measures to strengthen their financial and functional autonomy. SPP 22610"},{"id":13,"txt":"Which of the following statements regarding regional languages in Indian states is correct?","ref":"","opts":["All states must adopt Hindi as their official language.","The choice of the official language of a state is limited to the languages listed in the Eighth Schedule of the Constitution.","States like Meghalaya, Arunachal Pradesh, and Nagaland have adopted English as their official language.","The Governor has no authority to direct use of any language for official purposes."],"ci":2,"exp":"Ex: In India, the Constitution allows states to determine their own official language, and this can be any language that the state deems fit, including languages not listed in the Eighth Schedule. The decision is influenced by the linguistic and cultural context of the region. Option a is incorrect: There is no constitutional mandate for all states to adopt Hindi as their official language. States are free to choose their official language. Option b is incorrect: The official language of a state is not strictly limited to those languages in the Eighth Schedule. States have the flexibility to choose any language, including those outside the list. As in article 345 mentioned that subject to the provisions of articles 346 and 347, the Legislature of a State may by law adopt any one or more of the languages in use in the State or Hindi as the language or languages to be used for all or any of the official purposes of that State. Option c is correct: Meghalaya, Arunachal Pradesh, and Nagaland have adopted English as their official language due to their specific linguistic circumstances and historical context. Option d is incorrect: As per Article 348(2), The Governer of state with the previous consent of the President, may authorize the use of the Hindi language or any other language used for any official purpose in state. PW ONLY IAS SUPER HINT If S1 were true, why do states like Tamil Nadu, Karnataka, and West Bengal officially use Tamil, Kannada, and Bengali instead of Hindi? Also, S2 and S3 are contradictory, how does Nagaland use English as its official language when English is not in the Eighth Schedule?. Hence one is incorrect and other is correct, giving C as right option. Extreme Claim Test → Saying the Governor has \"no authority at all\" is an extreme statement, which is usually incorrect. 6"},{"id":14,"txt":"With reference to Regional Languages under the Constitution, consider the following statements:\n1. A state legislature may adopt only those languages listed in the Eighth Schedule as the official language of the state.\n2. Two or more states may mutually agree to use Hindi instead of English for inter-state communication.\n3. The President may direct a state to officially recognise a language if a substantial proportion of the state’s population demands it.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is incorrect – Under Article 345, a State Legislature may adopt any language in use in the State or Hindi as the official language of the State. There is no restriction that the language must be listed in the Eighth Schedule. Statement 2 is correct – Article 346 provides that Hindi or English shall be used for inter- State communication. However, it also permits two or more States to mutually agree to use Hindi instead of English for such communication. Statement 3 is correct – Under Article 347, if a substantial proportion of the population of a State demands recognition of a language, the President may direct that the language be officially recognised by the State."},{"id":15,"txt":"Which of the following matters may be provided for by a law enacted by the State Legislature under Part IX of the Constitution?\n1. Providing for the representation of Members of the House of the People in Panchayats, subject to prescribed conditions\n2. Requiring Panchayats to prepare uniform State-wide socio-economic development indicators as binding guidelines for all levels of planning\n3. Empowering a Panchayat to levy, collect and appropriate taxes, duties, tolls and fees\n4. Authorising Panchayats to determine the conditions of service, disciplinary control and cadre management of State-level civil servants posted in their respective Panchayat\nSelect the correct answer using the codes given below:","ref":"","opts":["1 and 3 only","1, 2 and 3 only","1, 3 and 4 only","2 and 4 only"],"ci":0,"exp":"Ex: Part IX of the Constitution of India (Articles 243–243O) deals with the Panchayati Raj system and the powers that may be conferred upon Panchayats by State Legislatures. Statement 1 is correct: Article 243C expressly empowers the State Legislature to provide, by law, for the representation of Members of Parliament (Lok Sabha) and State Legislatures in Panchayats. Such representation is subject to conditions specified by the State Legislature. Statement 2 is Incorrect: Article 243G allows States to endow Panchayats with powers and responsibilities for local planning and implementation. However, imposing uniform, binding State-wide indicators undermines the decentralised and context-specific nature of Panchayat planning. Part IX does not envisage centrally or state-imposed binding planning templates for all Panchayats. Statement 3 is correct: Article 243H empowers Panchayats to levy, collect, and appropriate taxes, duties, tolls, and fees as per law made by the State Legislature. SPP 22610 Statement 4 is incorrect: Control over State civilservices (appointments, service conditions, discipline, cadre management) lies with the State Government under Articles 309–311. Part IX does not permit delegation of such powers to Panchayats. Panchayats may supervise local functionaries, but not State- level civil servants."},{"id":16,"txt":"The concept of Scheduled Areas under the Fifth Schedule of the Constitution is most directly derived from:","ref":"","opts":["Tribal Areas notified under the Indian Councils Act, 1909","Backward tracts identified by the Simon Commission","Excluded and Partially Excluded Areas under the Government of India Act, 1935","It is an original thought of constitution makers"],"ci":2,"exp":"Ex: The concept of Scheduled Areas under the Fifth Schedule of the Constitution is directly derived from the system of “Excluded Areas” and “Partially Excluded Areas” introduced under the Government of India Act, 1935. These areas were predominantly tribal regions requiring special administrative protection. They were administered with limited application of provincial laws and greater discretion to the Governor. The Constituent Assembly consciously adapted this framework, with modifications, into the Fifth Schedule to safeguard the interests of Scheduled Tribes in post-Independence India. Hence Option (c) is correct"},{"id":17,"txt":"Consider the following statements:\nStatement-I: All India Service officers cannot be removed from service arbitrarily. Statement-II: Article 311 of the Constitution mandates procedural safeguards before dismissal, removal, or reduction in rank.\nWhich one of the following is correct with respect to the above statements?","ref":"","opts":["Both Statement–I and Statement–II are correct, and Statement–II is the correct explanation for Statement–I","Both Statement–I and Statement–II are correct, but Statement–II is not the correct explanation for Statement–I","Statement–I is correct, but Statement–II is incorrect","Statement–I is incorrect, but Statement–II is correct"],"ci":0,"exp":"Ex: Statement–I is correct: Officers of the All India Services (AIS) enjoy constitutional protection against arbitrary removal from service. Their tenure and discipline are governed by constitutional provisions and statutory rules, ensuring due process. Statement–II is correct and explains Statement–I: Article 311 of the Constitution mandates procedural safeguards before an AIS officer can be dismissed, removed, or reduced in rank, including: ❖ a reasonable opportunity to be heard, and ❖ adherence to prescribed disciplinary procedures (subject to limited constitutional exceptions). These safeguards directly prevent arbitrariness, thereby explaining why AIS officers cannot be removed arbitrarily. 7"},{"id":18,"txt":"With reference to the applicability of the Panchayats (Extension to the Scheduled Areas) Act, 1996 (PESA), which of the following statements is correct?","ref":"","opts":["It applies exclusively to areas governed under the Sixth Schedule","It applies to Scheduled Areas notified under the Fifth Schedule only","It applies uniformly to all regions having a tribal population","It overrides the administrative framework of the Sixth Schedule"],"ci":1,"exp":"Ex: The PESA Act, 1996 was enacted to extend the provisions of Part IX of the Constitution relating to Panchayats to Scheduled Areas. ❖ Scheduled Areas are those notified under the Fifth Schedule of the Constitution. ❖ The Act explicitly does not apply to Sixth Schedule areas, which have a separate autonomous governance framework through Autonomous District Councils. Thus, PESA’s applicability is limited to Fifth Schedule areas, Hence option (b) is correct."},{"id":19,"txt":"Consider the following statements regarding the creation and control of All-India Services:\n1. The Parliament can create a new All-India Service only after the Rajya Sabha passes a resolution recommending it.\n2. The immediate control over All-India Services officers lies with the Central Government, while the ultimate control lies with the State Governments.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct Under Article 312, Parliament may create a new All-India Service only if the Rajya Sabha passes a resolution: ❖ supported by not less than two-thirds of the members present and voting, and ❖ declaring that it is necessary or expedient in the national interest to do so. This makes the Rajya Sabha’s recommendation a mandatory constitutional precondition. Statement 2 is incorrect. Immediate (day-to- day) control over AIS officers working in a State lies with the State Government (postings, work allocation, supervision). Ultimate control (recruitment, service conditions, discipline, cadre management) lies with the Central Government. The statement reverses the actual constitutional position."},{"id":20,"txt":"Consider the following statements about reservation in Panchayats under the 73rd Constitutional Amendment:\n1. Reservation for Scheduled Castes in Panchayats does not apply to Arunachal Pradesh.\n2. Reservation for Backward Classes in Panchayats is a mandatory provision under the Constitution.\n3. Reservation for SCs and STs in Panchayat seats shall cease after the period specified under Article 334.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 3 only","1 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Part IX (Article 243D) deals with reservation in Panchayats for SCs, STs, women, and optionally OBCs. Statement 1 is correct: The 83rd Constitutional Amendment exempts Arunachal Pradesh from SC-reservation in Panchayats because it has no Scheduled Caste population. SPP 22610 Statement 2 is incorrect: Reservation for Backward Classes is voluntary, not mandatory under Article 243D. States may provide such reservations at their discretion. Statement 3 is correct: Article 243D(5) expressly states that the reservation of seats for Scheduled Castes and Scheduled Tribes in Panchayats (and certain offices of Chairpersons) shall cease to have effect on the expiration of the period specified in Article 334. Article 334 currently specifies an extended period (eighty years for SCs/STs) for reservation in Parliament and State Assemblies, and Article 243D ties Panchayat reservations to that same period."},{"id":21,"txt":"In regard to the sea wealth of India, which of the following statements is/are correct?\n1. The territorial waters of India extend to a distance of 12 nautical miles from the appropriate baseline.\n2. All lands, minerals and other things of value underlying the ocean within the territorial waters of India shall vest in the Union. Select the answer using the code given below:","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: As per the provisions of , The Territorial Waters, Continental Shelf, Exclusive Economic Zone and Other Maritime Zones Act, 1976 territorial waters of India extend to a distance of 12 nautical miles from the appropriate baseline. Statement 2 is correct: Under Article 297(1) of the constitution all lands, minerals and other things of value underlying the ocean within the territorial waters of India shall vest in the Union."},{"id":22,"txt":"Consider the following statements regarding the protection of linguistic minorities in India:\n1. Every individual has the right to submit a representation to any Union or State authority in any language used in India.\n2. It is mandatory for every state to provide facilities for instruction in the mother tongue at all levels of education for linguistic minorities.\n3. The Constitution provides for the appointment of a Special Officer for Linguistic Minorities to report to the President on matters related to linguistic rights.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2, and 3"],"ci":1,"exp":"Ex: The protection of linguistic minorities in India is an essential aspect of the country’s commitment to preserving its linguistic diversity. The Constitution of India includes provisions to safeguard the rights of linguistic minorities and ensures their representation in government and educational institutions. Statement 1 is correct: According to Article 350 of the Indian Constitution, every person has the right to submit a representation to any Union or State authority in any language used in India. 8 Statement 2 is incorrect: While the Constitution recognizes the rights of linguistic minorities, it does not mandate that every state must provide facilities for instruction in the mother tongue at all levels of education. However, provisions do exist for protecting and promoting the languages and cultures of linguistic minorities through various measures, but universal provision for instruction in the mother tongue at all educational levels is not a constitutional requirement. Statement 3 is correct: According to Article 350B of the Constitution, the President is empowered to appoint a Special Officer for Linguistic Minorities, whose role is to report to the President on matters relating to the constitutional safeguards provided to linguistic minorities. This ensures that the rights of linguistic minorities are monitored and upheld."},{"id":23,"txt":"Which of the following statements is incorrect with reference to special provisions relating to States under the Constitution of India?","ref":"","opts":["Part XXI includes both temporary and special provisions relating to States","Special Category Status has been explicitly defined in the Constitution","Constitutional special status may affect legislative competence","Special Category Status mainly relates to financial assistance patterns"],"ci":1,"exp":"Ex: Option (a) is correct: Part XXI (Articles 369–392) contains temporary provisions (e.g. Article 370, now largely inoperative), and special provisions for certain States (Articles 371 to 371J). Hence, the statement is constitutionally correct. Option (b) is incorrect: Special Category Status (SCS) is not defined anywhere in the Constitution. It is a non-constitutional, administrative concept. It originated as an administrative/financial classification by the National Development Council (NDC) in 1969 based on Gadgil Formula recommendations from the Fifth Finance Commission, to provide higher central assistance (90:10 grant-loan ratio) to backward states. Option (c) is correct: Certain constitutional special provisions (e.g. Articles 371A, 371G) restrict Parliament’s legislative power over specified subjects unless the State legislature consents. Thus, constitutional special status can affect legislative competence. Option (d) is correct: Special Category Status primarily related to: ❖ higher Central assistance, SPP 22610 ❖ favourable funding ratios, and ❖ Concessional treatment in plan allocations. Thus its focus has been mainly financial, not legislative or constitutional."},{"id":24,"txt":"Which of the following statements regarding the administration of tribal areas under the Sixth Schedule of the Indian Constitution are correct?\n1. The Governor can reorganize autonomous districts, including dividing them into multiple autonomous regions for different tribes.\n2. The district councils consist of both elected and nominated members, with the Governor having discretion over the tenure of nominated members. Select the answer using the code given below:","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: The administration of tribal areas under the Sixth Schedule of the Indian Constitution provides for the creation of autonomous districts and regional councils. Statement 1 is correct: The Governor is empowered to reorganize autonomous districts. This includes dividing them into multiple autonomous regions if the district has different tribes, which is explicitly allowed under the Sixth Schedule. Statement 2 is correct: The district councils are composed of both elected and nominated members. Each autonomous district has a district council consisting of not more than 30 members, of whom not more than four are nominated by the governor and the remaining are elected on the basis of adult franchise. The elected members hold office for a term of five years (unless the council is dissolved earlier) and nominated members hold office during the pleasure of the governor."},{"id":25,"txt":"Regarding the functions and composition of a Municipal Corporation, consider the following statements:\n1. A Municipal Corporation is typically established in large cities and operates under the jurisdiction of the concerned state legislature or Parliament in Union Territories.\n2. The Mayor of a Municipal Corporation has executive powers and plays a central role in day-to-day administration.\n3. The municipal corporation's structure includes a Council, Standing Committees, and a Municipal Commissioner.\n4. The Municipal Commissioner is responsible for implementing the decisions taken by the council and is appointed by the state government, often from the Indian Administrative Service (IAS).\nWhich of the statements given above are correct?","ref":"","opts":["1, 3, and 4 only","1, 2, and 3 only","2 and 4 only","1 and 3 only"],"ci":0,"exp":"Ex: The 74th Constitutional Amendment Act of 1992 added Part IX-A to the Constitution of India, which governs the framework of urban local bodies, including Municipal Corporations. Statement 1 is correct: As per Article 243Q, Constitution of India: \"There shall be constituted in every State... a Nagar Panchayat, a Municipal Council, and a Municipal Corporation... in accordance with such provisions as may be specified in the law made by the Legislature of a State.\" Hence, it is mandatory for every state to constitute Municipal Corporations in urban areas based on population and other factors prescribed by law. Municipal Corporations operate under state laws in states and under Parliamentary laws in Union Territories. 9 Statement 2 is incorrect: The Mayor of a Municipal Corporation does hold significant powers, but they are primarily ceremonial and representational, not executive. However, in some cities, the Mayor may have more executive powers, depending on the state's laws. The Mayor's executive powers are typically limited and can vary by state. The Municipal Commissioner, not the Mayor, plays a central role in the day-to-day administration. For example, under the Mumbai Municipal Corporation Act, 1888, the Municipal Commissioner is the executive head, whereas the Mayor presides over meetings and represents the Corporation ceremonially. Statement 3 is correct: The municipal corporation's structure generally includes a Council, which is the legislative body, Standing Committees, which are responsible for specific functions (like finance or public works), and a Municipal Commissioner, who acts as the chief executive officer of the corporation. Statement 4 is correct: The Municipal Commissioner is responsible for implementing the decisions taken by the Council and is appointed by the state government. In many cases, the Municipal Commissioner is an officer from the Indian Administrative Service (IAS), ensuring that a skilled administrator is overseeing the implementation of policies and actions. For instance, the Delhi Municipal Corporation Act, 1957, states that the Municipal Commissioner is appointed by the state and acts as the executive authority. PW ONLY IAS SUPER HINT In most systems, executive functions are handled by an appointed official (Municipal Commissioner), not an elected representative (Mayor). Hence S2 is likely false, eliminating option B and C."},{"id":26,"txt":"Which of the following is NOT required mandatorily to be provided by States under the 73rd Constitutional Amendment?","ref":"","opts":["Five-year tenure of Panchayats","Direct elections to Panchayat seats","Reservation of seats for women","Transfer of subjects listed in the Eleventh Schedule"],"ci":3,"exp":"Ex: The 73rd Constitutional Amendment Act, 1992 inserted Part IX (Articles 243–243O) and the Eleventh Schedule, laying down mandatory institutional features of Panchayati Raj while leaving certain aspects to State discretion. SPP 22610 Option A is incorrect: Article 243E fixes a five-year term for Panchayats. Option B is incorrect: Article 243C(2) requires direct elections to all seats in Panchayats at the village, intermediate, and district levels. Option C is incorrect: Article 243D(3) mandates not less than one-third reservation for women (including seats reserved for SC/ST women). Option D is correct: Article 243G uses enabling language (“may endow”) allowing States to discretionarily devolve functions relating to the Eleventh Schedule. The Schedule is illustrative, not self-executing; States are not constitutionally compelled to transfer all listed subjects."},{"id":27,"txt":"With reference to the Committee of Parliament on Official Language, which of the following statements is correct?","ref":"","opts":["Parliamentary committees can directly enforce language policy in States","Recommendations of the Committee automatically apply to State Governments","The Committee’s role is primarily confined to the Union’s official functioning","States are constitutionally bound to follow the Committee’s reports"],"ci":2,"exp":"Ex: Option C is correct: The Committee of Parliament on Official Language, constituted under Article 344(4), is mandated to: ❖ review the progress in the use of Hindi for the official purposes of the Union ❖ examine compliance by Union Government offices and undertakings, and ❖ submit its recommendations to the President, who may place them before Parliament. Its jurisdiction is thus confined to the Union’s official functioning, not to directing or binding States. Option A is incorrect: Parliamentary committees are recommendatory bodies. They have no enforcement power, especially over States. Option B is incorrect: The Committee’s recommendations do not automatically apply even to the Union; they require consideration by the President and the Government. States are not bound by them. Option D is incorrect: Articles 345–347 grant States autonomy to decide their official language(s). There is no constitutional obligation on States to follow the Committee’s reports. 10"},{"id":28,"txt":"Match the following amendments to their respective changes in the Eighth Schedule of the Constitution:\nAmendment Act Change in the Eighth (with year) Schedule\n1. 21st (A)Addition of Sindhi Amendment Act, 1967\n2. 71st (B)Addition of Bodo, Amendment Santhali, Dogri, and Act, 1992 Maithili\n3. 92nd (C)Addition of Amendment Konkani, Manipuri, Act, 2003 and Nepali\nSelect the correct code:","ref":"","opts":["1-A, 2-B, 3-C","1-A, 2-C, 3-B","1-B, 2-A, 3-C","1-C, 2-B, 3-A"],"ci":1,"exp":"Ex: The Eighth Schedule of the Indian Constitution lists the languages recognized by the Indian Constitution. The amendments to the Constitution over the years have added new languages to this schedule, reflecting India’s linguistic diversity and evolving linguistic needs. ❖ The 21st Amendment Act, 1967 added Sindhi to the Eighth Schedule of the Constitution, acknowledging its cultural and linguistic importance. ❖ The 71st Amendment Act, 1992 added three languages,Konkani, Manipuri, and Nepali. ❖ The 92nd Amendment Act, 2003 added Bodo, Santhali, Dogri, and Maithili to the Eighth Schedule, recognizing them as official languages. Extra edge by PWonlyIAS The Eighth Schedule of the Indian Constitution recognizes 22 official languages. These languages include, Assamese, Bangla, Bodo, Dogri, Gujarati, Hindi, Kashmiri, Kannada, Konkani, Maithili, Malayalam, Manipuri, Marathi, Nepali, Oriya, Punjabi, Tamil, Telugu, Santali, Sindhi, and Urdu.  SPP 22610"},{"id":29,"txt":"With reference to the distribution of powers under Fifth and Sixth Schedules, consider the following pairs:\nPower Type Characteristic I. Governor’s Stronger under Fifth overriding power Schedule II. Autonomous Stronger under Sixth bodies’ law- Schedule making power III. Central direction Explicitly provided over State under Article 339 IV.Power to constitute Fifth Schedule village courts\nHow many pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Pair 1 is correctly matched: Under the Fifth Schedule, the Governor has extensive overriding powers in Scheduled Areas, including modifying or restricting the application of parliamentary and state laws or applying it with modifications. Such overriding discretion is far stronger than under the Sixth Schedule. Pair 2 is correctly matched: The Sixth Schedule provides for Autonomous District Councils with wide legislative and executive powers, including law-making on land, forests, customs, and local governance. These legislative powers are institutional and substantive, unlike the Fifth Schedule. Pair 3 is correctly matched: Article 339 empowers the Union Government to give directions to States regarding the administration of Scheduled Areas and tribal welfare. Pair 4 is not correctly matched: The power to constitute village courts is explicitly provided under the Sixth Schedule, not the Fifth Schedule.  11"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

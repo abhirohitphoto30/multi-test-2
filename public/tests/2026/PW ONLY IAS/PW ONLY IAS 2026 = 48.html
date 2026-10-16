@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 48</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 48</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 48">PW ONLY IAS 2026 = 48</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Which one of the following festival– significance pairs is correctly matched?","ref":"","opts":["Sarhul — Celebration of spring and worship of village deities among tribal communities","Gudi Padva — Beginning of the Malayalam calendar year","Hari Jiroti — Commemoration of Jagannath’s chariot procession","Rath Yatra — Agricultural thanksgiving festival marking harvest"],"ci":0,"exp":"Ex: (a) Sarhul — Correctly Matched: Primarily Jharkhand, Odisha, and Bihar. It is the most prominent tribal festival (celebrated by Oraon, Munda, and Ho tribes). It marks the beginning of the New Year and the Spring season. The Sal tree (Shorea robusta) is central to the ritual, as it is believed to be the abode of the goddess Sarna Devi. Tribes worship nature and village deities for a good harvest and protection. (b) Gudi Padva — Incorrectly Matched: It marks the beginning of the Marathi and Konkani New Year (Chaitra month), not the Malayalam year. The Malayalam New Year is called Vishu, usually celebrated in April. (c) Hari Jiroti — Incorrectly Matched: Region is Himachal Pradesh and parts of North India. It is an agricultural festival celebrated during the monsoon (Shravana month) to pray for the well-being of crops and livestock. It has no connection to the Jagannath chariot procession. (d) Rath Yatra — Incorrectly Matched: It is the commemoration of Lord Jagannath’s annual journey from the Jagannath Temple to the Gundicha Temple in Puri, Odisha. It is a religious procession, not primarily an agricultural thanksgiving festival. An example of a harvest/thanksgiving festival would be Pongal (Tamil Nadu), Onam (Kerala), or Baisakhi (Punjab)."},{"id":1,"txt":"Which award recognises contributions to classical and medieval literature?","ref":"","opts":["Sahitya Akademi Award","Anand Coomaraswamy Fellowship","Premchand Fellowship","Bhasha Samman"],"ci":3,"exp":"Ex: While the Sahitya Akademi is the parent organization for most of these honors, the Bhasha Samman was specifically instituted to fill a gap in recognizing scholars and writers working in languages and periods not covered by the regular annual awards. The Sahitya Akademi instituted the Bhasha Samman in 1996 with a very specific set of criteria: SPP 22649 ❖ Classical and Medieval Literature: It recognizes scholars who have made significant contributions to the study, translation, or interpretation of ancient and medieval Indian texts. ❖ Non-Recognized Languages: It is also awarded to writers working in languages that are not among the 24 languages officially recognized by the Sahitya Akademi (such as Bhojpuri, Magahi, or various tribal languages). ❖ The Goal: To honor the \"unsung\" keepers of India's linguistic heritage and those who bridge the gap between historical scholarship and modern readers. Why Other Options are Incorrect: (a) Sahitya Akademi Award: This is the mainstream annual award given to the best work of contemporary literature published in the 24 recognized languages over the last five years. It generally focuses on modern creative writing (novels, poetry, etc.) rather than historical scholarship. (c) Premchand Fellowship: This is named after the legendary writer Munshi Premchand and is specifically given to persons of eminence in the field of culture from SAARC countries (other than India) to do research in India. (b) Anand Coomaraswamy Fellowship: This fellowship is awarded to scholars from Asian countries to spend time in India for research on literary projects. It is named after the great art historian who pioneered the study of Indian art and aesthetics."},{"id":2,"txt":"With reference to ancient South India, the terms Kalanju, Kanam, Madai, Kasu were primarily associated with:","ref":"","opts":["units to measure weight.","names of currency.","A measure of land used for taxation.","A variety of ornament worn by royalty."],"ci":1,"exp":"Ex: ❖ From the Sangam age to the end of 9th century, the term Kanam, played an important role. In the Pallava times most of the taxes are mentioned in terms of Kanams. (P. 126-127). Later the term goes out of use. From the middle Pallava age- 7th century A.D., the terms Kalanju and Manjadi are also used in records. 2 Kalanju, Madai and Kasu predominate from 9th to [2th century A.D., in the records of the Imperial Cholas. Kalanju, the main medium of exchange, meant either a minted coin or an unminted gold of specific weight. ❖ The terms Madai and Kasu always referred to minted coins. It seems that upto 12th century A.D., gold coins played an important role in transactions though barter continued to be the main mode of exchange. The termAccu begins to appear from the end of the 11th century A.D., to the 13th century A.D., mainly in Kerala and Kongu countries and also occassionally in other parts of Tamil Nadu. ❖ In the 13th century A.D., Kasus are mentioned in several thousands in transactions indicating that copper coins were minted in loads; gold has become scarce and silver almost very little. ❖ From the end of I3th century, the dominant term Kalanju and Madai almost lose their currency. Even the term Accu begins to lose its usage. Instead the term Panam replaces these words. From the end of 13th century, Varahan is also found in records. ❖ Panam totally replaces all other terms in later period. The word, Rupya (Rupee) appears only from the 17th century with the advent of the Europeans."},{"id":3,"txt":"Consider the following statements regarding the Chola Temples:\n1. The Brihadisvara Temple at Thanjavur was built by Rajaraja I.\n2. The Airavatesvara Temple at Darasuram was built by Rajaraja II.\n3. The temples are built in Vesara style of temple architecture.\nHow many of the above statements is/are correct?","ref":"","opts":["Only one","Only two","Only three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: The Brihadisvara temple at Tanjavur marks the greatest achievement of the Chola architects. Known in the inscriptions as Dakshina Meru, the construction of this temple was inaugurated by the Chola King, Rajaraja I (985-1012 CE) possibly in the 19th regal year (1003-1004 CE) and consecrated by his own hands in the 25th regal year (1009-1010 CE). Statement 2 is correct: The Airavatesvara temple at Thanjavur was built by the Chola king Rajaraja II (1143-1173 CE.) is much smaller in size as compared to the Brihadisvara temple at Thanjavur and Gangaikonda- SPP 22649 cholapuram. It differs from them in its highly ornate execution. Statement 3 is incorrect: The three Chola temples of Southern India represent an outstanding creative achievement in the architectural conception of the pure form of the Dravida type of temple architecture. Additional Information: ❖ The Great Living Chola Temples are three temples in Tamil Nadu, India that are UNESCO World Heritage Sites. The temples are: ➢ Brihadisvara Temple: Located in Thanjavur ➢ Temple of Gangaikonda- cholapuram: Built by Rajendra I and completed in 1035 ➢ Airavatesvara Temple: Located in Darasuram and dedicated to Lord Shiva"},{"id":4,"txt":"With reference to early miniature paintings in India, consider the following statements:\n1. The most common theme of the Pala School of Art was Buddhist iconography.\n2. The Apabhramsa School of Art which was based on Jain themes, originated in Eastern India.\n3. Ragamala paintings originated under the Gupta rulers in the 4th century CE.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is correct: The Pala School of Art, which flourished in Bengal and Bihar from the 8th to the 12th centuries, is known for its exquisite Buddhist iconography. The artworks typically featured Buddhist deities, scenes from the life of Buddha, and various bodhisattvas. The rulers of the Pala dynasty, including notable kings like Dharmapala and Devapala, supported Buddhist monastic institutions and the arts. This patronage facilitated the creation of a rich artistic tradition that included paintings, sculptures, and architecture. This school played a significant role in the dissemination of Buddhist art throughout Eastern India and into Tibet. Statement 2 is incorrect: The term \"Apabhramsa\" refers to a group of dialects that evolved from Sanskrit and were spoken in the northwestern regions of India. Apabhramsa 3 School of Art traces its origin to Gujarat and Mewar region of Rajasthan during 11th to 15th century. These artworks often depict Tirthankaras (spiritual teachers in Jainism), important religious narratives, and scenes from the lives of saints and ascetics. The focus on Jain themes reflects the influence of the Jain community, which was a significant patron of the arts during this period. In the later stages, the Apabhramsa School began to incorporate Vaishnavite themes, reflecting the growing popularity of Vishnu and his avatars, particularly Krishna. Statement 3 is incorrect: Ragamala paintings are a genre of Indian miniature art that depict the musical modes (ragas) and their associated emotions, characters, and narratives. Originating in the 16th century during the Mughal period, these paintings often illustrate the connection between music and visual art, showcasing scenes of courtly life, nature, and divine love today named accordingly, as Pahari Ragamala, Rajasthan or Rajput Ragamala, Deccan Ragamala, and Mughal Ragamala."},{"id":5,"txt":"UNESCO’s designation of “City of Literature” is granted under which of the following frameworks?","ref":"","opts":["The World Heritage Convention","The Memory of the World Programme","The Creative Cities Network","The Representative List of Intangible Cultural Heritage"],"ci":2,"exp":"Ex: The UNESCO Creative Cities Network (UCCN) was launched in 2004 to promote cooperation among cities that have identified SPP 22649 creativity as a strategic factor for sustainable urban development. The \"City of Literature\" is one of the seven creative fields designated by the UCCN. Cities are recognized for their rich literary history, vibrant publishing industry, and commitment to promoting literature and literacy through festivals and libraries. Hence option C is correct. India's First: In late 2023, Kozhikode (Kerala) became the first Indian city to be designated as a UNESCO \"City of Literature.\" Other Indian Creative Cities: ❖ Gwalior: City of Music (added along with Kozhikode in 2023). ❖ Varanasi: City of Music. ❖ Srinagar: City of Crafts and Folk Arts. ❖ Hyderabad: City of Gastronomy. ❖ Mumbai: City of Film. ❖ Chennai: City of Music. ❖ Jaipur: City of Crafts and Folk Arts. Why Other Options are Incorrect (a) The World Heritage Convention: This framework focuses on physical sites (monuments, natural parks, or cultural landscapes) that have \"Outstanding Universal Value.\" It does not designate cities based on contemporary creative industries. (b) The Memory of the World Programme: This is dedicated to documentary heritage—manuscripts, archives, and oral traditions—rather than the living urban environment. (d) The Representative List of Intangible Cultural Heritage: This list recognizes traditions, rituals, and skills (like Yoga, Kumbh Mela, or Chhau dance) rather than geographic locations or cities."},{"id":6,"txt":"With reference to the Akhil Bharatiya Gandharva Mahavidyalaya Mandal (ABGMVM), consider the following statements:\n1. It institutionalised graded examinations in classical performing arts across India.\n2. It contributed to shifting music training from exclusive hereditary lineages to a structured public certification system.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: The Akhil Bharatiya Gandharva Mahavidyalaya Mandal (ABGMVM) is one of the most influential institutions in the history of Indian classical music and dance, playing a pivotal role in the \"democratization\" of these arts in the early 20th century. 4 Statement 1 is correct: The ABGMVM was instrumental in creating a standardized, graded examination system for Hindustani classical music and various classical dance forms. Before its establishment, there was no uniform way to measure a student's progress. The Mandal introduced a hierarchy of certifications—from Prarambhik (Beginner) to Sangeet Visharad (Bachelor's equivalent) and Sangeet Acharya (Doctorate equivalent)—which are recognized across India and abroad. Statement 2 is correct: Traditionally, Indian classical music was taught through the Guru- Shishya Parampara, often restricted to hereditary lineages (Gharanas) where knowledge was kept within families or close- knit circles. The Gandharva Mahavidyalaya movement, led by Pandit Vishnu Digambar Paluskar, broke these barriers by establishing public schools and a certification system that allowed anyone, regardless of their caste or family background, to learn and gain professional recognition in classical arts. Historical Context: The Paluskar Legacy The Mandal was established to carry forward the mission of Pandit Vishnu Digambar Paluskar, who founded the first Gandharva Mahavidyalaya in Lahore in 1901. Paluskar sought to remove the social stigma attached to musicians at the time and give music a respectable \"middle-class\" status. By creating a syllabus and textbook-based learning, the Mandal replaced the oral-only tradition with a documented pedagogical structure. Today, the Mandal has thousands of affiliated institutions across India, ensuring that a student in a small town can follow the same rigorous curriculum as one in a major city."},{"id":7,"txt":"With reference to Ramman, consider the following statements:\n1. It is a religious and theatrical tradition native to Garhwal region of Uttarakhand.\n2. Singing of Jagar, a musical rendition of local legends is an important aspect of performances.\n3. Only the Bhandaris, a Kshatriya caste, can wear the sacred Narasimha mask since every caste has a distinct role.\nWhich of the above statements is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: Ramman is an annual festival celebrated in the Garhwal region to honor the local deity, Bhumiyal Devta. It is held in the month of Baisakh (April) and combines music, dance, and theatrical enactment of the Ramayana and other local legends. SPP 22649 Statement 2 is correct: The performance involves the singing of Jagar, which are complex musical renditions of local myths and legends. The ritual also includes the recitation of the Ramayana in a specific local style, which is distinct from the mainstream Valmiki or Tulsidas versions. Statement 3 is correct: One of the most distinctive features of Ramman is its strict adherence to caste-based roles. For instance; The Bhandaris (Kshatriya) are the only ones allowed to wear the sacred Narasimha mask, representing the half-man, half-lion incarnation of Vishnu. TheBrahmins lead the prayers and rituals. The Dalits play the drums (specifically the Dhol and Damau), which are essential to the rhythm of the performance."},{"id":8,"txt":"Nyokum Yullo festival is associated with\nwhich of the following states?","ref":"","opts":["Nagaland","Arunachal Pradesh","Tripura","Mizoram"],"ci":1,"exp":"Ex: ❖ Nyokum is a festival celebrated by the Nyishi tribe of the Indian state of Arunachal Pradesh. The Word Nyokum has been derived from the combination of two words – Nyok means land (earth) and Kum means collectiveness or togetherness. The festival has a close link with cultivation. ❖ The Nyokum goddess, the goddess of prosperity is invoked for her blessings so that there may be more and more production of food-grains in the next harvesting season. The main prayer structure of the Nyishi is made of bamboo, called the yugang. ❖ Alongside the yugang, sacrificial animals are tethered. There are no idols in this worship. Neither is there any permanent structure. Besides the animal sacrifice, beer made from millet seeds and rice paste is used."},{"id":9,"txt":"Chhau dance is traditionally associated with\nwhich one of the following combinations of regions?","ref":"","opts":["West Bengal, Jharkhand and Odisha","Bihar, Jharkhand and Chhattisgarh","Odisha, Andhra Pradesh and Telangana","West Bengal, Assam and Manipur"],"ci":0,"exp":"Ex: Chhau is a semi-classical Indian dance with martial, tribal, and folk origins. It is famous for its powerful movements, storytelling based on the epics (Ramayana and Mahabharata), and the use of vibrant masks. 5 The Three Styles of Chhau: The dance is practiced in three distinct styles, each named after the specific region where it developed: Style Region Distinctive Feature Seraikella Jharkhand Uses highly Chhau symbolic and sophisticated masks. Purulia West Uses large, Chhau Bengal ornate masks; known for vigorous acrobatics. Mayurbhanj Odisha No masks are Chhau used; focuses on technical body movements. Key Characteristics of the Dance ❖ Martial Origins: The movements are derived from ancient martial arts techniques (Parikhanda) and mock combat maneuvers. ❖ UNESCO Recognition: In 2010, Chhau was inscribed on the UNESCO Representative List of the Intangible Cultural Heritage of Humanity. ❖ Themes: It typically depicts themes from the Puranas, the Ramayana, the Mahabharata, or nature-inspired motifs like birds and animals. ❖ Music: It is traditionally performed during the spring festival (Chaitra Parva) and is accompanied by traditional wind instruments like the Mohuri and Shehnai, and loud percussion like the Dhol and Nagada. Why Other Options are Incorrect (b) Bihar/Chhattisgarh: While Bihar and Jharkhand share a history, Chhau is not a traditional folk form of Bihar or the tribal belts of Chhattisgarh (which is known for Raut Nacha). (c) Andhra/Telangana: These regions are associated with Kuchipudi and Perini Shivatandavam. SPP 22649 (d) Assam/Manipur: These regions are the heartland of Sattriya and Manipuri classical dances."},{"id":10,"txt":"With reference to the Indian Council for Cultural Relations (ICCR), consider the following statements:\n1. It was established in 1950 to promote cultural exchange between India and other countries as part of India’s external outreach.\n2. It functions as an autonomous body under the Ministry of Culture with its headquarters located in New Delhi.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The Indian Council for Cultural Relations (ICCR) is India’s premier agency for cultural diplomacy. Statement 1 is correct: The ICCR was founded in 1950 by Maulana Abul Kalam Azad, India's first Education Minister. Its primary mandate is to foster and strengthen cultural relations and mutual understanding between India and other nations. It manages various cultural centers abroad, offers scholarships to international students, and organizes \"Festivals of India\" in foreign countries. Statement 2 is incorrect: Although the ICCR is an autonomous body headquartered in New Delhi (at Azad Bhavan), it functions under the Ministry of External Affairs (MEA), not the Ministry of Culture. This is because its core purpose is \"soft power\" diplomacy and international outreach, which falls under the domain of foreign policy."},{"id":11,"txt":"Consider the following statements regarding the coinage system in ancient India:\n1. The year of issue and the image of the king were specified on Indo-Greek coins.\n2. Kanishka, a devout admirer of Indian culture, exclusively used the Brahmi script on the coins issued during his reign\n3. The Satvahana kings were the first to issue silver coins with inscriptions on them in the Prakrit language.\n4. The collapse of long-distance trade with the Roman Empire led to a debasement of the coins produced by later Gupta emperors.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: The evolution of Indian coinage began with the use of metal objects as trade currency around the 6th century BCE, with the introduction of punch-marked coins by various regional kingdoms. The Mauryan Empire standardized coinage with gold and silver coins featuring symbols and inscriptions, paving the way for diverse regional issues in later periods. Over time, the art of coin minting evolved, incorporating intricate designs, motifs, and inscriptions that reflected the cultural and political landscapes of different dynasties. Statement 1 is correct: The reign of Indo- Greeks was from 180 BC to around 10 AD. The Indo-Greeks introduced the fashion of showing the bust or head of the ruler on the coins. The legends on their Indian coins were mentioned in two languages – in Greek on one side and in Kharosthi on the other side of the 6 coin. The initial series used images of Greek deities but later coins had images of Indian deities as well. These coins are significant because they carried detailed information about the issuing monarch, the year of issue and sometimes an image of the reigning king. Statement 2 is incorrect: While Kanishka, a ruler of the Kushan Empire, did issue coins that featured Brahmi script, he also used Greek and other scripts. His coinage often included multiple languages, reflecting the multicultural nature of his empire. Statement 3 is incorrect: Satavahanas' rule started after 232 BC and lasted up to 227 AD. The Satavahana kings were first to use lead as a material for their coins. Silver coins were rare.Next to lead, they used an alloy of silver and copper called ‘potin’. Many copper coins are also available. The dialect used was Prakrit. Statement 4 is correct: From the sixth century CE onwards, finds of gold coins declined significantly. Historians are divided on the reasons; some suggest that the collapse of the Western Roman Empire led to a decline in long-distance trade, impacting the prosperity of regions that depended on it. Others argue that new towns and trade networks emerged during this period, noting that while fewer coins have been found, they are still mentioned in inscriptions and texts, indicating they were in circulation rather than hoarded."},{"id":12,"txt":"With reference to Sankirtana listed in the representative List of the Intangible Cultural Heritage of Humanity, consider the following statements:\n1. It is performed to mark religious occasions and various stages in the life of the Vaishnava people of Manipur.\n2. Sankirtana practices centre on the temple, where performers narrate the lives and deeds of Krishna through song and dance.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Sankirtana of Manipur is a vibrant cultural practice that was inscribed on the UNESCO Representative List of the Intangible Cultural Heritage of Humanity in 2013. It is an artistic fusion of music, dance, and narration that serves as the heartbeat of the Manipuri Vaishnava community. Statement 1 is correct: Sankirtana is deeply woven into the social and religious fabric of the Meitei people. It is not just a performance but a mandatory ritual to mark life-cycle ceremonies (Sanskaras) such as the birth of a child, the initiation ceremony (piercing of ears), SPP 22649 weddings, and even funeral rites. It is believed to be an offering to the divine that ensures the spiritual well-being of the community. Statement 2 is correct: The practice traditionally centers on the temple (specifically the Mandapa or the temple courtyard). Performers, typically dressed in white, use song and dance to narrate the stories and deeds of Lord Krishna. The performance is highly structured, involving a specific sequence of ragas and rhythms, and is considered a form of \"visible prayer.\" Element Description Cymbal It primarily involves two and Drum main instruments: the Pung (a drum) and the Kartal (large cymbals). Pung This is the highly energetic Cholom and acrobatic dance performed by the drummers while they play. Spirituality Performers treat the Mandapa as a sacred space, often bowing and seeking permission before starting the ritual. Social It acts as a cohesive force, Function bringing the community together to celebrate and mourn."},{"id":13,"txt":"Which one of the following statements regarding the coinage of the Eastern Chalukyas is correct?","ref":"","opts":["Their coins typically carried elaborate legends and symbols on both obverse and reverse.","Their inscriptions were engraved in continuous Nagari script across the flan.","Their coinage prominently displayed the Varaha (boar) emblem on both sides.","They issued coins bearing a temple or lion device on one side, often leaving the reverse blank"],"ci":3,"exp":"Ex: The coinage of the Eastern Chalukyas (Vengi Chalukyas), who ruled parts of coastal Andhra Pradesh between the 7th and 12th centuries, is distinct and often characterized by its \"uniface\" nature. Statement (d) is correct: The early Eastern Chalukya coins, particularly the copper and base-metal issues, are often uniface (struck on one side only). The obverse typically features a Lion or a Temple (or sometimes a boar), while the reverse is frequently left blank or carries very faint, incidental marks. Statement (a) is incorrect: Unlike the Kushana or Gupta coins, Eastern Chalukya coins were not known for elaborate legends on both sides. Many of their smaller denominations had no legends at all, focusing primarily on a single central symbol. 7 Statement (b) is incorrect: The Eastern Chalukyas used the Telugu-Kannada script for their inscriptions, not Nagari. Their later gold coins, known as Gadyanas, featured legends in old Telugu. Statement (c) is incorrect: While the Varaha (Boar) was indeed the royal emblem of the Chalukyas, it was not usually stamped on \"both sides.\" In the unique gold Gadyanas issued later (by rulers like Saktivarman I), the boar was placed in the center, and several smaller symbols were punched around it on the same side."},{"id":14,"txt":"Which one of the following pairs of traditional martial practices and their associated regions is incorrectly matched?","ref":"","opts":["Sqay — Jammu & Kashmir","Kathi Samu — Tamil Nadu","Paika Akhada — Odisha","Mallakhamb — Maharashtra"],"ci":1,"exp":"Ex: (a) Sqay — Jammu & Kashmir: This is correctly matched. Sqay is a traditional sword-fighting art from the Kashmir valley. It involves the use of a curved single-edged sword and a shield, or sometimes just a long staff. (b) Kathi Samu — Andhra Pradesh: This is incorrectly matched. It is an ancient skill practiced by the royal armies of Andhra. \"Kathi\" means sword, and the art focuses on intricate footwork and sword-fencing. The martial art associated with Tamil Nadu is primarily Silambam. (c) Paika Akhada — Odisha: This is correctly matched. The Paikas were a landed militia of Odisha who famously revolted against the British in 1817. Their training centers (Akhadas) involve rhythmic movements and the use of the khanda (sword) and shield. (d) Mallakhamb — Maharashtra: This is correctly matched. It involves gymnasts performing aerial yoga and wrestling grips on a vertical stationary or hanging wooden pole. While it is now a national sport, its modern form originated in Maharashtra under the patronage of the Peshwas"},{"id":15,"txt":"Consider the following statements regarding Rani ki Vav:\n1. It is located on the banks of the Sabarmati River.\n2. It is a fine example of stepwell construction.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: Rani ki Vav is located on the banks of the Saraswati River in Patan, Gujrat. It illustrates the technological, SPP 22649 architectural and artistic mastery achieved at a stage of human development when water was predominantly resourced from ground water streams and reservoirs through access of communal wells. Statement 2 is correct: Rani-ki-Vav is an outstanding example of a subterranean stepwell construction and represents a prime example of an architectural type of water resource and storage system. It was built at the zenith of craftsmens’ ability in stepwell construction in the Maru-Gurjara architectural style. Initially built as a memorial, the stepwell was constructed as a religious as well as functional structure and designed as an inverted temple highlighting the sanctity of water."},{"id":16,"txt":"Consider the following statements regarding Champaner-Pavagadh Archaeological Park:\n1. It contains both Hindu and Islamic structures.\n2. Sultan Mehmud Begda made Champaner his capital in the 15th century.\n3. The site represents Mughal-era architecture.\n4. Pavagadh Hill is a volcanic formation.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1, 2, and 4 only","2, 3, and 4 only","1, 2, 3, and 4"],"ci":1,"exp":"Ex: Statement 1 is correct: The structures represent a perfect blend of Hindu-Islamic architecture, mainly in the Great Mosque (Jama Masjid), which became a model for later mosque architecture in India. This special style comes from the significant period of regional sultanates. Champaner-Pavagadh’s 14th-century temples and water-retaining installations, together with the later capital city’s religious, military and agricultural structures, represent both Hindu and Muslim architecture. Statement 2 is correct: Around 1300, the Chauhan Rajputs made Pavagadh their capital. However, after a 20-month siege, the Gujarat Sultan Mahmud Begada captured it in 1484 and in response to their defeat the Rajputs committed jauhar,. Sultan Mahmud Begada transformed Champaner, at the foot of the hill, into a magnificent new capital after capturing Pavagadh. However, Champaner's splendor was short-lived, since the capital returned to Ahmedabad and Champaner was destroyed when it was captured by Humayun in 1535. Statement 3 is incorrect: Champaner- Pavagadh is a pre-Mughal site. It does not have mughal influence in its architecture, rather it portrays architecture influenced by regional sultanates. 8 Statement 4 is correct: Pavagadh Hill is a volcanic formation that rises 800 m above the surrounding plains, the property includes the remains of settlements dating from the prehistoric to medieval periods, the latter represented by a hill-fortress of an early (14th- century) Hindu capital and the remains of an Islamic state capital founded in the 15th century. The large property, comprising 12 separate areas, contains the remains of fortifications, palaces, religious buildings, residential precincts, and water-retaining installations as well as the living village of Champaner."},{"id":17,"txt":"Consider the following statements regarding the Elephanta Caves:\n1. The caves are located on the island of Gharapuri.\n2. The sculptures inside the caves primarily depict Buddhist deities and motifs.\n3. The caves are known for their rock-cut architecture.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is correct: The Elephanta Caves are located in Western India on Elephanta Island also known as the Island of Gharapuri, which features two hillocks separated by a narrow valley. Statement 2 is incorrect: The sculptures and carvings inside the caves primarily represent Hindu deities, particularly Lord Shiva, and not Buddhist motifs. Out of 7 caves, 5 are Hindu, 2 are Buddhist caves. The 7-metre-high masterpiece ‘Sadashiva’ dominates the entrance to Cave 1. The sculpture represents three aspects of Shiva: the Creator, the Preserver, and the Destroyer, identified, respectively, with Aghora or Bhairava (left half), Taptapurusha or Mahadeva (central full face), and Vamadeva or Uma (right half). Representations of Nataraja, Yogishvara, Andhakasuravadha, Ardhanarishwara, Kalyanasundaramurti, Gangadharamurti, and Ravana- anugrahamurti are also noteworthy for their forms. Statement 3 is correct: The caves are known for their rock-cut architecture The layout of the caves, including the pillar components, the placement and division of the caves into different parts, and the provision of a sanctum or Garbhagriha of Sarvatobhadra plan, are important developments in rock-cut architecture. SPP 22649"},{"id":18,"txt":"Which Indian martial art has references in Sangam literature and later spread to Malaysia?","ref":"","opts":["Gatka","Silambam","Kalaripayattu","Cheibi Gad-ga"],"ci":1,"exp":"Ex: Silambamis an ancient weapon-based martial art from Tamil Nadu, primarily centered around the use of a bamboo staff. It is widely considered one of the oldest martial arts in the world. Historical Context and Sangam Literature The roots of Silambam trace back thousands of years to the Sangam period (approx. 3rd century BCE to 3rd century CE). Ancient Tamil texts like the Silappadikaram mention the sale of Silambam staves, swords, and armor to foreign merchants. It was also documented in the Purananuru, which describes the martial prowess of Tamil warriors. Royal Patronage: The art was patronized by the Chola, Chera, and Pandya kings. It was a mandatory part of military training for soldiers to master the \"long staff\" before moving to bladed weapons. Spread to Southeast Asia (Malaysia) Silambam is unique among Indian martial arts for its deep integration into the culture of the Tamil Diaspora in Southeast Asia. Through ancient maritime trade routes, Silambam traveled to Malaysia, Indonesia, and Singapore. Modern Recognition: In Malaysia, Silambam is not only practiced as a traditional art but is also recognized as a competitive sport. It is often demonstrated during festivals like Thaipusam. Hence option B is correct."},{"id":19,"txt":"With reference to the UNESCO Memory of the World – Asia-Pacific Regional Register (2024), consider the following works:\n1. Ramcharitmanas\n2. Panchatantra\n3. Sahṛdayāloka–Locana\n4. Rigveda Manuscripts\nHow many of the above were inscribed in the Asia-Pacific Regional Register in 2024?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: In a historic moment for Indian heritage, three literary masterpieces were inscribed in the UNESCO Memory of the World Asia-Pacific Regional Register during the 10th General Meeting of the Memory of the World Committee for Asia and the Pacific (MOWCAP) held in May 2024in Ulaanbaatar, Mongolia. 1. Ramcharitmanas (Inscribed 2024): Specifically, the illustrated manuscripts of Goswami Tulsidas's 16th-century epic were recognized. This work, written in the Awadhi dialect, is a foundational text of the Bhakti movement. 9 2. Panchatantra (Inscribed 2024): A rare 15th-century manuscript of these ancient fables (attributed to Pandit Vishnu Sharma was included. ThePanchatantra is one of the world's most translated non-religious books, teaching Niti (wise conduct) through animal allegories. 3. Sahṛdayāloka-Locana (Inscribed 2024): This is a seminal 9th-10th century Sanskrit text on Indian poetics and aesthetics, authored by Acharya Anandavardhana with the Locana commentary by Abhinavagupta. It is famous for establishing the theory of Dhvani (suggestion) in literature. 4. Rigveda Manuscripts (Already Inscribed 2007): While the Rigveda is indeed a part of UNESCO's Memory of the World, it was inscribed much earlier in the International Register in 2007. It was not part of the 2024 Asia-Pacific regional cycle."},{"id":20,"txt":"Arrange the following monuments in a correct chronological order of their formation:\n1. Lauria-Nandangarh pillar\n2. Panch-ratha at Mahabalipuram\n3. Mehrauli iron pillar\n4. Brihedeshwara temple of Thanjavur Which of the codes below is correct?","ref":"","opts":["1-2-3-4","1-2-4-3","2-1-3-4","1-3-2-4"],"ci":3,"exp":"Ex: Option (d) is correct: The correct chronological order is Lauria Nandangarh pillar - Mehrauli iron pillar - Panch ratha at Mahabalipuram - Brihadeshwara temple. ❖ Lauriya Nandangarh is a historic town in the state of Bihar. Lauriya gets its name from a pillar (Laur) of the Mauryan emperor Ashoka, which is situated here. The Lauriya Nandangarh pillar was constructed between 241–245 BCE. The top of the pillar is adorned with a lion. ❖ At present the Mehrauli Iron Pillar is located in Delhi in the Qutub Minar complex. It is notable for the rust resistant composition of the metals used in its construction. This pillar was established by Chandragupta-II (376-415 AD) of the Gupta dynasty as Vishnupada in the honour of Lord Vishnu. ❖ The Pallavan monuments in Mahabalipuram were built mostly between 6 to the 8th century A.D. The Pancha Rathas were constructed under the patronage of Narasimhavarman I, who SPP 22649 reigned from 630 to 668 A.D. This group consists of five monolithic, free-standing temples carved from solid granite and diorite rock ❖ Brihadeshwara Temple (Peruvudaiyar Kovil) is a Hindu temple dedicated to Shiva located in Thanjavur in the Indian state of Tamil Nadu. It was built by emperor Raja Raja Chola I and completed in 1010 AD."},{"id":21,"txt":"Consider the following statements regarding Bhimbetka Rock Shelters:\n1. They exhibit prehistoric cave paintings dating back to the Mesolithic period.\n2. These shelters are located in the Satpura mountain range.\n3. The rock art found here primarily depicts agricultural activities.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","1 and 3 only","2 and 3 only","1, 2, and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: The Bhimbetka Rock Shelters contain prehistoric cave paintings, some dating back to the Mesolithic period, making it a significant archaeological site. Statement 2 is incorrect: The Rock Shelters of Bhimbetka are located in the foothills of the Vindhya Mountains on the southern edge of the central Indian plateau. Statement 3 is incorrect: Hunting scenes and animal figures dominate the paintings. The paintings here include those of a mesolithic boar painted in dark red, animals like elephant, rhinoceros, boar, barasingha, spotted deer and cattle, and snake, etc. Later paintings include battle scenes painted in red and an elephant painted in white. The Boar Rock, which is the last among the rock shelters accessible for tourists, has a depiction of a mythical boar with horns that is many times larger than the human being chased by it."},{"id":22,"txt":"Consider the following pairs of Hoysala temples and their locations:\nTemple Location\n1. Chennakeshava Temple Somanathapura\n2. Hoysaleswara Temple Halebidu\n3. Keshava Temple — Belur\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: The Sacred Ensembles of the Hoysalas were inscribed on the UNESCO World Heritage List in 2023. These temples are famous for their unique \"stellate\" (star-shaped) ground plans and intricate soapstone carvings. Pair 1 Chennakeshava Temple — Somanathapura is Incorrectly Matched: The Chennakeshava Temple at Belur was commissioned by King Vishnuvardhana in 1117 CE to commemorate his victory over the Cholas. It is the most famous of the Hoysala temples and is renowned for its Madanika (bracket) figures. 10 Pair 2 Hoysaleswara Temple — Halebidu is Correctly Matched: Correct Location is Halebidu (the ancient capital, then known as Dwarasamudra). This is a \"Dvikuta\" (double) temple dedicated to Lord Shiva. It is famous for its massive Nandi statues and an endless frieze of elephants, lions, and scenes from the epics on the exterior walls. Pair 3 Keshava Temple — Belur is Incorrectly Matched: The Keshava Temple at Somanathapura is a \"Trikuta\" (three- shrined) temple. It is the most symmetrical and complete of the three major Hoysala temples, finished in 1268 CE."},{"id":23,"txt":"Which one of the following festivals is associated with the annual purification rites of Goddess Kamakhya and is also known as the “Mahakumbh of the East”?","ref":"","opts":["Dehing Patkai Festival","Ambubachi Mela","Majuli Festival","Wangala Festival"],"ci":1,"exp":"Ex: The Ambubachi Mela is the most significant festival of the Kamakhya Temple in Guwahati, Assam. It is a unique celebration that centers on the belief in the presiding goddess's annual menstrual cycle. It is known as the \"Mahakumbh of the East\" because it draws millions of devotees, including thousands of Tantric Sadhus, Aghoris, and Bauls, from all over India and neighboring countries, similar to the scale and fervor of the Kumbh Mela. It is believed that the Mother Earth (represented by Goddess Kamakhya) menstruates during the monsoon month of Ashaad (June). Hence option B is correct. The temple remains closed for three days, during which no religious activities or farming (plowing/sowing) are allowed in the region. On the fourth day, the temple reopens with a massive fair, and devotees receive a small piece of red cloth known as Angodak or Raktabastra, which is considered highly auspicious. Why Other Options are Incorrect (a) Dehing Patkai Festival: This is a socio- cultural festival held in the Tinsukia district of Assam. It focuses on the promotion of ethnic crafts, tea heritage, and tourism in the Patkai hills region. (c) Majuli Festival: Held on the world's largest river island, Majuli, this festival showcases the Neo-Vaishnavite culture, traditional masks (Mukha), and the unique Sattriya dance. SPP 22649 (d) Wangala Festival: This is a harvest festival of the Garo tribe, primarily celebrated in Meghalaya and parts of Assam. It is also known as the \"100 Drums Festival.\""},{"id":24,"txt":"With reference to Moidams, consider the following statements:\n1. They are located in the Patkai range of eastern Assam.\n2. They serve as a necropolis for the Ahom dynasty.\n3. Remains of the members of the royal family were buried along with goods, including food, animals and attendants.\n4. The shrine at the top, known as Mungklang, symbolizes a connection between heaven and earth.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","3 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: Statement 1 is correct: The Moidams are located in Patkai range of eastern Assam which is a part of the Purvanchal range. Statement 2 is correct: Moidams is a Mound- Burial System of the Ahom Dynasty. They are a royal mound burial necropolis established by the Tai-Ahom in northeastern India. For 600 years (13th--19th century CE) the Tai-Ahom created moidams (home-for-spirit) that work with the natural features of hills, forests, and water, creating a sacred geography by accentuating the natural topography. Sacred trees were planted and water bodies were created. Statement 3 is correct: The moidams have been created by building an earth mound (Ga- Moidam) over a hollow vault constructed of brick, stone or earth (Tak) and topped by a shrine (Chou Cha Li) at the centre of an octagonal wall (Garh). This shape symbolises the Tai universe. The vaults contain the buried or cremated remains of kings and other royal individuals together with grave goods such as food, horses, and elephants, and sometimes queens and servants. Statement 4 is correct: The shrine at the top of the mound is Mungklang, a middle space symbolised as a golden ladder establishing a heaven-earth continuum. The Tai-Ahom rituals of Me-Dam Me-Phi (ancestor worship) and Tarpan (libation) are practiced at the Charaideo necropolis."},{"id":25,"txt":"The terms ‘Suvarnarupa’, ‘Tamrarupa’, and ‘Sisarupa’ mentioned in the Arthashastra treatise are best related to which one of the following?","ref":"","opts":["Name of trading ports","Pali names of Nritta, Nritya, and Natya","Punch-marked coins","Famous Cities"],"ci":2,"exp":"Ex: Option (c) is correct: The Arthashastra, attributed to Kautilya (Chanakya), discusses various aspects of statecraft, economics, and trade, including the importance of different metals and their use in monetary systems. Chanakyamentioned the minting of punch 11 marked coins such as rupyarupa (silver), suvarnarupa (gold), tamrarupa (copper) and sisarupa (lead) in his Arthashastra treatise. Out of the various symbols used, the sun and six-armed wheels were most consistent. The coin contained an average of 50–54 grains of silver and 32 rattis in weight and was termed as Karshapanas."},{"id":26,"txt":"With reference to Mudiyettu, consider the following statements:\n1. The performance is based on the mythological tale of the battle between the goddess Kali and the demon Darika.\n2. Performers purify themselves through fasting and prayer before performing.\n3. The ritual is performed by professional dancers.\nWhich of the statements given above are correct?","ref":"","opts":["3 only","1 and 2 only","1 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is correct: Mudiyettu is a ritual dance drama performed in the Bhadrakali temples of Ernakulam and Kottayam districts of Kerala, based on the mythological tale of a battle between the goddess Kali and the demon Darika. A huge image of the goddess Kali, called kalam, is drawn on the temple floor with coloured powders, wherein the spirit of the goddess is invoked. This prepares the ground for the lively enactment to follow, in which the divine sage Narada requests Shiva to contain the demon Darika, who is immune to defeat by mortals. Shiva instead commands that Darika will die at the hand of the goddess Kali. Statement 2 is correct: Mudiyettu performers purify themselves through fasting and prayer followed by Kalamezhuthu which marks the start of the Mudiyettu ritual. This involves creating a highly colourful drawing of the protagonist Goddess Bhadrakali in the temple premises. Statement 3 is incorrect: The ritual is not performed by professional dancers rather it is a community ritual in which the entire village participates. Wearing vibrantly decorated headgear, costumes, and makeup, the artists perform remarkably to the thunderous beats of the traditional percussion instruments. PW ONLY IAS SUPER HINT For S3, \"Professional dancers\" sounds too modern—ritual arts are usually community- based, not commercialized. Ritual arts were tied to caste roles (e.g., Marars in Kerala for temple arts). The term \"professional\" is anachronistic for traditional rituals. Hence likley false. SPP 22649 Statement 2 mentions fasting/prayer, implying spiritual preparation. Professional dancers prioritize skill/entertainment, not austerity. You can’t claim \"purification rituals\" and \"professionalism\" together—they serve opposing purposes. Giving option B as correct."},{"id":27,"txt":"With reference to the Dadasaheb Phalke Award, consider the following statements:\n1. It is India’s highest honour in cinema.\n2. It is awarded annually under the Ministry of Culture.\n3. It commemorates the director of India’s first full-length feature film.\n4. It is presented by the Directorate of Film Festivals.\nWhich of the statements given above are correct?","ref":"","opts":["2, 3 and 4 only","1 and 2 only","1, 3 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Statement 1 is correct: It is indeed India’s highest award in cinema. It recognizes \"outstanding contribution to the growth and development of Indian cinema.\" Statement 2 is incorrect: The award is presented annually at the National Film Awards ceremony, but it falls under the Ministry of Information and Broadcasting, not the Ministry of Culture. Statement 3 is correct: It commemorates Dadasaheb Phalke (Dhundiraj Govind Phalke), who is known as the \"Father of Indian Cinema.\" He directed India’s first full-length feature film, Raja Harishchandra, in 1913. Statement 4 is correct: The award is presented by the Directorate of Film Festivals (DFF), an organization that was specifically set up by the Ministry of Information and Broadcasting to administer the National Film Awards and the International Film Festival of India (IFFI)."},{"id":28,"txt":"With reference to UNESCO World Heritage recognition in India, consider the following statements about the Western Ghats inscription:\n1. The inscription recognises the Western Ghats primarily as a mixed heritage site for both its biodiversity and monumental temple architecture.\n2. It was inscribed as a serial property comprising multiple protected areas across different states, rather than as a single contiguous site.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: The Western Ghats are inscribed as a Natural World Heritage Site, not a \"mixed\" site. Mixed sites are those that satisfy criteria for both natural beauty/biodiversity and human cultural achievement (like Khangchendzonga National Park). While the Ghats do contain ancient temples, the UNESCO recognition specifically highlights its monsoon system, high endemism (species found nowhere else), and evolutionary history. Statement 2 is correct: The Western Ghats were inscribed in 2012 as a serial property. This means it is not one single, unbroken park, but a collection of 39 individual components (including national parks, wildlife sanctuaries, and reserve forests) spread across six states: Gujarat, Maharashtra, Goa, Karnataka, Tamil Nadu, and Kerala. 12"},{"id":29,"txt":"With reference to the Kakatiya Rudreshwara (Ramappa) Temple, a UNESCO World Heritage Site, consider the following statements:\n1. The temple is noted for the use of lightweight porous bricks in its superstructure to reduce structural load.\n2. It represents a Nagara style of architecture characterised by a curvilinear shikhara.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The Kakatiya Rudreshwara Temple, popularly known as the Ramappa Temple (named after its architect), is a 13th-century masterpiece located in Palampet, Telangana. It was inscribed as a UNESCO World Heritage Site in 2021. Statement 1 is correct: One of the most unique engineering features of this temple is the use of \"floating bricks\" for its Vimana (superstructure). These bricks were made of porous, lightweight clay mixed with acacia wood and other materials, giving them a density lower than water. This ingenious technique was used to reduce the weight of the roof, protecting the structure from collapse during earthquakes or due to its heavy foundation. Statement 2 is incorrect: The temple does not represent the Nagara style. Instead, it is a classic example of Kakatiya architecture, which is often described as a refined version of the Vesara or Deccan style. It features a star- shaped (stellate) platform and a pyramidal shikhara (Vimana) rather than a curvilinear one.  SPP 22649 Feature Description Architect Named after Ramappa, making it perhaps the only temple in India named after its sculptor rather than the deity. Material The main structure is built of Reddish Sandstone, the pillars are carved from Black Basalt, and the roof uses lightweight bricks. Sandbox The foundation was built Technique using the \"Sandbox technique\"—filling the foundation pits with sand to act as a cushion against seismic tremors. Madanikas The temple is famous for its exquisite bracket figures (Madanikas or Shalabhanjikas) carved out of polished black basalt.  13"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

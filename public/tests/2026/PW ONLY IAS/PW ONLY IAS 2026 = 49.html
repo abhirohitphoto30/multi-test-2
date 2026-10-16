@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 49</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 49</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 49">PW ONLY IAS 2026 = 49</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Which European power, whose Indian factories were sold to the British government in 1845 and which was better known for missionary activities, failed to develop a shareholder-driven trading company structure like that of the English East India Company, where directors were elected annually?","ref":"","opts":["Portugal","Danes (Denmark)","French","Dutch (The Netherland)"],"ci":1,"exp":"Ex: While the British and Dutch East India Companies were massive, shareholder-driven machines, the Danish East India Company (and its successor, the Danish Asiatic Company) struggled to replicate that same level of private-sector efficiency. Here is the breakdown of why the Danes fit this description: The 1845 Sale: The Danish presence in India was centered at Tranquebar (Tamil Nadu) and Serampore (West Bengal). By 1845, these \"factories\" (trading posts) were no longer profitable and were sold to the British for 1.25 million rupees. Missionary Focus: The Danes were pioneers in Protestant missionary work in India. The Halle-Leipzig Mission at Tranquebar and the Serampore Missionaries (like William Carey, who operated under Danish protection because the British were initially hostile to missionaries) are far more famous today than their trade balance sheets. Structural Failure: Unlike the English East India Company (EIC), which featured a sophisticated shareholder-driven structure with annually elected directors, the Danish companies were often heavily reliant on the Danish Crown or state-appointed officials, making them less agile and more prone to financial instability."},{"id":1,"txt":"Arrange the following Later Mughal emperors in the correct chronological order of their reigns:\n1. Bahadur Shah I\n2. Jahandar Shah\n3. Muhammad Shah\n4. Farrukh Siyar\n5. Ahmad Shah Bahadur\n6. Alamgir II\nChoose the correct answer from the options given below:","ref":"","opts":["1-2-4-3-5-6","1-2-4-5-3-6","1-2-4-3-6-5","2-1-4-3-5-6"],"ci":0,"exp":"Ex: ❖ Bahadur Shah I (1707–1712 CE): The eldest son of Aurangzeb, who ascended the throne after Aurangzeb's death.He faced Sikh revolts under Banda Bahadur.Died in 1712 and was nicknamed \"Shah-i-Bekhabar\" (the Unaware King). SPP 22650 ❖ Jahandar Shah (1712–1713 CE): His reign was marked by dependence on nobles, such as Zulfiqar Khan.Focused on reversing Aurangzeb’s strict policies, abolishing Jizya and improving relations with Hindu nobles like the Rajputs.He introduced Ijarah (revenue farming). ❖ Farrukh Siyar (1713–1719 CE): Known for his reliance on the Sayyid Brothers, who later deposed him.Promoted policies of religious tolerance, abolishing Jizya and pilgrimage taxes.He issued farmans in 1717 granting significant trade privileges to the British East India Company. ❖ Muhammad Shah (1719–1748 CE): Known as 'Rangeela' for his extravagant lifestyle; his reign saw the invasion of Nadir Shah.His reign was marked by the Nadir Shah Invasion (1739), which devastated Delhi, looted treasures like the Kohinoor Diamond, and weakened the Mughal Empire irreparably. ❖ Ahmad Shah Bahadur (1748–1754 CE): Weak ruler who lost territory and influence to external invasions. Lost Punjab and Multan to Ahmad Shah Abdali, who invaded India multiple times during his reign. ❖ Alamgir II (1754–1759 CE): His reign saw invasions by Ahmad Shah Abdali and the Battle of Plassey in 1757."},{"id":2,"txt":"Consider the following pairs regarding the regional states during Mughal decline:\nCategory of State Example\n1. States formed by nobles — Awadh\n2. Watan Jagirs — Rajput States\n3. Rebellious States — Bengal\nHow many of the above pairs is/are correctly matched?","ref":"","opts":["Only one pair","Only two pairs","Only three pairs","None"],"ci":1,"exp":"Ex: ❖ Pair 1 is correct: The prominent states in this category were Bengal whose founder was Murshid Quli Khan, Awadh whose founder was Saadat Khan and Hyderabad whose founder was Nizam- ul-Mulk Asaf Jah. All three of these founder members were either former governors of these provinces or powerful members of the Mughal Nobility. 2 ❖ Pair 2 is correct: The second category of regional states in the 18\" century was those states who had previously served extremely well under the Mughals and as a result were allowed to enjoy considerable autonomy in their watan jagirs such as the Rajput states. ❖ Pair 3 is incorrect.Bengal was not a rebellious state. It was established by Murshid Quli Khan, a Mughal-appointed governor who later declared autonomy. Bengal fits into the category of \"states formed by nobles\", not rebellious states. Rebellious states, on the other hand, include the Marathas, Jats, and Sikhs, which openly challenged Mughal authority through uprisings."},{"id":3,"txt":"With reference to Bahadur Shah of Gujarat and the Portuguese, consider the following statements:\n1. Bahadur Shah sought Portuguese support during his conflict with Mughal emperor Humayun.\n2. The island of Bassein was ceded by Bahadur Shah to the Portuguese after Humayun’s final withdrawal from Gujarat.\n3. Bahadur Shah was killed on a Portuguese ship during negotiations with them.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is Correct: Bahadur Shah of Gujarat was engaged in a conflict with the Mughal emperor Humayun. To strengthen his position, he sought military and naval support from the Portuguese. In return for this assistance, he agreed to significant concessions, showing the growing influence of the Portuguese in western India. Statement 2 is Incorrect: Bahadur Shah ceded the island of Bassein to the Portuguese in 1534, when Humayun was still active in Gujarat. Humayun withdrew only in 1536, and therefore the cession of Bassein did not take place after the Mughal withdrawal. Statement 3 is Correct: Following Humayun’s withdrawal, relations between Bahadur Shah and the Portuguese deteriorated. Tensions rose due to conflicts between the Portuguese and local inhabitants. During negotiations, Bahadur Shah was invited onto a Portuguese ship, where he was killed in 1537, marking a decisive moment in Portuguese–Gujarat relations. SPP 22650"},{"id":4,"txt":"With reference to elementary and higher education in pre-colonial India, consider the following statements:\n1. Elementary education among both Hindus and Muslims was fairly widespread and limited to reading, writing and arithmetic.\n2. Pathshalas and maktabs were institutions meant exclusively for children of upper castes.\n3. Female participation in elementary education was at par with male participation.\n4. Chatuspathis or Tols functioned as centres of higher education, particularly in Bihar and Bengal.\nWhich of the statements given above are correct?","ref":"","opts":["2 and 3 only","1, 2 and 4 only","1 and 4 only","1, 3 and 4 only"],"ci":2,"exp":"Ex: Statement 1 is correct: Elementary education was relatively widespread and focused on the three R's: Reading, Writing, and Arithmetic. It was practical in nature, aimed at local literacy and accounting. In many villages, schools were supported by local zamindars or the community, and the standard of literacy among certain segments was surprisingly high before the introduction of the colonial system. Statement 2 is incorrect: While higher education was often caste-restricted, elementary schools (Pathshalas for Hindus and Maktabs for Muslims) were generally more inclusive. Although children from lower castes faced significant social barriers, these institutions were not \"exclusively\" for upper castes; children from trading and agricultural communities also attended to learn basic bookkeeping and literacy. Statement 3 is incorrect: Female participation was not at par with male participation. Education for girls was mostly restricted to the household. While some daughters of aristocratic families or wealthy merchants were educated at home, there were almost no public schools for girls. Prevailing social prejudices often linked female literacy with ill-fortune for the family. Statement 4 is correct: Chatuspathis (in Sanskrit) or Tols (in Bengali) were the traditional centers of higher learning. They specialized in subjects like Law (Smritis), Logic (Nyaya), Literature, and Philosophy. Bihar (specifically Mithila) and Bengal (specifically Nadia) were the most famous regional hubs for these institutions during the 18th century."},{"id":5,"txt":"Arrange the following administrative units of the Maratha Empire in descending order of their hierarchy (from top to bottom):\n1. Mauzas\n2. Prants\n3. Parganas\n4. Tarfs Choose the correct sequence:","ref":"","opts":["2 - 4 - 1 - 3","2 - 1 - 4 - 3","1 - 4 - 2 - 3","2 - 4 - 3 - 1"],"ci":3,"exp":"Ex: The administrative units of the Maratha Empire were organized hierarchically (top to bottom) as follows: 3 ❖ 2-Prants (Province): The largest administrative unit governed by a Subedar under the supervision of the Sarsubedar. ❖ 4-Tarfs (District): Subdivisions within the Prants maintained by Havaldars responsible for law and order. ❖ 3-Parganas (Sub-districts): Managed by Deshpandes (record keepers) and Deshmukhs (law and order). ❖ 1-Mauzas (Village): The smallest unit, with Kulkarnis maintaining records and Patils ensuring law and order. Thus, the correct descending order is Prants → Tarfs → Parganas → Mauzas."},{"id":6,"txt":"In the context of the early expansion of the English East India Company in India, arrange the following events in chronological order:\n1. Arrival of Sir Thomas Roe as the English ambassador at the Mughal court of Jahangir.\n2. The Battle of Swally was fought between the English and the Portuguese.\n3. Establishment of the English factory at Masulipatnam.\n4. Grant of trading privileges to the English by Shah Jahan through a Mughal farman.\nSelect the correct answer using the code given below:","ref":"","opts":["2 – 3 – 1 – 4","3 – 1 – 2 – 4","2 – 1 – 3 – 4","3 – 2 – 1 – 4"],"ci":3,"exp":"Ex: Event 3: Establishment of the English factory at Masulipatnam (1611)—This marks the earliest English foothold on the eastern coast of India. Masulipatnam was chosen because it lay within the dominions of the Sultan of Golconda and offered access to the Coromandel trade. This step was taken before the English had any major naval or diplomatic success, making it the logical starting point of the sequence. Event 2: Battle of Swally (1612)—The Battle of Swally was fought between the English and the Portuguese near the Gujarat coast. This naval victory was crucial because it broke Portuguese dominance over Indian Ocean trade and demonstrated that the English could protect their commercial interests by force. This success significantly strengthened the Company’s bargaining position in India, but it came after the first factory had already been established. Event 1: Arrival of Sir Thomas Roe at Jahangir’s court (1615)—Sir Thomas Roe arrived as the official ambassador of King James I to secure trading privileges for the Company. His diplomatic mission was possible only after the English had proved their commercial seriousness and naval capability. Roe’s arrival thus logically follows the initial factory establishment and naval success, not precedes them. SPP 22650 Event 4: Grant of trading privileges by Shah Jahan (1651): This occurred much later. In 1651, the English received a farman from Shah Jahan (facilitated by Dr. Gabriel Boughton) allowing them to trade in Bengal for a fixed annual payment of ₹3,000."},{"id":7,"txt":"Who among the following was appointed as the first Surveyor General of Bengal in 1767, initiating the scientific mapping of India and its bordering regions?","ref":"","opts":["Colin Mackenzie","James Rennell","George Everest","William Lambton"],"ci":1,"exp":"Ex: Option (b) is correct: James Rennell was appointed as the first Surveyor General of Bengal in 1767. His appointment marked the beginning of the scientific survey and systematic mapping of India and its bordering regions, which later evolved into the Survey of India. The other options are associated with later phases of Indian surveying and mapping, not with the initial establishment in 1767. Option (a) is incorrect: Colin Mackenzie is known as the first Surveyor General of India (1802) and for his extensive surveys in southern India. He was not the first Surveyor General of Bengal. Option (c) is incorrect: George Everest served later as Surveyor General of India (1830–1843) and is associated with the Great Trigonometrical Survey. The mountain Mount Everest is named after him. Option (d) is incorrect: William Lambton initiated the Great Trigonometrical Survey of India in 1802. While crucial to Indian surveying history, he was not appointed in 1767 and was not the first Surveyor General of Bengal."},{"id":8,"txt":"With reference to the reasons behind Nadir Shah’s invasion of India, consider the following statements:\n1. Muhammad Shah Rangeela's refusal to send a tribute to Nadir Shah led to the invasion.\n2. Muhammad Shah Rangeela gave shelter to Afghan nobles fleeing from Nadir Shah.\n3. Nizam-ul-Mulk and Saadat Khan invited Nadir Shah to invade India.\nWhich of the above statements is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1,2 and 3"],"ci":1,"exp":"Ex: ❖ Statement 1 is incorrect: The reason behind Nadir Shah’s invasion was not a refusal to send tribute but a series of diplomatic missteps by Muhammad Shah. These included withdrawing his ambassador from the Persian court, severing diplomatic ties, and detaining Nadir Shah’s envoy, which provoked him 4 ❖ Statement 2 is correct: Muhammad Shah gave asylum to Afghan nobles who had fled Nadir Shah during his campaign in Afghanistan. This act was viewed as a direct affront to Nadir Shah's authority. ❖ Statement 3 is correct: Nizam-ul-Mulk and Saadat Khan, two powerful Mughal nobles, sent secret invitations to Nadir Shah to invade India. This was done to weaken Muhammad Shah’s position and address their own grievances."},{"id":9,"txt":"With reference to the consolidation of the English East India Company on the western coast of India, consider the following statements:\n1. Bombay was acquired by the English Crown as part of a matrimonial alliance with Portugal.\n2. Bombay was transferred to the English East India Company on an annual payment after it came under the English Crown.\n3. The English East India Company shifted the headquarters of the Western Presidency from Bombay to Surat in the late seventeenth century.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 only","1 and 2 only","1, 2 and 3"],"ci":2,"exp":"Ex: Statement 1 is Correct: Bombay came into English possession not through conquest, but through a diplomatic and matrimonial arrangement. In 1662, the King of Portugal gifted Bombay to King Charles II of England as part of the dowry when Charles married Catherine of Braganza. This event marked an important turning point in English fortunes on the western coast. Statement 2 is Correct: After acquiring Bombay, the English Crown found it difficult to administer directly. Consequently, in 1668, Bombay was transferred to the English East India Company on a nominal annual rent of 10 pound. This move strengthened the Company’s administrative and commercial control over the region and gave it a secure maritime base. Statement 3 is Incorrect: The Western Presidency headquarters was shifted from Surat to Bombay in 1687, not the other way round. This shift reflected the decline of Surat and the rising strategic importance of Bombay as a fortified port and administrative centre."},{"id":10,"txt":"\"This leader, appointed Peshwa at the young age of nineteen, played a pivotal role in Maratha history. He defeated Bengal's Nawab Alivardi Khan, brought one-third of the Indian subcontinent under Maratha rule, and entered into an agreement with the Mughal Emperor in 1752 CE, promising to protect the Mughal Empire in exchange for the “chauth” of the northwest provinces and revenue of Agra and Ajmer. However, his leadership saw the catastrophic defeat of the Marathas in the Third Battle of Panipat, which fragmented the empire and marked the decline of Maratha unity.\" Who is this leader?","ref":"","opts":["Balaji Vishwanath","Baji Rao I","Balaji Baji Rao I","Shahuji"],"ci":2,"exp":"Ex: Option C is correct: Balaji Baji Rao (Nanasaheb) succeeded his father Baji Rao I as Peshwa in 1740 CE at the age of about twenty, after being appointed by Chhatrapati SPP 22650 Shahu. After Shahu’s death in 1749 CE without an heir, Balaji Baji Rao accepted Shahu’s nominated successor Rajaram II (Ramaraja) but consolidated real power through the Sangola Agreement (1750 CE), making the Peshwa the de facto head of the Maratha Confederacy. The Marathas under Balaji Baji Rao launched repeated raids into Bengal during Alivardi Khan’s rule, forcing him to pay chauth. In 1752 CE, Balaji Baji Rao entered into an agreement with the Mughal Emperor Ahmad Shah, under which the Marathas promised to protect the Mughal Empire in return for chauth from the northwest provinces and revenue from Agra and Ajmer. The Marathas, under Sadashivrao Bhau and Viswasrao, were decisively defeated by Ahmad Shah Abdali at the Third Battle of Panipat in 1761 CE, a loss that deeply affected Balaji Baji Rao. Unable to bear the shock of the Panipat defeat, Balaji Baji Rao died in June 1761, a few months after the battle."},{"id":11,"txt":"\"This ruler was instrumental in establishing a provincial kingdom during the decline of the Mughal Empire. Known for disciplining the local zamindars and maintaining a well-trained army, he also contributed to the administrative stability and cultural growth of his region. However, his rule ended tragically as he committed suicide under the pressure of Nadir Shah's demands for tribute.\" This description most likely corresponds to:","ref":"","opts":["Alivardi Khan","Nizam-ul-Mulk","Saadat Khan Burhan-ul-Mulk","Murshid Quli Khan"],"ci":2,"exp":"Ex: Saadat Khan was the founder of the autonomous state of Awadh (Oudh) and a central figure in the politics of the Later Mughal era. Founder of a Provincial Kingdom: In 1722, Saadat Khan was appointed as the Governor (Subahdar) of Awadh. He gradually consolidated power, turning the province into a hereditary state while maintaining nominal ties to the Mughal Emperor. Disciplining Zamindars: He was known for his \"iron hand.\" He crushed rebellious local zamindars who had refused to pay taxes, thereby increasing the state's revenue and establishing law and order. Administrative Stability: He introduced a fresh revenue settlement and used the Ijaradari system, but he also provided protection to the peasantry from the excesses of local petty chieftains. 5 The Tragic End: During Nadir Shah's invasion in 1739, Saadat Khan was captured. Hoping to gain favor with the invader, he initially suggested that Nadir Shah could extract 20 crore rupees from Delhi. When Nadir Shah reached Delhi and demanded this impossible sum specifically from Saadat Khan, the Nawab committed suicide by taking poison out of shame and the inability to meet the demand. Hence option C is correct."},{"id":12,"txt":"Which of the following best describes the Treaty of Aix-la-Chapelle?","ref":"","opts":["It ended the First Carnatic War by transferring Madras permanently to the French and consolidating their position in South India.","It concluded the Austrian War of Succession and led to the restoration of Madras to the English in exchange for French territories in North America.","It marked a military victory of the Nawab of Carnatic over the French at the Battle of St. Thome.","It resulted in the recognition of French political dominance in the Carnatic region by the English East India Company."],"ci":1,"exp":"Ex: Option (b) is Correct: The Treaty of Aix-la- Chapelle (1748) brought the Austrian War of Succession to an end and, as a consequence, also ended the First Carnatic War in India. Under the terms of this treaty, Madras was restored to the English, while the French received back their territories in North America. This clearly reflects the exchange of possessions. Option (a) is Incorrect: Madras was not transferred permanently to the French. On the contrary, it was handed back to the English under the treaty. Option (c) is Incorrect: The Battle of St. Thome was a significant event during the First Carnatic War, but the treaty did not record a military victory of the Nawab of Carnatic. Instead, it was a European diplomatic settlement. Option (d) is Incorrect: The treaty did not recognise French political dominance in the Carnatic. It essentially restored the status quo ante, without settling the question of political supremacy in South India."},{"id":13,"txt":"Which of the following describes the Ijaradari system?","ref":"","opts":["A system where the zamindars were appointed as hereditary revenue collectors for the state.","A system of land revenue settlements made annually with village heads.","A system of fixed revenue collection introduced during Akbar's reign.","A system where bankers or mahajans bid for the right to collect state taxes."],"ci":3,"exp":"Ex: ❖ Ijaradari System: The Ijaradari system was a revenue collection mechanism that emerged during the decline of the Mughal Empire, particularly in the regional successor states such as Bengal, SPP 22650 Awadh, and Hyderabad. It involved the auctioning of tax collection rights to the highest bidder, known as the Ijaredar.The system involved bankers or mahajans bidding for revenue collection rights."},{"id":14,"txt":"In the context of the rise of the Marathas, which of the following factors contributed to their emergence as a powerful state?\n1. The physical environment of the Maratha country.\n2. The experience gained from holding important positions in the administration and military of the Mughal Empire.\n3. The Bhakti movement fostering social unity.\nSelect the correct answer using the codes given below:","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2, and 3"],"ci":2,"exp":"Ex: The rise of the Marathas as a powerful state in the 16th and 17th centuries was the result of multiple factors, including geographical advantages, social cohesion, and their exposure to administration and warfare. ❖ Statement 1 is correct: The physical environment of the Maratha country, such as mountainous regions and dense forests, probably resulted in shaping certain peculiar qualities among the Marathas. For instance, this difficult terrain made the Maratha soldiers expert in guerilla tactics. ❖ Statement 2 is incorrect: The Marathas held important positions in the administrative and military systems of Deccan Sultanates of Bijapur and Ahmadnagar, which offered them first- hand experience of administration, further facilitating in the emergence and organisation of the Maratha state. ➢ While the Marathas gained administrative and military experience, it was primarily under the Deccan Sultanates (Bijapur and Ahmadnagar) and not the Mughals. ❖ Statement 3 is correct: The Bhakti movement in Maharashtra, spearheaded by spiritual leaders like Tukaram, Ramdas, Eknath played a significant role in uniting the Marathas. ➢ This unity provided the necessary social foundation for the political consolidation achieved by Shahji Bhonsle and Shivaji. 6"},{"id":15,"txt":"With reference to the Portuguese in India, consider the following statements:\n1. In 1507, the Portuguese were defeated in a naval battle off Diu by the combined Egyptian and Gujarat navies.\n2. During the naval battle of Diu, the son of Francisco de Almeida was killed.\n3. Francisco de Almeida later pursued the Blue Water Policy aiming at making the Portuguese the masters of the Indian Ocean.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is Correct: In 1507, the Portuguese fleet faced a major naval defeat off the coast of Diu at the hands of a combined Egyptian (Mamluk) and Gujarat naval force. This battle marked one of the earliest serious challenges to Portuguese naval power in the Indian Ocean. Statement 2 is Correct: During the battle of Diu the son of Francisco de Almeida, was killed. His death deeply impacted Almeida and became a major reason for his determination to seek revenge against the combined navies. Statement 3 is Correct: After avenging the defeat in the following year by decisively crushing the Egyptian and Gujarat navies, Francisco de Almeida pursued a clear strategic vision—to make the Portuguese the dominant naval power in the Indian Ocean. This policy, known as the Blue Water Policy (Cartaze system), focused on controlling key sea routes and maritime trade rather than acquiring extensive land territories."},{"id":16,"txt":"With reference to Shah Alam II and his reign, consider the following statements:\n1. Shah Alam II ascended the throne after the assassination of Alamgir II.\n2. His reign witnessed two major battles: the Third Battle of Panipat and the Battle of Buxar.\n3. The Treaty of Allahabad (1765) granted the British East India Company the Diwani rights over Bengal, Bihar, and Odisha.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: ❖ Statement 1 is correct: Shah Alam II became emperor in 1759 following the assassination of Alamgir II, marking his rise to the Mughal throne. ❖ Statement 2 is correct: The Third Battle of Panipat saw Ahmad Shah Abdali defeating the Marathas in 1761. Shah Alam II’s involvement came later with the Battle of Buxar in 1764, where his combined forces with Mir Qasim and Shuja-ud-Daula were defeated by the British. ❖ Statement 3 is correct: The Treaty of Allahabad formalized the British East India Company's control over revenue collection in these provinces. Shah Alam II was a signatory, effectively marking the beginning of British colonial dominance. SPP 22650"},{"id":17,"txt":"With reference to Maharaja Ranjit Singh and the Sikh kingdom of Punjab, consider the following statements:\n1. Ranjit Singh belonged to the Sukarchakiya Misl and was the son of its leader, Mahan Singh.\n2. He brought under his control the territory extending from the Sutlej to the Jhelum.\n3. By the Treaty of Amritsar, he acknowledged British authority over the Cis-Sutlej territories.\n4. The British annexation of Punjab began during the lifetime of Ranjit Singh.\nWhich of the statements given above are correct?","ref":"","opts":["1, 2 and 3 only","1 and 3 only","2 and 4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Statement 1 is correct: Maharaja Ranjit Singh was the son of Mahan Singh, who was the chief of the Sukarchakiya misl. His early power base came from this misl, which enabled him to rise as the most powerful Sikh ruler and eventually establish a strong kingdom in Punjab. Statement 2 is correct: Ranjit Singh consolidated his authority over the region between the rivers Sutlej and Jhelum, which became the territorial core of the Sikh kingdom. This area included important cities like Lahore and Amritsar, conquered in 1799 and 1802 respectively. Statement 3 is correct: By the Treaty of Amritsar with the British, Ranjit Singh recognised British control over the Cis-Sutlej territories (areas east of the Sutlej). At the same time, the British acknowledged his authority over the territories west of the Sutlej, maintaining Punjab’s independence during his lifetime. Statement 4 is incorrect: The British did not annex Punjab during the lifetime of Ranjit Singh. He ruled till 1839 and remained independent, though increasingly constrained by British diplomacy. The real decline and eventual British takeover occurred after his death, when his successors failed to hold the kingdom together."},{"id":18,"txt":"Consider the following statements about Martanda Varma and the state of Travancore:\n1. Martanda Varma established the state of Kerala with a small territory centred around Travancore.\n2. He organized his army on the Western model and implemented various measures to develop his state.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: Marthanda Varma did not establish the \"State of Kerala.\" At that time, the region of present-day Kerala was divided into several small warring principalities (such as Calicut, Cochin, and Travancore). Marthanda Varma successfully expanded the small kingdom of Venad to form the powerful state of Travancore. He did not unify the entire Kerala region; that unification only occurred in 1956 on a linguistic basis. 7 Statement 2 is correct: Marthanda Varma was a progressive administrator and military strategist. He realized the superiority of European warfare and organized his army on the Western model. He equipped his infantry with modern firearms and built a strong line of fortifications (the Travancore Lines). He centralized the administration by crushing the power of local feudal lords (Ettuveetil Pillamar), improved irrigation through the construction of dams and canals, and established a state monopoly over the lucrative pepper trade. The Battle of Colachel (1741): One of Marthanda Varma's greatest achievements was the Battle of Colachel, where he decisively defeated the Dutch East India Company. This was the first time an Asian power had defeated a European naval power in a structured war. Following the victory, he took the Dutch commander, Eustachius De Lannoy, into his service to further modernize the Travancore army. Dedication to the Deity (Tripadidanam): In 1750, in a unique political and religious move known as Tripadidanam, Marthanda Varma dedicated his entire kingdom to the deity Lord Padmanabha (at the Sree Padmanabhaswamy Temple in Thiruvananthapuram). He thereafter ruled as the Padmanabha Dasa (Servant of the Lord). This move effectively gave his rule a divine sanction, making any rebellion against the King appear as a rebellion against God."},{"id":19,"txt":"With reference to the invasions of Nadir Shah and Ahmad Shah Abdali in the eighteenth century, consider the following statements:\n1. Nadir Shah permanently annexed Delhi and ruled it as a province of the Persian Empire.\n2. Ahmad Shah Abdali began his Indian invasions during the lifetime of Nadir Shah.\n3. The Mughal emperor ceded Punjab to Ahmad Shah Abdali in an attempt to buy peace.\n4. Ahmad Shah Abdali recognised Alamgir II as the Mughal emperor and appointed Najib-ud-Daula as Mir Bakhshi.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 4 only","3 and 4 only","1, 3 and 4 only"],"ci":2,"exp":"Ex: Statement 1 is Incorrect: Nadir Shah’s invasion of 1739 resulted in the sack of Delhi and massive plunder of wealth, including the Peacock Throne and Kohinoor diamond and seventy crore rupees were collected from the official treasury and the safes of the rich nobles. However, he did not establish Persian rule over Delhi or annex it permanently; after the plunder, he withdrew to Persia. SPP 22650 Statement 2 is Incorrect: Ahmad Shah Abdali emerged as a power in India only after Nadir Shah’s death in 1747. His invasions began from 1748 onwards, making it chronologically incorrect to say he became active during Nadir Shah’s lifetime. Statement 3 is Correct: Facing repeated Afghan invasions and military weakness, the Mughal emperor attempted to secure peace by diplomatically ceding Punjab to Ahmad Shah Abdali in 1751–52, reflecting the declining authority of the Mughal state. Statement 4 is Correct: After capturing Delhi in 1757, Ahmad Shah Abdali did not rule directly but recognised Alamgir II as the Mughal emperor and appointed the Rohilla chief Najib-ud-Daula as Mir Bakhshi, thereby exercising indirect control over Mughal affairs."},{"id":20,"txt":"Read the following paragraph:\nHe adopted a pacific policy towards the Marathas, the Rajputs and the Jats. Shahu, the Maratha prince, was released from Mughal captivity, and Rajput chiefs were confirmed in their respective states. However, the Sikh leader Banda Bahadur attacked the Muslims in Punjab, and, hence, the emperor took action against him. He died in February 1712. Khafi Khan gave him the title of ‘Shahi-Bekhabar’. In the above paragraph, which of the following Mughal rulers is being referred to?","ref":"","opts":["Aurangzeb","Bahadur Shah I","Jahandar Shah","Farrukhsiyar"],"ci":1,"exp":"Ex: Bahadur Shah I adopted a conciliatory policy after Aurangzeb’s death, releasing Shahu to weaken Maratha unity and confirming Rajput chiefs in their states. During his reign, Banda Bahadur’s Sikh uprising in Punjab led to imperial action. He died in February 1712 and was criticised by Khafi Khan as ‘Shahi-Bekhabar’, giving him the correct answer."},{"id":21,"txt":"Match List-I with List-II and select the correct answer using the code given below the lists:\nList-I (Later List-II (Events / Mughal rulers) Characteristics) A. Jahandar 1. Issued farmans granting Shah trading privileges to the English East India Company B. Farrukhsiyar 2. Came to power with the support of Zulfiqar Khan C. Muhammad 3. Reign witnessed the Shah invasion of India by Nadir Shah D. Alamgir II 4. Recognised by Ahmad Shah Abdali after the capture of Delhi Codes:","ref":"","opts":["A-2, B-1, C-3, D-4","A-1, B-2, C-4, D-3","A-3, B-1, C-2, D-4","A-4, B-3, C-1, D-2"],"ci":0,"exp":"Ex: A. Jahandar Shah: Came to power with the support of Zulfiqar Khan Jahandar Shah ascended the Mughal throne in 1712 with the decisive support of the noble Zulfiqar Khan, who became his Wazir. Jahandar Shah’s reign was short and marked by weak administration, dependence on nobles and a pleasure-loving court culture. His rule is an example of how Mughal emperors increasingly depended on powerful nobles for survival, rather than exercising independent authority. 8 B. Farrukhsiyar: Issued farmans granting trading privileges to the English East India Company: Farrukhsiyar granted important farmans in 1717 to the English East India Company. These farmans allowed the Company to trade duty-free in Bengal and significantly strengthened its economic and political position in India. This episode shows how weakening Mughal authority enabled European trading companies to expand their influence. C. Muhammad Shah: Reign witnessed the invasion of India by Nadir Shah: During the reign of Muhammad Shah, India was invaded by Nadir Shah in 1739. This invasion was a turning point in Mughal decline, marked by the sack of Delhi and massive plunder, including the Peacock Throne and Kohinoor diamond. The invasion exposed the military and administrative weakness of the Mughal Empire and encouraged further foreign invasions. D. Alamgir II: Recognised by Ahmad Shah Abdali after the capture of Delhi: After capturing Delhi in 1757, Ahmad Shah Abdali did not rule directly but instead recognised Alamgir II as the Mughal emperor. Alamgir II ruled under Afghan influence, illustrating the reduced Mughal authority and the increasing control of external powers over imperial politics in the mid-18th century."},{"id":22,"txt":"Consider the following Dutch factories established in India:\n1. Pulicat\n2. Surat\n3. Chinsura\n4. Cochin\nWhich one of the following is the correct chronological order of their establishment?","ref":"","opts":["2 – 1 – 4 – 3","1 – 3 – 2 – 4","1 – 2 – 3 – 4","2 – 3 – 1 – 4"],"ci":2,"exp":"Ex: 1. Pulicat was the first major Dutch factory in India, established in 1609 on the Coromandel Coast. It served as the early headquarters of the Dutch East India Company in India and therefore correctly appears as the earliest in the chronological sequence. 2. The Dutch factory at Surat was established in 1616, after Pulicat. This marked the Dutch expansion into western India to tap into the thriving maritime trade of the Gujarat region. SPP 22650 3. Chinsura in Bengal became a Dutch factory in 1653, reflecting the later phase of Dutch commercial expansion towards eastern India, particularly to benefit from the rich Bengal trade. 4. Cochin was taken over by the Dutch from the Portuguese in 1663. This was one of the last among the listed Dutch establishments and hence correctly placed at the end of the chronological order."},{"id":23,"txt":"With reference to the farmans obtained by the English East India Company, which came to be regarded as the ‘Magna Carta’ of the Company, consider the following statements:\n1. In Bengal, the Company’s imports and exports were exempted from additional customs duties except for an agreed annual payment.\n2. The Company was permitted to rent additional lands in the vicinity of Calcutta.\n3. The Company was exempted from paying all forms of rent for lands held in Bengal.\n4. The coins minted by the Company at Bombay were valid only within the Bombay Presidency.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Statement 1 is Correct: The farmans granted to the English East India Company in Bengal provided that the Company’s imports and exports would be exempt from additional customs duties, except for a fixed annual payment of 3,000 rupees, which had already been settled earlier. This concession sharply reduced the Company’s trading costs and gave it a decisive commercial advantage over Indian merchants. Statement 2 is Correct: The Company was explicitly permitted to rent additional lands around Calcutta. This was an important territorial privilege because it allowed the Company to expand its settlements, warehouses, and administrative establishments. However, the farmans did not grant ownership or rent-free possession, only the right to rent. Statement 3 is Incorrect: This statement falsely generalises the privilege. The farmans did not exempt the Company from paying rent on lands in Bengal. There is a clear distinction between permission to rent land and exemption from rent. The Mughal authorities retained their revenue rights over land. The Company’s privilege was expansion of space, not abolition of rent. 9 Statement 4 is Incorrect: The farmans decreed that coins minted by the Company at Bombay were to circulate throughout the Mughal Empire, not merely within the Bombay Presidency. By restricting their circulation to Bombay, the statement understates the scope of the privilege and therefore becomes incorrect."},{"id":24,"txt":"Consider the following statements regarding the Jats during the Mughal period:\n1. The first major Jat rebellion against Mughal imperial forces occurred in the Mathura district in 1669 under the leadership of Gokula.\n2. Churaman and Badan Singh established the Jat kingdom of Bharatpur in the 18th century.\n3. Under Suraj Mal, the Jat kingdom expanded to include territories from the Ganga in the east to Chambal in the south.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: The Jats were a robust community of agriculturists living in the region around Delhi, Agra, and Mathura. Their transition from a peasant community to a political power is a classic example of an \"insurgent state\" rising against the background of Mughal decline. Statement 1 is correct: The Jats were among the first to rise in organized rebellion against the agrarian and religious policies of Aurangzeb. In 1669, the Jat peasants of Mathura rebelled under the leadership of a local zamindar named Gokula. Though the rebellion was suppressed and Gokula was executed, it set the stage for future resistance. Statement 2 is correct: In the 18th century, taking advantage of the chaos following Aurangzeb's death, Churaman built the first significant Jat stronghold at Bharatpur. However, it was his successor, Badan Singh, who truly laid the foundations of the Bharatpur State by consolidating various Jat clans and gaining recognition from the Mughal court. Statement 3 is correct: The Jat power reached its zenith under Suraj Mal (reigned 1756–1763), often called the \"Plato of the Jat tribe\" because of his political sagacity and steady intellect. Under him, the state of Bharatpur expanded significantly, encompassing a territory that stretched from the Ganges in the east to the Chambal in the south, including the districts of Agra, Mathura, Meerut, and Aligarh. SPP 22650 The Zenith of Jat Power: Suraj Mal: Suraj Mal was not only a brilliant military commander but also a great builder and administrator. He built the famous Lohagarh Fort (Iron Fort) in Bharatpur, which remained one of the strongest and most impregnable forts in Indian history. He is credited with building beautiful palaces at Deeg, which blended Persian and Rajput architectural styles."},{"id":25,"txt":"With reference to the French settlements in India, consider the following statements:\n1. Pondicherry was founded in 1674 after a site was granted by the governor of Valikondapuram under the Bijapur Sultan.\n2. Francois Martin became the French governor of Pondicherry before its foundation.\n3. Mahe, Karaikal, Balasore and Qasim Bazar were French trading centres in India.\nWhich of the statements given above are correct?","ref":"","opts":["2 and 3 only","1 only","1 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Statement 1 is Correct: In 1673, Sher Khan Lodi, the governor of Valikondapuram under the Bijapur Sultan, granted a site for settlement to Francois Martin. Based on this grant, Pondicherry was founded in 1674. Statement 2 is Incorrect: Francois Martin did not become governor before the founding of Pondicherry. In 1674, the same year Pondicherry was founded, Francois Martin replaced Caron as the French governor. This makes the statement a chronology-based error. Statement 3 is Correct: Apart from Pondicherry, the French East India Company established several important trading centres in India, including Mahe, Karaikal, Balasore and Qasim Bazar, mainly in the coastal regions."},{"id":26,"txt":"Consider the following statements regarding social and religious conditions of India in the 18th century:\n1. Polygamy was prevalent with women possesing little individuality of their own.\n2. The family structure was patriarchal and patrilineal in nature.\n3. The custom of Sati was widely prevalent.\nWhich of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: The social and religious conditions in India during the 18th century were shaped by a complex blend of traditions, customs, and a deeply stratified society. This period, marked by the decline of the Mughal Empire and the rising influence of regional kingdoms and European powers, had distinct social and religious characteristics. Statement 1 is correct: Polygamy existed in 18th century India, particularly among the aristocracy, royal families, and wealthy sections, as it was linked to wealth, status, and lineage consolidation. Among commoners, monogamy was more usual. Women generally had limited social and personal autonomy; their roles were largely confined to household responsibilities, child-rearing, and maintaining family honor. 10 Statement 2 is correct: Indian society in the 18th century was overwhelmingly patriarchal, with the eldest male acting as the head of the family. Inheritance and lineage were passed through the male line, reflecting a patrilineal system. Women had limited decision-making power within the household and were expected to follow family norms and traditions. The patriarchal and patrilineal structure influenced social hierarchy, marriage, property rights, and inheritance practices across most regions and communities. Statement 3 is correct: Sati, the practice where widows were compelled or voluntarily immolated on their husband’s funeral pyre, was prevalent in several parts of India, particularly among upper-caste communities such as Rajputs and Brahmins. Its prevalence varied regionally, being more common in Rajasthan, Bengal, and parts of northern India. Sati was rooted in notions of female chastity, honor, and patriarchal control, and became a focus of social reformers later during the 19th century under British rule. However, in the South it was uncommon, and the Marathas did not encourage it."},{"id":27,"txt":"With reference to the religious policies of the Portuguese in India, consider the following statements:\nStatement 1: Portuguese religious policies contributed to political insecurity and opposition among Indian rulers. Statement 2: This opposition emerged mainly because Portuguese missionary activities were confined to Muslims and did not affect Hindu society.\nWhich of the following is correct?","ref":"","opts":["Both Statement 1 and Statement 2 are true, and Statement 2 is the correct explanation of Statement 1","Both Statement 1 and Statement 2 are true, but Statement 2 is not the correct explanation of Statement 1","Statement 1 is true, but Statement 2 is false","Statement 1 is false, but Statement 2 is true"],"ci":2,"exp":"Ex: Statement 1 is correct: The religious policies of the Portuguese, particularly the activities of Jesuit missionaries, gave rise to political fears. These fears were not isolated but formed part of a broader context in which Portuguese power was declining due to loss of commercial influence, piracy, arrogant behaviour, and hostility from Indian rulers, including the Mughals. Religious interference thus added to the political opposition already building against the Portuguese.  SPP 22650 Statement 2 is Incorrect: The Portuguese antagonism was not limited to Muslims alone. While hostility towards Muslims existed, the policy of conversion to Christianity also made Hindus resentful. Therefore, missionary activities affected both Muslim and Hindu communities, contradicting the statement that Hindu society was unaffected."},{"id":28,"txt":"On the eve of British conquest, which one of the following best explains the political advantage enjoyed by the English East India Company in India?","ref":"","opts":["The complete collapse of Mughal administrative institutions","The existence of fully sovereign regional kingdoms","The persistence of Mughal legitimacy alongside regional autonomy","The technological superiority of European armies alone"],"ci":2,"exp":"Ex: On the eve of British conquest, Mughal central authority had weakened, but its symbolic and legal legitimacy continued. Regional rulers exercised real power while still recognising the Mughal emperor. The English East India Company exploited this arrangement by securing imperial sanction and operating within established institutions, allowing it to expand authority without appearing to overthrow Indian political order."},{"id":29,"txt":"The book ‘Jij Muhammad-shahi’ is related to\nwhich of the following?","ref":"","opts":["Religious offerings","Astronomy","Revenue Calculations","Reign of Muhammad Shah"],"ci":1,"exp":"Ex: Sawai Jai Singh, ruler of the kingdom of Amber (later known as Jaipur), is acknowledged for his significant contributions to architecture, city planning, and astronomy. Besides establishing the \"Pink City\" of Jaipur and building five astronomical observatories across India, he also authored \"Jij Muhammad-shahi\". It's an astronomical text providing calculations of celestial bodies' positions, furnishing valuable assistance in studying astronomy. \"Jij\" is a Persian term indicating astronomical books used for such calculations during the Islamic Golden Age.  11"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

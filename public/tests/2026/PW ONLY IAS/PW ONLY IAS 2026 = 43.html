@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 43</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 43</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 43">PW ONLY IAS 2026 = 43</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Which one of the following foreign travellers to India made the following observations during the Mughal period? ❖ He described Indian cities as “camp towns” that shifted with the movement of the emperor. ❖ He praised the efficiency of the postal (dak–chowki) system. ❖ He noted the participation of women in agricultural and artisanal labour. ❖ He criticised the absence of private ownership of land, arguing that all land belonged to the emperor.","ref":"","opts":["Al-Biruni","Ibn Battuta","Francois Bernier","Jean-Baptiste Tavernier"],"ci":2,"exp":"Ex: Francois Bernier was a French physician and traveler who spent 12 years (1656–1668) in India, primarily at the court of Aurangzeb. His work, Travels in the Mughal Empire, is one of the most analytical and critical foreign accounts of the era. Bernier’s Observations ❖ \"Camp Towns\": Bernier famously described Mughal cities as \"camp towns.\" He argued that cities like Delhi and Agra lacked a stable middle class or urban infrastructure and existed only because the Emperor was present. If the Emperor moved the court, the city’s population and economy would effectively follow him or collapse. ❖ Private Ownership of Land: This was Bernier's most influential (and debated) thesis. He argued that the King was the sole owner of all land in the empire. He believed this prevented the development of an aristocracy like in Europe and led to \"Oriental Despotism,\" as peasants had no incentive to improve land they didn't own. ❖ Women in Labor: Unlike many travelers who focused only on the harem, Bernier noted that women from lower social strata were actively involved in agricultural fields and artisanal workshops, highlighting the economic contribution of women beyond the domestic sphere. Hence option C is correct"},{"id":1,"txt":"With reference to Al-Biruni, consider the following statements:\n1. His analysis of the Indian caste system was based not only on personal observation but also on a critical study of Indian religious and legal texts.\n2. He translated and explained Patanjali’s Yoga Sutras into Arabic, thereby transmitting Indian philosophical ideas to the Islamic world.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Al-Biruni was not just a traveler; he was a rigorous scholar who sought to understand Indian society from the \"inside\" by learning the language and studying the foundational texts of the culture he was observing. Statement 1 is correct: Al-Biruni’s account of the caste system in Kitab-ul-Hindis remarkably detailed. While he observed the social hierarchy in the 11th century, he did not rely on hearsay. SPP 22644 He cross-referenced his observations with Sanskrit texts like the Manusmriti and the Bhagavad Gita to explain the theoretical basis of the four Varnas. Interestingly, he attempted to provide a comparative perspective by noting that ancient Persian society also had similar social divisions (monks, warriors, scientists, and peasants), suggesting that social stratification was a universal human phenomenon, though the Indian concept of \"pollution\" was unique. Statement 2 is correct: Al-Biruni was a prolific translator. He realized that to explain Indian thought to the Arabic-speaking world, he had to translate primary works. He translated Patanjali’s Yoga Sutras into Arabic (titled Kitab Batanjal). In this translation, he didn't just provide word-for-word meanings; he added explanations to bridge the gap between Indian mystical concepts and Islamic philosophical terminology. He also translated works on astronomy and mathematics, such as those of Brahmagupta, making Indian scientific achievements accessible to the Abbasid intellectual centers."},{"id":2,"txt":"Nimbarka founded which of the following Vaishnava sampradayas?","ref":"","opts":["Brahma Sampradaya","Rudra Sampradaya","Sri Sampradaya","Sanak Sampradaya"],"ci":3,"exp":"Ex: Nimbarka (roughly 12th century) was a prominent Vedantic philosopher who established one of the four traditional Vaishnava schools. His sect is also known as the Kumara Sampradaya or the Hansa Sampradaya. The Four Traditional Vaishnava Sampradayas In the tradition of Vaishnavism, there are four authorized lineages (Sampradayas) through which divine knowledge is said to have been passed down. Sampradaya Founder / Main Philosophy Philosopher Sri Ramanujacharya Vishishtadvaita Sampradaya Brahma Madhvacharya Dvaita Sampradaya 2 Rudra Vallabhacharya Shuddhadvaita Sampradaya (and Vishnuswami) Sanak Nimbarkacharya Dvaitadvaita Sampradaya Why \"Sanak\" Sampradaya? The sect is named after the Sanat-kumaras (Sanaka, Sanatana, Sanandana, and Sanat- kumara), who are believed in Hindu mythology to be the \"mind-born\" sons of Brahma. According to tradition the knowledge was first given by Lord Vishnu to the Sanat-kumaras. It was then passed to the sage Narada. Narada eventually initiated Nimbarkacharya, who formalized the teachings into the Dvaitadvaita (Bheda-Abheda) school. Hence option D is correct. Key Features of Nimbarka’s Sect ❖ Deity Focus: Unlike Ramanuja (who focused on Vishnu-Lakshmi), Nimbarka was one of the first to emphasize the worship of Radha-Krishna together as the supreme divine couple. ❖ Geographical Hub: While he was born in South India (Andhra Pradesh), his influence was strongest in Vrindavan and North India. ❖ Literature: His primary work is the Vedanta-Parijata-Saurabha, a commentary on the Brahma Sutras."},{"id":3,"txt":"\"He was born in Prayag and was influenced by Ramanuja’s philosophy. He preached Vaishnavism with a focus on devotion to Rama and Sita, rejecting caste distinctions. His disciples included Kabir and Ravidas, and he was the first to preach in Hindi, making Bhakti accessible to the masses.\" Identify the Bhakti saint on the basis of the description given above:","ref":"","opts":["Chaitanya Mahaprabhu","Ramananda","Vallabhacharya","Namdev"],"ci":1,"exp":"Ex: Ramananda (14th–15th century) is often considered the bridge between the Bhakti movements of South India and North India. Influence of Ramanuja: Ramananda was originally a follower of the Sri Sampradaya (the school of Ramanuja). However, he eventually moved away from its strict rituals and caste regulations to form his own liberal path. Focus on Rama and Sita: While the Southern Bhakti movement was predominantly centered on Vishnu or Krishna, Ramananda shifted the focus of devotion (Bhakti) toward Rama and Sita, establishing them as the supreme divine couple. SPP 22644 The Use of Hindi: Ramananda was the first major Bhakti saint to abandon Sanskrit in favor of Hindi (the vernacular language of the masses). This was a revolutionary step that allowed the Bhakti philosophy to spread rapidly across the common population of North India. Disciples from All Backgrounds: He famously rejected caste hierarchies in spiritual matters. His \"Twelve Disciples\" (Ashta Chhap is different; these were the Dwara) included people from diverse social backgrounds: ❖ Kabir (a weaver/Muslim background) ❖ Ravidas (a cobbler/leather worker) ❖ Sena (a barber) ❖ Dhanna (a Jat peasant). Hence option B is correct"},{"id":4,"txt":"Which of the following personalities were associated with the Qadriya order?\n1. Miyan Mir\n2. Dara Shikoh\n3. Hazrat Mohani\n4. Shah Waliullah\nSelect the correct answer using the code below:","ref":"","opts":["1 and 2 only","1, 2 and 3 only","2, 3 and 4 only","1, 3 and 4 only"],"ci":1,"exp":"Ex: The Qadriya order, founded by Abdul Qadir Jilani in Baghdad, is one of the oldest and most widespread Sufi silsilas. In India, it was known for its intellectual depth and its appeal to both the royal elite and the common masses. 1. Miyan Mir (Correct): He was a famous saint of the Qadriya order based in Lahore. He is perhaps most legendary for his close relationship with the Sikh tradition; it is widely believed that Guru Arjan Dev invited Miyan Mir to lay the foundation stone of the Harmandir Sahib (Golden Temple) in Amritsar. 2. Dara Shikoh (Correct): The eldest son of Shah Jahan, Dara Shikoh was a deeply mystical prince and a committed follower of the Qadriya order. He was a disciple of Mulla Shah Badakhshi, who was himself a disciple of Miyan Mir. Dara’s famous work Safinat-ul-Auliya is a biographical dictionary of Sufi saints, with a special emphasis on the Qadriya lineage. 3. Hasrat Mohani (Correct): The famous poet and freedom fighter (who coined the slogan Inquilab Zindabad) was a devout Sufi. He was initiated into the Qadriya- Chishtiya tradition. His lifestyle was a unique blend of revolutionary politics and profound Sufi asceticism. 3 4. Shah Waliullah (Incorrect): While he was a massive figure in 18th-century Indian Islam, Shah Waliullah is primarily associated with the Naqshbandi order. He sought to reform and bridge the gaps between various schools of Islamic thought but his spiritual lineage and reformist ideology were rooted in the Naqshbandi tradition."},{"id":5,"txt":"With reference to the Bhakti movement in South India, consider the following pairs:\nDevotional Associated Tradition / Figure Composition\n1. Alvars Divya Prabandham\n2. Nayanars Thevaram and Thiruvachakam\n3. Shankaracharya Brahmasutra Bhashya\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: The Bhakti movement in South India (roughly between the 7th and 12th centuries) was characterized by a shift from ritualistic religion to a personal, emotional bond with the divine. 1. Alvars – Divya Prabandham is correct: The Alvars (meaning \"those immersed in God\") were 12 Vaishnavite poet-saints who sang the praises of Vishnu. Their hymns were compiled in the 10th century by Nathamuni into a collection called the Nalayira Divya Prabandham (The Four Thousand Divine Verses). It is often referred to as the \"Dravida Veda.\" 2. Nayanars – Thevaram and Thiruvachakam is correct: The Nayanars were a group of 63 Shaivite poet-saints. ➢ Thevaram: A collection of the hymns of the three most prominent Nayanars (Appar, Sambandar, and Sundarar). ➢ Thiruvachakam: Composed by Manikkavasagar, this is a deeply emotional work of poetry dedicated to Lord Shiva. Together with the Thevaram, these form the core of the Thirumurai, the sacred canon of Tamil Shaivism. 3. Shankaracharya – Brahmasutra Bhashya is correct: While the Alvars and Nayanars led the emotional Bhakti path, Adi Shankaracharya (8th century) led the intellectual revival through Advaita Vedanta (Non-dualism). His most significant scholarly work is the Brahmasutra Bhashya, a commentary on Badarayana's Brahmasutras. He also wrote famous commentaries on the Upanishads and the Bhagavad Gita (the Prasthanatrayi). SPP 22644"},{"id":6,"txt":"Which of the following statements correctly reflects the observations of the Russian traveler Afanasy Nikitin regarding the Bahmani Kingdom?\n1. Calicut thrived as a prominent port city and hub for a flourishing slave trade.\n2. Khambhat was distinguished for its production of production of indigo and lac.\n3. Bidar was acclaimed for its fine breeds of horses, intricately woven brocade and silk garments.\nSelect the correct answer using the code given below:","ref":"","opts":["1 only","2 only","1 and 3 only","1, 2, and 3"],"ci":3,"exp":"Ex: Nikitin (1472) was a Russian merchant who visited India in the latter half of the fifteenth century. Statement 1 is correct: Nikitin reached Calicut after his stay in the Deccan. He described it as a \"port for the whole Indian sea.\" He was a meticulous observer of social markets and explicitly recorded the presence of a flourishing slave trade, noting that he saw people being bought and sold in the city. Statement 2 is correct: Nikitin’s observations are used to establish Khambhat as the \"manufacturing heart\" of Western India. He documented the production of indigo (the \"blue stone color\") and lac(a resin used for dyes and varnishes). These commodities, along with his mention of fata (garments), highlight Khambhat’s role as a primary center for the textile and dyeing industries that supplied the international \"Western\" markets of the era. Statement 3 is correct: Bidar was the capital of the Bahmani Kingdom during Nikitin's visit. Nikitin himself was a horse trader; he brought a stallion from Persia and spent months trying to sell it in Bidar. He noted that Bidar was the premier center for fine horse breeds, which were essential for the military of the Sultanate. He provided a stark contrast between the \"miserable\" commoners and the nobility, who he described as being surrounded by immense wealth, including intricately woven brocade and silk garments. Additional Information: ❖ Nikitin specifically, discusses the cities of Chaul, Junnar, Bidar, Gulbarga, etc. He has provided detailed information regarding the grandeur, structure and security of their forts, has given details of distances between different cities or of the time taken to cover these distances. ❖ During the winter months he spent in Junnar, sowing wheat, gram and other cereals are mentioned, as well as making a special type of liquor from the bark of palm trees. 4 ❖ However, he says the commodities in the Indian region are of no value in Russia, and even if some of them have, there is no profit in trading in them because Muslim rulers charge higher duties from foreigners."},{"id":7,"txt":"Which one of the following Mughal rulers is associated with engagement with the Bhakti saint Dadu Dayal?","ref":"","opts":["Babur","Humayun","Akbar","Jahangir"],"ci":2,"exp":"Ex: Akbar was famous for his policy of Sulh-i-kul (universal peace) and his genuine interest in understanding the various religious traditions of the Indian subcontinent. His engagement with Dadu Dayal is a significant chapter in the history of the liberal Mughal tradition. Dadu Dayal (1544–1603) was a prominent saint from the Nirguni tradition (worship of the Formless God), much like Kabir. According to the hagiographies of the Dadu Panth, Akbar was deeply impressed by Dadu’s teachings. In 1585, Akbar invited the saint to his capital, Fatehpur Sikri. They are said to have spent 40 days in religious and philosophical discussion. Akbar was particularly drawn to Dadu's rejection of ritualism and his emphasis on the unity of all religions. This interaction likely influenced Akbar’s decision to formally promulgate the Tauhid-i- Ilahi (Divine Monotheism) a few years later, as both the Emperor and the Saint shared a vision of a \"religion of the heart\" that bypassed orthodox clergy. Hence option C is correct. Who was Dadu Dayal? ❖ Origin: Born in Ahmedabad, he spent most of his life in Rajasthan (specifically Naraina, near Jaipur). ❖ Philosophy: He founded theDadu Panth. His followers did not believe in idol worship, caste distinctions, or formal scriptures. ❖ Literary Work: His teachings are compiled in the'Dadu Dayal ki Bani'. He wrote in a simple dialect (Braj Bhasha mixed with Rajasthani) to reach the common people. SPP 22644"},{"id":8,"txt":"Which of the following foreign travelers was awarded the title of \"Malik-ul-Tujiar' by the Bahmani Kingdom?","ref":"","opts":["Abdul Razzak","Ibn-e-Batuta","Eduardo Barbosa","Mahmoud Gawan"],"ci":3,"exp":"Ex: Born in the Caspian Sea province of Gilan in northern Iran, Mahmoud Gawan was a man of letters and a successful merchant plying the lucrative route from the Persian Gulf port of Gombroun (presently Bandar Abbas) to the Konkan coast of India with cargos of silken fabrics, pearls, Arabian horses, etc., for the Bahmani capital of Bidar - where Persian culture was prevalent. On one such visit at the age of 42, he was given the title of \"Malik-ut- Tujjar\" (King of Traders) by Feroze Shah Bahamani and offered a post at the court. Extra Information: Mahmoud Gawan stayed in India, and in the reigns of the subsequent kings, he steadily rose in the administrative hierarchy because of his efficient management, earning the titles \"Wakeel us-Sultana\" and \"Khwaja-e Jahan\" or Prime Minister. Mahmoud Gawan authored several books such as \"Riyaz al-Insha\" and built a magnificent college famous as Madrasa Mahmud Gawan in Bidar, where scholars from Iran, Iraq, and Arabia used to teach. His literary contributions reflect the rich cultural and intellectual environment of the time."},{"id":9,"txt":"With reference to Madhvacharya’s Dvaita philosophy, consider the following statements:\nStatement I: According to Madhvacharya, the distinction between Brahman and the individual soul (Ātman) is real, eternal, and fundamental.\nStatement II: Madhvacharya’s doctrine affirms real distinctions among individual souls and among material objects.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct, and Statement II explains Statement I","Both Statement I and Statement II are correct, but Statement II does not explain Statement I","Statement I is correct, but Statement II is incorrect","Statement I is incorrect, but Statement II is correct"],"ci":1,"exp":"Ex: Madhvacharya’s Dvaita (Dualism) is the most radical departure from Shankaracharya’s Non- dualism. While Statement I and Statement II both accurately describe the core of his philosophy, they are independent components of his broader \"Five-fold Difference\" theory. Statement I is Correct: Madhvacharya (13th century) argued for Svatantra (Independent Reality) and Asvatantra (Dependent Reality). Brahman (Vishnu) is the only Independent Reality, while the individual soul (Atman) is real but eternally dependent on Him. Unlike Ramanuja, who saw souls as \"parts\" of God, Madhva insisted they are entirely distinct entities. Statement II is Correct: Distinctions among individual souls and among material objects refers to the concept of Jiva-Jiva Bheda and 5 Jada-Jada Bheda. Madhva posited that no two souls are alike; they possess inherent differences in their nature and their capacity for bliss (Ananda-taratamya). Similarly, every material object is distinct from every other material object. Statement II does not explain Statement I: Statement I focuses on the Vertical Distinction (between the Creator and the Created). Statement II focuses on the Horizontal Distinction (between created entities themselves). While they both belong to the same philosophical framework, the fact that souls differ from each other (S-II) is not the reason why the soul is different from God (S-I). The difference between God and the Soul is rooted in the definition of God as \"Independent\" and the Soul as \"Dependent.\" The five eternal distinctions that Madhva identified: Type of Description Difference Brahman and Difference between God and Jiva individual souls. Brahman and Difference between God and Jada matter. Jiva and Jada Difference between individual souls and matter. Jiva and Jiva Difference between one soul and another. Jada and Jada Difference between one material object and another."},{"id":10,"txt":"He was one of the greatest composers of Carnatic music and composed the famous Pancharatna Kritis. Moreover, he had written thousands of devotional compositions which are mostly in Telugu, in praise of Lord Ram. The saint mentioned here is","ref":"","opts":["Saint Thyagaraja","Saint Naraharai","Saint Pipa","Saint Vidyapati"],"ci":0,"exp":"Ex: Thyagaraja (1767–1847) is one of the most celebrated figures in the history of Indian classical music. He is a member of the \"Trinity of Carnatic Music,\" alongside Muthuswami Dikshitar and Syama Sastri. The description provided contains specific hallmarks of his life and work: Devotion to Lord Rama: Thyagaraja was a \"Rama Bhakta\" (devotee of Rama). He viewed music not just as an art form, but as a path to Moksha (liberation) through Namasmarana (constant remembrance of the name of God). SPP 22644 The Pancharatna Kritis: These are his \"Five Gems\"—a set of five legendary compositions set to five different ragas (Nata, Gaula, Arabhi, Varali, and Sri). They are the peak of his musical craftsmanship and are sung collectively by musicians every year during the Aradhana festival at Thiruvaiyaru. Language: Although he lived in the Tamil- speaking heartland of Tanjore, he composed primarily in Telugu (his mother tongue) and some in Sanskrit. His lyrics are known for their poetic simplicity and emotional depth. Hence option A is correct. Why Other Options are Incorrect B) Saint Narahari: He was a Varkari saint- poet from Maharashtra, a goldsmith by profession, and a devotee of Vitthal (a form of Vishnu/Krishna). He wrote in Marathi. C) Saint Pipa: He was a Rajput king turned mystic and one of the twelve disciples of Ramananda. He belonged to the Nirguna school and his hymns are included in the Guru Granth Sahib. D) Saint Vidyapati: Known as Maithil Kokil (the Cuckoo of Maithili), he was a 14th- century poet from Bihar famous for his love lyrics dedicated to Radha and Krishna, written in the Maithili language."},{"id":11,"txt":"With reference to important ideas in Sufism in India, consider the following statements:\n1. Wahdat-ul-Wujood is the idea that only God truly exists and the world is a manifestation of Him; this view is associated with the teachings of Ibn al- Arabi.\n2. In India the Naqshbandi Sufi order under Shaikh Ahmad Sirhindi put forward Wahdat-ul-Shahood, which holds that the experience of unity with God is spiritual, while God and the world remain distinct in reality.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: Wahdat-ul-Wujood (Unity of Being) was formulated by the Andalusian mystic Ibn al-Arabi (1165–1240), this doctrine posits that there is only one ultimate Reality (Haqq). Everything in the universe is a manifestation or a reflection of God. In India: This philosophy was widely embraced by the Chishti and Qadri orders. It provided a strong intellectual bridge for syncretism, as it mirrored the Advaita Vedanta (Non-dualism) of Indian philosophy. If everything is a manifestation of God, then the distinctions between different religions and cultures become secondary. Statement 2 is correct: During the late 16th and early 17th centuries, Shaikh Ahmad 6 Sirhindi (of the Naqshbandi order) challenged the prevailing Wahdat-ul-Wujood. He felt that the idea of God and the world being \"one\" led to a dilution of Islamic law (Sharia) and a loss of the distinction between the Creator and the servant. He proposed Wahdat-ul-Shahood. He argued that the \"unity\" a Sufi feels during meditation is a subjective experience (a state of the mind/spirit) rather than an objective reality. He used the analogy of the sun and the stars. During the day, the stars are not \"one\" with the sun; they are simply invisible because the sun's light is so overwhelming. Similarly, the world is not God; it is just overshadowed by His presence during a mystical experience. Comparison of the Two Doctrines Feature Wahdat-ul- Wahdat-ul- Wujood Shahood Translation Unity of Being Unity of Witness (Perception) Proponent Ibn al-Arabi Shaikh Ahmad Sirhindi Nature of A Distinct from World manifestation/ God, created reflection of by Him. God. Sufi State Identity (I am Servitude (I the Truth). witness the Truth). Cultural Promoted Promoted Impact syncretism/liber orthodoxy/ alism. Sharia adherence."},{"id":12,"txt":"Consider the following statements regarding Sikhism in India:\n1. He transformed Sikhs into a militant community.\n2. Took the title of Sachcha Padshah.\n3. He was the proprietor of the concept of miri and piri (keeping two knives). Which sikh guru is being described in above statements?","ref":"","opts":["Guru Har Kishan","Guru Har Rai","Guru Arjun Dev","Guru Har Govind"],"ci":3,"exp":"Ex: Guru Har Govind (1606–1644 CE) was 6th Guru of the Sikh religion - Longest tenure as Guru. Following the martyrdom of his father, Guru Arjan Dev, Guru Har Govind realized that the Sikh community needed to be able to defend itself against the increasing hostility of the Mughal state. His reign marked a significant shift from a purely meditative community to a \"Saint-Soldier\" order. SPP 22644 ❖ Transforming into a Militant Community: Guru Har Govind was the first Guru to take up arms. He encouraged his followers to bring gifts of horses and weapons instead of money. He built a fort at Amritsar called Lohgarh and maintained a standing army, training Sikhs in martial arts and warfare. ❖ The Title \"Sachcha Padshah\": While the term was used by followers for earlier Gurus to denote \"The True Emperor\" (spiritual), Guru Har Govind’s adoption of the title carried a political weight. It asserted that the Guru was the sovereign of the Sikhs' souls and lives, contrasting with the \"temporal\" emperors in Delhi. ❖ Miri and Piri: Upon his succession, he famously wore two swords instead of the traditional woolen cord (seli). Miri represented temporal (political/worldly) power. Piri represented spiritual (religious) authority. Hence option D is correct Other Significant Contributions ❖ Akal Takht: He constructed the Akal Takht (The Throne of the Timeless One) directly opposite the Harmandir Sahib. While the Golden Temple was for prayer, the Akal Takht was where he held court and discussed political and military matters. ❖ Resistance: He fought several successful skirmishes against the forces of the Mughal Emperor Shah Jahan, most notably the Battle of Amritsar (1634)."},{"id":13,"txt":"The Marathi work Dasabodha, noted for its dialogic structure combining Vedantic philosophy with practical guidance on ethics, social conduct and governance, is most closely associated with:","ref":"","opts":["Tukaram","Dnyaneshwar","Eknath","Samarth Ramdas"],"ci":3,"exp":"Ex: Samarth Ramdas (1608–1681) was a contemporary of Sant Tukaram and the spiritual mentor of Chhatrapati Shivaji Maharaj. His work, the Dasabodha, stands out in the Marathi Bhakti tradition for its unique blend of spiritualism and \"worldliness.\" The word Dasabodha literally means \"advice to the disciple.\" It was dictated by Ramdas to his disciple, Kalyan Swami, in a cave at Shivathar Ghal. 7 ❖ Dialogic Structure: The text is written in the form of a dialogue between a Guru and a disciple. It consists of 20 chapters (called Dashakas), each containing 10 sub- chapters (Samasas). ❖ Vedanta and Practicality: While it explores deep Upanishadic truths and the nature of theAtman, it is most famous for its focus on \"Prapancha\" (worldly life) and \"Paramartha\" (spiritual life). Ramdas argued that one cannot achieve the latter if they are incompetent in the former. ❖ Social and Political Tone: Unlike the purely emotional Bhakti of Tukaram, Ramdas emphasized \"Maharashtra Dharma\"—the duty to protect one's culture and land. He provided guidance on administration, leadership, and the importance of physical and mental strength. Hence option D is correct Why Other Options are Incorrect (a) Tukaram: He is famous for his Abhangas (devotional lyrics). His focus was on personal, emotional devotion to Lord Vitthal and a critique of ritualism. (b) Dnyaneshwar: He is the author of the Dnyaneshwari (a commentary on the Bhagavad Gita) and the Amritanubhava. While he laid the foundation of Marathi philosophy, his work is primarily metaphysical and poetic. (c) Eknath: He is known for the Eknathi Bhagavata and Bharoods. His work focused on social equality and bringing Sanskrit wisdom to the common Marathi speaker."},{"id":14,"txt":"With reference to Bhakti Saint Meerabai, consider the following statements:\n1. She was a disciple of Sant Ravidas and a devotee of Lord Krishna.\n2. She primarily composed poems in Awadhi Language.\n3. Bhaktmal, a poetry collection that provides information about Meera Bai, was written by Guru Nabha Dass ji.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Meerabai (1498-1546 AD) was was born to Ratan Singh, ruler of Merta in the Chaukari village in Merta, Rajasthan. She was a devotee of Lord Krishna. She treated Lord Krishna as her husband and composed Bhajans (short religious songs) for him. Statement 1 is correct: Meera Bai was in Ramanandi lineage, and she was a disciple of Sant Ravidas, famously known as Raidas. SPP 22644 Statement 2 is incorrect: Mirabai wrote her songs and poems in Rajasthani and Braj Bhasa languages, and they were translated into Hindi and Gujarati. One of her most popular compositions is \"Payoji maine Ram Ratan dhan payo.\". Statement 3 is correct: The Bhaktamal, a significant work that chronicles the lives and teachings of various Bhakti saints, indeed includes information about Meerabai. Written by Guru Nabha Dass in 1585 CE in Braja language., this collection highlights the devotion and contributions of different saints, with Meerabai being a prominent figure due to her unique expressions of love and devotion to Krishna."},{"id":15,"txt":"The Malfūẓāt (recorded discourses and conversations) of Shaikh Nizamuddin Auliya are preserved in the work Fawāʾid-ul-Fuwād. Who among the following was responsible for compiling this text?","ref":"","opts":["Abdul Haqq Muhaddis Dehlavi","Amir Hasan Sijzi Dehlavi","Sheikh Ahmad Sirhindi","Khwurd Kirmani"],"ci":1,"exp":"Ex: The Fawāʾid-ul-Fuwād (literally \"Benefits for the Heart\") is considered one of the most significant works of Persian literature in India and a foundational text for understanding the Chishti Sufi tradition. Amir Hasan Sijzi was a renowned poet and a close disciple of Shaikh Nizamuddin Auliya. Unlike many other biographies written after a saint's death, Sijzi recorded these conversations in real-time between 1307 and 1322 CE. This work effectively established the Malfuzat (recorded table-talk) genre in India. Before this, Sufi literature consisted mostly of formal treatises or letters (Maktubat). The book is not a dry theological text. It captures the Shaikh's informal guidance, his anecdotes about previous saints, his views on social ethics, and his emphasis on the \"service of humanity\" as the highest form of worship. Hence option B is correct. Nizamuddin Auliya was popularly revered as Sultan-ul-Mashaiykh, meaning “King of the Sufi Shaikhs”. The title reflects his supreme spiritual authority within the Chishti order in India, not any political position. Why Other Options are Incorrect (a) Abdul Haqq Muhaddis Dehlavi: A much later scholar (16th–17th century) famous for Akhbar-ul-Akhyar, a comprehensive biographical dictionary of Indian Sufi saints. 8 (c) Sheikh Ahmad Sirhindi: A 17th-century Naqshbandi saint known as the Mujaddid Alif Sani. He was famous for his Maktubat (letters) and his more orthodox/ conservative approach to Islamic law. (d) Khwurd Kirmani: He was the author of Siyar-ul-Auliya, which is a biography of the Chishti saints. While it contains information about Nizamuddin Auliya, it is a biographical narrative rather than a direct record of his discourses."},{"id":16,"txt":"Which one of the following travellers is NOT associated with any Mughal ruler?","ref":"","opts":["Antonio Monserrate","Peter Mundy","Jean-Baptiste Tavernier","Domingo Paes"],"ci":3,"exp":"Ex: Domingo Paes visited India around 1520–1522 CE. He visited the Vijayanagara Empire during the reign of its greatest ruler, Krishnadevaraya. His accounts provide the most vivid description of the city of Hampi, the military strength of the Vijayanagara kings, and the grandeur of the Mahanavami Dibba (the great platform used for festivals). At the time of his visit, the Mughal Empire had not yet been established; Babur did not invade India until 1526 CE. Hence option D is correct. Travelers Associated with Mughal Rulers (a) Antonio Monserrate (Akbar): A Spanish Jesuit priest who arrived at the court of Akbar in 1580 as part of the first Jesuit mission. He served as a tutor to Prince Murad and accompanied Akbar on his military campaign to Kabul. (b) Peter Mundy (Shah Jahan): An English traveler who visited India during the reign of Shah Jahan (1628–1634). He is particularly noted for his harrowing first- hand account of the Great Famine of 1630–32 that devastated the Deccan and Gujarat. (c) Jean-Baptiste Tavernier (Shah Jahan & Aurangzeb): This French diamond merchant visited India six times during the mid-17th century, enjoying patronage under both Shah Jahan and Aurangzeb."},{"id":17,"txt":"Consider the following statements:\nStatement I: Dashanami Sanyasis are followers of Advaita Vedanta tradition.\nStatement II: Dashanami Sanyasis are disciples and followers of Ramanujacharya.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement - I and Statement - Il are correct and Statement-Il is the correct explanation for Statement - I.","Both Statement - I and Statement - II are correct and Statement - Il is not the correct explanation for Statement - I.","Statement-I is correct, but Statement-Il is incorrect.","Statement-I is incorrect, but Statement-ll is correct."],"ci":2,"exp":"Ex: Dashnami Sanyasi is a prominent sect under Shaivism. They are also called \"Dash Nam Sanyasi\" as they are further divided into 10 groups. SPP 22644 Statement I is correct: Dashanami Sanyasis belongs to the Advaita Vedanta tradition, which is one of the major schools of Vedanta philosophy in Hinduism. They adhere to the teachings of Adi Shankaracharya and emphasize the non-dualistic (advaita) interpretation of Vedanta, focusing on the oneness of the individual soul (Atman) with the ultimate reality (Brahman). Statement Il is incorrect: Dashanami Sanyasis do not follow Ramanujacharya; instead, they follow the teachings of Adi Shankaracharya. Ramanujacharya was a key figure in Vishishtadvaita Vedanta, a different school of Vedanta philosophy with distinct beliefs compared to Advaita Vedanta. Hence, Statement-I is correct, but Statement- Il is incorrect."},{"id":18,"txt":"Karaikkal Ammaiyar is significant in the history of the Bhakti movement primarily because she:","ref":"","opts":["articulated Shaiva doctrine through systematic philosophical exposition","exemplified early female devotional expression within Shaiva Bhakti","played a central role in organising temple-based Shaiva rituals","exercised institutional leadership over the Nayanar devotional community"],"ci":1,"exp":"Ex: Karaikkal Ammaiyar is one of the most revered and iconic figures in the early medieval Bhakti movement, specifically within the Nayanar (Shaivite) tradition of South India. Her Significance in the Bhakti Movement A Rare Female Voice: Out of the 63 Nayanars, she is one of only three women. Her life and poetry challenged the contemporary social norms that typically restricted women to domestic roles, proving that the path of extreme devotion (Bhakti) was open to all, regardless of gender. Hence option B is correct. The \"Demoness\" Motif: Legend tells that she prayed to Lord Shiva to take away her physical beauty so she could devote herself entirely to him without worldly distractions. She is often depicted in art as a skeletal, \"ghoul-like\" figure (the \"Ammaiyar\" or mother) to signify her transcendence of the physical body. Pioneer of Tamil Music: She is credited with being the first to introduce the 'Padigam' style of poetry—verses set to music (raga and tala). This style became the foundation for the Thevaram hymns composed by later Nayanars like Sambandar and Appar. 9"},{"id":19,"txt":"The Veerashaiva/Lingayat tradition was founded by Basavanna, who served as a minister under:","ref":"","opts":["the Hoysala ruler Vishnuvardhana","the Chalukya ruler Pulakesin II","the Kalachuri ruler Bijjala II","the Kakatiya ruler Ganapati DevaZ"],"ci":2,"exp":"Ex: Basavanna (12th century) was a philosopher, poet, and statesman who transformed the social and religious landscape of medieval Karnataka. His position in the state administration allowed him to advocate for a radical, egalitarian society. Historical Context: Basavanna and Bijjala II Basavanna served as the Chief Minister (Bhandari) and treasurer in the court of Bijjala II, who ruled over the Kalachuri dynasty (a feudatory that overthrew the Western Chalukyas). While serving in this high administrative post, Basavanna established the Anubhava Mantapa (Hall of Spiritual Experience). This was an academy of mystics, saints, and philosophers who debated spiritual and social issues. Hence option C is correct. The Conflict: Basavanna's radical ideas—such as rejecting the caste system and the authority of the Vedas—eventually led to friction with the orthodox elements in Bijjala's court. This tension culminated in a social revolution in the city of Kalyani. Core Tenets of the Veerashaiva/Lingayat Tradition The movement was not just religious but a socio-economic reform movement characterized by: ❖ Vachanas: Simple, rhythmic prose poems written in Kannada to make spiritual wisdom accessible to everyone. ❖ Kayaka (Work): The belief that honest labor is a form of worship. \"Kayaka-ve Kailasa\" (Work is Heaven). ❖ Dasoha (Service): The principle of selfless giving and the distribution of wealth. ❖ Ishtalinga: Devotees wear a small linga in a pendant on their body, representing a direct, personal connection with Shiva, bypassing the need for temple priests."},{"id":20,"txt":"Consider the following Bhakti saints:\n1. Kabir\n2. Guru Nanak\n3. Surdas\nHow many of the above given saints were related to the concept of Nirguna Bhakti?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Bhakti traditions are generally classified into two broad categories: Saguna (with attributes) and Nirguna (without attributes). SPP 22644 The categorisation traces its origin from one of the earliest Bhakti saints, Adi Sankaracharya (788 - 820). Statement 1 is correct: Kabir is one of the most outstanding examples of a nirguna poet- saint. Kabir's poems, songs and sayings, popularly dubbed as 'Kabirvanis', began to be collected only several decades after his death. Kabir Vani include couplets called 'dohas' and short songs called 'sabdas' or 'padas'. Further, he saw all creations of God as equal. This is because, in his view, all souls were inhabited by the same Supreme Being and therefore, it is pointless to fight over differences over religious beliefs. Kabir, thus, had a monotheistic conception of God. Hence, Kabir advocated belief in a formless Supreme Being, a spirit. This conception is referred to as the nirguna path. Statement 2 is correct: Baba Guru Nanak, founder of the Sikh faith, was born in Talwandi, near Lahore in Pakistan in 1469. He was one of the greatest saints of the Bhakti movement. The message of Baba Guru Nanak is spelt out in his hymns and teachings. Teachings of Guru Nanak includes - There is one God; God is formless; Caste system and idolatry should be rejected and superstitions should be condemned superstitions. This suggests that he advocated a form of nirguna bhakti. Statement 3 is incorrect: Surdas was one of the saguna bhaktas from Uttar Pradesh. He wrote his Sur Sagar in which he talks of Krishna as an infant, a young lad indulging in pranks and a young man engaged in dalliance with the gopis. His poems often depict the divine in a personal, form-based manner."},{"id":21,"txt":"The Guru Granth Sahib includes compositions of which of the following Bhakti/Sufi saints?\n1. Ramananda\n2. Namdeva\n3. Kabir\n4. Sheikh Farid\nSelect the correct answer:","ref":"","opts":["1 and 3 only","2 and 4 only","1, 2 and 3 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: The Guru Granth Sahib (originally compiled as the Adi Granth by Guru Arjan Dev in 1604) is a unique scripture because it includes not only the hymns of the Sikh Gurus but also the Bhagat Bani—the compositions of 15 non- Sikh Bhakti and Sufi saints. The inclusion of these saints was a deliberate effort to emphasize the universal nature of truth and the rejection of caste and religious boundaries. 10 1. Ramananda: A 14th-century Vaishnava saint from Varanasi who is often credited with bringing the Bhakti movement to Northern India. One of his hymns is included in the Guru Granth Sahib, emphasizing that God is found in the heart, not just in temples. 2. Namdeva: A 14th-century Marathi saint from the Varkari tradition. Interestingly, the Guru Granth Sahib contains a significant number of his hymns (61 in total), reflecting his travels and influence in the Punjab region. 3. Kabir: The most prominently featured non-Sikh saint in the scripture. The Guru Granth Sahib contains over 500 of his verses (Saloks and Shabads), which align closely with the Sikh rejection of idolatry and empty ritualism. 4. Sheikh Farid (Baba Farid): A 12th- century Sufi saint of the Chisti order. He is the most prominent Sufi presence in the Granth, with 134 hymns and couplets. His inclusion highlights the Sikh tradition's respect for the mystical aspects of Islam. Hence option D is correct. The Structure of the \"Bhagat Bani\": The Guru Granth Sahib is organized by Ragas (musical measures). Within each Raga, the hymns are arranged in a specific order: 1. Gurus: Starting with Guru Nanak. 2. Bhagats: The compositions of the saints like Kabir and Namdev. 3. Bhatts: Compositions of the court bards."},{"id":22,"txt":"With reference to Abdur Razzaq, consider the following statements:\n1. He was a Persian traveller and ambassador of Shah Rukh of the Timurid dynasty.\n2. He came to India via Calicut (Zamorin’s port).\n3. He visited during the reign of Devaraya I.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Abdur Razzaq Samarqandi (1413–1482) was one of the most significant diplomatic visitors to the Vijayanagara Empire. His account provides a rare \"state-level\" perspective on the wealth and military might of South India. Statement 1 is correct: Abdur Razzaq was an ambassador sent by Shah Rukh, the ruler of the Timurid dynasty of Persia (modern-day Iran). He was a highly educated scholar and diplomat, which makes his observations more structured than those of typical merchant-travellers. SPP 22644 Statement 2 is correct: He reached India in 1442 CE, landing first at Calicut (the port of the Zamorin). He spent several months there before being invited to the capital of the Vijayanagara Empire. He was initially quite critical of Calicut's climate and dress, which makes his subsequent awe of Vijayanagara even more striking. Statement 3 is incorrect: Abdur Razzaq visited Vijayanagara in 1443 CE, which was during the reign of Devaraya II (1422–1446), the most powerful ruler of the Sangama dynasty.Devaraya I (1406–1422) was the ruler who hosted the Italian traveller Nicolo Conti earlier in the century. Key Observations of Abdur Razzaq: Abdur Razzaq’s account of Vijayanagara is famous for several specific details: ❖ The Seven Fortifications: He described the city as being protected by seven concentric circles of walls. Crucially, he noted that the space between these walls was used for agriculture, a strategic move to survive long sieges. ❖ The Jewel Markets: He was stunned by the open display of wealth, noting that merchants sold rubies, pearls, and diamonds in the open market, treating them as common commodities. ❖ The Royal Palace: He described the King's palace as having various chambers for administration and a highly organized bureaucracy. Travellers to Vijayanagara Traveller Period Reigning Origin King Nicolo 1420- Devaraya I Italy Conti 21 Abdur 1443 Devaraya II Persia Razzaq (Timurid) Domingo 1520- Krishna- Portugal Paes 22 devaraya Fernao 1535- Achyutaraya Portugal Nuniz 37 11"},{"id":23,"txt":"With reference to the characteristics of Sufism, consider the following statements:\n1. They failed to communicate with the local masses due to over emphasis on the Persian language.\n2. Some Sufis adopted yogic practices as one of the means to establish a link with God.\n3. Sufism was restricted solely in Northern India during the period of Delhi Sultanate.\nHow many of the statements given above is/are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is incorrect: Sufi saints used local languages to convey their messages to the masses in India. They translated many Persian Sufi verses into a local dialect known as Hindavi, which is regarded as one of the earliest examples of such translations. This shows that they prioritized local languages to connect with people rather than solely focusing on Persian. Statement 2 is correct: Some Sufis accepted yoga breathing exercise as one of the means of their devotional path. For example, Shaikh Nizamuddin Auliya, the greatest Sufi saint of the 14th century, in his khangah, had many conversations with the Nathpanthi yogi visitors and he adopted many yoga breathing exercises and was called a Sidh (perfect) by the yogis. Statement 3 is incorrect: Sufism reached parts of Deccan region during the period of Delhi sultanate. Shaikh Burhanuddin Gharib (1340 AD) who was one of those Sufis who were forced by Sultan Muhammed Tughlaq to migrate to the Deccan. He made Daulatabad center of his activities and introduced the Chishti order there. His legacy continues to be felt in the Sufi tradition, particularly in the Deccan region."},{"id":24,"txt":"With reference to the Sikh Gurus and their contemporaneous Mughal rulers, consider the following pairs:\nSikh Guru Contemporary Mughal Ruler\n1. Guru Ram Das Akbar\n2. Guru Tegh Bahadur Aurangzeb\n3. Guru Gobind Singh Bahadur Shah I\n4. Guru Arjan Dev Jahangir\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: The relationship between the Sikh Gurus and the Mughal Emperors evolved from one of mutual respect and land grants (during the early Gurus) to one of intense conflict and martyrdom as the Mughal state became more centralized and orthodox. 1. Guru Ram Das – Akbar is correctly matched: There was a period of cordial relations between the early Gurus and the Mughal state. Akbar visited Guru Amar Das and later maintained a friendly relationship with Guru Ram Das. Historical tradition holds that Akbar granted the land (or the revenues of the villages) where the city of Amritsar and the Golden Temple were eventually built. SPP 22644 2. Guru Tegh Bahadur – Aurangzeb is correctly matched: This was a period of severe conflict. Guru Tegh Bahadur stood up against the forced religious conversions in Kashmir. This led to his arrest and eventual execution in Delhi in 1675 CE on the orders of Aurangzeb. The Gurudwara Sis Ganj Sahib in Delhi marks the site of his martyrdom. 3. Guru Gobind Singh – Bahadur Shah I is correctly matched: While Guru Gobind Singh fought many battles against Aurangzeb’s forces, the relationship changed after Aurangzeb’s death. The Guru supported Bahadur Shah I in the Mughal war of succession. They maintained a diplomatic relationship, and the Guru was traveling with the Emperor's camp toward the Deccan when he passed away at Nanded. 4. Guru Arjan Dev – Jahangir is correctly matched: Guru Arjan Dev, the fifth Guru, was the first Sikh martyr. Jahangir viewed the growing influence of the Guru with suspicion. The immediate spark for his execution in 1606 CE was the Guru’s alleged support/blessing for Jahangir’s rebellious son, Prince Khusrau. Chronological Mapping of Gurus and Emperors Sikh Contemporary Significant Guru Mughal Event Emperor(s) Guru Babur / Foundation of Nanak Humayun Sikhism; Babur- Dev bani. Guru Akbar Akbar visited Amar the Guru and ate Das in the Langar. Guru Akbar Foundation of Ram Das Amritsar. Guru Jahangir Compilation of Arjan Adi Granth; Dev Martyrdom. Guru Jahangir / Shah Transformation Har Jahan to a military Gobind order; Akal Takht. 12 Guru Aurangzeb Martyrdom for Tegh religious Bahadur freedom. Guru Aurangzeb / Foundation of Gobind Bahadur Shah Khalsa; Singh I Zafarnama."},{"id":25,"txt":"Which one of the following statements is correct related to foreign scholars and travellers in medieval India?","ref":"","opts":["Al-Biruni came to India during the Ghaznavid invasions, studied Sanskrit texts, and helped introduce Indian philosophical ideas to the Arabic–Persian world.","Ibn Battuta visited India after the establishment of the Mughal Empire and later wrote his travel account during Babur’s reign.","Francois Bernier observed Mughal India under Akbar and argued that the presence of private land ownership led to oriental despotism.","Jean-Baptiste Tavernier linked the prosperity of diamond mines under Aurangzeb directly to the long-term decline of Indian handicrafts."],"ci":0,"exp":"Ex: Al-Biruni was one of the greatest polymaths of the medieval world. His work represents the first serious \"Indological\" study by a foreign scholar. Option A is correct: Al-Biruni accompanied Mahmud of Ghazni to India in the 11th century. Unlike many invaders, Al-Biruni was a scientist and linguist. He spent years in the Punjab region learning Sanskrit and studying the Vedas, Puranas, and Patanjali’s Yoga Sutras. His masterpiece, Kitab-ul-Hind (or Tahqiq-i-Hind), provided an objective and encyclopedic account of Indian philosophy, mathematics, astronomy, and social customs. He acted as a bridge, translating Indian astronomical works into Arabic and Greek logic into Sanskrit. Why Other Options are Incorrect (b) Ibn Battuta visited India in the 14th century (1333 CE) during the reign of Muhammad bin Tughlaq (Delhi Sultanate), not the Mughals. He served as a Qazi in Delhi for eight years before writing his travelogue, the Rihla. (c) Francois Bernierwas in India during the mid-17th century (reigns of Shah Jahan and Aurangzeb), not Akbar. More importantly, he argued that the absence of private land ownership (the King being the sole owner) led to \"Oriental Despotism\" and the ruin of agriculture. (d) Jean-Baptiste Tavernier was a French jewel merchant who visited India six times. While he wrote extensively about diamonds (including the Koh-i-Noor), he did not link them to the decline of handicrafts. That kind of economic critique is more characteristic of 19th-century nationalist historians. SPP 22644"},{"id":26,"txt":"Which of the following is a new form of Marathi religious song introduced by Eknath?","ref":"","opts":["Abhanga","Bharood","Kirtan","Doha"],"ci":1,"exp":"Ex: Sant Eknath (1533–1599) was a towering figure in the Bhakti movement of Maharashtra. While he contributed significantly to existing forms of devotion, his unique contribution was the introduction of the Bharood. A Bharood is a metaphorical and dramatic religious song. Unlike the standard hymns that were direct prayers, Eknath used the Bharood to reach the common masses by using everyday characters and social scenarios as allegories for spiritual truths. These were often humorous, rhythmic, and performed with drama. Hence option B is correct. Eknath would take the persona of various characters—such as a blind man, a fortune teller, a disgruntled wife, or even a Mahar (outcaste)—to critique social hypocrisy and explain the path to God. It served as a \"secular- religious\" bridge, making complex Vedantic philosophy accessible to the uneducated through street performances and storytelling. Why Other Options are Incorrect (a) Abhanga: This form was popularized long before Eknath by Sant Jnaneshwar and Sant Namdev. While Eknath wrote many Abhangas, he did not introduce the form. (c) Kirtan: This is a traditional form of musical discourse that dates back to ancient times. Eknath was a legendary Keertankar (performer), but he did not \"introduce\" the form itself; rather, he revitalized it in the Marathi vernacular. (d) Doha: This is a two-line poetic form primarily associated with North Indian Bhakti saints like Kabir andTulsidas. It is not a native Marathi religious song form. Form Primary Character Association Abhanga Namdev, Direct, emotional Tukaram devotional poetry. Bharood Sant Metaphorical, Eknath dramatic, and social satire. 13 Owi Women / Simple verses Jnaneshwar usually sung by women while grinding grain. Gavlan Eknath, Songs focused on Tukaram the childhood and \"Leela\" of Krishna."},{"id":27,"txt":"With reference to major Sufi silsilas, consider the following:\nSufi Order Founder Region\n1. Chishtiya Khwaja Ajmer Moinuddin Chishti\n2. Qadriya Abdul Qadir Baghdad Jilani\n3. Suhrawardiya Shihabuddin Multan Suhrawardi\n4. Naqshbandiya Bahauddin Central Naqshband Asia\nHow many of the above rows are correctly matched?","ref":"","opts":["Only One","Only Two","Only Three","All Four"],"ci":3,"exp":"Ex: 1. Chishtiya – Khwaja Moinuddin Chishti – Ajmer is Correct: While the order originated in Chisht (Afghanistan), it was Khwaja Moinuddin Chishti who established it in India during the late 12th century. He settled in Ajmer, which remains the primary pilgrimage center for this order. It is known for its emphasis on poverty, simplicity, and the use of music (Sama). 2. Qadriya– Abdul Qadir Jilani – Baghdad is Correct: This is one of the oldest Sufi orders, founded in Baghdad by Abdul Qadir Jilani. It reached India much later (around the 15th century). Notable followers in India included Prince Dara Shikoh. The order is known for its adherence to the Sharia while pursuing mystical paths. 3. Suhrawardiya – Shihabuddin Suhrawardi – Multan is Correct: Founded in Baghdad by Shihabuddin Suhrawardi, the order was popularized in the Indian subcontinent by his disciples, most notably Bahauddin Zakariya. Their primary center was Multan (and later Sindh). Unlike the Chishtis, the Suhrawardis did not believe in poverty and often accepted state patronage and high government posts. 4. Naqshbandiya – Bahauddin Naqshband – Central Asia is Correct: Founded in Bukhara (Central Asia), this order was introduced to India by Khwaja Baqi Billah and further strengthened by Sheikh Ahmad Sirhindi. This order was the most orthodox and was unique for its \"Silent Dhikr\" and its opposition to music (Sama). SPP 22644"},{"id":28,"txt":"Which foreign traveller’s account provides an insider’s perspective on court politics and administrative functioning of the Delhi Sultanate?","ref":"","opts":["Al-Biruni","Isami","Ziauddin Barani","Ibn Battuta"],"ci":3,"exp":"Ex: Ibn Battuta, a Moroccan traveller, arrived in India in 1333 CE during the reign of Muhammad bin Tughlaq. Unlike other travellers who merely observed from the periphery, he was directly integrated into the state machinery: ❖ Appointment as Qazi: Because of his knowledge of Islamic law, the Sultan appointed him as the Qazi (Judge) of Delhi. He held this position for nearly eight years. ❖ Diplomatic Envoy: After a brief period of falling out of favor, he was appointed as the Sultan’s ambassador to China. ❖ The Rihla: His travelogue, the Rihla, provides an intimate look at court intrigues, the Sultan’s unpredictable temperament, the complex judicial system, and the day-to-day administrative challenges of the Tughlaq era. Hence option D is correct. Why Other Options are Incorrect (a) Al-Biruni: He was a scientist and scholar who came in the 11th century (pre- Sultanate era) with Mahmud of Ghazni. His focus was on Indian philosophy, religion, and science (Kitab-ul-Hind), not the administrative politics of a resident Sultan. (b) Isami: Though his work Futuh-us-Salatin is a vital historical source, he was an Indian-born poet/historian who wrote from the perspective of the Bahmani court (after leaving Delhi). He is not classified as a \"foreign traveller.\" (c) Ziauddin Barani: He was a contemporary of Ibn Battuta and a courtier (Nadim) to Muhammad bin Tughlaq. However, Barani was a local aristocrat and official, not a foreign visitor. His work, Tarikh-i-Firoz Shahi, is a political history rather than a travel account. 14"},{"id":29,"txt":"The statement “two real entities but not separate” in Ramanuja’s philosophy implies that:","ref":"","opts":["God and the world are identical in all respects","God and the world are unrelated but coexistent","the world derives its reality from Brahman","the world exists independently of Brahman"],"ci":2,"exp":"Ex: Ramanuja’s philosophy, known as Vishishtadvaita (Qualified Non-dualism), was a response to Shankaracharya’s Absolute Non- dualism. Ramanuja argued that while Brahman is the ultimate reality, the individual souls (Chit) and the material world (Achit) are also real—not mere illusions. The core of this philosophy is the principle of Aprthaksiddhi (inseparable relationship). Ramanuja explains the \"two real entities but not separate\" concept through the Sharira-Shariri Bhava (Body-Soul relationship): ❖ The World as the Body: Just as a human body is real but cannot exist or function without the soul, the world and souls are the \"body\" of God. ❖ God as the Soul: Brahman is the Antaryamin (Inner Controller). He is the source of existence, support, and purpose for the world.  SPP 22644 ❖ Inseparability: You can distinguish between a body and a soul, but you cannot separate them and still have a living being. Similarly, the world is distinct from Brahman but totally dependent on Him for its reality. Hence option C is correct. Why Other Options are Incorrect (a) Identical in all respects: This would be \"Pure Advaita\" or Pantheism. Ramanuja argues that God has perfect attributes (Kalyana Gunas) that the world does not possess. God is the creator; the world is the created. (b) Unrelated but coexistent: This would lead to Dualism (Dvaita). Ramanuja insists they are organically linked. (d) Exists independently: This contradicts the very definition of Brahman in Vishishtadvaita. Without Brahman, the world would vanish, as it has no independent \"Satta\" (existence).  15"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

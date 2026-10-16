@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 34</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 34</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 34">PW ONLY IAS 2026 = 34</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to ceramic technology of the Harappan civilisation, which one of the following statements is correct?","ref":"","opts":["The red colour of Harappan pottery was achieved by applying a slip prepared from iron-rich clay","Grey ware pottery was produced using copper-based glazing techniques","Polychrome decoration was a dominant feature of Mature Harappan ceramics","Harappan pottery was largely unpainted and undecorated"],"ci":0,"exp":"Ex: Option A is correct: The vibrant red color was not the natural color of the clay after firing. Harappan potters applied a slip (a liquid mixture of clay and water) made from iron-rich red ochre (Geru) or ferruginous clay before firing. This red background provided a stark contrast for the black designs, which were painted using manganese-rich pigments. The pottery was fired in an oxidizing atmosphere within circular kilns, which turned the iron-rich slip into a permanent, deep red finish. Option B is incorrect: True \"glazing\" (vitrification of the surface) was extremely rare in the IVC. While they produced faience (a glazed vitreous paste), they did not use copper-based glazing for Grey Ware. Grey ware was usually the result of firing in a reducing atmosphere (limited oxygen). Option C is incorrect: Polychrome (multi- colored) pottery exists but is extremely rare and limited to small vases. The \"dominant\" feature was monochrome (black paint on a red slip). Option D is incorrect: While \"plain\" pottery (unpainted) was more common for daily use, Harappan pottery is globally famous for its standardized decorations. These included geometric patterns (intersecting circles, chequers) and naturalistic motifs (pipal leaves, fish scales, and animals like the humped bull)."},{"id":1,"txt":"In the context of Indus Valley Civilisation, the term 'cire perdue' is related to which one of the following?","ref":"","opts":["It is a house-building technology using burnt bricks which was employed by Harappan inhabitants.","It was the process of jewellery making using precious stones.","It refers to the ancient technique of irrigation using wells and tanks.","It was a process of bronze/metal casting of artefacts."],"ci":3,"exp":"Ex: In lost wax technique molten metal is poured into a mould that has been made using a wax model, commonly known as the cire- perdue method of metal casting. In the Indus valley civilisation, castings were frequently made of pure copper, but bronze (an alloy of copper and other metals), which is stronger and more tensile, quickly replaced copper as the preferred. One of the first SPP 22635 known Indian sculptures produced utilising the lost wax process is the famous \"Dancing Girl\" bronze sculpture, which was produced at Mohenjo-daro in 2500 BCE. PwOnlyIAS extra edge Stages of Lost wax technique  The elaborate and complex lost wax technique of metal casting is divided into many stages.  First, a well-detailed solid wax model of the figure is created.  The wax model is then enclosed in a clay mould. This is heated, which causes the wax to melt or \"lose.\"  Once the clay mould is empty, molten bronze (or any other metal) is poured inside.  When the clay is shattered to show a solid bronze statue, it has cooled.  The sculpture is then polished and polished to remove blemishes."},{"id":2,"txt":"Arrange the following sites from Ghaggar basin to Ganga basin:\n1. Kalibangan\n2. Banawali\n3. Rakhigarhi\n4. Alamgirpur","ref":"","opts":["1–2–3–4","2–3–1–4","3–2–1–4","1–3–2–4"],"ci":0,"exp":"Ex: Kalibangan (Hanumangarh, Rajasthan): Located on the left bank of the now-dry Ghaggar river. It is the westernmost among the four. Banawali (Fatehabad, Haryana): Situated further east of Kalibangan on the banks of the ancient Saraswati (Ghaggar system). Rakhigarhi (Hisar, Haryana): Located in the Drishadvati river basin (a major tributary of the Ghaggar system). It is geographically east of Banawali. Alamgirpur (Meerut, Uttar Pradesh): Situated on the banks of the Hindon river (a tributary of the Yamuna). This is the easternmost site of the entire Harappan civilization, marking its entry into the Ganga- Yamuna Doab. 2"},{"id":3,"txt":"Consider the following statements:\n1. Hunsgi is noted for habitation-cum-factory sites where tools used for various activities were found.\n2. The first animal to be tamed was the wild ancestor of the sheep.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: 1. Statement 1 is correct: A number of early Palaeolithic sites were found in Hunsgi(Karnataka). At some sites, a large number of tools, used for all sorts of activities, were found. These were probably habitation-cum factory sites. In some of the other, smaller sites, there is evidence to suggest that tools were made. Some of the sites were close to springs. Most tools were made from limestone, which was locally available. 2. Statement 2 is incorrect: The first animal to be tamed was the wild ancestor of the dog. Later, people encouraged animals that were relatively gentle to come near the camps where they lived. These animals such as sheep, goat, cattle and also the pig lived in herds, and most of them ate grass. Often, people protected these animals from attacks by other wild animals. This is how they became herders."},{"id":4,"txt":"With reference to Mesolithic age in India, consider the following statements:\n1. The first rock paintings in India were discovered in Sohagighat.\n2. Mesolithic rock art sites in India have shown large depictions of animals, especially snakes pointing to ancient serpent culture.\n3. Adamgarh in Madhya Pradesh provides the earliest evidence for the domestication of animals.\n4. The Mesolithic people lived in semi- permanent and temporary settlements.\nWhich of the statements given above is/are correct?","ref":"","opts":["1, and 2 only","2, 3, and 4 only","1, 3, and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex:  Statement 1 is correct: In 1867, the first rock paintings in India were discovered at Sohagighat(Kaimur Hills, UP). SPP 22635  Statement 2 is incorrect: Now, over 150 Mesolithic rock art sites have been discovered across India, with rich concentration in Central India such as the Bhimbetka caves, Kharwar, Jaora, and Kathotia (M.P.), Sundargarh and Sambalpur (Orissa), Ezhuthu Guha (Kerala). Animals dominate the scenes at most Mesolithic rock art sites. However, no snakes are depicted in Mesolithic  Statement 3 is correct: Adamgarh in Madhya Pradesh provides the earliest evidence for the domestication of animal  Statement 4 is correct: The Mesolithic people lived in semi-permanent and temporary settlements along with occupying caves and open grounds."},{"id":5,"txt":"With reference to Chalcolithic burial practices, consider the following statements:\n1. In Maharashtra, burials were generally oriented north–south.\n2. In South India, burials were commonly oriented east–west.\n3. Fractional burials were characteristic of western India.\nWhich of the statements given above is/are correct?","ref":"","opts":["2 only","1 and 2 only","1 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is correct: In Chalcolithic Maharashtra (Jorwe–Malwa–Pravara– Godavari zone), burials were generally oriented north–south. This pattern is repeatedly attested at sites such as Inamgaon and Nevasa and forms a regional norm. They were usually buried under the floors of the houses rather than in a separate cemetery. Children were often buried in two urns placed mouth-to-mouth (Urn Burials), also in a North–South direction Statement 2 is correct: In South India, Chalcolithic and early megalithic burials commonly show east–west orientation, often linked to cosmological beliefs about sunrise and sunset. This orientation recurs across multiple sites and cultural phases. Statement 3 is incorrect: Fractional burials (where only selected bones are buried after the body has been exposed to elements) are highly characteristic of the Ganga Valley 3 Mesolithic (e.g., Damdama) and certain Late Harappan phases in the North-west (Cemetery H culture). Western and Central Indian Chalcolithic cultures primarily practiced Primary Extended Burials (for adults) and Urn Burials (for children). Fractional burials were not a defining regional characteristic of the West."},{"id":6,"txt":"With reference to the Neolithic site of Chirand in the Middle Ganga plain, consider the following statements:\n1. Evidence from the site indicates a well- developed bone tool industry alongside the absence of metal tools.\n2. Pottery at Chirand was largely handmade, although limited use of the turntable has been reported.\n3. The occurrence of black-and-red ware at the site is sufficient to classify Chirand as a Chalcolithic settlement.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 only","1, 2 and 3"],"ci":0,"exp":"Ex: Statement 1 is correct: Most Neolithic sites are defined by polished stone tools (celts). However, Chirand is located in an alluvial plain where good quality stone was scarce. The inhabitants developed a highly sophisticated bone tool industry, using antlers and bones of deer. They produced about 400 bone objects, including scrapers, borers, needles, and even arrowheads. The Neolithic Label: In its earliest phase, there is a total absence of metal, confirming its status as a Neolithic settlement before it transitioned into the Chalcolithic. Statement 2 is correct: Pottery at Chirand is predominantly handmade, but evidence of turntable use has been reported, indicating limited adoption of improved ceramic techniques without full wheel-thrown production. The inhabitants produced pale grey, red, and blackish wares. Some pots were decorated with post-firing ochre paintings, a rare artistic feature for the Neolithic. Statement 3 is incorrect: The presence of black-and-red ware does not necessarily imply Chalcolithic affiliation. BRW actually appears in the Upper Neolithic phase at Chirand. To be classified as \"Chalcolithic,\" there must be evidence of copper metallurgy (smelting or copper tools) being the dominant technology. Chirand has a distinct Neolithic base that only later evolved into a Chalcolithic phase. SPP 22635"},{"id":7,"txt":"Arrange the following Harappan sites in the correct order from South to North:\n1. Rakhigarhi\n2. Lothal\n3. Dholavira\n4. Rangpur","ref":"","opts":["4-2-3-1","3-2-1-4","2-3-1-4","4-1-2-3"],"ci":0,"exp":"Ex: South to north  4- Rangpur is located in Gujarat near Bhadar river..Its key findings include:  Remains of both pre-Harappan and Mature Harappan culture  Yellow and grey color pots of pre- Harappan people.  2- Lothal is located in Gujarat near Sabarmati river.Its key findings include:  Dockyard and bead making factory  Town was not divided into two sectors  Remains of rice husks  Painting on a jar resembling the story of the cunning fox in Panchatantra  Evidence of double burial (male and female together).  Brick-built tank-like structure  Seal from Mesopotamia found here  Ivory scale found here  Terracotta model of ship found here  Fire altars  3- Dholavira is located inIts key findings include:  Giant Water reservoir  Unique water harvesting system  Shows all three phases of Harappan culture  Large-scale use of sandstone along with mud brick  1- Rakhigarhi is located in Haryana.Its key findings include:  Over 350 hectares with new finds of two additional mounds, making it the largest Indus Valley civilisation site (Fatehgarh) and town in the world.  Shows all three phases of Harappan Culture 4  At Bhirrana a fragmented artefact of a thick, sturdy red ware with an incised female figure has been found, with a pose similar to the bronze Mohenjo-Daro 'dancing girl."},{"id":8,"txt":"Which one of the following prehistoric sites was famous for 'cord-marked pottery'?","ref":"","opts":["Mehrgarh","Gufkral","Daojali hading","Paiyampalli"],"ci":2,"exp":"Ex: Neolithic artefacts from the Daojali Hading site, which is located in the Dima Hasao District of Assam, date to about 2,700 years ago. It is the first stratified neolithic site found in Northeast India. The dig turned up typical shouldered celts and earthenware with cord markings. The cord-marked pottery, which is distinctive to this site and other Northeast Indian Neolithic sites and is uncommon in Indian Neolithic societies, suggests cultural links with East and Southeast Asian peoples, particularly the Hoabinhian. (Fig: Cord marked vessal) SPP 22635 About Mehrgarh  This location is situated close to the Bolan Pass, one of the most significant routes into Iran, amid a rich plain.  Women and men in this region possibly learned how to raise sheep and goats as well as grow barley and wheat for the first time in Mehrgarh.  One of the first villages that we are aware of is this one.  The site was excavated by archaeologists, who discovered evidence of numerous kinds of animal bones dating to the lowest strata. These included the skeletons of several wild animals, including deer and pig.  More sheep and goat bones were discovered in later levels, and even more cattle bones were discovered in later levels, indicating that this was the animal that was typically kept by people.  At Mehrgarh, there have also been discovered the remnants of square or rectangular houses. There were at least four compartments in each home, some of which might have been utilised for storage.  People are typically remembered by their friends and family when they pass away. Perhaps in the hope that there is some sort of life after death, people take care of them. One such arrangement is burial.  At Mehrgarh, numerous graveyards have been discovered. In one case, the deceased was interred with goats, which were likely intended to be used as food in the hereafter."},{"id":9,"txt":"Consider the following statements regarding Upanishads:\n1. There are traditionally 108 Upanishads.\n2. Mandukya is the largest Upanishad.\n3. Chandogya refers to the first three ashramas.\n4. Upanishads are part of Shruti.\nWhich of the statements given above are correct?","ref":"","opts":["2, 3 and 4 only","1, 2 and 4 only","1, 3 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Statement 1 is correct: While there are hundreds of Upanishads, the Muktika 5 Upanishad provides the definitive list of 108 that are considered canonical. Of these, 10 to 13 are considered \"Mukhya\" (Principal) Upanishads upon which Adi Shankara wrote commentaries. Statement 2 is incorrect: The Mandukya Upanishad (Atharvaveda) is actually the shortest of all Upanishads, containing only 12 verses (mantras). It focuses on the four states of consciousness and the syllable 'OM'. The Brihadaranyaka Upanishad (White Yajurveda) is the largest, both in volume and philosophical scope. Statement 3 is correct: The Chandogya Upanishad (Samaveda) is the earliest text to mention three ashramas: Brahmacharya (student), Grihastha (householder), and Vanaprastha (forest dweller). The fourth stage, Sannyasa, is first explicitly mentioned as a four-fold system in the later Jabala Upanishad. Statement 4 is correct: TheUpanishads are classified as Shruti (\"that which is heard\"), meaning they are considered divine revelations. They are called Vedanta (the end of the Vedas) because they appear at the end of the Vedic Brahmanas and represent the final philosophical goal of Vedic study"},{"id":10,"txt":"Consider the following information about the phases of the Harappan Civilization:\nPhase Important Features Sites\n1. Early Harappa, Kot Fortification, Harappan Diji, Amri incipient trade networks, craft specialization\n2. Mature Mohenjo- Full-scale Harappan Daro, urbanization, Harappa, uniformity in Dholavira artifacts, full- fledged trade\n3. Late Cemetery at Refers to the Harappan Harappa, fragmentation Siswal, of the culture Rangpur of the Integration Era\nHow many of the above rows is/are not correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":3,"exp":"Ex:  Row 1 is correct: Early/Pre-Harappan phase (c. 3200-2600 BCE)  Sites: Harappa, Kot Diji, Amri.Some of the early Harappan archaeological sites are Padri in Gujarat, Kalibangan in Rajasthan, Dholavira in Kutch, Harappa in West Punjab, Balakot, Amri, and Bhirrana in Haryana, Kot Diji and Gumla in Pakistan. It is note- worthy to add that there are no early Harappan sites in the active Indus plain SPP 22635  Features: Fortification, incipient trade networks, craft specialization. It is related to the Hakra phase of settlements, and the settlements in this period are marked by their:  (a) Fortifications,  (b) Fairly high level of expertise in specialised crafts such as stone-working, bead-making, and metal-crafting,  (c) The use of wheeled transport, and the existence of trade networks However, it is pertinent to note that this phase did not have the large cities that defined the mature Harappan phase, neither did it have as much expertise in craft specialisation. However, most raw materials except jade, which has not been found in the early Harappan settlements, are similar to the ones used in the mature Harappan phase  Row 2 is correct: Mature Harappan phase (c. 2600-1900 BCE)  Sites: Mohenjo-Daro, Harappa, Dholavira. Some of the important sites belonging to this phase are Harappa in West Punjab, Mohenjo- Daro and Suktagendor in Pakistan, Lothal in Gujarat, Kalibangan in Rajasthan, Dholavira in Kutch, Banawali and Rakhigarhi in Haryana.  Features: Full-scale urbanization, uniformity in artifacts, full- fledged trade.It is also known as the Integration Era.It was the urban phase of the Harappan civilisation, which shows the characteristics of a full fledged civilisation. The unqualified term, 'Harappan Culture' or 'Harappan Civilisation', primarily refers to this mature urban phase. 6  Row 3 is correct: Late Harappan phase (c. 1900-1300 BCE)  Sites: Rangpur –The Late Harappan phase comprises five geographical zones each having distinct phases:  (a) The West Punjab Phase (Cemetery- Harappan Culture),  (b) The East Punjab Phase,  (c) The Jhukar Phase: Important sites are Jhukar, Chanhudaro and Amri.  (d) The Rangpur Phase: Prominent Rangpur phase sites are in Kutch, Saurashtra and mainland Gujarat.  (e) The Ganga-Yamuna Doab Phase: It should be noted that even though the Late Harappan settlements were more in number, yet they were smaller and more rural, though marked by a diverse agricultural base.  Features: The last phase of the Harappan civilisation, which is also known as the Localisation Era, was the post-urban phase defined by a decline in the cities. This is the final period the Harappan Civilisation and refers to the fragmentation of the culture of the Integration Era. Late Harappan settlements were smaller compared to mature Harappan ones. The transition from the mature phase does not show any sudden discontinuity as such, but there is a gradual change in seals, pottery confined writing, in the frequency of cubical weights, and so on."},{"id":11,"txt":"Consider the following statements regarding Indian Neolithic sites:\nStatement 1: Piklihal and Hallur show evidence of pastoral practices such as cattle penning and ash accumulation. Statement 2: Payyampalli represents a Neolithic site located in present-day Tamil Nadu with evidence of early agriculture.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: Piklihal (Karnataka) and Hallur (Karnataka) are prominent Neolithic sites in South India known specifically for their \"ashmounds.\" Archaeologists have found evidence that these sites were seasonal camps for pastoral SPP 22635 communities. The famous ashmounds were formed by the ritualistic burning of accumulated cow dung within these cattle pens. This confirms that livestock (cattle, sheep, and goats) played a central role in their economy. Statement 2 is correct: Payyampalli is a key Neolithic site located in the Vellore district of Tamil Nadu. Excavations have yielded evidence of the cultivation of crops like green gram and horse gram, as well as the domestication of animals. It marks the transition from a nomadic lifestyle to a settled agricultural life in the southern part of the Indian peninsula"},{"id":12,"txt":"Which of the following features can be classified as distinctive elements of the Harappan Civilization's town planning and structures?\n1. The use of burnt bricks for construction, surpassing contemporary civilizations like Egypt in durability.\n2. The presence of well-organized drainage systems, with each house connected to street drains.\n3. Monumental structures like the Great Bath and granaries symbolizing the ruling class's ability to mobilize resources.\n4. Exclusive use of circular platforms for threshing grain in Kalibangan, similar to Harappa.\nSelect the correct answer using the code given below:","ref":"","opts":["1, 2, and 3 only","2, 3, and 4 only","1, 2 and 4 only","1, 2, 3, and 4"],"ci":0,"exp":"Ex:  Statement 1 is correct: The use of burnt bricks in the Harappan cities is remarkable because in the contemporary buildings of Egypt dried bricks were primarily used.  Statement 2 is correct: The Harappans had an impressive drainage system, with houses connected to street drains, ensuring cleanliness and health.The drainage system of Mohenjo-daro was very impressive. In almost all the cities, every house, large or small, had its own courtyard and bathroom. Water flowed from the house to the streets which had drains.\"  Statement 3 is correct: Structures like the Great Bath and granaries highlight the rulers' organizational skills and resource mobilization.The monuments of the cities symbolized the ability of the ruling class to mobilize labour and collect taxes. The most important public place of Mohenjo-daro seems to have been the great bath. In Mohenjo- daro, the largest building is a granary. 7  Statement 4 is incorrect: While circular platforms for threshing grain were found in Harappa, there is no evidence to suggest they were exclusively used in Kalibangan.To the south of the granaries at Harappa lay working floors consisting of the rows of circular brick platforms. These were evidently meant for threshing grain. In the southern part of Kalibangan too, there are brick platforms, which may have been used for granaries."},{"id":13,"txt":"Regarding the Harappan script, consider the following statements:\n1. The Harappan script was pictographic and logosyllabic, with each symbol representing a word or syllable.\n2. It followed a boustrophedon pattern of writing, alternating between right-to-left and left-to-right.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex:  Statement 1 is correct: The Harappan script was pictographic and logosyllabic (each symbol stood for a word/syllable). It is believed that they used ideograms;e. a graphic symbol or a character to convey the idea directly.  Statement 2 is correct: Harappan writing was boustrophedon, that is to say, right to left and left to right in alternate lines. The Harappan script has not been deciphered so far."},{"id":14,"txt":"The archaeological importance of Lehuradeva lies mainly in the fact that it","ref":"","opts":["marks the earliest confirmed transition from hunting-gathering to settled agriculture in India","represents a pre-pottery Neolithic phase devoid of ceramic traditions","provides some of the earliest evidence of rice cultivation in the Middle Ganga plain","is associated with Neolithic cultures of the Vindhyan plateau"],"ci":2,"exp":"Ex: In the last decade, Lahuradeva (Sant Kabir Nagar district, UP) has revolutionized our understanding of Indian prehistory, specifically the antiquity of agriculture in the Ganga Valley. Before the excavations at Lahuradeva, the Neolithic site of Koldihwa (c. 6500 BCE) was considered the oldest evidence of rice. However, Lahuradeva pushed this date back significantly. Carbon dating of charred rice grains from Lahuradeva suggests dates ranging from c. 8000 BCE to 9000 BCE. Wild vs. Cultivated: The site provides evidence of both wild rice (Oryza nivara) and domesticated rice (Oryza sativa), proving that the Middle Ganga Plain was an independent center of rice domestication, separate from China. Hence option C is correct SPP 22635"},{"id":15,"txt":"Consider the following statements:\n1. Palaeolithic people in India are referred to as 'Quartzite men' due to their use of quartzite stone tools.\n2. Chalcolithic people primarily lived in urban settlements and used burnt bricks for construction.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex:  Statement 1 is correct: Man,during the Palaeolithic period, used tools of unpolished, undressed rough stones- mainly hand axes, cleavers, choppers, blades, burins, and scrapers.  Since the stone tools were made of a hard rock called 'quartzite', Palaeolithic men are therefore also called 'Quartzite men' in India.  Statement 2 is incorrect: Chalcolithic people were characterized by rural settlements and were not acquainted with burnt brick, and generally lived in thatched houses made of mud bricks. Their economy was a village- based economy.  Also, the beginnings of social inequalities in Chalcolithic societies, as chiefs who lived in rectangular houses dominated others who lived in round huts."},{"id":16,"txt":"The wide spatial distribution of uniform seals and weights across Harappan sites is best explained by the:","ref":"","opts":["dominance of maritime trade over land routes","centralised political authority enforcing cultural uniformity","existence of integrated riverine, overland and coastal trade networks","isolation of craft production within urban centres"],"ci":2,"exp":"Ex: The uniformity of chert weights (following a strict 1:2:4:8... ratio) and steatite seals across distant sites like Mohenjo-daro (Sindh), Lothal (Gujarat), and Kalibangan (Rajasthan) was only possible through high-frequency interaction. Integrated Logistics: To maintain such precise standards, the civilization relied on a \"Triple Network\": 1. Riverine: For bulk transport (grain, timber) via the Indus and its tributaries. 2. Overland: Using bullock carts and pack animals to connect the hinterlands (mines and farms) to the cities. 3. Coastal: Maritime routes connecting Gujarat to the Makran coast and beyond to Mesopotamia. 8 This network ensured that a merchant in Lothal used the exact same weight system as a merchant in Harappa, facilitating seamless trade and tax collection. Hence option C is correct. Option A is incorrect: While maritime trade was crucial (especially for international trade with Meluhha), the majority of internal standardized exchange happened via riverine and overland routes. Maritime trade alone cannot explain the uniformity found in landlocked sites like Banawali or Rakhigarhi. Option B is incorrect: While a central authority might have existed, there is no archaeological evidence of a \"King\" or a central palace that could enforce such rules across such a vast distance. Most scholars believe the uniformity was driven by common economic interests and guild-like trade organizations rather than a singular political decree. Option D is incorrect: This is the opposite of reality. Craft production was interdependent. For example, Chanhudaro produced beads that were then distributed across the entire trade network. Isolation would have led to regional variations, not the uniformity we see."},{"id":17,"txt":"With reference to Vedic terminology, consider the following pairs:\nTerm Contextual meaning\n1. Gavishthi War\n2. Gomat One who owns cows as a measure of wealth\n3. Godhuli A specific ritual performed at dusk\n4. Gavyuti A unit of distance measured by cattle movement\nWhich of the pairs given above are correctly matched?","ref":"","opts":["2 and 4 only","1, 2 and 4 only","2 and 3 only","1, 3 and 4 only"],"ci":1,"exp":"Ex: Pair 1 is correctly matched: In the Rig Vedic age, the word for \"war\" or \"conflict\" was Gavishthi. While it literally translates to \"a search for cows,\" it contextually refers to inter-tribal warfare. Since cows were the main form of movable property, most battles between tribes (like the Bharatas or Purus) were fought to capture or recover cattle. Pair 2 is correctly matched: Gomat literally means “possessor of cows.” In Vedic society, cattle were the primary unit of wealth, status, and prosperity. The term is repeatedly used to denote affluence and social standing. SPP 22635 Pair 3 is incorrectly matched: Godhuli refers to the time of dusk, literally when cow dust rises as cattle return home. It is a time-marker, not a ritual. While rituals may occur at godhuli time, the term itself does not denote a ritual act. Pair 4 is correctly matched: Gavyuti denotes a distance unit, commonly understood as the distance a cow herd can travel in a day. It reflects how pastoral movement structured spatial understanding in the Vedic period."},{"id":18,"txt":"The sites Sarai Nahar Rai, Mahadaha, and Damdama are best described as forming a Mesolithic cluster in\nwhich of the following regions?","ref":"","opts":["Upper Belan valley","Middle Son valley","Central Ganga plain","Eastern Vindhyan plateau"],"ci":2,"exp":"Ex: These three sites—Sarai Nahar Rai, Mahadaha, and Damdama—are rarely discussed in isolation. They form a cultural and chronological unit representing the earliest permanent or semi-permanent settlements in the Ganga Valley. Option (c) is correct: These sites are located in the Central Ganga plain and are specifically associated with relict river courses (oxbow lakes and abandoned meanders). During the transition from the Pleistocene to the Holocene, a warmer and wetter climate turned the Ganga plain into a lush region filled with \"Oxbow lakes\" (remnants of shifting river courses). This attracted Mesolithic hunter- gatherers away from the Vindhyan highlands. Sarai Nahar Rai: Known for the earliest evidence of intentional human burials and localized violence (skeletons with microliths embedded in them). Mahadaha: Famous for the discovery of bone ornaments (earrings and necklaces) and double burials (male and female buried together). Damdama: Yielded a massive number of burials (41 graves), including triple burials, and evidence of diverse animal remains, suggesting a rich, sedentary lifestyle. 9 Option (a) is incorrect: While the Belan Valley is close and shares cultural links, it is technically part of the Vindhyan-Ganga transition zone, not the plain itself. The Belan valley is more famous for the Neolithic transition (Koldihwa). Option (b) is incorrect: This region is primarily known for Upper Palaeolithic sites like Baghor and the famous \"shrine\" found there. Option (d) is incorrect: This is the hilly region (Mirzapur/Sonbhadra) where sites like Lekhahia are located."},{"id":19,"txt":"With reference to the Sinauli archaeological site, consider the following statements:\n1. The burial practices at Sinauli are markedly different from those of the Harappan civilisation.\n2. The site has yielded evidence of solid-wheeled vehicles associated with elite burials.\n3. Sinauli is generally associated with Harappan culture.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","2 and 3 only","1 and 2 only","1, 2 and 3"],"ci":2,"exp":"Ex: The excavations at Sinauli (Baghpat, Uttar Pradesh) by the ASI have rewritten the understanding of India's \"Dark Age\" between the Harappan and Vedic periods. Statement 1 is correct:While Harappans typically practiced simple pit burials or coffin burials with basic pottery, Sinauli features elaborate coffin burials decorated with copper sheathing and floral motifs. The presence of extensive weaponry (swords, shields) and military equipment in graves suggests a warrior-centric social structure, which contrasts with the predominantly mercantile and \"civilian\" nature of Harappan burials. Statement 2 is correct: Sinauli is the first site in the Indian subcontinent to yield actual physical remains of two-wheeled, copper- decorated solid-wheeled vehicles (often termed chariots). These vehicles were found alongside sophisticated coffins and weaponry, indicating they were part of the funerary rites Site Year of Discovery Key Archaeologist Harappa 1921 Daya Ram Sahni Mohenjo- 1922 R.D. Banerji daro SPP 22635 of an elite military class. This discovery challenged the long-held theory that chariots were introduced to India only by much later nomadic groups. Statement 3 is incorrect: Archaeologists classify Sinauli under the Ochre Coloured Pottery (OCP) – Copper Hoard culture (dated ~1900–1500 BCE). It represents a distinct cultural phase that co-existed with or followed the Late Harappan period but maintained its own unique metallurgical and social identity, centered in the Ganga-Yamuna Doab."},{"id":20,"txt":"With reference to the archaeological exploration of the Indus Valley Civilisation in India, which one of the following statements is correct?","ref":"","opts":["Harappa was the first site excavated in India after Independence","Ropar represents the earliest post-Independence excavation of an Indus site","Mohenjodaro was discovered after Dholavira","Dholavira was excavated before Independence"],"ci":1,"exp":"Ex: Option (b) is correct: Ropar (located on the banks of the Sutlej in Punjab) was excavated by Y.D. Sharma in 1953. It holds the distinction of being the first site to be excavated in independent India, proving that the Harappan culture extended far into the Indian mainland. Option (a) is incorrect: Harappa was discovered and excavated much earlier, in 1921, by Daya Ram Sahni under the British Raj. It is currently in the Montgomery district of Punjab, Pakistan. Option (c) is incorrect: Harappa was the first discovered site (1921). Mohenjo-daro was discovered a year later, in 1922, by R.D. Banerji. This is why the civilization is often called the \"Harappan Civilisation\"—it is named after the type-site (the first one found). Option (d) is incorrect: Dholavira (in the Rann of Kutch, Gujarat) was discovered much later, in 1967-68, by J.P. Joshi. Harappa was found nearly 46 years before Dholavira. Significance First IVC site discovered Largest city; \"Mound of the Dead\" 10 Ropar 1953 Y.D. Sharma Lothal 1954 S.R. Rao Dholavira 1967 J.P. Joshi"},{"id":21,"txt":"Consider the following pairs:\nConcept Vedic Context\n1. Nadistuti Sukta — Praisegeographic awarenessof rivers and\n2. Nasadiya Sukta Social stratification and ritual hierarchy\n3. Purusha Sukta — Cosmologicaland origin of varnaspeculation\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Pair 1 is correctly matched: Found in the 10th Mandala of the Rig Veda, the Nadistuti Sukta (Hymn in Praise of Rivers) lists about 21 rivers, starting from the Ganga in the east and moving to the Indus (Sindhu) and its western tributaries in modern-day Afghanistan. It serves as a vital historical record of the geographical horizon of the Vedic people. Pair 2 is incorrectly matched: The Nasadiya Sukta is not about social stratification. Instead, it is the most famous Cosmological Hymn in the Rig Veda. It speculates on the origin of the universe, famously beginning with \"Then was neither non-existence nor existence.\" It represents the highest level of Vedic philosophical inquiry into the \"Unknown.\" Pair 3 is correctly matched: Found in the 10th Mandala, the Purusha Sukta describes the symbolic sacrifice of the Purusha (the Primeval Being). It is here that the four-fold varna system is mentioned for the first and only time in the Rig Veda. It describes the Brahmanas coming from the mouth, the Kshatriyas from the arms, the Vaishyas from the thighs, and the Shudras from the feet of the Purusha."},{"id":22,"txt":"With reference to Vedic and early historic socio- political terminology, consider the following pairs:\nTerm Functional sphere\n1. Vratya Marginal non-Vedic Aryan groups\n2. Sangrahitri Treasurer or official associated with revenue collection\n3. Rathakara Chariot-maker with elevated ritual or social status\n4. Sthapati Judicial authority responsible for dispute resolution\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Pair 1 is correctly matched: The Vratyas were groups who spoke the Aryan language but did not follow the strict Vedic sacrificial rituals or social codes. They are famously mentioned in the Atharvaveda and the Panchavimsha Brahmana, which describes the Vratyastoma ritual—a ceremony used to \"purify\" and admit these marginal groups into the Vedic fold. SPP 22635 First excavated in Independent India First IVC dockyard discovered Advanced water management system Pair 2 is correctly matched: In the Later Vedic period, the King was assisted by twelve high officials known as Ratnins (Jewel- bearers). Sangrahitri was the collector or treasurer. Along with the Bhagadugha (tax collector), the Sangrahitri ensured the king had the resources needed to perform grand sacrifices like the Rajasuya. Pair 3 is correctly matched: Unlike later periods where manual labor was stigmatized, the Rathakara (Chariot-maker) held a very high status in the Vedic age because the chariot was central to warfare and the king's prestige. Various Brahmanas explicitly state that the Rathakara had the right to wear the sacred thread (Upanayana) and perform certain Vedic sacrifices, making them a unique high-status artisan group. Pair 4 is incorrectly matched: A Sthapati was a high-ranking official, often a local governor or a chief over a specific territory (sometimes a \"border district\"). While they had administrative powers, they were primarily Chief Architects or master builders (the word Sthapatya still refers to architecture today). In the Vedic context, the judicial functions were usually handled by the King himself, the Gramyavadin (village judge), or the Sabha (assembly)."},{"id":23,"txt":"Which of the following were characteristics of the Chalcolithic Age?\n1. Cultivation of wheat, rice, bajra, and pulses such as lentil and black gram was found.\n2. Chalcolithic Age people were acquainted with horses.\n3. Use of pottery like black and red ware, and ochre-colored pottery made by both male and female potters using the potter's wheel.\nSelect the correct answer using the code given below:","ref":"","opts":["1, and 2 only","2, and 3 only","1, and 3 only","1, 2, and 3 only"],"ci":0,"exp":"Ex:  Statement 1 is correct: Chalcolithic Age (3000 B.C- 500 B.C). Chalcolithic people subsisted on agriculture and cattle rearing, besides practising hunting and fishing.  The people of the Chalcolithic phase produced wheat and rice as their staple, bajra, several pulses such as lentil, black gram, green gram, and grass pea, while those living in eastern regions lived on fish and rice. 11  They practiced more slash-burn or jhum cultivation. However, neither the plough nor the hoe has been found at any site of this period.  Statement 2 is correct: They domesticated cows, sheep, goats, pigs and buffaloes and hunted deer and had some knowledge of horses, camels, donkeys and wild ass.  The domesticated animals were slaughtered for food and not milked for dairy products (this practice still continues among the Gond people of Bastar).  Statement 3 is incorrect: They used different types of pottery, of which black and red pottery and ochre coloured pottery (OCP) were the most popular.  This was made using the potter's wheel and was painted with white line design.  The female potters did not use the potter's wheel, only men did."},{"id":24,"txt":"Consider the following rivers mentioned in the Rig Veda:\n1. Vipāśā\n2. Asiknī\n3. Purushṇī\n4. Drishadvatī Arrange them from west to east in their most likely geographical order.","ref":"","opts":["3 – 2 – 4 – 1","2 – 4 – 3 – 1","1 – 2 – 3 – 4","2 – 3 – 1 – 4"],"ci":3,"exp":"Ex: 2. Asiknī (Chenab): The westernmost of the four listed. It flows between the Jhelum (Vitasta) and the Ravi. In the Rig Veda, Asiknī is explicitly described as a dark, powerful river, matching the Chenab’s silt- heavy flow. 3. Purushṇī (Ravi): Located to the east of the Chenab. It is famous in the Rig Veda as the site of the Dasrajan (Battle of the Ten Kings). 1. Vipāśā (Beas): Located to the east of the Ravi. In modern geography, the Beas is a tributary of the Sutlej (Shutudri). 4. Drishadvatī (Chautang/Ghaggar system): The easternmost. It flowed through Haryana and Rajasthan, often considered the southern boundary of the Brahmavarta region (the holy land between Saraswati and Drishadvati). Hence the correct order is (d) 2 – 3 – 1 – 4 SPP 22635"},{"id":25,"txt":"The bronze image of a charioteer with animals (ox, elephant, rhinoceros) was discovered from:","ref":"","opts":["Mohenjodaro","Kalibangan","Daimabad","Harappa"],"ci":2,"exp":"Ex: Daimabad, located on the banks of the Pravara River (a tributary of the Godavari), Daimabad is the southernmost site of the Indus Valley Civilisation. In 1974, a cache of four massive bronze sculptures was discovered here. The most famous is the Charioteer, who is shown standing on a low- wheeled platform (chariot) driven by two oxen. Along with the charioteer, the hoard included large, solid bronze figures of an Elephant, a Rhinoceros, and a Buffalo. These were made using the Lost-Wax Technique (Cire Perdue), but unlike the delicate \"Dancing Girl,\" these figures are massive, heavy, and solid. Hence option C is correct"},{"id":26,"txt":"With reference to burial practices in the Harappan civilisation, consider the following statements:\n1. Surkotada has yielded evidence of oval graves and double burials.\n2. Lothal has provided evidence of pot burials and post-cremation burials.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is Incorrect: Surkotada (Gujarat) is famous for its pot burials and stone-covered graves (cairn/capstone burials). While Surkotada has yielded stone- covered burials, the specific evidence for double burials (a male and female skeleton in a single pit) is the hallmark of Lothal, not Surkotada. Oval Graves: Oval pit burials are more typically associated with sites like Ropar or Kalibangan (where they were used for pot/symbolic burials). Statement 2 is Incorrect: As a port city, Lothal(Gujrat) shows high social and cultural diversity. Its most unique feature is the Double Burial (Twin Burial), where pairs of skeletons were found together. While pot 12 burials were found in many Gujarat sites (like Surkotada and Nagwada), they are not the defining feature of Lothal's main cemetery. More importantly, post-cremation burials (urns containing ashes/charred bones) are primarily found at Mohenjo-daro and Harappa, rather than Lothal. Lothal's graves often featured brick-lined pits, indicating a different architectural tradition."},{"id":27,"txt":"Consider the craft material with the most specific Harappan production centre:\nList-I (Material) List-II (Site) A. Carnelian beads 1. Lothal B. Shell objects 2. Balakot C. Steatite 3. Nageshwar D. Lapis lazuli 4. Shortughai\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Pair 1 is correctly matched: Lothal (Gujarat) was strategically located near the Ratanpur mines, the primary source of high- quality carnelian (a reddish-orange semi- precious stone). Lothal is the most specialised centre for carnelian bead manufacture. Archaeological evidence includes bead- drilling workshops, etched carnelian beads, stone drills, and large quantities of debitage. While carnelian beads are found across Harappan sites, Lothal stands out for organised, large-scale production, not just consumption. Pair 2 is correctly matched: Balakot is a major shell-working centre due to its direct access to the Makran coast. Excavations reveal shell bangles, ladles, inlays, and large amounts of shell waste, indicating on-site manufacture rather than import. Pair 3 is correctly matched: Nageshwar is specifically known for steatite(soapstone) beads and ornament manufacture. The site lies close to steatite sources and shows production debris, unfinished objects, and toolkits related to soft-stone working, making it a specialised centre. Pair 4 is correctly matched: Shortughai (Afghanistan) is a Harappan outpost near the Badakhshan lapis lazuli mines. It was established specifically to control the trade of Lapis Lazuli, a deep blue stone highly prized in Mesopotamia. SPP 22635 Raw Material Primary Site/Source Copper Khetri Mines (Rajasthan) Gold Kolar (Karnataka) Tin Afghanistan / Iran Turquoise Khorasan (Iran) Steatite Rajasthan / Gujarat"},{"id":28,"txt":"Regarding the religious practices of the Harappan Civilization, consider the following statements:\n1. The Harappans practiced idolatry.\n2. Evidence of phallic and yoni worship is found in Harappan society.\n3. Fire altars, used for ritualistic purposes, have been discovered at Kalibangan and Mohenjo-Daro.\n4. The seal of Pashupati Mahadeva depicts him surrounded by animals, indicating the worship of animals.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 ,2, and 3 only","3 and 4 only","1, 2, and 4 only","1, 2, 3, and 4"],"ci":2,"exp":"Ex:  Statement 1 is correct: Idolatry was practiced, with the worship of the Mother Goddess and Pashupati Mahadeva in a yogic posture.  Statement 2 is correct: The Harappans engaged in phallic (lingam) and yoni worship, pointing to the importance of fertility cults.  Statement 3 is incorrect: Fire altars were found at Kalibangan and Lothal, not at Mohenjo-Daro.  Statement 4 is correct: The seal of Pashupati Mahadeva depicts animals like an elephant, tiger, and one-horned unicorn, suggesting animal worship. Additional information: Other key inferences about the Harappan religious practices are as follows:  Idolatry was practiced. The Harappan people generally worshipped: Mother goddess Pashupati Mahadeva or proto- Shiva (mostly an upper-class preference, seal depict him in a yogic posture) Lingam (phallus) and yoni worship (cult of fertility)  Pipal tree, Humped bull, Birds (dove and pigeon), One-horned unicorn (may in fact be the rhinoceros)  The seal of Pashupati Mahadeva is surrounded by an elephant, a tiger, a rhino, a buffalo and a deer and it is likely that these animals were also worshipped 13  Dead bodies were placed in a north- south direction and were generally accompanied by objects including food, pottery, ornaments and tools. These items were not as expensive in comparison to those in contemporary Mesopotamian or Egyptian cultures. However, there is still no clear idea among historians about the nature of inheritance in Harappan society."},{"id":29,"txt":"With reference to pre-historic paintings, consider the following statements:\n1. Lakhudiyar cave paintings have man, animal and geometric paintings represented in them.\n2. Neolithic paintings are found from the granitic rocks of Karnataka and Andhra Pradesh\nWhich of the statements given above is/are incorrect?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is correct: some prehistoric paintings have reportedly occurred in the Kumaon Hills of Uttarakhand as well. These prehistoric murals can be found on the rock shelters along the banks of the River Suyal near Lakhudiyar. Literally translated as \"one lakh caves,\" lakhudiyar there are three genres of paintings : white, black, and red ochre geometric designs, animal paintings, and paintings of human and animals. Stick- like representations of humans are used. The main animal motifs include a fox, a lizard with many legs, and a creature with a large nose. There are also wavy lines, geometric patterns with rectangle-filled patterns, and clusters of dots.  SPP 22635 (Image source: ncert) Statement 2 is correct: The granite rocks of Andhra Pradesh and Karnataka made excellent canvases for Neolithic man's paintings. There are many similar places, but Kupgallu, Piklihal, and Tekkalkota are the most well-known. Paintings in white, paintings in red ochre over a white backdrop, and paintings in red ochre combined with white paintings are the three types of paintings that have been found from this source. 14"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

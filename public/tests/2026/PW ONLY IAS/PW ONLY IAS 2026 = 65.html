@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 65</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 65</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 65">PW ONLY IAS 2026 = 65</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to TSAT-1A, consider the following:\n1. It is a sub-metre resolution Earth observation satellite.\n2. It is India’s first military geospatial satellite built entirely by the private sector.\n3. It operates in geostationary orbit.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 3 only","2 only","1 and 2 only","1, 2 and 3"],"ci":2,"exp":"Ex: TSAT-1A is a cornerstone of India's \"Atmanirbhar\" (self-reliant) defense space capability. Before this, India's military primarily relied on ISRO-built satellites (like the RISAT or Cartosat series) or purchased data from foreign private players. The success of TSAT-1A has paved the way for more \"Made in India\" private constellations Statement 1 is Correct: TSAT-1A is an Earth observation satellite capable of providing sub-metre resolution imagery. This means it can distinguish objects on the ground that are smaller than one metre in size, which is a critical requirement for precision military surveillance and strategic mapping. Statement 2 is Correct: TSAT-1A is highly significant because it is India’s first military- grade geospatial satellite built by the private sector. It was developed by Tata Advanced Systems Limited (TASL) in collaboration with the Latin American company Satellogic. While ISRO provided the launch (via PSLV- C58 in April 2024), the satellite itself represents the capability of Indian industry to handle sensitive defense-related space hardware. Statement 3 is Incorrect: Like almost all high-resolution Earth observation satellites, TSAT-1A operates in Low Earth Orbit (LEO), not geostationary orbit. ❖ Why LEO? To get sub-metre detail, the satellite needs to be close to the Earth (usually between 500 km and 700 km). ❖ GEO limitation: A satellite in geostationary orbit (35,786 km away) is too far to capture the fine physical details required for tactical military intelligence. SPP 22666"},{"id":1,"txt":"With reference to air-breathing propulsion systems, consider the following statements:\n1. Air-breathing engines do not carry oxidizer onboard for combustion.\n2. Ramjets require rotating compressors to compress incoming air.\n3. Scramjets are capable of sustaining combustion at hypersonic speeds.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Air-breathing propulsion systems represent a major leap in efficiency for high-speed flight. Unlike traditional rockets, which must carry both fuel and oxidizer, these systems \"breathe\" oxygen from the atmosphere to burn their fuel. Statement 1 is Correct: Conventional rockets (like PSLV or GSLV) carry their own oxidizer (like Liquid Oxygen) because they eventually travel into the vacuum of space. Air-breathing engines (Ramjets, Scramjets, and Turbojets) take advantage of the oxygen available in the atmosphere. By not carrying an oxidizer, the vehicle becomes much lighter, allowing it to carry a larger payload or travel much further. Statement 2 is Incorrect: A Ramjet is unique because it has no moving parts (like the rotating compressors found in jet engines). Instead, it uses the high forward speed of the vehicle to \"ram\" and compress the incoming air into the combustion chamber. Note: Because they rely on forward motion to compress air, Ramjets cannot produce thrust from a standstill; the vehicle must already be moving at supersonic speeds (usually above Mach 2 or 3) for a Ramjet to work. Statement 3 is Correct: A Scramjet (Supersonic Combustion Ramjet) is an improvement over the Ramjet. In a standard Ramjet, the incoming supersonic air is slowed down to subsonic speeds before combustion. In a Scramjet, the air remains at supersonic speeds throughout the entire engine. This allows the engine to operate efficiently at hypersonic speeds (Mach 5 and above)."},{"id":2,"txt":"Consider the following statements regarding orbital velocity:\n1. Orbital velocity of a satellite depends on the mass of the satellite.\n2. Orbital velocity decreases as the altitude of the satellite increases.\n3. Geostationary satellites have lower orbital velocity than Low Earth Orbit (LEO) satellites.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: To understand orbital velocity, we look at the mathematical relationship that keeps a satellite in a stable circular path. The orbital velocity (v) of a satellite is given by the formula: 2 𝐺𝑀 𝑢 = √ 𝑅+ℎ Where: ❖ G is the Universal Gravitational Constant. ❖ M is the mass of the Earth (or the central body). ❖ R is the radius of the Earth. ❖ h is the altitude (height) above the Earth's surface. Statement 1 is Incorrect: The formula shows that orbital velocity depends solely on the mass of the central body (M) and the distance from its center (R+h). It does not depend on the mass of the satellite itself. Whether it is a tiny CubeSat or the massive International Space Station (ISS), if they are at the same altitude, they must travel at the same speed to stay in orbit. Statement 2 is Correct: The altitude (h) is in the denominator of our equation. As the altitude increases (the satellite moves further away from Earth), the gravitational pull weakens. To balance this weaker pull, the satellite requires less speed to maintain a stable orbit. Therefore, velocity decreases as altitude increases. Statement 3 is Correct: LEO Satellites (like the ISS) orbit at low altitudes (approx. 200- 2,000 km}). To stay up, they must move very fast, roughly 7.8 km/s (28,000 km/h). Geostationary Satellites (GEO) orbit at a much higher altitude (approx. 35,786 km). Due to this great distance, their required orbital velocity is much lower, approximately 3.07 km/s (11,000 km/h}."},{"id":3,"txt":"Consider the following pairs:\nMission/System Orbital Location /\n1. NAVIC GEO Fixed over Indian satellites longitude\n2. ADITYA-L1 Halo orbit around Sun — Earth L1\n3. OCEANSAT-3 — Mediumfor ocean scanningEarth orbit\n4. Mars Orbiter Direct Hohmann Mission transfer trajectory to Mars orbit\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Pair 1 is Correct: The NavIC constellation (Navigation with Indian Constellation) consists of 7 satellites. Three of these are placed in Geostationary Orbit (GEO). These satellites are \"fixed\" relative to a specific longitude over India, ensuring constant coverage for regional positioning services over the Indian subcontinent. SPP 22666 Pair 2 is Correct: Launched in 2023, India's first solar observatory is placed in a Halo Orbit around the first Sun-Earth Lagrangian point (L1). This point is located about 1.5 million km from Earth. A halo orbit allows the satellite to view the Sun continuously without any eclipses or occultations. Pair 3 is Incorrect: Oceansat-3 is a remote sensing satellite designed for oceanography and atmospheric studies. Like almost all of ISRO's Earth Observation Satellites (EOS), it is placed in a Low Earth Orbit (LEO)— specifically a Sun-Synchronous Polar Orbit (altitude of about 740 km)—not a Medium Earth Orbit (MEO). MEO is typically reserved for navigation satellites like GPS. Pair 4 is Incorrect: Mars Orbiter Mission (Mangalyaan); While MOM eventually reached Mars, it did not use a \"Direct\" Hohmann transfer. Due to the limited lifting power of the PSLV rocket at the time, ISRO used a \"Hohmann Transfer with Earth- bound maneuvers.\" The spacecraft circled Earth several times, performing orbit-raising burns to gain velocity before finally performing the \"Trans-Mars Injection.\" A direct transfer would require a much more powerful rocket to launch the craft straight toward Mars in one go."},{"id":4,"txt":"Consider the following rows of Lunar locations and their associated missions:\nPoint Associated Significant Mission Detail\n1. Shiv Chandrayaan- Location of the Shakti 3 first successful Point soft landing.\n2. Tiranga Chandrayaan- Site of the Point 2 Vikram lander's hard landing/impact.\n3. Jawahar Chandrayaan- Impact site of Point 1 the Moon Impact Probe (MIP).\nHow many of the above rows are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Row 1 is Correct: Shiv Shakti Point (Chandrayaan-3) On August 23, 2023, India became the first country to land a spacecraft near the lunar south pole. The landing site of the Vikram lander was named \"Shiv Shakti Point.\" The name symbolizes the \"Shiv\" (humanity's welfare) and \"Shakti\" (the power of women scientists). Row 2 is Correct: Tiranga Point (Chandrayaan-2) In 2019, the Chandrayaan- 2 mission's Vikram lander lost contact and made a \"hard landing\" (crashed) on the lunar surface. To honor the effort and the national flag, the spot where it impacted was named \"Tiranga Point.\" The government noted that no failure is final, and the Tiranga signifies that India's presence is now on the Moon. 3 Row 3 is Correct: Jawahar Point (Chandrayaan-1) India’s first moon mission in 2008 carried the Moon Impact Probe (MIP). The probe was intentionally crashed into the lunar surface near the Shackleton Crater at the South Pole. The impact site was named \"Jawahar Point\" (or Jawahar Sthal) to mark the birthday of India's first Prime Minister, Jawaharlal Nehru, which coincided with the probe's landing day (November 14)."},{"id":5,"txt":"With reference to the Sun's surface and atmospheric layers, consider the following statements:\n1. Granulation is a phenomenon observed in the Chromosphere, caused by radiative heat transfer.\n2. The Photosphere is the layer where 'Supergranules' originate, which are associated with large-scale magnetic field patterns.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Data from the Aditya-L1 mission (India) and the Daniel K. Inouye Solar Telescope (DKIST) are providing the highest-ever resolution images of Granulation and Supergranules. Scientists are studying supergranules to understand how the Sun’s magnetic field is \"generated\" and \"transported,\" which is the key to predicting Solar Flares. Statement 1 is Incorrect: Granulation is observed in the Photosphere (the visible \"surface\" of the Sun), not the Chromosphere. The Chromosphere is a thin layer of the solar atmosphere located above the Photosphere. Granulation is caused by convection, not radiative heat transfer. It is the visible manifestation of hot plasma rising, cooling, and then sinking back down—similar to the boiling of water in a pot. Statement 2 is Correct: Like regular granules, Supergranules are seen in the Photosphere. They are much larger (about 30,000 km across) and represent a deeper, more powerful layer of convection. Supergranules are fundamentally linked to the Sun's magnetic network. As the plasma flows horizontally from the center of a supergranule to its edges, it \"sweeps\" magnetic field lines along with it. This concentrates the magnetic fields at the boundaries of the cells, creating the solar magnetic network. SPP 22666"},{"id":6,"txt":"With reference to global and domestic initiatives for tracking and managing space debris, consider the following statements:\n1. \"Clearspace-1\" and \"Elsa-d\" are international missions led by Europe and Japan, respectively, to demonstrate debris removal technologies.\n2. \"Digantara\" is a specialized wing of the Indian Ministry of Defense designed to regulate the use of graveyard orbits.\n3. ISRO’s NETRA (Network for space object Tracking and Analysis) provides India with autonomous capability to monitor risks to its space-based assets.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is Correct: Active Debris Removal (ADR) Missions. ❖ Clearspace-1: This is a mission led by the European Space Agency (ESA) in collaboration with the Swiss startup ClearSpace. It aims to capture and de- orbit a piece of space debris (a Vega rocket adapter) using a \"chaser\" satellite with robotic arms. ❖ ELSA-d (End-of-Life Services by Astroscale-demonstration): This is a mission by the Japanese private company Astroscale. It successfully demonstrated the use of magnetic docking technology to capture a simulated piece of debris in 2021. Statement 2 is Incorrect: Digantara is not a wing of the Indian Ministry of Defense. It is a private Indian space-tech startup (based in Bengaluru). It is pioneering the development of a space-based surveillance platform to track orbital debris. While it works closely with the government and defense sectors, it is a commercial entity, not a regulatory wing of the MoD. Statement 3 is Correct: Project NETRA is an early warning system established by ISRO to detect and track hazards to Indian satellites. It consists of a network of observational facilities (radars and telescopes) and a dedicated Space Situational Awareness (SSA) Control Centre in Bengaluru. It gives India \"Strategic Autonomy\" by reducing its dependence on the US Space Command for collision alerts."},{"id":7,"txt":"With reference to the MACE telescope, consider the following statements:\n1. It directly detects gamma rays from space using mirrors.\n2. It detects secondary Cherenkov radiation produced in Earth’s atmosphere.\n3. It is located at high altitude to reduce atmospheric absorption of gamma rays.\n4. It is designed to observe optical light from stars.\nWhich of the above are correct?","ref":"","opts":["1 and 4 only","2 and 3 only","1, 2 and 3 only","2 only"],"ci":1,"exp":"Ex: The MACE (Major Atmospheric Cherenkov Experiment) telescope, located at Hanle in Ladakh, is India's largest and the world's highest imaging Cherenkov telescope. It represents a significant step in India's contribution to ground-based high-energy gamma-ray astronomy. 4 Statement 1 is Incorrect: Gamma rays from space do not reach the ground; they interact with the Earth's atmosphere. Therefore, the MACE telescope does not directly detect gamma rays. Instead, it observes the effects of these rays as they enter the atmosphere. Statement 2 is Correct: When a high-energy gamma ray hits the upper atmosphere, it creates a shower of charged particles. These particles travel faster than the speed of light in air (which is slower than the speed of light in a vacuum). This creates a blue \"sonic boom\" of light known as Cherenkov radiation. MACE uses its massive 21-metre diameter mirror to capture these extremely faint and fast flashes of blue light (lasting only a few nanoseconds). Statement 3 is Correct: MACE is located at Hanle, Ladakh, at an altitude of about 4,300 metres. Being at such a high altitude is crucial because: ❖ The atmosphere is thinner, meaning the Cherenkov light flashes are less absorbed or scattered before reaching the mirrors. ❖ The site offers exceptionally clear skies and low light pollution, which is vital for detecting such faint signals. Statement 4 is Incorrect: While MACE uses mirrors to collect light, its purpose is not to look at the visible light from stars (optical astronomy). It is a Gamma-ray telescope. Its electronics are specifically designed to trigger on the ultra-fast pulses of Cherenkov light, which ordinary optical telescopes cannot do."},{"id":8,"txt":"Consider the following statements:\nStatement I: Both Agnikul Cosmos and Skyroot Aerospace are focused on developing small satellite launch vehicles.\nStatement II: Both companies primarily specialize in satellite communication services.\nWhich one of the following is correct?","ref":"","opts":["Both I and II are correct and II explains I","Both I and II are correct but II does not explain I","Statement I is correct but Statement II is incorrect","Statement I is incorrect but Statement II is correct"],"ci":2,"exp":"Ex: Statement I is Correct: Focus on Small Satellite Launch Vehicles (SSLVs). Both Agnikul Cosmos and Skyroot Aerospace are Indian space-tech startups focused on the launch vehicle market. They aim to provide \"on-demand\" launches for small satellites, which currently have to \"piggyback\" on larger rockets like ISRO's PSLV. SPP 22666 ❖ Skyroot Aerospace: Successfully launched India’s first private rocket, Vikram-S, in November 2022. They are developing the Vikram series (Vikram I, II, and III). ❖ Agnikul Cosmos: Known for their Agnibaan They achieved a global milestone by successfully test-firing the world's first 3D-printed engine (Agnilet) and launched their first sub-orbital mission, Agnibaan SOrTeD, from India's first private launchpad in Sriharikota. Statement II is Incorrect: Specialization. Neither company specializes in satellite communication services. They are Launch Service Providers. Satellite communication services involve operating satellites to provide internet, TV, or data (companies like OneWeb, Starlink, or Nelco do this). Agnikul and Skyroot build the transportation systems (rockets) that put those communication satellites into orbit. Their core competency lies in propulsion, rocket stages, and avionics."},{"id":9,"txt":"With reference to the OneWeb satellite missions launched by ISRO’s LVM3, which one of the following statements is correct?","ref":"","opts":["They marked the first commercial launches by LVM3 carrying a large constellation of satellites to Low Earth Orbit","They were part of a bilateral space cooperation programme between the Governments of India and the United Kingdom","They represented the first instance of LVM3 placing satellites into Geostationary Transfer Orbit for a foreign customer","They were conducted under India’s human spaceflight programme to validate the rocket’s crew-rated capability","1, 2 और 3","1, 2, 3 और 4"],"ci":0,"exp":"Ex: The OneWeb India-1 (LVM3-M2) and OneWeb India-2 (LVM3-M3) missions, conducted in late 2022 and early 2023, represented a watershed moment for the commercialization of India's heaviest rocket. Option (a) is Correct: Historically, the LVM3 was reserved for India’s most prestigious national missions (like Chandrayaan and GSATs). The OneWeb missions were the first time this heavy-lifter was used to carry a commercial constellation into Low Earth Orbit (LEO). Each of the two missions carried 36 satellites simultaneously, totaling nearly 6 tonnes of payload per launch. This successfully demonstrated that the LVM3 is a viable global competitor for launching \"mega- constellations,\" a market previously dominated by SpaceX’s Falcon 9. 5 Why the other options are Incorrect: (b) Bilateral Government Programme: While OneWeb is a UK-based company, this was a commercial contract between OneWeb and NewSpace India Limited (NSIL)—the commercial arm of ISRO. It was a business transaction, not a diplomatic treaty between governments. (c) Geostationary Transfer Orbit (GTO): OneWeb is a satellite internet constellation that operates in Low Earth Orbit (LEO) at an altitude of approximately 1,200 km. It does not use GTO, which is located much further away (35,786 km). (d) Human Spaceflight Programme: While these successful launches helped build statistical confidence in the LVM3, they were not \"conducted under\" the Gaganyaan program. Human-rating involves specific \"HLVM3\" tests (like the Crew Escape System tests) that are distinct from commercial satellite launches."},{"id":10,"txt":"Mission Shakti demonstrated India’s capability in:","ref":"","opts":["Submarine-launched ballistic missile interception","Anti-satellite kinetic interception in Low Earth Orbit","Interception of cruise missiles over Indian Ocean","Hypersonic glide vehicle deployment"],"ci":1,"exp":"Ex: Mission Shakti, conducted on March 27, 2019, was a landmark technological demonstration that made India the fourth country in the world (after the US, Russia, and China) to possess advanced Anti-Satellite (ASAT) weapon capability. The mission involved the successful interception of a live Indian satellite (Microsat-R) in Low Earth Orbit (LEO) at an altitude of about 300 km. The interception was \"kinetic,\" meaning the missile did not use an explosive warhead; instead, it destroyed the target by physically striking it at an extremely high speed (hit-to-kill technology). The interceptor was a three-stage interceptor missile developed by the DRDO (Defence Research and Development Organisation). It was a modified version of the Prithvi Defence Vehicle (PDV) from India's Ballistic Missile Defence (BMD) program. Hence option B is correct SPP 22666"},{"id":11,"txt":"With reference to the phenomenon of auroras, consider the following pairs:\nEmission Colour Atmospheric Gas Responsible\n1. Green Atomic oxygen at altitudes of about 100– 200 km\n2. Red Atomic oxygen at altitudes above about 200 km\n3. Blue/Violet Molecular nitrogen\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Pair 1 is Correct: Green (Atomic Oxygen, 100–200 km); This is the most common auroral color. At these mid-altitudes, the atmosphere is dense enough with atomic oxygen that collisions with solar electrons release energy in the green spectrum (specifically at a wavelength of 557.7 nm). Pair 2 is Correct: Red (Atomic Oxygen, Above 200 km); At much higher altitudes (above $200\\text{ km}$), the concentration of oxygen is lower. When solar particles hit oxygen atoms here, the atoms take longer to release their energy. Because the air is so thin at this height, the oxygen atom isn't bumped by other atoms before it can finish its \"slow\" transition, which releases a red light (at 630.0 nm). Pair 3 is Correct: Blue/Violet (Molecular Nitrogen); Nitrogen is the most abundant gas in our atmosphere. Unlike oxygen, it often glows in blue or violet hues. These colors are usually seen at the lower fringes of the auroral \"curtain\" (below 100 km) where nitrogen is more prevalent. In intense solar storms, nitrogen can also produce a bright crimson or purplish-red color."},{"id":12,"txt":"With reference to the OSIRIS-REx mission, consider the following statements:\n1. It is a NASA mission to bring samples from an asteroid.\n2. The target asteroid Bennu is a near-Earth asteroid.\n3. Bennu is a metallic asteroid primarily composed of iron and nickel.\nWhich of the above statements are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: The OSIRIS-REx (Origins, Spectral Interpretation, Resource Identification, Security-Regolith Explorer) mission is a landmark in planetary science, having successfully delivered the largest asteroid sample ever collected to Earth in late 2023. Statement 1 is Correct: OSIRIS-REx is a NASA mission launched in 2016. Its primary goal was to travel to an asteroid, collect a sample of rocks and dust (regolith) from the surface, and return it to Earth. The sample capsule successfully landed in the Utah desert on September 24, 2023, carrying approximately 121.6 grams of material. 6 Statement 2 is Correct: The target, Bennu, is a Near-Earth Asteroid (NEA). This means its orbit brings it relatively close to Earth’s own orbital path. Scientists chose Bennu because it is ancient, well-preserved, and categorized as a \"potentially hazardous\" asteroid, making it vital to study for both scientific and planetary defense reasons. Statement 3 is Incorrect: Bennu is not a metallic asteroid. It is a B-type carbonaceous asteroid, which means it is rich in carbon and organic molecules. It also contains water- bearing minerals (phyllosilicates). Metallic asteroids (like 16 Psyche) are M-type and are composed primarily of iron and nickel. Bennu, by contrast, is a \"rubble pile\" asteroid—a loose collection of rocks held together by gravity."},{"id":13,"txt":"Consider the following statements regarding the Kulasekarapattinam Spaceport:\n1. It is being developed primarily to support Small Satellite Launch Vehicle (SSLV) missions.\n2. It enables direct southward launches into polar and Sun-synchronous orbits without major trajectory deviation.\n3. It reduces payload efficiency loss associated with dog-leg manoeuvres required at Sriharikota.\n4. It is strategically located east of Sriharikota to facilitate equatorial launches.\nWhich of the above are correct?","ref":"","opts":["1, 2 and 3 only","2 and 4 only","1 and 4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: The development of the Kulasekarapattinam Spaceport in the Thoothukudi district of Tamil Nadu is one of ISRO's most strategic infrastructure projects in decades. It is specifically designed to handle the growing global demand for small satellite launches. Statement 1 is Correct:While the Satish Dhawan Space Centre (SDSC) in Sriharikota handles heavy lifters like the GSLV and LVM3, the new spaceport is being built primarily for the Small Satellite Launch Vehicle (SSLV). The SSLV is designed for \"launch-on-demand\" of small satellites (up to 500 kg), and having a dedicated, smaller launch pad allows for much faster turnaround times. Statement 2 is Correct: The location of Kulasekarapattinam on the southern coast of India allows rockets to fly directly south over the Indian Ocean. This is ideal for reaching Polar and Sun-synchronous orbits, which are the most common orbits for Earth observation and spy satellites. SPP 22666 Statement 3 is Correct: When rockets are launched from Sriharikota toward the south, they must perform a \"dog-leg\" manoeuvre (a sharp turn mid-flight) to avoid flying over the island nation of Sri Lanka. This turn consumes a massive amount of fuel, which reduces the amount of payload (satellite weight) the rocket can carry. Launching from Kulasekarapattinam removes this obstacle, significantly increasing payload efficiency. Statement 4 is Incorrect: Kulasekarapattinam is located South-West of Sriharikota, not East. Furthermore, while it is closer to the equator than Sriharikota, its primary advantage is the southward path for polar orbits, not for \"facilitating equatorial launches\" (which usually require an eastward path to take advantage of the Earth's rotation)."},{"id":14,"txt":"With reference to different types of Earth orbits, consider the following statements:\n1. Every geostationary orbit is geosynchronous, but every geosynchronous orbit is not necessarily geostationary.\n2. A satellite placed at 35,786 km altitude with a 10° orbital inclination will appear stationary to an observer on Earth.\n3. A satellite in a highly elliptical orbit will move fastest at perigee and slowest at apogee.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is Correct: A Geosynchronous orbit is any orbit with a period of 24 hours (matching Earth's rotation). However, a Geostationary orbit (GEO) is a specific subset of geosynchronous orbits. To be geostationary, the orbit must: 1. Be circular. 2. Have a 24-hour period. 3. Have zero inclination (sit directly above the Equator). Therefore, all geostationary orbits are geosynchronous, but a geosynchronous orbit with an inclination or an elliptical shape is not geostationary. Statement 2 is Incorrect: To an observer on Earth, a satellite at the correct altitude 35,786 km but with a 10 degree inclination will not appear stationary. Instead, it will appear to move North and South across the equator in a figure-eight pattern called an analemma over a 24-hour period. To be truly stationary, the inclination must be 0 degree. 7 Statement 3 is Correct: According to Kepler’s Second Law of Planetary Motion (the Law of Equal Areas), a satellite in an elliptical orbit sweeps out equal areas in equal intervals of time. This means: ❖ At Perigee (closest point): The satellite must move at its maximum speed to \"counter\" the stronger gravitational pull. ❖ At Apogee (farthest point): The satellite moves at its minimum speed as the gravitational pull is weakest."},{"id":15,"txt":"Which one of the following orbital characteristics is most suitable for Earth observation satellites like RISAT and EOS-1?","ref":"","opts":["Geostationary orbit","Highly elliptical orbit","Sun-synchronous low Earth orbit","Lagrange point orbit (URSC) (NRSC)","1, 2 और 3","1, 2 और 3","1, 2, 3 और 4","1, 2 और 3"],"ci":2,"exp":"Ex: Earth observation satellites like the RISAT (Radar Imaging Satellite) series and EOS (Earth Observation Satellite) series are designed to monitor the planet’s surface. To do this effectively, they require a specific vantage point that offers both proximity and consistency. Why Sun-synchronous Low Earth Orbit (SSO)? ❖ Proximity (LEO): These satellites operate at altitudes typically between 500 km and 800 km. Being close to the Earth allows their sensors (cameras or radars) to capture high-resolution images. ❖ Consistency (Sun-synchronous): This is a special type of polar orbit. A satellite in SSO passes over any given point on the Earth's surface at the same local solar time every day. ❖ The Benefit: Because the angle of sunlight is the same every time the satellite passes over a specific region, scientists can easily compare images taken weeks or months apart to detect changes (like crop growth, deforestation, or urban expansion) without being confused by different shadow lengths. Hence option C is correct SPP 22666 Why other options are incorrect: (a) Geostationary orbit (GEO): At 35,786 km, these are too far away for high- resolution imaging. They are \"fixed\" over one spot, meaning they cannot scan the entire globe. They are best for communication and weather monitoring. (b) Highly elliptical orbit (HEO): These (like the Molniya orbit) are used to provide communication coverage to high-latitude regions (like the North Pole). They spend most of their time far from Earth, making them unsuitable for detailed surface imaging. (c) Lagrange point orbit: These (like the L1 point for Aditya-L1) are located 1.5 million km away. They are used for observing the Sun or deep space, not for looking at Earth's surface."},{"id":16,"txt":"Consider the following pairs of Space Institutions and their locations:\nInstitution Location\n1. Vikram Sarabhai Thiruvananthapuram, Space Centre Kerala (VSSC)\n2. U R Rao SatelliteCentre — Bengaluru,Karnataka\n3. SatishSpace CentreDhawan Sriharikota,Pradesh — Andhra\n4. National Remote Hyderabad, Sensing Centre Telangana\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"No explanation provided."},{"id":17,"txt":"Consider the following statements regarding Shourya missile:\n1. It follows an exo-atmospheric ballistic path.\n2. It is capable of carrying conventional as well as nuclear payload.\n3. Its manoeuvrability complicates ballistic missile defence interception.\nWhich of the above statements are correct?","ref":"","opts":["1 and 3 only","2 and 3 only","1 and 2 only","1, 2 and 3"],"ci":1,"exp":"Ex: The Shourya is a canister-launched, surface- to-surface tactical missile developed by DRDO. It is essentially the land-based version of the K-15 Sagarika submarine-launched ballistic missile (SLBM). Statement 1 is Incorrect: Unlike a standard ballistic missile that follows a high, predictable arc into space (exo-atmospheric), the Shourya is a quasi-ballistic missile. It remains within the Earth's atmosphere (endo- atmospheric) for most of its flight. It flies at hypersonic speeds (Mach 7) at a relatively low altitude, which makes it much harder for radar systems to detect and track compared to high-flying ballistic missiles. Statement 2 is Correct: Shourya is designed to be a part of India's strategic deterrent. It is a \"dual-capable\" missile, meaning it can carry both conventional high-explosive warheads and nuclear payloads (warheads weighing between 200 kg to 1000 kg). Statement 3 is Correct: Standard ballistic missiles follow a fixed, mathematically SPP 22666 predictable trajectory. In contrast, the Shourya can perform manoeuvres as it approaches its target. This unpredictable path, combined with its high speed, makes it extremely difficult for enemy Ballistic Missile Defence (BMD) systems to calculate an intercept point."},{"id":18,"txt":"With reference to multi-wavelength astronomical observation, consider the following statements:\n1. Infrared telescopes are particularly useful for studying early galaxies and star- forming regions obscured by dust.\n2. Radio telescopes can be used to image black holes indirectly through interferometric techniques.\n3. Optical telescopes are superior to X-ray telescopes in studying neutron stars.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1 only","2 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Astronomers use \"Multi-wavelength\" observation because different objects in the universe emit radiation at different parts of the electromagnetic spectrum. Using only visible light would be like looking at the world in just one color. Statement 1 is Correct: Infrared Telescopes (e.g., James Webb Space Telescope). Infrared radiation has longer wavelengths than visible light, which allows it to pass through dense clouds of cosmic gas and dust. This makes infrared telescopes essential for: ❖ Star-forming regions: Seeing \"inside\" the dust clouds where stars are born. ❖ Early Galaxies: Because the universe is expanding, light from the earliest stars is \"redshifted\" from the visible spectrum into the infrared spectrum by the time it reaches us. Statement 2 is Correct: Radio Telescopes and Interferometry. Black holes do not emit light themselves, but the superheated gas swirling around them (the accretion disk) emits intense radiation. Radio telescopes use a technique called VLBI (Very Long Baseline Interferometry) to link telescopes across the globe, creating a \"virtual telescope\" the size of the Earth. This is exactly how the Event Horizon Telescope (EHT) captured the first- ever images of black holes in galaxies M87 and our own Milky Way (Sgr A*). Statement 3 is Incorrect: X-ray vs. Optical for Neutron Stars. Neutron stars are extremely dense and hot. While they can be 9 seen in optical light, they are most energetic and clearly visible in X-rays. Many neutron stars exist in \"X-ray Binaries,\" where they pull material from a companion star, heating it to millions of degrees and releasing massive amounts of X-ray radiation. Therefore, X-ray telescopes (like NASA’s Chandra or India’s AstroSat) are generally superior for studying the high-energy physics of neutron stars."},{"id":19,"txt":"Consider the following statements regarding Liquid Mirror Telescopes:\n1. They are significantly cheaper than glass mirror telescopes of similar aperture.\n2. They can observe only a narrow strip of sky passing overhead.\n3. They are suitable for high-resolution planetary imaging.\n4. They require complex polishing and mirror alignment systems.\nWhich of the above statements are correct?","ref":"","opts":["1 and 2 only","1, 2 and 3 only","2 and 4 only","1, 2, 3 and 4"],"ci":0,"exp":"Ex: Statement 1 is Correct: Cost Efficiency. Traditional telescopes use high-precision glass mirrors that take years to cast, grind, and polish. Liquid Mirror Telescopes (LMTs) use a rotating container filled with a reflective liquid (usually mercury). Centrifugal force naturally shapes the liquid into a perfect paraboloid, which is the ideal shape for focusing light. This eliminates the massive costs of glass manufacturing and polishing, making them roughly 10 to 100 times cheaper than traditional telescopes. Statement 2 is Correct: Zenith Observation. LMTs are fixed; they cannot be tilted or steered like Hubble or the James Webb. If you tilt the container, the liquid would spill or the parabolic shape would deform. Therefore, LMTs can only look straight up (Zenith). They observe a narrow strip of the sky as the Earth rotates, making them perfect for \"deep-sky surveys\" (long- term monitoring of the same area). Statement 3 is Incorrect: Not for Planetary Imaging. High-resolution planetary imaging requires the ability to track a specific moving object across the sky for long periods. Because LMTs are fixed and look only at the zenith, they cannot track planets. Their primary use is for detecting transient objects (things that appear and disappear) like supernovae, space debris, and gravitational lenses. SPP 22666 Statement 4 is Incorrect: No Polishing Required. The primary advantage of LMTs is that they do not require polishing. The surface of the rotating mercury is naturally smooth and perfectly shaped by gravity and rotation. Similarly, the alignment is simplified because the mirror is essentially \"self- leveling\" and \"self-shaping\" due to physics. Extra edge: In 2026, the International Liquid Mirror Telescope (ILMT) in Devasthal has become a global center for Space Debris tracking. Because it constantly watches the same strip of sky, it is highly efficient at identifying tiny pieces of junk that pass overhead, which is vital for the safety of India's Gaganyaan and Bhartiya Antariksha Station."},{"id":20,"txt":"With reference to the evolution of India’s Satellite Launch Vehicles, consider the following statements:\n1. SLV was primarily designed to place satellites into Low Earth Orbit for atmospheric research.\n2. ASLV achieved full operational success and became ISRO’s long-term workhorse vehicle.\n3. PSLV is capable of launching satellites into both Sun-Synchronous Orbit (SSO) and Sub-GTO trajectories.\nWhich of the statements given above are correct?","ref":"","opts":["1 only","2 only","1 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Statement 1 is Correct: The SLV-3 was India’s first experimental satellite launch vehicle. It was an all-solid, four-stage vehicle designed to place a 40 kg class satellite (like the Rohini series) into Low Earth Orbit (LEO). Its successful launch in 1980 made India the sixth member of the exclusive \"Space Club.\" Its primary utility was to gain the technical expertise required for orbital injection and atmospheric research. Statement 2 is Incorrect: The ASLV (Augmented Satellite Launch Vehicle) was intended to be an intermediate vehicle between SLV and PSLV. However, it had a very limited success rate (2 out of 4 launches) and was essentially a \"demonstrator\" for technologies like strap-on boosters and nose- cone maneuvering. It never became the \"workhorse\" of ISRO. That title belongs to the PSLV (Polar Satellite Launch Vehicle), which has a record of over 50 successful missions. 10 Statement 3 is Correct: The PSLV is famously known as the \"Workhorse of ISRO.\" While its primary mission is to place remote sensing satellites into Sun-Synchronous Orbits (SSO), it is highly versatile. It has successfully launched satellites into Geosynchronous Transfer Orbit (GTO)— specifically Sub-GTO—as seen in the Chandrayaan-1 and Mars Orbiter Mission (Mangalyaan). It can also perform \"multi- orbit\" missions where it deploys satellites at different altitudes in a single flight."},{"id":21,"txt":"Consider the following pairs of Lunar Missions and their participating nations:\nMission Participating Entity\n1. Beresheet — Israel\n2. Hakuto-R — Japan + UAE\n3. Lupex — India + Japan\n4. Dhanuri — South Korea\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Pair 1 is Correct: Beresheet (Israel) Launched in 2019, Beresheet was a private mission by the Israeli non-profit SpaceIL in collaboration with Israel Aerospace Industries. It aimed to be the first private spacecraft to land on the Moon. Unfortunately, it crashed during the final descent, but it made Israel the seventh country to orbit the Moon. Pair 2 is Correct: Hakuto-R (Japan + UAE) Hakuto-R was a lunar lander developed by the Japanese private company ispace. For its Mission 1 (2023), it carried the Rashid Rover, which was built by the United Arab Emirates (MBRSC). This represented a significant international collaboration between a Japanese private firm and an Arab space agency. Pair 3 is Correct: LUPEX (India + Japan) The Lunar Polar Exploration (LUPEX) mission is a joint venture between India’s ISRO and Japan’s JAXA. In this partnership, Japan is expected to provide the launch vehicle and the rover, while India will provide the lander. The mission is specifically targeting the lunar south pole to explore water-ice. SPP 22666 Pair 4 is Correct: Danuri (South Korea) The Korea Pathfinder Lunar Orbiter (KPLO), officially named Danuri, is South Korea's first mission to the Moon. Launched in late 2022 via a SpaceX Falcon 9 rocket, it successfully entered lunar orbit. It carries instruments to map lunar resources and search for water ice in shadowed craters."},{"id":22,"txt":"Which engine powers the upper stage of the LVM3, making it capable of launching heavy satellites into Geostationary Transfer Orbit (GTO)?","ref":"","opts":["Vikas Engine","Agnilet Engine","CE-20 Cryogenic Engine","CE-7.5 Cryogenic Engine"],"ci":2,"exp":"Ex: The CE-20 is a powerhouse of Indian engineering and is the primary reason why the LVM3 (formerly GSLV Mk-III) can carry heavy \"4-tonne class\" satellites. Option C is correct: The CE-20 is a high- thrust cryogenic engine developed indigenously by the Liquid Propulsion Systems Centre (LPSC). It operates on the Gas Generator cycle, which is simpler and more powerful than the cycles used in previous engines. It uses a combination of Liquid Oxygen (LOX) and Liquid Hydrogen (LH2). It delivers a nominal thrust of 200 kN (kilo- Newtons), providing the massive \"kick\" needed to push heavy payloads from the Earth's atmosphere into a high Geostationary Transfer Orbit (GTO). Why the other options are incorrect: Vikas Engine: This is a liquid-fueled engine based on the French Viking design. It is used in the second stage of the PSLV and the core stage (L110) of the LVM3, but it does not have the efficiency required for the final \"upper stage\" push into high orbits. Agnilet Engine: This is a semi-cryogenic engine developed by the private Indian startup Agnikul Cosmos. It is famous for being the world's first single-piece 3D-printed engine, but it is used for small, private rockets, not ISRO's heavy lifters. 11 CE-7.5 Cryogenic Engine: This is also an indigenous cryogenic engine, but it is less powerful than the CE-20. It is used in the GSLV Mk-II (the \"smaller\" sibling of the LVM3). It operates on the more complex \"Staged Combustion\" cycle"},{"id":23,"txt":"Consider the following pairs:\nTelescope Primary Wavelength Observed\n1. Hubble — Visible and Ultraviolet\n2. Spitzer — Infrared\n3. Chandra — X-ray\n4. Compton — Radio waves\nHow many of the above pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Pair 1 is Correct: Hubble Space Telescope Hubble is primarily an optical (visible) telescope. However, it also has a significant capability to observe in the Ultraviolet (UV) and a small portion of the near-infrared spectrum. This combination has allowed it to capture the most iconic, colorful images of the cosmos. Pair 2 is Correct: Spitzer Space Telescope Spitzer was designed specifically to observe the Infrared universe. Because infrared light can pass through dense clouds of gas and dust, Spitzer was essential for looking into \"stellar nurseries\" (where stars are born) and detecting the heat signatures of exoplanets. Note for 2026: While Spitzer was retired in 2020, its legacy is being carried forward and expanded by the James Webb Space Telescope (JWST). Pair 3 is Correct: Chandra X-ray Observatory Chandra is specialized in detecting X-ray emissions from very hot regions of the universe. This includes exploded stars (supernovae), clusters of galaxies, and matter swirling around black holes. Earth's atmosphere absorbs X-rays, which is why a space-based observatory like Chandra is necessary. Pair 4 is Incorrect: Compton Gamma Ray Observatory The Compton Observatory was built to detect Gamma rays, which are the most energetic form of light, not radio waves. Gamma rays come from the most violent events in the universe, such as solar flares, pulsars, and nova explosions. Radio waves are typically observed by ground-based telescopes like the Giant Metrewave Radio Telescope (GMRT) in Pune, India, or the ALMA array in Chile. SPP 22666"},{"id":24,"txt":"Consider the following statements:\n1. The image of a black hole captured by EHT is produced by observing visible light emitted from the event horizon.\n2. The “shadow” of a black hole is inferred from the interaction of matter and radiation near its event horizon.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is Incorrect: The Event Horizon Telescope (EHT) does not observe visible light. Black holes are often surrounded by thick clouds of gas and dust that block visible light. To pierce through this interference, the EHT observes the universe in Radio Waves (specifically at a frequency of 230 GHz). By using radio interferometry, astronomers can capture the radiation from the superheated gas (plasma) swirling around the black hole, which visible-light telescopes would miss. Statement 2 is Correct: A black hole itself is completely dark because its gravity is so strong that even light cannot escape from within the Event Horizon. What we see in the EHT image is the \"Shadow\" of the black hole. This shadow is created because the black hole bends the path of light and swallows any photon that crosses the event horizon. The bright ring surrounding the shadow is the Accretion Disk—matter moving at near-light speeds, heating up and emitting radiation just before it is lost forever."},{"id":25,"txt":"Consider the following statements:\n1. Megha Tropiques was launched to study the tropical atmosphere and climate-related aspects such as monsoons, cyclones, etc.\n2. SARAL satellites were launched for oceanographic studies using altimetric measurements.\nWhich of the statements given above is/are incorrect?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is correct: Megha-Tropiques is an Indo-French Joint Satellite Mission for studying the water cycle and energy exchanges in the tropics. It is also useful for the study of the tropical atmosphere and climate-related to aspects such as monsoons, cyclones, etc. Statement 2 is correct: SARAL (i.e. Satellite with ARGOS and ALTIKA) is a joint Indo-French satellite mission for oceanographic studies. SARAL performs altimetric measurements designed to study ocean circulation and sea surface elevation. 12"},{"id":26,"txt":"With reference to the Women Engineered Satellite (WESAT), consider the following statements:\n1. The WESAT is a nanosatellite developed by the joint efforts of the European Space Agency and Indian Space Research Organisation.\n2. It will be used to measure UV rays in space and the earth’s surface and their influence on the climate change phenomena.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: Women Engineered Satellite (WESAT) is a project of the Lal Bahadur Shastri Institute of Technology for Women. The nanosatellite weighs around 1 kg and is stated to be country’s first satellite to be designed fully under the supervision of women. Statement 2 is correct: The nanosatellite will be used to measure UV rays in space and the earth’s surface and their influence on the warm temperatures and climate change phenomena. It will research ultraviolet radiation and its effects."},{"id":27,"txt":"With reference to the EDUSAT Programme, consider the following statements:\n1. EDUSAT is the first Indian satellite built exclusively to serve the educational sector.\n2. It is a Geo-synchronous satellite.\nWhich of the statements given above is/are incorrect?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is Correct: EDUSAT (also known as GSAT-3) was launched by ISRO in September 2004. It was the first dedicated \"Educational Satellite\" in the world. Its primary objective was to provide an interactive satellite-based distance education system for the country, specifically targeting rural and remote areas where traditional teaching infrastructure was lacking. It supported schools, colleges, and higher education through virtual classrooms and video conferencing. Statement 2 is Correct: To provide continuous coverage over the Indian subcontinent, EDUSAT was placed in a Geo- synchronous Orbit (specifically, it was co- located with METSAT and INSAT-3C at 74 degree East longitude). Why Geo-synchronous? A satellite in this orbit takes exactly 24 hours to orbit the Earth, matching the Earth's rotation. This allows the satellite to stay \"fixed\" relative to a point on the ground (in this case, India), which is essential for fixed satellite dishes at schools and universities to receive signals without needing to track a moving target.  SPP 22666"},{"id":28,"txt":"Consider the following statements regarding the Solid Fuel Ducted Ramjet (SFDR) technology:\n1. It enables the missile to intercept aerial threats at very long range at supersonic speeds.\n2. It has been jointly developed by India and USA.\nWhich of the statements given above is/are incorrect?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is correct: Defence Research and Development Organisation (DRDO) successfully flight tested Solid Fuel Ducted Ramjet (SFDR) booster at the Integrated Test Range (ITR). The SFDR-based propulsion enables the missile to intercept aerial threats at very long range at supersonic speeds. The performance of the system has been confirmed from the data captured by a number of range instruments like Telemetry, Radar and Electro Optical Tracking Systems deployed by ITR. Statement 2 is incorrect: The Solid Fuel Ducted Ramjet (SFDR) project was started in May 2013 with the objective of developing state-of-the-art SFDR propulsion technology, which can operate at varying altitudes and speeds. The development and demonstration of SFDR propulsion system is a joint venture of DRDO and Russia."},{"id":29,"txt":"Which of the following statements is/are incorrect about the Molniya Orbit?\n1. This orbit is characterized by its zero inclination and eccentricity making it ideal for communications in polar regions.\n2. It allows for a fixed position over the Earth for high-latitude observation.\nSelect the correct answer using the codes given below:","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is incorrect: The Molniya orbit is specifically designed for high-latitude communications, particularly in regions like Russia, where traditional geostationary satellites are less effective due to their low elevation angles at high latitudes. The Molniya orbit has a high inclination (about 63.4°) and high eccentricity, which allows the satellite to spend a significant amount of time over the high-latitude regions during each orbit, providing better coverage and longer observation times. Statement 2 is incorrect: The satellite in a Molniya orbit does not remain stationary relative to the Earth like a geostationary satellite but as it spends a large portion of its orbit in a high-altitude position over the same region (the apogee), it appears as if it is stationary over that region for extended periods. This is particularly useful for observing and communicating with regions at high latitudes, which are otherwise difficult to cover with geostationary satellites.  13"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

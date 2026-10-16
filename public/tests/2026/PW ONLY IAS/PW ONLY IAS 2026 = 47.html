@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PW ONLY IAS 2026 = 47</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>PW ONLY IAS 2026 = 47</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="PW ONLY IAS 2026 = 47">PW ONLY IAS 2026 = 47</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following statements regarding the contributions of ancient Indian mathematicians:\n1. The Sulvasutras were the foundation of Indian mathematics.\n2. Apastamba introduced practical geometry, including concepts of acute, obtuse and right angles.\n3. Brahmagupta’s Brahmasphuta Siddhanta was the first text to mention zero as a number.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Ancient Indian mathematics evolved from ritualistic needs to complex algebraic and astronomical systems. Each of thesemilestones represents a critical leap in mathematical thought. Statement 1 is correct: The Sulvasutras (dating from 800–500 BCE) are the oldest extant mathematical texts in India. They are part of the Kalpa Vedanga and provide the geometrical instructions required to construct sacrificial altars(VedicVedis). Theycontain the earliest expressions of the Pythagoreantheorem and methods for squaring a circle. Statement 2 is correct: Apastamba (approx. 600 BCE) was a major author of the Sulvasutras. His work expanded on practical geometry to ensure the precision of ritual spaces. He provided detailed calculations for the sides of various geometric figures and demonstrated a clear understanding of acute, obtuse, and right angles through the construction of complex altars like the Syenachiti (falcon-shaped altar). Statement 3 is correct: While the concept of \"emptiness\" (Sunya) was older, Brahmagupta’s Brahmasphuta Siddhanta(628 CE) was the first text to treat zeroas a number in its own right, rather than just a placeholder. He defined the rules for arithmetic operations involving zero and even attempted to define division by zero. Mathematician Major Key Text Contribution Baudhayana Early Baudhayana statement of Sulvasutra Pythagoras' Theorem. Aryabhata Approximatio Aryabhatiya n of pi (3.1416); Table of Sines. Brahmagupta Operations Brahmasphuta with Zero and Siddhanta Negative numbers. SPP 22648 Bhaskara II Concept of Lilavati / Infinity; Siddhanta precursor to Shiromani Calculus."},{"id":1,"txt":"Which one of the following theatre traditions of Kashmir is especially known for its sustained use of satire and parody to comment on social and political life?","ref":"","opts":["Bhand Pather","Raslila","Tamasha","Yakshagana"],"ci":0,"exp":"Ex: Bhand Pather is the traditional folk theatre of Kashmir. The word \"Bhand\" stands for \"jester\" or \"performer,\" while \"Pather\" means \"drama\" or \"play.\" Bhand Pather is unique because it is not just a religious or mythical performance; it is a powerful medium of social and political commentary. Satire and Parody: Theplays (called Pathers) use sharp humor andparody to mock the high- handedness of local officials, social hypocrisies, and historical oppressors. It is traditionally performedin openspaces(village squares) and involves a mix of music, dance, and stylized acting. The Music: The performance is always accompanied by the Surnai (a Kashmiri woodwind instrument) and the Dhol (drum). The music provides thecues for the actors and sets the emotional tone of the satire. Hence option A is correct. Why Other Options are Incorrect (b) Raslila: This is a traditional theatre form of Uttar Pradesh (Mathura/Vrindavan) centered on the life of Lord Krishna. It is devotional and romantic in nature, rather than satirical. (c) Tamasha: This is a folk theatre of Maharashtra. Whileit contains elements of humor (especiallythrough theSongadya or jester), it is characterized more by its vigorous dance (Lavani) and romantic narratives. (d) Yakshagana: As discussed earlier, this is the classical-folk theatreof Karnataka. It focuses on the epics (Ramayana and Mahabharata) and is known for its grand costumes and elaborate makeup, not for socio-political satire. 2"},{"id":2,"txt":"Kutiyattam is best described as:","ref":"","opts":["A classical Sanskrit theatre tradition preserved in Kerala temples","A regional folk theatre form performed in village festivals","A devotional dance tradition centred on Vaishnava narratives","A medieval court theatre influenced by Persian stagecraft"],"ci":0,"exp":"Ex: Kutiyattam (also spelled Koodiyattam) is widely considered one of the oldest living theatrical traditions in the world. It is the only surviving school of Sanskrit drama in India that has maintained a continuous tradition for over 2,000 years. Antiquity and Continuity: It represents a synthesis of Sanskrit classicism and the local traditions of Kerala. It is believed to have been codifiedbyKingKulasekhara Varman in the 10th century. UNESCO Recognition: In 2001, it was the first Indian art form to be recognized by UNESCO as a \"Masterpiece of the Oral and Intangible Heritage of Humanity.\" Temple Connection: Traditionally, it is performed only in Koothambalams—sacred theatres built inside temple complexes. Performers: The tradition is upheld by the Chakyar (actors), Nangyar (female performers/singers), andNambiar(drummers). Hence option A is correct"},{"id":3,"txt":"With reference to the Indian People’s Theatre Association (IPTA), consider the following statements:\n1. It functioned as a cultural movement that influenced theatre, cinema, music and dance in the colonial and early post- colonial period.\n2. It was established primarily as a state- sponsored apex body for the preservation of classical performing arts.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The Indian People’s Theatre Association (IPTA) was a revolutionarycultural movement that fundamentally changed the landscape of Indian performance arts by taking art out of elite spaces and bringing it to the common people. Statement 1 is correct: IPTA was not just a theatre group; it was a massive cultural movement. Founded in 1943 during the backdrop of the Bengal Famine and the Quit India Movement, its goal was to use art as a tool for social and political awakening. It brought together luminaries like Prithviraj Kapoor, Balraj Sahni, Ravi Shankar, Bimal Roy, and Shambhu Mitra. Its influence extended to cinema (defining the \"Social Realism\" of earlyBollywood), music (reviving folk tunes for political protest), and dance. Statement 2 is incorrect: IPTA was not state- sponsored. In fact, it was a grassroots, volunteer-ledorganizationwith strong leanings SPP 22648 toward left-wing ideology (associated with the Communist Party of India). It stood in direct opposition to \"state-sponsored\" or \"classical\" elitism. Its mission was to preserveandusefolk arts (not just classical) to highlight the struggles of peasants and workers against colonialismandfeudalism. The \"apexbody\" for the preservation of classical arts established by the state is actually the Sangeet Natak Akademi (founded in 1953). Significant Contributions of IPTA: IPTA's motto was \"People's Theatre for the People.\" Here are its most lasting impacts: Domain Impact / Key Work Theatre Nabanna (written by Bijon Bhattacharya) – a play about the Bengal Famine that revolutionized Indian drama. Cinema Influenced films like Dharti Ke Lal and the works of directors like Ritwik Ghatak and Satyajit Ray. Music Popularized \"Mass Songs\" (Gana Sangeet) that were sung in groups during protests and marches. Folk Revived forms likeJatra(Bengal), Tamasha (Maharashtra), and Burrakatha (Andhra) for political messaging."},{"id":4,"txt":"With reference to early theories of atomism, consider the following statements:\n1. The Vaiśeṣika school proposed that matter is composed of indivisible units called aṇu, which combine to form perceptible substances.\n2. The ancient Indian philosopher traditionally credited with articulating an early atomic theory is Kaṇāda\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: The Vaiśeṣika school posits that the physical universeis composedof Paramāṇu (atoms), which are indivisible, eternal, and indestructible. According to this theory, a single atom (aṇu) is invisible to the naked eye. Atoms of the same substance combine to form Dvyanuka (dyads/pairs). Three dyads thencombineto form a Tryanuka (triad), which is the smallest perceptible unit of matter (oftencompared to a mote of dust seen in a sunbeam). Statement 2 is correct: Kaṇāda (also known as Kashyapa or Uluka) is the sage and philosopher whofoundedthe Vaiśeṣika school. His name \"Kaṇāda\" is actually a nickname meaning \"atom-eater\" or \"grain-eater,\" referringto his habit of collecting grains from 3 the fields to eat while focusing on his philosophy of the smallest particles (Kana). In his text, the VaiśeṣikaSūtra, heexplained that all objects in the universe are reducible to atoms, and thequalitative differences between substances (like earth, water, fire, and air) are due to the different types of atomsthat compose them. Key Concepts of Kaṇāda’s Atomism: Unlike modern atomic theory, which is strictly materialist, ancient Indian atomism integrated spiritual and physical laws: Concept Vaiśeṣika View Indivisibility An atom is the point where the division of matter must stop (Parama meaning ultimate, Anu meaning particle). Motion Atoms are initially at rest; their first motionis causedby Adṛṣṭa (the \"unseenforce\" or moral merit/demerit). Attributes Earth atoms have smell; Water atoms have taste; Fire atoms have color; Air atoms have touch. Combination Two atoms of the same class combine to form a dyad. Comparison with Greek Atomism: It is interesting to note that Kaṇāda's theories emerged around the same time as, or possibly earlier than, those of the Greek philosophers Democritus and Leucippus. However, Kaṇāda’s theory was more elaborate in explaininghow different combinations of atoms lead to the specific chemical and physical properties of matter."},{"id":5,"txt":"The following description best corresponds to which traditional theatre form of India? \"One of the oldest traditional theatre forms of Kerala, it is based on Sanskrit theatre traditions. The main characters include Chakyaar, Naambiyaar, and Naangyaar. The Sutradhar and Vidushak are central figures, with the Vidushak alone delivering dialogues. The art form emphasizes intricate hand gestures and expressive eye movements.\"","ref":"","opts":["Krishnattam","Koodiyaattam","Mudiyettu","Maach"],"ci":1,"exp":"Ex: Koodiyaattam(or Kutiyattam) is a masterpiece of the oral andintangible heritageof humanity, officially recognized by UNESCO. It is the only surviving link to the ancient Sanskrit theatre traditions of India. The description provided contains several specific technical markers that define this art form: SPP 22648 ❖ The Performers: It is traditionally performed bythe Chakyaar(male actors), Naambiyaar (drummers who play the Mizhavu), and Naangyaar (women who play the cymbals and sometimes take on female roles). ❖ The Vidushak’s Role: In a unique departure from standard Sanskrit drama, the Vidushak (jester) in Koodiyaattam is the only character whospeaks in the local language (Malayalam). He translates and explains the Sanskrit verses to the audience, often usingsharp wit and social satire. ❖ Abhinaya (Acting): The form is famous for Nethrabhinaya (eye expression) and Hastabhinaya (hand gestures). An actor might spend hours or even days elaborating ona single verse throughthese silent expressions. ❖ The Venue: It is traditionallyperformedin a Koothambalam, a specially designed temple theatre located within the premises of Kerala's temples. Why Other Options are Incorrect (A) Krishnattam: This is a cycle of eight plays performed at the Guruvayur Temple in Kerala. While it uses masks and elaborate costumes similar to Kathakali, it is specificallydedicatedto the life of Lord Krishna and does not follow the specific Sanskrit-theatre/Vidushak structure of Koodiyaattam. (C) Mudiyettu: This is a ritual dance-dramaof Kerala performed in Kali temples. It depicts the battle between the goddess Bhadrakali and the demon Darika. It is more of a community ritual than a formal Sanskrit theatrical performance. (D) Maach: This is the traditional folk theatre of Madhya Pradesh (Malwa region). It is characterized by singing and secular themes, bearing no resemblance to the ancient Sanskrit traditions of Kerala."},{"id":6,"txt":"Consider the following statements:\n1. Kancheepuram Silk and Arani Silk are GI-tagged products of Tamil Nadu.\n2. Navalgund Durries are GI-tagged to Maharashtra.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: Both Kancheepuram Silk and Arani Silk are legendary textiles from Tamil Nadu. Kancheepuram Silk: Known as 4 the \"Queen of Silks,\" these sarees are famous for their heavy gold Zari and the \"contrast\" borders that are joined to the body using the Pitni (distinguishing) technique. Arani Silk: Produced in the Tiruvannamalai district, Arani silk is known for its lighter weight and the unique \"two-side\" (double-side) borders, whereonesaree can effectively show two different color schemes. Statement 2 is incorrect: Navalgund Durries are GI-tagged to Karnataka, not Maharashtra. Navalgund is a town in the Dharwad district. These durries (floor mats) are unique because they are woven exclusively by women on vertical looms. They are famous for their Jamkhana style, featuring geometric patterns and motifs like the Peacock or Dice-game (Pagadi) boards."},{"id":7,"txt":"Which one of the following individuals is identified as the initiator of Bombay Parsi theatre?","ref":"","opts":["Khurshid Balliwala","Girish Karnad","Pestonji Framji","Bharatendu Harishchandra"],"ci":2,"exp":"Ex: Pestonji Framji is recognized as a pioneering figure in the mid-19th century who laid the foundation for what became a massive theatrical empire across the Indian subcontinent. Parsi theatreemergedin Bombay (now Mumbai) in the 1850s. It was a unique cultural synthesis that blended European theatrical techniques with Indian narratives. Pestonji Framji was instrumental in professionalizing this art form. He founded the Original Parsi Theatrical Company in 1853, which was oneof the first organized troupes in the city. Under his leadership, the theatre moved away from private, amateur gatherings to public, ticketed performances, setting the stage for the commercial theatre industry in India. Hence option C is correct. SPP 22648 Why Other Options are Incorrect (a) Khurshid Balliwala: While a legendary figure, Balliwala belonged to the second generation of Parsi theatre. He was a famous actor and director who took Parsi theatre to international heights, even touring England, but he was not the \"initiator.\" (b) Girish Karnad: He was a modern Indian playwright and actor associated with the post-independence era andthe \"Theatreof Roots\" movement in the 20th century. His work is primarily in Kannada and English. (d) Bharatendu Harishchandra: Known as the \"Father of ModernHindi Literature and Theatre,\" he worked in Varanasi. While he was influenced by Parsi theatre and even critiqued its commercialism, he was not its initiator in Bombay."},{"id":8,"txt":"With reference to Bhagavata Mela Natakam, consider the following statements:\n1. The tradition originated in the Thanjavur region of Tamil Nadu and later gained wider prominence in parts of Andhra Pradesh.\n2. It is a purely folk performance tradition.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Bhagavata Melais a unique andancient dance- drama traditionthat serves as a bridge between the classical andthe devotional. While it shares many similarities with Kuchipudi, its history and geographic roots are distinct. Statement 1 is correct: The tradition originated in the Thanjavur district of Tamil Nadu, specifically in thevillage of Melattur. It was nurturedby theTelugu-speakingBrahmins who migrated to the Tamil region under the patronage of the Nayak and Maratha rulers of Thanjavur (around the16thand 17th centuries). It eventually influencedandgainedprominence in neighboring regions, including Andhra Pradesh. Statement 2 is incorrect: Bhagavata Mela is not a folk tradition. It is a classical dance- drama that strictly followsthe principlesof the Natya Shastra. It utilizes thetechnical nuances of Bharatanatyam for its dance sequences. The music is based on Carnatic Classical traditions. The scripts are written in high- literary Telugu, mostly composed by Venkatrama Sastri. 5 Key Characteristics of Bhagavata Mela Feature Description Performers Traditionally performed only by male members of the Brahmin community. Even female roles are played by men. Venue It is essentially a temple ritual performed once a year duringthe NarasimhaJayanti festival. Primary Focused on the Bhagavata Purana, particularlythe story Theme of Prahlada Charitram(The story of Narasimha). The Mask The character of Lord Narasimha wears a highly sacred, consecratedmask that is kept in the temple and worshipped throughout the year."},{"id":9,"txt":"Consider the following pairs:\nList-I (Traditional List-II Handicraft) (State/UT)\n1. Waraseoni Handloom Karnataka\n2. Manjusha Art — Bihar\n3. Ganjifa Cards — MadhyaPradesh\n4. Khatamband — Kashmir\nHow many of the pairs given above is/are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Only two pairs are correctly matched. Pair 1 is not correctly matched: Waraseoni handloom- Madhya Pradesh ❖ Waraseoni Handloom Sarees and Fabrics, woven in the town of Waraseoni, Madhya Pradesh, are renowned for their intricate designs, fine craftsmanship, and rich colors. Skilled weavers createthesetextiles using traditional handloom techniques, resulting in beautiful sarees and fabrics. Waraseoni Handloom is a GI-Tagged product. Pair 2 is correctly matched: Manjusha Art- Bihar ❖ Manjusha Art is characterized as line drawings and mainly three colors Pink, Green, andYellow are used in it. Borders are very important in Manjusha Art andare usually made in the form of Belpatra, Lehariya, Triangle, Mokha, and series of Snakes. Major Motifs of Manjusha Art are inspired bynature.Major Characters of Manjusha Art are LordShiva, Mansa Devi (Bishari), Bihula, Bala, Hanuman, and SPP 22648 ChanduSaudagar. The motifs of Manjusha arts are inspired by the religious and cultural beliefs of the Ang Region. It is a GI-Tagged product. Pair 3 is not correctly matched: Ganjifa Cards- Mysore, Karnataka ❖ Ganjifa Cards are made in different sizes and shapes. Motifsof animals,birds, nude figures, swords, leaves, zodiac signs, etc. themes are drawn on the cards. Traditionally the design motifs were selected from Agamas, Upanishads, Ramayana,Mahabharatatha, Bhagavat Geetha, Puranas, Jain, Buddhist Literature shakta, shaivya, vaishnava, Ganapathy, Advaitya, Dwaitya etc. It is a GI-tagged handicraft. Pair 4 is correctly matched: Khatamband- Kashmir ❖ KHATAMBAND is one of the oldest known wood crafts of Kashmir which is the result of the uniquecombinationof the geo-climatic conditions and the socio- cultural history of the region. The craft involves theuse of an indigenous process and related practices uniqueto the Kashmir region on locally grown raw material which is both aesthetic andcost-effective. This intricate carving is a GI-Tagged product from Kashmir."},{"id":10,"txt":"Ajrakh block printing from Gujarat is traditionally known for the use of:","ref":"","opts":["Synthetic dyes in bright neon shades","Natural dyes such as indigo and madder","Metallic thread embroidery on silk","Oil-treated cotton resist technique"],"ci":1,"exp":"Ex: Ajrakh is a unique and ancient form of block printingfound in the Kutch district of Gujarat and the Barmerdistrict of Rajasthan. Its name is often linkedto the Arabic word Azrak, meaning \"blue,\" which is a dominant color in the craft. Ajrakh is not just a printing technique; it is a complex 16-stage chemical process that relies entirely on the reaction between natural elements: ❖ Indigo (Blue): Derived from the Indigofera tinctoria plant, it provides the deep, signature blue backgrounds. ❖ Madder Root (Red): Known as Al or Manjistha, it creates the rich earthy reds and maroons. 6 ❖ Camel Dung and Myrobalan: Usedin the initial stages to softenthe clothand act asa mordant to ensure the colors stay fast. ❖ Iron Filings and Jaggery: Fermented together to producethe blackdye used for outlines. Hence option B is correct. Key Characteristics of Ajrakh Feature Description Geometry Unlike the floral prints of Sanganer, Ajrakh is strictly geometric, featuring stars, circles, and complexlattices. Double- High-quality Ajrakh is Sided Minakari (double-sided), where the pattern is printed on both sides of the cloth with perfect alignment. Resist It uses a technique called Printing Dhabu (a lime and gum resist) to protect certainareas from the dye, creating white or contrasting outlines. Community It is traditionally practicedby the Khatri community, who migrated from Sindh to Kutch centuries ago."},{"id":11,"txt":"With reference to classical Ayurvedic texts, consider the following statements:\n1. Harita Saṁhitā is confined to surgical procedures.\n2. Nimi Tantra is primarily associated with diseases and treatment of the eye.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect: TheHaritaSaṁhitā is not confinedto surgery. It is a comprehensive Ayurvedic text that coversall eight branches of medicine.It is particularly notedfor its focus on Kayachikitsa (General Medicine), toxicology, and its uniqueclassificationof seasons and their impact on health.The text primarily focused on surgical procedures is the Sushruta Saṁhitā, authored by Sushruta, who is known as the \"Father of Surgery.\" Statement 2 is correct: Nimi Tantra is an ancient treatisededicatedto Shalakya Tantra, the branch of Ayurveda dealingwith diseasesof the head, neck, and organs of the senses. Specifically, it is regarded as the foundational text for Ophthalmology (diseases and treatment of the eye). King Nimi of Videha is traditionally credited as thepioneer of this field. SPP 22648 Sage/Tex Specialization Modern t Equivalent Sushruta Shalya Tantra Surgery Charaka Kayachikitsa Internal Medicine Nimi Shalakya Ophthalmolo Tantra gy (Eye) Kashyap Kaumarabhrity Pediatrics / a a Obstetrics Agastya Agada Tantra Toxicology"},{"id":12,"txt":"Which one of the following classical texts is specifically concerned with formulations for perfumes, aromatic compounds and cosmetic preparations such as mouth fresheners and bath powders?","ref":"","opts":["Gandhayukti","Bṛhat Saṁhitā","Charaka Saṁhitā","Kāmasūtra"],"ci":0,"exp":"Ex: While many ancient Indian texts touch upon aesthetics andpersonal care, the Gandhayukti (meaning\"the art of combiningperfumes\") is a specialized technical discipline dedicated entirely to the science of fragrance and cosmetics. In ancient India, perfumery was considered one of the 64 arts (Kalas). The Gandhayukti specifically deals with: Formulations: It provides precise \"recipes\" for various aromaticproductslike Dhupa (incense), Gandhodaka (perfumed water), and Mukhavaasa (mouth fresheners). Blending Techniques: It explains the principles of blending—how to balance base, middle, andtop notesusing natural ingredients like sandalwood,saffron, musk, and camphor. Preservation: It details how to stabilize scents so they remain fragrant over time. Why Other Options are Incorrect (b) Bṛhat Saṁhitā: This is a vast encyclopediawritten byVarahamihira in the 6th century AD. While it covers astrology, architecture, and agriculture, it actually contains a famous chapter titled 'Gandhayukti'. However, the Gandhayukti itself is the name of the science/textual tradition,whereas the Bṛhat Saṁhitā is a general work that merely includes it. (c) Charaka Saṁhitā: This is primarily a medical text. While it discusses oils and pastes for hygiene (Dinacharya), its focus is therapeutic rather than cosmetic or aesthetic. 7 (d) Kāmasūtra: Writtenby Vatsyayana, this text mentions perfumery as one of the skills a refinedcitizen (Nagaraka) should possess, but it does not provide technical formulations or thescientific chemistry of perfumes."},{"id":13,"txt":"Which ruler established the Dhanvantari Mahal at Thanjavur to promote research in cosmetics and medicine?","ref":"","opts":["Rajaraja Chola","Raja Serfoji","Krishnadevaraya","Tipu Sultan"],"ci":1,"exp":"Ex: Raja Serfoji II (reigned1798–1832) was thelast major Maratha ruler of Thanjavur and was a remarkable polymath. He was deeply interested in the integration of traditional Indian sciences with Western scientificmethods. He established the Dhanvantari Mahal, whichwas essentially an advanced research institute for medicine and pharmacology. He didn't just preserve old texts; he actively experimented. He maintained a laboratory where formulations from Siddha, Unani, and Ayurveda were tested and refined. The Dhanvantari Mahal also conducted research into cosmetics and perfumery, documenting hundreds of recipes for oils, scents, and skin preparations. Saraswathi Mahal Library: He significantly expanded this famous library, collecting thousands of palm-leaf manuscripts on medicine (including the Gaja Shastra on elephant medicine). Ophthalmology: Interestingly, Serfoji II was an early pioneer of cataract surgery in India. He maintained records of eye surgeries performedat his institute, complete with hand- drawn anatomical diagrams of the eye. Hence option B is correct."},{"id":14,"txt":"With reference to Karchobi and Kantha traditions, consider the following statements:\n1. Karchobi employs metallic threads laid over padding to produce a raised ornamental surface.\n2. Kantha originated as a recycling practice in which layers of worn textiles were secured using running stitches.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both Karchobi and Kantha represent two distinct philosophies of Indianembroidery: one focused on royal opulence and the other on domestic thrift and sustainability. Statement 1 is correct: Karchobi is a specialized form of Zardozi (metal embroidery) that is characterized by its raised, three-dimensional effect. It is created by placing cotton or thick thread padding on the fabric and then stitching metallic threads SPP 22648 (traditionally gold or silver, now often copper or synthetic) overit. This techniqueis primarily used for heavygarments like bridal wear, royal canopies, and velvet coverings. Statement 2 is correct: Kantha originated in Bengal (West Bengal and Bangladesh) as a practical andeco-friendly wayto repurposeold, soft sarees and dhotis. Several layers of old fabric were stitched together using a simple running stitch. Traditionally, the thread used for the embroiderywaspulledfromthe borders of the old sarees themselves."},{"id":15,"txt":"The traditional Phulkari embroidery of Punjab is typically executed on which one of the following fabric combinations?","ref":"","opts":["Handspun cotton khaddar embroidered with untwisted silk floss","Fine muslin decorated with resist-dyed geometric motifs","Silk brocade embellished with metallic zari threadwork","Velvet fabric enriched with raised gold embroidery"],"ci":0,"exp":"Ex: Phulkari (literally meaning \"flower work\") is the most celebratedfolkembroidery of Punjab. It is deeply rooted in the domestic life of Punjabi women and is consideredan auspicious craft, often gifted during weddings. The authenticity of a traditional Phulkari piece lies in its specific material combination: ❖ The Base (Khaddar): It is alwaysdone on handspun, hand-woven cotton known as Khaddar. This fabric was traditionally chosen because it was sturdy, locally available, and its coarse weave made it easier to count the threads for the embroidery without a frame. ❖ The Thread (Pat): The embroidery is done with untwisted silk floss called Pat. Because the silk is untwisted, it reflects light in a unique way, giving the finished work a brilliant, velvety sheen that contrasts beautifullywith the matte cotton base. ❖ The Technique: It is executed using the darn stitch on the reverse side of the cloth. The weaver countsthe threads of the khaddar to create perfectly geometric patterns on the front. 8 Types of Phulkari Type Description Bagh Literally \"Garden.\" The embroidery is so dense that the base khaddar is completely invisible. Chope Usually red-colored; gifted by the maternal grandmother to the bride. It features borders only. Nilak Done on a black or navy blue khaddar base with yellow or bright crimson thread. Shishadar Phulkari that incorporates small mirrors (similar to Gujarati work)."},{"id":16,"txt":"Bhela Saṁhitā, attributed to a disciple of Atreya, is notable for early discussions relating to:","ref":"","opts":["Pulse diagnosis and astrology","Botanical classification","Plastic surgery techniques","Brain function and bodily fluid movement"],"ci":3,"exp":"Ex: The Bhela Saṁhitā is one of the oldest treatises of Ayurveda, composedby Bhela, who was one of the six disciples of the legendary sage Atreya Punarvasu (alongside Charaka’s predecessor, Agnivesha). While much of the Bhela Saṁhitā aligns with the general principles of the Atreya School (Internal Medicine), it contains several remarkably \"ahead of its time\" anatomical and physiological observations: ❖ Location of the Mind (Chitta): Unlike many contemporary texts that placed the seat of the mind in the heart, the Bhela Saṁhitā explicitly discusses the brain (Mastulunga) as the center of mental faculties and cognitive processes. ❖ Bodily Fluid Movement: The text provides early descriptions of the circulation of fluids/bloodwithinthe body. SPP 22648 It describeshow the heart acts as a center from whichvarious Dhamanis (channels) carry nutrients and life force to the extremities. ❖ Unique Psychophysiology: It attempts to explain how various types of Doshas (specifically Alochaka Pitta) interact within the brain to facilitate vision and thought. Hence option D is correct Why Other Options are Incorrect (a) Pulse diagnosis and astrology: Pulse diagnosis (Nadi Pariksha) is a later development in Ayurveda, becoming prominent only around the 13th–14th centuries (e.g., in the Sarangadhara Samhita). Whileastrologyis mentioned in many texts, it is not the \"notable\" defining feature of Bhela. (b) Botanical classification: While the Bhela Saṁhitā mentions herbs, the most systematic ancient botanical classifications are found in the Vrkshayurveda (by Surapala) or the Nighantus (Ayurvedic lexicons). (c) Plastic surgery techniques: This is the exclusive domain of the Sushruta Saṁhitā. The Atreya school, to which Bhela belonged, focused primarily on internal medicine (Kayachikitsa) rather than surgical intervention."},{"id":17,"txt":"With reference to the National School of Drama (NSD), consider the following statements:\n1. It was set up by the Sangeet Natak Akademi in 1959.\n2. It is an autonomous organization under the Ministry of Culture.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: National School of Drama (NSD) is one of the foremost theatre institutions in the world and the only one of its kind in India. It was set up by Sangeet Natak Academy in 1959. Statement 2 is correct: In 1975, it became an autonomous organization, fully funded by the Ministry of Culture, Government of India. Additional Information: NSD hasset-up four centres at Agartala,Bengaluru, Gangtok and Varanasi (under its Outreach Programme) to impart one year certificatecourseon teaching& training in Dramatic Arts. Recently, a centre has been opened at Srinagar to start a one year course of TIE (Theatre-in-Education) methodology. 9"},{"id":18,"txt":"Tanchhoi weaving, often confused with Banaras silk, originally developed in:","ref":"","opts":["Varanasi","Surat","Murshidabad","Kanchipuram"],"ci":1,"exp":"Ex: While Tanchoi (also spelled Tanchhoi) is now one of the most famous varieties of silk sarees produced in Varanasi, its origins are deeply rooted in the textile history of Surat, Gujarat. The Fascinating History of Tanchoi: The name \"Tanchoi\" itself provides a clue to its origin. The word is derived from the \"Three\" (Tan) \"Choi\" brothers from Surat. In the mid- 19th century, three Parsi brothers from Surat traveled to China to learn the art of weaving silk with intricate, multi-coloredfloral patterns. Upon their return to Surat, they began producingthis Chinese-influenced silk, which came to be known as \"Tan-choi\" (the work of the three Chois). Migration to Varanasi: As the patronage for high-end silk shifted and the Surat weaving community faced challenges, the technique eventually migrated to Varanasi. The master weavers of Banaras adapted the Tanchoi technique, blendingit with their own traditional Zari work to create the modern Banarasi Tanchoi we see today. Hence option B is correct. How to Identify Tanchoi: Tanchoi is distinct from other silks due to its specific weaving characteristics: ❖ Satin Base: It is essentially a silk-on-silk weave with a satin ❖ No Floats: Unlikeregular Banarasi sarees where you might see loosethreads (floats) on the reverse side, Tanchoi is woven so densely that the backlooks almost as clean as the front. ❖ Embossed Effect: The patterns (usually small floral motifs like Amru) appear slightly raised or \"embossed\" onthe fabric, givingit a rich, heavy texture without the use of heavy gold or silver Zari."},{"id":19,"txt":"With reference to medieval history, which of the following correctly defines Sukraniti?","ref":"","opts":["A text that mentions the preparation of gunpowder using saltpetre.","A work on Ayurveda detailing medicinal formulations and surgical techniques.","A philosophical text explaining the principles of Vedanta and metaphysics.","A manual on temple architecture and iconographic proportions"],"ci":0,"exp":"Ex: Sukraniti (or Sukraniti-sara), attributed to the sage Sukracharya, is an ancient and medieval treatise on statecraft, military strategy, and social organization. It is highly significant in the history of science and technology in India SPP 22648 for its descriptions of weaponry. The text contains specific verses that provide clear evidenceof the use of firearms and explosives in India during the medieval period: ❖ Gunpowder Formulation: It provides a precise recipe for gunpowder (Agni- churna), statingthat it is madefrom 5 parts saltpetre (Suryaksara), 1 part sulphur (Gandhaka), and 1 part charcoal (Angara). ❖ Firearms: The text describes the use of Nalika (guns or muskets) and Shataghni (literally \"hundred-killer,\" referring to large cannons or projectile launchers). ❖ Projectile Mechanics: It discusses theuse of lead or iron balls as projectiles and explains how the force of the \"fire- powder\" propels theball. Hence option A is correct."},{"id":20,"txt":"With reference to traditional textile forms of India, consider the following statements:\n1. Kalamkari, characterised by narrative themes drawn from epics and executed with natural dyes, is associated with centres such as Machilipatnam and Srikalahasti.\n2. Telia Rumal is a resist-dyed cotton textile traditionally linked with the Deccan region and treated with oil prior to dyeing.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: Kalamkari (literally meaning \"pen-work\") has two distinct styles: ❖ Srikalahasti Style: This involves using a bamboo pen (kalam) to freehand draw narrative themes from the Ramayana, Mahabharata, and Puranas. It is highly detailed and focuses on religious storytelling. ❖ Machilipatnam Style: This style uses hand-carved wooden blocks for the outlines and the kalam for filling in finer details. Its motifsare oftenmore floral and Persian-influenced (such as the tree of life). ❖ Natural Dyes: Both styles exclusively use vegetable andmineral dyes, likeindigo for blue, madder for red, and pomegranate skin for yellow. Statement 2 is correct: Telia Rumal (literally \"oily handkerchief\") is a unique double-ikat weave from Puttapaka in Telangana(formerly part of the Hyderabad State in the Deccan). Before dyeing, the yarn is treated with a mixture of gingelly(sesame) oil,castor oil, and sheep dung. This treatment helps the natural dyes adhere better and makes the fabric water- repellent and uniquely soft with a distinct metallic luster. 10 ❖ Double Ikat: It is a complex process where both the warp and the weft are resist-dyed before weaving to create intricate geometric patterns."},{"id":21,"txt":"Consider the following statements regarding Mughal-era texts:\n1. Akbarnama gives an account of the casting of cannons.\n2. Ain-i-Akbari mentions the Regulations of the Perfume Office of Akbar.\nWhich of the statements given above is/are correct?","ref":"","opts":["Only 1","Only 2","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Statement 1 is correct: In the Akbarnama, Abul Fazl provides a detailed account of Akbar’s personal interest in mechanical inventions and military technology. He specifically describes the casting of cannons and the innovations made in artillery. Akbar is credited with inventing a machine that could clean seventeen gun barrels simultaneously. The text mentions the construction of heavy \"Gajnal\" (elephant-mounted) and \"Shuturnal\" (camel-mounted) cannons,as well as the use of detachable barrels for easier transport in mountainous terrain. Statement 2 is correct: The Ain-i-Akbari (Third Volume of Akbarnama) contains a fascinatingsection titled \"The Regulations of the Perfume Office\" (Khushbu Khana). It provides an exhaustive list of aromatic substances, their prices, and the specific \"recipes\" usedfor the Emperor’s personal use. It mentions the preparation of Gulkand, the distillation of various flowerwaters(Arqs), and the creation of incense sticks and scented oils. This section is often cited as a key historical text for the study of Gandhayukti (Indian perfumery) during the medieval period."},{"id":22,"txt":"With reference to traditional textiles in India, the term ‘Soft Gold’ is associated with:","ref":"","opts":["Kanchipuram Silk","Muga Silk","Pashmina Wool","Banarasi Brocade"],"ci":2,"exp":"Ex: ❖ Pashmina, often referred to as ‘soft gold’, has been a symbol of luxury and prestige since the Mughal era. This fabric SPP 22648 holds significant cultural importance in Kashmir, where it is commonly used in ceremonial shawls and treasured heirlooms. ❖ Pashmina is associated with exceptional craftsmanship, representing the rich heritage of the region. Pashmina, popularly known as cashmere wool, is well-known not just in India but also globally for its exquisite softness, warmth, and long life. ❖ It derives its name from pashmn – the under fleece of the mountain goat called Chyangra (Capra Hircus), which lives in the high altitude of 12,000 feet in the Himalayan regions."},{"id":23,"txt":"The text Rasaratnakara, dealing with alchemy and chemical processes, is attributed to:","ref":"","opts":["Bhaskaracharya","Nagarjuna","Mahaviracharya","Baudhayana"],"ci":1,"exp":"Ex: The Rasaratnakara is a seminal text in the field of Rasa Shastra (Indian alchemy and iatrochemistry).It marksa transition in ancient Indian sciencefrom purely herbal medicine to the sophisticated useof minerals andmetals for therapeutic purposes. The authorship is attributed to the chemist- philosopher Nagarjuna (often associated with the 7th–8th century CE alchemy tradition, distinct fromthe earlier Buddhist philosopher of the same name). The text provides detailed descriptions of the extraction of metals like gold, silver, copper, and tin from their ores. It describes complex processes such as sublimation, distillation, and calcination (Marana). Alchemy: It discusses the transformation of \"base metals\" into \"noble metals\" (mercuryinto gold) and the preparation of the \"elixir of life\" for longevity. Thetext is notablefor describing various types of apparatus (Yantras) used for chemical reactions, such as the Dola Yantra (suspension apparatus) and the Patana Yantra (distillation apparatus). Hence option B is correct. Why Other Options are Incorrect (a) Bhaskaracharya:As a mathematician and astronomer, hisworks (Lilavati, Siddhanta Shiromani) focus on arithmetic, algebra, and planetary motion, not chemistry. 11 (c) Mahaviracharya: A 9th-century mathematician whose work, Ganit Sara Sangraha, is purely mathematical (arithmetic and geometry). (d) Baudhayana: One of the earliest authors of the Sulvasutras (approx. 800 BCE), his contributions are in the field of geometry and the construction of Vedic altars."},{"id":24,"txt":"Consider the following pairs of shadow puppetry forms and their associated regions in India:\nPuppet Form Region\n1. Bommalattam — Tamil Nadu\n2. Kundhei — Bihar\n3. Yampuri — Odisha\n4. Tholu Bommalata Andhra Pradesh\nSelect the correct answer from the codes given below:","ref":"","opts":["2 and 3 only","1, 2, 3 and 4","1, 2 and 3 only","1 and 4 only"],"ci":3,"exp":"Ex: Pair 1 is correct: Bommalattamis a string and rod puppet tradition of Tamil Nadu, not a shadow puppet, but since it's linked to Tamil Nadu, Pair 2 is incorrect: The string puppets of Odisha, known as Kundhei, are made of light wood with no legs but long flowing skirts. They have more joints, making them highly articulate and easyto manipulate.Puppeteers use a triangular wooden prop to control the strings. Their costumes resemble Jatraactors, and the music is influenced by Odissi and regional folk tunes. Pair 3 is incorrect: Yampuri, the rod puppet of Bihar, is carved from a single piece of wood with no joints, unlike West Bengal and Odisha's rod puppets. Due to the lack of joints, manipulation requires greater dexterity to animate movements effectively. Pair 4 is correct: Tholu Bommalata, the shadow puppet theatre of Andhra Pradesh, features large, jointed puppets at the waist, shoulders, elbows, and knees. These puppets are painted on both sides, allowing colored shadows on the screen. The music follows classical styles, and themes are drawnfrom the Ramayana, the Mahabharata, and the Puranas."},{"id":25,"txt":"Consider the following pairs of traditional theatre forms and their associated states:\nTraditional Theatre State Form\n1. Bhand Pather — Kashmir\n2. Bhavai — Gujarat\n3. Yakshagana — Tamil Nadu\n4. Which of the given above pairs is/are correct?4. Therukoothu — Karnataka","ref":"","opts":["1 and 2 only","1, 2, 3 and 4","1,3 and 4 only","3 and 4 only"],"ci":0,"exp":"Ex: Pair 1 is correct: Bhand Pather, the traditional theatre formof Kashmir, is a unique combination of dance, music andacting. Satire, wit and parody are preferred for inducing laughter. In this theatreform, music is provided with surnai, nagaaraanddhol.Since theactors of Bhand Pather are mainly from the farming SPP 22648 community, the impact of their way of living, ideals and sensitivity is discernible. Pair 2 is correct: Bhavai is the traditional theatre form of Gujarat. The centers of this form are Kutch andKathiawar. Theinstruments used in Bhavai are: bhungal, tabla, flute, pakhaawaj, rabaab, sarangi, manjeera, In Bhavai, there is a rare synthesis of devotional and romantic sentiments. Pair 3 is incorrect: Yakshagaana, traditional theatre form of Karnataka, is based on mythological stories and Puranas. The most popular episodes are from theMahabharata i.e. Draupadi swayamvar, Subhadra vivah, Abhimanyu vadh, Karna-Arjun yuddhandfrom Ramayana i.e. Raajyaabhishek, Lav-kush Yuddh, Baali-Sugreeva yuddha andPanchavati. Pair 4 is incorrect: Therukoothu, the most popular form of folk drama of Tamil Nadu, literally means \"street play\". It is mostly performedat the time of annual temple festivals of Mariamman (Rain goddess) to achieve rich harvest. At the core of the extensive repertoire of Therukoothu there is a cycle of eight plays based on thelife of Draupadi. Kattiakaran, the Sutradhara of the Therukoothu performance, gives the gist of the play to the audience and Komali entertains the audience with his buffoonery."},{"id":26,"txt":"Consider the following statements regarding the development of mathematics in medieval India:\n1. Ganitasara was composed by Bhaskara.\n2. Bija Ganita was translated by Ataullah Rashidi during Shah Jahan’s reign.\n3. Akbar ordered the inclusion of mathematics as a subject in the educational system.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is incorrect: The Ganitasara (or Ganitasara-sangraha) was actually composed by the 9th-century Jain mathematician Mahaviracharya, not Bhaskara. It was one of the first texts to separate mathematics from astrology. Bhaskara II (Bhaskaracharya) is famous for the Siddhanta Shiromani, which contains the Lilavati (Arithmetic) and Bija Ganita (Algebra). Statement 2 is correct: Duringthe Mughal era, there was a concerted effort to translate classical Indian scientific works. Ataullah Rashidi, the son of the architect of the Taj Mahal (Ustad Ahmad Lahori), translated Bhaskara’s Bija Ganita into Persian during Shah Jahan’s reign (around 1634–35). Similarly, the Lilavati had been translated earlier by Faizi during Akbar's reign. 12 Statement 3 is correct: Akbar was a great reformer of the education system. Through the influence of his vizier Abul Fazl, he issued an imperial decree stating that the curriculum should include \"secular\" sciences.Mathematics (Ganita), alongwith medicine,agriculture, and astronomy, were made mandatory subjects in the Madrasas and schools to ensure students were prepared for administrative and commercial life."},{"id":27,"txt":"Consider the following pairs of puppet forms and their corresponding types:\nPuppet Form Type\n1. String Puppets — Kathputli\n2. Shadow Puppets Togalu Gombeyatta\n3. Rod Puppets — Putul Nautch\n4. Glove Puppets — Pavakoothu\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Pair 1 is correct: String Puppets: India has a rich and ancient tradition of string puppetry, also knownas marionettes, whichhave jointed limbs controlled by strings for greater flexibility and articulation. This form of puppetryhasflourished in Rajasthan, Odisha, Karnataka, and Tamil Nadu. Kathputli of Rajasthan. These puppets are carved from a single piece of wood and are brightly dressed in medieval Rajasthani attire. Their distinct facial featuresincludeoval faces, large eyes, arched eyebrows, and large lips. Pair 2 is correct: Shadow puppets are flat, leather-cut figures, treated to make them translucent. Thesepuppets areplacedagainst a screen with a strong light source, creating silhouettes or colorful shadows for the audience. This tradition is still prevalent in Odisha, Kerala, Andhra Pradesh, Karnataka, Maharashtra, and Tamil Nadu. One prominent form is Togalu Gombeyatta of Karnataka, where puppet sizes vary by character status—larger for kings and religious figures, smaller for commoners. This distinct storytelling technique adds depth to performances, keeping the art alive in Karnataka’s cultural traditions. Pair 3 is correct: Rod puppets are larger than glove puppets and are manipulated from below using rods. This form of puppetry is mainly found in West Bengal and Odisha. In West Bengal, Putul Nautch is a traditional rod puppet form, where puppets are carved from wood and follow regional artistic styles. Once human-sized in Nadia district, the surviving puppets are 3-4 feet tall, dressed like Jatra theatre actors,andhave three movable joints at the neck and shoulders for expressive movement. SPP 22648 Pair 4 is correct: Glove puppets, also called sleeve, hand, or palmpuppets, are controlled using fingers, with the first fingermoving the head and the thumb and middle finger controlling the arms. These puppets are popular in Uttar Pradesh, Odisha, West Bengal, and Kerala. In Kerala, Pavakoothu is the traditional glovepuppet theatre, influenced by Kathakali. Originatingin the 18th century, Pavakoothu puppets range from one to two feet tall, with wooden heads and arms attached to cloth bodies, allowing expressive storytelling."},{"id":28,"txt":"In the classical Sanskrit theatrical tradition,\nwhich one of the following roles is primarily responsible for introducing the play in the prologue and facilitating transitions between acts?","ref":"","opts":["Vidūṣaka","Pratināyaka","Nāyaka","Sūtradhāra"],"ci":3,"exp":"Ex: The Sūtradhāra (literallymeaning \"the holder of the strings\") is the most vital functional role in a classical Sanskrit drama. He acts as the stage manager, director, and narrator all in one. In the tradition of Sanskrit drama(as outlined in the Nātyaśāstra), the play does not start directly with the actors. Instead: ❖ The Prologue (Prastāvanā): The Sūtradhāra enters first to perform the Nāndī (openingprayer). He then addresses the audience, introduces the playwright, and sets the theme of the play. ❖ The Transition: He often engages in a dialogue with an actress (Naṭī) or an assistant to lead into the first scene. ❖ The \"String-Holder\": His name comes from the ancient puppet theatre, where the person holding the strings controlled the entire show. In drama, he \"holds the strings\" of the plot, often appearing between acts to summarize events or bridge time gaps. Hence option D is correct. Why Other Options are Incorrect (a) Vidūṣaka: He is the jester or the comic companion of the hero. While he is a central character, his role is to provide humor and social commentary, not to manage the technical introduction or transitions of the play. (b) Pratināyaka: This refers to the antagonist or the villain (the \"counter-hero\"). His role is to create conflict for the protagonist. 13 (c) Nāyaka: This is the protagonist or the hero of the play (e.g., King Dushyanta in Abhijnānashākuntalam)."},{"id":29,"txt":"Which one of the following traditional craft techniques involves engraving designs on a metal surface and filling the incised grooves with coloured resin or compounds?","ref":"","opts":["Tarkashi","Koftgiri","Marori work","Dhokra casting"],"ci":2,"exp":"Ex: Marori work is a sophisticated metalcraft tradition, primarily practicedin Uttar Pradesh (Moradabad) and parts of Rajasthan. It is a form of decorative metal engraving that gives an appearance similar to black-and-gold embroidery on a metallic surface. The techniqueis a multi-step process that creates a high-contrast, \"lace-like\" effect on brass or copper objects: Etching/Engraving: Theartisanfirst etches or carves intricatefloral or geometric patterns into the surface of the metal using a sharp chisel. Filling the Gaps: The recessed areas (the \"marori\" or curves) arethenfilled with a black lac or resin-based substance. Polishing: Once the resin sets, the object is buffed and polished. The gold-colored metal remains visibleon theraisedportions,while the black resin provides a deep,matte background, makingthe metal patterns \"pop.\" Hence option C is correct.  SPP 22648 Why Other Options are Incorrect (a) Tarkashi: This is the art of inlaying fine metallic wires (brass, copper, or silver) into hard wood (usually Sheesham). It involves carvinga groove and hammering the wire into it, not filling gaps with resin on metal. (b) Koftgiri: This is a \"damascening\" techniqueused historically for decorating weaponry (swords andshields). It involves overlaying gold or silver wire on a cross- hatched steel surface by pressing and heatingit. It does not involve resin filling. (d) Dhokra Casting: This is an ancient lost- wax casting technique used by tribal communities (likethe Gadds of Odishaand Chhattisgarh). It involves creating a clay core, covering it with wax threads, and then pouring molten metal. It is a casting process, not a surface engraving/etching technique.  14"}],"m":null,"tt":1800,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>
