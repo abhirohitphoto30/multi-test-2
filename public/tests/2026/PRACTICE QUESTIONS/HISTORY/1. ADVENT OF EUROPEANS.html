@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>1. ADVENT OF EUROPEANS</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>1. ADVENT OF EUROPEANS</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="1. ADVENT OF EUROPEANS">1. ADVENT OF EUROPEANS</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to the Modern Indian history, consider the following statements:\n1. Jotedars were the sharecroppers who used to lease the land of large peasants for cultivation.\n2. Gomasthas were the large landowners who cultivated their agricultural lands by hiring labours.\n3. Bargadars were the rural officials responsible for the collection of revenue from peasants.","ref":"","opts":["Only one","Only two","All three","None"],"ci":3,"exp":"Ex: Jotedars were actually a group of rich peasants who acquired vast areas of land by the early 19th century. Gomasthas were Indian agents of the British East India Company who signed agreements with local weavers and artisans to supply goods. Bargadars were sharecroppers who cultivated the land of Jotedars and handed over half the produce after harvest."},{"id":1,"txt":"Consider the following statements with respect to the arrival of Europeans in India:\n1. The first Portuguese factory was set up at Calicut by Vasco da Gama.\n2. The French were the first to set up factories in Pondicherry.\n3. The Dutch established their first factory in Masulipatnam.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: The first Portuguese factory at Calicut was set up by Pedro Alvarez Cabral in 1500, not Vasco da Gama. The Portuguese were the first to set up a factory in Pondicherry in 1523, followed by the Danes, not the French. The Dutch did indeed establish their first factory in Masulipatnam in 1605."},{"id":2,"txt":"Consider the following reasons for quest of Europeans to find a direct sea route to India:\n1. Demand for Indian luxury goods increased in Europe.\n2. Land routes to India were controlled by the Arabs.","ref":"","opts":["1 Only","2 Only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Increased economic prosperity in Europe led to a higher demand for Indian luxury goods. Additionally, the capture of Constantinople by the Ottoman Empire in 1453 gave Arabs control over land routes, forcing Europeans to seek direct maritime access to India."},{"id":3,"txt":"With regards to the \"misls\" among the Sikhs, which of the following statements is correct?","ref":"","opts":["Misls were groups of armed officers formed by Maharaja Ranjit Singh.","Misls were democratic in nature and based on the principle of equality.","Misls were formed to protect Punjab from the invasions of Nadir Shah.","None of the statements (a), (b) or (c) is correct."],"ci":1,"exp":"Ex: Misls were Sikh confederacies that operated in different parts of the province and were democratic in nature, allowing all members an equal voice. They were formed to fill the political vacuum created after the withdrawal of Ahmad Shah Abdali, rather than Nadir Shah's invasion."},{"id":4,"txt":"With reference to the reasons behind the success of the Britishers over French in colonising India, consider the following statements:\n1. Unlike the French East India Company, the British East India Company was under strict government control and regulation.\n2. In comparison to the Britishers, there was a lack of abled leaders and commanders on the French side.\n3. France were more interested in commercial interests whereas the British were focused on political interests.\n4. Britishers had a superior navy as compared to the French.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: The British Company was a private enterprise with less government control, allowing for instant decisions, unlike the state-controlled French company. While the British had many able leaders like Robert Clive, the French side mostly relied on Dupleix. The British never neglected commercial interests despite imperial motives, and their navy was technologically superior."},{"id":5,"txt":"With reference to the prevalence of slavery during the Colonial Period in India, consider the following statements:\n1. Indian slaves were purchased only for domestic works and were not traded like African slaves.\n2. Slaves in India were usually treated as hereditary servants.\n3. Only Men were kept as slaves, and never the Women.\n4. The Colonial Government made no efforts for the abolishment of slavery in India.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Slaves in India were generally treated as hereditary servants rather than menials, which was different from the European style. However, Indians were indeed traded globally as indentured laborers, women were also kept as slaves for domestic help, and the British passed a law in 1843 banning slavery in Indian territories."},{"id":6,"txt":"In the context of establishment of early European powers in India, the \"Cartaz System\" refers to:","ref":"","opts":["A Sea trade pass introduced by Portuguese East India Company in Indian Ocean region.","A commercial passport introduced by British to facilitate the passage of consignments.","A trade license for Indian merchants introduced by French to establish monopoly over trade.","A system under which Dutch companies were given exclusive rights to trade in certain goods."],"ci":0,"exp":"Ex: The Cartaz system was a naval trade license introduced by the Portuguese in the early 16th century to assert their supremacy in the Indian Ocean. It compelled all Asian partners to pay a toll for freedom of movement. The Navicert system was a separate commercial passport introduced by the British much later in 1916."},{"id":7,"txt":"Consider the following items:\n1. Coffee\n2. Tobacco\n3. Tea\n4. Sugarcane\n5. Chilli. How many of the items given above are introduced by Portuguese in India?","ref":"","opts":["Only two","Only three","Only four","All five"],"ci":0,"exp":"Ex: The Portuguese introduced tobacco, cashew nuts, and chilli to India. Coffee was introduced by an Indian Sufi saint named Baba Budan from Yemen, tea was introduced by the British to counter Chinese monopoly, and sugarcane cultivation has existed in India since the Vedic period."},{"id":8,"txt":"With reference to the system of Indigo cultivation in India during the Colonial Period, consider the following statements:\n1. Under the Ryot/Ryoti system, the Planter cultivated Indigo by employing hired labourers on land controlled by him.\n2. Under the Nij system, the Planter signs a contract with the peasants and provides loans for cultivation.\n3. At the end of the 19th century, the entire indigo cultivated land was under the Nij system.","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: All three statements are incorrect. Under the Nij system, the planter controlled the land and hired laborers. Under the Ryot system, planters forced peasants to sign contracts. By the late 19th century, less than 25% of indigo land was under the Nij system; the majority remained under the Ryot system."},{"id":9,"txt":"With reference to Haider Ali, consider the following statements:\n1. He established arms factory at Dindigul, with the help from French.\n2. He maintained friendly relations with the Nawab of Arcot.\n3. He forced the English forces to accept a very humiliating treaty of Madras.\n4. His attack on Travancore for restoration of his sovereign rights led to the second Anglo-Mysore war.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Haider Ali established the Dindigul arms factory with French help and forced the British to sign the humiliating Treaty of Madras in 1769. However, he had territorial disputes with the Nawab of Arcot, and it was Tipu Sultan, not Haider Ali, whose attack on Travancore led to the third Anglo-Mysore war."},{"id":10,"txt":"Consider the following statements:\n1. East India Company's prime objective at that time was the expansion of trade.\n2. The local rulers in India were ready to grant privileges to the East India Company. Which of the statements given above are the correct reasons for East India Company to not annex Bengal after the Battle of Plassey?","ref":"","opts":["1 Only","2 Only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: After the Battle of Plassey, the EIC preferred expanding trade over direct territorial conquest. Since local rulers were willing to grant trade privileges and rights without the Company needing to take on the burden of administration, they initially chose not to annex Bengal directly."},{"id":11,"txt":"Assertion(A): Portugal was not able to maintain its long-term trade monopoly with India. Reason(R): Portugal followed dishonest trade practices and also followed a policy of religious intolerance.","ref":"","opts":["Both A and R are correct and R is the correct explanation of A.","Both A and R are correct and R is not the correct explanation of A","A is correct but R is incorrect","A is incorrect but R is correct"],"ci":0,"exp":"Ex: While the Portuguese were the first to arrive in India, they lost influence by the 18th century. Their decline was driven by factors including religious intolerance, fanatical conversion policies, and dishonest trade practices like sea piracy, which alienated both local rulers and the Mughals."},{"id":12,"txt":"Consider the following statements regarding the British Policy of Paramountcy:\n1. The Policy was first initiated under the Governor General Warren Hasting.\n2. Under this policy, the Company's authority was considered greater than that of Indian states.\n3. The policy justified the annexation of Indian states by the British.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The policy of Paramountcy was initiated under Lord Hastings (1813-1823), not Warren Hastings. Under this policy, the Company claimed its power was supreme and superior to Indian states, which allowed them to interfere in internal affairs or threaten annexation to protect British interests."},{"id":13,"txt":"Consider the following events in the Indian history:\n1. Nadir Shah defeated the Mughals in the Battle of Karnal.\n2. Akbar II gave the title of Raja to Rammohan Roy.\n3. Occurrence of the Battle of Buxar.\n4. Jahandar Shah became the Mughal Emperor. What is the correct chronological order?","ref":"","opts":["1-4-3-2","4-1-2-3","1-3-4-2","4-1-3-2"],"ci":3,"exp":"Ex: Jahandar Shah became emperor in 1712. Nadir Shah's invasion and the Battle of Karnal occurred in 1739. The Battle of Buxar took place in 1764. Finally, Akbar II bestowed the title of 'Raja' on Rammohan Roy in 1831."},{"id":14,"txt":"Consider the following statements with respect to Zamindari and Jagirdari system in Modern Indian history:\n1. Jagirdari is a land tenure system first introduced during the Mughal era.\n2. The Jagirdar had the right to remove a Zamindar.\n3. The Zamindars did not have the hereditary rights of collecting land revenue.\n4. The zamindars maintained troops and cavalry.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Jagirdari was developed during the Delhi Sultanate, not the Mughal era. While Jagirdars could remove Zamindars, Zamindars did indeed have hereditary rights to collect revenue. Zamindars also maintained their own troops and cavalry to assist in revenue collection and maintaining local control."},{"id":15,"txt":"With reference to the impact of the 'Battle of Buxar', consider the following statements:\n1. The real power of administration shifted from the Nawab to the Naib-Subedar.\n2. Awadh was immediately annexed into the Company's territory.\n3. Treaty of Allahabad was signed between Robert Clive and Shah Alam II.\n4. The East India Company was given the diwani of the province of Bengal.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: After Buxar, the Treaty of Allahabad (1765) granted the EIC the Diwani rights of Bengal, Bihar, and Orissa. Power shifted to the Naib-Subedar, making the Nawab a titular head. However, Awadh was not annexed; it was maintained as a buffer state to protect the EIC from Afghan or Maratha attacks."},{"id":16,"txt":"Consider the following statements with reference to 'Residents' appointed in the Princely States by the Britishers:\n1. The Residents were appointed in the Indian states as political or commercial agents of the Company.\n2. They acted as the heads of Contingent army units placed in the states by the British.\n3. The Residents never interfered in the internal affairs of Indian states, under any circumstance.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Residents were indeed political/commercial agents and served as heads of contingent units under the Subsidiary Alliance. However, the statement that they never interfered is false; the Company used Residents specifically to interfere in the internal affairs of Indian states, including the appointment of ministers."},{"id":17,"txt":"Which of the following statements correctly describes the primary cause of the Vellore Mutiny of 1806?","ref":"","opts":["A 50% hike in land revenue by the British Indian Government.","Interference in the social and religious practices of the sepoys.","Large-scale transfer of land ownership from locals to outsiders.","Introduction of money lenders in the region."],"ci":1,"exp":"Ex: The Vellore Mutiny was triggered by changes in the army uniform that offended the religious sentiments of Hindu and Muslim sepoys. This included the replacement of the turban with a leather cockade and prohibitions against wearing religious marks or maintaining certain facial hair."},{"id":18,"txt":"Which of the following is the main reason for the British to secure control of North-west India during 19th century?","ref":"","opts":["They saw the rulers of Punjab as ambitious that can endanger their control over India.","Kingdoms in Northwest India violated the Doctrine of Lapse policy.","They feared the invasion of India by Russia.","They wanted to acquire the rich fertile tracts of North west India to raise land revenue."],"ci":2,"exp":"Ex: In the 1830s, the EIC was deeply worried about Russian expansion across Asia. They feared Russia might enter India through the North-west, which prompted them to fight wars in Afghanistan and eventually annex Sindh (1843) and Punjab (1849) to secure the frontier."},{"id":19,"txt":"With reference to 'British conquest in India, consider the following pairs:\n1. First Anglo-Maratha war: Treaty of Salbai\n2. First Anglo-Mysore war: Treaty of Purandhar\n3. Second Anglo-Maratha war: Treaty of Gwalior\n4. Second Anglo-Mysore war: Treaty of Srirangpatnam. How many are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Only pair 1 is correct; the Treaty of Salbai (1782) ended the First Anglo-Maratha War. The First Anglo-Mysore war ended with the Treaty of Madras. The Treaty of Gwalior was signed during the Third Anglo-Maratha War. The Treaty of Srirangapatam was the result of the Third (not Second) Anglo-Mysore War."},{"id":20,"txt":"Why Panipat was one of the favorite battlefields in the political history of India?\n1. The surrounding region of Panipat has a difficult mountainous terrain that made it a strategic location in Northern India.\n2. The duration of monsoon rainfall in the region is short, making it easier to fight.\n3. The artisans/smiths of these region were experts in making warfare-related materials.","ref":"","opts":["1 and 2 only","2 and 3 only","2 only","1 and 3 only"],"ci":1,"exp":"Ex: Panipat was preferred because it had flat ground suitable for cavalry, not mountainous terrain. It also benefited from a short monsoon season and a local population of skilled smiths who could repair and replenish warfare materials for the battling armies."},{"id":21,"txt":"Consider the following statements:\n1. Portuguese Jesuit Antonio Monserrate was the contemporary of Mughal ruler Akbar.\n2. French Physician Francois Bernier served as a physician to Prince Dara Shukoh.\n3. French jeweller Jean Baptiste Tavernier visited India several times during the reign of Mughal emperor Humayun.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Monserrate visited Akbar's court in 1580, and Bernier served as a physician to Dara Shukoh in the mid-17th century. However, Tavernier visited India during the 17th century (reigns of Shah Jahan and Aurangzeb), long after Humayun's death in 1556."},{"id":22,"txt":"In the context of Portuguese rule in India, consider the following events:\n1. Establishment of the first Portuguese factory at Calicut.\n2. Accession of the island of Bassein.\n3. Abolition of Sati.\n4. Introduction of 'Blue Water Policy'.\n5. Acquisition of Goa from the Sultan of Bijapur. How many took place during the tenure of Alfonso De Albuquerque?","ref":"","opts":["Only two","Only three","Only four","All five"],"ci":0,"exp":"Ex: Alfonso de Albuquerque abolished Sati in Goa and acquired Goa from the Sultan of Bijapur in 1510. The first factory was established by Cabral (1500), Bassein was acquired under Nino da Cunha (1534), and the Blue Water Policy was introduced by Francisco de Almeida."},{"id":23,"txt":"With reference to education during 18th century India, Consider the following statements:\n1. Chatuspathis or Tols were the centers of primary education.\n2. There was large scale participation of women in elementary schools.\n3. Nadia and Utkala were famous centers of Sanskrit education.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Chatuspathis/Tols were centers of higher education, not primary. Female presence in schools was extremely rare in the 18th century. Nadia and Utkala were indeed well-known centers for traditional Sanskrit learning during this period."},{"id":24,"txt":"Consider the following events:\n1. Third Battle of Panipat\n2. Battle of Buxar\n3. Battle of Plassey\n4. Battle of Karnal. What is the correct chronological sequence?","ref":"","opts":["1-2-4-3","2-3-1-4","3-4-1-2","4-3-1-2"],"ci":3,"exp":"Ex: The Battle of Karnal occurred in 1739. The Battle of Plassey took place in 1757. The Third Battle of Panipat followed in 1761, and the Battle of Buxar happened in 1764."},{"id":25,"txt":"Consider the following statements about Mir Kasim, the then Nawab of Bengal:\n1. Mir Kasim agreed to finance East India Company's war efforts in the South India.\n2. He shifted the capital of Bengal from Munger to Murshidabad.\n3. He abolished inland tariffs, to put Indian traders on an equal footing with English traders.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Mir Kasim agreed to pay five lakh rupees for EIC war efforts in the South and abolished inland tariffs to help Indian traders. However, he shifted the capital from Murshidabad to Munger (not vice versa) to distance himself from British influence in Calcutta."},{"id":26,"txt":"Consider the following pairs:\n1. Hyderabad: Burhan-ul-Mulk\n2. Awadh: Nizam-ul-Mulk\n3. Bengal: Murshid Kuli Khan. How many are correct?","ref":"","opts":["Only one","Only two","Only three","None"],"ci":0,"exp":"Ex: Only the Bengal pair is correct. Hyderabad was founded by Nizam-ul-Mulk (Chin Kilich Khan), and Awadh was founded by Saadat Khan (Burhan-ul-Mulk). Murshid Kuli Khan was the independent founder of the Bengal state."},{"id":27,"txt":"Consider the following statements about the Treaty of Allahabad signed in August 1765:\n1. It was signed between the British, the Nawab of Awadh and Mir Kasim.\n2. Under the treaty, Nawab of Awadh agreed to surrender Allahabad and Kara directly to the East India Company.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Both statements are incorrect. The treaty was signed with the Nawab of Awadh and the Mughal Emperor Shah Alam II, not Mir Kasim. The Nawab of Awadh surrendered Allahabad and Kara to the Emperor Shah Alam II, not directly to the Company."},{"id":28,"txt":"The Dual Government established in Bengal in 1765 was abolished by which of the following?","ref":"","opts":["Robert Clive","Major Hector Munro","Warren Hastings","Lord Cornwallis"],"ci":2,"exp":"Ex: Robert Clive introduced the Dual System in 1765, which led to administrative breakdown and misery. Warren Hastings abolished this system in 1772, bringing Bengal under the direct administrative control of the British."},{"id":29,"txt":"Consider the following statements about the Second Anglo Mysore War:\n1. English attempt to capture Mahe instigated Haider Ali to fight the Second Anglo Mysore war.\n2. Haider Ali had forged an anti-English alliance at the beginning of the war.\n3. Haider was able to successfully defeat English at the Porto Novo.\n4. Treaty of Seringapatam was signed to conclude the war.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Haider Ali was instigated by the attack on Mahe and forged an alliance with the Marathas and Nizam. However, he was defeated at Porto Novo, and the war was concluded by the Treaty of Mangalore, not Seringapatam."},{"id":30,"txt":"Consider the following pairs about the treaties signed between the Marathas and the British:\n1. Treaty of Surat: British ceded the territories of Salsette and Bassein to Marathas.\n2. Treaty of Salbai: Peshwa should not support any other European nation than British\n3. Treaty of Bassein: English troops to be kept permanently in Maratha territory.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The Treaty of Surat involved Raghunathrao ceding Salsette and Bassein to the British (not vice versa). The Treaty of Salbai (1782) ensured the Peshwa would not support other Europeans, and the Treaty of Bassein (1802) mandated the permanent stationing of British troops."},{"id":31,"txt":"With reference to Trade during 18th century India, consider the following statements:\n1. India's exports were more than its imports.\n2. India imported Tea and Silk from China.\n3. India's major exports were textiles and precious stones.","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: India was largely self-sufficient and its goods were in high demand abroad, leading to a surplus of exports over imports. It imported luxury items like tea and silk from China while exporting textiles, spices, indigo, and precious stones."},{"id":32,"txt":"Consider the following statements regarding the Dutch Rule in India:\n1. Their commercial interests remained confined only to the areas South of the Krishna River.\n2. They defeated the Portuguese in the Battle of Hooghly (1759).","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Both statements are false. Dutch factories were spread across Gujarat, UP, Bengal, and Bihar, not just South of the Krishna. The Battle of Hooghly in 1759 was between the Dutch and the English, and the Dutch were defeated by the English."},{"id":33,"txt":"Consider the following events regarding the setting up of factories in India by the European powers:\n1. First French Factory at Surat\n2. First Danes Factory at Tranquebar\n3. First Dutch Factory at Masulipatnam\n4. First Portuguese Factory at Calicut. What is the correct chronological order?","ref":"","opts":["4-3-2-1","4-3-1-2","2-4-3-1","4-2-3-1"],"ci":0,"exp":"Ex: The first Portuguese factory at Calicut was set up in 1500. The Dutch factory at Masulipatnam followed in 1605. The Danes established a factory at Tranquebar in 1620, and the French established theirs in Surat in 1667."},{"id":34,"txt":"Consider the following statements regarding Farrukhsiyar's Farman (1715):\n1. The Mission to seek a Farman in 1715 was led by Sir Thomas Roe.\n2. The Farman decreed that the coins of EIC, minted at Bombay, could be used as currency throughout the Mughal Empire.\n3. The Farman provided that Company's trade in Bengal was fully exempted from custom duties.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: The mission was led by John Surman, not Thomas Roe (who came in 1615). The Farman did allow Bombay-minted EIC coins to circulate throughout the empire. However, trade was not \"fully\" exempt; they had to pay a fixed annual sum of 3,000 rupees in Bengal."},{"id":35,"txt":"With reference to social condition of India during 18th century, consider the following statements:\n1. Women were not at all allowed to work outside their houses.\n2. With the advent of Europeans, slavery got heightened in India.","ref":"","opts":["1 Only","2 Only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: While upper-class women were restricted, lower-class women worked in fields and outside. Slavery was indeed heightened as European companies began purchasing Indian slaves for global trade in Africa and America."},{"id":36,"txt":"Consider the following statements regarding the success of the English against other European powers in India:\n1. East India Company (EIC) was State-owned since beginning, leading to convergence of political and commercial interests.\n2. More acceptability of English by natives due to their lesser zeal for religion.\n3. Total abstinence by British from use of debt to fund the Wars.\n4. Naval superiority of British over its rivalries.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: The EIC was a private enterprise, not state-owned. British success was partly due to being less focused on religious conversion compared to the Portuguese or Spanish. They actually used government debt effectively via the Bank of England to fund wars, and their navy was the most advanced of the era."},{"id":37,"txt":"Consider the following statements regarding the administration of Portuguese in India:\n1. 'Vedor de Fazenda' was an official responsible for the collection of revenues.\n2. The Church played an important role in the administrative affairs of the State.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: In the Portuguese decentralized administration, the Vedor de Fazenda managed revenues and cargoes. The Catholic Church held significant influence, making Goa the seat of an archbishop and earning it the title \"Rome of the East.\""},{"id":38,"txt":"Consider the following events:\n1. Emperor Jahandar Shah levied Jaziya tax for the first time since the emperor Akbar abolished it in 1564.\n2. The independent State of Hyderabad was founded during the reign of the Emperor Muhammad Shah.\n3. Iranian invader Ahmad Shah Abdali attacked Mughals for the first time during the reign of Ahmad Shah Bahadur.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only statement 2 is correct. Jahandar Shah actually abolished Jaziya. Ahmad Shah Abdali first invaded India in 1748 during the reign of Muhammad Shah, not Ahmad Shah Bahadur. Hyderabad was founded by Nizam-ul-Mulk in 1724 during Muhammad Shah's reign."},{"id":39,"txt":"In the context of the history of India, who were the Pindaris?","ref":"","opts":["They were allies of Haider Ali in the First Anglo-Mysore war.","They were the rulers of the Sindh region, prior to the rule of Talpuras Amirs.","They were the mercenaries attached to the Maratha army.","They were a class of bankers in the Bengal region."],"ci":2,"exp":"Ex: Pindaris were mercenaries of diverse castes who served the Maratha armies. After the Marathas were weakened in the 19th century, Pindaris lost regular employment and turned to plundering, leading to British military action against them."},{"id":40,"txt":"Consider the following statements regarding the relation between Sindh and the British:\n1. Annexation of Sindh was done during the tenure of Governor General Lord William Bentinck.\n2. The Treaty of Eternal Friendship allowed free passage to the English traders through Sindh.\n3. Sindh was annexed by the British under the Doctrine of Lapse.\n4. Charles Napier was the first Governor of Sindh after annexation by the British.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Sindh was annexed in 1843 under Lord Ellenborough, not Bentinck. The Treaty of Eternal Friendship (1809) focused on excluding the French, while a later 1832 treaty allowed free passage. It was annexed after a military conflict and Subsidiary Alliance, not Doctrine of Lapse. Charles Napier was indeed its first governor."},{"id":41,"txt":"Consider the following statements regarding the Sikhs during the British period:\n1. Sikhs lost the territory of Kashmir after they failed to pay the war indemnity under Treaty of Lahore.\n2. The Treaty of Bhairowal was signed between the Sikhs and the British after the Second Anglo Sikh War.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The Treaty of Lahore (1846) required a 1 crore rupee indemnity; failing this, the British sold Kashmir to Gulab Singh. The Treaty of Bhairowal was signed between the two wars because Sikhs were dissatisfied with the Lahore treaty, not after the Second war."},{"id":42,"txt":"Consider the following statements regarding developments in Art, Architecture and Culture during 18th century India:\n1. Bada Imambara was built during the rule of Nishapur Dynasty at Lucknow.\n2. Rajputana and Kangra schools of painting lost their prominence.\n3. Heer Ranjha, the romantic epic in Punjabi literature, was composed.\n4. Mirza Raja Man Singh I constructed pink city of Jaipur.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Bada Imambara was built by Asaf-ud-Daula in 1784. Heer Ranjha was composed by Warris Shah in the 18th century. However, Rajputana and Kangra paintings actually gained prominence then, and Jaipur was built by Sawai Jai Singh, not Man Singh I."},{"id":43,"txt":"Consider the following statements about the Anglo-Nepalese relations:\n1. The conflict between the Gorkhas and the British began during the period of Lord Hastings.\n2. The Treaty of Yandabo was signed between the British and the Gorkhas to ensure mutual peace.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The war (1814-1816) occurred under Lord Hastings due to boundary disputes. The war ended with the Treaty of Sagauli; the Treaty of Yandabo was signed with the Burmese in 1826 after the First Burma War."},{"id":44,"txt":"Consider the following statements regarding uprisings in Ganjam and Gumsur:\n1. Strikara Bhanj and Dhananjay Bhanj were the leaders of this uprising.\n2. The main cause of the revolt was the resentment caused due to subsidiary alliance arrangement.\n3. One of the main Centers of this uprising was in the Northern Circar region.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The Ganjam and Gumsur uprisings in the Northern Circars were led by the Bhanj family. However, the primary cause was the payment of heavy and unjustifiable land revenue, not the subsidiary alliance system."},{"id":45,"txt":"\"This Mughal Emperor was also known as Ali Gauhar. During his reign, the Mughal Empire extended only from Delhi to Palam. His reign saw the Third Battle of Panipat (1761) and the Battle of Buxar (1764).\" Who is he?","ref":"","opts":["Muhammad Shah","Shah Jahan III","Shah Alam II","Bahadur Shah II"],"ci":2,"exp":"Ex: Shah Alam II, also known as Ali Gauhar, reigned when the empire had shrunken significantly. He participated in the Battle of Buxar against the British and eventually became a pensioner of the East India Company under the Treaty of Allahabad."},{"id":46,"txt":"Consider the following statements regarding the Treaty of Lhasa, 1904:\n1. Lord Curzon was the Viceroy of India when this treaty was concluded.\n2. The Treaty of Lhasa mandated Tibet to recognize and accept the border of Sikkim.\n3. The treaty provided that England can negotiate with the Tibet only through the mediation of the Chinese government.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Lord Curzon was Viceroy during the 1904 treaty, which required Tibet to pay an indemnity and respect the Sikkim border. The provision about negotiating only through China came from the Anglo-Russian Convention of 1907, not the Treaty of Lhasa."},{"id":47,"txt":"Consider the following statements with reference to the British policy in India:\n1. Forward policy of Auckland implied that it was EIC responsibility to protect the boundary from a probable Russian attack.\n2. John Lawrence started a foreign policy of 'proud reserve' which was aimed at safeguarding 'spheres of influence'.\n3. Lord Curzon created the North-West Frontier Province (NWFP) directly under the control of Government of India.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Auckland's Forward Policy (1836) aimed to counter Russia via treaties or annexation. Curzon created the NWFP in 1901 for better control. However, the 'proud reserve' policy was started by Lord Lytton (1876), whereas John Lawrence followed 'masterly inactivity'."},{"id":48,"txt":"Consider the following statements regarding the Revolt of Raja of Vizianagaram:\n1. The primary cause of the revolt was the British annexation of Vizianagaram by applying the 'Doctrine of Lapse'.\n2. The Battle of Padmanabhan is associated with this revolt.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: The revolt was caused by the British demanding heavy tribute and the disbandment of troops after they had jointly ousted the French. It was not a Doctrine of Lapse case. The Raja died at the Battle of Padmanabhan in 1794."},{"id":49,"txt":"Consider the following statements about the Carnatic Wars:\n1. The English forces won over the combined forces of Nawab of Carnatic and French in the Battle of St. Thome.\n2. The French, led by Governor Dupleix, won the Battle of Wandiwash in 1960.\n3. The Treaty of Peace of Paris is related to the Third Carnatic War.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: The French actually won the Battle of St. Thome (1746). The English won the Battle of Wandiwash (1760), which happened during the Third Carnatic War, long after Dupleix was recalled. The Third Carnatic War concluded with the Treaty of Paris in 1763."},{"id":50,"txt":"Which of the following can be considered as a consequence of the arrival of European traders especially British in India?","ref":"","opts":["Rapid increase in the share of Urban population in India.","Rapid economic growth of some port cities.","Rapid increase in the number of towns located along the rivers.","Rapid modernisation of traditional Industries."],"ci":1,"exp":"Ex: While total urbanization remained low and stagnant, specific colonial port cities like Madras, Calcutta, and Bombay emerged as new economic capitals. Traditional river towns often declined as trade shifted to these ports and later to railway hubs."},{"id":51,"txt":"Which one of the following statements is incorrect with reference to the Treaty of Sagauli?","ref":"","opts":["As a result of the Treaty, Nepal agreed to withdraw from Sikkim.","The Treaty gave better facilities to British for trade with Central Asia.","The Indian government got access to the Chumbi Valley.","After the Treaty, the Gorkhas joined the British Indian Army in large numbers."],"ci":2,"exp":"Ex: Statement (c) is incorrect. Access to the Chumbi Valley for 75 years was a provision of the Treaty of Lhasa (1904) with Tibet, not the Treaty of Sagauli (1816) with Nepal."},{"id":52,"txt":"Consider the following statements regarding Anglo-Sikh wars:\n1. The first Anglo-Sikh war fought between British and Maharaja Ranjit Singh.\n2. Lord Hardinge was the governor-general during the Second Anglo-Sikh war.\n3. The Sikhs ceded the Jalandhar Doab to the British under the Treaty of Lahore.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only statement 3 is correct. The first war (1845-46) happened after Ranjit Singh's death. Lord Hardinge was Governor-General during the first war, while Lord Dalhousie presided during the second war (1848-49)."},{"id":53,"txt":"Which of the following statements is/are correct regarding the battles of Panipat?\n1. The First battle of Panipat marked the beginning of the Mughal Empire in India.\n2. The second battle of Panipat was fought between Babur and Ibrahim Lodhi.\n3. The ambition of Marathas to gain influence in northern India was one of the causes of Third Battle of Panipat.","ref":"","opts":["1 and 2 only","2 only","1 and 3 only","2 and 3 only"],"ci":2,"exp":"Ex: The First Battle (1526) was between Babur and Ibrahim Lodhi. The Second Battle (1556) was between Akbar and Hemu. The Third Battle (1761) involved Marathas struggling for influence in the North against Ahmad Shah Abdali."},{"id":54,"txt":"With reference to advent of Portuguese in India, which of the following statements is correct?\n1. Portuguese established its first factory at Cochin.\n2. The permit system for ships were introduced by Francisco De Almeida.\n3. Afonso de Albuquerque abolished the practice of Sati system in Goa.\n4. The Portuguese governor Nino da Cunha shifted the capital from Cochin to Goa.","ref":"","opts":["1 and 2 only","2, 3 and 4 only","3 and 4 only","1, 3 and 4 only"],"ci":2,"exp":"Ex: The first factory was at Calicut (1500). The permit (Cartaz) system was introduced by Albuquerque, not Almeida (who proposed the Blue Water Policy). Albuquerque did abolish Sati in 1515, and Nino da Cunha moved the capital to Goa in 1530."},{"id":55,"txt":"With reference to Farrukhsiyar's Farman of 1717, which of the following statements is/are correct?\n1. The concessions under the farman was only available in Bengal.\n2. The East India Company was exempted from export duty but not from import duty.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Both statements are false. The Farman provided concessions in Bengal, Gujarat, and Hyderabad. It exempted the Company from both export and import duties in exchange for a fixed annual payment."},{"id":56,"txt":"Which of the statements is correct regarding the Golden Farman?","ref":"","opts":["It gave East India Company the right to collect the revenue of Bengal and Orissa.","It gave East India Company the privilege of trading freely in the ports of Golconda.","It gave the zamindari rights of three villages to East India Company.","It granted nizamat of Bengal to the East India Company."],"ci":1,"exp":"Ex: The Golden Farman was issued by the Sultan of Golconda in 1632, allowing the British to trade freely in Golconda ports for an annual payment of 500 pagodas. This allowed them to reopen their Masulipatnam factory."},{"id":57,"txt":"With reference to the Permanent Settlement system, consider the following statements:\n1. The erstwhile zamindars and revenue collectors became the owners of the land.\n2. It was introduced by the Lord Wellesley in Bengal and Bihar.\n3. The zamindars were to keep only one-eleventh of the land revenue they extracted.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Zamindars became hereditary owners, and they kept 1/11th of the revenue, giving 10/11th to the state. However, it was introduced by Lord Cornwallis in 1793, not Lord Wellesley."},{"id":58,"txt":"Which of the following statements regarding the outcomes of Battle of Plassey is/are correct?\n1. Mir Jafar became the Nawab of Bengal.\n2. The British acquired the zamindari of Burdwan, Midnapur & Chittagong from the new Nawab.\n3. Sovereignty of the English over Calcutta was recognized.","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Mir Jafar was made Nawab and English sovereignty over Calcutta was recognized. However, the EIC received the Zamindari of 24 Parganas after Plassey; the rights to Burdwan, Midnapur, and Chittagong were given later by Mir Kasim in 1760."},{"id":59,"txt":"With reference to the Ahom kingdom, consider the following statements:\n1. It was founded by Chaolung Sukaphaa.\n2. Assam was ceded to British India after the Treaty of Yandabo.\n3. Forced labour was prevalent in the Ahom kingdom.","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: The Ahom kingdom was founded in 1228 by Sukaphaa. It relied on forced labor (Paiks). Following the First Anglo-Burmese War, the kingdom was annexed to British India under the terms of the Treaty of Yandabo (1826)."},{"id":60,"txt":"Which of the following statements is not correct regarding the socio-economic condition in 18th century India?","ref":"","opts":["Co-existence of extreme poverty and extreme luxury.","India enjoyed favorable balance of trade with exports contributing more than imports.","Techniques of production in agriculture sector remained backward and stagnant.","The status of slaves in India was worse than that in Europe."],"ci":3,"exp":"Ex: Statement (d) is incorrect. The status of slaves in India was generally better than in Europe, as they were often treated as hereditary family servants rather than menial labor used for large-scale profit generation."},{"id":61,"txt":"What is the correct chronological sequence of the following battles?\n1. Battle of Wandiwash\n2. Battle of Bedara\n3. Battle of Plassey.","ref":"","opts":["1-2-3","1-3-2","3-1-2","3-2-1"],"ci":3,"exp":"Ex: The Battle of Plassey took place in 1757. The Battle of Bedara between the English and the Dutch occurred in 1759. The Battle of Wandiwash between the English and the French followed in 1760."},{"id":62,"txt":"Which of the following statements are correct regarding the consequences of the Battle of Plassey?\n1. Dual government in Bengal was introduced by Robert Clive.\n2. Zamindari of 24 Parganas was given to the East India Company.\n3. It played a decisive role in the Anglo-French struggle.\n4. The EIC was granted right to free trade in Bengal, Bihar and Orissa.","ref":"","opts":["1, 2 and 3 only","2, 3 and 4 only","1 and 4 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Statement 1 is incorrect because Robert Clive introduced the Dual Government in 1765 after the Battle of Buxar, not Plassey (1757). The other statements regarding 24 Parganas, the ousting of French rivals, and free trade rights are correct."},{"id":63,"txt":"Which of the following actions of Mir Qasim led to disputes with the EIC culminating in the Battle of Buxar?\n1. Shifting capital from Murshidabad to Munger.\n2. Abolishing all duties on internal trade.\n3. Stripping the Company of its right to issue dastaks.\n4. Raising a modern army along European lines.","ref":"","opts":["1 and 4 only","1, 2 and 4 only","2, 3 and 4 only","1, 2 and 3 only"],"ci":1,"exp":"Ex: Mir Qasim shifted his capital and modernized his army to maintain independence. He abolished internal trade duties to help Indian merchants. However, he did not strip the EIC of the right to issue dastaks; he only tried to check their rampant misuse for private trade."},{"id":64,"txt":"Which of the following statements are correct regarding the Battle of Wandiwash?\n1. Dupleix played a decisive role in the Battle of Wandiwash.\n2. This battle left the EIC with no European rival in India.\n3. Indian natives joined the English army and not the French.\n4. Pondicherry was given to France along with five trading ports.","ref":"","opts":["1 and 2 only","2 and 4 only","2 and 3 only","1, 2 and 4 only"],"ci":1,"exp":"Ex: Dupleix had been recalled in 1754, years before Wandiwash (1760). Natives actually served as sepoys in both the English and French armies. The battle eliminated European rivals, and the subsequent Treaty of Paris returned Pondicherry to France for trade only."},{"id":65,"txt":"Consider the following pairs:\n1. First Anglo Mysore war: Accepted Company's arbitration in all differences\n2. Second Anglo Sikh war: Setting up of three-member board to govern Punjab\n3. Second Anglo Maratha war: Peshwa gave up all claims for chauth on Mysore's dominions. How many are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only pair 2 is correct; a board including the Lawrence brothers was set up to govern Punjab after the second war. Pair 1 relates to the Treaty of Bassein (Maratha), and pair 3 is incorrect as the Peshwa gave up chauth claims on Nizam's (not Mysore's) dominions."},{"id":66,"txt":"Arrange the conquest of states by Lord Dalhousie under Doctrine of Lapse policy in the chronological order:\n1. Nagpur\n2. Awadh\n3. Jhansi\n4. Satara.","ref":"","opts":["1-2-4-3","1-4-2-3","4-2-3-1","4-3-1-2"],"ci":3,"exp":"Ex: Satara was annexed in 1848, followed by Jhansi in 1853, and Nagpur in 1854. Awadh was annexed last in 1856, though it was technically on grounds of maladministration rather than the Doctrine of Lapse."},{"id":67,"txt":"Consider the following statements regarding the annexation of Awadh:\n1. The annexation of Awadh by Lord Dalhousie in 1856 was widely resented.\n2. The annexation was made on the ground of maladministration.\n3. The annexation of Awadh provided economic relief to the people.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The annexation was deeply resented and served as a trigger for the 1857 revolt. It was officially based on maladministration. However, people received no economic relief; instead, they faced higher land revenue and new taxes on food, houses, and justice."},{"id":68,"txt":"With reference to the relationship between Maharaja Ranjit Singh and the British, consider the following statements:\n1. Charles Metcalf proposed an Anglo-Sikh alliance to prevent Franco Russian invasion on India.\n2. Treaty of Amritsar was concluded after the First Anglo - Sikh war.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct as fear of Napoleon led to Metcalfe's mission in 1807. Statement 2 is incorrect; the Treaty of Amritsar was signed in 1809, decades before the First Anglo-Sikh war (1845-46)."},{"id":69,"txt":"Consider the following statements with reference to trade relations during the 18th century India:\n1. Major trading destinations were Arabia, Tibet and Africa.\n2. Among the major items of exports from India were indigo and saltpetre.\n3. Major items of imports to India were coffee, gold, drug, porcelain, and silk.","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: India maintained robust trade with regions like China, Arabia, Tibet, Africa, and Europe. It exported manufactured goods and raw materials like textiles, indigo, and saltpetre, while importing luxury goods, metals, and items like coffee and porcelain."},{"id":70,"txt":"With reference to the Permanent Settlement System, consider the following statements:\n1. Transferability of land was not allowed under the system.\n2. The government sought to improve land productivity with heavy investment.\n3. Summary evictions were witnessed under this regime.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only statement 3 is correct. The system allowed zamindars to sell or transfer land. The government made almost no investment, wrongly assuming the permanent nature of the settlement would incentivize zamindars to invest themselves. Zamindars frequently evicted tenants to maximize profits."},{"id":71,"txt":"With reference to the Permanent Settlement System, which of the following is correct?","ref":"","opts":["It was introduced during the tenure of Governor General Warren Hastings.","It was implemented in the provinces of Madras and Assam.","The entire village was treated as one unit for the payment of land revenue.","In this system, the Zamindars were treated as the revenue collectors of the state."],"ci":3,"exp":"Ex: The system was introduced by Lord Cornwallis in 1793 in Bengal and Bihar. It defined the zamindar not as a landowner, but as a revenue collector for the state, responsible for a fixed demand in perpetuity."},{"id":72,"txt":"With reference to the Anglo-Afghan relations, consider the following statements:\n1. A policy of Masterly inactivity was followed by Lord Lytton.\n2. The Treaty of Gandamak is associated with the Second Anglo-Afghan War.\n3. A Tripartite Treaty in 1838 was signed by the British, Sikhs and Dost Mohommad.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only statement 2 is correct. 'Masterly inactivity' was the policy of John Lawrence; Lord Lytton followed 'proud reserve'. The Tripartite Treaty was signed by the British, Sikhs, and Shah Shuja (the deposed ruler), not Dost Mohammad."},{"id":73,"txt":"Consider the following statements with regard to Durand Line Agreement (1893):\n1. The North West Frontier Province (NWFP) was carved out under this agreement.\n2. The Durand Agreement was able to bring peace in the region.\n3. The agreement took place during the reign of Lord Curzon.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: The agreement demarcated the Afghan-British boundary and eventually led to the NWFP's formation. However, it failed to bring peace, as tribal uprisings continued. It took place in 1893, while Curzon's reign began in 1899."},{"id":74,"txt":"What is the correct chronological order of the treaties?\n1. Treaty of Gandamak\n2. Treaty of Yandabo\n3. Treaty of Lhasa\n4. Treaty of Sugauli.","ref":"","opts":["1-3-4-2","2-4-3-1","3-2-4-1","4-2-1-3"],"ci":3,"exp":"Ex: The Treaty of Sugauli was signed in 1816. The Treaty of Yandabo followed in 1826. The Treaty of Gandamak was signed in 1879, and the Treaty of Lhasa was concluded in 1904."},{"id":75,"txt":"Which of the following statements is/are correct regarding the significance of Portuguese rule in India?\n1. The system of drilling groups of infantries was introduced by Portuguese.\n2. The art of the silversmith and goldsmith flourished under Portuguese rule.","ref":"","opts":["1 Only","2 Only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: The Portuguese introduced infantry drilling in the 1630s based on Spanish models. They also popularized intricate metalwork, including filigree and jewel-embedded pieces, particularly in Goa."},{"id":76,"txt":"With reference to Industrial development of India in 18th century, the term \"Kunjali Maraikkars\" is associated with?","ref":"","opts":["Naval Chiefs","Revenue collectors","Merchant Bankers","Trade supervisors"],"ci":0,"exp":"Ex: The Kunjali Maraikkars were the naval chiefs of the Zamorin (Hindu king) of Calicut. They were originally maritime merchants of Arab descent who took up arms to resist Portuguese incursions."},{"id":77,"txt":"Consider the following statements with respect to the development of railways by the British government:\n1. The Railway Minute was developed by Lord Canning.\n2. Initially both British and Indian capital funds were used for the speedy construction of railways.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Both statements are false. The Railway Minute of 1853 was prepared by Lord Dalhousie. The construction was funded entirely by British capital, with a guaranteed 5% return for investors, which drained Indian wealth."},{"id":78,"txt":"With reference to the Anglo-Maratha wars, consider the following statements:\n1. The battle of Bhima-Koregaon was part of second Anglo-Maratha war.\n2. Lord Hastings' actions against the Pindaris led to the third Anglo-Maratha war.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Bhima-Koregaon (1818) was one of the final battles of the Third Anglo-Maratha War, not the second. The Third war was triggered when the Peshwa viewed British actions against the Pindari mercenaries as a violation of Maratha sovereignty."},{"id":79,"txt":"Consider the following statements with reference to the Carnatic Wars:\n1. The First Carnatic War was an extension of the Seven Years War.\n2. The Second Carnatic War was the result of interference in political affairs of the Indian rulers.\n3. The Third Carnatic War established Britain as the supreme European power in India.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The First Carnatic War was an extension of the War of the Austrian Succession; the Third war coincided with the Seven Years War. The second war resulted from local dynastic interference. The third war's conclusion established British supremacy over the French."},{"id":80,"txt":"'Policy of Intrusive Surveillance' was adopted by which of the following Governor-Generals?","ref":"","opts":["Lord Wellesly","Lord Dalhousie","Lord Minto","Lord Curzon"],"ci":3,"exp":"Ex: Lord Curzon adopted this policy, viewing Indian states as integral parts of the British system rather than as separate treaty-bound entities. He increased government oversight to counter political unrest and revolutionary developments."},{"id":81,"txt":"With reference to the dual government in Bengal, consider the following statements:\n1. The diwani rights came under the control of the East India Company, while the nizamat rights remained under the control of the Nawab of Bengal.\n2. The East India Company could nominate deputy subahdar of Bengal.\n3. It was abolished by Lord Cornwallis.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only statement 2 is correct. Under the dual system, the EIC controlled both Diwani and Nizamat functions (exercising Nizamat via a nominated deputy subahdar). It was introduced by Clive in 1765 and abolished by Warren Hastings in 1772."},{"id":82,"txt":"With reference to Anglo-Mysore wars, consider the following statements:\n1. The Treaty of Seringapatam was concluded between Haidar Ali and the English.\n2. The Nizam of Hyderabad and the Marathas supported the state of Mysore in the four Anglo-Mysore wars.\n3. Both Arthur Wellesley and Lord Wellesley were involved in the fourth Anglo-Mysore war.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 3 is correct; the fourth war (1799) involved both Wellesley brothers. The Treaty of Seringapatam was with Tipu Sultan, not Haider Ali. The Nizam and Marathas often switched sides, frequently supporting the British against Mysore."},{"id":83,"txt":"Consider the following statements:\n1. The Treaty of Amritsar made the river Sutlej as the boundary between territories of Ranjit Singh and the British.\n2. The annexation of Punjab was completed under Lord Dalhousie.\n3. The annexation of Sindh was completed under Lord Ellenborough.","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: The 1809 treaty fixed the Sutlej as the boundary for Ranjit Singh. Sindh was annexed in 1843 during Ellenborough's tenure. Punjab was finally annexed by Dalhousie in 1849 following the Second Anglo-Sikh War."},{"id":84,"txt":"With reference to modern Indian history, 'sunset law' is related to which of the following?","ref":"","opts":["Raleigh Commission","Mahalwari System","Permanent Settlement","Macdonnell Commission"],"ci":2,"exp":"Ex: Under the Permanent Settlement, revenue had to be paid punctually. The Sunset Law mandated that if payment was not received by sunset of the specified date, the zamindari would be liable to auction."},{"id":85,"txt":"Which of the following factors resulted in the Battle of Plassey?\n1. Fortification of Calcutta without the permission of nawab by the British.\n2. Asylum was provided to the Nawab's enemy Krishna Das by the British.\n3. The rampant misuse of the trade privileges by the British.","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: Siraj-ud-Daulah was provoked by British fortifications, their decision to shelter the fugitive Krishna Das, and the continuous misuse of duty-free trade passes (dastaks) for private trade by Company officials."},{"id":86,"txt":"Consider the following statements:\n1. British territories were divided into Presidencies ruled by a Governor.\n2. The role of a Collector was to collect revenue and maintain law and order.\n3. From 1772, the criminal courts were presided by the European district collectors.\n4. Under the Regulating Act of 1773, the Sadar Nizamat Adalat was set up at Calcutta.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Presidencies (Bengal, Madras, Bombay) and the role of the Collector are described accurately. Statement 3 is wrong; while collectors supervised, criminal courts remained under a Qazi and Mufti. The Sadar Nizamat Adalat was established in Calcutta."},{"id":87,"txt":"Which of the following factors attracted European trading companies to India?\n1. Charters from rulers that ensured no competition from native country companies.\n2. Demand for spices and textiles in Europe.\n3. Looking for new lands to buy cheap and sell dear.","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: European companies sought royal charters to eliminate domestic competition. They were driven by the mercantilist goal of buying Indian goods (like cotton, silk, and spices) at low prices to sell them for high profits in European markets."},{"id":88,"txt":"Which of the following is the main reason for the cultivation of indigo plantation in India by end of 18th century?","ref":"","opts":["Sharp decline in the world production of indigo.","European cloth manufacturers boycotted woad.","The demand for synthetic dyes declined due to its poor quality.","Only India had the suitable climate to grow indigo."],"ci":0,"exp":"Ex: Indigo production fell by half globally between 1783-1789 while British industrialization increased dye demand. EIC looked to India to fill this supply gap. Synthetic dyes only appeared in the late 19th century."},{"id":89,"txt":"In context to 'Gomastha' during the British India rule, which of the following statements is correct?","ref":"","opts":["They were commission agents for internal trade commodities.","They were mediators who settled disputes out of court.","These are the officials who distributed wages to sepoys.","They were paid agents of EIC to supervise weavers in India."],"ci":3,"exp":"Ex: Gomasthas were paid EIC agents appointed to eliminate traditional brokers and establish direct control over weavers, allowing the Company to supervise production and examine cloth quality."},{"id":90,"txt":"Which of the following factors led to the fall of Punjab after the death of Ranjit Singh?\n1. Weak successors.\n2. Strength of Punjab military was lesser than British.\n3. Rise of court factions and rivalry.\n4. Instability in administration.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Punjab's fall was due to weak successors, internal court rivalries (Hira Singh vs Jawahar Singh), and administrative chaos. However, Punjab's military was actually larger than the British force during the first war; they were defeated due to the treachery of their own generals."},{"id":91,"txt":"With reference to the Jotedars in modern Indian history, consider the following statements:\n1. Jotedars were rich peasants during eighteenth century.\n2. Zamindari system led to decline of power of Jotedars.\n3. Jotedars were involved in local trade and Moneylending.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Jotedars were rich peasants whose power grew as zamindars declined. They were far more effective in villages than urban-dwelling zamindars because they controlled local trade, money lending, and directly oversaw sharecroppers."},{"id":92,"txt":"Consider the following reasons for the decline of the Portuguese rule:\n1. Annexation of Salsette and Bassein Island by British.\n2. Sea Piracy by Portuguese.\n3. Discovery of Brazil.","ref":"","opts":["Only one","Only two","Only three","None"],"ci":1,"exp":"Ex: Statement 1 is incorrect; the Marathas, not the British, captured Salsette and Bassein in 1739. The other two reasons—arrogance leading to piracy and the shifting of focus to the colonization of Brazil—are major factors in their decline."},{"id":93,"txt":"Consider the pairs regarding Carnatic Wars:\n1. First: Besieging of Madras by French\n2. Second: Succession rivalry in Hyderabad and Carnatic\n3. Third: French Attack on Fort William. How many are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: The first two are correct. The First Carnatic War involved the French seizing Madras. The second was driven by local succession rivalries. The third war was sparked by the Seven Years War and the English capture of Chandernagore, not a French attack on Fort William."},{"id":94,"txt":"With reference to the reasons for the downfall of the Mughals, consider the following statements:\n1. Shifting Allegiance of Zamindars\n2. Rivalry between the nobles\n3. Economic extravagance by the rulers.","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: The Mughal decline was multifaceted: powerful zamindars shifted loyalty to nobles, the nobility was deeply divided by religious and ethnic rivalries, and the state was bankrupted by the luxurious lifestyles and excessive spending of later emperors."},{"id":95,"txt":"What was the common thread among Dacca, Varanasi, Multan, and Ahmedabad in 18th century India?","ref":"","opts":["Textile Centre","Seat of Provincial Powers","Centre of revolt against Mughals","Famine hit areas."],"ci":0,"exp":"Ex: These cities were major hubs for the Indian textile industry. India was self-sufficient in handicrafts, and its industrial products were in high demand globally, attracting gold and silver into the country."},{"id":96,"txt":"With reference to the Portuguese policies in India, consider the following statements:\n1. Viceroys were given the charge of revenue in their administration.\n2. Nino da Cunha arranged for settlement of Portuguese nationals in Bengal.\n3. The Portuguese were highly tolerant towards other religions.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only statement 2 is correct. The Vedor da Fazenda, not the Viceroy, was responsible for revenues. The Portuguese were notably intolerant, practicing forcible conversions and persecuting Muslims and, later, Hindus."},{"id":97,"txt":"Consider the following statements regarding the problems of Mughal administration in the 18th century:\n1. The availability of a limited number of jagirs led to exploitation of peasants.\n2. There was no significant advancement in scientific and technological field.","ref":"","opts":["1 Only","2 Only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Shortage of land (bejagiri) caused amirs to over-exploit the peasantry to meet recorded income levels. Simultaneously, the lack of scientific progress left the economy stagnant while Europeans were advancing rapidly."},{"id":98,"txt":"Regarding regional states emerging after the Mughal decline, which is incorrect?","ref":"","opts":["These states developed sound administrative, financial and military system.","The states were constantly engaged in warfare with neighbouring regional powers.","The Jagirdari crisis intensified under regional powers.","Both internal and foreign trade continued under the administration of regional powers."],"ci":0,"exp":"Ex: Statement (a) is incorrect. Most regional states (except perhaps Mysore) failed to modernize their administrative or military organizations and remained backward in science and technology compared to Europeans."},{"id":99,"txt":"Consider the following statements with reference to Chapati and Lotus movement during 1857:\n1. It turned out to be an effective weapon of psychological warfare against colonial rule.\n2. Chapatis with secret message encoded in them were distributed rapidly in parts of North India.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: The mysterious distribution of chapatis created restlessness and worried the British. However, there were no messages written on the chapatis; they were unmarked, leaving the British unable to arrest anyone for spreading messages."},{"id":100,"txt":"In the context of Portuguese Prince Henry, consider the following statements:\n1. Pope Nicholas V conferred on him the right to navigate the \"sea to the distant shores of the Orient\".\n2. He had an obsession with the idea of finding an ocean route to India.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Prince Henry 'the Navigator' was obsessed with finding a sea route to India to circumvent Muslim trade domination. In 1454, the Pope granted him a bull authorizing navigation to the Orient to spread the Christian faith."},{"id":101,"txt":"In the context of history, Treaty of Tordesillas is associated with:","ref":"","opts":["It is a treaty between the rulers of Portugal and Spain to divide the non-Christian world.","Treaty was an agreement between Henry IV and the duke of Orléans.","Peace treaty that ended the Third Anglo-Dutch War.","Sultan Bahadur of Gujarat ceded the Mumbai Islands to the Portuguese."],"ci":0,"exp":"Ex: In 1494, the Treaty of Tordesillas divided the non-Christian world between Portugal (East) and Spain (West) via an imaginary line in the Atlantic, setting the stage for Portuguese incursions into Indian waters."},{"id":102,"txt":"Consider the following statements:\n1. After fourth Anglo-Mysore war the new state of Mysore was handed over to Wodeyar dynasty.\n2. William Bentinck took control of Mysore on grounds of misgovernance in 1831.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: After Tipu Sultan's death in 1799, the British restored the Wodeyar dynasty under a princely state. Bentinck later took direct control due to alleged misgovernance, though Lord Ripon eventually restored the kingdom to its ruler in 1881."}],"m":null,"tt":6180,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>
