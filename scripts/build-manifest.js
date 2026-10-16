@@ -1,27 +1,48 @@
 const fs = require('fs');
 const path = require('path');
+
 const root = path.resolve(__dirname, '../public/tests');
 const out = path.resolve(__dirname, '../public/tests.json');
 const ignored = new Set(['.gitkeep', 'README.md', 'readme.md']);
-function walk(dir) {
+const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+
+function folderNode(name, relParts = []) {
+  return { name, type: 'folder', path: relParts.join('/'), children: [], testCount: 0 };
+}
+
+function buildTree(dir, relParts = []) {
   if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir, { withFileTypes: true }).sort((a,b)=>a.name.localeCompare(b.name, undefined, {numeric:true,sensitivity:'base'})).flatMap(entry => {
+  const entries = fs.readdirSync(dir, { withFileTypes: true })
+    .filter(entry => !ignored.has(entry.name))
+    .sort((a, b) => collator.compare(a.name, b.name));
+  const nodes = [];
+
+  for (const entry of entries) {
     const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) return walk(full);
-    if (!entry.isFile() || ignored.has(entry.name) || !entry.name.toLowerCase().endsWith('.html')) return [];
-    const rel = path.relative(root, full).split(path.sep);
-    if (rel.length < 2) return []; // Put each test in a coaching folder.
-    const coaching = rel[0];
-    const testName = path.basename(entry.name, path.extname(entry.name));
-    return [{ coaching, name: testName, url: '/tests/' + rel.map(encodeURIComponent).join('/') }];
-  });
+    const parts = [...relParts, entry.name];
+    if (entry.isDirectory()) {
+      const children = buildTree(full, parts);
+      const testCount = children.reduce((sum, child) => sum + (child.type === 'test' ? 1 : child.testCount), 0);
+      nodes.push({ name: entry.name, type: 'folder', path: parts.join('/'), children, testCount });
+    } else if (entry.isFile() && entry.name.toLowerCase().endsWith('.html') && relParts.length > 0) {
+      nodes.push({
+        name: path.basename(entry.name, path.extname(entry.name)),
+        type: 'test',
+        path: parts.join('/'),
+        url: '/tests/' + parts.map(encodeURIComponent).join('/')
+      });
+    }
+  }
+  return nodes;
 }
-const byCoaching = new Map();
-for (const test of walk(root)) {
-  if (!byCoaching.has(test.coaching)) byCoaching.set(test.coaching, []);
-  byCoaching.get(test.coaching).push({ name: test.name, url: test.url });
-}
-const coachings = [...byCoaching.entries()].sort(([a],[b])=>a.localeCompare(b, undefined, {numeric:true,sensitivity:'base'})).map(([name,tests])=>({name,tests}));
-const manifest = { generatedAt: new Date().toISOString(), coachingCount: coachings.length, testCount: coachings.reduce((n,c)=>n+c.tests.length,0), coachings };
+
+const folders = buildTree(root).filter(node => node.type === 'folder');
+const testCount = folders.reduce((sum, folder) => sum + folder.testCount, 0);
+const manifest = {
+  generatedAt: new Date().toISOString(),
+  coachingCount: folders.length,
+  testCount,
+  folders
+};
 fs.writeFileSync(out, JSON.stringify(manifest, null, 2) + '\n');
-console.log(`Generated ${out}: ${manifest.coachingCount} coaching folder(s), ${manifest.testCount} HTML test(s).`);
+console.log(`Generated ${out}: ${folders.length} top-level folder(s), ${testCount} HTML test(s), nested folders supported.`);
