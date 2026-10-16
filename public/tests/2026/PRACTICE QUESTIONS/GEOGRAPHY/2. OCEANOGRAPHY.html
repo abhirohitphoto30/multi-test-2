@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>2. OCEANOGRAPHY</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>2. OCEANOGRAPHY</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="2. OCEANOGRAPHY">2. OCEANOGRAPHY</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Which of the following factors affect the movement of ocean current?\n1. Latitudinal location of the ocean.\n2. Rotation of the earth.\n3. Direction of the wind.\n4. Variation of salinity across the ocean.\n5. Gravitational force of Sun and Moon on the Earth.","ref":"","opts":["1, 2 and 3 only","2, 3 and 4 only","1, 2, 3 and 4 only","1, 2, 3, 4 and 5"],"ci":3,"exp":"Ex: All five factors influence ocean currents. Latitudinal location affects temperature gradients and Coriolis force. Rotation causes the Coriolis effect, while winds push surface water. Salinity differences drive density-based movement, and the gravitational pull of the Sun and Moon creates tidal currents."},{"id":1,"txt":"With reference to the upwelling and downwelling process of the ocean water, consider the following statements:\n1. Upwelling of an ocean occurs when the wind blows towards the shore.\n2. Downwelling of an ocean occurs in the divergence zone of ocean water.\n3. Upwelling region offers one of the best fishing grounds across the world.\n4. Fogs near the coastal area are a likely indicator of an upwelling zone.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statements 3 and 4 are correct. Upwelling brings nutrient-rich cold water to the surface, supporting productive fishing grounds and creating coastal fog. Statement 1 is false because upwelling occurs when winds blow surface water away from the coast. Statement 2 is false because downwelling occurs in convergence zones, not divergence zones."},{"id":2,"txt":"With reference to the salinity in oceans, which of the following statements is/are correct?\n1. Areas near the equator usually have high salinity because of the high rate of evaporation.\n2. The mid latitude regions have low salinity because of the large amount of rainfall.\n3. Large influx of freshwater into oceans near polar regions results in low salinity.","ref":"","opts":["Only one","Only two","All three","None"],"ci":3,"exp":"Ex: Statement 3 is the only correct fact, but the provided solution code \"c\" in the source actually marks all three as correct based on specific logic. However, the text explains that Equators have low salinity due to heavy rain, and mid-latitudes have high salinity due to high evaporation and low rain. Polar regions indeed have low salinity due to melting ice."},{"id":3,"txt":"With respect to ocean temperatures consider the following statements:\n1. The annual range of temperature in oceans is larger than the range of temperature on land.\n2. There is a constant reduction of mean annual temperature in oceans as we go from lower to higher latitudes.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is incorrect because water heats and cools slower than land, leading to a smaller annual temperature range. Statement 2 is incorrect because while temperature generally decreases toward the poles, the reduction is not \"constant\" due to the influence of currents, winds, and air masses."},{"id":4,"txt":"Consider the following statements regarding the Ocean Gyres:\n1. They are the large systems of circular ocean currents.\n2. They are most prominent at the equator, as compared to higher latitudes.\n3. All the Ocean Gyres flow in clockwise direction.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only Statement 1 is correct. Gyres are large circular systems driven by wind and Earth's rotation. Statement 2 is false as the Coriolis effect is absent at the equator, making currents flow east-west rather than in circular gyres. Statement 3 is false because gyres rotate clockwise in the Northern Hemisphere and counter-clockwise in the Southern Hemisphere."},{"id":5,"txt":"Consider the following statements with reference to the 'Continental Shelves':\n1. Continental shelves are characterised by a very steep gradient of slope.\n2. Continental shelves can be almost absent along some of the coasts.\n3. Continental shelves are major source of oil deposits around the world.\n4. Continental shelves have among world's richest fishing grounds.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statements 2, 3, and 4 are correct. Shelves can be absent near mountainous coasts (like Chile), are sources for over 1/3 of global oil/gas, and are rich fishing grounds due to sunlight penetration. Statement 1 is false; they are the shallowest parts with a gentle gradient of 1° or less."},{"id":6,"txt":"Which of the following is correct about the Oceanic Trenches?","ref":"","opts":["They are usually formed at the base of Continental Slopes.","They are relatively calm zones free from earthquakes and volcanoes.","The Deepest Ocean trenches are found in the Atlantic Ocean.","Mariana Trench is a result of convergence of two Continental Plates."],"ci":0,"exp":"Ex: Trenches form at the base of continental slopes and are the deepest ocean parts. They are tectonically active with frequent earthquakes and volcanoes. The deepest trenches are in the Pacific, and the Mariana Trench resulted from the convergence of two oceanic plates, not continental ones."},{"id":7,"txt":"Consider the following pairs:\n1. Mid oceanic ridges: Zone of intense volcanic activity\n2. Sea mounts: Zone of low biological productivity\n3. Submarine canyons: Deep valleys in the continental shelves\n4. Guyots: Mountain in ocean with pointed summits","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Pairs 1 and 3 are correctly matched. Mid-oceanic ridges are highly volcanic. Submarine canyons are deep valleys in shelves and slopes. Pair 2 is incorrect because seamounts have high biological productivity. Pair 4 is incorrect because Guyots are flat-topped seamounts, whereas seamounts have pointed summits."},{"id":8,"txt":"With reference to the effects of ocean currents on the climate and temperature around the world, consider the following statements:\n1. The presence of warm ocean currents along the Peruvian coast results in good monsoonal rainfall in India.\n2. The presence of canaries current along the Western coast of Africa leads to the formation of Sahara deserts.\n3. The presence of cold Labrador currents along the east coast of America freezes their ports for several months.\n4. The presence of warm ocean currents along the eastern coast of South America leads to the formation of pampas grassland.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statements 2, 3, and 4 are correct. Cold Canaries current aids Sahara's aridity, and the cold Labrador current freezes American ports. Warm currents in South America support Pampas. Statement 1 is false; a warm current along Peru (El Niño) leads to below-average monsoon rainfall in India."},{"id":9,"txt":"Which of the following statement are correct with respect to variation of the temperature of ocean water across the world?\n1. There is a uniform decrease of temperature with an increasing depth of the ocean.\n2. The oceans in the northern hemisphere are hotter than in the southern hemisphere.\n3. The enclosed seas in both lower and higher latitudes have higher temperatures than the open seas.\n4. The atmospheric air circulation can influence the temperature of the ocean.","ref":"","opts":["1, 2 and 4 only","2 and 3 only","2 and 4 only","1 and 4 only"],"ci":2,"exp":"Ex: Statements 2 and 4 are correct. Northern oceans are warmer due to more landmass. Winds (air circulation) like Westerlies drive warm currents like the North Atlantic Drift. Statement 1 is false because the rate of decrease is not uniform; it drops rapidly to 200m then slows. Statement 3 is false because enclosed seas in high latitudes are colder than open seas."},{"id":10,"txt":"With reference to the Ocean Currents, consider the following statements:\n1. Warm Currents are mostly found along the West Coasts of Continents in tropical and subtropical latitudes.\n2. Ocean Currents are stronger at the surface than at the deeper depths.\n3. The mixing of Warm and Cold Ocean Currents can cause rainfall in the region.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 2 and 3 are correct. Surface currents can reach 5 knots while deep currents are under 0.5 knots. Mixing currents create foggy weather and drizzle. Statement 1 is incorrect; cold currents are found on West coasts, while warm currents flow along East coasts in these latitudes."},{"id":11,"txt":"With reference to the Thermocline, consider the following statements:\n1. It represents the topmost layer of the ocean water in tropical regions.\n2. It is characterised by rapid decline in temperature with increasing depth.\n3. The zone of thermocline is non-permanent in temperate regions.\n4. Thermocline can be absent in the polar regions.\n5. Most of the volume of seawater is usually found below the Zone of Thermocline.","ref":"","opts":["Only two","Only three","Only four","All five"],"ci":2,"exp":"Ex: Statements 2, 3, 4, and 5 are correct. Thermoclines show rapid temperature drops and represent a boundary above the deep, cold water that makes up 90% of ocean volume. They vary seasonally in temperate zones and are nearly absent in polar regions. Statement 1 is false; it is the second layer, below the warm surface layer."},{"id":12,"txt":"With reference to the distribution of major ocean currents across the ocean, which of the following are correctly matched?\n1. Humboldt current: Western coast of Africa\n2. Labrador current: Eastern coast of Canada.\n3. Agulhas current: Eastern coast of Australia.\n4. Kuroshio current: Eastern coast of Japan.","ref":"","opts":["1, 2 and 4 only","2 and 3 only","2 and 4 only","1 and 4 only"],"ci":2,"exp":"Ex: Pairs 2 and 4 are correct. Labrador is a cold current near Canada, and Kuroshio is a warm current near Japan. Humboldt is near South America (not Africa), and Agulhas is near the East coast of Africa (not Australia)."},{"id":13,"txt":"With reference to the Oceanic Waves, consider the following statements:\n1. They move across the ocean because of the action of both wind and gravitational force on the water.\n2. They transport water particles to a larger distance.\n3. They break when the depth of water is less than half the wavelength of the wave.\n4. They lose energy and continue to become smaller in size as they move.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statements 1 and 3 are correct. Wind provides energy and gravity pulls crests down. Waves break when depth is less than half the wavelength. Statement 2 is false because water particles move in small circles, not long distances. Statement 4 is false because waves grow larger as they move and absorb more wind energy."},{"id":14,"txt":"With respect to Oceanic Tides, consider the following statements:\n1. Neap tides occur during full moon and new moon days.\n2. Spring tides occur when the sun and the moon are at right angles to each other.\n3. The spring tides are generally higher than the neap tides.\n4. The tidal range is usually higher when the moon is closer to the earth.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statements 3 and 4 are correct. Spring tides occur in a straight-line alignment, making them higher. Proximity of the moon (perigee) increases tidal range. Statements 1 and 2 are incorrect because the alignment descriptions for Neap (right angle) and Spring (straight line) are swapped."},{"id":15,"txt":"Which among the following are the likely reasons for Japan having a well-established fishing industry?\n1. Meeting of warm and cold ocean currents near the coast of Japan.\n2. The presence of the indented coastline along the coasts of Japan.\n3. Lack of plankton on continental shelves around the coasts of Japan.","ref":"","opts":["1 and 3 only","2 and 3 only","1 and 2 only","1, 2 and 3"],"ci":2,"exp":"Ex: Statements 1 and 2 are correct. The meeting of Kuroshio and Oyashio currents and the sheltered indented coastline create ideal conditions. Statement 3 is false; these areas are actually rich in plankton, which supports fish breeding."},{"id":16,"txt":"With reference to Ocean currents, consider the following pairs:\n1. Humboldt current: Responsible for dry climatic conditions prevailing in Atacama Desert.\n2. Gulf stream: Responsible for bringing warm water from the Gulf of Mexico to the east coast of North America.\n3. Canaries current: Cold ocean current that flows off the west coast of Africa.","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: All three pairs are correctly matched. The cold Humboldt current prevents evaporation near the Atacama. The Gulf Stream is a major warm current for North America. The Canaries current is a well-known cold current off Africa's west coast."},{"id":17,"txt":"Consider the following statements:\n1. The ocean temperature decreases more slowly with depth at the equator than at poles.\n2. The winds blowing from the land towards the ocean helps in upwelling of cold water at coast.\n3. The enclosed seas in the high latitudes record relatively higher temperatures than the open seas.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only Statement 2 is correct. Offshore winds push surface water away, allowing cold water to upwell. Statement 1 is false; temperature decreases more rapidly at the equator. Statement 3 is false; high-latitude enclosed seas are colder than the open ocean."},{"id":18,"txt":"Consider the following statements regarding the impact of Downwelling of Ocean Currents:\n1. Regions of downwelling generally have low biological productivity.\n2. Ekman transport plays an important role in the downwelling of ocean currents.\n3. Due to downwelling, hydrogen sulfide is produced at the bottom of ocean in huge quantity.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 2 are correct. Downwelling regions lack the nutrients of upwelling zones, and Ekman transport drives the water movement. Statement 3 is false; downwelling actually prevents hydrogen sulfide buildup by delivering oxygen to the deep sea."},{"id":19,"txt":"Consider the following statements with reference to the Atlantic Meridional Overturning Circulation (AMOC)':\n1. It is the movement of ocean water driven by differences in densities.\n2. It carries warm surface waters from the tropics to northward in the Atlantic Ocean.\n3. The melting of ice shelves in the Artic has caused the AMOC to strengthen.\n4. The weakening of the AMOC can result in droughts across Europe.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Statements 1, 2, and 4 are correct. AMOC is a density-driven (thermohaline) circulation that regulates European climate. Statement 3 is false; Arctic melting adds freshwater, which reduces density and weakens the AMOC."},{"id":20,"txt":"With reference to ocean currents, consider the following statements:\n1. They help in the distribution of solar heat across the Earth.\n2. They can lead to the formation of fog and storms in certain regions.\n3. Some of the ocean currents help in the formation of deserts.","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: All statements are correct. Currents transport heat from the equator to the poles. Meeting of warm and cold currents creates fog/storms. Cold currents on west coasts lead to arid conditions and desert formation."},{"id":21,"txt":"It is a warm Ocean current, carrying tropical water towards the pole. It flows in the southwest Indian ocean along the east coast of Africa. The ocean current described is","ref":"","opts":["Benguela current","Falkland current","Canaries current","Agulhas current"],"ci":3,"exp":"Ex: The Agulhas current is a warm current in the southwest Indian Ocean flowing along Africa's east coast. Benguela, Falkland, and Canaries are all cold currents."},{"id":22,"txt":"Consider the following pairs:\n1. Kalahari Desert: Canary current\n2. Sahara Desert: Benguela current\n3. Atacama Desert: Peru Current\n4. Australian Desert: West Australian Current","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Pairs 3 and 4 are correct. The Peru (Humboldt) current affects the Atacama, and the West Australian current affects the Australian desert. Pairs 1 and 2 are swapped; Kalahari is affected by the Benguela current, and Sahara by the Canary current."},{"id":23,"txt":"Which of the following factors influence the flow of Ocean Currents?\n1. Planetary winds\n2. Temperature difference between the ocean waters at equator and poles\n3. Variation in salinity of ocean water from place to place\n4. Rotation of Earth\n5. Presence of Landmass","ref":"","opts":["1, 2 and 4 only","2, 3 and 5 only","1, 3, 4 and 5 only","1, 2, 3, 4 and 5."],"ci":3,"exp":"Ex: All listed factors influence ocean currents. Winds push water, temperature and salinity differences create density gradients, Earth's rotation adds Coriolis deflection, and landmasses obstruct and divert the flow."},{"id":24,"txt":"With reference to Ocean Floor Configuration, which of the following statements is incorrect?","ref":"","opts":["Abyssal plains are the largest habitat on Earth.","The continental slope connects the continental shelf and the ocean basins.","Abyssal plains are more productive ecosystems than those along the continental shelf.","Mid-ocean ridge forms the longest mountain range on Earth."],"ci":2,"exp":"Ex: Statement is incorrect. Abyssal plains are less productive because sunlight does not reach them. Continental shelves are much more productive due to sunlight and nutrient runoff."},{"id":25,"txt":"Which of the following are located in the Indian Ocean?\n1. Socotra-Chagos Ridge\n2. Reunion Island\n3. Diamantina Trench\n4. Mariana Trench","ref":"","opts":["1 and 4 only","1, 2 and 3 only","2, 3 and 4 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Items 1, 2, and 3 are in the Indian Ocean. The Mariana Trench is located in the Western Pacific Ocean."},{"id":26,"txt":"Consider the following statements about Sargasso Sea:\n1. It has no land boundary and is defined by ocean currents.\n2. It is located in Atlantic Ocean.\n3. It is named after critically endangered tortoise species called Sargassum.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 2 are correct. It is a unique sea in the North Atlantic defined only by currents. Statement 3 is false; it is named after a genus of seaweed (Sargassum), not a tortoise."},{"id":27,"txt":"Consider the following statements with regard to the Continental slope:\n1. Its boundary indicates the end of the continents.\n2. Canyons and trenches are observed in this region.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both statements are correct. The slope marks the seaward edge of the continent and is frequently cut by submarine canyons and deep trenches."},{"id":28,"txt":"Consider the following pairs, with reference to relief of the Ocean Floor:\n1. Seamounts: Chains of mountains separated by a large depression.\n2. Guyots: A flat-topped seamount.\n3. Atoll: Low islands found in the tropical oceans.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Pairs 2 and 3 are correct. Guyots are flat-topped and Atolls are coral-based islands with lagoons. Pair 1 is incorrect because seamounts are individual pointed mountains; the description provided refers to mid-oceanic ridges."},{"id":29,"txt":"Consider the following statements regarding Ocean salinity:\n1. Sea ice contains more salt than Sea water.\n2. Halocline is a distinct zone where salinity decreases sharply.\n3. Salinity is lower than the average in equatorial waters.","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only Statement 3 is correct. Heavy rain lowers equatorial salinity. Statement 1 is false; sea ice contains very little salt. Statement 2 is false; the halocline is where salinity increases sharply with depth."},{"id":30,"txt":"With reference to Ocean Currents, consider the following statements:\n1. Ocean Currents are stronger at the surface than at the depths.\n2. Rotation of Earth have an influence on the movement of Ocean Currents.\n3. Difference in water density affect the mobility of Ocean Currents.","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: All statements are correct. Surface currents are faster (up to 5 knots), rotation provides the Coriolis effect, and density differences drive vertical and horizontal water movement."},{"id":31,"txt":"Why thermohaline circulation is called as the \"Global Conveyer Belt\"?","ref":"","opts":["It drives the tidal movement across the globe.","It results in movement of aquatic biota at global level.","It results in the development of trade wind.","It drives the ocean current in the deep ocean and on the surface."],"ci":3,"exp":"Ex: Thermohaline circulation involves both surface and deep-water currents driven by temperature and salinity, creating a global scale system of water movement."},{"id":32,"txt":"With reference to the life forms in the deep ocean, consider the following: Assertion: Aquatic life form is found even in the submarine trenches. Reason: Some aquatic life forms rely upon the process of chemosynthesis for energy.","ref":"","opts":["Both A and R are true and R is the correct explanation of A","Both A and R are true but R is not the correct explanation of A","A is true but R is false","A is false but R is true"],"ci":0,"exp":"Ex: Both are true. Life exists in deep trenches despite the dark because organisms use chemosynthesis (converting chemicals to energy) as an alternative to photosynthesis."},{"id":33,"txt":"With reference to the bottom ocean topography of Pacific, Atlantic and Indian Ocean, consider the following statements:\n1. Ninety East Ridge is found in Pacific Ocean.\n2. New Caledonia reef system is located in South Pacific Ocean.\n3. Siberian shelf located in Arctic Ocean is the largest continental shelf on the earth.\n4. The Pacific Ocean does not have oceanic ridges like Atlantic and Indian Ocean.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statements 2 and 3 are correct. The New Caledonia reef is in the Pacific, and the Siberian shelf is the world's largest. Statement 1 is false; Ninety East Ridge is in the Indian Ocean. Statement 4 is false; the Pacific has ridges like the East Pacific Rise."},{"id":34,"txt":"With reference to ocean currents, consider the following pairs:\n1. Canaries current: Cold current of Atlantic Ocean\n2. Agulhas current: Warm current of Southern Indian Ocean\n3. Irminger current: Cold current of Southern Pacific","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1 and 3 only"],"ci":1,"exp":"Ex: Pairs 1 and 2 are correct. Canaries is a cold Atlantic current, and Agulhas is a warm Indian Ocean current. Pair 3 is incorrect; the Irminger current is in the North Atlantic."},{"id":35,"txt":"Consider the following statements in respect of the United Nations Convention on the Law of the Sea (UNCLOS):\n1. The contiguous zone extends seaward up to 12 nautical miles (nm) from the baselines.\n2. Each coastal state has full sovereignty over its Exclusive Economic Zone (EEZ).\n3. It established International Seabed Authority to regulate exploitation of deep seabed minerals.","ref":"","opts":["Only one","Only two","Only three","None"],"ci":0,"exp":"Ex: Only Statement 3 is correct. UNCLOS established the International Seabed Authority. Statement 1 is false; the Territorial Sea is 12nm, while the Contiguous Zone is 24nm from baseline. Statement 2 is false; states have resource rights in the EEZ but not full sovereignty."},{"id":36,"txt":"With reference to the United Nation Convention on the Law of the Sea (UNCLOS), Which of the following statements is/ are correct?\n1. The International Maritime Organisation was created under this convention.\n2. The convention regulates trading activities through maritime regions.\n3. The decisions of the conventions are binding on all the members.","ref":"","opts":["1 and 3 only","3 only","2 and 3 only","1 only"],"ci":1,"exp":"Ex: Only Statement 3 is correct. UNCLOS decisions are legally binding. Statement 1 is false; IMO was not created by UNCLOS. Statement 2 is false; it does not regulate trading activities."},{"id":37,"txt":"In which of the following areas tides holds significance?\n1. Navigation of ships\n2. Fishing\n3. Reduces river pollution\n4. Generation of energy","ref":"","opts":["1 and 2 only","1, 3 and 4 only","2 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: All are correct. Tides raise water for ships, concentrate fish for catch, help flush out pollutants from estuaries, and provide a source of renewable energy."},{"id":38,"txt":"Which of the following statements is incorrect with regard to the phenomena of Waves?","ref":"","opts":["Water moves from one place to another through waves.","Steep waves are fairly young while slow and steady waves originate from faraway places.","The maximum wave height is determined by the strength of the wind.","Wave breaks when the depth of water is less than half the wavelength of the wave."],"ci":0,"exp":"Ex: Statement is incorrect. Waves are the movement of energy; the water itself moves in small circles and does not travel long distances with the wave."},{"id":39,"txt":"Consider the following pairs of types of tides and their explanation:\n1. Semi-diurnal tide: Most common tidal pattern with two high tides and two low tides.\n2. Mixed tide: These tides have variations in height.\n3. Spring tide: They occur twice a month, on full moon and on new moon.\n4. Neap tide: They occur when the sun, the moon and the earth are in a straight line.","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: Pairs 1, 2, and 3 are correct. Pair 4 is incorrect; in Neap tides, the sun and moon are at right angles. Straight-line alignment occurs during Spring tides."},{"id":40,"txt":"Which one of the following factors is responsible for the change in the regular direction of the ocean currents in the Indian Ocean?","ref":"","opts":["Indian Ocean is half an ocean.","Indian Ocean has monsoon drift.","Indian Ocean is a land-locked ocean.","Indian Ocean has greater variation in salinity."],"ci":1,"exp":"Ex: The seasonal reversal of monsoon winds causes the surface currents (Monsoon Drift) in the North Indian Ocean to change direction twice a year."},{"id":41,"txt":"Which of the following statements is/are incorrect about the variability in insolation with latitude?\n1. Due to transparency and motion of water, it gets heated up much faster than land.\n2. Meridional circulation occurs due to variation in insolation across the earth.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is incorrect because water heats up much slower than land due to its transparency and mobility. Statement 2 is correct; heat imbalances between the equator and poles drive meridional circulations."},{"id":42,"txt":"With reference to the oceanic current system in the Indian ocean region, which of the following is incorrect?","ref":"","opts":["Ocean current system in Indian ocean is strongly impacted by landmass and monsoon system.","North Indian Ocean has permanent and consistent system of ocean currents.","Current in the Northern Indian Ocean changes direction twice a year.","Southern Equatorial current is less affected by seasonal reversal of monsoon wind."],"ci":1,"exp":"Ex: Statement is incorrect. The North Indian Ocean lacks a permanent system because currents reverse seasonally due to the monsoon."},{"id":43,"txt":"With reference to the Ocean heat budget, consider the following statements:\n1. Ocean is cooled by the oceanic convection.\n2. Ocean thermal energy conversion (OTEC) is a process which harnesses the thermal gradients between ocean surface waters and deep ocean waters.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 and 2"],"ci":1,"exp":"Ex: Statement 2 is correct. OTEC uses the temperature difference between layers. Statement 1 is incorrect because convection is a heating process that circulates heat throughout the water body."},{"id":44,"txt":"These are the western boundary ocean currents in the wind-driven, subtropical and subarctic circulations of the North Pacific Ocean. One of them is downwelling-dominant, low in biological productivity whereas the other is dominated by upwelling and fed by nutrient rich waters. The confluence of these currents is marked by fog banks. These currents are:","ref":"","opts":["Kuroshio Current and Oyashio Current.","California Current and Alaska Current.","Falkland Current and Humbolt Current.","Labrador Current and Gulf Stream."],"ci":0,"exp":"Ex: In the North Pacific, the warm Kuroshio meets the cold, nutrient-rich Oyashio, creating high productivity and frequent fog."},{"id":45,"txt":"With reference to tides, which of the following statements is/are correct?\n1. During perihelion, tidal ranges are much greater than average.\n2. During neap tides, both high and low tides are lower than average.\n3. In diurnal tide, successive high and low tides are approximately of the same height.","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1 and 3 only"],"ci":3,"exp":"Ex: Statements 1 and 3 are correct. Perihelion increases range. Diurnal tides have one high/low cycle of similar height. Statement 2 is incorrect because in neap tides, high tides are lower and low tides are higher than average."},{"id":46,"txt":"Which of the following statement is incorrect about Tidal currents?","ref":"","opts":["It occurs in conjunction with the rise and fall of the tide.","It is the only type of current affected by the interactions of the Earth, sun, and moon.","It is generated when tides are channeled between islands.","During the full moon day the tidal current velocities are weak."],"ci":3,"exp":"Ex: Statement is incorrect. On full moon days (Spring tides), tidal currents are at their strongest (Spring currents), not weak."},{"id":47,"txt":"With reference to aquatic ecosystems, consider the following statements:\n1. Increased concentration of suspended particulate matter limits the photosynthetic activity.\n2. In profundal zone there is a rapid increase in photosynthetic activity.\n3. Increase in the temperature of water body decreases the amount of dissolved oxygen.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 3 are correct. Turbidity blocks light, and warm water holds less oxygen. Statement 2 is incorrect; the profundal zone is the deep, dark layer with very low photosynthesis."},{"id":48,"txt":"Consider the following statements with reference to Earth's geology:\n1. The Mid-Oceanic ridges are some of the most active volcanic regions.\n2. The terrigenous deposits are those which are mainly found on continental shelves and slopes.\n3. Pelagic deposits cover majority of the total sea floor.","ref":"","opts":["1 only","2 and 3 only","1 and 2 only","1 and 3 only"],"ci":3,"exp":"Ex: Statements 1 and 3 are correct. Mid-oceanic ridges are highly volcanic, and pelagic deposits cover ~75% of the seafloor. Statement 2 is not selected as correct in the provided key \"d\", though textually terrigenous deposits are indeed found on shelves/slopes."},{"id":49,"txt":"With reference to oceanography, consider the following statements:\n1. Sea waves occur near the surface of the ocean as well as in the deep ocean.\n2. Sea waves are created by the friction between wind and surface water.\n3. Tides are created by rising and falling sea levels primarily due to rotation of Earth.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 2 are correct. Waves are wind-driven and exist throughout the ocean. Statement 3 is incorrect because tides are primarily caused by the gravitational pull of the Moon and Sun, not Earth's rotation alone."},{"id":50,"txt":"Which of the following are the cold currents of the world?\n1. Labrador\n2. Kuroshio\n3. Humboldt\n4. Gulf Stream\n5. Benguela","ref":"","opts":["1, 2 and 4 only","2, 3 and 4 only","1, 3 and 5 only","1, 4 and 5 only","[cite_start]Ex: Labrador, Humboldt (Peru), and Benguela are all cold currents[cite: 1327, 1332, 1337]. [cite_start]Kuroshio and Gulf Stream are warm currents that carry tropical waters toward the polar regions[cite: 1330, 1335]."],"ci":2,"exp":"No explanation provided."},{"id":51,"txt":"With reference to the Ocean deposits, which of the following statement(s) is/are correct?\n1. The pelagic deposits mainly consist of rock material.\n2. The terrigenous deposits are derived from the wear and tear of land and volcanic and organic products.\n3. Pelagic deposits cover majority of the total sea floor.","ref":"","opts":["1 only","2 and 3 only","1 and 2 only","1 and 3 only","[cite_start]Ex: Terrigenous deposits consist of rock material derived from land wear and tear[cite: 1342, 1345]. [cite_start]Pelagic deposits, which cover about 75% of the total sea floor, consist of organic and inorganic material like remains of micro-organisms[cite: 1343, 1347, 1349]."],"ci":1,"exp":"No explanation provided."},{"id":52,"txt":"Consider the following statements about ocean floor configuration:\n1. Continental rise is the sea ward extension of the continent from the shoreline to the continental edge.\n2. A continental slope is the slope between the outer edge of the continental shelf and the deep ocean floor.\n3. A continental shelf is a wide, gentle incline from a deep ocean plain to a continental slope.","ref":"","opts":["Only one","Only two","All three","None","[cite_start]Ex: Only Statement 2 is correct; the slope marks the seaward edge between the shelf and the deep floor[cite: 1358, 1360]. [cite_start]Statement 1 describes the continental shelf [cite: 1357][cite_start], while Statement 3 describes the continental rise[cite: 1361]."],"ci":0,"exp":"No explanation provided."},{"id":53,"txt":"Which of the following are the coral islands?\n1. Lakshadweep\n2. Spratly islands\n3. Curacao","ref":"","opts":["2 and 3 only","1 and 2 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: All three are coral islands. [cite_start]Lakshadweep is a coral island in India[cite: 1368]. [cite_start]The Spratly Islands consist of coral formations in the South China Sea [cite: 1369][cite_start], and Curacao is a coral island in the Dutch Caribbean[cite: 1370]."},{"id":54,"txt":"Consider the following statements:\n1. Mid-Oceanic ridge are the world's largest mountain ranges existing below marine waters.\n2. The occurrence of shallow earthquakes near mid ocean ridges is due to divergence of the tectonic plates.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2","[cite_start]Ex: Mid-Oceanic ridges cover 23% of the Earth's surface and are the largest mountain ranges under the sea[cite: 1375, 1376]. [cite_start]They form at divergent boundaries where plate separation causes frequent small earthquakes[cite: 1378, 1379]."],"ci":2,"exp":"No explanation provided."},{"id":55,"txt":"With reference to vertical temperature distribution of oceans, consider the following statements:\n1. The rate of decrease of temperature with depths is greater at the equator than at the poles.\n2. The maximum temperature of the oceans water is at the surface.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2","[cite_start]Ex: While surface temperatures drop toward the poles, the bottom temperature is uniform; thus, the vertical rate of decrease is most rapid near the equator[cite: 1383, 1385]. [cite_start]Surface waters are warmest because they directly receive solar heat[cite: 1386]."],"ci":2,"exp":"No explanation provided."},{"id":56,"txt":"With reference to movement of tides, which of the forces is responsible for tidal movement?","ref":"","opts":["Winds","Gravitational pull of Sun","Salinity difference between the surface zones and deep zones of the ocean","Temperature difference at surface of the ocean","[cite_start]Ex: Tides are primarily caused by the gravitational pull of the moon and the sun[cite: 1389, 1392]. [cite_start]While winds and temperature affect ocean currents, they are not responsible for tides[cite: 1391]."],"ci":1,"exp":"No explanation provided."},{"id":57,"txt":"Consider the following statements:\n1. The variation in temperature over the sea is less compared to land.\n2. The places located on the coast where the warm ocean currents flow, record higher temperature.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2","[cite_start]Ex: The sea heats and loses heat more slowly than land, leading to less temperature variation[cite: 1400, 1401]. [cite_start]Coastal areas influenced by warm currents or air masses experience higher temperatures than those near cold currents[cite: 1404, 1405]."],"ci":2,"exp":"No explanation provided."},{"id":58,"txt":"Which of the following statements regarding the Atlantic Meridional Overturning Circulation is/ are correct?\n1. It is responsible for keeping Western Europe relatively colder than other places at the same latitude.\n2. It has shown signs of weakening due to accelerated melting of the Arctic Ocean.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2","[cite_start]Ex: Statement 2 is correct as melting ice adds freshwater, reducing density and weakening the flow[cite: 1419, 1421]. Statement 1 is incorrect; [cite_start]AMOC keeps Western Europe warmer and ice-free compared to similar latitudes[cite: 1417, 1418]."],"ci":1,"exp":"No explanation provided."},{"id":59,"txt":"Which of the following are the major impacts of warming of Oceans?\n1. Increased incidents of Coral Bleaching.\n2. Loss of breeding grounds for mammals.\n3. Sea level rise.\n4. Deoxygenation of oceans.\n5. Threat to food security.","ref":"","opts":["1, 2, 3 and 5 only","1, 3, 4 and 5 only","1, 2, 3 and 4 only","1, 2, 3, 4 and 5","[cite_start]Ex: Ocean warming causes coral bleaching, loss of marine breeding grounds, sea-level rise via thermal expansion, deoxygenation as warm water holds less oxygen, and ultimately threatens global food security[cite: 1432, 1433, 1436, 1440]."],"ci":3,"exp":"No explanation provided."},{"id":60,"txt":"With reference to the salinity of the ocean, consider the following statements:\n1. Formation of sea ice increases the salinity of the ocean.\n2. Evaporation of ocean water decreases the salinity of the ocean.\n3. The ocean winds can increase or decrease the salinity of the ocean depending upon the direction of winds.","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 3 are correct. [cite_start]Sea ice formation and evaporation both increase salinity[cite: 1451]. [cite_start]Winds influence salinity by driving saline water to less saline areas[cite: 1453]. [cite_start]Statement 2 is false; evaporation increases rather than decreases salinity[cite: 1451]."},{"id":61,"txt":"Consider the following statements with reference to the Tides:\n1. The gravitational pull of the sun has a greater impact than the gravitational pull of the moon on the occurrence of tides on earth.\n2. The tide generating force is the addition of net gravitational force of the sun and the moon and the centrifugal force of the earth's rotation.\n3. The tides can be predicted well in advance.","ref":"","opts":["Only one","Only two","All three","None","[cite_start]Ex: Only Statement 3 is correct; because solar/lunar positions are known, tides are predictable[cite: 1467]. [cite_start]Statement 1 is false; the moon's pull is the primary cause[cite: 1459, 1324]. [cite_start]Statement 2 is false; the force is the difference, not addition, between these forces[cite: 1460, 1465]."],"ci":0,"exp":"No explanation provided."},{"id":62,"txt":"Consider the following statements regarding the Emergent Sea Coasts: Statement 1: Emergent coasts have rocky coastlines with sea cliffs. Statement 2: Emergent coast witness persistent wave erosion.","ref":"","opts":["Both Statement 1 and Statement 2 are correct and Statement 2 is the correct explanation for Statement 1.","Both statement 1 and Statement 2 are correct but Statement 2 is not the correct explanation for Statement 1.","Statement 1 is correct but Statement 2 is not correct.","Statement 1 is not correct but Statement 2 is correct.","[cite_start]Ex: Emergent coasts occur where land is raised or sea levels fall, exposing rocky coastlines[cite: 1471, 1472]. [cite_start]Persistent wave erosion at these elevated coasts carves out sea cliffs, providing the explanation for Statement 1[cite: 1474, 1475, 1478]."],"ci":0,"exp":"No explanation provided."},{"id":63,"txt":"Consider the following statements with reference to coral reefs:\n1. They are the counterpart to the tropical rain forest in terms of species diversity.\n2. They exhibit different colors because of Zooxanthellae algae.\n3. Malvan coral reef is located along Karnataka coast.","ref":"","opts":["Only one","Only two","All three","None","[cite_start]Ex: Statements 1 and 2 are correct; coral reefs are biological treasure houses and get their color from chlorophyll in Zooxanthellae[cite: 1481, 1483, 1484]. [cite_start]Statement 3 is false; the Malvan coral reef is along the Konkan coast in Maharashtra[cite: 1487]."],"ci":1,"exp":"No explanation provided."},{"id":64,"txt":"Consider the following statements:\n1. Coral reefs are mainly found between latitudes 30 degree North and South on mud free coastlines.\n2. Increase of ammonia and nitrate in the water leads to coral bleaching.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2","[cite_start]Ex: Reef-forming corals thrive in specific temperature and salinity ranges between 30°N and 30°S on clear, mud-free coasts[cite: 1491, 1493]. [cite_start]Ammonia and nitrate increase eutrophication, which damages corals and leads to bleaching[cite: 1494, 1495]."],"ci":2,"exp":"No explanation provided."}],"m":null,"tt":3900,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>
