@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SFG LEVEL 01    2026 = 321135</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>SFG LEVEL 01    2026 = 321135</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="SFG LEVEL 01    2026 = 321135">SFG LEVEL 01    2026 = 321135</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following statements:\n1. No virus can survive in ocean waters.\n2. No virus can infect bacteria.\n3. No virus can change the cellular transcriptional activity in host cells.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":3,"exp":"Ex: Statement I is incorrect: Viruses are abundant in ocean waters. Oceans are estimated to contain billions of viruses, making them one of the most virus-rich environments on Earth. The vast majority of these are bacteriophages, which infect marine bacteria. These viruses play a key role in regulating microbial populations, nutrient cycling, and even in carbon cycling, by influencing the death and lysis (breaking down) of microbial cells. Marine viruses are an active area of research in marine biology, virology, and climate sc ience. Statement II is incorrect: There is a well-known class of viruses called bacteriophages (or simply phages) that specifically infect bacteria. These are widely used in research and have even found therapeutic applications (called phage therapy) to combat antibiotic-resistant bacterial infections. Bacteriophages attach to bacterial cells, inject their genetic material, and hijack the bacterial machinery to replicate themselves. Statement III is incorrect: Viruses are obligate intracellular parasites, meaning they rely on host cell machinery to replicate. To achieve this, many viruses manipulate and alter the host cell’s transcriptional activity (and other cellular processes) to favor viral gene expression and replication. This can involve activating or repressing host genes, hijacking host transcription factors, or introducing their own transcriptional machinery."},{"id":1,"txt":"This empty-looking space in plant cells helps them to store important substances, get rid of waste and maintain the shape of the cell. This gives strength and support to the plant. In animal cells, they are usually not present, if present, they are usually small.\nThe above paragraph best describes which of the following?","ref":"","opts":["Centriole","Peroxisomes","Endoplasmic reticulum","Vacuole"],"ci":3,"exp":"Ex: Option a is incorrect: Centriole is present in all the animal cells (but not in Amoeba), located just outside the nucleus . It is cylindrical, 0.5 μm in length and without a membrane. It has its own DNA and RNA and therefore it is self duplicating. Centrioles are involved in cell division. They give orientation to the ‘mitotic spind le’ which forms during cell division. Option b is incorrect: Peroxisomes are found both in plant and animal cells. They are found in the green leaves of higher plants. They participate in oxidation of substrates resulting in the formation of hydrogen peroxide. They often contain a central core of crystalline material called nucleoid composed of urate oxidase crystals. They are involved in photorespiration in plant cells. They bring about fat metabolism in cells.    Option c is incorrect: Endoplasmic reticulum (ER) is a network of short tubular interconnected structures scattered in the cytoplasm. ER divides the inner region of the cell into luminal (inside ER) and extra-luminal (cytoplasm) parts. ER is of two types: rough endoplasmic reticulum (RER) and smooth endoplasmic reticulum (SER). RER has a rough surface due to the presence of ribosomes. It is the site of protein synthesis . It also transports proteins to the Golgi apparatus. SER lacks ribosomes and is involved in synthesis of lipids. Option d is correct: Vacuoles are membrane-bound sacs which contain water or dilute salt solutions. Plant cells have a large, empty-looking space called a vacuole. These vacuoles are filled with cell sap and help in maintaining the rigidity and turgidity of the cell by regulating the water balance. This helps the plant cell store important substances, get rid of waste, and maintain the shape of the cell. This gives strength and support to the plant. In animal cells, vacuoles are usually not present, if present, they are usually small. These small vacuoles store certain substances dissolved in water."},{"id":2,"txt":"Consider the following statements with reference to yeasts:\n1. They belong to a group of microorganisms called fungi.\n2. Carbon dioxide is evolved from food materials spoiled by yeasts.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: Yeasts are large, single-celled organisms that rarely form filaments. They are ovoid or spheroid and reproduce by budding or fission. Statement I is correct: Yeast is a type of microorganism that belongs to a group of microorganisms, called fungi. Yeast is a unicellular fungus. They are widely distributed in nature. They are somewhat larger than bacteria. The cell length is about 10mm and the diameter is about a third of this. Most yeast is spherical or ellipsoidal. Yeasts that multiply by means of 'budding' are known as 'true yeasts'. Statement II is correct: Like other organisms, yeast also respires and breaks down food to release energy for their growth and carry out life processes. During this process, carbon dioxide is released, which forms bubbles that make the dough soft and fluffy. Yeast also produces a small amount of alcohol during this process, which gives the dough a slightly different smell. This special property of yeast is used in the process of making breads, cakes, etc."},{"id":3,"txt":"With reference to eukaryotic and prokaryotic cells, consider the following statements:\n1. Unlike prokaryotic cells, eukaryotic cells have a membrane-bound nucleus.\n2. Unlike prokaryotic cells, cytoplasm is present in eukaryotic cells.\n3. Prokaryotic cells are generally smaller and multiply more rapidly than the eukaryotic cells.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II","II only","III only","I and III"],"ci":3,"exp":"Ex: Cells are classified into two basic types - Eukaryotes (cells that possess a well-formed nucleus enclosed by a nuclear membrane) and Prokaryotes (cells that lack a well-defined, membrane-bound nucleus). Statement I and III are correct: Cells that have membrane bound nuclei are called eukaryotic whereas cells that lack a membrane bound nucleus are prokaryotic. Eukaryotic cells have distinct nucleus with well formed nuclear membranes. In the case of prokaryotic cells, the nucleus is not distinct; i t is in the form of a nuclear zone ‘nucleoid’ and the nuclear membrane is absent. Prokaryotic cells are generally smaller and multiply more rapidly than the eukaryotic cells. Statement II is incorrect: In both prokaryotic and eukaryotic cells, a semi-fluid matrix called cytoplasm occupies the volume of the cell. The cytoplasm is the main arena of cellular activities in both the plant and animal cells. Various chemical reactions occur in it to keep the cell in the ‘living state’."},{"id":4,"txt":"Consider the following statements in respect of probiotics:\n1. Probiotics are made of both bacteria and yeast.\n2. The organisms in probiotics are found in foods we ingest but they do not naturally occur in our gut.\n3. Probiotics help in the digestion of milk sugars.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","1 and 3","2 and 3"],"ci":2,"exp":"Ex: Probiotics are live microorganisms that are intended to have health benefits when consumed or applied to the body. They can be found in yogurt and other fermented foods, dietary supplements, and beauty products. Statement 1 is correct: Probiotics are a combination of live beneficial bacteria and/or yeasts . Statement 2 is incorrect: Probiotics live naturally in our body. L. acidophilus is a probiotic bacterium that naturally occurs in the human gut. The most common place linked to beneficial microbes is our gut (mostly large intestines), but there are other places like mouth, urinary tract, skin, lungs etc where these probiotics are found. Statement 3 is correct: Yogurt is a well-known food source of probiotics. Certain strains of bacteria in yogurt have ß- D-galactosidase, which is an enzyme that helps break down lactose in dairy products into the sugar's glucose and galactose . Thus, Probiotics help in the digestion of milk sugars."},{"id":5,"txt":"With reference to diseases and their causative agents, consider the following pairs: Disease Caused by\n1. Measles Virus\n2. Cholera Worms\n3. Typhoid Bacteria\n4. Malaria Protozoa\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: Pair I is correct: Measles Measles is caused by the Measles virus , which belongs to the Paramyxoviridae family. It is a highly contagious viral disease that spreads through respiratory droplets when an infected person coughs or sneezes. It affects the skin and respiratory tract. Being viral in nature, it does not respond to antibiotics and is mainly prevented through vaccination (MMR vaccine ). Pair II is incorrect: Cholera Cholera is not caused by worms. It is an acute diarrhoeal disease caused by the bacterium Vibrio cholerae (a Bacteria). The infection spreads mainly through contaminated water or food and leads to severe watery diarrhoea and dehydration. Worms cause diseases such as ascariasis, filariasis (elephantiasis), and hookworm infection, not cholera. Pair III is correct: Typhoid Typhoid fever is caused by bacterium Salmonella typhi. It spreads through contaminated food and water, especially in areas with poor sanitation and affects the intestinal tract and bloodstream. Since it is a bacterial disease, it can be treated with appropriate antibiotics . Pair IV is correct: Malaria Malaria is caused by protozoan parasites of the genus Plasmodium (such as P. vivax, P. falciparum). These protozoa are transmitted to humans through the bite of an infected female Anopheles mosquito. The protozoa multiply inside liver cells and red blood cells, leading to periodic fever and chills. Being a protozoan disease, malaria requires specific anti-malarial drugs , not antibiotics."},{"id":6,"txt":"Consider the following statements:\n1. Antibiotics are ineffective in the treatment of Hepatitis A infection.\n2. Hepatitis A is a disease caused by a virus.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":0,"exp":"Ex: Statement I is correct: Antibiotics are medicines specifically developed to destroy or inhibit the growth of bacteria . They act by targeting bacterial structures and metabolic processes such as cell wall formation, protein synthesis, and DNA replication . Antibiotics kill the bacteria that might have caused the disease. Antibiotics work only against bacterial infections because they target parts of bacterial cells that are different from human or other animal cells. They do not work against viruses or diseases caused by protozoa. Hepatitis A infection does not involve bacteria; therefore, antibiotics do not play any role in the treatment of Hepatitis A . Statement II is correct: Hepatitis A is caused by the Hepatitis A virus (HAV), a virus that infects liver cells and spreads mainly through the faeco-oral route, often via contaminated food or water. Relationship between the statements: The fact that Hepatitis A is caused by a virus (Statement II) is the fundamental reason why antibiotics are ineffective against it (Statement I). Since antibiotics effectively act only on bacteria and not on viruses, the viral nature of Hepatitis A directly explains the lack of effectiveness of antibiotics in its treatment. Hence, Both Statement I and Statement II are correct and Statement II explains Statement I."},{"id":7,"txt":"When iodine solution is added to a food substance and it turns blue-black in colour, this reaction primarily indicates the presence of which of the following in food substance?","ref":"","opts":["Glucose","Starch","Proteins","Dietary fibres"],"ci":1,"exp":"Ex: When iodine solution is added to a food substance containing starch, it produces a blue-black colour. This happens because iodine molecules get trapped inside the helical (spiral) structure of amylose, which is a major component of starch. This interaction forms a coloured complex, resulting in the characteristic blue-black appearance. This reaction is known as the iodine test for starch and is commonly used to detect the presence of starch in food materials."},{"id":8,"txt":"In eukaryotic cells, the organelle that serves as the principal site for energy release through aerobic cellular respiration is:","ref":"","opts":["Golgi apparatus","Ribosomes","Endoplasmic reticulum","Mitochondria"],"ci":3,"exp":"Ex: Option d is correct: In eukaryotic cells, mitochondria are known as the powerhouses of the cell because they are the main sites of aerobic cellular respiration . During this process, organic molecules such as glucose are broken down in the presence of oxygen to release energy which gets stored in the form of ATP (adenosine triphosphate) for ready use. Option a is incorrect: Golgi apparatus: It is mainly involved in the modification, sorting, and packaging of proteins and lipids for secretion or transport within or outside the cell. It does not participate in energy production. Option b is incorrect: Ribosomes: Ribosomes are the sites of protein synthesis , where amino acids are assembled into polypeptide chains. They have no role in cellular respiration or ATP generation . Option c is incorrect: Endoplasmic reticulum: The rough endoplasmic reticulum is associated with protein synthesis and transport , while the smooth endoplasmic reticulum is involved in steroid synthesis and storing carbohydrates, not in aerobic energy production."},{"id":9,"txt":"Consider the following cell organelles:\n1. Cell wall\n2. Plastids\n3. Golgi apparatus\n4. Cytoplasm\nHow many of the above are generally present in plant cells but absent in animal cells?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: .    Plant cells and animal cells are the two major types of eukaryotic cells that form the structural and functional units of plants and animals respectively. Both possess a well-defined nucleus and membrane-bound organelles such as mitochondria, endoplasmic reticulum, Golgi apparatus, ribosomes and cytoplasm. However, they differ in structure and function due to the distinct lifestyles and nutritional requirements of plants and animals. Option I is correct: Cell wall The cell wall is a rigid, non-living outer layer located outside the plasma membrane in plant cells . It is primarily composed of cellulose and provides structural support, rigidity, shape, and protection to plant cells. Animal cells do not have a cell wall ; instead, they are bounded only by a flexible cell membrane or plasma membrane. Hence, the cell wall is present in plant cells, but absent in animal cells. Option II is correct: Plastids Plastids are double-membrane-bound organelles found exclusively in plant cells and some algae . They are responsible for key metabolic and biosynthetic functions and include chloroplasts (for photosynthesis), chromoplasts (for pigment storage), and leucoplasts (for storage of starch, proteins, and fats). Animal cells lack plastids because they do not perform photosynthesis. Therefore, plastids are present only in plant cells and absent in animal cells . Option III is incorrect: Golgi apparatus The Golgi apparatus is present in both plant and animal cells. It is involved in the modification, packaging, and transport of proteins and lipids. In plant cells, the Golgi bodies are often referred to as dictyosomes , but they are structurally and functionally the same organelle . Since it occurs in both cell types, it is not exclusive to plant cells. Option IV is incorrect: Cytoplasm The cytoplasm is the main arena of cellular activities in both the plant and animal cells. Various chemical reactions occur in it to keep the cell in the ‘living state’. Cytoplasm is the semi -fluid, jelly-like substance present between the plasma membrane and the nucleus. It contains cell organelles and is the site of most metabolic and biochemical reactions. Since cytoplasm is essential for basic cellular functioning, it is present in all living cells, including both plants and animals. Knowledge Base: Differences between Plant Cell and Animal Cell Plant Cell Animal Cell Cellulose cell walls are present external to the cell No cell wall ; outermost structure is the cell membrane membrane. (plasma membrane). Vacuoles are usually large and centrally located. Vacuoles are generally absent ; if present, they are usually small. Plastids are present. Plastids are absent. Golgi body is present in the form of units known as Golgi body is well developed and consists of flattened sacs dictyosomes. called cisternae.    Centriole is absent. Ce ntriole is present."},{"id":10,"txt":"Consider the following:\n1. Bacteria\n2. Fungi\n3. Virus\nWhich of the above can be cultured in artificial/synthetic medium?","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":0,"exp":"Ex: Bacteria and Fungi can be cultured in artificial/synthetic medium, but Viruses cannot. Option 1 is correct: Bacteria: Bacteria can be grown in artificial or synthetic laboratory media. These media provide the necessary nutrients, salts, and conditions for bacterial growth and can be tailored to specific bacterial species or strains. Option 2 is correct: Fungi: Fungi can also be cultured in artificial or synthetic media. These media typically contain sources of carbon, nitrogen, vitamins, and other essential nutrients required for fungal growth. Option 3 is incorrect: Virus: Viruses are not considered living organisms on their own. They are obligate intracellular parasites, meaning they cannot replicate outside a host cell. Therefore, they cannot be cultured in artificial media. Instead, they require a host organism’s cells to replicate."},{"id":11,"txt":"The tetanus shot or tetanus vaccine, often administered after an injury to prevent infection, is produced from\nwhich one of the following?","ref":"","opts":["Live attenuated bacteria","Live attenuated virus","Inactivated bacterial toxin","Inactivated virus"],"ci":2,"exp":"Ex: Tetanus is caused by a toxin called tetanospasmin , which is produced by the bacterium Clostridium tetani. This bacterium commonly enters the body through deep wounds, cuts, or injuries contaminated with soil, dust, or rusted objects. The infection leads to painful muscle contractions, particularly of the jaw and neck muscle, and is commonly known as “ lockjaw” . The tetanus shot or vaccine (Tetanus Toxoid) is prepared from this toxin after it has been inactivated (detoxified) using chemicals such as formaldehyde. The inactivated toxin , known as a toxoid , loses its disease-causing property but retains its antigenic nature.    When the toxoid is injected into the body, it stimulates the immune system to produce specific antibodies against the tetanus toxin. These antibodies remain in the blood and provide protection. If the person later gets infected with Clostridium tetani, the already-formed antibodies immediately neutralize the toxin, thereby preventing symptoms of tetanus. Thus, the tetanus shot contains an inactivated bacterial toxin that safely induces long-term immunity."},{"id":12,"txt":"With reference to differences between xylem and phloem tissues in plants, which of the following statements is/are correct?\n1. Xylem primarily transports water and minerals from roots to other parts of the plant, whereas phloem primarily transports prepared food from leaves to different parts of the plant.\n2. Transport through xylem is mainly bidirectional, whereas transport through phloem is always unidirectional.\n3. Most of the structural elements of xylem are dead at maturity, while most structural elements of phloem are living tissues.\nSelect the correct answer using the code given below:","ref":"","opts":["I only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: Vascular tissues are specialized conducting tissues in plants that help in the transport of water, minerals, and food, and also provide mechanical support. They form the plant’s internal transport syste m and are mainly of two types: xylem and phloem . Together, xylem and phloem form vascular bundles , which are present in roots and stems. These tissues play a crucial role in the growth, survival, and proper functioning of higher plants. Statement I is correct: Xylem and phloem are the two main vascular tissues in plants with distinct transport functions. Xylem is responsible for transporting water and dissolved mineral salts from roots to the stem, leaves, and other aerial parts of the plant . Phloem transports prepared food (photosynthates) synthesised in the leaves to different parts of the plant. Statement II is incorrect: Transport through xylem is essentially unidirectional , occurring mainly from roots to aerial parts due to root pressure, capillary action, and transpiration pull. In contrast, phloem transport is bidirectional , as food can move both upward and downward depending on source – sink relationships. Statement III is correct: Xylem is a conducting tissue which conducts water and salts upward from roots to leaves. Xylem is composed of (a) Tracheids, (b) Vessels (c) Fibres and (d) Xylem Parenchyma. Most structural elements of xylem , such as tracheids, vessels, and xylem fibres (except Xylem Parenchyma) are dead at maturity , providing efficient conduction and mechanical support. Phloem is composed of (a) Sieve tube element (b) Companion cells (c) Phloem fibre and (d) Phloem Parenchyma. In contrast to xylem, most phloem elements , such as sieve tube elements and companion cells and Phloem Parenchyma (except phloem fibres) are living tissues , which are essential for active food transport."},{"id":13,"txt":"Consider the following statements:\n1. Bajra (Pearl Millet) and Ragi (Finger Millet) have a lower glycaemic index as compared to wheat and rice.\n2. Bajra (Pearl Millet) and Ragi (Finger Millet) are gluten-free cereals.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":1,"exp":"Ex: Statement I is correct: Bajra (pearl millet) and ragi (finger millet) have a lower glycaemic index (GI) than wheat and rice. The glycaemic index indicates how quickly a food raises blood glucose levels after consumption. Bajra and ragi are whole millets and contain higher dietary fibre, complex carbohydrates , and a more resistant starch structure, which slow down digestion and the absorption of glucose into the bloodstream . As a result, they cause a more gradual rise in blood sugar levels compared to rice and wheat . Statement II is correct: Bajra and ragi are naturally gluten-free cereals, meaning they lack gluten-forming proteins such as gliadin and glutenin that are found in wheat, barley and related grains. This characteristic makes them nutritionally important for individuals suffering from celiac disease or non-celiac gluten sensitivity, and it also broadens their role in diversified and inclusive diets. However, Statement II does not explain Statement I. The absence of gluten does not determine the glycaemic index of a food . Glycaemic index depends primarily on factors such as fibre content, degree of processing, starch composition, and rate of digestion, rather than the presence or absence of gluten proteins. Therefore, while both statements are individually correct , the reason given in Statement II does not account for the lower glycaemic index mentioned in Statement I. Hence, the correct answer is b) Both Statement I and Statement II are correct but Statement II does not explain Statement I."},{"id":14,"txt":"Which one of the following is synthesised in human body that dilates blood vessels and increases blood flow:","ref":"","opts":["Nitric oxide","Nitrous oxide","Nitrogen dioxide","Nitrogen pentoxide"],"ci":0,"exp":"Ex: Nitric oxide (NO) is synthesized in the human body and plays a crucial role in vasodilation, which increases blood flow. The body produces nitric oxide from the amino acid L-arginine using the enzyme nitric oxide synthase (NOS). The primary site of NO synthesis is the inner layer of blood vessels (the endothelium), although other cell types also contribute to its production. Nitric oxide (NO) acts as a powerful vasodilator, relaxing vascular smooth muscles in arteries. This dilation increases blood flow, benefiting overall cardiovascular health. It also serves as a neurotransmitter and is involved in various functions, including neuronal activity and learning."},{"id":15,"txt":"With reference to the immune system in humans, which of the following statements with regard to B-lymphocytes is/are correct?\n1. They produce antibodies in response to pathogens into our blood to fight with them.\n2. The immune response mediated by B-lymphocytes is known as humoral immunity.\n3. They are primarily responsible for rejection of organ transplants/grafts in the human body.\nSelect the correct answer using the code given below.","ref":"","opts":["I and II only","I and III only","II and III only","I, II and III"],"ci":0,"exp":"Ex: . The human body is able to defend itself from most of the foreign agents (disease-causing organisms). This overall ability of the body to fight the disease-causing organisms, conferred by the immune system is called immunity. Immunity is of two types: (i) Innate immunity and (ii) Acquired immunity. Innate immunity is a non-specific type of defence that is present at the time of birth. This is accomplished by providing different types of barriers to the entry of the foreign agents into our body. Innate immunity consists of four types of barriers i.e. physical barriers, physiological barriers, cellular barriers and cytokine barriers. Acquired immunity, on the other hand, is pathogen specific. It is characterised by memory. This means when our body encounters a pathogen for the first time it produces a response called primary response which is of low intensity. Subsequent encounters with the same pathogen elicits a highly intensified secondary or anamnestic response. This is ascribed to the fact that our body appears to have memory of the first encounter. The primary and secondary immune responses are carried out with the help of two special types of lymphocytes present in our blood, i.e., B- lymphocytes and T-lymphocytes. Statement I is correct . The B-lymphocytes produce an army of proteins in response to pathogens into our blood to fight with them. These proteins are called antibodies. These antibodies bind only to specific foreign substances called antigens . This binding happens mainly in blood and body fluids. Since this immune protection works through antibodies, it is called antibody-mediated immunity. Statement II is correct . There are two types of acquired immune response in the human body – one is antibody mediated which is caused by B-lyphocytes and the second type is called cell-mediated immune response or cell- mediated immunity (CMI). The T-lymphocytes mediate CMI. The immune response mediated by B lymphocytes is also known as humoral immunity because the antibodies they produce circulate in body fluids such as blood and lymph . Since this protection is provided through soluble factors present in these fluids, it is termed the humoral immune response .    Statement III is incorrect . Rejection of transplanted organs is primarily mediated by T-lymphocytes, not B- lymphocytes. During transplant rejection, the recipient’s immune system recognizes donor tissue as foreign and mounts a cell-mediated immune response . T cells play the central role in identifying and attacking graft cells."},{"id":16,"txt":"With reference to the hormones in human body, consider the following information: Hormone Primary Function Secreted by (Gland)\n1. Insulin Stimulating the breakdown of glycogen into Pancreas glucose in the liver\n2. Glucagon Facilitating the cellular uptake of glucose Thyroid Gland from the bloodstream\n3. Cortisol Regulating the body's stress response and Adrenal Gland metabolism\n4. Melatonin Coordinating the circadian rhythm and Pineal Gland sleep-wake cycles\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Row I is incorrect: Insulin Insulin is a peptide hormone secreted by the β -cells of the pancreas. It plays a major role in the regulation of glucose homeostasis . Its main role is to lower blood glucose levels . Its primary functions are: 1. Promoting glycogenesis: conversion of glucose into glycogen for storage in liver and muscle cells. 2. Facilitating cellular uptake of glucose: helps cells absorb glucose for energy production. 3. Inhibiting glycogenolysis: prevents breakdown of glycogen into glucose. 4. Enhances fat synthesis and protein synthesis. It does not stimulate the breakdown of glycogen. The breakdown of glycogen into glucose (glycogenolysis) is the action of glucagon, not insulin . Row II is incorrect: Glucagon Glucagon is secreted by the α -cells of the pancreas in response to low blood glucose levels. Its main functions are: 1. Stimulating glycogenolysis: breaking down glycogen into glucose in the liver to increase blood sugar. 2. Promoting gluconeogenesis: formation of glucose from amino acids and other non-carbohydrate precursors. 3. Promotes fat breakdown (lipolysis) to provide energy. It does not facilitate cellular uptake of glucose. Uptake of glucose is mainly promoted by insulin . Row III is correct: Cortisol Cortisol is a steroid hormone secreted by the adrenal cortex in Adrenal Gland. It is often called the “stress hormone”. Its main Functions include:    1. Metabolic regulation: Increases gluconeogenesis in the liver, mobilizes amino acids from muscles, and promotes lipolysis to increase energy availability. 2. Stress response: Prepares the body to handle stress by maintaining blood glucose, regulating blood pressure, and modulating immune response. 3. Anti-inflammatory action: Suppresses inflammation and immune reactions in stress situations. Row IV is correct: Melatonin Melatonin is a hormone secreted by the pineal gland in response to darkness. Its main Functions include: 1. Regulating circadian rhythms: helps synchronize the body’s internal clock with the day -night cycle. 2. Inducing sleep: signals the brain that it is time to sleep, promoting restorative sleep cycles. 3. Seasonal rhythms: in some animals, it helps control reproductive cycles according to day length."},{"id":17,"txt":"Consider the following pairs: Food component Associated (Vitamin/Mineral) diseases/disorder due to its deficiency\n1. Iron Goitre\n2. Vitamin C Scurvy\n3. Vitamin K Beri beri\n4. Calcium Tooth and Bone decay\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Pair I is incorrect: Iron is an important mineral which is required in small amounts by the body and is therefore also called a trace element. Iron plays a major role in the synthesis of haemoglobin which is the red coloured pigment present in our red blood cells. Iron deficiency leads to Anaemia (not Goitre). The deficiency of iodine leads to a condition called Goitre . Pair II is correct: Vitamin C , also known as ascorbic acid , is sensitive to heat and light and is easily destroyed on exposure to them. It plays a crucial role in the healthy development of teeth, gums, and skin, and enhances the body’s immunity against infections . Deficiency of Vitamin C causes scurvy , which is characterized by painful and swollen gums, bleeding, loosening of teeth, and eventual tooth loss. Pair III is incorrect: Vitamin K is essential for blood clotting and helps prevent excessive bleeding following an injury or cut. Deficiency of Vitamin K results in delayed clot formation and increased blood loss (but not Beri beri). Deficiency of Vitamin B ₁ (thiamine) leads to a disease known as beri-beri. Pair IV is correct: Calcium is present in large amounts in the human body and is found in nearly all cells. Its primary function is the formation and maintenance of strong bones and teeth. Its deficiency causes tooth and bone decay.    Deficiency of calcium can also lead to symptoms like rickets in children and osteomalacia in adults (especially women), resulting in weak and fragile bones. Knowledge Base:"},{"id":18,"txt":"Consider the following diseases:\n1. Sickle-cell anemia\n2. Thalassemia\n3. Tuberculosis\n4. Phenylketonuria\nHow many of the above are generally referred to as genetic disorders?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: . Broadly, genetic disorders are classified into Mendelian disorders and chromosomal disorders. Mendelian disorders arise due to mutation or alteration in a single gene and are inherited according to the principles of inheritance, with their transmission pattern traceable through pedigree analysis. Common examples of Mendelian disorders include haemophilia, cystic fibrosis, sickle-cell anaemia , colour blindness, phenylketonuria, and thalassemia. Option I is correct: Sickle-cell anaemia is an autosomal recessive genetic disorder transmitted to offspring when both parents are carriers (heterozygous) of the defective gene. The condition is governed by a single gene with two alleles, HbA (normal) and HbS (mutant). Individuals with the heterozygous genotype (HbA HbS) usually appear normal but act as carriers of the disease and may pass the mutant gene to their children with a 50% probability, a condition known as the sickle-cell trait. Option II is correct: Thalassemia is also an autosome-linked recessive blood disease transmitted from parents to the offspring when both the partners are carriers for the gene (or heterozygous). The defect could be due to either mutation or deletion which ultimately results in reduced rate of synthesis of one of the globin chains ( α and β chains) that make up haemoglobin. Option III is incorrect: Tuberculosis (TB) is not a genetic disorder because it is not caused by a mutation in genes or chromosomes . It is an infectious disease caused by the bacterium Mycobacterium tuberculosis . The disease spreads through airborne droplets when an infected person coughs or sneezes. Option IV is correct: Phenylketonuria is an inborn error of metabolism and is also inherited as the autosomal recessive trait . The affected individual lacks an enzyme that converts the amino acid phenylalanine into tyrosine. As a result of this, phenylalanine is accumulated and converted into phenylpyruvic acid and other derivatives. Accumulation of these in the brain results in mental retardation. These are also excreted th rough urine because of its poor absorption by the kidney."},{"id":19,"txt":"With reference to general biology, Thymine, Guanine and Cytosine are the-","ref":"","opts":["hormones involved in the regulation of metabolism.","nitrogenous bases that are components of nucleic acids.","medicinal plant varieties used in cancer treatment.","amino acids that serve as the building blocks of proteins."],"ci":1,"exp":"Ex: Thymine, Guanine, and Cytosine are nitrogenous bases , which are fundamental components of nucleic acids. Deoxyribonucleic acid (DNA) is a long polymer made up of repeating units called deoxyribonucleotides, and its length is defined by the number of nucleotides or base pairs it contains, which is characteristic of each organism. Each nucleotide consists of three parts: a nitrogenous base, a pentose sugar (deoxyribose in DNA and ribose in RNA), and a phosphate group. Nitrogenous bases are of two types — purines (Adenine and Guanine) and pyrimidines (Cytosine, Thymine, and Uracil). Cytosine is common to both DNA and RNA, Thymine is found only in DNA, and Uracil replaces Thymine in RNA. Hence, Thymine, Guanine, and Cytosine correctly refer to the nitrogenous bases of nucleic acids."},{"id":20,"txt":"Which one of the following is considered as ‘good cholesterol’ with reference to individuals facing the risk of cardio-vascular diseases and hypertension?","ref":"","opts":["High Density Lipoprotein (HDL)","Low Density Lipoprotein (LDL)","Triglyceride","Fatty acids"],"ci":0,"exp":"Ex: High Density Lipoprotein (HDL) is often referred to as “good cholesterol ” because it plays a protective role in cardiovascular health. HDL helps remove excess cholesterol from the bloodstream and carries it back to the liver for processing and elimination. This process is known as reverse cholesterol transport, and it helps prevent the buildup of cholesterol in the arteries, reducing the risk of cardiovascular diseases, such as heart attacks and strokes."},{"id":21,"txt":"With reference to Deoxyribonucleic Acid (DNA) and Ribonucleic Acid (RNA), consider the following statements:\n1. DNA is found in the nucleus of cells whereas RNA is found only outside the nucleus of cells.\n2. DNA is chemically less reactive and structurally more stable than RNA.\n3. DNA can directly code for the synthesis of proteins, however, RNA is dependent on DNA for synthesis of proteins.\nWhich of the statements given above is/are correct?","ref":"","opts":["II only","III only","I and II","I and III"],"ci":0,"exp":"Ex: Both Deoxyribonucleic Acid (DNA) and Ribonucleic Acid (RNA) act as genetic material in organisms, but they differ in their structure and biological functions. Statement I is incorrect: While DNA is found in the nucleus of cells, RNA is found in the nucleus as well as outside the nucleus such as cytoplasm, and ribosomes of cells. Statement II is correct: The genetic material should be stable enough not to change with different stages of life cycle, age or with change in physiology of the organism. Stability is one of the important properties of genetic material. DNA chemically is less reactive and structurally more stable when compared to RNA. Therefore, among the two nucleic acids, the DNA is a better genetic material. Statement III is incorrect: RNA can directly code for the synthesis of proteins, hence can easily express the characters. DNA, however, is dependent on RNA for synthesis of proteins. The protein synthesising machinery has evolved around RNA. The above discussion indicates that both RNA and DNA can function as genetic material, but DNA being more stable is preferred for storage of genetic information. For the transmission of genetic information, RNA is better."},{"id":22,"txt":"With reference to colour blindness in humans, consider the following statements:\n1. Compared to females, the occurrence of colour blindness is higher among males.\n2. Genes responsible for colour blindness are located on the X chromosome.\nWhich of the above is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I.","Both Statement I and Statement II are correct but Statement II does not explain Statement I.","Statement I is correct but Statement II is not correct.","Statement I is not correct but Statement II is correct."],"ci":0,"exp":"Ex: . Human beings have 23 pairs of chromosomes. One pair decides the sex of the individual. Females have two X chromosomes (XX), while males have one X and one Y chromosome (XY). colour blindness is a sex-linked recessive disorder due to defects in either red or green cones of the eye resulting in failure to discriminate between red and green colour. This defect is due to mutation in certain genes present in the X chromosome. Both Statement I and Statement II are correct and Statement II explains Statement I. Colour blindness is found much more commonly in males than in females . It occurs in about 8 per cent of males and only about 0.4 per cent of females . This is because the genes that lead to red-green colour blindness are on the X chromosome . Males have only one X chromosome and females have two. The son of a woman who carries the gene has a 50 per cent chance of being colour blind. The mother is not herself colour blind because the gene is recessive. That means that its effect is suppressed by her matching dominant normal gene. A daughter will not normally be colour blind, unless her mother is a carrier and her father is colour blind."},{"id":23,"txt":"With reference to gene expression in living organisms, which of the following best describes the process of making (Ribonucleic acid) RNA from (Deoxyribonucleic acid) DNA?","ref":"","opts":["Replication","Translation","Transcription","Reverse transcription"],"ci":2,"exp":"Ex: . Living cells function because genetic information stored in DNA is selectively expressed . This expression does not happen in one step. It occurs in a logical sequence , where DNA first gives rise to RNA, and RNA later helps in protein formation. Option a is incorrect. Replication is the process of copying DNA to form two identical DNA molecules . It occurs before cell division and has nothing to do with RNA formation. Option b is incorrect. Translation is the next step after transcription. It refers to the process by which the RNA sequence is decoded to form a protein . Option c is correct . The process of copying genetic information from one strand of the DNA into RNA is termed as transcription. DNA stores all instructions of the body, but it cannot directly take part in protein formation. For this reason, the cell first prepares an RNA copy of the required information. This RNA acts as a messenger that carries the instruction forward. During transcription, only one strand of DNA is used to make RNA. The cell follows this rule to avoid confusion in genetic information. If both strands of DNA were copied at the same time, they would produce RNA molecules with different information. This would result in the formation of different proteins from the same DNA region, which would disturb normal cell functioning. Option d is incorrect. Reverse transcription is a special process seen in some viruses, where RNA is used to make DNA . It is not the normal pathway of gene expression in most living organisms."},{"id":24,"txt":"For the digestion of carbohydrate, protein and fat, enzymes such as amylase, trypsin and lipase are required. It is secreted into the duodenum through:","ref":"","opts":["Bile","Plasma","Lymph","Pancreatic juice"],"ci":3,"exp":"Ex: The pancreas is our major digestive-enzyme-producing organ. It produces about 1.5 litres of alkaline pancreatic juice per day, full of enzymes necessary for us to break down food. Pancreatic juice consists of protein-digesting trypsin and chymotrypsin, fat-digesting lipases and carbohydrate digesting amylases. Pancreatic enzymes are released into the duodenum. If the stomach acidity is low, reduced production of pancreatic juices can impair digestion."},{"id":25,"txt":"Epidermal cells of plant roots increase their absorption surface by having:","ref":"","opts":["Scales","Root hairs","Endodermis","Stomata"],"ci":1,"exp":"Ex: Root hairs are small, thread-like extensions of the epidermal cells of plant roots. They are very numerous and increase the surface area of the root by a large factor. This allows the root to absorb more water and nutrients from the soil."},{"id":26,"txt":"Which of the following best describes the nature of satellite deoxyribonucleic acid (Satellite DNA)?","ref":"","opts":["Unique DNA segments that differ completely between all individuals.","DNA sequences that actively code for structural and enzymatic proteins.","Highly repetitive DNA sequences that do not code for proteins.","DNA regions found only in germ cells and absent in somatic cells."],"ci":2,"exp":"Ex: . The human genome is largely similar across individuals, yet every person is genetically unique. This uniqueness arises mainly from variations present in certain repetitive regions of DNA. These regions do not perform direct protein-coding functions, but they play a critical role in identification techniques such as DNA fingerprinting . Satellite DNA consists of short DNA sequences repeated many times in the genome. These sequences do not code for proteins , but they occupy a significant portion of human DNA. Their number of repeats varies greatly from one individual to another. This high degree of variation, called polymorphism , makes satellite DNA the foundation of DNA fingerprinting."},{"id":27,"txt":"With reference to the applications of DNA fingerprinting, consider the following:\n1. Establishing biological relationships such as parentage\n2. Establishing identity of individuals in a criminal investigation\n3. Comparing genetic material of extinct species with living organisms    For how many of the above can DNA fingerprinting be effectively used presently?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":2,"exp":"Ex: . DNA fingerprinting is a technique that identifies individuals based on unique patterns in their DNA. It works on the principle that certain regions of DNA, especially VNTRs (Variable Number Tandem Repeats) , show high variation among individuals. These variations are stable, inheritable, and identical in all cells of an individual. It is widely used in medicine, forensics, and biological research. Option I is correct . VNTR patterns are inherited from parents to offspring. By analysing and matching these patterns, parental relationships such as paternity and maternity can be accurately established. Even parental DNA profiles can be reconstructed using offspring data, making this method reliable in disputed cases. Option II is correct . DNA fingerprinting plays a crucial role in forensic science . DNA collected from blood, hair, skin, semen, or other biological materials at a crime scene can be analysed and compared with that of suspects. This helps in establishing guilt or innocence with a high degree of certainty in criminal cases. Option III is correct . DNA fingerprinting is used in evolutionary biology . By comparing DNA extracted from fossils with DNA of modern organisms, scientists can study evolutionary relationships and genetic changes over time."},{"id":28,"txt":"With reference to theories of evolution in biology, which of the following best describes t he term ‘saltation’?","ref":"","opts":["Sudden formation of new species due to large mutations occurring in a species in a single step.","Gradual accumulation of small heritable variations in a species over many generations.","Evolution driven only by natural selection acting on minor variations in species.","Random genetic drift occurring in small and isolated ecological populations."],"ci":0,"exp":"Ex: . Evolutionary biology has attempted to explain how variation arises and how new species are formed. While Darwin emphasised slow and continuous change, later scientists proposed alternative explanations. One such idea came from Hugo de Vries, whose views differed sharply from Darwinian gradualism. Saltation (single step large mutation) refers to the idea that new species arise suddenly due to large mutations occurring in a single step . This concept was proposed by Hugo de Vries , who believed that mutations, rather than small continuous variations, were the main driving force of evolution. According to him, such large and sudden changes could directly lead to speciation."},{"id":29,"txt":"With reference to immunity in humans, consider the following:\n1. Production of antibodies by B - lymphocytes   \n2. Saliva present in the mouth\n3. Cytokine barriers such as interferons\n4. Skin acting as a physical barrier\n5. Tears secreted by the eyes\nHow many of the above are examples of innate immunity?","ref":"","opts":["Only two","Only three","Only four","All the five"],"ci":2,"exp":"Ex: . The human body is able to defend itself from most of the foreign agents (disease-causing organisms). This overall ability of the body to fight the disease-causing organisms, conferred by the immune system is called immunity. Immunity is of two types: (i) Innate immunity and (ii) Acquired immunity. Innate immunity is a non-specific type of defence that is present at the time of birth. This is accomplished by providing different types of barriers to the entry of the foreign agents into our body. Innate immunity consists of four types of barriers i.e. physical barriers, physiological barriers, cellular barriers and cytokine barriers. Option I is incorrect . Antibodies by B-lymphocytes are produced only after exposure to a specific antigen . Their formation involves immune memory and specificity, which are defining features of Acquired immunity . Option II is correct . Saliva is another physiological barrier . It helps in flushing out microbes from the oral cavity and contains enzymes that restrict the growth of microorganisms. This protective role does not depend on prior infection and therefore belongs to innate immunity. Option III is correct . Interferons are cytokines released by virus-infected cells . They protect nearby healthy cells by preventing viral replication. This response is rapid, non-specific, and does not involve immune memory. Hence, cytokine barriers are an essential component of innate immunity. Option IV is correct . Skin is the first and most important physical barrier of innate immunity. It prevents the entry of pathogens into the body by forming a continuous protective covering. As this protection is always present and non- specific, skin is a classic example of innate immunity. Option V is correct . Tears form a physiological barrier of innate immunity. They continuously wash the surface of the eyes and contain substances that inhibit microbial growth. This action is non-specific and operates from birth, which makes tears an important component of innate immunity. Knowledge Base: Acquired immunity is pathogen specific . It is characterised by memory . This means when our body encounters a pathogen for the first time it produces a response called primary response which is of low intensity. Subsequent encounters with the same pathogen elicits a highly intensified secondary or anamnestic response. The primary and secondary immune responses are carried out with the help of two special types of lymphocytes present in our blood, i.e., B-lymphocytes and T-lymphocytes . The B-lymphocytes produce an army of proteins in response to pathogens into our blood to fight with them. These proteins are called antibodies."},{"id":30,"txt":"In making the saffron spice, which one of the following parts of the plant is used?","ref":"","opts":["Leaf","Petal","Sepal","Stigma"],"ci":3,"exp":"Ex: Saffron is a spice made from the dried stigmas of the saffron crocus (Crocus sativus). The stigmas are the female reproductive parts of the flower, and they are the only part of the plant that is used to make saffron. Saffron crocuses are native to the Mediterranean region , but they are now cultivated in many parts of the world, including Iran, India, Spain, and Morocco . Iran is the world’s largest producer of saffron. In India, Saffron is mainly found in the Pampore region of Jammu and Kashmir, India . It is also cultivated in some other parts of India, such as Himachal Pradesh and Uttarakhand."},{"id":31,"txt":"Which among the following organisms primarily carries out respiration through its moist skin?","ref":"","opts":["Earthworm","Lizard","Crab","Cockroach"],"ci":0,"exp":"Ex: Option a is correct: Earthworms have no respiratory organs . The entire skin functions as the respiratory surface. Earthworms respire mainly through their moist, permeable skin , a process known as cutaneous respiration . Their skin is richly supplied with tiny blood capillaries. Oxygen from the surrounding air dissolves in the thin layer of moisture present on the skin and then diffuses directly into the blood capillaries, while carbon dioxide diffuses out in the same manner . Hence, maintaining a moist body surface is essential for their survival; earthworms die if their skin dries out. Option b is incorrect: Lizards (reptiles) breathe using lungs through pulmonary respiration , with air entering via nostrils and moving to lungs. They do not rely on skin for primary gas exchange (though minor cutaneous respiration occurs in some reptiles, it is not primary). Option c is incorrect: Crabs respire through gills , which are located in branchial chambers on either side of the body. These gills extract dissolved oxygen from water. Even in semi-terrestrial crabs, respiration mainly takes place through moist gills, not through the general body skin. Hence, crabs do not depend on skin for gaseous exchange. Option d is incorrect : Cockroaches respire through a well-developed tracheal system , where air enters the body via openings called spiracles and is directly transported to tissues through tracheae and tracheoles, without the involvement of blood. The skin does not participate in respiration."},{"id":32,"txt":"With reference to the human immune system, consider the following:\n1. An infant receiving antibodies t hrough the mother’s first milk.\n2. An injection of ready-made antibodies administered after a snake bite.\n3. Injecting a weakened virus to stim ulate the body’s immune system.\n4. Antibodies transferred from the mother to the foetus through the placenta during pregnancy.\nHow many of the above are examples of passive immunity?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: . When a host is exposed to antigens, which may be in the form of living or dead microbes or other proteins, antibodies are produced in the host body. This type of immunity is called active immunity . When ready-made antibodies are directly given to protect the body against foreign agents, it is called passive immunity . Statement I is correct . The yellowish fluid colostrum secreted by mother during the initial days of lactation has abundant antibodies (IgA) to protect the infant. This is an example of passive immunity . Statement II is correct . In case of a snake (like cobra) bite, ready-made antibodies (antivenom) are injected into the body. These antibodies act immediately to neutralise the venom. Since the body does not generate these antibodies itself, this is passive immunity . Statement III is incorrect . Vaccines containing weakened or inactivated pathogens stimulate the body to produce its own antibodies . This process takes time and results in immune memory. Hence, this is an example of active immunity . Statement IV is correct . During pregnancy, antibodies from the mother pass to the foetus through the placenta . This provides protection to the newborn during the initial months of life. Since the antibodies are transferred and not produced by the fetus, this is passive immunity ."},{"id":33,"txt":"With reference to biology, which one of the following best describes the idea of ‘genetic equilibrium’?","ref":"","opts":["A state where the gene pool of a population remains constant over generations in the absence of evolutionary forces.","The condition in which all individuals of a population possess identical genetic makeup.","The stage at which a species reaches its maximum sustainable population size in an ecosystem.","A condition in which an ecological community has an equal number of individuals of all species."],"ci":0,"exp":"Ex: . Genetic equilibrium refers to a condition in which the allele frequencies of a population remain constant from one generation to the next . This idea comes from the Hardy – Weinberg principle . It explains how genes behave in an ideal population. In genetic equilibrium, the gene pool, which means the total collect ion of genes and their alleles in a population , remains stable over time. Individual organisms may differ genetically, but the overall proportion of alleles does not change. This stability is maintained only when no evolutionary forces act on the population. These forces include natural selection , mutation , gene flow , genetic drift , and recombination . If none of these forces disturb the population, the genetic structure remains unchanged. Genetic equilibrium does not mean absence of variation . Variation exists in the population, but it is balanced . The population is therefore not evolving under this condition. If the allele frequencies change , it means the genetic equilibrium is disturbed . Such a disturbance indicates that evolution is taking place . Knowledge Base: An allele is a different version of a gene found at the same position on chromosomes. For example, the gene for eye color has alleles for brown, blue, or green eyes."},{"id":34,"txt":"When the bark of a tree is removed in a circular fashion all around near its base, it gradually dries up or dies because-","ref":"","opts":["Water from soil cannot rise to aerial parts","Roots are starved of energy","Tree is infected by the soil microbes","Roots do not receive oxygen for respiration"],"ci":1,"exp":"Ex: When the bark of a tree is removed in a circular fashion all around near its base, the phloem tissue is damaged. Phloem tissue is responsible for transporting food from the leaves to the roots. Without phloem tissue, the roots cannot receive the food they need to survive."},{"id":35,"txt":"With reference to Guillain-Barré Syndrome (GBS), consider the following statements:\n1. It is an autoimmune disorder.\n2. In GBS, the immune system may destroy the fatty layer wrapped around nerve cells.\n3. Presently, there is no known cure for GBS.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one of them explains Statement I","Only one of the Statement s II and Statement III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":1,"exp":"Ex: Statement I is correct: Guillain-Barré Syndrome (GBS) is a rare but serious autoimmune disorder that affects the peripheral nervous system, leading to muscle weakness, loss of reflexes, and even paralysis. Statement II is correct: In Guillain-Barré Syndrome (GBS), the immune system destroys the myelin sheath -- a fatty layer wrapped around nerve cells. This impacts the nerves’ ability to send signals to the brain, which causes weakness in the muscles. GBS affects the peripheral nervous system -- the part of the nervous system outside the brain and spinal cord -- that controls the movement of muscles, temperature, touch and pain sensations. Statement II explains Statement I: In autoimmune conditions, the body’s immune system begins to attack its own cells. Similarly, in GBS, the immune system destroys the myelin sheath, which impacts the nerve's ability to send signals to the brain. Thus, it is also considered an autoimmune disorder. Statement III is correct: Guillain-Barré Syndrome is a rare but potentially life-threatening neurological disorder. There is no known cure for GBS, only the timely medical intervention can alleviate symptoms, reduce complications, and accelerate the recovery process. Statement III does not explain Statement I: Though for most of the autoimmune disorder, there is no known cure and only supportive care can be provided. But no known cure does not explain why GBS is considered an autoimmune disease. It is an autoimmune disease as the body’s own immune system begins to attack its own cells."},{"id":36,"txt":"Consider the following:\n1. Erythrocytes or red blood cells (RBC)\n2. Leucocytes or white blood cells (WBC)\n3. Platelets or thrombocytes\nArrange the above mentioned formed elements of the blood in descending order as per their average number in per – 3 cubic millimeter (mm ) of blood in a healthy adult man?","ref":"","opts":["I-II-III","II-I-III","I-III-II","II-III-I"],"ci":2,"exp":"Ex: Option I: Erythrocytes or red blood cells (RBC) are the most abundant of all the cells in blood. A healthy adult man has, – 3 ( on average, 5 million to 5.5 million of RBCs mm per cubic millimeter ) of blood. Option III: Platelets also called thrombocytes, are cell fragments produced from megakaryocytes (special cells in the – 3 bone marrow). Blood normally contains 1,500,00-3,500,00 platelets mm Option II: Leucocytes are also known as white blood cells (WBC) as they are colourless due to the lack of haemoglobin. – 3 They are nucleated and are relatively lesser in number, which averages 6000-8000 mm of blood."},{"id":37,"txt":"Under the ABO blood group system, human blood is classified into different groups primarily based on:","ref":"","opts":["presence or absence of specific surface antigens on the red blood cells only.","presence or absence of specific antibodies in the blood plasma only.","presence or absence of specific Hemoglobin variants in the blood plasma only.","both the presence or absence of specific surface antigens on the red blood cells and the presence or absence of specific antibodies in the blood plasma."],"ci":3,"exp":"Ex: Blood of human beings differs in certain aspects though it appears to be similar. Various types of grouping of blood have been done. Two such groupings – the ABO and Rh – are widely used all over the world. In 1901, Karl Landsteiner discovered A, B, O of ABO blood group system while the AB blood group was discovered by de Castello and Steini in 1902. This system has four blood groups (A, B, AB and O) which are determined based on the presence and absence of antigens and antibodies. Antigens and antibodies are present in the blood (the former present on the red cells and the latter in blood plasma). The antigens are designated as A and B and the antibodies as anti-A and anti-B.    The distribution of antigens and antibodies in the four groups of blood, A, B, AB and O are given in below table:"},{"id":38,"txt":"With reference to cell organelles and their primary functions, consider the following pairs: Cell Organelle Primary Function\n1. Endoplasmic Reticulum Synthesis of proteins and lipids\n2. Lysosomes Intracellular digestion and waste removal\n3. Ribosomes Modification and packaging of proteins\nHow many of the pairs given above are correctly matched?","ref":"","opts":["All the three","Only one","Only two","None"],"ci":2,"exp":"Ex: Pair I is correct: The Endoplasmic Reticulum (ER) is an extensive membranous network that plays a central role in biosynthetic activities of the cell. It exists in two forms: Rough Endoplasmic Reticulum (RER) has ribosomes attached to its surface and is primarily involved in the synthesis of proteins , especially those destined for secretion, membranes, or lysosomes. Smooth Endoplasmic Reticulum (SER) lacks ribosomes and is mainly responsible for the synthesis of lipids, phospholipids, and steroids, along with detoxification of drugs and poisons. Pair II is correct: Lysosomes are membrane-bound organelles formed by the process of packaging in the golgi apparatus. Lysosomes contain hydrolytic enzymes (such as proteases, lipases and carbohydrases) that break down waste materials, cellular debris, and foreign particles and are capable of digesting carbohydrates, proteins, lipids and nucleic acids.    Lysosomes are therefore known as the “ suicide bags” of the cell and are central to intracellular digestion and cellular waste removal. Pair III is incorrect: Ribosomes are composed of ribonucleic acid (RNA) and proteins and are not surrounded by any membrane. Their primary and exclusive function is the synthesis of proteins by translating messenger RNA (mRNA) into polypeptide chains, and not Modification and packaging of proteins. Modification and packaging of proteins are functions of the Golgi apparatus , which processes proteins synthesized by ribosomes before they are transported to their final destinations."},{"id":39,"txt":"With reference to human health, consider the following pairs: Description Heart Disease\n1. Heart failure It is a condition when the heart muscle is suddenly damaged by an inadequate blood supply\n2. Cardiac arrest It is a condition when heart is not pumping blood effectively enough to meet the needs of the body\n3. Heart attack It is a condition when the heart stops beating\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":3,"exp":"Ex: Pairs I, II and III are incorrect: Heart failure means the state of heart when it is not pumping blood effectively enough to meet the needs of the body. It is sometimes called congestive heart failure because congestion of the lungs is one of the main symptoms of this disease. Heart failure is not the same as cardiac arrest (when the heart stops beating) or a heart attack (when the heart muscle is suddenly damaged by an inadequate blood supply)."},{"id":40,"txt":"A married couple adopted a male child. A few years later, twin boys were born to them. The blood group of the cou ple is AB positive and O negative. The blood group of the three sons is A positive, B positive, and O positive. The blood group of the adopted son is?","ref":"","opts":["O positive","A positive","B positive","Cannot be determined on the basis of the given data"],"ci":0,"exp":"Ex: Each biological parent donates one of two ABO genes to their child. The A and B genes are dominant and the O gene is recessive. For example, if an O gene is paired with an A gene, the blood type will be A. Couples with AB+ blood group consist of A+ and B+ gene with O negative blood group consist of O - gene. A+ gene is dominant over O gene which results in A+ blood group in one child. B+ gene is dominant over the O - gene which results in B+ blood group in other children. Therefore, the blood group of the adopted son would be O+."},{"id":41,"txt":"Digestion of which of the following substances in the rumen (a part of stomach) of ruminant animals primarily leads to the release of methane gas?","ref":"","opts":["Starch","Cellulose","Protein","Lipid"],"ci":1,"exp":"Ex: Option b is correct: Cows, buffaloes and other grass-eating animals can be observed chewing continuously even when they are not eating. Actually, they quickly swallow the grass while eating and store it in a part of the stomach called rumen. Here the food gets partially digested and is called cud. But later the cud returns to the mouth in small lumps and the animal chews it. This process is called rumination and these animals are called ruminants. Ruminant animals such as cows and buffaloes possess a specialized stomach chamber called the rumen , where digestion occurs under anaerobic (oxygen-free) conditions. The feed of these animals is rich in cellulosic plant material, which cannot be digested by the animals themselves and therefore requires the action of microorganisms. Certain anaerobic bacteria known as methanogens grow on cellulosic material. A common example of such bacteria is Methanobacterium . These microbes help break down cellulose in the rumen (a part of the stomach), thereby contributing significantly to the nutrition of cattle. During the microbial breakdown of cellulose , these methanogens produce methane (CH ₄ ) along with carbon dioxide (CO ₂ ) and hydrogen (H ₂ ) as metabolic by-products. Because these methanogens are abundant in the rumen, they are also present in cattle dung (gobar). This is why dung is widely used for the production of biogas (gobar gas), which mainly contains methane. Hence, methane release in ruminants is primarily linked to the microbial digestion of cellulose. Option a is incorrect: Starch is a readily digestible carbohydrate. In the rumen, it is broken down rapidly by microbes into volatile fatty acids with negligible methane production compared to cellulose. It does not favour methanogenic activity. Option c is incorrect: Proteins are mainly degraded into amino acids and ammonia. Their metabolism does not involve methanogenic pathways and hence does not contribute significantly to methane release.    Option d is incorrect: Lipids are broken down into fatty acids and glycerol. In fact, higher lipid content in feed can reduce methane emissions by inhibiting methanogenic microorganisms."},{"id":42,"txt":"Which of the following organisms can be used as a biological control agent for controlling mosquito populations in agricultural fields and water bodies?","ref":"","opts":["Dragonflies","Earthworms","Honeybees","Silkworms"],"ci":0,"exp":"Ex: Option a is correct: Dragonflies act as effective biological control agents against mosquitoes because both their aquatic larvae (nymphs) and adult forms are voracious predators . The Dragonfly larvae feed on mosquito larvae in ponds, irrigation channels, and waterlogged agricultural fields, while adult dragonflies prey on flying adult mosquitoes . This dual-stage predation helps in naturally reducing mosquito populations without the use of chemical pesticides. Option b is incorrect: Earthworms are detritivores that improve soil aeration and fertility by breaking down organic matter. However, they do not prey on insects and therefore cannot control mosquito populations. Option c is incorrect: Honeybees are important pollinators that help in crop reproduction and agricultural productivity. They have no role in pest or mosquito control. Option d is incorrect: Silkworms are domesticated insects reared for silk production and feed exclusively on mulberry leaves. They are non-predatory and have no role in pest or mosquito control."},{"id":43,"txt":"Consider the following organisms:\n1. Nostoc\n2. Anabaena\n3. Mycorrhiza\n4. Azotobacter\nHow many of the above are capable of fixing atmospheric nitrogen either independently or in association with plants?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: Pair I and II are correct: Cyanobacteria Cyanobacteria, also known as blue-green algae , are photosynthetic prokaryotic organisms (bacteria) capable of nitrogen fixation . Many cyanobacteria such as Anabaena and Nostoc fix atmospheric nitrogen independently in aquatic or terrestrial environments. Some cyanobacteria also form mutualistic associations with plants , e.g ., Anabaena azollae in Azolla (a water fern) used in rice paddies, contributing fixed nitrogen to the rice ecosystem. Pair III is incorrect: Mycorrhiza Mycorrhiza represents a mutualistic symbiotic association between fungi and plant roots . The fungus helps the plant absorb water and minerals, especially phosphorus, and improves resistance to drought and pathogens. However, mycorrhizal fungi lack the nitrogenase enzyme and therefore cannot fix atmospheric nitrogen. Pair IV is correct: Azotobacter Azotobacter is a free-living, aerobic soil bacterium known for its ability to fix atmospheric nitrogen independently , without forming a symbiotic association with plants. Despite the oxygen-rich environment (which can inactivate nitrogenase), Azotobacter protects the enzyme through a very high rate of respiration. It plays an important role in improving soil nitrogen content and is often used as a biofertilizer."},{"id":44,"txt":"The blood pressure of a normal human being is found to b e 120/80 mmHg. These “numbers’ represent the blood pressure at-","ref":"","opts":["ventricular contraction and ventricular relaxation, respectively","ventricular relaxation and ventricular contraction, respectively","auricular contraction and auricular relaxation, respectively","ventricular contraction and auricular contraction, respectively"],"ci":0,"exp":"Ex: Blood pressure is measured using two values: systolic pressure and diastolic pressure . The systolic pressure represents the pressure exerted on the walls of the arteries when the heart contracts, specifically during ventricular contraction. The diastolic pressure represents the pressure in the arteries when the heart is at rest, specifically during ventricular relaxation. In the given blood pressure reading of 120/80 mmHg, the number 120 represents the systolic pressure, which occurs during ventricular contraction. The number 80 represents the diastolic pressure, which occurs during ventricular relaxation. Therefore, the correct interpretation of the numbers in the blood pressure reading is that 120 mmHg is the blood pressure during ventricular contraction, and 80 mmHg is the blood pressure during ventricular relaxation."},{"id":45,"txt":"With reference to the plants, consider the following statements regarding the vegetative propagation:\n1. It is a type of asexual reproduction in which new plants are produced from roots, stems, leaves and buds of plants.\n2. Plants produced through vegetative propagation are genetically identical to the parent plant.\n3. Plants produced by vegetative propagation take less time to grow and to bear flowers and fruits, compared to the plants produced from seeds.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I, II and III","I and III only"],"ci":2,"exp":"Ex: Natural vegetative Propagation    Artificial Vegetative propagation Statement I is correct: Vegetative propagation is a method of asexual reproduction in plants in which new individuals are formed from vegetative parts such as roots, stems, and leaves, instead of seeds. In this process, there is no involvement of gametes, fertilization, or seed formation. The new plant develops directly from the parent plant’s body parts. Examples: Stem : Potato (tuber), Sugarcane (stem cutting) Root: Sweet potato Leaf: Bryophyllum It may occur naturally and can also be artificially induced by humans using techniques like cutting, layering, grafting and tissue culture, especially in horticulture and commercial agriculture. Statement II is correct: Since vegetative propagation does not involve meiosis or sexual reproduction, but rather involves mitosis only , the genetic material is copied directly from the parent plant to the offspring. As a result, all plants produced by this method are genetically identical to the parent plant and to each other . These identical individuals are called clones. This feature is useful in agriculture and horticulture for maintaining desirable traits , such as: fruit quality, high yield, better taste, and disease resistance. Statement III is correct: Plants raised through vegetative propagation usually flower and bear fruits earlier than those grown from seeds. This is because they originate from mature, differentiated tissues of the parent plant and bypass the juvenile phase seen in seed-grown plants. This is why horticultural crops like banana, sugarcane, and many fruit trees are commonly propagated vegetatively."},{"id":46,"txt":"With reference to transpiration in plants, consider the following factors:\n1. Light intensity\n2. Atmospheric humidity\n3. Wind speed\n4. Colour of flowers\n5. Leaf surface area\nHow many of the above affect the rate of transpiration in plants?","ref":"","opts":["Only two","Only three","Only four","All the five"],"ci":2,"exp":"Ex: Transpiration is the process by which plants lose water in the form of water vapour from their aerial parts, mainly through stomata present on the leaves and also from cuticles and lenticles . It plays an important role in maintaining water balance, regulating plant temperature, and facilitating the upward movement of water and minerals from roots to leaves. The rate of transpiration is influenced by several environmental and structural factors such as light, humidity, atmospheric pressure, temperature, wind velocity, water supply and leaf characteristics.    Option I is correct: Light intensity: Light has no direct effect on the rate of transpiration, but it influences the process indirectly in two ways. First , light controls the opening and closing of stomata; higher light intensity leads to stomatal opening, which increases water loss. Second, light raises the leaf temperature , which enhances evaporation. Therefore, with an increase in light intensity, the rate of transpiration generally increases. Option II is correct: Atmospheric humidity: Atmospheric humidity determines the concentration gradient of water vapour between the leaf interior and the surrounding air. When humidity is low , the air is dry, and water vapour diffuses rapidly from the leaf to the atmosphere , increasing transpiration . When humidity is high , this gradient decreases, and transpiration slows down. Option III is correct: Wind speed: An increase in wind velocity raises the rate of transpiration by continuously removing water vapour from the air surrounding the aerial parts of the plant. This lowers the relative humidity near the leaf surface and maintains a steep diffusion gradient, thereby promoting faster loss of water vapour from the leaves. Option IV is incorrect: Colour of flowers The colour of flowers is determined by pigments such as anthocyanins and carotenoids and is mainly related to pollination and attraction of insects . It has no role in stomatal regulation, water movement, or evaporation from leaves. Hence, it does not affect transpiration . Option V is correct: Leaf surface area: Leaf surface area directly influences transpiration because most water loss occurs through stomata present on leaves. Larger leaves generally possess a greater number of stomata and a wider evaporative surface, resulting in higher transpiration. Smaller or reduced leaves limit water loss, especially in dry environments."},{"id":47,"txt":"Consider the following statements:\n1. All viruses contain both RNA and DNA.\n2. In general, viruses that infect animals have only the single stranded RNA.\nWhich of the statements given above is/are incorrect ?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: Statement I is incorrect: Viruses contain genetic material, that could be either RNA or DNA. No virus contains both RNA and DNA . A virus is a nucleoprotein and the genetic material is infectious. In general, viruses that infect plants have single stranded RNA and viruses that infect animals have either single or double stranded RNA or double stranded DNA. Statement II is incorrect: In addition to proteins, viruses also contain genetic material, that could be either RNA or DNA. No virus contains both RNA and DNA. A virus is a nucleoprotein and the genetic material is infectious. In general, viruses that infect plants have single stranded RNA and viruses that infect animals have either single or double stranded RNA or double stranded DNA. Bacterial viruses or bacteriophages (viruses that infect the bacteria) are usually double stranded DNA viruses."},{"id":48,"txt":"Consider the following statements:\n1. Prions are infectious agents consisting of single-stranded circular RNA without any protein coat.\n2. Viroids are infectious agents composed solely of mis-folded proteins without any nucleic acid.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":3,"exp":"Ex: Statement I is incorrect: Prions are infectious agents made entirely of misfolded proteins and do not contain any nucleic acid (DNA or RNA). In modern medicine certain infectious neurological diseases were found to be transmitted by an agent consisting of abnormally folded protein . The agent was similar in size to viruses. These agents were called prions . The most notable diseases caused by prions are bovine spongiform encephalopathy (BSE) commonly called mad cow disease in cattle and its analogous variant Creutzfeldt – Jacob disease (CJD) in humans. Statement II is incorrect: Viroids are not protein-based agents. They consist of small, circular, single-stranded RNA molecules and lack any protective protein coat (capsid). They mainly infect plants and interfere with normal gene expression, causing diseases like potato spindle tuber disease."},{"id":49,"txt":"Consider the following statements regarding Haemoglobin present in human blood:\n1. Haemoglobin is primarily responsible for transporting oxygen from the lungs to body tissues.\n2. Carbon monoxide gas can bind to haemoglobin in blood, ultimately causing hypoxia in humans.\n3. Deficiency of haemoglobin in the blood is known as haemophilia.\nWhich of the statements given above are correct?","ref":"","opts":["I and III only","II and III only","I and II only","I, II and III"],"ci":2,"exp":"Ex: Statement I is correct: Haemoglobin is a red coloured iron-containing pigment present inside red blood cells (erythrocytes). Its primary function is to transport oxygen from the lungs (where oxygen concentration is high) to various body tissues (where oxygen concentration is lower). It also helps in transporting a small amount of carbon dioxide back to the lungs. Thus, haemoglobin plays a central role in respiration and energy production. Statement II is correct: When Carbon monoxide enters the blood, it binds with haemoglobin to form carboxyhaemoglobin . This prevents oxygen from binding to haemoglobin. As a result, oxygen supply to tissues is reduced , leading to hypoxia , headache, dizziness, and in severe cases, death.    Statement III is incorrect: Deficiency of haemoglobin in the blood is termed anaemia, which leads to reduced oxygen delivery to tissues, resulting in symptoms such as fatigue, weakness, and breathlessness. Anaemia can arise due to iron deficiency, vitamin B ₁₂ or folate deficiency, chronic diseases, or blood loss. Haemophilia is a rare, inherited bleeding disorder . It is characterized by a deficiency of one of the clotting factors which is necessary for normal blood clotting, leading to excessive bleeding and bruising."}],"m":null,"tt":3000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

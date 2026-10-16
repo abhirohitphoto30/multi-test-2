@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SFG LEVEL 01    2026 = 321128</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>SFG LEVEL 01    2026 = 321128</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="SFG LEVEL 01    2026 = 321128">SFG LEVEL 01    2026 = 321128</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"On June 21 every year, which of the following latitude(s) experience(s) a sunlight of more than 12 Hours?\n1. Equator\n2. Tropic of Cancer\n3. Tropic of Capricorn\n4. Arctic Circle\nSelect the correct answer using the code given below:","ref":"","opts":["1 only","2 only","3 and 4","2 and 4"],"ci":3,"exp":"Ex: Options 2 and 4 are correct. On 21st June, the Northern Hemisphere is tilted towards the sun. The rays of the sun fall directly on the Tropic of Cancer . As a result, these areas receive more heat. Sunlight of more than 12 hours is received at the tropic of cancer. The North Pole is inclined towards the sun and the places beyond the Arctic Circle experience continuous daylight for about six months . Since a large portion of the Northern Hemisphere is getting light from the sun, it is summer in the regions north of the equator. The longest day and the shortest night at these places occur on 21st June. Length of the Day in Hours and Minutes and Winter and Summer Solstices in the Northern Hemisphere Latitude 0° 20° 40° 60° 90° December 22 12h 00m 10h 48m 9h 8m 5h 33m 0 June 21 12 h 00m 13h 12m 14h 52m 18h 27m 6 months"},{"id":1,"txt":"With reference to the interior of the Earth, which of the following statements is/are correct about the core of Earth?\n1. The core of Earth is mostly composed of iron and nickel.\n2. Core is the densest layer of the Earth.\n3. The entire core is in a liquid state.\n4. The outer core is separated from the inner core by the Repetti discontinuity.\nSelect the correct answer using the code given below:","ref":"","opts":["I only","I and II only","I, II and IV","II, III and IV"],"ci":1,"exp":"Ex: Earth’s interior is arranged into three layers namely crust, mantle and core. The outer hard and thin layer is the crust, middle layer is the mantle and innermost layer is the core. The Core has a volume of about 17% of the earth and contains 34% of the mass. Statement I is correct. The core-mantle boundary is located at a depth of 2,900 km. The outer core is in liquid state while the inner core is in solid state. The core is made up of very heavy material mostly composed of nickel and iron. It is sometimes referred to as the NiFe layer (Nickel+Ferrum).    Statement II is correct. Core is the most dense layer of the Earth with its density more than 11.0 g/cm3. The density of Mantle varies from 3.1 to 5.1 g/cm3. The density of Crust varies from 2.75 to 2.90 g/cm3. Due to increase in pressure and presence of heavier materials towards the earth's centers, the density of earth's layers also goes on increasing towards the centre. Thus, the innermost layer of the earth is very dense. Statement III is incorrect. The core of the Earth is further divided into the inner core and the outer core. The outer core is in liquid state while the inner core is in solid state. Statement IV is incorrect. The Lehmann Discontinuity separates the liquid outer core from the solid inner core. A discontinuity known as Lehmann discontinuity lies at 5100 km depth. It acts as a sharp boundary between the outer liquid core and the solid inner core. The boundary between the upper mantle and the lower mantle is called the Repetti Discontinuity. The mantle is separated from the crust with a discontinuity called Mohorovicic discontinuity."},{"id":2,"txt":"With reference to the measurement of latitudes on the Earth, consider the following statements:\n1. The linear distance of a degree of latitude at the poles is a little shorter than that at the equator.\n2. The Earth is slightly flattened at the poles.\nWhich of the above is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I.","Both Statement I and Statement II are correct but Statement II does not explain Statement I.","Statement I is correct but Statement II is not correct.","Statement I is not correct but Statement II is correct."],"ci":3,"exp":"Ex: . Latitude and longitude are imaginary lines drawn on the Earth to locate places and measure distances. Latitudes are imaginary lines that run parallel to the Equator. They are used to measure how far a place is north or south of the    Equator. Latitudes are expressed in degrees; by convention, the Equator is latitude 0° (zero degree), while the latitudes of the two poles are 90° North and 90° South respectively; this is noted as 90°N and 90°S. Statement I is incorrect . The linear distance covered by one degree of latitude is not exactly the same everywhere on the Earth . Near the equator, one degree of latitude measures slightly less distance. For example at the equator (0°) it is 68.704 miles, at 45° it is 69.054 miles and at the poles it is 69.407 miles. The average is taken as 69 miles. The linear distance of a degree of latitude at the poles is a little longer than that at the equator. Statement II is correct . The Earth is not a perfect sphere. It is slightly flattened at the poles and bulges at the equator. Due to this shape, the radius of the Earth is larger at the equator and smaller at the poles . Due to the equatorial bulge, the curvature of the Earth is gentler near the equator, causing one degree of latitude to represent a slightly shorter linear distance. Near the poles, the Earth is flattened and the curvature in the north – south direction is steeper, resulting in a slightly longer distance per degree of latitude."},{"id":3,"txt":"With reference to the Nebular Hypothesis, consider the following statements:\n1. It proposes that the planets of the Solar System were formed as a result of a collision between the Sun and another star.\n2. It is based on the observation that galaxies are moving away from each other, suggesting that the universe is expanding.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":3,"exp":"Ex: . Statement I is incorrect . A large number of hypotheses were put forth by different philosophers and scientists regarding the origin of the earth . One of the earlier and popular arguments was by German philosopher Immanuel Kant. Mathematician Laplace revised it in 1796. It is known as Nebular Hypothesis . The hypothesis considered that the planets were formed out of a cloud of material associated with a youthful sun, which was slowly rotating . According to this hypothesis, the Solar System formed from a rotating cloud of gas and dust , called a nebula. Over time, gravity caused this cloud to contract and flatten into a disc. The Sun formed at the centre, while planets formed from the remaining material. On the other hand, the Collision Theory proposes that the planets of the Solar System were formed as a result of a collision between the Sun and another star. Statement II is incorrect . The Nebular Hypothesis does not deal with the expansion of the universe or the increasing distance between galaxies. These observations are explained by cosmological theories such as the Big Bang theory. The most popular argument regarding the origin of the universe is the Big Bang Theory . It is also called the expanding universe hypothesis. Edwin Hubble, in 1920, provided evidence that the universe is expanding . As time passes, galaxies move further and further apart."},{"id":4,"txt":"Consider the following statements:\n1. Anadyr in Siberia and Nome in Alaska are a few kilometers from each other, but when people are waking up and getting set for breakfast in these cities, it would be different days.\n2. When it is Monday in Anadyr, it is Tuesday in Nome.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":0,"exp":"Ex: Anadyr is a town located in the far eastern part of Russia in the region of Chukotka, and Nome is a town in western Alaska, USA. Although they are geographically close — separated only by the Bering Strait — they lie on opposite sides of the International Date Line (IDL). The IDL is an imaginary line, roughly along the 180° longitude, where the calendar date changes by one day when crossed. Statement I is correct. Anadyr in Russia and Nome in Alaska are geographically close and separated only by the Bering Strait. However, they lie on opposite sides of the International Date Line (IDL). This means that although it may be the same clock time, say, 8:00 AM in both places, the calendar date would be different. For example, if it’s Monday mornin g in Anadyr, it would still be Sunday morning in Nome. The IDL causes this one-day difference despite the small distance between the two locations. Statement II is incorrect. When it is Monday in Anadyr, it cannot be Tuesday in Nome. In fact, it’s the rev erse. Nome lags behind Anadyr by a day. So if it is Monday in Anadyr, it is still Sunday in Nome. The International Date Line adds a day as one crosses it travelling westward (moving east to west or crossing it from Nome to Adyar here), and subtracts a day as one travelling eastward(moving west to east or crossing it from Anadyr to Nome) — which makes Russia (west of the IDL) ahead of the U.S. (east of the IDL)."},{"id":5,"txt":"With reference to various theories of the origin of the universe, the Hoyle – Narlikar theory supports that:","ref":"","opts":["the universe began from a singular explosive event at a definite point in time.","the matter is continuously created to maintain a constant average density of the universe.","the universe expands and contracts cyclically over long periods of time.","galaxies were formed mainly due to large-scale gravitational collapse after the origin of the universe."],"ci":1,"exp":"Ex: . Several theories have been proposed to explain the origin and nature of the universe. These theories differ mainly on one fundamental question: Did the universe have a definite beginning, or has it always existed in some form? The Hoyle – Narlikar theory is a modified form of the Steady State theory , developed by Fred Hoyle and later refined with Jayant Narlikar. According to this theory, the universe does not have a definite beginning or end in time . Instead, it has always existed and continues to exist in a similar overall form. A key problem faced by astronomers was that observations showed the universe to be expanding , with galaxies moving away from each other. If the universe is expanding, its average density should decrease over time. The Hoyle – Narlikar theory addresses this problem by proposing continuous creation of matter (C-field) . New matter is created gradually in empty spaces so that, even though the universe expands, the average density of matter remains constant .    This continuous creation is not explosive or sudden. It is a slow and steady process that balances expansion. Because of this, the large-scale appearance of the universe remains the same at all times. This idea is often described using the Perfect Cosmological Principle , which states that the universe looks the same not only in all directions and locations, but also at all times."},{"id":6,"txt":"With reference to the Big Bang Theory of origin of universe, consider the following statements: According to the Big Bang theory,-\n1. in the beginning, all matter forming the universe existed in one place in the form of a singular atom with an unimaginably small volume, infinite temperature and infinite density.\n2. within the first few minutes after the Big Bang event, the first atom began to form.\n3. the expansion of the universe refers to the increase in space between the galaxies and expansion of galaxies themselves.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":0,"exp":"Ex: . The Big Bang Theory is the most widely accepted explanation for the origin of the universe. It is also known as the expanding universe hypothesis . According to this theory, the universe has not remained static. Instead, it has been expanding continuously since its origin. Statement I is correct . The Big Bang Theory states that In the beginning, all matter forming the universe existed in one place in the form of a “tiny ball” (singular atom) with an unimaginably small volume, infinite t emperature and infinite density. Statement II is correct . After the Big Bang, the universe expanded rapidly and began to cool. Within the first few minutes , basic particles combined to form the earliest atomic structures. This marked the beginning of the formation of matter. At the time of the Big Bang event the “tiny ball” (singular atom) exploded violently. This led to a huge expansion. It is now generally accepted that the event of the big bang took place 13.7 billion years before the present. The expansion continues even to the present day. As it grew, some energy was converted into matter. There was particularly rapid expansion within fractions of a second after the bang. Thereafter, the expansion has slowed down. Within the first three minutes from the Big Bang event, the first atom began to form. Statement III is incorrect . The expansion of the universe does not mean that galaxies themselves are expanding. Instead, it refers to the increase in space between galaxies . Observations show that galaxies remain largely intact, while the distance separating them continues to increase."},{"id":7,"txt":"What is the correct ascending order of the given elements in terms of their percentage share in Earth’s crust in terms of mass?\n1. Iron\n2. Silicon\n3. Oxygen\n4. Aluminium\nSelect the correct answer using the code given below:","ref":"","opts":["IV-I-II-III","I-IV-III-II","IV-I-III-II","I-IV-II-III"],"ci":3,"exp":"Ex: The Earth is divided into three different layers namely crust, mantle, and c ore. “Crust” is the outermost layer of our terrestrial planet. The crust is made of various elements. There are mainly 8 elements in varying proportions which make up the crust of the Earth. Option I: Iron is the fourth most abundant element of the crust accounting for about 5.63% of the crustal mass. Option II: Silicon is the second most abundant element of the crust accounting for about 28.2% of the crustal mass. Option III: Oxygen is the most common element of the crust accounting for about 46.1% of the crustal mass. Option IV: Aluminum is the third most abundant chemical element of the crust accounting for about 8.23% of the crustal mass. So, the correct increasing order by mass is iron < aluminum < silicon < oxygen"},{"id":8,"txt":"Consider the following statements:\n1. A light year is commonly used as a unit of measurement of time in celestial studies.\n2. The speed of light in vacuum is constant in the universe.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct and Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":3,"exp":"Ex: Statement I is incorrect: A light year is a measure of distance and not of time. Light travels at a speed of 300,000 km/second. Considering this, the distance the light will travel in one year is taken to be one light year. This equals 9.461×1012 km. For example, the mean distance between the sun and the earth is 149,598,000 km. In terms of light years, it is 8.311minutes. Statement II is correct: The speed of light in vacuum is constant in the universe. It does not depend on the speed of the source of light. Hence Option d is correct: Statement I is not correct but Statement II is correct."},{"id":9,"txt":"Consider the following statements:\n1. The same face of the Moon always faces the earth.\n2. The Earth and the Moon rotate in the same direction.\n3. The Moon is tidally locked with the Earth.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I.","Both Statement II and Statement III are correct but only one of them explains Statement I.","Only one of the Statements II and III is correct and that explains Statement I.","Neither Statement II nor Statement III is correct."],"ci":1,"exp":"Ex: Statement I is correct: The Moon, Earth's natural satellite, revolves around the Earth in an elliptical orbit every 27.33 days. The same face of the moon always faces the Earth, while the opposite hemisphere remains hidden from view. Statement II is correct and does not explain statement I: Both the Earth and Moon rotate in the same counterclockwise direction but it does not explain why the same lunar hemisphere always faces the Earth. Statement III is correct and explains statement I: The Moon completes one rotation every 27.3 days and it takes the same amount of time to complete one rotation on its axis resulting in tidal locking. If the Moon rotated faster or slower than this rate, different parts of its surface would become visible from Earth over time. The Moon is rotating at the same rate that it revolves around Earth (called synchronous rotation or tidally locked), so the same hemisphere faces Earth all the time. Though the Moon and Earth rotate in the same direction, it is not the cause of the same face always pointing toward Earth. Hence option b is correct: Both Statement II and Statement III are correct but only one of them explains Statement I."},{"id":10,"txt":"Consider the following statements:\n1. The albedo of an object determines its visual brightness when viewed with reflected light.\n2. The albedo of Mercury is much greater than the albedo of the Earth.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: Albedo is the fraction of the incident sunlight that is reflected from the surface of an object. When an object reflects most of the light that hits it, it looks bright and has a high albedo. For example, snow and ice have high albedos. When an object absorbs most of the light that hits it, it looks dark and has a low albedo. For example, asphalt and charcoal have low albedos. The albedo of an object also depends on the wavelength of the light, as some objects may reflect more or less light at different parts of the electromagnetic spectrum. Statement 2 is incorrect: Mercury, the closest planet to the Sun, has a very low albedo, because it is mainly composed of dark porous rock that reflects very little light. The albedo of Mercury is 0.142, which is lower than the albedo of Earth, which is 0.367. T his means that Mercury appears darker than Earth when viewed with reflected light. The albedo of Earth is higher than Mercur y’s because Earth has clouds, oceans, ice caps, and vegetation that reflect lighter than Mercury’s barren surface."},{"id":11,"txt":"With reference to celestial bodies in the universe, the phenomenon of 'Differential Rotation' most likely indicates that the:","ref":"","opts":["celestial body is undergoing gravitational collapse leading to the formation of a black hole.","celestial body is not a rigid solid object and is composed of plasma.","gravitational force of the celestial body is weaker at the equator than at its poles.","celestial body is approaching the end of its life due to depletion of nuclear fuel."],"ci":1,"exp":"Ex: The Sun rotates about its own axis, but unlike the Earth which rotates as a rigid body with a uniform rotation period of 24 hours, the Sun exhibits differential rotation. This variation in rotation speed with latitude was first identified in the 19th century by Carrington, through observations of sunspot movements on the solar surface. Differential rotation refers to the phenomenon in which different latitudinal regions of a celestial body rotate at different angular speeds. In the case of the Sun, the period of rotation near its equator is 26.5 days, at the sun spot zone (16 degrees north) it is 27.3 days, and at the pole it is 31.1 days. Differential rotation of a celestial body indicates that it is not a rigid body but composed of plasma and plays a crucial role in understanding its internal dynamics."},{"id":12,"txt":"The primordial atmosphere of Earth, with hydrogen and helium, is supposed to have been stripped off as a result of","ref":"","opts":["the solar winds.","chemical precipitation of hydrogen and helium gases.","replacement of hydrogen and helium by oxygen produced through photosynthesis.","replacement of hydrogen and helium by carbon dioxide produced by living organisms."],"ci":0,"exp":"Ex: The present composition of Earth’s atmosphere is dominated by nitrogen and oxygen, which is the result of a long process known as the evolution of the atmosphere. This evolution occurred in three distinct stages. The early atmosphere, with hydrogen and helium, is supposed to have been stripped off as a result of the solar winds. This happened not only in the case of the earth, but also in all the terrestrial planets, which were supposed to have lost their primordial atmosphere through the impact of solar winds. The second stage began with the cooling of Earth’s interior, leading to degassing, during which volcanic activity released gases such as water vapour, nitrogen, carbon dioxide, methane and ammonia. This marked the formation of the secondary atmosphere. In the third stage, biological activity significantly altered atmospheric composition. As Earth cooled, water vapor condensed to form oceans. Carbon dioxide dissolved in rainwater, reducing its atmospheric concentration. With the evolution of photosynthesis around 2.5 – 3 billion years ago, oxygen began accumulating first in oceans and later in the atmosphere, leading to the present oxygen-rich atmosphere."},{"id":13,"txt":"With reference to the study of the Earth’s interior, consider the following sources:\n1. Magma from volcanic eruptions\n2. Meteors\n3. Earth ’s magnetic field\n4. Seismic waves\nHow many of the above sources are indirect sources for studying the Earth’s interior?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: The earth’s radius is about 6,378 km. No one can reach the centre of the earth and make observations or collect samples of the material. So, geographers and geophysicists rely on two broad types of sources to study it: direct sources (materials obtained from within the Earth, like magma and rock samples ) and indirect sources (natural phenomena whose behaviour reflects internal conditions, such as seismic waves , the magnetic field , and meteorites ). These sources together help scientists infer the structure, composition, and physical state of the Earth’s inner layers. Option I is incorrect: Magma that comes out during volcanic eruptions originates from within the Earth. Since it consists of actual material from the Earth’s interior, it provides direct physical evidence about the composition , temperature, and nature of internal layers . Hence, it is a direct source.    Option II is correct: Meteors are remnants of early solar system material and are believed to have a composition similar to that of the Earth’s inter ior. By comparing their metallic and rocky composition, scientists indirectly infer the nature and composition of the Earth’s core and mantle. This makes meteors an indirect source. Option III is correct: Earth’s magnetic field is generated by the motion of molten iron and nickel in the outer core (geodynamo mechanism). Variations and characteristics of the geomagnetic field provide evidence about the composition, state (liquid/solid), and dynamics of the Earth’s outer and inner core. Thus, it is an indirect source. Option IV is correct: Seismic waves are the most reliable and widely used indirect source for understanding the Earth’s internal structure. Changes in their Velocity, direction (refraction and reflection) and behaviour (P-wave and S-wave shadow zones) help scientists identify: Different internal layers (crust, mantle, core) Physical states (solid or liquid) Boundaries like the Mohorovicic and Gutenberg discontinuities Since seismic waves provide information through wave behavior rather than direct sampling, they are classified as an indirect source."},{"id":14,"txt":"Which one of the following statements about the atmosphere is correct?","ref":"","opts":["The atmosphere has definite upper limits, but gradually thins until it becomes imperceptible","The atmosphere has no definite upper limits, but gradually thins until it becomes imperceptible","The atmosphere has no definite upper limits, but gradually thickens until it becomes imperceptible","The atmosphere has definite upper limits, but gradually thickens until it becomes imperceptible"],"ci":1,"exp":"Ex: T he Earth’s atmosphere does not have a definitive boundary where it abruptly ends. Instead, it gradually thins as altitude increases until it merges with the vacuum of space. This transition is not clearly perceptible, as the density of gases decreases with increasing altitude, and eventually becomes indistinguishable from the surrounding space."},{"id":15,"txt":"Consider the following statements:\n1. The gravitation force of Earth is greater near the poles and less at the equator.\n2. The distance of the Earth’s surface from its centre is greater at the equator than at the poles.\n3. The centrifugal force due to Earth’s rotation is maximum at the poles and minimum at the equator.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one of them explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Neither Statement II nor Statement III is correct."],"ci":2,"exp":"Ex:    Statement I is correct: The gravitation force (g) of earth is not the same at different latitudes on the surface. It is greater near the poles and less at the equator. Statement II is correct and explains Statement I: The Earth is not a perfect sphere ; it is an oblate spheroid , bulging at the equator and flattened at the poles. Because of this shape, the equatorial radius is larger than the polar radius. The distance of the Earth’s surface from its centre is greater at the equator tha n at the poles. Since gravitational force varies inversely with the square of the distance from the Earth’s centre, the greater distance at the equator reduces the value of ( 𝑔 ) there, while the smaller distance at the poles increases ( 𝑔 ). Thus, Statement II correctly explains why Earth’s gravitational force (g) is greater near the poles and less at the equator. Statement III is incorrect: The centrifugal force due to Earth’s rotation depends on latitude . It is maximum at the equator , where linear rotational velocity is highest. It decreases with latitude and becomes zero at the poles, where there is no circular motion around Earth’s axis. At the equator, centrifugal force acts opposite to gravity , thereby reducing the effective gravitational acceleration. This further contributes to the minimum value of g at the equator , not higher ( 𝑔 ) at the poles as wrongly stated. Hence, the correct answer is (c) Only one of the Statements II and III is correct and that explains Statement I."},{"id":16,"txt":"In the context of seismology, which of the following best defines the ‘Focal Depth’ of an earthquake?","ref":"","opts":["The maximum distance covered by any seismic wave from the focus of an earthquake in any direction.","The vertical distance from the hypocentre of an earthquake to its epicenter on the Earth’s surface.","The maximum depth reached by surface waves of an earthquake before they dissipate.","The depth at which seismic waves first attain their maximum amplitude."],"ci":1,"exp":"Ex: Earthquakes occur due to the rupture of rocks beneath the crust. The point where rupture originates is called the focus or hypocenter of the earthquake. The point where the energy is released is called the focus of an earthquake, alternatively, it is called the hypocentre. The energy waves travelling in different directions reach the surface. The point on the surface, nearest to the focus, is called epicentre. It is the first one to experience the waves. It is a point directly above the focus. The focal depth refers to the vertical distance between the hypocentre and the epicentre , i.e., how deep below the Earth’s surface the earthquake originated. Based on focal depth, earthquakes are commonly classified as shallow-focus (<60 Km), intermediate-focus (60-300 Km), and deep-focus earthquakes (300-700 Km). Commonly the shallow focus earthquakes are more damaging due to the close proximity to the ground."},{"id":17,"txt":"With reference to Seismic S-waves (Secondary waves), which of the following statements is/are correct?\n1. S-waves can travel only through solid materials.\n2. The direction of vibration of material particles due to S-waves is parallel to the direction of propagation of the wave.\n3. S-waves travel faster than P-waves and are the first seismic waves to be recorded on seismographs.\nSelect the correct answer using the code given below:","ref":"","opts":["I only","II only","III only","I and II"],"ci":0,"exp":"Ex: Earthquake waves are broadly classified into body waves and surface waves . Body waves originate from the focus (hypocentre) of an earthquake and propagate in all directions through the Earth’s interior. They are of two main types of body waves: P-waves (Primary waves) and S-waves (Secondary waves). When these body waves reach the Earth’s surface, they interact with surface rocks and generate a new set of waves known as surface waves. Statement I is correct: S-waves (Secondary waves) are shear or transverse waves that require a rigid medium for their propagation. They cannot travel through liquids or gases because fluids do not support shear stress. Hence, S-waves can travel only through solid materials and cannot propagate through liquids or gases. This is why S -waves disappear at the mantle –outer core boundary, providing direct evidence that the Earth’s outer core is liquid. Statement II is incorrect: In case of S-waves , the direction of material particles vibration is perpendicular (not parallel) to the direction of wave propagation. This is the defining feature of transverse (shear) waves. In contrast, the direction of particle vibration in P-waves is parallel (longitudinal) to the direction of wave propagation. Statement III is incorrect: P-waves are the fastest seismic waves and always arrive first. S-waves travel at about 60%-70% of the speed of P-waves in the same medium and arrive at the surface with some time lag. Seismographs record: 1. P-waves first 2. S-waves next 3. Surface waves last"},{"id":18,"txt":"Which of the following pairs of minerals includes the two main constituents of granite rocks?","ref":"","opts":["Calcium and Sodium","Magnesium and Lime","Iron and Nickel","Silica and Aluminium"],"ci":3,"exp":"Ex:    Granite is one of the most common igneous rocks found on the Earth's surface and is commonly used as dimension/ building stones. Granite is a plutonic felsic rock. It is mostly light in colour and grains are large enough to be visible with the unaided eye. Granite is a fine example of polymineralic rock. If a rock comprises many minerals it is known as polymineralic rock. Granite is essentially composed of quartz, alkali feldspar and mica. Quartz is one of the most important components of granite. It consists of silica. Granite may contain about 70 to 80% of silica. Granites contain very little quantity of iron, magnesium and lime. Typical granite is chemically composed of 70 – 77 % silica (SiO2), 11 – 13 % alumina (Al2O3), 3 – 5% potash (K2O), 3 – 5% soda (Na2O), 1 % lime (CaO), 2 – 3% total iron, and less than 1 % magnesia (MgO) and titania (TiO2)."},{"id":19,"txt":"Which of the following were cited as evidence to support the Continental Drift Theory by Alfred Wagener?\n1. Jigsaw fit of the certain Continental margins\n2. Expansion of the Atlantic ocean basin\n3. Evidence of magnetic reversal in certain oceanic sediments.\n4. Presence of gold deposits in western coast of Ghana and eastern coast of Brazil from the same source rocks\nSelect the correct answer using the code given below:","ref":"","opts":["I, III and IV only","I and III only","II and IV only","I and IV only"],"ci":3,"exp":"Ex: The Continental Drift Theory was proposed by Alfred Wegener, a German meteorologist, in 1912. According to Wegener, initially there was a super continent named Pangaea(all Earth) and a mega-ocean called Panthalassa (all water). He postulated that around 200 million years ago, the super continent, Pangaea,broke into two large continental masses - Laurasia and Gondwanaland forming the northern and southern components respectively. Over time Laurasia and Gondwanaland drifted away and in between a shallow sea(Tethys sea)emerged by filling up the water from Panthalasa. Later on Laurasia and Gondwanaland also drifted and broke apart to form the present day distribution of continents and ocean on the earth. Option I is correct: The Matching of coastlines of Continents supports the Continental drift theory. The east coast of South America and the west coast of Africa seem to fit together like pieces of a jigsaw puzzle, and Wegener discovered their rock layers “fit” just as clearly. It suggests that they were broken from a single large landmass. The palaeomagnetic studies of rocks from these regions show similarity in the composition and age of rocks. Option II is incorrect: Along the mid Atlantic ridge, magma comes out at the sea bed and gets solidified, forming new oceanic crust over millions of years thereby increasing the size of the Atlantic ocean which is termed as sea floor spreading. Which forms the basis of seafloor spreading theory of Harry Hess and not continental drift theory. Option III is incorrect: Paleomagnetism is the study of ancient magnetism in old rocks, sediments and minerals across geological time periods, throwing light on magnetic field reversal and continental drift. Symmetrical magnetic stripes on either side of mid-ocean ridges prove new crust forms and spreads from the ridge. Magnetically susceptible minerals like haematite, pyrrhotite magnetite etc. get aligned with the magnetic pole of the earth and are recorded during the solidification of magma during that time. However, the study of paleomagnetism happened in    1940( due to advancements in submarine technology) while Alfred Wagner gave his theory in 1912 . Although paleomagnetism is a vital evidence of seafloor spreading and plate tectonics theory, it is not of Wagner’s theory. Option IV is correct: Ghana, located on the west coast of Africa, has rich gold deposits along its coast, yet there is no local source rock to account for this mineral wealth. The likely explanation is that these gold deposits originated from the Brazil Plateau, which, before the continents drifted apart, lay adjacent to what is now Ghana. This is one of the pieces of evidence supporting the theory of continental drift given by Alfred Wagener."},{"id":20,"txt":"In order to find out the absolute location of a place on the map, which of the following will be required?","ref":"","opts":["Latitude of the place alone","Longitude of the place alone","Both latitude and longitude of the place","Neither latitude nor longitude of the place"],"ci":2,"exp":"Ex: . Latitude and longitude are two sets of coordinates that are used to determine the absolute location of a place on the map. Latitude is the measure of a place’s distance north or south of the equator, w hile longitude is the measure of a place’s distance east or west of the Prime Meridian."},{"id":21,"txt":"With reference to the standard time system followed in India, consider the following statements:\n1. India does not follow Daylight Saving Time.\n2. India follows a single time zone.\nWhich of the above is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I.","Both Statement I and Statement II are correct but Statement II does not explain Statement I.","Statement I is correct but Statement II is not correct.","Statement I is not correct but Statement II is correct."],"ci":1,"exp":"Ex: . Daylight Saving Time (DST) is the practice of resetting clocks ahead by an hour in spring, and behind by an hour in autumn (or fall). During these months, countries that follow this system get an extra hour of daylight in the evening. Because the spring to fall cycle is opposite in the Northern and Southern Hemispheres, DST lasts from March to October/November in Europe and the US, and from September/October to April in New Zealand and Australia. Statement I is correct . DST is in practice in some 70 countries, including those in the European Union. India does not follow daylight saving time ; countries near the Equator do not experience high variations in daytime hours between seasons. Statement II is correct . India follows a single standard time , known as Indian Standard Time, which is based on the longitude of 82½° East (GMT+5:30). Despite its wide east – west extent, India has not adopted multiple time zones. This has been done to ensure national uniformity in governance, transport schedules, broadcasting, and official functioning. Statement II does not explain Statement I . The absence of Daylight Saving Time in India is due to its equatorial location, not the presence of a single time zone."},{"id":22,"txt":"When the volcanic lava makes its way through cracks and the fissures developed in the land, it solidifies almost perpendicular to the ground. It gets cooled in the same position to develop a wall-like structure. These structures are known as-","ref":"","opts":["Dykes","Batholiths","Lacoliths","Sills"],"ci":0,"exp":"Ex: When the lava makes its way through cracks and the fissures developed in the land, it solidifies almost perpendicular to the ground. It gets cooled in the same position to develop a wall-like structure. Such structures are called dykes. These are the most commonly found intrusive forms in the western Maharashtra area. These are considered the feeders for the eruptions that led to the development of the Deccan traps."},{"id":23,"txt":"The International Space Station orbits the Earth in which of the following layers of the atmosphere?","ref":"","opts":["Exosphere","Thermosphere","Mesosphere","Stratosphere"],"ci":1,"exp":"Ex: The atmosphere consists of different layers with varying density and temperature. The atmosphere is divided into five different layers: troposphere, stratosphere, mesosphere, thermosphere and exosphere. Option a is incorrect. The Exosphere is the uppermost layer of the Earth’s atmosphere lying above the thermosphere. This layer separates the rest of the atmosphere from outer space. The exosphere has gases like hydrogen and helium, but they are very spread out. Option b is correct. The International Space Station (ISS) is a habitable artificial satellite, located in low Earth orbit (at an altitude of between 370 – 460 km). The International Space Station orbits in the thermosphere. The air density in the thermosphere is very low, which is why it is sometimes considered as outer space. Only the lightest gases — mostly oxygen, helium, and hydrogen — are found here. The average altitude of the International Space Station is about 330 km (205 miles), placing it in the thermosphere below the exosphere. The thermosphere is located between about 80 and 700 kilometers. Its lower part contains the ionosphere, which is located between 80 and 400 km. It contains electrically charged particles known as ions, and hence, it is known as ionosphere. Radio waves transmitted from the earth are reflected back to the earth by this layer. Temperature here starts increasing with height. It is both cloud free and water vapor-free. This layer is completely cloudless and free of water vapor The aurora borealis and aurora australis are sometimes seen here. Option c is incorrect. The Mesosphere lies above the stratosphere, and extends up to a height of 80 km. In this layer, temperature starts decreasing with the increase in altitude. The upper limit of the mesosphere is known as the    mesopause. The very scarce water vapor present at the top of the mesosphere forms noctilucent clouds, the highest clouds in Earth’s atmosphere . Noctilucent clouds are very thin clouds composed of water ice. These clouds are the highest clouds in the Earth’s atmosphere. They are located in the mesosphere at an altitude of approximately 280,000ft. Option d is incorrect. The Stratosphere is found above the tropopause from 12km and extends up to a height of 50 km. The Stratosphere contains the ozone layer that absorbs ultraviolet radiation from the Sun and shields life on the earth from intense, harmful forms of energy. The Stratosphere is the ideal region for flying aeroplanes as it is nearly cloud- and weather-free. Knowledge Base: The Troposphere is the lowermost layer of the atmosphere. Its average height is 13 km and extends roughly to a height of 8 km near the poles and about 18 km at the equator. The temperature in this layer decreases with increase in height, at the rate of 1°C for every 165 m of height. All changes in climate and weather take place in this layer. Most of Earth’s weather happens here, and almost all clouds that are generated by weathe r are found here."},{"id":24,"txt":"The Earth without rotational movement would result into\n1. no Sun-rise and Sun-set.\n2. no occurrence of day and night cycles.\n3. only one season.\nSelect the correct answer using the codes given below:","ref":"","opts":["Only 1","1 and 2 only","2 and 3 only","All of these"],"ci":1,"exp":"Ex: . If the Earth did not have rotational movement, it would result in the following consequences: Statement 1 is correct: The rotation of the Earth on its axis causes the apparent rising and setting of the Sun. Without the Earth’s rotation, there would be no daily movement of the Sun across the sky, resulting in the absence of Sun- rise and Sun-set. Statement 2 is correct: The rotation of the Earth is responsible for the alternation of day and night . As the Earth rotates, different parts of it are exposed to sunlight, leading to the day and night cycle. Without rotational movement, there would be a fixed illumination pattern, with one side of the Earth always facing the Sun (perpetual day) and the other side always in darkness (perpetual night). Statement 3 is incorrect: The Earth’s axial tilt and its revolution around the Sun are primarily responsible for the occurrence of different seasons. Even without rotation, the axial tilt and orbital characteristics would still lead to variations in the amount of sunlight received by different regions, resulting in the occurrence of different seasons."},{"id":25,"txt":"Consider the following statements:\n1. Iceland experiences frequent volcanic eruptions.\n2. Iceland is situated over a Mid-Oceanic Ridge.\n3. Iceland is located along the Pacific Ring of Fire.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one of them explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":2,"exp":"Ex: Statement I is correct: Iceland is often referred to as a land of ice and fire. The North Atlantic island nation with its many glaciers and volcanoes has now seen a dozen eruptions since geological systems on its Reykjanes peninsula reactivated in 2021. That makes this north European island a prime destination for volcano tourism. Statement II is correct and explains Statement I. Iceland, often referred to as the \"Land of Fire and Ice,\" is known for its frequent volcanic activity. Iceland experiences frequent volcanic eruptions because it sits on an active Mid-Atlantic Ridge. Iceland is situated atop the Mid-Atlantic Ridge, where the North American and Eurasian tectonic plates are diverging . This geological setting is primarily responsible for the continuous volcanic eruptions observed in the region. Iceland is uniquely positioned directly above a part of this ridge, leading to its characteristic high volcanic activity. The Mid-Atlantic Ridge is a Mid-Oceanic Ridge located along the floor of the Atlantic Ocean. Mid Oceanic Ridges refers to an interconnected chain of mountain systems within the ocean. Mid-ocean ridges occur along divergent plate boundaries, where a new ocean floor is created as two oceanic tectonic plates spread apart. As the plates separate, molten rock rises to the seafloor, producing enormous eruptions of volcanoes. In addition to the ridge, Iceland is also over a hotspot — a plume of hot mantle rising towards the surface. This hotspot enhances the volcanic activity already caused by the ridge, leading to more frequent and sometimes more intense eruptions. Statement III is incorrect. The Ring of Fire, also referred to as the Circum-Pacific Belt, is a path along the Pacific Ocean characterized by active volcanoes and frequent earthquakes. The Ring of Fire is a roughly 25,000-mile chain of volcanoes and seismically active sites that outline the Pacific Ocean. The Ring of Fire is home to 75% of the world's volcanoes and 90% of its earthquakes. The Ring of Fire traces the meeting points of many tectonic plates, including the Eurasian, North American, Juan de Fuca, Cocos, Caribbean, Nazca, Antarctic, Indian, Australian, Philippine, and other smaller plates, which all encircle the large Pacific Plate.    Iceland is not located along the Pacific Ring of Fire. Iceland is located between the Arctic Ocean and the North Atlantic Ocean."},{"id":26,"txt":"Consider the following pairs: Discontinuities Separates\n1. Mohorivicic Crust and Mantle\n2. Gutenberg Upper mantle and lower mantle\n3. Conrad Core and Mantle\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":0,"exp":"Ex: Pair I is correct: The discontinuity between the upper mantle and the crust is Mohorovicic or Moho discontinuity. It is named after the Croatian geophysicist Andrija Mohorovicic who first discovered it in 1909. The Moho does not exist at a uniform depth, because not all regions of Earth are equally balanced in isostatic equilibrium. The Moho is found at about eight kilometers (five miles) beneath the ocean and about 32 kilometers (20 miles) beneath continents. Pair II is incorrect: Gutenberg discontinuity represents the boundary between the outer core and the mantle . Gutenberg discontinuity was accurately delineated at 2900 km by Beno Gutenberg in 1912. The Gutenberg discontinuity is more popularly known as the core-mantle boundary (CMB). At the CMB, S- waves, which can’t continue in liquid, suddenly disappear, and P-waves are strongly refracted, or bent. The boundary between the upper mantle and the lower mantle is called the Repetti Discontinuity. Pair III is incorrect: The boundary between the upper crust and the lower crust is called the Conrad discontinuity ."},{"id":27,"txt":"Which of the following types of rocks are primarily characteris ed by ‘foliation’ and ‘banding’ of minerals?","ref":"","opts":["Igneous rocks","Sedimentary rocks","Metamorphic rocks","All of the above"],"ci":2,"exp":"Ex: Metamorphic rocks are formed when pre-existing rocks are subjected to great temperature or pressure. Metamorphism is a process by which already consolidated rocks undergo recrystallisation and reorganisation. In the process of metamorphism in some rocks, grains or minerals get arranged in layers or lines . Such an arrangement of minerals or grains in metamorphic rocks is called foliation or lineation.    Thus, foliation indicates a texture displayed by metamorphic rocks in which mineral grains exhibit a preferred, directional orientation. Sometimes minerals or materials of different groups are arranged into alternating thin to thick layers appearing in light and dark shades. Such a structure in metamorphic rocks is called banding and rocks displaying banding are called banded rocks."},{"id":28,"txt":"Consider the following pairs: Volcano in news Country in which it is located\n1. Hayli Gubbi Iceland\n2. Mount Lewotobi Laki-Laki Philippines\n3. Kilauea United States of America\n4. Volcan de Fuego Guatemala\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Volcanoes are openings, or vents where lava, tephra (small rocks), and steam erupt onto the Earth’s surface. Volcanoes can be on land and in the ocean. The material could be liquid rock (known as “magma”, when it’s underground and “lava” when it breaks through the surface), ash, and/or gases. Pair I is incorrect: The Hayli Gubbi volcano is a shield volcano located in northern Ethiopia (and not Iceland). It has been a dormant volcano that erupted recently after several thousand years. In this remote area of East Africa, tectonic plates are moving away from each other, which allows magma to rise to the surface and feed several active volcanoes. It is situated at the edge of the East African Rift, where the African and Arabian plates are slowly diverging. Pair II is incorrect: Mount Lewotobi Laki-Laki is a volcano on the Indonesian (and not Phillippines) island of Flores that erupted in July 2025. It is part of the ’Ring of Fire’ — a chain of over 450 volcanoes lining the Pacific Ocean. Mount Lewotobi is composed of two adjacent stratovolcanoes: Laki-Laki and Perempuan - Laki-Laki, the more active of the two. Indonesia is home to over 120 active volcanoes — more than in any other country. Pair III is correct: Kilauea is one of six active volcanoes in the Hawaiian Islands, USA which also include Mauna Loa, the world’s largest volca no. It has remained highly active since 1983 and erupts relatively frequently. First forming underwater roughly 280,000 years ago, Kīlauea is a fairly typical shield volcano with long, shallow slopes due to eruption of low viscosity Basaltic lava. Pair IV is correct: Volcan de Fuego, which means “Volcano of Fire” in Spanish, is one of several active volcanoes in Guatemala. It lies near the colonial city of Antigua, a UNESCO world heritage site that has survived several major eruptions. It is one of three large stratovolcanoes overlooking Guatemala's former capital, Antigua."},{"id":29,"txt":"According to the ‘Convectional Current Theory’ propounded by Arthur Holmes, the movement of convectional currents within the earth’s mantle is primarily generated due to the:","ref":"","opts":["radioactive elements causing thermal differences in the mantle portion.","expansion of the mantle because of increasing temperature in the outer core of the earth.","vertical flow of materials caused by their density difference within the mantle.","horizontal displacement of mantle material caused by gravitational sliding of lithospheric plates."],"ci":0,"exp":"Ex: Arthur Holmes in the 1930s discussed the possibility of convection currents operating in the mantle portion. These currents are generated due to radioactive elements causing thermal differences in the mantle portion. Holmes argued that there exists a system of such currents in the entire mantle portion. This was an attempt to provide an explanation to the issue of force, on the basis of which contemporary scientists discarded the continental drift theory. Option b, c and d are not related to Convection Current Theory of Arthur Holmes. Knowledge Base: According to Holmes, radioactive elements are present in the crust also in low concentration but the generated temperature is not so high because there is gradual loss of heat through conduction and radiation from the upper surface at the rate of 60 calories per square centimeter per year."},{"id":30,"txt":"Which of the following statements about volcanoes are correct?\n1. The strength of a volcano is measured by the Volcanic Explosive Index.\n2. Iceland and the Philippines were created by volcanic activity.\n3. Volcanic soils are rich, deep and fertile and allow intensive agriculture to take place.\nSelect the correct answer using the code given below.","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct: The Volcanic Explosive Index (VEI) is a relative scale that measures the explosiveness of volcanic eruptions based on factors such as eruption cloud height, volume of ejected material, and other qualitative observations.    Statement 2 is correct: Iceland is located on the Mid- Atlantic Ridge, where the Eurasian and North American tectonic plates are spreading apart, leading to volcanic activity. The Philippines is part of the Pacific Ring of Fire, an area characterized by intense volcanic and seismic activity due to the movement of several tectonic plates. Statement 3 is correct: When volcanoes erupt, they release minerals and nutrients from the Earth’s mantle, which enrich the surrounding soil. These soils are highly fertile and support intensive agriculture."},{"id":31,"txt":"Consider the following statements with reference to Earth’s crust:\n1. The Oceanic crust rocks of the Earth are significantly younger than the Continental rocks.\n2. Oceanic crust is continuously being created at mid-ocean ridges and is simultaneously destroyed at subduction zones.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct and Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":0,"exp":"Ex: Earth’s crust is divided into two types: oceanic crust and continental crust. The transition zone between these two types of crust is sometimes called the Conrad discontinuity. Statement I is correct: The dating of the rocks from the oceanic crust revealed the fact that they are much younger than the continental areas.The oldest existing oceanic crust is in the Ionian sea (part of mediterranean basin) which is about 270 million years old. The oldest parts of continental crust, on the other hand, are more than four billion years old. The reason being continental crust is rarely destroyed and recycled in the process of subduction. While oceanic crust is continuously recycled at the subduction zone along the plate margins. Statement II is correct and explains Statement I: Oceanic crust is constantly formed at mid-ocean ridges, where tectonic plates are diverging from each other. As magma that wells up from these rifts in Earth’s surface cools, it becomes a young oceanic crust. The age and density of oceanic crust increases with distance from mid-ocean ridges. Just as oceanic crust is formed at mid-ocean ridges, it is destroyed in subduction zones."},{"id":32,"txt":"With reference to the configuration of the ocean floor, consider the following:\n1. Continental shelf\n2. Continental slope\n3. Continental rise\n4. Abyssal plain\nHow many of the above are components of continental margins?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: .    The ocean floor is not a flat and uniform surface. It shows clear divisions based on depth, relief, and geological processes . The ocean floor may be segmented into three major divisions based on the depth as well as the forms of relief. These divisions are continental margins, deep-sea basins and mid-ocean ridges. These divisions help us understand how continents extend beneath the oceans and how sediments, volcanoes, and tectonic forces shape the Earth’s surface. One such important division is the continental margin , which acts as a transition zone between continents and deep-sea basins . They include continental shelf, continental slope, continental rise and deep-oceanic trenches. Option I is correct . The continental shelf is the shallow, gently sloping submerged extension of the continent . It lies close to the coast and is covered by shallow seas. Most fishing grounds and offshore resources such as oil and natural gas are found here. Because it is clearly part of the transition from land to ocean, it forms a core component of the continental margin .The average width of continental shelves is about 80 km. The shelves are almost absent or very narrow along some of the margins like the coasts of Chile, the west coast of Sumatra, etc. On the contrary, the Siberian shelf in the Arctic Ocean, the largest in the world, stretches to 1,500 km in width Option II is correct . The continental slope marks the steep descent from the edge of the continental shelf to deeper oceanic areas . It represents the boundary between continental crust and oceanic crust. Due to its sharp gradient and tectonic significance, it is an essential part of the continental margin . Option III is correct . The continental rise is found at the base of the continental slope . It is formed due to the accumulation of sediments that flow down from the continental shelf and slope. These sediments gradually build a gentle incline before the deep ocean floor begins. Hence, it is included within the continental margin system . Option IV is incorrect . The abyssal plains are extensive, flat regions of the deep-sea basin , located beyond the continental margins. They are formed by fine continental sediments settling over millions of years over abyssal plains. Since they lie between continental margins and mid-oceanic ridges , they are not part of the continental margin . Knowledge Base:"},{"id":33,"txt":"With reference to tectonic plates of the earth, the Nazca Plate is located between which of the following major plates?","ref":"","opts":["South American Plate and Pacific Plate","Central American Plate and Pacific Plate","Philippine Plate and Indian Plate","Eurasian Plate and Pacific Plate"],"ci":0,"exp":"Ex: .    The theory of Plate Tectonics explains the movement of rigid lithospheric plates over the semi-molten asthenosphere. While major plates receive more attention, minor plates play a crucial role in generating volcanoes, earthquakes, trenches, and mountain-building processes . Option a is correct . The Nazca Plate is a minor oceanic plate situated between the South American Plate and the Pacific Plate . It is moving eastward and subducting beneath the South American Plate. This subduction is responsible for the formation of the Andes Mountains and frequent earthquakes and volcanic activity along the western margin of South America. Option b is incorrect . The plate located between Central America and the Pacific Plate is the Cocos Plate , not the Nazca Plate. The Cocos Plate is associated with seismic and volcanic activity along Central America. Option c is incorrect . The plate found between the Philippine Plate and the Indian Plate is the Caroline Plate , located north of New Guinea. Option d is incorrect . The plate situated between the Eurasian (Asiatic) Plate and the Pacific Plate is the Philippine Plate . This region is part of the highly active western Pacific “Ring of Fire”. Knowledge Base: Other important minor plate are I. Arabian plate: It consists of arabian peninsula landmass and is sandwiched between three major plates i.e, Eurasian plate, African plate and Indian plate. II.Scotia plate : It is surrounded by the South American plate to the north and Antarctic plate to the south and west."},{"id":34,"txt":"Which of the following statements concerning the atmosphere of the Earth are correct?\n1. In the stratosphere, temperature increases with altitude.\n2. In the mesosphere, temperature decreases with altitude.\n3. The lowest temperature of the atmosphere is recorded in the upper part of the mesosphere.\n4. Tropopause is an isothermal zone.\nWhich of the statements given above are correct?","ref":"","opts":["1 and 2 only","1, 2 and 3 only","3 and 4 only","All of these"],"ci":3,"exp":"Ex: . Statement 1 is correct- In the stratosphere, temperature increases with altitude due to the presence of the ozone layer, which absorbs ultraviolet radiation from the Sun, leading to the heating of the surrounding air. Statement 2 is correct- The mesosphere is the third layer of the Earth’s atmosphere, located above the stratosphere. As altitude increases , the density of air molecules decreases, resulting in a decrease in temperature . Statement 3 is correct- The lowest temperature of the atmosphere is recorded in the upper part of the mesosphere. Known as the mesopause , this is the coldest region of the Earth’s at mosphere with temperatures reaching as low as - 90 degrees Celsius (-130 degrees Fahrenheit). Statement 4 is correct- The tropopause is the boundary between the troposphere (the lowest layer of the atmosphere) and the stratosphere. In this region, th e temperature remains relatively constant with increasing altitude , resulting in an isothermal zone."},{"id":35,"txt":"With reference to transform boundaries in plate tectonics, consider the following statements:\n1. Transform faults are generally oriented perpendicular to the mid-oceanic ridges.\n2. Transform plate boundaries are zones where new crust is continuously created due to magma upwelling.\nWhich of the above is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I.","Both Statement I and Statement II are correct but Statement II does not explain Statement I.","Statement I is correct but Statement II is not correct.","Statement I is not correct but Statement II is correct."],"ci":2,"exp":"Ex: . Plate boundaries are not only sites where the Earth’s crust is created or destroyed. In some locations, plates simply slide past one another horizontally . These zones are called transform boundaries , and they play a major role in explaining earthquakes, offsets in oceanic ridges, and the segmented nature of the ocean floor . Statement I is correct . Transform faults are indeed generally perpendicular to mid-oceanic ridges . As the eruptions do not take all along the entire crest at the same time, thereby forming different parts of the ridge at different times and places. This differential movement of a portion of the plate creates breaks or offsets in the ridge. Transform faults connect these offset ridge segments. Along these faults, tectonic plates slide past each other sideways. This sideways movement helps adjust the uneven spreading of the plates. For example San Andreas fault in California(USA), Alpine fault (New Zealand) etc. Statement II is incorrect . Transform boundaries are not zones of crustal creation . New crust is formed at divergent boundaries , such as mid-oceanic ridges, where magma rises and solidifies. In contrast, transform boundaries involve horizontal sliding without magma upwelling where the crust is neither created nor destroyed ."},{"id":36,"txt":"With reference to the internal structure of the Earth, which one of the following is known as the Low Velocity Zone (LVZ) for seismic waves?","ref":"","opts":["Uppermost crust","Outer core","Inner core","Asthenosphere"],"ci":3,"exp":"Ex: . The asthenosphere is a part of the upper mantle located just below the rigid lithosphere. It is called the Low Velocity Zone (LVZ) because the velocity of seismic waves(both P-Waves and S-Waves) slows down while passing through it . This happens due to its high temperature and pressure,ductile rocks , and semi-viscous nature of rocks , with a small amount of partially molten material around mineral grains. KnowledgeBase:"},{"id":37,"txt":"With reference to major oceanic trenches and their tectonic location, consider the following pairs: Oceanic Trench Location\n1. Mariana Trench Indian Ocean\n2. Java Trench Pacific Ocean\n3. Aleutian Trench Atlantic Ocean\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":3,"exp":"Ex:    Pair I is incorrect . The Mariana Trench , the deepest trench in the world, is located in the Pacific Ocean. Mariana Trench is the deepest of all such trenches with its deepest part reaching up to a depth of 11,034 m which is known as the Challenger Deep. Pair II is incorrect . The Java Trench (also known as Sunda Trench), is an oceanic trench located in the Indian Ocean near Sumatra , formed where the Australian-Capricorn plates subduct under a part of the Eurasian Plate. It is 3,200 km long with a maximum depth of 7,290 meters. Its maximum depth is the deepest point in the Indian Ocean. Pair III is incorrect: The Aleutian Trench is an oceanic trench along a convergent plate boundary which runs along the southern coastline of Alaska and the Aleutian Islands in the North Pacific Ocean. The trench extends for 3,400 Km from a triple junction in the west with the Ulakhan Fault and the northern end of the Kuril – Kamchatka Trench, to a junction with the northern end of the Queen Charlotte Fault system in the east."},{"id":38,"txt":"With reference to geomorphology, consider the following events:\n1. Formation of Deccan traps\n2. Breaking up of Pangaea\n3. Convergence of Indian plate with Eurasian plate\nWhich of the following is the correct chronological order of events that occurred?","ref":"","opts":["I-II-III","II-III-I","II-I-III","I-III-II"],"ci":2,"exp":"Ex: Option II ( Breaking up of Pangaea): India is supposed to have started her northward journey about 200 million years ago at the time when Pangaea broke . At that time, India was a large island situated off the Australian coast, separated from the Asian continent by the Tethys Sea. This breakup marked the beginning of the independent movement of the Indian plate. Option I (Formation of the Deccan Traps): During the movement of the Indian plate towards the Eurasian plate, a major event that occurred was the outpouring of lava and formation of the Deccan Traps . Deccan Traps were formed in three phases. The first phase began at 68 Ma ago (Mega Annum ago or Million years ago), The second phase of volcanic eruption is considered as the main event of lava flows because 80% of the total lava flows of the Deccan Traps were erupted during this phase. The last and third phase began around 64 Ma ago and about 14% of lava flows of the total Deccan Traps were erupted. A total duration of about 4 million years, from 68 to 64 Ma ago, for volcanic eruptions has been estimated for the Deccan Traps Option III (Convergence of the Indian Plate with the Eurasian Plate): India collided with Asia about 40 – 50 million years ago, which caused the convergence of the Indian Plate with the Eurasian Plate and the rapid uplift of the Himalayas. From about 40 million years ago and thereafter, the event of formation of the Himalayas took place. Scientists believe that the process is still continuing and that the height of the Himalayas is rising even to this date.    Hence the correct chronological order is II-I-III: Breaking up of Pangaea- Formation of the Deccan Traps- Convergence of the Indian Plate with the Eurasian Plate"},{"id":39,"txt":"With reference to the major mountains across the world, consider the following information:\nName of the Mountains Type of m ountain Location\n1. Vosges Block Mountains Russia\n2. Alps Fold mountain United States of America\n3. Merapi Volcanic mountain Indonesia\n4. Monadnock Fold Mountain Central Europe\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Mountains make up a large proportion of the Earth's surface. Based on their mode of formation, they are distinguished into four main types such as (i)Fold Mountain (ii) Block Mountain (iii) Volcanic Mountain (iv) Residual Mountain Row I is incorrect: The Vosges Mountains are the type of block mountains located in France near the Germany border(not in Russia). Block mountains are formed due to internal earth movements. When tensional forces act on the Earth’s crust, they create faults. If the landmass between two nearly parallel faults is uplifted relative to the surrounding areas, it results in the formation of a block mountain termed as horsts and the lowered blocks are called graben. Row II is incorrect : The Alps are young fold mountains located in European countries spread over Austria, Italy, France, Switzerland, Germany, and Slovenia . Fold mountain ranges are formed primarily from uplifted and folded sedimentary rocks. Convergence of tectonic plates exerts pressure that forces sedimentary rock layers to bend and fold upward, creating extensive mountain systems. For example a)continent- continent convergence created Himalayas in Asia. b) continental-oceanic convergence created Andes mountain in south america. Row III is correct: Mount Merapi is an active volcanic mountain located in Bali, Indonesia. Volcanic mountains are formed when molten rock material (magma) is expelled onto the Earth’s surface during volcanic eruptions. This material accumulates around the volcanic vent, gradually building up in the shape of a cone. With successive eruptions, the cone continues to grow in height and eventually develops into a mountain. Row IV is incorrect: Monadnock is a type of residual mountain (not fold mountain) located in the USA (not Central Europe). Continuous processes of weathering and the action of various erosional agents wear down elevated mountain ranges. Over long geological periods, softer rocks are eroded faster, while the more resistant hard rocks remain, though with reduced height. Such remnants of erosion are known as residual mountains."},{"id":40,"txt":"Consider the following statements: Assertion (A): To orbit around the Sun, the planet Mars takes less time than the time taken by the Earth. Reason (R): The diameter of the planet Mars is less than that of Earth. Code:","ref":"","opts":["Both (A) and (R) are individually true and (R) is the correct explanation of (A).","Both (A) and (R) are individually true but (R) is not the correct explanation of (A).","(A) is true, but (R) is false.","(A) is false, but (R) is true."],"ci":3,"exp":"Ex: . Assertion (A) is false: The orbital period of a planet depends on its distance from the Sun, not on its diameter. The farther a planet is from the Sun, the longer it takes to complete one orbit. Mars is about 1.5 times farther from the Sun than Earth, so it takes about 1.88 times longer to orbit the Sun than Earth. Reason (R) is true : The diameter of a planet affects its surface gravity, rotation speed, and atmospheric pressure, but not its orbital period. Mars has a smaller diameter than Earth , so it has a lower surface gravity, a faster rotation speed, and a thinner atmosphere than Earth."},{"id":41,"txt":"In the context of geomorphological process of the earth, the term ‘gradation’ refers to the phe nomenon of-","ref":"","opts":["deposition of fine sediments at the mouth of a river based on their size.","mechanical disintegration of rocks through the actions of physical forces like wind and temperature change.","wearing down of relief variations of the surface of the earth through erosion.","transfer of mass debris down the slope of a mountain based on the direct influence of gravity."],"ci":2,"exp":"Ex: The earth’s crust is dynamic and its surface is continuously subjected to variations due to exogenetic(external forces)as well as endogenetic forces induced mainly by energy from the sun and internal forces(endogenic forces) operating from within the earth. Exogenic processes derive their energy from the atmosphere, which ultimately comes from the sun, and also from gradients created by tectonic factors. Option a is incorrect: Deposition of fine sediments at the mouth of a river based on their size i.e, sand, silt, clay results in formation of Delta. It is a depositional landform and not related to Gradation which is erosional in nature. Option b is correct : Mechanical weathering or physical weathering is the process of weakening and breaking of rock materials by physical forces which include gravitational forces, abrasion , temperature changes,freezing and thawing , wind and growth of salt crystals. Its scope is restricted to merely breaking down rock fragments and not wearing of relief. Option c is correct : The action of exogenic forces results in the wearing down (degradation) of relief or elevations and the filling up (aggradation) of basins or depressions on the earth’s surface. The phenomenon of wearing down relief variations of the earth surface through erosion is known as gradation. Option d is incorrect: Transfer of mass debris down the slope of a mountain based on the direct influence of gravity is known as Mass movements. Mass movements are aided by gravity and no geomorphic agent like running water, glaciers, wind, waves and currents participate in the process of mass movements."},{"id":42,"txt":"Which of the following are exogenic geomorphic processes?\n1. Earthquakes\n2. Weathering\n3. Volcanism\n4. Erosion\n5. Deposition\nSelect the correct answer using the code given below:","ref":"","opts":["I, II, IV and V only","I, III, IV and V only","II, IV and V only","II and III only"],"ci":2,"exp":"Ex: The endogenic and exogenic forces causing physical stresses and chemical actions on earth materials and bringing about changes in the configuration of the surface of the earth are known as geomorphic processes. Exogenic forces are also known as denudational processes which include Weathering, mass wasting/movements, erosion/transportation deposition. Option I is incorrect : Diastrophism is classified as an endogenic geomorphic process. All processes that move, elevate or build up po rtions of the earth’s crust come under diastrophism. They include: (i) orogenic processes involving mountain building through severe folding and affecting long and narrow belts of the earth’s crust; (ii) epeirogenic processes involving uplift or warping of large parts of the earth’s crust; (iii) earthquakes involving local relatively minor movements; (iv) plate tectonics involving horizontal movements of crustal plates. Option II is correct: Weathering is a type of exogenic process. It is defined as mechanical disintegration and chemical decomposition of rocks through the actions of various elements of weather and climate and biological activity. Option III is incorrect: Volcanism is a type of endogenic geomorphic process that includes the movement of molten rock (magma) onto or toward the earth’s surface and also formation of many intrusive(Batholiths,Lacoliths,Dykes) and extrusive volcanic forms. Option IV is correct: Erosion is a type of exogenic process which involves acquisition and transportation of rock debris. When massive rocks break into smaller fragments through weathering and any other process, erosional geomorphic agents like running water, groundwater, glaciers, wind and waves remove and transport it to other places depending upon the dynamics of each of these agents Option V is correct: Deposition is also a type of exogenic process that occurs as a consequence of erosion. The erosional agents lose their velocity and hence energy on gentler slopes and the materials carried by them start to settle themselves. For example: Delta formation. Knowledge Base:"},{"id":43,"txt":"With reference to geomorphology, consider the following statements:\n1. Among the world’s ecosystems, the depth of the weathering mantle is generally greatest/thickest in tropical rainforest regions.\n2. Tropical rainforest regions experience high temperatures and heavy rainfall throughout the year.\nWhich of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct and Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":0,"exp":"Ex: Weathering refers to the action of elements of weather and climate on earth materials while weathering mantle refers to depth of the weathered material. Weathering processes are controlled by a complex interaction of geological, climatic, topographic, and vegetative factors, among which climate is the most significant. Not only do weathering processes vary from one climate to another, but the depth of the weathering mantle also differs accordingly. Statement I is correct: Tropical rainforest regions generally have the thickest weathering mantle as the depth of the weathering mantle increases from cold and arid regions towards warm and humid regions. Statement II is correct: Tropical rainforest regions experience high temperature and high precipitation throughout the year which enhance physical weathering and chemical weathering processes like hydrolysis, oxidation, and leaching leading to formation of thickest weathering mantle among major ecosystems ."},{"id":44,"txt":"What is the difference between asteroids and comets?\n1. Asteroids are small rocky planetoids, while comets are formed of frozen gases held together by rocky and metallic material.\n2. Asteroids are found mostly between the orbits of Jupiter and Mars, while comets are found mostly between Venus and Mercury.\n3. Comets show a perceptible glowing tail, while asteroids do not.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","1 and 3 only","3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Asteroids, sometimes called minor planets, are rocky, airless remnants left over from the early formation of our solar system about 4.6 billion years ago. Comets are cosmic snowballs of frozen gases, rock, and dust that orbit the Sun. Statements 1 and 3 are correct. Asteroids are small, rocky objects that orbit the Sun. Comets are frozen leftovers from the formation of the solar system composed of dust, rock and ices. They range from a few miles to tens of miles wide, but as they orbit closer to the sun, they heat up and spew gases and dust into a glowing head that can be larger than a planet. This material forms a tail that stretches millions of miles. Statement 2 is incorrect. The asteroid belt is located roughly between the orbits of the planets Jupiter and Mars. Comets are not limited to any specific region; they are spread all over the solar system."},{"id":45,"txt":"In the context of weathering processes, the process in which minerals undergo chemical addition of water, resulting in expansion and an increase in volume, is known as:","ref":"","opts":["Solution","Hydration","Hydrolysis","Oxidation"],"ci":1,"exp":"Ex: A group of weathering processes viz; solution, carbonation, hydration, oxidation and reduction act on the rocks to decompose, dissolve or reduce them to a fine clastic state through chemical reactions by oxygen, surface and/or soil water and other acids. Water and air (oxygen and carbon dioxide) along with heat must be present to speed up all chemical reactions. Over and above the carbon dioxide present in the air, decomposition of plants and animals increases the quantity of carbon dioxide underground. Option b is correct : Hydration is a chemical weathering process that involves the chemical addition of water to minerals . During this process, minerals absorb water into their structure, which leads to expansion and a consequent increase in the volume of the mineral or the rock mass . A classic example of hydration is calcium sulphate (CaSO4) taking in water to form gypsum(CaSO4·2H2O). Option a is incorrect: Solution is a chemical weathering process in which minerals get dissolved in water or weak acids. The water or acid along with the dissolved material is termed a solution. Its effectiveness depends upon the solubility of the mineral in water or weak acids such as carbonic acid. Since solution leads to loss and removal of material , and not to chemical addition of water or increase in volume , it does not correspond to the process described in the question. Option c is incorrect: In Hydrolysis( chemical breakdown of a compound due to reaction with water .) water acts as a reactant breaking original mineral bonds and forming new minerals (e.g., feldspar converting into clay). Thus water here doesn’t act as an additive causing swelling. Hence, volume increase due to water absorption does not characterize hydrolysis. Option d is incorrect: Oxidation is a chemical weathering process in which minerals, particularly those containing iron,manganese sulphur upon reaction with oxygen form oxides of these elements thus weathering down the rock .Water may facilitate the process, but chemical addition of oxygen and not water are its defining features."},{"id":46,"txt":"With reference to the processes of weathering and erosion, which of the following statements is/are correct?\n1. Weathering involves the breakdown of rocks in situ, whereas erosion involves the removal and transportation of the material.\n2. The primary forces driving weathering are mainly chemical reactions and temperature changes, while erosion is primarily driven by external agents like running water, wind, glaciers, and waves.\n3. Weathering is a mandatory pre-condition for erosion to take place, as erosion cannot occur in the absence of prior weathering of rocks.\nSelect the correct answer using the code given below:","ref":"","opts":["I and II","II only","II and III","I and III"],"ci":0,"exp":"Ex:    Weathering and erosion are key exogenic geomorphic processes operating under the broader concept of denudation, which encompasses weathering, mass wasting, erosion and transportation , all of which act to wear down and reshape the Earth’s surface. Statement I is correct: Weathering refers to mechanical disintegration and chemical decomposition of rocks through the actions of various elements of weather and climate. It is an in-situ or on-site process as very little or no motion of materials takes place in weathering, Erosion, on the other hand , necessarily includes detachment, removal and transportation of rock debris by agents such as rivers, wind, glaciers and sea waves.Thus, the key distinction lies in no movement in weathering versus active movement in erosion. Statement II is correct: Weathering is primarily controlled by physical forces (expansion – contraction due to temperature changes, frost action), chemical reactions (such as oxidation, carbonation, hydration), and biological activity . Erosion , however, depends on Kinetic Energy of external geomorphic agents like running water, wind, glaciers, waves and ground water , which physically remove and carry material from one place to another. Statement III is incorrect: Weathering is not a mandatory pre-condition for erosion . Although weathering weakens rocks and makes erosion more effective, erosion can act directly on fresh, unweathered rock surfaces. For example, river undercutting bedrock, glacial plucking, and wave action along rocky coasts can remove material without prior weathering. Therefore, weathering aids erosion but is not essential for it to occur."},{"id":47,"txt":"Consider the following types of rocks:\n1. Gabbro\n2. Schist\n3. Gneiss\n4. Limestone\n5. Chert\nHow many of the above are examples of metamorphic rocks?","ref":"","opts":["Only two","Only three","Only four","All the five"],"ci":0,"exp":"Ex: Option I is incorrect. Granite, gabbro, pegmatite, basalt, volcanic breccia and tuff are some of the examples of igneous rocks. Options II and III are correct. Gneiss, syenite, slate, schist, marble, quartzite etc. are some examples of metamorphic rocks.    Options IV and V are incorrect. Sedimentary rocks are classified into three major groups: (i) mechanically formed — sandstone, conglomerate, limestone , shale, loess etc. (ii) organically formed — geyserite, chalk, limestone, coal etc. (iii) chemically formed — chert, limestone, halite, potash etc."},{"id":48,"txt":"Consider the following statements:\n1. Hardpans are commonly formed in arid climatic regions characterized by high temperatures.\n2. In arid regions, evaporation exceeds precipitation, resulting in upward movement of groundwater and accumulation of soluble salts near the soil surface.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I.","Both Statement I and Statement II are correct but Statement II does not explain Statement I.","Statement I is correct but Statement II is not correct.","Statement I is not correct but Statement II is correct."],"ci":0,"exp":"Ex: Hardpans are dense, compact, and often impermeable layers of soil that form below or near the surface due to the cementation of soil particles by substances such as salts, silica, iron, or calcium carbonate, restricting water infiltration and root penetration. Statement I is correct: Hardpans are indeed commonly found in arid or semi-arid regions . These regions are characterized by high temperatures , which promote processes that lead to hardpan formation. Statement II is correct: In arid regions, evaporation exceeds precipitation , creating a capillary rise of groundwater. When this water reaches the surface and evaporates due to high temperatures, it leaves behind soluble salts (like calcium carbonate, silica, or iron compounds). These salts cement soil particles, forming a hard, impermeable layer known as a hardpan. Thus ,Statement II directly explains the process responsible for the formation of hardpans in arid, high-temperature regions described in Statement I. Hence, the correct answer is: a) Both Statement I and Statement II are correct and Statement II explains Statement I."},{"id":49,"txt":"Consider the following geomorphic processes:\n1. Formation of rift valleys\n2. Erosion of a river valley\n3. Occurrence of Landslides\nHow many of the above processes are examples of Diastrophism?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":0,"exp":"Ex: Geomorphic processes are broadly categorized into two types: endogenic processes and exogenic processes. 1. Endogenic processes are driven by internal forces within the Earth and include volcanism and diastrophism. 2. Exogenic processes occur due to external forces like weathering, erosion, mass wasting, and deposition. Among the endogenic processes, diastrophism refers to the movement, elevation, and deformation of the Earth's crust due to tectonic forces. It includes: 1. Orogenic processes – Mountain-building due to severe folding. 2. Epeirogenic processes – Uplift or subsidence of large portions of the Earth's crust. 3. Earthquakes – Localized, relatively minor movements in the crust. 4. Plate tectonics – Large-scale horizontal movements of crustal plates Option I is correct: Formation of Rift Valleys: 1. Rift valleys form due to the divergent movement of tectonic plates, leading to faulting and subsidence. This is a direct result of plate tectonics, which is a key aspect of diastrophism . 2. Example: The Great Rift Valley in Africa Option II is incorrect: Erosion of a River Valley: 1. The erosion of river valleys occurs due to the continuous action of flowing water, cutting through rock layers over time. This is an exogenic process driven by surface water movement. 2. Example: The Grand Canyon (USA), formed by the erosion caused by the Colorado River. Option III is incorrect: Occurrence of Landslides: 1. Landslides involve the downhill movement of soil, rock, or debris due to gravity, often triggered by factors like rainfall, earthquakes, or human activity. 2. While earthquakes (a diastrophic process) can trigger landslides, the landslide itself is categorized under mass wasting, an exogenic process ."}],"m":null,"tt":3000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

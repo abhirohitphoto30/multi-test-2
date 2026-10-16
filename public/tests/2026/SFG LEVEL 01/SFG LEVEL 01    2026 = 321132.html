@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SFG LEVEL 01    2026 = 321132</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>SFG LEVEL 01    2026 = 321132</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="SFG LEVEL 01    2026 = 321132">SFG LEVEL 01    2026 = 321132</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"Consider the following information: Waterfall Region River\n1. Dhuandhar Malwa Narmada\n2. Hundru Chota Nagpur Subarnarekha\n3. Gersoppa Western Ghats Netravati\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Row 1 is incorrect: The Narmada River originates from the western flank of the Amarkantak plateau (not Malwa) and flows through a rift valley, bordered by the Satpura range to the south and the Vindhyan range to the north. Near Jabalpur district, it carves a scenic gorge through marble rocks and creates the stunning Dhuandhar waterfall. Row 2 is correct: The Hundru Falls was created on the course of the Subarnarekha River. The falls is located on the Ranchi-Purulia Road on Chota Nagpur Plateau. Row 3 is incorrect: Jog Falls, also known as Gersoppa Falls, is located in the Shimoga district of Karnataka. It is created by the Sharavathi river rising in the Western Ghats."},{"id":1,"txt":"With reference to Karewa deposits in India, consider the following statements:\n1. They are predominantly found in the Shiwalik range of the Himalayas.\n2. They are formed by the accumulation of alluvial and glacial sediments in ancient lake basins.\n3. They are highly fertile and are well-known for large scale cultivation of cotton and sugarcane.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II and III","II only","I and III"],"ci":2,"exp":"Ex: Karewas are thick deposits of glacial clay and other fine sediments embedded with moraines, primarily found in the Kashmir Valley . These flat-topped terraces are of lacustrine origin and are known for their fertile soil and geological significance. Karewas date back to the Pleistocene epoch (approximately 2.6 million to 11,700 years ago), a period known for repeated glacial cycles. During this time, significant geological and climatic changes occurred, leading to the formation of the Karewa sediments in the ancient lake basins of the Kashmir Valley. Statement I is incorrect: While Karewas are lacustrine (lake-originated) deposits , they are not found in the Shiwalik range. 1. Karewa deposits are found in the Kashmir Valley , which lies between the Pir Panjal range and the Greater Himalayas. 2. They are not associated with the Shiwalik range, which lies in the outer Himalayas (south of the main range).    3. The term \" Karewa \" is derived from a Kashmiri word meaning \"table land .\" 4. These deposits consist of elevated flat-topped mounds formed through geological processes over time. Statement II is correct: Karewa deposits were formed in ancient lake basins that existed in the Kashmir Valley. Over time, these lake basins were filled with sediments, mostly from glaciers, rivers (alluvium), and wind-blown materials. The process involved in their formation includes: 1. Tectonic uplift , which created closed basins (lakes) 2. Deposition of fine materials (clay, silt, sand, loam) from surrounding hills and glaciers These sediments settled in horizontal or gently tilted layers, forming the thick Karewa sequences. This formation makes them fossil-rich and useful for studying the paleoenvironment and past climate. Statement III is incorrect: The fine-textured and nutrient-rich soils of the Karewa formations are among the most fertile lands in Jammu & Kashmir. Karewas support the cultivation of high-value crops are well known for: 1. Saffron – particularly in areas like Pampore, which is world-famous for its saffron. 2. Almonds, walnuts, and apples , all of which grow well on these elevated terrace-like deposits. Their fertility is attributed to organic-rich sediments and the alluvial nature of the deposits."},{"id":2,"txt":"Consider the following statements about Gangotri glacier:\n1. It is the longest glacier in the Indian Himalayas.\n2. The Bhagirathi River originates from Gangotri glacier in Uttarakhand.\n3. The Gangotri Glacier forms part of the Great Himalayan National Park.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and III","II only","II and III","III only"],"ci":1,"exp":"Ex: The snow and ice reserves of the Hindu Kush Himalaya are critical sources of water to sustain major rivers like the Indus, Ganga, and Brahmaputra. Statement I is incorrect: The Gangotri is the second largest Himalayan glacier after Siachen. The width of this 30.2- km-long glacier, whose head at its highest point is called Chaukhamba, varies from 0.5 km to 2.5 km. Statement II is correct: The Bhagirathi River originates from Gaumukh snout, the edge of Gangotri glacier . The Ganga rises in the Gangotri glacier near Gaumukh (3,900 m) in the Uttarkashi district of Uttarakhand. Here, it is known as the Bhagirathi. It cuts through the Central and the Lesser Himalayas in narrow gorges. At Devprayag, the Bhagirathi meets the Alaknanda; hereafter, it is known as the Ganga. Statement III is incorrect: The Gangotri Glacier lies within Gangotri National Park, whereas the Great Himalayan National Park is located in the western Himalayas of Himachal Pradesh . Hence, the Gangotri Glacier is not part of the Great Himalayan National Park."},{"id":3,"txt":"Despite being located in a high-altitude region in the Himalayas, Pangong Tso is a saline lake primarily because:","ref":"","opts":["it lies within the Indus river drainage network, where slow-moving river waters promote salt accumulation.","subterranean channels connect the lake to the hypersaline aquifers of the Tibetan Plateau.","it is a closed (endorheic) basin with no outlet, where high evaporation concentrates dissolved minerals.","it represents a relict water body formed from marine incursions associated with the closure of the Tethys Sea."],"ci":2,"exp":"Ex: Pangong Tso, at approximately 4,350 meters above sea level, is the world's highest saltwater lake . Its water, which appears to be painted blue, contrasts with the dry mountains surrounding it. The Pangong Lake is almost 160 kilometres long. Pangong Lake, one of Leh Ladakh's most famous lakes, is named after the Tibetan phrase \"Pangong Tso,\" which means \"high grassland lake\" . Option c is correct: Pangong Tso is a saline lake despite its high-altitude Himalayan location because it is an endorheic (closed) basin with no outlet for drainage . Meltwater and runoff bring dissolved minerals into the lake, but in the absence of an outlet , these salts cannot be flushed out. Over time, high evaporation rates in the cold desert environment of Ladakh concentrate these dissolved minerals, resulting in saline water."},{"id":4,"txt":"Consider the following statements:\n1. Jhelum River passes through Wular Lake.\n2. Krishna River directly feeds Kolleru Lake.\n3. Meandering of the Gandak River formed Kanwar Lake.\nHow many of the statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is correct: The Jhelum, an important tributary of the Indus, rises from a spring at Verinag situated at the foot of the Pir Panjal in the south-eastern part of the valley of Kashmir. It flows through Srinagar and the Wular lake before entering Pakistan through a deep narrow gorge. It joins the Chenab near Jhang in Pakistan. Statement 2 is incorrect: The Kolleru lake serves as a natural flood-balancing reservoir for two rivers. The lake is fed directly by water from the seasonal Budameru and Tammileru streams. It is connected to the Krishna (but not directly feeds) and Godavari systems by over 68 inflowing drains and channels. Statement 3 is incorrect: “Meandering of Gandak River formed Kanwar Lake” is an incorrect statement as the Kanwar lake in Bihar, Asia’s largest freshwater oxbow lake, formed due to meandering of Burhi Gandak river (not Gandak river)."},{"id":5,"txt":"With reference to weather conditions in India, consider the following statements:\n1. Although Udhagamandalam (Ooty) and Coimbatore are located at roughly the same latitude, Coimbatore experiences higher summer temperatures.\n2. Udhagamandalam (Ooty) is situated at a higher altitude than Coimbatore.\n3. Unlike Coimbatore, Udhagamandalam (Ooty) is a coastal city.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one of them explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":2,"exp":"Ex: Statement I is correct. Udhagamandalam (Ooty) and Coimbatore are almost at the same latitude. The range of summer temperatures in Ooty is 10 – 25°C while that in Coimbatore is 25 – 38°C. So, we can see that Coimbatore experiences significantly higher summer temperatures than Ooty. Statement II is correct and explains Statement I. Ooty is a hill station that is located at a higher altitude than the plains . The atmospheric pressure, and therefore the air density, decreases as the altitude increases and as the air gets less dense, it gets cooler. Also, the sun heats the surface of the Earth, and so the farther away from the surface, the less hot the air will be. On the other hand, Coimbatore is situated in plains and hence experiences higher temperatures. Statement III is incorrect. Neither Ooty nor Coimbatore is a coastal city. Temperatures in places close to coastal areas do not vary much. The summers here are not too hot and the winters are not too cold. That is because the sea acts as a moderator for the temperature. As you move inland from the coast, the temperatures get more extreme — summer temperatures will be higher and winter temperatures lower."},{"id":6,"txt":"With reference to the Standard Meridian of India, consider the following statements:\n1. The 82°30' East longitude is designated as the ‘standard meridian’ of India.   \n2. 82°30' East longitude lies approximately in the middle of India and is a multiple of 7°30' of longitude.\nWhich of the above is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I.","Both Statement I and Statement II are correct but Statement II does not explain Statement I.","Statement I is correct but Statement II is not correct.","Statement I is not correct but Statement II is correct."],"ci":0,"exp":"Ex: Statement I is correct. The 82.5 degree East longitude is considered as the Standard Meridian of India. It passes through Mirzapur, near Allahabad in Uttar Pradesh. Statement II is correct and explains Statement I: Two things are kept in mind while selecting a standard meridian. Firstly, it should pass through approximately the middle of the country and secondly, it should be divisible by 15° (1 hour) or 7°30' (half an hour). 82°30' East longitude satisfies both these conditions. So, it is designated as the ‘standard meridian’ of Ind ia."},{"id":7,"txt":"In context to the physiography of India, consider the following:\n1. Meghalaya Plateau\n2. Chotanagpur Plateau\n3. Satmala Range\nHow many of the above are a part/extension of the Peninsular Plateau of India?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":2,"exp":"Ex: Rising from the height of 150 m above the river plains up to an elevation of 600-900 m is the irregular triangle known as the Peninsular plateau. Delhi ridge in the northwest, (extension of Aravalis), the Rajmahal hills in the east, Gir range in the west and the Cardamom hills in the south constitute the outer extent of the Peninsular plateau. On the basis of the prominent relief features, the Peninsular plateau can be divided into three broad groups: (i) The Deccan Plateau (ii) The Central Highlands (iii) The Northeastern Plateau. Option I is correct. The Northeastern Plateau is an extension of the main Peninsular plateau. It is believed that due to the force exerted by the northeastward movement of the Indian plate at the time of the Himalayan origin, a huge fault was created between the Rajmahal hills and the Meghalaya plateau. Later, this depression got filled up by the deposition activity of the numerous rivers. Today, the Meghalaya and Karbi Anglong plateau stand detached from the main Peninsular Block. The Meghalaya plateau is further sub-divided into three: (i) The Garo Hills; (ii) The Khasi Hills; (iii) The Jaintia Hills, named after the tribal groups inhabiting this region. An extension of this is also seen in the Karbi Anglong hills of Assam. Option II is correct. Chotanagpur Plateau is the northeastern part of the Peninsula plateau. The Chotanagpur Plateau encompasses primarily Jharkhand, northern Chhattisgarh, and portions of West Bengal. The plateau is predominantly composed of Gondwana rocks. Statement III is correct: The Satmala Hills are located in the Nashik District of Maharashtra. They are a part of theWestern Ghats. The Western Ghats, also known as Sahyādri, are considered a faulted edge and run north to south along the western edge of the Deccan Plateau, a part of the Peninsular Plateau."},{"id":8,"txt":"Consider the following tributaries of the River Ganga and arrange them from east to west order according to the location where they join the River Ganga:\n1. Gandak\n2. Ghaghara\n3. Gomati   \n4. Kosi\nSelect the correct answer using the code given below:","ref":"","opts":["I – II – III – IV","IV – I – II – III","III – II – I – IV","IV – III – II – I"],"ci":1,"exp":"Ex: . Kosi (IV), often called the “ Sorrow of Bihar ” due to its frequent course changes, joins the Ganga near Kursela (Bihar). This is the easternmost confluence among the listed tributaries . Gandak (I) originates in the Nepal Himalayas between Dhaulagiri Mountain and Mt Everest. It flows through Bihar before joining the Ganga near Patna. The Gandak – Ganga confluence lies slightly east of the Ghaghara – Ganga confluence . Ghaghara (II) is one of the largest Himalayan tributaries of the Ganga. It has its origin in the Mapchachungo glacier near Mt Kailash and Mansarovar lake . After flowing through Nepal and eastern Uttar Pradesh, it meets the Ganga near Chapra (Bihar) . This confluence is located east of the Gomati – Ganga confluence . Gomati (III) is a left-bank tributary originating in the Terai region of Uttar Pradesh (Pilibhit district). It joins the Ganga near Ghazipur (Uttar Pradesh). Among the given rivers, this confluence lies farthest to the west. Therefore, the correct east-to-west sequence is: Kosi → Gandak → Ghaghara → Gomati Hence, the correct answer is: b) IV – I – II – III. Knowledge Base: Various tributaries of Ganga: 1. Major left-bank tributaries : Ramganga, Gomati, Ghaghara, Gandak, Kosi, and Mahananda. 2. Major right-bank tributaries : Yamuna, Tamsa (Tons), Son and Punpun."},{"id":9,"txt":"Consider the following mountain peaks of the Himalayas:\n1. Kamet   \n2. Nag Tibba\n3. Nanda Devi\n4. Godwin Austen (K2)\nHow many of the above given mountain peaks are a part of the Greater Himalayas?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: The Himalayan range is a young fold mountain. These mountain ranges run in a west-east direction from the Indus to the Brahmaputra. It extends for over 2500 km from Pamir in the west to Mishmi Hills in the east. Its width ranges from 150 to 400 km. The Himalaya comprises a chain of parallel mountain ranges that includes Greater Himalayas, Lesser Himalayas and Shiwaliks. Option I is correct. Mount Kamet (7755 metres) is part of the Greater Himalayas . Kamet is the second-highest mountain in the Garhwal region of Uttarakhand. Option II is incorrect. Nag Tibba, also known as the Serpent's Peak, is one of the highest peaks in the Lesser Himalayas. Nag Tibba is in Garhwal Himalayas of Uttarakhand. Option III is correct. Nand Devi is a part of the Greater Himalayas. It has a height of 7817 meters. It is part of the Garhwal Himalayas, and is located in the state of Uttarakhand. It is India’s second highest mountain. Option IV is incorrect. Godwin Austen (K2) is the world's second highest mountain peak . It is located in the Karakoram Range. It is a Trans Himalayan peak."},{"id":10,"txt":"Consider the following:\n1. Cashew   \n2. Papaya\n3. Red sanders\nHow many of the above trees are actually native to India?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Item 1 is incorrect. The Cashew is native to northeastern Brazil. The Portuguese brought it to India during the late 16th century. Item 2 is incorrect. Papaya is native to Central America. It is grown in tropical and warmer subtropical areas worldwide. Papaya was introduced from the Philippines through Malaysia to India in the later part of the 16th century. Item 3 is correct. Red Sanders is endemic to a distinct tract of forests in Andhra Pradesh. Red Sanders is reported to be one of India’s most exploited tree species and is under severe pressure from illegal logging and harvesting. Following the amendment to the Wildlife (Protection) Act 1972 in December 2022, Red Sanders is now listed in Schedule IV."},{"id":11,"txt":"Consider the following statements with reference to the Aravalli range:\n1. It is spread over the four states/Union Territories of Delhi, Haryana, Rajasthan and Gujarat.\n2. It acts as a water divide between the Ganga and the Indus river systems.\n3. Luni and Banas rivers originate from Aravalli hills.\n4. Sammed Shikhar is the highest peak of the Aravalli range.\nWhich of the statements given above are correct?","ref":"","opts":["I, II and III only","III and IV only","I and II only","I, II, III and IV"],"ci":0,"exp":"Ex: Statement I is correct: The Aravallis are one of the oldest landforms on the Earth (dating back 350 million years). They stretch across four states/Union Territories (Delhi, Haryana, Rajasthan and Gujarat) shaping not only the distinct western-flank topography of this region, but also the culture and traditions of settlements around it. “Aravalli” is a Sanskrit word which can be broken down into Ara and Valli which translate to the “line of peaks”. Statement II is correct: Aravalli mountain chain acts as a water divide between the Indus and Ganga river systems. The rivers of the Indus system flow towards the southwest into the Arabian Sea, while the rivers of the Ganga system flow towards the south east into the Bay of Bengal. These two river systems are separated by the Aravalli mountain chain, which cuts across the plain in a north northeast – south southwest direction.    Statement III is correct: Luni originates from western slopes of the Aravalli ranges and is the largest river system of Rajasthan. It flows towards the west and finally flows into the Rann of Kachchh. The entire river system is ephemeral. Banas is the only significant tributary of the river Chambal that originates from the Aravalli in the west. Statement IV is incorrect: The highest peak of the Aravalli range is called Gurushikhar, which is 1722 metre high and is situated in Mount Abu, Rajasthan. Sammed Shikhar is a Jain pilgrimage site in Parasnath hills of Jharkhand."},{"id":12,"txt":"With reference to natural vegetation in India, if one wishes to see silver fir, juniper and pine trees in their natural habitat, which one of the following states would be most suitable to visit?","ref":"","opts":["Rajasthan","Uttarakhand","Andhra Pradesh","Uttar Pradesh"],"ci":1,"exp":"Ex: . The distribution of natural vegetation in India is closely linked to altitude, temperature and moisture conditions . In the higher reaches of the Himalayas, low temperatures and snowfall favour the growth of temperate and alpine coniferous forests , which are markedly different from vegetation found in plains and plateau regions. Silver fir, juniper and pine are coniferous tree species that thrive in cool, high-altitude environments . These trees are typically found at elevations of about 3,000 to 4,000 metres , where temperatures remain low for most of the year and snowfall is common. Such conditions prevail in the Himalayan region , particularly in states like Uttarakhand , which has extensive temperate and alpine forests."},{"id":13,"txt":"With reference to the drainage system of Peninsular India, consider the following rivers:\n1. Tapi\n2. Mahi\n3. Periyar\n4. Sharavathi\n5. Mandovi\n6. Zuari\nHow many of the above rivers discharge their waters into the Arabian Sea?","ref":"","opts":["Only three","Only four","Only five","All the six"],"ci":3,"exp":"Ex: . Rivers of Peninsular India show a clear east – west contrast . Most long rivers flow eastwards into the Bay of Bengal, while comparatively short but swift rivers flow westwards into the Arabian Sea . Option I is correct . The Tapi River originates in the Satpura range and flows westwards through a rift valley. Majority of its basin lies in Maharashtra(79%) and the rest in Madhya Pradesh and Gujarat. It flows for 724 km before emptying into the Arabian Sea near the Gulf of Khambhat . Option II is correct . The Mahi River rises from the Northern slopes of Vindhya range and flows westwards across Rajasthan and Gujarat. It drains into the Arabian Sea through the Gulf of Khambhat after flowing for 583 km. Option III is correct . The Periyar originates from Shivagiri hills of the Western Ghats and flows entirely within Kerala and hence known a s Lifeline of Kerala . It finally drains into the Arabian Sea near Kochi , forming an important estuarine system. Option IV is correct . The Sharavathi River rises in the Western Ghats of Karnataka from Shivamoga district. It is well known for forming the Jog Falls( Gersoppa falls) , after which it continues westward and drains into the Arabian Sea . Option V is correct . The Mandovi River originates in the Western Ghats from Bhimghad Wildlife Sanctuary in Karnataka and flows through Goa. It forms an estuary near Panaji before meeting the Arabian Sea. It flows for 111 km with two-third of the river stretch lies in Goa. Option VI is correct . The Zuari River originates in the Western Ghats and flows westwards through Goa. It is one of the two main rivers of Goa , the other being Madovi. It forms a wide estuarine system before entering the Arabian Sea."},{"id":14,"txt":"Which of the following statements with respect to the Indian Peninsular Plateau are correct?\n1. The Deccan Plateau gradually rises from North to South.\n2. The Malwa Plateau dominates the Vindhyan scraps, forming the Eastern flank of the plateau.\n3. The Western Satpuras separate the Narmada and Tapi rivers.\n4. The Chota Nagpur Plateau is composed of Archaean granite and gneiss rocks.\nSelect the correct answer using the codes given below:","ref":"","opts":["1, 2, 3 and 4","1, 3 and 4","2 and 3","1 and 3"],"ci":1,"exp":"Ex: Statement 1 is correct- The Deccan Plateau , located in the southern part of the Indian Peninsula , gradually rises from north to south, forming an inclined plane.    Statement 2 is incorrect- The Malwa Plateau is not part of the Vindhyan ranges . It is a separate plateau located in the western part of central India, spanning across the states of Madhya Pradesh and Rajasthan . The Vindhyan ranges , on the other hand, lie to the south of the Malwa Plateau . Statement 3 is correct- TheWestern Satpura Range acts as a barrier and separates the Narmada and Tapi rivers. It runs roughly parallel to the Vindhyan ranges. Statement 4 is correct- The Chota Nagpur Plateau , located in the northeastern part of the Indian Peninsula, is indeed composed of Archaean granite and gneiss rocks."},{"id":15,"txt":"In the context of Indian geography, Galwan River is a tributary of-","ref":"","opts":["Nubra River","Shyok river","Zanskar river","Sutlej river"],"ci":1,"exp":"Ex: The Galwan River is more accurately described as a mountain stream or nullah that originates in the Aksai Chin region and flows westward through a narrow valley before joining the Shyok River on the Indian side of the Line of Actual Control (LAC) . Just before the confluence, the Galwan River takes a distinctive sharp bend , creating a Y- shaped junction — a feature that is locally referred to on the Indian side as the Y-nullah or Y-junction . On the Chinese side, this same confluence is broadly described as the Galwan-Shyok estuary ."},{"id":16,"txt":"Which of the following is the correct sequence of occurrence of the following peaks of the Himalayas as one proceeds from east to west?\n1. Kamet\n2. Dhaula Giri\n3. Makalu\n4. Namcha Barwa\nSelect the correct answer using the code given below:","ref":"","opts":["IV-III-II-I","III-IV-II-I","III-IV-I-II","I-II-III-IV"],"ci":0,"exp":"Ex: Option I: Kamet is a mountain located in the Garhwal region in the Chamoli District of Uttarakhand. Option II: Dhaulagiri is the seventh-highest mountain in the world. It is located in Nepal. Option III: Mt. Makalu is located in the Mahalangur range of the Nepal Himalayas, at the border between Nepal and Tibet. Option IV: The Arunachal Himalayas extend from the east of the Bhutan Himalayas up to the Diphu pass in the east. The general direction of the mountain range is from southwest to northeast. Some of the important mountain peaks of the region are Kangtu and Namcha Barwa. So, the correct sequence of occurrence of the above-mentioned peaks of the Himalayas as one proceeds from east to west is Namcha Barwa-Makalu-Dhaulagiri-Kamet i.e. IV-III-II-I."},{"id":17,"txt":"Consider the following hills/hill ranges of India:\n1. Satmala Hills\n2. Kaimur Hills\n3. Ajanta Range\n4. Vindhyan Range   \nHow many of the above hills/hill ranges are located to the south of the Satpura mountain range?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Option I is correct. Satmala Hills are located to the south of the Satpura mountain range . The Satmala Hills are located in the Nashik District of Maharashtra. They are a part of the Sahyadri range. Option II is incorrect. Kaimur Hills are located to the north of the Satpura mountain range. The Kaimur Hills are part of the Vindhya range, located at its eastern edge. Option III is correct. Ajanta Ranges are located to the south of the Satpura mountain range . The Ajanta range is a mountain range in the state of Maharashtra in Central India. The range forms the northern wall of the Deccan plateau. Option IV is incorrect. Vindhyan Ranges are located to the north of the Satpura mountain range. The Vindhya range stretches for a distance of nearly 1,050 km with an average elevation of 300m. The Vindhya and Satpura ranges form part of the central uplands of India. It also forms an important watershed and, along with the Satpura range, constitutes the northern boundary of the Deccan plateau."},{"id":18,"txt":"Consider the following statements regarding the physiographic divisions of the Northern Plains of India:\n1. Banger is the belt of newer alluvial soil, which is highly fertile and is replenished annually by river floods.\n2. Khadar is the belt of older alluvial soil, which is rich in calcareous deposits known as \"Kankar\".\n3. Bhabhar is a region at the foothills of the Himalayas, consisting of porous and coarse sediments where rivers disappear underground.\n4. Tarai is a swampy, marshy region with dense vegetation, where most rivers and streams reemerge.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","III and IV only","I, III and IV","I, II and IV"],"ci":1,"exp":"Ex: The Northern Plains of India are formed by alluvial deposits brought by the Indus, Ganga, and Brahmaputra rivers . These plains stretch approximately 3,200 km from east to west , with an average width of 150 – 300 km. The alluvial deposits in this region have a depth ranging between 1,000 – 2,000 meters. Based on their geographical features, the plains are divided into three major zones from north to south: Bhabhar, Tarai, and the alluvial plains . The alluvial plains are found south of Tarai region and are further classified into Khadar (newer alluvium) and Bangar (older alluvium) , each with distinct characteristics. Statement I is incorrect: Bangar refers to the older alluvial soil , found on slightly elevated terraces above the floodplain, found in the Northern Plains of India. 1. It is less fertile than Khadar because it does not receive fresh silt deposits annually. 2. It contains calcareous nodules (Kankar ), which make the soil harder and less fertile compared to Khadar. 3. However, it is still used for agriculture, though it requires irrigation and soil management. Statement II is incorrect: Khada r refers to the newer alluvial soil that is deposited annually by rivers in the Northern Plains of India. 1. It is found in the floodplains of major rivers like the Ganga, Yamuna, and Brahmaputra. 2. These deposits are highly fertile because they are replenished annually by river floods, bringing fresh silt and nutrients. 3. Due to its high fertility, it is highly productive and ideal for growing crops like wheat, rice, and sugarcane. Statement III is correct: Bhabhar is a narrow belt (8-10 km wide) found along the Shiwalik foothills. 1. As rivers descend from the Himalayas, they deposit heavy materials like rocks and boulders in this zone. 2. Due to the high porosity of the coarse sediments , streams and rivers often disappear underground in this region. 3. This area is dry and not suitable for agriculture , but it supports deep-rooted vegetation. 4. South of Bhabhar lies the Tarai belt, where the lost streams and rivers reemerge. Statement IV is correct: 1. Tarai is a marshy and swampy region located south of Bhabhar , with an approximate width of 10-20 km. 2. This is where rivers and streams reemerge after disappearing in Bhabhar. 3. Due to the high-water table, this region remains waterlogged, making it highly suitable for crops like rice, jute, and sugarcane. 4. Tarai also has a luxurious growth of natural vegetation and supports diverse wildlife, hosting many national parks and wildlife sanctuaries, such as Dudhwa National Park in Uttar Pradesh."},{"id":19,"txt":"With reference to the physiography of India, consider the following statements regarding the Western Ghats:\n1. The Western Ghats meet with the Eastern Ghats at the Nilgiri hills.\n2. The Javadi and Nallamala hills are important ranges of the Western Ghats.\n3. Doddabetta is the highest peak of the Peninsular Plateau, located on the Nilgiri hills of the Western Ghats.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","I and III","II and III"],"ci":0,"exp":"Ex: . Deccan Plateau, the part of India’s Pe ninsular plateau, is bordered by the Western Ghats in the west, Eastern Ghats in the east and the Satpura, Maikal range and Mahadeo hills in the north. Western Ghats are locally known by different    names such as Sahyadri in Maharashtra, Nilgiri hills in Karnataka and Tamil Nadu and Anaimalai hills and Cardamom hills in Kerala. Western Ghats have an average elevation of about 1,500 m with the height increasing from north to south. Statement I is correct . The Nilgiri hills act as a meeting point of the Western Ghats and the Eastern Ghats. The continuity of the Western Ghats breaks here, and the fragmented Eastern Ghats also converge in this region. Statement II is incorrect . The Javadi hills and the Nallamala hills are not part of the Western Ghats. They are important hill ranges of the Eastern Ghats . The Western Ghats include ranges such as the Sahyadris, Nilgiri hills, Anaimalai hills and Cardamom hills . Statement III is incorrect . Anaimudi’ (2,695 m), the highest peak of the Peninsular plateau, is located on the Anaimalai hills of the Western Ghats followed by Dodabetta (2,637 m) on the Nilgiri hills."},{"id":20,"txt":"Among the following cities, which one lies on a longitude closest to that of Delhi?","ref":"","opts":["Bengaluru","Hyderabad","Nagpur","Pune"],"ci":0,"exp":"Ex: Longitude is measured by imaginary lines that run around the Earth vertically (up and down) and meet at the North and South Poles. These lines are known as meridians. They are used to define the East-West position of a location on the planet. Longitude of Delhi- 77.1025° E Longitude of Bengaluru- 77.5946°E Longitude of Hyderabad- 78.4867° E Longitude of Nagpur- 79.0882° E Longitude of Pune- 73.8567° E"},{"id":21,"txt":"With reference to the Eastern Coastal plains of India, which of the following statements is/are correct?\n1. It is an example of an emergent coast.\n2. The eastern coastal plains are broader compared to the western coastal plains.\n3. Unlike the western coastal plains of India, Estuary formation is a prominent feature of the rivers flowing across this coastal plain.\nSelect the correct answer using the code given below:","ref":"","opts":["I and II only","II only","II and III only","I, II and III"],"ci":0,"exp":"Ex: . India’s long coastline has not evolved uniformly. Differences in river behaviour, sediment deposition and changes in sea level have produced distinct coastal landforms on the eastern and western margins of the Peninsular Plateau .    Statements I and II are correct . The Eastern Coast of India is described as an emergent coast meaning that the coast has risen with respect to mean sea level over time due to the continuous deposition of sediments by major east- flowing rivers. The formation of extensive deltas supports the emergent nature of the eastern coast. As compared to the western coastal plain, the eastern coastal plain is broader. Statement III is incorrect . Rivers flowing across the eastern coastal plains generally form well-developed deltas . Estuary formation is not a prominent feature of the rivers flowing across this coastal plain. Estuaries are a characteristic feature of rivers flowing through submerged coasts on the western coastal plain of India."},{"id":22,"txt":"With reference to the Andaman and Nicobar Islands, consider the following statements:\n1. The Andaman Islands and Nicobar Islands are separated by a water body known as the Ten Degree Channel.\n2. Barren island, the only active volcano in India, is situated around 140 kilometers northwest of the Nicobar Islands.\n3. The Andaman and Nicobar islands feature tropical rainforests with evergreen and semi-evergreen trees.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: . The Andaman and Nicobar Islands constitute a strategically important Indian archipelago in the Bay of Bengal. These islands are notable for their unique geological origin, climatic conditions, and rich biodiversity. Statement I is correct . The Andaman and Nicobar Islands together form a long north – south chain in the Bay of Bengal. The Andaman Islands are located in the northern part , while the Nicobar Islands lie to the south . These two groups are separated by a narrow stretch of water known as the Ten Degree Channel , named after the 10° North latitude that passes through it. Statement II is incorrect . Barren island, the only active volcano in India, is situated around 140 kilometers northeast of Port Blair, Andaman Islands. Statement III is correct . The Andaman and Nicobar Islands lie close to the equator and are influenced by high temperatures and intense heating. As a result, they receive convectional rainfall, and the natural vegetation characterised by dense evergreen forests and rich biodiversity. The Andaman and Nicobar islands, positioned in the Bay of Bengal, feature tropical rainforests with evergreen and semi-evergreen trees, including Teak and Mahogany. Knowledge Base:"},{"id":23,"txt":"With reference to rivers of India, consider the following pairs: River Originates in\n1. Chambal Aravali Hills\n2. Son Chotanagpur Plateau\n3. Saryu Milam glacier in the Nepal\n4. Mahananda Darjeeling Hills\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Pair I is incorrect: Chambal The Chambal River is a major right-bank tributary of the Yamuna . It rises near Mhow part of Malwa plateau( Madhya Pradesh) and not from the Aravalli Range. Chambal river is also famous for its badland topography called the Chambal ravines . The Aravalli Range is one of the oldest folded mountains in India and is the source region of rivers like: Luni, Sabarmati and Banas. Pair II is incorrect: Son The Son River is a major right-bank tributary of the Ganga. It originates from the Amarkantak Plateau ( not from the Chotanagpur Plateau ) which is part of the Maikal Range of Madhya Pradesh. The Amarkantak region is a major watershed, giving rise to rivers like: Narmada, Son and Johila. The Chotanagpur Plateau, on the other hand, is the source of rivers such as: Damodar, Subarnarekha and Brahmani. Pair III is correct: Saryu The Saryu River, also known as the Sarda , rises in the Milam Glacier in the Nepal Himalayas. In its upper course, the river is known as the Goriganga. Along the Indo – Nepal border, it is called the Kali or Chauk River . After flowing through this stretch, it joins the Ghaghara River , which ultimately becomes a major tributary of the Ganga. Pair IV is correct: Mahananda The Mahananda River rises from the Darjeeling Hills in West Bengal . It is the last left-bank tributary of the Ganga before Ganga enters Bangladesh."},{"id":24,"txt":"Consider the following statements:\n1. The Great Northern Plains are formed by basins of three distinct river systems-the Indus, the Ganga and the Brahmaputra.\n2. They are one of the most densely populated areas on Earth.\n3. Between the Yamuna at Delhi and the Bay of Bengal, nearly 1600 km away, there is a drop of only 200 metres in elevation.\nWhich of the statements given above are correct?","ref":"","opts":["1, 2 and 3","2 and 3 only","1 and 2 only","1 and 3 only"],"ci":0,"exp":"Ex: Statement 1 is correct: The Great Northern Plains are indeed formed by three distinct river systems — the Indus , Ganga , and Brahmaputra rivers. These plains span across northern India and extend into parts of Pakistan and Bangladesh. It is divided into three distinct parts: Indus Plains , Ganga Plains , and Brahmaputra Plains . The plains owe their formation to the gradational activities of these rivers and their tributaries, which have deposited fertile alluvial soil over time. Statement 2 is correct: The Great Northern Plains are among the most densely populated regions in the world. The reasons for this include the fertile soil , availability of water from the river systems, and the favorable climate for agriculture, making the region ideal for human settlement and cultivation. Statement 3 is correct: The Great Northern Plains of India have a very gentle slope from the Yamuna at Delhi to the Bay of Bengal, with a drop of only about 200 meters over a distance of approximately 1600 km . This gradual slope ensures the smooth flow of rivers, further aiding agricultural activities."},{"id":25,"txt":"Consider the following statements:\n1. The Arabian Sea exhibits higher salinity levels than the Bay of Bengal.\n2. The Arabian Sea receives comparatively less freshwater inflow from rivers than the Bay of Bengal.\n3. The rate of evaporation is higher over the Arabian Sea than over the Bay of Bengal.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I.","Both Statement II and Statement III are correct but only one of them explains Statement I.","Only one of the Statements II and III is correct and that explains Statement I.","Neither Statement II nor Statement III is correct."],"ci":0,"exp":"Ex: Statement I is correct: On an annual mean basis, the Arabian Sea has higher surface salinity than the Bay of Bengal, especially in its surface waters due to high evaporation and low influx of fresh water. Statement II is correct: The Bay of Bengal receives massive freshwater discharge from some of the world’s largest river systems, including the Ganga – Brahmaputra – Meghna system, along with rivers like Mahanadi, Godavari, Krishna, and Irrawaddy. This large riverine input significantly dilutes seawater salinity. In contrast, the Arabian Sea receives relatively limited freshwater inflow from rivers such as the Indus, Narmada, and Tapi, leading to less dilution and higher salinity.    Statement III is correct: The Arabian Sea is influenced by dry continental winds, lower cloud cover, and relatively clearer skies. These conditions enhance evaporation , which removes water but leaves dissolved salts behind, thereby increasing salinity . The Bay of Bengal , on the other hand, experiences higher rainfall, persistent cloud cover, and frequent cyclonic activity , all of which reduce net evaporation and promote lower salinity . Conclusion: Both Statement II (lower freshwater inflow) and Statement III (higher evaporation) are correct and independently explain why the Arabian Sea has higher salinity than the Bay of Bengal. Therefore, the correct answer is: (a) Both Statement II and Statement III are correct and both of them explain Statement I."},{"id":26,"txt":"With reference to Shola forests, consider the following statements:\n1. They are found in the higher montane regions of Karnataka, Kerala and Tamil Nadu.\n2. The vegetation here is predominantly evergreen in nature.\n3. These forests are usually found in patches separated by grasslands.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: . Shola forests are a unique type of tropical montane vegetation found in the higher elevations of the Western Ghats. They occur as patches of evergreen forest interspersed with rolling grasslands and are adapted to cool, moist climatic conditions. These forests play an important role in biodiversity conservation and in regulating water resources in peninsular India. Statement I is correct . Shola forests occur in the higher montane regions at elevation of 1500m above mean sea level in the southern Peninsular India , particularly in the Nilgiri, Anaimalai and Palani hills . These hill systems extend across Tamil Nadu, Kerala and Karnataka . Statement II is correct . The vegetation of Shola forests is evergreen in nature . Trees in these forests retain their leaves throughout the year due to the cool temperatures and high moisture availability at higher altitudes. Species such as magnolia, laurel ,cinchona, wattle and other broad-leaved evergreen trees are characteristic of Shola vegetation. Statement III is correct: Shola forests are a tropical montane forest of southern India which is usually found in patches separated by grasslands. The unique Shola forests are interspersed with grassy meadows, harbour endemic species like the Nilgiri tree fern, contributing to the region's ecological distinctiveness."},{"id":27,"txt":"With reference to the Satluj River, consider the following statements:\n1. Based on the origin, it is an antecedent river.\n2. It enters India through the Lipulekh pass in the Himalayan ranges.\n3. It feeds the canal system of the Bhakra Nangal Project.\nWhich of the above statements are correct?","ref":"","opts":["I, II and III","II and III only","I and III only","I and II only"],"ci":2,"exp":"Ex: . The Satluj River is one of the important rivers of the Indus system, originating from Raksas Tal (near Mansarovar lake)in Tibet and flowing through Himachal Pradesh and Punjab in India before entering Pakistan. Statement I is correct . Antecedent or Inconsequent drainage develops when the stream exists prior to the topography and the original course of flow is maintained despite the change in the underlying rock structure. A prominent example is the Himalayan River Indus, Ganga and Brahmaputra, which have their presence before the uplift of the Himalayas and maintain their courses through gorges in the mountain. The Satluj is also an antecedent river , meaning it existed before the Himalayan uplift and it continues to follow its previous course ever after the formation of the Himalayas by cutting deep gorges through the rising terrain. Statement II is incorrect . The Satluj enters India from Tibet through a gorge at Rupar. Then it flows through Shipki La pass in Himachal Pradesh and enters Punjab before finally entering Pakistan to meet the Indus River. Lipulekh is a mountain pass located in Uttarakhand, India. Statement III is correct . The Satluj river feeds the canal system of Bhakra Nangal project , one of India’s largest multipurpose river valley projects, providing water for irrigation and hydroelectric power generation."},{"id":28,"txt":"Which of the following Indian States shares its borders with the maximum number of other Indian States?","ref":"","opts":["Assam","Rajasthan","Madhya Pradesh","Uttar Pradesh"],"ci":3,"exp":"Ex: Option a is incorrect. Assam shares its border with seven other States namely Arunachal Pradesh, Nagaland, Manipur, Mizoram, Tripura, Meghalaya, and West Bengal. Option b is incorrect. Rajasthan s hares its border with five States namely Punjab, Haryana, Uttar Pradesh, Madhya Pradesh and Gujarat. Option c is incorrect. Madhya Pradesh shares its border with five States namely Uttar Pradesh, Chhattisgarh, Maharashtra, Gujarat and Rajasthan. Option d is correct. Uttar Pradesh shares its border with eight States namely Himachal Pradesh, Uttarakhand, Rajasthan, Madhya Pradesh, Bihar, Jharkhand, Chhattisgarh, and Haryana; and one Union Territory namely Delhi."},{"id":29,"txt":"With reference to the natural vegetation in India, consider the following trees:\n1. Tendu\n2. Amla\n3. Khejri\n4. Teak   \nHow many of the above are predominantly deciduous trees?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: . Indian natural vegetation includes a wide variety of tree species adapted to different climatic and ecological conditions. One of the key ways to classify trees is based on their leaf-shedding behaviour , that is, whether they are deciduous or evergreen. Option I is correct . Tendu is commonly found in dry and moist deciduous forests of central and eastern India. It sheds its leaves during the dry season to reduce water loss.Its leaves are used by central indian tribes for Beedi making . Option II is correct . Amla sheds its leaves seasonally, particularly during dry or cooler periods. It is widely distributed across deciduous forest regions. Option III is incorrect . Khejri is a drought-resistant tree native to arid and semi-arid regions, especially the Thar Desert. It is part of Tropical thorn forests and retains its foliage even under harsh climatic conditions. Option IV is correct . Teak is both a dry and moist deciduous tree. Dry type is found mainly in central India ,while wet type in North-east India and foothills of Himalayas. They drop their leaves when sufficient moisture is not available during the spring and early summer."},{"id":30,"txt":"Which one of the following is the best example of repeated falls in sea level, giving rise to present-day extensive marshland?","ref":"","opts":["Bhitarkanika Mangroves","Marakkanam Salt Pans","Naupada Swamp","Rann of Kutch"],"ci":3,"exp":"Ex: Option a is incorrect: Bhitarkanika mangroves, located in Odisha, India, is a significant mangrove ecosystem. While it experiences tidal fluctuations, it is not primarily characterized by repeated falls in sea level. Rather, it is influenced by the riverine system and is considered an important breeding ground for various species, including the endangered saltwater crocodile. Option b is incorrect: Marakkanam salt pans, situated in Tamil Nadu, India, are salt marshes used for salt production. They are formed in low-lying coastal areas where seawater is allowed to evaporate, leaving behind salt crystals. However, these salt pans do not result from repeated falls in sea level but are created artificially by utilizing the existing seawater. Option c is incorrect: Naupada swamp, also known as Naupada Wetland, is located in Odisha, India. It is a freshwater swamp and is not primarily influenced by repeated falls in sea level. Instead, it is formed by the inflow of freshwater from rivers and receives seasonal rainwater. Option d is correct: The Rann of Kutch , situated in Gujarat, India, is the best example among the options provided. It is a v ast seasonal salt marsh that experiences significant fluctuations in sea level due to its geological history . The Rann of Kutch was once an arm of the Arabian Sea, and as the sea level fell over time, it transformed into a marshy land. The region is known for its unique ecosystem, supporting a diverse range of flora and fauna, including migratory    birds and endangered species. The Rann of Kutch is also famous for the annual Rann Utsav, a cultural festival that celebrates the vibrant traditions of the region."},{"id":31,"txt":"With reference to the tributaries of the Indus River, consider the following:\n1. Shyok\n2. Zaskar\n3. Suru\nHow many of the above are right-bank tributaries of the Indus river?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":0,"exp":"Ex: . It is one of the largest river basins of the world, covering an area of 11,65,000 sq. km (in India it is 321, 289 sq. km and a total length of 2,880 km (in India 1,114 km). The Indus, also known as the Sindhu, is the westernmost of the Himalayan rivers in India. It originates from a glacier near Bokhar Chu (31°15' N latitude and 81°40' E longitude) in the Tibetan region at an altitude of 4,164 m in the Kailash Moun tain range. In Tibet, it is known as ‘Singi Khamban; or Lion’s mouth. Option I is correct . Shyok river originates from the Rimo Glacier in the Karakoram range and joins the Indus near Skardu as its right bank tributary. Option II is incorrect . Originating in the Drung Drang glacier in Zaskar range, Zaskar rivers is a left bank tributary of the Indus. Option III is incorrect . Suru river, originates near Penzila Pass in Ladakh is a left-bank tributary of Indus River. Kargil town is situated on the banks of Suru river."},{"id":32,"txt":"With reference to the Meghalaya Plateau, which one of the following statements is incorrect ?","ref":"","opts":["It is separated from the Chotanagpur Plateau by a major fault known as the Malda Fault.","It is rich in mineral resources such as coal, iron ore and uranium.","It is particularly renowned for its extensive limestone formations.","It is categorized under seismic zone IV, as per the updated seismic zonation map of India."],"ci":3,"exp":"Ex: . The Meghalaya Plateau (along with Karbi Anglong) forms part of the Northeastern Plateau and represents an eastward extension of the Main Peninsular Plateau . Its present location and structure are closely linked to tectonic movements associated with the formation of the Himalayas. Statement a is correct . The Meghalaya Plateau is separated from the main Peninsular block, including the Chotanagpur Plateau, by a major tectonic fault zone lying between the Rajmahal Hills and the Meghalaya Plateau .    This fault was formed during north-eastward movement of the Indian plate during the Himalayan mountain formation. Over time, the depression created by this fault was filled by river-borne sediments, leaving the Meghalaya Plateau detached from the Peninsular Plateau. Statement b is correct . Similar to the Chotanagpur plateau, the Meghalaya plateau is also rich in mineral resources like coal, iron ore, sillimanite, limestone and uranium. Statement c is correct . The Meghalaya plateau is primarily composed of ancient sedimentary rocks, including sandstone, shale, and limestone. It is particularly renowned for its extensive limestone formations, which have given rise to impressive features such as caves, sinkholes, and underground rivers. The region is home to some of the longest caves in the world, including the Mawsmai Caves in Cherrapunji, known for its stunning Karst topographic features like stalactites and stalagmites. Statement d is incorrect . As per the updated seismic zonation map of India, the meghalyan plateau is categorized under seismic zone VI. It was earlier classified under seismic zone V."},{"id":33,"txt":"The river originates from the Panhunri glacier in North Sikkim, near the Indo – China border. It flows southward through Sikkim and northern West Bengal before entering Bangladesh, where it joins the Brahmaputra River. The river is associated with major hydropower projects and is central to India – Bangladesh water-sharing negotiations.\nWhich of the following rivers is described in the above passage?","ref":"","opts":["Teesta","Subansiri","Manas","Sankosh"],"ci":0,"exp":"Ex: Option a is correct: The river described in the passage is the Teesta River. It originates from Panhunri glacier (also spelled Cholamu or Chho Lhamo ) in North Sikkim, near the Indo-China border. The river flows southward through Sikkim and then through the northern districts of West Bengal (notably Darjeeling and Jalpaiguri regions). It then enters Bangladesh and joins the Brahmaputra River (from where the river is known as the Jamuna ). It is indeed central to major hydropower projects (e.g., in Sikkim and West Bengal) and is a key issue in ongoing India – Bangladesh water-sharing negotiations (Teesta water dispute). Option b is incorrect: Subansiri It originates in Tibet (near Mount Porom) , flows through Arunachal Pradesh and Assam , and joins the Brahmaputra in Assam , not in Bangladesh. Option c is incorrect: Manas It rises in the Bhutan Himalayas and flows through Assam. It joins the Brahmaputra in Assam and is associated with Manas National Park. It neither flows through Sikkim nor enters Bangladesh. Option d is incorrect: Sankosh It originates in the Bhutan Himalayas, flows through Assam, and joins the Brahmaputra in Assam. It does not pass through Sikkim or West Bengal and is not linked to Indo – Bangladesh water negotiations."},{"id":34,"txt":"Four persons are travelling to different States of India. To whom will you advise to protect oneself from blizzards?","ref":"","opts":["The person travelling to Arunachal Pradesh","The person travelling to Assam","The person travelling to Tripura","The person travelling to Odisha"],"ci":0,"exp":"Ex: Arunachal Pradesh , with its highest point reaching 7,060 meters , is more likely to experience blizzards. Blizzards are cold, violent, powdery polar winds that are prevalent in high and mid- latitudes. Arunachal Pradesh’s elevation and geographical location make it susceptible to blizzard conditions, making it important for individuals traveling to this state to protect themselves from blizzards."},{"id":35,"txt":"With reference to the drainage system in India, consider the following statements: Unlike the Himalayan rivers, the Peninsular rivers of India are primarily characterized by:\n1. absence of extensive meanders.\n2. perennial flow of water.\n3. smaller drainage basins and shorter river lengths.\nWhich of the above given statements are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: India’s river systems are broadly classified into Himalayan rivers and Peninsular rivers based on their origin, geological setting, and flow characteristics. Himalayan rivers originate from snow-fed glaciers, are generally perennial, long, and highly meandering due to their flow over extensive alluvial plains. In contrast, Peninsular rivers originate on the ancient and stable Peninsular plateau, are mostly rainfed, shorter in length, have fixed courses, and exhibit limited meandering due to their flow over hard crystalline rocks. Option I is correct: Peninsular rivers generally flow over hard, resistant crystalline rocks of the Peninsular plateau. As a result, lateral erosion is limited and well-developed meanders are largely absent, unlike Himalayan rivers that flow over vast alluvial plains and show extensive meandering in their middle and lower courses. Option II is incorrect: Most Peninsular rivers depend mainly on monsoon rainfall for their water supply. During the dry season, their discharge reduces sharply and many rivers shrink considerably. Hence, they are rainfed and seasonal, i.e., non-perennial.    In contrast, Himalayan rivers receive water from both rainfall and melting snow and glaciers, which makes them perennial throughout the year . Option III is correct: Compared to Himalayan rivers like the Ganga and Brahmaputra, Peninsular rivers generally have shorter lengths and smaller drainage basins . This is because the plateau region is narrower and does not support the development of very long river courses and extensive drainage systems."},{"id":36,"txt":"With reference to India, which of the following is a correct reason for the onset of southwest monsoon?","ref":"","opts":["Differential heating of the Indian landmass and the Indian Ocean.","The shift of the Inter Tropical Convergence Zone to the south of the equator.","Inflow of western cyclonic disturbances in India.","Onset of westerly jet streams over the north Indian plains."],"ci":0,"exp":"Ex: Option a is correct: Towards the end of the nineteenth century, it was believed that the differential heating of land and sea during the summer months is the mechanism which sets the stage for the monsoon winds to drift towards the Indian subcontinent. During April and May when the sun shines vertically over the Tropic of Cancer, the large Indian landmass in the north of the Indian ocean gets intensely heated. This causes the formation of an intense low pressure in the northwestern part of the subcontinent. Since the pressure in the Indian Ocean in the south of the landmass is high as water gets heated slowly, the low pressure cell attracts the southeast trades across the Equator. These conditions help in the northward shift in the position of the ITCZ. The southwest monsoon may thus be seen as a continuation of the southeast trades deflected towards the Indian subcontinent after crossing the Equator. These winds cross the Equator between 40°E and 60°E longitudes. Option b is incorrect: The lower pressure conditions over the Indian landmass causes the northward shift in the position of the ITCZ not southward. The onset of the Indian monsoon is related to the northward shift in the position of the ITCZ. Option c is incorrect: Inflow of western cyclonic disturbances in India is related to the Winter monsoon in India and not the onset of the southwest monsoon. The western cyclonic disturbances which enter the Indian subcontinent from the west and the northwest during the winter months, originate over the Mediterranean Sea and are brought into India by the westerly jet stream. An increase in the prevailing night temperature generally indicates an advance in the arrival of these cyclone disturbances. Option d is incorrect: The shift in the position of the ITCZ towards north is also related to the phenomenon of the withdrawal of the westerly jet stream from its position over the north Indian plain, south of the Himalayas. The easterly jet stream sets in along 15°N latitude only after the western jet stream has withdrawn itself from the region. This easterly jet stream (and not the westerly jet stream) is held responsible for the burst of the monsoon in India."},{"id":37,"txt":"Which of the following is the only Indian river that crosses the Tropic of Cancer twice during its course?","ref":"","opts":["Narmada","Tapi","Mahi","Luni"],"ci":2,"exp":"Ex: The Mahi River is the only river in India that crosses the Tropic of Cancer twice during its course. It originates in the Vindhya Range near a village called Minda ( Dhar district, Madhya Pradesh ), flows initially northward towards Rajasthan, crossing the Tropic of Cancer for the first time. Due to the structural control of the terrain, the river then takes a south-westward turn, crossing the Tropic of Cancer again before entering Gujarat and finally draining into the Gulf of Khambhat (Arabian Sea)."},{"id":38,"txt":"The Bhavani and Amaravati rivers are important tributaries of which one of the following major river systems in Peninsular India?","ref":"","opts":["Mahanadi","Krishna","Pennar","Cauvery"],"ci":3,"exp":"Ex: The Cauvery (Kaveri) River system is a major perennial river system of Peninsular India. The river originates in the Brahmagiri Hills (about 1,341 m elevation), Western Ghats, in the Kodagu district of Karnataka and flows for about 800 km, draining an area of nearly 81,155 sq. km. Its important tributaries are the Kabini, Hemavati , Bhavan i and Amravati. The Bhavani River originates in the Nilgiri Hills of the Western Ghats and flows through parts of Tamil Nadu, joining the Cauvery on the right bank about 45 kms below Mettur Reservoir. The Amaravati River rises near the Majampatti valley of the Western Ghats and flows eastward across Tamil Nadu, joining the Cauvery at Thirumukkudalur."},{"id":39,"txt":"With reference to La Niña, consider the following statements:\n1. La Niña is characterized by abnormal warming of sea surface temperatures in the central and eastern equatorial Pacific Ocean.\n2. During La Niña years, India generally experiences above-normal southwest monsoon rainfall.\n3. La Niña conditions generally lead to cooler-than-normal winters in northern India.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II","II only","II and III","I and III"],"ci":2,"exp":"Ex:    Statement I is incorrect: La Niña is the cold phase of the ENSO (El Niño Southern Oscillation) cycle. It is characterized by abnormal cooling of sea surface temperatures in the central and eastern equatorial Pacific Ocean, particularly near the coast of South America. This is caused by strengthened easterly trade winds , which increase upwelling of cold, nutrient-rich waters along the South American coast. In contrast, El Niño represents abnormal warming of sea surface temperatures in the central and eastern equatorial Pacific Ocean. Statement II is correct: La Niña enhances the Walker circulation , causing stronger convection over the western Pacific and the Indian Ocean region. This tends to increase moisture transport to India , resulting in a stronger southwest monsoon (June – September) and often above-average rainfall. Example: Historically, La Niña years like 2020, 2021, and 2022 were associated with good monsoon rainfall in India . Statement III is correct : La Niña modifies global atmospheric circulation, which generally leads to enhanced cold waves or cooler winter temperatures in northern India , especially in the Indo-Gangetic plains. Knowledge Base: El Niño: El Niño is the warm phase of the ENSO (El Niño – Southern Oscillation) phenomenon, characterized by abnormal warming of sea surface temperatures in the central and eastern equatorial Pacific Ocean . Key Features Weakening of easterly trade winds Weak Walker Circulation Reduced upwelling of cold water near the South American coast Accumulation of warm water in the eastern Pacific Impact on India Generally leads to below-normal southwest monsoon rainfall Increases the risk of droughts and heatwaves Adversely affects agriculture and water availability Frequency Occurs every 2 to 7 years Usually lasts 9 to 12 months"},{"id":40,"txt":"Consider the following statements:\n1. In India, the Himalayas are spread over five states only.\n2. Western Ghats are spread over five states only.\n3. Pulicat Lake is spread over two States only.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","3 only","2 and 3 only","1 and 3 only"],"ci":1,"exp":"Ex: Statement 1 is incorrect. In India, the Himalayas are spread over seven states i.e. Jammu & Kashmir, Himachal Pradesh, Uttarakhand, Sikkim, Assam, West Bengal and Arunachal Pradesh.    Statement 2 is incorrect. Western Ghats are spread over six states i.e. Gujarat, Maharashtra, Goa, Karnataka, Tamil Nadu and Kerala. Statement 3 is correct. Pulicat Lake is located at the border of Andhra Pradesh and Tamil Nadu."},{"id":41,"txt":"Consider the following statements:\n1. During the winter season, Northwestern regions of India record much lower temperatures than the Peninsular region of India.\n2. Unlike the Peninsular region of India, the Northwestern regions of India are far away from the moderating influence of the sea.\n3. Unlike the Peninsular region of India, the cold winds from the regions of the Caspian Sea and Turkmenistan affect Northwestern regions of India during winters.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I","Both Statement II and Statement III are correct but only one of them explains Statement I","Only one of the Statements II and III is correct and that explains Statement I","Neither Statement II nor Statement III is correct"],"ci":0,"exp":"Ex: Statement I is correct: During the cold weather season (mid-November to February), northwestern India experiences significantly lower temperatures than southern India . December and January are the coldest months in the northern plains, with mean daily temperatures often remaining below about 21°C and night temperatures occasionally falling to or below the freezing point in parts of Punjab and Rajasthan. In contrast, southern India, particularly the Peninsular and coastal regions, does not experience a well-defined cold weather season and experiences relatively mild winters . Statement II is correct: Northwestern states of India such as Punjab, Haryana, and Rajasthan are far away from the moderating influence of the sea, therefore experience a continental climate . This leads to a sharp fall in temperature during winter . In contrast, the Peninsular region of India remains under strong maritime influence, resulting in minimal seasonal variation in temperature. This is a primary reason for the severe winter conditions in northwestern India and directly explains Statement I. Statement III is correct : During late winter (around February), cold continental winds associated with western disturbances, originating from regions around the Caspian Sea and Turkmenistan enter northwestern India . These winds intensify cold wave conditions , often accompanied by frost and fog. They significantly contribute to lowering winter temperatures in northwestern India . On the other hand, these cold waves do not affect the Peninsular region of India due to the large distance. Therefore, this statement also explains Statement I (why northwestern India records much lower temperatures than the southern parts of the country during winters). Hence, the correct answer is: a) Both Statement II and Statement III are correct and both of them explain Statement I"},{"id":42,"txt":"With reference to local storms of hot weather season in India, consider the following information: Local Storms Area of Occurrence Description\n1. Blossom Shower Bengal and Assam Pre-monsoon showers which help in the early ripening of mangoes.\n2. Nor Westers Coastal Kerala and Evening thunderstorms which are useful Karnataka for tea and rice cultivation.\n3. Loo Punjab to Bihar in the Hot, dry and oppressing winds during Northern Plains summers.\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":0,"exp":"Ex: Information in row I is incorrect: Blossom Shower Blossom Showers are pre-monsoon local showers of the hot weather season. They occur mainly in Kerala and nearby areas of the Western Ghats, and not Bengal and Assam. These showers help coffee flowers to blossom , which is crucial for coffee cultivation ( not particularly related to mango ripening .) Information in row II is incorrect: Nor Westers Nor Westers (Kalbaisakhi) are violent evening thunderstorms occurring in Bengal and Assam during the pre- monsoon season (and not in Coastal Kerala and Karnataka). In Assam, they are locally called “ Bardoisila.” They are useful for tea, jute, and rice cultivation. Information in row III is correct: Loo The Loo consists of hot, dry and oppressing winds blowing over the Northern Plains of India, extending from Punjab to Bihar, with maximum intensity between Delhi and Patna. These winds prevail during peak summer afternoons and often cause severe heat stress and heat strokes."},{"id":43,"txt":"Consider the following statements about the Godavari River system:\n1. It is the largest Peninsular river system.\n2. Andhra Pradesh accounts for nearly 50% of the catchment area of the Godavari basin.\n3. The Polavaram Multipurpose Project is located on the Godavari River.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: The Godavari is the largest river system of Peninsular India , often referred to as the “ Dakshin Ganga.” It originates from Trimbakeshwar near Nasik district of Maharashtra in the Western Ghats and flows eastwards to drain into the Bay of Bengal. The river has a total length of about 1,465 km.    Statement I is correct: The Godavari is the largest Peninsular river system. It is also called the Dakshin Ganga. It rises in the Nasik district of Maharashtra and discharges its water into the Bay of Bengal. Statement II is incorrect: The tributaries run through the states of Maharashtra, Madhya Pradesh, Chhattisgarh, Odisha and Andhra Pradesh. It is 1,465 km long with a catchment area spreading over 3.13 lakh sq. km., 49 per cent of this, lies in Maharashtra, 20 per cent in Madhya Pradesh and Chhattisgarh, and the rest in Andhra Pradesh. Hence, Andhra Pradesh does not account for about 50% of the catchment area. Statement III is correct: The Polavaram Project is a multi-purpose irrigation project on the Godavari River near Polavaram village in Andhra Pradesh .It is designed for irrigation, hydroelectric power, and water supply, and is one of the largest ongoing river projects in India. Knowledge Base: Some important facts about the Godavari River : Its tributaries run through the states of Maharashtra, Telangana, Chhattisgarh, Madhya Pradesh, Odisha, and Andhra Pradesh . Major tributaries include Pranhita, Indravati, Manjira, Penganga, Wardha, and Wainganga . The river is navigable only in its deltaic stretch , mainly near Rajahmundry. After Rajahmundry, it splits into several distributaries forming a large and fertile delta . The lower reaches of the Godavari are prone to floods , especially near and downstream of Polavaram. Important projects on the river include Polavaram, Kaleshwaram, Jayakwadi and Dowleswaram Barrage."},{"id":44,"txt":"What would be the influence on the weather conditions when in mid-winter a feeble high pressure develops over the North-Western part of India?\n1. High and dry winds would blow outward from this high pressure area.\n2. The Northern plain would become cold.\n3. Scorching winds (locally called loo) would blow during the day - time.\n4. There would be torrential rains brought by thunderstorms.\nSelect the correct answer using the codes given below:","ref":"","opts":["1 and 2 only","2 and 3 only","3 and 4 only","All of these"],"ci":0,"exp":"Ex: Statement 1 is correct: When a high-pressure system develops, it is characterized by sinking air. As the air sinks, it tends to spread outwards from the center of high pressure. This leads to the development of high and dry winds that blow away from the high-pressure area. These winds are typically dry because the sinking air suppresses the formation of clouds and precipitation. Statement 2 is correct : In the case of the North-Western part of India, when a feeble high-pressure system develops in mid-winter, it would bring colder air masses into the region . The sinking air associated with the high pressure prevents warm air from rising, leading to cooler temperatures in the Northern plain. Statement 3 is incorrect : Scorching winds, commonly known as “loo,” are hot and dry winds that typically occur in the summer months, particularly in the North-Western region of India. They are associated with the intense heating of the land, which creates a low-pressure system and draws in hot winds from the surrounding areas.    Statement 4 is incorrect: High-pressure systems are generally associated with stable atmospheric conditions , where sinking air suppresses the formation of clouds and precipitation."},{"id":45,"txt":"With reference to the Indian Monsoon, consider the following statements:\n1. During the south-west monsoon period after having rains for a few days, certain regions experience a break in the monsoon for one or few weeks.\n2. In northern India break in the monsoon occurs if the rain-bearing storms are not very frequent along the monsoon trough.\n3. Over the west coast the break in the monsoon occurs when winds blow parallel to the coast.\nWhich of the above is correct in respect of the above statements?","ref":"","opts":["Both Statement II and Statement III are correct and both of them explain Statement I.","Both Statement II and Statement III are correct, but only one of them explains Statement I.","Only one of the Statement II and Statement III is correct and that explains Statement I.","Neither Statement II nor Statement III is correct."],"ci":0,"exp":"Ex: . Statements I, II and III are correct and statements II and III explain statement I: During the south-west monsoon period after having rains for a few days, if rain fails to occur for one or more weeks, it is known as break in the monsoon. These dry spells are quite common during the rainy season. These breaks in the different regions are due to different reasons: (i) In northern India rains are likely to fail if the rain-bearing storms are not very frequent along the monsoon trough or the ITCZ over this region. (ii) Over the west coast the dry spells are associated with days when winds blow parallel to the coast."},{"id":46,"txt":"With reference to the Indian monsoon, consider the following statements about the Southern Oscillation Index (SOI):\n1. It can be calculated by measuring the difference in pressure between Tahiti in French Polynesia in the East Pacific and port Darwin in northern Australia.\n2. A negative value of the SOI is generally associated with a weak Indian monsoon.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: . Statement I is correct . The Southern Oscillation Index can be calculated by measuring the difference in pressure between Tahiti (roughly 20°S and 140°W) in French Polynesia in the East Pacific and port Darwin (12°30'S and 131°E) in northern Australia. These two locations lie on opposite sides of the tropical Pacific and reflect the east – west pressure gradient. Changes in this pressure difference indicate shifts in large-scale atmospheric circulation, which are central to understanding El Nino and La Nina conditions.    Statement II is correct . Negative SOI values (meaning below-normal pressure over the central Pacific and above- normal over the western Pacific) generally indicate El Niño phenomena, whereas positive SOI values indicate La Niña episodes. Hence the negative value of SOI can be associated with the weaker monsoon in India due to the likely occurrence of El Nino."},{"id":47,"txt":"Consider the following information: Mountain Peak in India Mountain Range State\n1. Mahendragiri Western Ghats Karnataka\n2. Dhupgarh Vindhyan Range Maharashtra\n3. Anaimudi Eastern Ghats Andhra Pradesh\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":3,"exp":"Ex: Row I is incorrect: Mahendragiri - Eastern Ghats - Odisha: (not Western Ghats and Karnataka) 1. Mahendragiri is one of the prominent peaks of the Eastern Ghats , rising to an elevation of about 1,501 meters . 2. It is located in the Gajapati district of Odisha . 3. Mahendragiri holds religious significance as well, being associated with the Ramayana period and believed to be the place where Lord Parashurama practiced penance. Row II is incorrect: Dhupgarh – Satpura Range – Madhya Pradesh ( (not Vindhyan Range and Maharashtra) 1. Dhupgarh is actually the highest peak of the Satpura Range, not the Vindhya Range . 2. It stands at an elevation of 1,350 meters and is located near Pachmarhi hill station (often referred to as the \" Queen of Satpura\" ) in Narmadapuram District, Madhya Pradesh , 3. The Satpura Range lies south of the Vindhya Range and runs parallel to it. 4. The Vindhya Range, on the other hand, is known for Sadbhavna Shikhar (Goodwill peak) , also known as the Kalumar Peak as one of its highest points. Row III is incorrect: Anaimudi – (Western Ghats) – Tamil Nadu (not Eastern Ghats and Andhra Pradesh) 1. Anaimudi’ (2,695 m), the highest peak of the Peninsular plateau, is located on the Anaimalai hills of the Western Ghats. 2. Anaimudi has an elevation of 2695 meters ."},{"id":48,"txt":"With reference to important mountain passes in India, consider the following pairs: Mountain Pass State/Union Territory\n1. Nathu La Sikkim\n2. Cho La Arunachal Pradesh\n3. Zoji La Jammu and Kashmir\n4. Shipki La Uttarakhand   \nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: . Mountain passes play a crucial role in connecting regions separated by high relief barriers. In India, many important passes lie in the Himalayan and trans-Himalayan regions and have strategic, economic and historical significance. Pair I is correct . Nathu La is a well-known mountain pass located in Sikkim . It lies on the Indo-China border and has historically been an important trade route between India and Tibet. Pair II is incorrect . Cho La is not located in Arunachal Pradesh . It is a high-altitude mountain pass in Sikkim , close to the India – China border recently opened by the government for battlefield tourism under Bharat Rannbhoomi Darshan initiative along with Dok-La mountain pass. Pair III is correct . Zoji La provides connectivity between Srinagar in the Union Territory of Jammu and Kashmir and Kargil and Leh in Union Territory of Ladakh. The Zoji La tunnel project aims to ensure all-weather connectivity to Leh round the year Pair IV is incorrect . Shipki La is a high-altitude mountain pass located in Himachal Pradesh and not Uttarakhand , near the India – China border. It lies in the Kinnaur region and has historical importance as a trade route with Tibet."},{"id":49,"txt":"With reference to the distribution of rainfall in Northeast India, consider the following statements:\n1. In the Brahmaputra valley in Assam, the annual rainfall often exceeds 1,000 cm.\n2. Moisture-laden southwest monsoon winds from the Bay of Bengal are forced to rise abruptly over the steep slopes of the Garo, Khasi and Jaintia Hills.\nWhich of the above is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I.","Both Statement I and Statement II are correct but Statement II does not explain Statement I.","Statement I is correct but Statement II is not correct.","Statement I is not correct but Statement II is correct."],"ci":3,"exp":"Ex: . Rainfall distribution in India shows sharp regional contrasts due to variations in relief, wind direction and moisture availability. Northeast India, in particular, receives heavy rainfall under the influence of the Bay of Bengal branch of the southwest monsoon. However, the intensity of rainfall differs significantly between river valleys and adjoining hill ranges. Statement I is incorrect . The Brahmaputra valley in Assam does receive heavy rainfall , but it does not exceed 1,000 cm . Such extremely high rainfall figures are characteristic of specific hill regions, not broad river valleys. In the Brahmaputra valley and adjoining plains, the average annual rainfall is generally below 200 cm , though it remains among the wetter regions of India. Statement II is correct . The Bay of Bengal branch of the southwest monsoon moves into Northeast India after being deflected by the Arakan Hills. When these moisture-laden winds strike the steep southern slopes of the Garo, Khasi    and Jaintia Hills , they are forced to rise sharply. This orographic uplift leads to intense condensation and very heavy rainfall, particularly over places like Mawsynram and Cherrapunji witnessing more than 1000 cm of rainfall."}],"m":null,"tt":3000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

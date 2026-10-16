@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SFG LEVEL 01    2026 = 321142</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>SFG LEVEL 01    2026 = 321142</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="SFG LEVEL 01    2026 = 321142">SFG LEVEL 01    2026 = 321142</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"According to Portuguese writer Nuniz, the women in the Vijayanagara Empire were expert in which of the following areas?\n1. Wrestling\n2. Astrology\n3. Accounting\n4. Soothsaying\nSelect the correct answer using the code given below:","ref":"","opts":["1, 2 and 3 only","1, 3 and 4 only","2 and 4 only","1, 2, 3 and 4"],"ci":3,"exp":"Ex: Women in general occupied a high position in Vijayanagara society and instances of the active part they took in the political, social and literary life of the country are not rare, besides being trained in wrestling, handling swords and shields, music and other fine arts, some of them at any rate received a fair amount of literary educa tion. Nuniz writes: “he (the king of Vijaynagar) has also women who wrestle, and others who are astrologers and soothsayers; and he has women who write all the accounts of expenses that are incurred inside the gates and others whose duty it is to write al l the affairs of the kingdom and compare their books with those of the writers outside; he has women also for music, who play instruments and sing. Even the wives of the king are well versed in music...it is said that he has judges, as well as bailiffs and watchmen who every night guard the palace, and these are women.”"},{"id":1,"txt":"This ruler from the Eastern Ganga dynasty was noted for his military strength. He defeated the governor of Bengal in Delhi Sultanate. To commemorate his victories, he built the Sun Temple at Konark.\nWhich of the following medieval India rulers is being described above?","ref":"","opts":["Bhimdev I","Narasimhavarman I","Narasimha Deva I","Kumarapala"],"ci":2,"exp":"Ex: Option c is correct: King Narasimha Deva I (also spelt Narasingha Deva I) was one of the powerful kings of the Eastern Ganga dynasty in 13th century CE. Narasimhadeva I was noted for the military st rength and cultural brilliance he brought to the kingdom. Apart from repelling multiple inroads of the Delhi Sultanate, he defeated the Delhi Sultanate’s governor of Bengal. Partly to commemorate these victories, he built the famed Sūrya (sun) temple at Ko nark (present - day Odisha) on the Bay of Bengal coast around 1244AD. It is known for its intricate design and erotic sculptures of maithunas."},{"id":2,"txt":"Which of the following is the correct chronological order of the foreign travellers accordi ng to the time of their arrival in India?\n1. Seydi Ali Reis\n2. Peter Mundy\n3. Antonio Monserrate\nSelect the correct answer using the code given below:","ref":"","opts":["I - III - II","II - III - I","I - II - III","II - I - III"],"ci":0,"exp":"Ex: Option a is correct: The correct chronological order of the foreign travellers according to the time of their arrival in India: Seydi Ali Reis (1554) - Antonio de Monserrate (1580) - Peter Mundy (1628). Option I: Seydi Ali Reis (1498 - 1562 CE) was t he Admiral of the Ottoman Sultan (Turkey), Suleiman the Magnificent, who accidentally landed on the Indian coast in 1554 CE, when his fleet was hit by a typhoon. He landed on the Gujarat coast, where the Gujarat Sultanate was in the middle of a civil war. From here, he travelled to Sindh, which was in the throes of an uprising, and then onward to Delhi exactly at the time when Mughal Emperor Humayun slipped and fell down a staircase and died. Seydi recorded what he witnessed on this extraordinary adventure in his travelogue titled Mir’ât ül Memâlik (The Mirror of Countries, 1557), which gives us a valuable account of India of those times. Option III: Father Antonio de Monserrate was a Jesuit missionary who accompanied the first Jesuit mission to Akbar’s cour t along with Father Rudolf Aquaviva (leader of the mission) and their Persian interpreter Francisco Henrique. The first Jesuit mission arrived at Akbar’s court in 1580. Father Monserrate’s account is a first - hand narration of his journey from Goa to Fathpu r Sikri and hence his stay at the Mughal court. He provides a lively account of the cities of India . He praises Surat, its forts, garrisons, merchant activities, and ships of the port town. Option II: Peter Mundy (from England) visited India during the reign of Shah Jahan in 1628 and left behind detailed accounts of India. The Travels of Peter Mundy (1628 - 34) provide important information about Shahjahan's reign."},{"id":3,"txt":"With reference to Deccan sultanates during medieval India,consider the following pairs: Deccan Sultanate Ruled by\n1. Bijapur Qutb Shahi dynasty\n2. Berar Imad Shahi Dynasty\n3. Bidar Barid Shahi dynasty\nHow many of the pairs given above are correct?","ref":"","opts":["Only one","Only two","All the three","None    [ 2 ]"],"ci":1,"exp":"Ex: Option b is correct: The Bahmani Kingdom, established in 1347 AD by Alauddin Bahman Shah, emerged as a dominant force in southern India, covering large parts of present - day Maharashtra, Karnataka, and Andhra regions. By the late 15th century, internal factionalism among nobles (amirs), provincial assertiveness, and administrative weakness led to its fragmentation. Powerful governors decla red independence and formed five Deccan Sultanates: Bijapur, Golconda, Ahmadnagar, Bidar and Berar. Pair I is incorrect: Bijapur was ruled by the Adil Shahi dynasty. Golconda was ruled by the Qutb Shahi dynasty. Pair II is correct: Berar was ruled by the I mad Shahi dynasty. Pair III is correct: Bidar came under the Barid Shahi dynasty."},{"id":4,"txt":"With reference to medieval India, which one of the following is the correct sequence in a scending order in terms of size?","ref":"","opts":["Paragana - Sarkar – Suba","Sarkar – Paragana – Suba","Suba - Sarkar – Paragana","Paragana – Suba - Sarkar"],"ci":0,"exp":"Ex: The order according to the size is Pargana >Sarkar> Suba The entire Suba was divided into Sarkars (districts), each being looked after by a military officer called the chief Shiqdar. Each Sarkar was divided into smaller units called Parganas. There was a Shiqdar (military officer), Amin or Munsif (Civilian Judge ), one Fotahdar (treasurer) and two Karkuns (clerks or writers) in each Pargana. Pargana comprises a number of villages. Above the Pargana was the sarkar. A number of sarkar groups into provinces called Suba or Mahal."},{"id":5,"txt":"He was brought to India as a slave who rose to become the Abyssinian minister of Ahmadnagar. He tried to revive the kingdom by placing a royal heir on the throne and c ontinued resisting the Mughals. Prince Khurram compelled him to surrender the Ahmadnagar fort and Balaghat districts, but he regained the lost territories by 1619 – 20.\nWhich of the following medieval Indian personalities is being described above?","ref":"","opts":["Ibrahim Adil Shah II","Mohammed Gawan","Nizam Shah I","Malik Ambar"],"ci":3,"exp":"Ex: Option d is correct: Malik Ambar (1548 – 1626) was a former slave, and the Abyssinian minister of Ahmed Shah of Ahmednagar .    [ 3 ] Malik Ambar, a Nizam Shah i noble, tried to revive the kingdom by enthroning a member of the royal family as Murtaza Nizam Shah II. He continued to defy the Mughals. In 1610, he killed the intriguing Murtaza and enthroned his son as Burhan Nizam Shah III. During his reign, skirmish es took place between the Nizam Shahi forces and the Portuguese. The Mughal pressure on the Nizam Shahi forces compelled Burhan to conclude peace with the Portuguese. In 1616, the Mughal commander Shah Nawaz Khan ravaged the new Nizam Shahi capital Khirki , but Malik Ambar rehabilitated it and resumed the offensive against the Mughals. Later, Prince Khurram forced Malik Ambar to surrender the Ahmednagar fort and the districts of Balaghat. However during 1619 - 1620, Malik Ambar recovered the lost territories . Malik Ambar was not only a successful military commander but a very able administrator. He is credited with a number of effective measures concerning revenue and general administration. With his death in 1626, Ahmednagar seems to have lost all hopes. Sou rce:) History - Tamil Nadu SCERT XI, Volume II, Chapter - 14, The Mughal Empire, Pg. 39 deccan - forces - akbar - jahangir - mughals - 2837302 - 2025 - 12 - 17 https ://egyankosh.ac.in/bitstream/123456789/20230/1/Unit - 8.pdf (Page 6)"},{"id":6,"txt":"Which of the following travellers wrote extensively about the widespread poverty in India during the seventeenth century?","ref":"","opts":["Duarte Barbosa","Athanasius Nikitin","Francisco Pelsaert","William Hawkins"],"ci":2,"exp":"Ex: Option c is correct: Francisco Pelsaert was a Dutch factor (Gumashta) who visited the subcontinent during the early decades of the seventeenth century. He lived in Agra during Jahangir’s time. His report has details about the city of Agra, the trading activities in Agra and eastern part of the country, the Dutch trade in northern India, Burhanpur and Gujarat’s co mmercial profile, Mughal administration, living conditions of lower sections of the society as well European Travelogues as of elites, and religious practises of the Hindus. He talked extensively about the widespread poverty in India in the seventeenth ce ntury. He was shocked to see the widespread poverty, “poverty so great and miserable that the life of the people can be depicted or accurately described only as the home of stark want and the dwelling place of bitter woe”. Holding the state responsible, he says: “So much is wrung from the peasants that even dry bread is scarcely left to fill their stomachs.”"},{"id":7,"txt":"It was built in the 15th century and is located in the Aravalli hills of Rajasthan. It is famous for its massive 36 - kilometre - long wall, which is believed to be the second longest continuous wall in the world, after the Great Wall of China. It is a UNESCO World Heritage Site.\nWhich of the followi ng monuments is being described above?","ref":"","opts":["Chittorgarh Fort","Amer Fort","Kumbhalgarh Fort","Ranthambore Fort    [ 4 ]"],"ci":2,"exp":"Ex: Option a is incorrect. Chittorgarh Fort is located in the Chittorgarh district of Rajasthan. was in itially constructed by Chitrangad of the Mori (Mourya) dynasty during the 7th century AD. The colossal Chittorgarh Fort is roughly in the shape of a fish in layout. It served as the capital of Mewar Kingdom. It was declared a UNESCO World Heritage Site in 2013 under the Hill Forts of Rajasthan. Option b is incorrect. The Amer Fort was built by the Kachwaha Rajputs and acted as their governing seat prior to Jaipur. Started in the 11th century, it took close to 100 years to complete this structure. It is located near Jaipur. Option c is correct. The Kumbhalgarh Fort, located in the R ajsamand district of Rajasthan, about 84 km away from Udaipur, is a striking example of Rajput military architecture . This fort is well known for its spectacularly long protective wall, running up to a length of 36 km! The wall is believed to be the second longest in the world, after the Great Wall of China. The fort played a crucial role in the political history of the kingdom of Mewar, and stories and legends from its past are still a source of pride and glory for the people of the region. Kumbhalgarh was declared as a UNESCO World Heritage Site in 2013 . Option d is incorrect. The Ranthambore Fort was built by the Chauhan rulers in the 10th century . The fort is characterised by temples, tanks, massive gates and huge walls. It is located near Sawai madhop ur in Rajasthan. It was declared a UNESCO World Heritage Site in 2013 under the Hill Forts of Rajasthan."},{"id":8,"txt":"Consider the following statements regarding the Gol Gumbaz of Bijapur:\n1. It is the mausoleum of the founder of the Bijapur Sultanate Yusuf Adil Shah.\n2. It is p rimarily constructed using white marble.\n3. It is widely regarded to be having the second - largest dome in the world.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and III only","III only","II only","II and III only"],"ci":1,"exp":"Ex: The double layered roofing style of Iran has been used in construction of Gol Gumbaz. In India, this is the biggest dome among all the domes of the world in which the inner layer of the dome is rounded in semi - circular form    [ 5 ] whereas the outer layer is conically narrowed upward giving it a bulbous look. There are four octagonal minars at the four comers which have seven storeys each. The inner area of this building is 1600 square meters. Statement I is incorrect. Gol Gumbaz was built by Mohammed Adil Shah of the Bijapur Sultanate. Gol Gumbaz is the most famous monument in Bijapur. Bijapur (modern Vijayapura) was the capital of the Adil Shahi dynasty during 1480 - 1686. Gol Gumbaz (round dome) is the mausoleum of the seventh ruler of the dynasty Mohammad Adil Shah (1627 - 1656). Mohammad Adi Shah commissioned the mausoleum in his lifetime. Yusuf Adil Shah was the founder of the Adil Shahi dynasty. Statement II is incorrect. It is built of dark grey basalt and decorated plaster. The exterior of Gol Gumbaz is simple but beautiful. On the four corners of the bare walls are four doomed octagonal towers. Each tower has seven storeys and each storey has several windows which give the structure a striking look. Statement III is correc t. The dome is the second largest in the world after St. Peter’s Basilica in Rome. The tomb is a complex of buildings such as a gateway, a Naqqar Khana, a mosque and a sarai located within a large - walled garden."},{"id":9,"txt":"In context to Medieval India, consider the following cities/towns:\n1. Vengurla\n2. Raigarh\n3. Dabhol\n4. Bellari\nHow many of the above were the port towns of the Maratha Empire?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Option I is correct: Vengurla was an important west coast port on the Konkan coast. It functioned as a maritime trading centre and was connected with Maratha naval and commercial activity.    [ 6 ] Option II is inc orrect: Raigarh was the capital fort of the Maratha state under Shivaji. It is a hill fort located inland and not a coastal port town, even though it lies in the Konkan region. Option III is correct: Dabhol (Dabul) was a well - known historic port on the wes tern coast. It was active in medieval maritime trade and came under Maratha control. Option IV is incorrect: Bellari (Ballari) is an inland settlement in the Deccan plateau and has no coastal or port significance.    [ 7 ]"},{"id":10,"txt":"How did the dynasty of Nizam Shahi of Ahmadnagar come to an end?","ref":"","opts":["Ahmadnagar was annexed to the Mughal empire and Hussain Shah was consigned to life imprisonment.","Mughal troops destroyed Daulatabad fort and killed Nizam - ul - Mulk of Ahmadnagar.","Fateh Khan usurped the throne from Nizam - ul - Mulk.","Malik Ambar was defeated in a battle with Mughals in 1631 and the entire royal family was killed by the Mughal troops."],"ci":0,"exp":"Ex: The Nizam Shahi dynasty of Ahmadnagar was fo unded by Malik Ahmad Nizam Shah in 1490 . The dynasty lasted for over 140 years, and it was one of the most powerful and influential kingdoms in the Deccan region of India. The Nizam Shahis were eventually conquered by the Mughal Empire under Shah Jahan in 1636. The last Nizam Shahi ruler, Hussain Shah, was consigned to life imprisonment in the Gwalior Fort . The Nizam Shahi dynasty came to an end, and Ahmadnagar was annexed to the Mughal Empire."},{"id":11,"txt":"With reference to the Ashtapradhan of Maratha ruler Shivaji, consider the following pairs: Officer Title\n1. Walkia - Nawis Finance Minister\n2. Amatya Chief Justice\n3. Dabir Foreign Secretary\n4. Sar - i - Naubat Commander - in - Chief\nHow many of the above given pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Shivaji had an advisory council to assist him in his day - to - day administration. This council of eight ministers was known as Ashta Pradhan. Its functions were advisory. Pair I is incorrect. The Walkia - Nawis or Mantri maintained the records of the king’s activities and the proceedings in the court . Pair II is incorrect. The Amatya or finance minister checked and countersigned all public accounts of the kingdom.    [ 8 ] Pair III is correct. Dabir or Summant was the Foreign secretary. His duty was to advise the king on all matters of war and peace and to receive ambassadors and e nvoys from other countries. Pair IV is correct. Sari Naubat was the commander - in - chief. He was in charge of recruitment, organization and discipline of the Army. Knowledge Base: Members of Ashtapradhan: The Mukhya Pradhan or Peshwa or prime minister whose duty was to look after the general welfare and interests of the State. He officiated for the king in his absence. The Amatya or finance minister checked and countersigned all public accounts of the kingdom. The Walkia - Nawis or Mantri maintained the record s of the king’s activities and the proceedings in the court. Dabir or Summant was the Foreign secretary. His duty was to advise the king on all matters of war and peace and to receive ambassadors and envoys from other countries. Sachiv or Shuru Nawis : He was the home secretary. He used to take care of all the official correspondences. He was to look after the correspondence of the king with the power to revise the drafts. Pandit Rao : He was the ecclesiastical head. He was in charge of religion, ceremonies and charities. He was the judge of canon law and censor of public morals. Sari Naubat. He was the commander - in - chief. He was in charge of recruitment, organization and discipline of the Army. Nyayadish: He was the Chief Justice. He was responsible for civ il and military justice."},{"id":12,"txt":"In the context of the Maratha empire during Medieval India, the terms ‘Shiledars’ and ‘Bargirs’ refer to which\namong the following?","ref":"","opts":["Type of Village headmen","Class of soldiers in the cavalry.","Class of Merchants conducting long - distance trade","Type of small farmers cultivating on rented land"],"ci":1,"exp":"Ex: Shivaji organized a large standing army. The Maratha armed forces were divided into three parts — infantry, cavalry and navy. The cavalry w as made up of two types of soldiers — the bārgīrs , whose horses and equipment were paid for by the state, and the shiledārs , whose horses and equipment were paid for by the soldiers themselves."},{"id":13,"txt":"The mother - daught er duo of Sammakka and Saralamma/Sarakka is known for their protest against the levy of taxes on tribal people during drought conditions against the rulers of which of the following dynasties in medieval India?","ref":"","opts":["Bahmani Dynasty","Gajapati Dynasty    [ 9 ]","Hus ain Shahi Dynasty","Kakatiya Dynasty"],"ci":3,"exp":"Ex: According to the legend, once a troop from the Koya tribal community was returning from a trip, they saw a little girl playing with the tigress. The head of the troop saw the girl and inspired by her bravery, he adopted her and named her as Sammakka. Later , she married a headman of a neighboring tribal group and had a daughter, Sarakka/Saralamma . Both the mother and daughter protested against the Kakatiya kings, who forced the tribes to pay taxes. Both women fought bravely and reportedly lost their lives. T he Koya community constructed a temple as a token of gratitude. The Sammakka Saralamma temple in Warangal was built during the 12th century. This temple has no mythological background relating to the construction of the temple; instead, it is believed to b e built in memory of two tribal women. The main deity(s) of the Sammakka Saralamma temple are two brave women who stood up for their community and its betterment . They became Martyrs in the battle. Sammakka Saralamma Jatara or Medaram Jatara is a festival of honouring the goddesses celebrated in the state of Telangana, India. This Jatara is known for witnessing one of the largest gatherings of people in the world."},{"id":14,"txt":"Who of the following founded a new city on the south bank of a tributary to river Krishna and undertook to rule his new kingdom as the agent of a deity to whom all the land south of the river Krish na was supposed to belong?","ref":"","opts":["Amoghavarsha I","Ballala II","Harihara I","Prataparudra II"],"ci":2,"exp":"Ex: Vijayanagar was founded in 1336 by Harihara and Bukka of the Sangama dynasty. They were originally served under the Ka katiya rulers of Warangal. They proclaimed their independence and founded a new city on the south bank of the Tungabhadra River. It was called Vijayanagar meaning city of victory."},{"id":15,"txt":"“During his tenure, the Treaty of Warna was signed; and Thana, Salsette and Bassein (Vasai) were captured from the Portuguese.”\nWhich among the following Peshwas of Maratha kingdom is being referred to in the above desc ription?","ref":"","opts":["Baji Rao I","Balaji Baji Rao","Balaji Viswanath","Baji Rao II    [ 10 ]"],"ci":0,"exp":"Ex: Option a is correct. Baji Rao I (1720 – 1740) was appointed Peshwa in 1720 after his father Balaji Viswanath. Baji Rao enhanced the power and prestige of the Maratha Empire by defeating the Nizam of Hyderabad, the Rajput Governor of Malwa and the Governor of Gujarat. During his tenure, Peshwa assumed the office of the commander - in - chief also. By the treaty of Warna signed in 1731, Samb haji of Kolhapur was forced to accept the sovereignty of Shahuji. Thana, Salsette and Bassein were captured from the Portuguese in 1738 - 1739. At the same time, the English made friendly overtures to the Marathas and got the right to free trade in the Decca n region. Option b is incorrect. Balaji Baji Rao (1740 – 1761) succeeded as the Peshwa after the death of his father Baji Rao I. Known as Nana Sahib, he proved to be a good administrator and an expert in handling financial matters. Option c is incorrect. Bal aji Viswanath (1713 – 1720) assisted the Maratha emperor Shahuji to consolidate his control over the kingdom that had been plagued by a civil war. Kanhoji Angre was the most powerful naval chief on the western coast. During the civil war Kanhoji had supporte d Tarabai. The Peshwa convinced him of the common danger from the Europeans and secured his loyalty to Shahu. The practice of granting jagirs was revived. And the office of Peshwa was made hereditary. Option d is incorrect. Baji Rao II was the last Peshwa of the Maratha Empire. Baji Rao II accepted the subsidiary alliance and signed the Treaty of Bassein in 1802."},{"id":16,"txt":"Consider the following statements regarding the Third Battle of Panipat:\n1. It was fought between the forces of the Maratha Confederacy and Nadir Shah of Persia.\n2. The immediate cause of the battle was the expulsion of Viceroy Timur Shah of Lahore by the Marathas.\n3. It is considered that the battle led to a power vacuum in India, which later led to the British conquest of India\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II","II only","III only","II and III"],"ci":3,"exp":"Ex: Statement I is incorrect. The Third Battle of Panipat took place on 14 January 1761, at Panipat. It was fought between the forces of the Maratha Empire and a coalition of the King of Afghanistan, Ahmad Shah Abdali wit h two Indian Muslim allies — the Rohilla Afghans of the Doab, and Shuja - ud - Daula, the Nawab of Oudh. Statement II is correct. Ahmad Shah Abdali wanted to avenge the expulsion of his Governor Timur Shah from Lahore by Marathas. The Third battle of Panipat too k place between Ahmed Shah Abdali and Maratha commander Sadashiv Rao on 14 January 1761 in the Panipat ground. Abdali had appointed Timur Shah as the Viceroy of Lahore. But, an expedition under Malhar Rao Holkar and Raghunatha Rao reached Delhi after Abdal i had left. They removed the agent of Abdali at Delhi and appointed a man of their choice as the Wazir. Thereafter they captured Sirhind and Lahore in 1758. The Afghan forces were defeated, and Timur Shah deposed. So, Abdali returned to India. Statement II I is correct. In the Third Battle of Panipat,. Ahmad Shah won but with a very heavy casualty rate on both sides. It resulted in the worst defeat of Marathas in their history. The war led to a power vacuum which later led to the British conquest of India. S ource:) Tamil Nadu Class 11th History Book Chapter 15: The Marathas Page: 233    [ 11 ]"},{"id":17,"txt":"With reference to the administration of the Marathas, ‘Mamlatdar’ and ‘Kamavistar’ were :","ref":"","opts":["Chiefs of various branches of the military","Revenue officials of the villages","Spies employed in different parts of the Kingdom","Representatives of Peshwa in the districts"],"ci":3,"exp":"Ex: Maratha administration, established by Chhatrapati Shivaji, was a highly organised system charac terized by a strong central government ; Ashtapradhan(Council of Eight Ministers) and focus on merit based appointments. The centre of the Maratha administration was the Peshwa Secretariat at Poona. The Mamlatdar and Kamavistar were Peshwa’s representative s in the districts and played an important role in provincial administration. They were responsible for every branch of district administration including revenue collection. To oversee and observe the activities of Mamlatdar and Kamavistar, Deshmukhs and D eshpandes were appointed as district officers who were in charge of accounts . Thus, it was a system of checks and balances. In order to prevent misappropriation of public money, the Maratha government collected a heavy sum (Rasad) from the Mamlatdars and other officials. It was collected on their first appointment to a district. In Baji Rao II’s time, these offices were auctioned off."},{"id":18,"txt":"Consider the following dynasties:\n1. Kadambas of Banavasi\n2. Kalachuris of Tripuri\n3. Yadavas of Devagiri\n4. Kakatiyas of Warangal\nHow many of the above - mentioned dynasties established their i ndependent kingdoms during the 12th century CE?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Option I is incorrect. The Kadambas were an ancient royal family that initially emerged around Talagunda (mod ern Shimoga district) in the north - western Karnataka around 345 CE. It ruled northern Karnataka and the Konkan from Banavasi in present - day Uttar Kannada district .The Kadmabas of Banavasi ruled approximately during the interval between 345 CE and 525 CE. The kingdom was founded by Mayurvarman in c. 345. Subsequently they were absorbed into Chalukyan polity around 6th century CE and became feudatories of the Chalukyas and Rashtrakutas. They once again emerged into prominence in the second half of the 10th c entury CE. Option II is incorrect. Kalchuri of Tripuri are also known as Kalchuri of Chedi. Kokalla was the founder of the Kalachuri dynasty of Tripuri in 9th century CE.. The Kalachuris of Chedi ruled from their capital Tripuri which is now    [ 12 ] a village near Jabalpur in Madhya Pradesh. The first important king of this branch was Kokalla I whose reign began in about 845 C.E. During the reign of Gangeyadeva Kalachuris became an important political power. Option III is correct. The Yadavas, since 9th century CE. ruled as the feudatories of the Rashtrakutas and the Chalukya. With the decline of the latter, they emerged as independent rulers with a big territory under their control. Bhillama V (1175 - 1191), the feudatory of the Chalukya ruler, Somesvara IV (1181 - 11 89), acquired independent status in CE 1187 and laid the foundation of the Yadava rule. Devagiri (modern Daulatabad) was the capital of the Yadavas. With the death of Ramchandra in 1311 the dynasty came to an end. Option IV is correct. The Kakatiyas were t he feudatories of the Chalukyas of Kalyani. Kakati Rudradeva (Prataprudra I), the founder of the Kakatiya state, succeeded in overpowering the Chalukya ruler, Tailapa III, during the second half of the 12th century (c. 1162). He also succeeded in capturing Kurnool district from the Velananti chiefs sometime around 1185. Ganapati (1199 - 1262), Rudrambe (1262 - 95) and Prataprudra II (1295 - 1326) were other important rulers of the dynasty. Their rule extended over most of the Andhra region up to Godavari, Kanchi , Kurnool and Cudappah districts. They were first defeated by Malik Kafur and later by Muhammad bin Tughlaq, who overran the whole of Telangana in 1322 and thus ended the Kakatiya rule."},{"id":19,"txt":"With reference to the ‘Ayagar System’ of Medieval India, consider the following statements:\n1. It was a system of village administration under the Vijayanagara Empire.\n2. Under this sys tem, appointments to administrative offices were generally hereditary.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: Statement I is correct. Durin g the Vijayanagara rule,the smallest unit of administration i.e, village administration was organised in the form of the ‘ayagar system’. Statement II is correct. According to this system, every village was a separate unit. Twelve functionaries, collectiv ely known as ‘ayagars’ were appointed by the government in each village and once allotted, the office became hereditary. The ayagar could sell or mortgage their office. Tax free lands or manyas were granted to them for their maintenance for perpetuity. Sour ce:) Page: 24"},{"id":20,"txt":"Arrange the following events associated with Shivaji in chronological order:\n1. Attack on Afzal Khan\n2. Capture of Torna\n3. Attack on Shaista Khan\n4. Annexation of Javli    [ 13 ]\nSelect the correct answer using the code given below:","ref":"","opts":["2, 4, 1, 3","4, 2, 1, 3","1 , 2, 3, 4","3, 1, 2, 4"],"ci":0,"exp":"Ex: Chhatrapati Shivaji Maharaj was the founder of the Maratha Empire in western India during the 17th century. Renowned for his exceptional military strategies, resilience, and commitment, h e played a pivotal role in establishing a powerful and enduring Maratha Empire. Option 2: Torna Fort was constructed in the 13th Century CE by the Shiva Panth. Later, it was under the Nizam Shahi dynasty. Chhatrapati Shivaji, at the age of 16, captured the fort from Adilshah in 1646. The fort was renamed the Torna Fort. Option 4: Shivaji Maharaj attacked Javali and captured it in 1656 in a military engagement fought between the Maratha rebels and the Bijapur Sultanate, under the command of Chandra Rao More. Option 1: In 1659, Chhatrapati Shivaji Maharaj confronted and killed Afzal Khan , a general of the Adil Shahi dynasty of Bijapur, during a truce negotiation at the Battle of Pratapgarh. Option 3: In 1663, Chhatrapati Shivaji launched a surprise raid in Lal mahal Pune and attacked Shaista Khan who was the uncle of Mughal ruler Aurangzeb. Hence the correct chronological order of the above given events is option a: 2 - 4 - 1 - 3"},{"id":21,"txt":"In the context of socio - economic structure of the Maratha empire, the Kunbis primarily constituted which of the following groups?","ref":"","opts":["A hereditary class of village accountants responsible for maintaining land records","A community of court poets and chroniclers attached to Maratha rulers","A mercantile community controlling inland and overseas trade networks","A community of peasant - pastoralists forming the backbone of the Maratha army"],"ci":3,"exp":"Ex: Option d is the cor rect answer. The Kunbi were traditionally an agrarian caste widely spread across the Deccan region during the Maratha Empire. Their primary occupation was agriculture , often combined with pastoral activities. Due to their hardy rural background and familiarity with the terrain, many Kunbis were recruited into the Maratha military, especially as light infantry and auxiliary forces, forming the backbone of the Maratha army."},{"id":22,"txt":"Which of the following statements are correct regarding the Amara - Nayaka System of the Vijayanagara Empire?\n1. Nayakas were military chiefs having the authority to collect taxes from their assigned territories.\n2. Nayakas were required to contribute a stipulated quota of horses or soldiers to the King.\n3. Portuguese travelers Fernao Nuniz and Domingo Paes provided a detailed account of the Amara Nayaka system.\nSelect the correct answer using the code given below:","ref":"","opts":["I and II only","II and III only","I and III only    [ 14 ]","I, II and III"],"ci":3,"exp":"Ex: Option d is the correc t answer. The amara - nayaka system was a major political innovation of the Vijayanagara Empire. Many features of this system were derived from the ‘Iqta’ system of the Delhi Sultanate. The practice became well established during the reign of Krishnadevaraya and Achyuta Devaraya. Statement I is correct. The amara - nayakas or nayakas were military commanders who were given territories. They collected taxes and other dues from peasants, craftspersons and traders in the area. They retained a part of the revenue for personal use and for maintaining a stipulated contingent of horses and elephants. The nayaks also had to pay a sum of money to the central exchequer. The amara - nayakas sent tribute to the king annually and personally appeared in the royal court with gifts to express their loyalty. Statement II is correct. They paid tribute and rendered military service to the king . These chiefs had to maintain a fixed number of soldiers, horses and elephants for the serv ice of the state . These contingents provided the Vijayanagara kings with an effective fighting force with which they brought the entire southern peninsula under their control. Statement III is correct: Portuguese travellers Fernao Nuniz and Domingo Paes vi sited Vijayanagara during the reigns of Krishnadeva Raya and Achyuta Raya of the Tuluva dynasty in the 16th century . 1. They studied the Nayaka system and provided its detailed account and regarded the Nayakas as agents of the central authority, i.e., the Rayas. 2. Their writings are among the most significant primary sources on the military and administrative functioning of the Vijayanagara Empire, especially the Nayankara system."},{"id":23,"txt":"With reference to Medieval Indian history, the Hiriya canal was constructed during the reign of which of the following rul ers?","ref":"","opts":["Krishnadeva Raya","Devaraya I","Virupaksha Raya","Achyuta Deva Raya"],"ci":1,"exp":"Ex: The capital of the Vijayanagara Empire was strategically located in a natural basin formed by the Tungabhadra River, which flows in a north - easterly direction. Numerous streams descended from these rocky outcrops into the Tungabhadra, making the site defensible but agriculturally challenging because the region was one of the most arid zones of the peninsula. In almost all cases embankm ents were built along these streams to create reservoirs of varying sizes. One of the most prominent waterworks to be seen among the ruins is the Hiriya canal. It was built by Sangama dynasty king Devaraya I . The canal drew water from a dam across the Tungabhadra and irrigated the cultivated valley that separated the “sacred centre” from the “urban core”."},{"id":24,"txt":"The term Upari refers to which one of the following?","ref":"","opts":["A category of proprietary tenure under the Mughal rule","A category of tenancy tenure under the Maratha rule","A soldier in the Maratha army","A village headman in the Mughal period"],"ci":1,"exp":"Ex: The term “Upari” refers to a category of tenancy tenure under the Maratha rule. It was a syste m in which the revenue rights of a particular area were leased out to an individual or a group of individuals , who would then collect revenue from the land and pay a fixed amount to the government. The Upari holders were responsible for the management and collection of revenue from the assigned land."},{"id":25,"txt":"With reference to Indian history, consider the following events:\n1. Conquest of Goa by the Portuguese\n2. Establishment of the Gajapati kingdom of Orissa\n3. Collapse of the Bahmani kingdom\nWhich of the following is the correct chronological order of the above given events, starting from earliest?","ref":"","opts":["III - I - II","II - III - I","III - II - I","II - I - III"],"ci":3,"exp":"Ex: Option II: The Gajapati Empire was a medieval Hindu monarchy in the Indian subcontinent, originally from the region of Odisha that reigned from c. 1435 to 1541. It was founded by Kapilendra, the minister of Bhanudeva IV of Eastern Ganga. Option I: Goa was conquered by the Portuguese in 1510 under the leadership of Afonso de Albuquerque . At that time, Goa was under the control of the Sultan of Bijapur. Albuquerque realised that establishing a perma nent base at Goa would significantly strengthen Portuguese ambitions to dominate the maritime trade routes of the East. Option III: By 1518, the Bahmani Sultanate had collapsed and fragmented into five independent Deccan sultanates. Among the prominent suc cessor states that emerged from its disintegration was the Qutb Shahi dynasty, which established its rule in the Deccan region following the decline of Bahmani authority. Hence the correct chronological order is option c i.e. II – I – III."},{"id":26,"txt":"The Bahmani Kingdom was founded by Alauddin Hasan Bahman Shah during the reign of which of the following rulers of the Delhi Sultanate?","ref":"","opts":["Muhammad bin Tughlaq","Alauddin Khalji","Firoz Shah Tughlaq","Ghiyas ud din Balban"],"ci":0,"exp":"Ex: The Bahmani Kingdom came into being under AlaudDin Hasan Bahman Shah during the reign of Muhammad bin Tughlaq (1325 – 1351). Its capital was Gulbarga. Alauddin Bahman Shah, Muhammad Shah I and Firoz Shah were important rulers of this kingdom. Ahmad Wali Shah shifted the capita l from Gulbarga to Bidar and the Bahmani kingdom reached its peak under the guidance of Mahmud Gawan."},{"id":27,"txt":"During the reign of Bahamani kingdom, the finance minister was known as:","ref":"","opts":["Waziri - kull","Vakil - ussaltana","Sadr - ijahan","Amir - i - jumla"],"ci":3,"exp":"Ex: Mohammed I (1358 – 1375) established a good system of government that was followed by all the successor sultanates as well as by the Marathas later. He appointed a council of eight ministers of state. Option a is incorrect: Waziri - kull, who supervised the work of all other ministers. Option b i s incorrect: Vakil - ussaltana are the lieutenant of the kingdom who act as the immediate subordinate of the sovereign. Option c is incorrect: Sadr - ijahan were the chief justice and minister of religious affairs and endowments. Option d is correct: Amir - i - ju mla acted as minister of finance during the rule of Bahamani kingdom."},{"id":28,"txt":"Wi th reference to Bahmani kingdom, consider the following statements about Mohammed Gawan:\n1. He made Bidar as the capital of Bahamani Kingdom.\n2. He expanded the military powers of the provincial governors under his rule by permitting them to occupy multip le forts within their respective territories.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":3,"exp":"Ex:    [ 17 ] A Persian by birth, Mohammed Gawan was well - versed in Islamic theology, Persian, and Mathematics. He was also a poet and a prose - writer. Gawan served with great distinction as prime minister under Mohammad III and contributed extensively to the dynamic development of the Bahmani Kingdom. Statement I is incorr ect: Ahmad Wali Shah shifted the capital from Gulbarga to Bidar in 1429 (not by Mohammed Gawan) . Statement II is incorrect: In order to tighten the administration and to curb the power of provincial governors, who functioned virtually as kings, Mahmud Gaw an divided the existing four provinces of the Bahmani Sultanate into eight. Mahmud Gawan sought to curtail the military powers (not expanded) of the provincial governors by permitting them to occupy only one fort within their respective territories , while the remaining forts were brought under the direct control of the Sultan."},{"id":29,"txt":"With reference to the Vijayanag ar Empire, what is the correct chronological order of the dynasties that ruled it, starting from the earliest?","ref":"","opts":["Sangama – Saluva – Tuluva – Aravidu","Saluva – Sangama – Aravidu – Tuluva","Tuluva – Aravidu – Saluva – Sangama","Aravidu – Saluva – Sang ama – Tuluva"],"ci":0,"exp":"Ex: . The Vijayanagar Empire was founded in 1336 by Harihara and Bukka . Over a period of more than three centuries, it was ruled by four successive dynasties. Sangama Dynasty (1336 – 1485) – It was founded by sons of Sangama - Harihara and Bukka in 1336. It was the first ruling house. There are two views about their origin , the first one states that they were feudatories of Hoysalas who came to power after the dissolution of the Hoysalas Em pire. The second view states them to be employed under the Kakatiyas . Saluva Dynasty (1485 – 1505) – Saluva Narasimha was the military commander of last king Mallikarjuna. Saluva Narasimha overthrew him to establish the Saluva dynasty . Tuluva Dynasty (1505 – 1570) The last ruler of Saluva dynasty was assassinated by the powerful noble and regent Vira Narasimha who laid the foundation of Tuluva or third dynasty . Krishnadevaraya belonged to this dynasty. Aravidu Dynasty (1570 – 1650) – The last ruling dynasty of Vijayanagar. Therefore, the correct chronological order, starting from the earliest is: Sangama – Saluva – Tuluva – Aravidu."},{"id":30,"txt":"With reference to Indian history, wh ich of the following statements is/are correct?\n1. The Nizamat of Arcot emerged out of Hyderabad State.\n2. The Mysore Kingdom emerged out of Vijayanagara Empire.\n3. Rohilkhand Kingdom was formed out of the territories occupied by Ahmad Shah Durrani.\nSelect the correct answer using the code given below:","ref":"","opts":["1 and 2    [ 18 ]","2 only","2 and 3","3 only"],"ci":1,"exp":"Ex: Statement 1 is incorrect. The Nizamat of Carnatic (Arcot) did not emerge from the Hyderabad state. It was a protected ar ea of the Hyderabad state, but it did not get out of it. Statement 2 is correct. The Mysore kingdom, which was founded and ruled for most part by the Hindu Wodeyar family, initially served as a vassal state of the Vijayanagara Empire. Statement 3 is incorr ect. The Kingdom of Rohilkhand arose under the declining Mughal Empire in 1721 and continued to exist until 1774 when annexation by the British transformed its significantly reduced borders into the Princely State of Rampur."},{"id":31,"txt":"With reference to a medieval Indian history literary work, consider the following information:\n1. It was written by Gangadevi, the wife of Kumara Kampana of Vijaynagar empire.\n2. It is a Sanskrit work that celebrates the military campaigns of Vijayanagar in Tamil country.\n3. It describes the defeat of the Madurai Sultan by Kumara Kampana around 1370 CE.\nWhich one of the following works is described by the a bove information?","ref":"","opts":["Amuktamalyada","Madura - vijayam","Rajatarangini","Prabandha Chintamani"],"ci":1,"exp":"Ex: . Madura - vijayam is an important literary source for understanding Vijayanagar’s expansion into Tamil country and the defeat of the Madurai Sultanate. Statement I . Gangadevi was the wife of Kumara Kampana, son of Bukka I of Vijayanagar. She composed this work to glorify the achievements of her husband. Statement II . The text is written in Sanskrit. It praises the campaig n of Kumara Kampana in Tondai - mandalam, covering the northern districts of Tamil area, which was under the rule of the Sambuvaraya chiefs. Statement III . The work narrates the slaying of the Madurai Sultan and the end of the Madurai Sultanate. It presents this event as a righteous conquest. Knowledge Base: Amuktamalyada is a Telugu devotional poem written by the Vijayanagar emperor Krishnadevaraya . It tells the story of Andal , a great Vaishnavite saint , and her deep devotion to Lord Vishnu . The work beauti fully blends bhakti, poetry and ideas of ideal kingship . It shows that Krishnadevaraya was not just a warrior, but also a refined scholar and poet . Rajatarangini , written by Kalhana , is a chronicle of the kings of Kashmir . The name means “River of Kings.” It presents a systematic account of Kashmir’s rulers from ancient times. It is one of India’s earliest historical writings in Sanskrit . Prabandha Chintamani , written by the Jain scholar Merutunga , is a collection of biographical stories of kings and schol ars . It gives valuable details about medieval Gujarat and western India"},{"id":32,"txt":"With reference to foreign travellers who visited the Vijayanagar Empire, consider the following pairs: Foreign Traveller Visited during the reign of\n1. Abdur Razaak Krishnadevaraya\n2. Fernao Nuniz Sadasivaraya\n3. Domingo Paes Devaraya II\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":3,"exp":"Ex: . Foreign travellers are important sources for the history of Vijayanagar. Their accounts give details about administration, army, tra de and the grandeur of the capital. Pair I is incorrect . Abdur Razaak was a Persian ambassador . He visited the court of Vijayanagar during the reign of Devaraya II (1422 – 1446) in the year 1443 - 45. He described the vast extent of the empire which was under the control of Devaraya II. Pair II is incorrect . Fernao Nuniz was a Portuguese traveller. He visited Vijayanagar during the time of Krishnadevaraya(1509 - 29) , not Sadasivaraya (1542 – 70 ). His account mainly deals with the achievements of Krishnadevaraya and earlier rulers. Pair III is incorrect . Domingo Paes was a Portuguese traveller who visited Vijayanagar during the reign of Krishnadevaraya (1509 – 1529) . He gave a detailed acc ount of the wealth, markets, temples and military strength of the empire."},{"id":33,"txt":"Which of the following statements with regard to the primary causes of conflict between the Vijayanagar and the Bahmani kingdoms are correct?\n1. Both kingdoms fought to control the fertile Raichur doab between the Krishna and Tungabhadra rivers.\n2. Control over ports such as Goa was important for managing the horse trade from Iraq and Iran.\n3. Religious rivalry between Hindu Vijayanagar and Muslim Bahmani rulers was the main cause of conflict.\nSelect the correct answer usin g the code given below.","ref":"","opts":["I and II only","I and III only","II and III only","I, II and III"],"ci":0,"exp":"Ex: . The conflict between Vijayanagar and the Bahmani kingdom was long and repeated. It was driven by economic and terri torial interests.    [ 20 ] Statement I is correct . The Raichur doab lies between the Krishna and Tungabhadra rivers . It was fertile and rich in mineral resources. Both kingdoms constantly fought to control this region. Statement II is correct . The Konkan belt and t he port of Goa were important for trade. Goa was a major centre for import of horses from Iraq and Iran . Control of this trade was strategically important for maintaining cavalry strength. Statement III is incorrect . The rivalry between the Vijayanagar and the Bahmani kingdoms are sometimes seen as Hindu – Muslim conflicts. However, the real causes were territorial expansion and economic control. Religion was not the main reason for warfare. Despite recurring hostilities, the two states occasionally cooperate d. Krishnadevaraya backed certain claimants in the Sultanates and proudly assumed the title “establisher of the Yavana kingdom.” Likewise, the Sultan of Bijapur intervened in Vijayanagara’s succession disputes after Krishnadevaraya’s death."},{"id":34,"txt":"Consider the following statements about science in medieval South India:\n1. The Katapayadi system of numerals, which was invented by Vararuchi of Kerala, the author of Chandra Vakyas, was used for calculating the position of the Moon on any day of the year.\n2. Achyuta Pisharati (1550 - 1621) wrote Uparagakriyakrama, a text on eclipses.\n3. Ravi Varma of Mahodayapuram set up an observatory and is also said to have inaugurated the Kollam era.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 3 only","3 only","1 and 2 only","1, 2 and 3"],"ci":3,"exp":"Ex: Statement 1 is correct. Vararuchi , who is believed to have lived around the 4th or 5th century CE, is often credited with the creation of Katapay adi system . He authored the Chandra Vakyas were tables that gave positions of the Moon on different days of the year, and Katapayadi system was used for those calculations. Statement 2 is correct. Achyuta Pisharati (1550 - 1621) wrote Uparagakriyakrama , deal t with the calculation and prediction of eclipses , an important aspect of astronomy in medieval India. Statement 3 is correct. Ravi Varma Kulashekhara was a ruler of the Chera dynasty in Mahodayapuram (present day Kodungallur, Kerala) during the medieval p eriod. He is credited with setting up an observatory to study astronomical phenomena. Knowledge Base: The Katapayadi system is an ancient Indian numeral system where letters of the alphabet are assigned numerical values. It was widely used in South India, particularly in Kerala."},{"id":35,"txt":"Consider the following statements regarding Krishnadevaraya, ruler of Vijayanagar Empire:\n1. He patronized eminent poets such as Allasani Peddana and Nandi Thimmana.\n2. He laid the foundation of the main Venkateshwara temple at Tirupati.\n3. He permitted the Portuguese to build a fort at Bhatkal in return for military assistance.    [ 21 ]\nWhich of the state ments given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: . Krishnadevaraya (1509 – 1529) of the Tuluva dynasty is regarded as the greatest ruler of Vijayanagar. His achie vements covered not only military success but also temple patronage, literature and importantly efficient administration. Historians regard his reign as the Golden Age of Vijayanagar . Statement I is correct . Krishnadevaraya’s court was a centre of extraord inary literary activity. It was adorned by great Telugu poets such as Allasani Peddana and Nandi Thimmana . These poets were among the celebrated group often associated with his courtly brilliance. He was not just a patron but was a scholar - king. He authore d the famous Telugu work Amuktamalyada , which narrates the story of Andal. Statement II is incorrect . Krishnadevaraya made large donations to major temples like Tirupati, Srisailam, Kanchipuram and Chidambaram . He also added towering gopuras that still stand today. However, the main Venkateshwara temple at Tirupati was not built by him . It existed much earlier. The temple of Lord Venkateswara was built by Thondaman King and reformed periodically by Cholas, Pandyas and Vijayanagar. His role wa s in enriching and expanding temple structures, not in founding the original shrine. Statement III is correct . Krishnadevaraya had to constantly fight the Bahmani successor states . During these campaigns, the Portuguese , who were trying to establish their influence along the Malabar and Konkan coasts, offered him military assistance. In return, he permitted them to build a fort at Bhatkal . This shows his practical diplomatic approach. He used foreign support strategically to strengthen his military position ."},{"id":36,"txt":"Consider the following statements regarding the fall of the Vijayanagar Empire: Statement – I : The Vijayanagar Empire ceased to exist as a political power immediately after the Battle of Talikota in 1565. Statement – II: The defeat of Vijayanagar in the Battle of Talikota led to the sack and destruction of its capital city by the Deccan Sultanates.\nWhich of the above is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I.","Both Statement I and Statement II are correct but Statement II does not explain Statement I.","Statement I is correct but Statement II is not correct.","Statement I is not correct but Statement II is correct."],"ci":3,"exp":"Ex: . The Battle of Talikota (1565) was a decisive and traumatic event in the history of Vijayanagar. King Ramaraya of Vijaynagar was defeated and executed. The victorious Deccan Sultanates entered the capital city and devastated it. This battle marked the beginning of the empire’s decline.    [ 22 ] Statement I is incorrect . The empire did not imme diately come to an end after Talikota. Though the capital was destroyed, the ruling family survived. Sadasivaraya escaped to Penugonda , and in 1570 Tirumala(brother of Rama raya) founded the Aravidu dynasty . The empire continued in a weakened form for seve ral decades with shifting capitals till around 1670. Statement II is correct . After the defeat at Talikota, the victorious Deccan Sultanates entered the capital city of the Vijaynagar empire and plundered it for several months , leaving it devastated. This destruction was severe and long - lasting which marked the symbolic fall of imperial grandeur. Therefore, the Battle of Talikota, is considered as the watershed moment in the history of Vijayanagar Empire after which it lost its dominant authority and rule i n the region."},{"id":37,"txt":"Who among the following assumed the title of Nizam - u l - Mulk Asaf Jah to set himself an independent ruler with his base in Hyderabad?","ref":"","opts":["Kartalab Khan","Bahadur Shah","Alivardi Khan","Chin Qilich Khan"],"ci":3,"exp":"Ex: Chin Qilich Khan assumed the title of Nizam - ul - Mulk Asaf Jah to establish himself as an independent ruler with his base in Hyderabad. He was a prominent noble and military commander in the Mughal Empire under Aurangzeb . In 1719 , Chin Qilich Khan broke up with the Mughals after the death of Aurangzeb and declared himself the ruler of the Hyderabad State. He was recognized as the Nizam of Hyderabad by the Mughal emperor Bahadur Shah I in 1724."},{"id":38,"txt":"With reference to economic life during the Vijayanagar period, which of the following best describes the term “pattadai” or “kasaya - vargam”?","ref":"","opts":["A group of temple priests who received tax - free land grants","A category of non - a grarian artisans who paid taxes in cash","A military unit stationed in port towns","A guild of maritime traders dealing in horses"],"ci":1,"exp":"Ex: . The Vijayanagar period witnessed an important economic transformation. Until t he thirteenth century, the economy was mainly agrarian. From the fourteenth century onwards, it became increasingly commercialised . The use and circulation of coined money increased significantly . With the rise of the money economy, non - agrarian crafts exp anded rapidly . Artisans such as weavers, blacksmiths and masons gained greater prominence in society. These groups were collectively known as pattadai (workshop people) or kasaya - vargam , meaning those who paid taxes in cash .    [ 23 ]"},{"id":39,"txt":"With reference to literary works of the Vijayanagar period, consider the following pairs: Literary Work Author\n1. Panduranga Mahatyam Allasani Peddanna\n2. Manucharita Tenali Rama\n3. Jambavati Kalyanam Krishnadeva Raya\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":0,"exp":"Ex: . The reign of Krishnadeva Raya is regarded as the classical age of Telugu literature . His court was adorned by the famous Ashtadiggajas , the eight great Telugu poets - Nandi Timmana(the author of Parijathapaharanam), Madayagari Mallana, Dhurjati, Ayyalaraju Ramabhadra Kavi, Pingali Surana, Ramaraja Bhushana and Tenali Ramakrishna and the famous Allasani Peddanna. Pair I is incorrect . Pandur anga Mahatyam was written by Tenali Rama , the famous scholar and witty court jester of Krishnadeva Raya. The work is a devotional text centred on Lord Panduranga (a form of Vishnu worshipped at Pandharpur). Pair II is incorrect . Manucharita was composed by Allasani Peddanna , who was regarded as the greatest among the Ashtadiggajas . He was honoured with the title ‘Andhrakavita Pitamaha’ (Grandfather of Telugu Poetry). The work narrates the story of King Manu and is considered a masterpiece of Telugu court poetry . It established Peddanna’s reputation as the leading poet of the age. Pair III is correct . Jambavati Kalyanam is a Sanskrit work composed by King Krishnadeva Raya himself . It narrates the marriage of Lord Krishna with Jambavati. Krishn adeva Raya was not only a patron but also a scholar - king. His reign saw remarkable literary growth in Telugu and Kannada, and he earned the title ‘Abhinava Bhoja’ for his literary excellence. His another work Amukta Malyada (story of Andal)written in Telugu is a masterpiece of Telugu literature."},{"id":40,"txt":"Consider the following pairs: Medieval India State Present Region\n1. Champaka Central India\n2. Durgara Jammu\n3. Kuluta Malabar\nWhich of the above pairs is / are correctly matched?","ref":"","opts":["1 and 2 only","2 only","1 and 3 only","3 only    [ 24 ]"],"ci":1,"exp":"Ex: The regional states like Champaka (Chamba – Himachal Pradesh), Durgara (Jammu), Trigarta (jalandhar), Kuluta (Kulu – Himachal Pradesh) emerged in the ninth century in the hills of Himalayas, some of which maintained their identity, despite their wars with each other and the frequent raids from the men of the plains."},{"id":41,"txt":"With reference to foreign travellers visiting India, consider the following:\n1. Duarte Barbosa\n2. Afanasii Nikitin\n3. Nicolo de Conti\n4. Marco Polo\nHow many of the above visited during the era of Vij ayanagar Empire?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: . The Vijayanagar Empire attracted several foreign travellers due to its wealth, military strength and thriving trade . Their accounts provide valuable information about its society and economy. Option I is correct . Duarte Barbosa was a Portuguese traveller who visited India during 150 - 1517. He visited South India in the early sixteenth century. His writings describe the prosperity and trade of the Vijayanagar Empire. Option II is correct . Afanasii Nikitin was a Russian merchant wh o travelled to India during the later half of the fifteenth century and visited the Deccan region, including areas under Vijayanagar influence. His travelogue is now famous as Voyage Beyond Three Seas . Option III is correct . Nicolo de Conti was an Italian traveller. He visited Vijayanagar in the fifteenth century and left an account describing the large size and splendour of the city. Option IV is incorrect . Marco Polo visited India in the late thirteenth century, mainly during the time of the Pandya kingdo m and Kakatiya kingdom in South India. He visited before the establishment of the Vijayanagar Empire in 1336."},{"id":42,"txt":"With reference to medieval Indian scholar Firdausi, consider the following statements:\n1. He served as the court poet of Alauddin Hasan Bahman Shah of the Bahmani kingdom.\n2. He was the author of the epic Shahnama/Shahnameh.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II    [ 25 ]"],"ci":1,"exp":"Ex: Stateme nt I is incorrect: Firdausi did not serve as the court poet of Alauddin Hasan Bahman Shah. Firdausi lived during the late 10th and early 11th centuries CE and was closely with the court of Mahmud of Ghazni. In contrast, Alauddin Hasan Bahman Shah founded t he Bahmani Kingdom in the Deccan in the 14th century (1347) CE, nearly three centuries after Firdausi’s lifetime. Statement II is correct: Firdausi is the author of the famous Persian epic Shahnama/Shahnameh (Book of Kings). It is one of the longest epic p oems in the world and narrates the mythical, legendary, and historical past of Iran. The Shahnameh played a major role in preserving Persian language and culture after the Arab conquest."},{"id":43,"txt":"In context to the rule of the Marathas in India, the term ‘Kurja - Patti’ refers to which of the following?","ref":"","opts":["A type of loan provided by the ruler to farmers.","A type of land - grant made by the ruler to brahmanas.","A type of emergency tax imposed by the ruler.","A type of land directly owned by the ruler."],"ci":2,"exp":"Ex: The Maratha rulers collected various types of taxes. Land revenue was the main source of income for the State. There were other sources of income like Chauth, Sardeshmukhi, Customs, excise duties, and other miscellaneous taxes. However, when the Maratha government was in financial difficulty , it levied on all land - holders a tax equal to one year’s income of the tax - payer . This additional tax is known as the Kurja - Patti or Tasti - Patti. So, Kurja - Patti is a type of emergency tax imposed on the landholders."},{"id":44,"txt":"Who among the following rulers of medieval Gujarat surrendered Diu to the Portuguese?","ref":"","opts":["Ahmad Shah","Mahmud Begarha","Bahadur Shah","Muhammad Shah"],"ci":2,"exp":"Ex: Option c is th e correct answer In 1534, Bahadur Shah signed the Treaty of Bassein with the Portuguese. By this, he ceded Diu to the Portuguese , as well as other territories of his empire such as Vasai and the islands that today form the Mumbai. The Portuguese obtained Daman from the Shah in 1559."},{"id":45,"txt":"With reference to the Hoysala rule during the 11th - 14th centuries in South India, consider the follo wing statements:\n1. Narasimha I is considered the real founder of the dynasty.\n2. The capital of the Hoysalas was initially at Belur and was later shifted to Dwarasamudra.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":1,"exp":"Ex: The Hoysalas were a prominent medieval dynasty that ruled large parts of present - day Karnataka from the 11th to the 14th century . They initially served as feudatories of the Western C halukyas and later established an independent kingdom under Vishnuvardhana . Statement I is incorrect: The founder of the Hoysala dynasty was Nripa Kama II, who initially served as a feudatory of the Western Gangas. However, the real founder of the independent Hoysala dynasty is regarded as Vishnuvardhana, who consolidated and expanded the kingdom significantly after weakening the authority of the Western Chalukyas. The Ariskere inscription (1197 CE) eulogizes Vishnuvardhana as “a devouring epidemic to Chera,” highlighting his military successes and imperial stature. Narasimha I, the son and successor of Vishnuvardhana , further extended the boundaries of the kingdom as far as Vikramesvaram (Ramesvaram) in the south. Thus, Narasimha I was an important consolidator and expander of the dynasty, but not its founder . Statement II is correct: The early capital of the Hoysalas was Belur . Later, the capital was shifted to Dwarasamudra (modern day Halebidu) , which became the principal politi cal and cultural centre of the dynasty."},{"id":46,"txt":"With reference to the administration of medieval South India, Palayams is best referred as:","ref":"","opts":["A small lake in the village.","An uncultivable land in the village.","A barter system prevalent in the region.","A small region co nsists of a few villages."],"ci":3,"exp":"Ex: In medieval South India, Palayams were a small region consisting of few villages, which was governed by local chiefs known as Poligars (Palaiyakkarars). The literal meaning of Palayakkarar is the holder of a camp as well as the holder of an estate on military tenure. These chiefs exercised administrative, judicial, and military authority within their assigned territories and were responsible for providing military assistance to the ruling power (such as the Nayakas, Vijayanagara successors, and later the Marathas)."},{"id":47,"txt":"With reference to the later medieval and early modern history administration of India, consider the following: ‘A system was introduced, offering protection to cultivators on the payment o f a tax of 20 per cent of the produce. Under this system, peasants paid a certain amount to local chiefs or Sikh leaders in exchange for protection against external raids, bandits, or rival groups.’\nWhich of the following systems is being described in the above paragraph?","ref":"","opts":["Gurmata","Rakhi","Jatha","Dal Khalsa"],"ci":1,"exp":"Ex: The Rakhi system was a protection tax system established primarily by the Sikhs in 18th - century Punjab. Under this system, peasants paid a certain amou nt (Rakhi) to local chiefs or Sikh leaders in exchange for protection against external raids, bandits, or rival groups. In this system, cultivators typically paid a tax of 20% of their produce in exchange for security. It was essentially a contractual arr angement ensuring security. Knowledge Base: The Sikhs organised themselves into a number of bands called jathas , and later on misls. Their combined forces were known as the grand army ( dal khalsa ). The entire body used to meet at Amritsar at the time of Baisakhi and Diwali to take collective decisions known as “resolutions of the Guru ( gurmatas )."},{"id":48,"txt":"With reference to medieval Indian history, consider the following description: He was a powerful ruler of the Jat kingdom in the 18th century who successfully resisted Mughal authority. Under his leadership the kingdom of Bharatpur emerged as a strong state. He built the famous Loha garh fort at Bharatpur.\nWhich of the following rulers is best described in the above passage?","ref":"","opts":["Churaman","Raja Todar Mal","Suraj Mal","Raja Jai Singh II"],"ci":2,"exp":"Ex: The description refers to Suraj Mal ( r. 1755 – 1763), the most powerful ruler of the Jat kingdom of Bharatpur in the 18th century. He consolidated the Jat state around Bharatpur and significantly strengthened it politically and militarily. He successfully resisted Mughal authority at a time when the Mughal E mpire was rapidly declining. Under his leadership, Bharatpur emerged as a major regional power in North India .He built the famous Lohagarh fort at Bharatpur. However, after his death in 1763 , the strength and cohesion of the Jat state gradually declined, a nd it could not maintain the same level of influence. Hence, the ruler best described in the passage is Suraj Mal."},{"id":49,"txt":"With refer ence to medieval India, consider the following personalities:\n1. Sant Tukaram\n2. Eknath\n3. Samarth Ramdas\n4. Sant Namdev\nHow many of the above were contemporaries of the Maratha ruler Chatrapati Shivaji?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Chhatrapati Shivaji (1627 – 1680) was the founder of the Maratha empire in western India and one of the most prominent rulers of 17th - century India . Born at Shivneri Fort , he carved out an independent kingdom in the Deccan in opposition to the Bijapur Sultanate and the Mughal Empire. He is known for his innovative guerrilla warfare tactics (Ganimi Kava), efficient administrative system ( Ashtapradhan Council ), strong naval policy, and fort - based defense strategy. During his time, Shivaji was closely associated with saints and thinkers such as Sant Tukaram and Samarth Ramdas He was also influenced by the worldview of the Maharashtrian bhakti saint poets such as Namdeo and D ynaneshwar. Option I is correct: Sant Tukaram Sant Tukaram was one of the most prominent saints of the Varkari Bhakti tradition in Maharashtra . His devotional poetry (Abhangas), dedicated to Vithoba of Pandharpur , had a deep social and spiritual impact. He lived in the 17th century, which coincided with the early and middle phase of Shivaji’s life. Hence, he was a contemporary of Shivaji. Option II is incorrect : Eknath Eknath was an important 16th - century saint - scholar of the Varkari tradition . He composed works such as the Eknathi Bhagavata and promoted devotional egalitarianism. However, he died more than three decades before Shivaji was born . Hence, he was not a contemporary of Shivaji. Option III is correct : Samarth Ramdas Samarth Ramdas lived in the 1 7th century and was a direct contemporary of Shivaji . He is traditionally regarded as Shivaji’s spiritual mentor . He was the author of Dasbodh and Manache Shlok. Option IV is incorrect : Sant Namdev Namdev was an early Bhakti saint of Maharashtra whose comp ositions are included in the Guru Granth Sahib. However, he belonged to the 13th – 14th century , nearly three centuries before Shivaji’s time. Therefore, he was not a contemporary of Shivaji."}],"m":null,"tt":3000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

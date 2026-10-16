@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SFG LEVEL 01    2026 = 321137</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>SFG LEVEL 01    2026 = 321137</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="SFG LEVEL 01    2026 = 321137">SFG LEVEL 01    2026 = 321137</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to monoclonal antibodies, often mentioned in news, consider the following statements:\n1. They are man-made proteins.\n2. They stimulate immunological function due to their ability to bind to specific antigens.\n3. They are used in treating viral infections like that of Nipah virus.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: Statement I is correct: Monoclonal antibodies are manmade antibodies artificially created in laboratories using biotechnology. Scientists produce them by cloning a single white blood cell (B-cell) that produces a desired antibody. Since all the antibodies are copies (clones) of one original cell, they are called monoclonal antibodies. These proteins are designed to mimic the immune system’s ability to fight off harmful pathogens such as viruses and bacteria. Statement II is correct: Monoclonal antibodies are highly specific – they are engineered to bind to a particular antigen (a molecule or protein found on the surface of pathogens or abnormal cells). This binding can: Neutralize the pathogen (by blocking its activity), Mark it for destruction by other immune cells, Or block recept ors that the virus uses to enter human cells. By binding to these specific targets, mAbs enhance the immune response and help the body fight disease more effectively. Statement III is correct: Monoclonal antibodies have been developed as therapeutic options for several viral infections, including : • COVID - 19 (e.g., Casirivimab and Imdevimab) • Ebola virus (e.g., Inmazeb, Ebanga) • Nipah virus : A monoclonal antibody called m102.4 has shown potential against the Nipah virus. It was used under compassionate use protocols in a few cases and is under further clinical investigation."},{"id":1,"txt":"With reference to germline gene editing, consider the following statements:\n1. It involves genetic modification of reproductive cells and embryos.\n2. Modifications made through germline gene editing can be passed down to future generations.\n3. India has recently permitted trials of CRISPR-Cas9 technology to edit the human germline.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":0,"exp":"Ex: Human gene therapy is a treatment approach in which genetic material is added, removed, or altered within human cells to treat or prevent disease, typically by correcting or compensating for defective genes. Statement I is correct: In germline editing technique, genes in reproductive cells such as eggs, sperms or embryos may be edited. These cells pass their DNA to future generations so any edits made to them are inherited. The aim of editing may also be to propagate the desired change to all cells. However, embryo editing may result in mosaicism, which means that the embryos would have some edited and non-edited cells. Mosaicism may occur if gene editing happens after division of the initial single-cell embryo into two cells. For example, at the two-cell stage, one of the cells acquires one type of edit while the other cell has a different edit or no edit.    Statement II is correct: Editing the human germline essentially means creating genetically modified humans through the manipulation of their genes. While germline editing is focussed on editing the genes — or traits — that pass on from parents to children, it runs the risk of affecting even non-targeted genes. In the case of germline gene editing, modifications are heritable and could alter the genetic makeup of future generations and even populations. Statement III is incorrect: At present, in India, gene therapy is applied only to somatic (non-heritable) cells in clinical settings, while germline modifications remain prohibited and tightly regulated for ethical reasons. India has not permitted trials of CRISPR-Cas9 technology to edit the human germline. There are ethical concerns that the germline editing technology can be used by the rich to ‘customise’ a baby with desired traits, and allowing human genome editing could make India a hub for a certain kind of medical tourism. Knowledge Base: Techniques used to alter Genetic Function: Gene silencing: Inhibition of expression of a pathogenic gene (e.g., via RNA interference or antisense). Gene editing: Targeted modification using tools such as CRISPR – Cas systems to correct disease-causing variants. Cell-based gene therapy : Genetic modification of cells (e.g., T cells, stem cells) followed by their administration back to the patient, as in CAR-T cell therapies."},{"id":2,"txt":"BIRSA-101, recently seen in news, is:","ref":"","opts":["a high-yielding variety of bio-fortified rice seeds designed to combat malnutrition among children.","India’s first indigenous CRISPR -based gene therapy for sickle cell disease.","an automated biomedical waste treatment that disinfects pathogenic waste without incineration.","a portable hospital designed to provide rapid medical assistance in Humanitarian Aid & Disaster Relief (HADR) conditions."],"ci":1,"exp":"Ex: Option b is correct: The Union Ministry of Science & technology has recently launched BIRSA 101 - India’s first indigenous \"CRISPR\" based gene therapy for Sickle Cell Disease, which particularly affects India's tribal population. The therapy has been named \"BIRSA 101\" in honour of tribal leader Birsa Munda on his 150th anniversary (15th November, 2025). Birsa-101 precisely corrects the mutations in the genetic code that causes the disease. The therapy has to be given as a one-time infusion, after which the body should start producing normal red blood cells instead of sickle-shaped ones. This method is very different from the globally approved treatment Casgevy, which edits a gene to push the body’s blood manufacturing mechanism to make more foetal haemoglobin, which do es not carry the same defect. Foetal haemoglobin, which is naturally present in everyone at birth, does not carry the same abnormalities as adult haemoglobin. The same therapy can be used for the treatment of thalassaemia — another inherited blood disorder where the body produces little or no haemoglobin. Knowledge Base: Sickle Cell Disease: It is a genetic condition that leads to the body’s red blood cells becoming rigid, sickle-shaped, and less capable of carrying oxygen. The shape of the blood cells can also lead to blockages in blood flow, leading to acute episodes of pain, chronic pain, organ damage, anemia, infections, and strokes. A person can be a carrier and not have a disease. The government has launched a mission with the aim of eliminating the disease by 2047, mainly by screening carriers of the gene and making them aware of the risk of having a child with other carriers."},{"id":3,"txt":"Which of the following statements with respect to the differences between ballistic missiles and cruise missiles is/are incorrect ?\n1. Compared to Ballistic missiles, Cruise missiles are generally harder to detect by radar.\n2. Cruise missiles can only be used to deliver conventional warheads, whereas ballistic missiles can carry both nuclear and conventional warheads.\nSelect the correct answer using the code given below.","ref":"","opts":["Neither I nor II","Both I and II","II only","I only"],"ci":2,"exp":"Ex: . Missiles are a core component of modern military capability and are classified based on their flight path, propulsion system, altitude, and guidance mechanism . Among them, ballistic missiles and cruise missiles represent two fundamentally different technologies, each designed for distinct strategic and tactical roles. Statement I is correct . Cruise missiles are difficult to detect because they fly low and can use terrain for concealment. Ballistic missiles, due to their high-altitude trajectory and speed , are generally easier to detect and track by radar and satellite systems once launched. Ballistic missiles are initially powered by one or more rocket stages , after which they follow a high-arching, unpowered (ballistic) trajectory through space before descending toward their target. In contrast, cruise missiles are jet-powered and maintain a steady, low-altitude flight path throughout their journey to the target. Cruise missiles remain within the atmosphere for the duration of their flight and can fly as low as a few meters off the ground. Flying low to the surface of the earth expends more fuel but makes a cruise missile very difficult to detect. Statement II is incorrect . Both cruise and ballistic missiles are capable of delivering either conventional or nuclear warheads. For instance, The BrahMos missile is a supersonic cruise missile capable of carrying both conventional and nuclear warheads. The Agni series (like Agni-V, Agni-IV) are nuclear-capable ballistic missiles, designed specifically for strategic deterrence. Knowledge Base:"},{"id":4,"txt":"With reference to India’s defense, consider the following pairs: Aircraft type Description\n1. Dornier-228 Maritime patrol aircraft\n2. IL-76 Supersonic combat aircraft Supersonic combat aircraft\n3. C-17 Globe Master III Military transport aircraft\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":1,"exp":"Ex: India’s defence forces operate a diverse fleet of aircraft, each serving specific roles such as surveillance, combat, and transportation. Pair I is correct. The Dornier 228 is a twin-engine turboprop aircraft utilized by the Indian Navy and Coast Guard for maritime patrol , surveillance, search and rescue, and pollution control missions. Manufactured under license by Hindustan Aeronautics Limited (HAL), it is equipped with advanced sensors and communication systems tailored for maritime operations.    Pair II is incorrect. The Ilyushin Il-76 is a strategic airlifter, not a supersonic combat aircraft. Designed by the Soviet Union’s Il yushin design bureau, it serves roles such as transporting heavy machinery, aerial refueling, and emergency response. It is a four-engine turbofan aircraft capable of operating in rugged environments but lacks the speed and agility characteristic of supersonic combat aircraft. Pair III is correct. The C-17 Globemaster III is a large military transport aircraft developed by McDonnell Douglas (now Boeing) for the United States Air Force and also operated by the Indian Air Force. It is designed for rapid strategic airlift of troops and cargo to main operating bases or forward bases in the deployment area. The aircraft is capable of performing tactical airlift, medical evacuation, and airdrops, making it a versatile asset in military logistics."},{"id":5,"txt":"What is the primary function of a moderator in a nuclear reactor?","ref":"","opts":["To absorb excess neutrons and stop the chain reaction.","To convert nuclear energy directly into electrical energy.","To slow down fast-moving neutrons produced during nuclear fission.","To remove heat from the reactor core to prevent it from excessive heating."],"ci":2,"exp":"Ex: . In a nuclear reactor, energy is released when a heavy nucleus like uranium splits. This process is called nuclear fission . When fission occurs, it releases a large amount of energy and also fast-moving neutrons . For a sustained and controlled chain reaction , neutrons must move slowly. Such neutrons are called thermal neutrons . Moderator is a substance used to slow down the neutrons produced by fission to sustain the chain reaction. Common moderator materials include graphite, heavy water, and ordinary water ."},{"id":6,"txt":"With reference to MicroRNA, consider the following statements:\n1. They are endogenous in nature, meaning they are encoded within the organism's own genome.\n2. They are short duplex RNA molecules that exert gene silencing effects at the post-transcriptional level by targeting messenger RNA (mRNA).\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: MicroRNAs (miRNAs) are important types of noncoding RNA molecules involved in gene silencing and post- transcriptional regulation of gene expression . Statement I is correct. miRNAs are endogenous , m eaning they are encoded within the organism's own genome. They are typically transcribed from specific genes and processed into mature miRNAs. miRNAs are types of noncoding RNAs , meaning they do not code for proteins.    Statement II is correct. miRNAs are short duplex RNA molecules that exert gene silencing effects at the post- transcriptional level by targeting messenger RNA (mRNA). miRNAs regulate gene expression by binding to the 3' untranslated region (UTR) of target mRNAs, either inhibiting translation or causing mRNA degradation."},{"id":7,"txt":"Which of the following statements regarding Chimeric Antigen Receptor T (CAR-T) cell therapy is/are correct?\n1. In CAR-T cell therapy, T-cells can be genetically engineered to add specific receptors, which are specifically designed to recognise and bind to antigens on the surface of cancer cells.\n2. Unlike chemotherapy, which can affect both cancerous and healthy cells, CAR-T cell therapy generally specifically attacks cancer cells while sparing normal healthy cells.\nSelect the correct answer using the code given below:","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: . Statement I is correct: T-cells are primarily used in CAR-T cell therapy because of their pivotal role in the immune system’s response to pathogens and malignancies. T hese cells can be genetically engineered to express chimeric antigen receptors (CARs), which are specifically designed to recognise and bind to antigens on the surface of cancer cells. Once bound, these modified T-cells can efficiently kill cancer cells. Other cells like B cells or natural killer cells also play roles in immunity but don’t have the same adaptability and memory capabilities as T cells, making them less effective for the persistent and targeted action required in CAR-T cell therapy. Statement II is correct: CAR-T cell therapy has emerged as a transformative treatment in oncology – a branch of medicine that specialises in the diagnosis and treatment of cancer – offering significant benefits for patients. Targeted Precision: CAR-T cell therapy is designed to target specific antigens present in cancer cells. This specificity allows the therapy to directly attack cancer cells while sparing normal, healthy cells. The precision minimises collateral damage and reduces the risk of side effects compared to traditional treatments like chemotherapy, which can affect both cancerous and healthy cells."},{"id":8,"txt":"Consider the following statements regarding Transposons:\n1. They are mobile DNA sequences commonly known as Jumping genes.\n2. They can cause DNA damage and may lead to early cell death.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: . Statements I and II are correct . Transposons, also known as “jumping genes” or mobile elements are little pieces of DNA that can insert themselves into different regions of the genome, damaging it and leading to cell death. The DNA damage caused by the transposons leads to these cells dying out early. Transposons challenge the prevailing concept that genes are stable and arranged in an orderly manner on the chromosome. The discovery of transposons revolutionised our understanding of genetics, in particular their role in enabling nat ure’s wondrous diversity. Transposons influence the effects of genes by turning ‘on’ or ‘off’ their expression using a variety of epigenetic mechanisms. They are thus rightly called the tools of evolution, for their ability to rearrange the genome and introduce changes."},{"id":9,"txt":"With reference to the use of thorium for the generation of power, consider the following statements:\n1. Naturally occurring thorium can be directly used as fuel in nuclear reactors for the generation of electrical power.\n2. Naturally occurring thorium is a ‘fertile’ material that can be converted into a ‘fissile material.’\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":3,"exp":"Ex: Thorium is a silvery, slightly radioactive metal commonly found in igneous rocks and heavy mineral sands. Thorium- 232 is the only naturally occurring isotope of thorium. India has the largest deposits of Thorium in the world, roughly a quarter of the world’s thorium. Together, Kerala and Odisha account for over 70 percent of Ind ia’s thorium. The third stage of India’s nuclear power programme envisages the use of thorium for power generation. Statement I is incorrect. Thorium by itself cannot be directly used as a fuel in nuclear reactors for generation of power . Thorium has to be converted to Uranium-233 in a reactor before it can be used as fuel. Statement II is correct. Thorium is not a fissile material. Rather,it is fissionable fertile material that has to be converted to fissile material U233. When irradiated, thorium-232 undergoes a series of nuclear reactions, eventually forming uranium-233, which can then be split to release energy to power a nuclear reactor.    Thus, Thorium will create fissile U233, which will be used as fuel for the generation of nuclear energy . Thus, thorium in itself is not directly a nuclear fuel, but it can be used to create one."},{"id":10,"txt":"“Membrane Bioreactors” are often discussed in the context of:","ref":"","opts":["Assisted reproductive technologies","Drug delivery nanotechnologies","Vaccine production technologies","Wastewater treatment technologies"],"ci":3,"exp":"Ex: Option d is correct: Membrane Bioreactors” are commonly discussed in the context of wastewater treatment technologies. These systems combine biological treatment (using microorganisms) with membrane filtration to efficiently remove pollutants from wastewater. The membranes act as barriers, allowing clean water to pass through while retaining suspended solids and microorganisms. Membrane bioreactors are widely used in treating domestic and industrial wastewater."},{"id":11,"txt":"Consider the following statements about mRNA vaccines:\n1. They generally use weakened or killed forms of a virus to generate an immune response in the human body.\n2. They do not alter human DNA because the mRNA usually does not enter the cell nucleus.\n3. The mRNA vaccine can be stored at normal room temperature for a long time.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II","II only","III only","None of the above"],"ci":1,"exp":"Ex: . mRNA vaccines are a modern type of vaccine that use messenger RNA (mRNA) to train the immune system. The process begins with the delivery of mRNA into the cytoplasm of hu man cells. The cell’s own machinery then reads this mRNA and synthesises a viral protein fragment , such as the spike protein. The immune system recognises this protein as foreign and mounts a response by producing antibodies and memory cells to protect the body against it. After the protein is produced, the mRNA naturally degrades and is eliminated by the body , without entering the nucleus or altering DNA. Statement I is incorrect . mRNA stands for messenger RNA, is a form of nucleic acid which carries genetic information. Like other vaccines, the mRNA vaccine also attempts to activate the immune system to produce antibodies that help counter an infection from a live virus. However, while most vaccines use weakened or dead bacteria or viruses to evoke a response from the immune system, mRNA vaccines only introduce a piece of the genetic material that corresponds to a viral protein. This is usually a protein found on the membrane of the virus and is called spike protein. Therefore, the mRNA vaccine does not expose individuals to the virus itself.    Statement II is correct . mRNA from vaccines never enters the nucleus of the cell. Human DNA is stored inside the nucleus, while mRNA functions in the cytoplasm. Since the mRNA cannot interact with DNA, it cannot alter or integrate into human genes . Statement III is incorrect . The mRNA vaccines are required to be stored at sub-zero temperatures as mRNA is fragile and easily breaks down thus reducing the efficacy of the vaccine."},{"id":12,"txt":"With reference to recent advances in technology, a new technique called Light-microscopy-based Connectomics (LICONN) is most closely associated with which of the following?","ref":"","opts":["Mapping neural connections in human brain","Establishing satellite based internet networks","Developing Small Modular Nuclear Reactors","Developing high end night vision infrared cameras for military purpose"],"ci":0,"exp":"Ex: . Light-microscopy-based Connectomics (LICONN) is a new technique used to map how brain cells are connected. Normally, many brain structures are too small to be seen with a light microscope. Because of this, scientists had to rely on complex and costly electron microscopes. LICONN solves this problem by physically expanding brain tissue by soaking in a special gel that expands evenly. This makes the tissue about 16 times larger than its original size. After expansion, scientists use fluorescent stains to mark different proteins inside neurons. These stains make neurons glow under a light microscope. Advanced computer programs, including artificial intelligence, are then used to identify neurons, trace their shapes, and map how they are connected."},{"id":13,"txt":"The gene drive technology was recently seen in the news in the context of which one of the following?","ref":"","opts":["Treating genetic disorders through human gene therapy.","Treating cancer in humans.","Developing faster DNA sequencing techniques.","Controlling malaria by spreading infertility or resistance traits in mosquitoes."],"ci":3,"exp":"Ex: . Under normal genetic rules, animals have a 50:50 chance of inheriting a single gene from either parent . But a gene drive is a naturally occurring process where a specific gene is prioritised, meaning its chances of being inherited are up to 99% . Within a few generations, almost all of the species will carry that gene. Malaria is spread by female Anopheles mosquitoes . Scientists use gene drive technology to insert specific genes into mosquitoes, such as: Genes that make mosquitoes infertile , or Genes that prevent mosquitoes from carrying the malaria parasite    When these genetically modified mosquitoes are released into the wild: They mate with normal mosquitoes. The modified gene is inherited by nearly all offspring. Over time, the mosquito population either collapses or becomes unable to transmit malaria. Gene drive offers a long-term solution to malaria control. It reduces dependence on insecticides and drugs . Importantly, it targets the disease vector , not humans. However, the technology also raises ethical and ecological concerns , since once released, gene drives can spread rapidly and are difficult to reverse."},{"id":14,"txt":"Aerial metagenomics best refers to which one of the following situations?","ref":"","opts":["Collecting DNA samples from air in a habitat at one go.","Understanding the genetic makeup of avian species of a habitat.","Using air-borne devices to collect blood samples from moving animals.","Sending drones to inaccessible areas to collect plant and animal samples from land surfaces and water bodies."],"ci":0,"exp":"Ex: “Aerial metagenomics” refers to the collection and analysis of DNA samples from the air or aerosol particles pr esent in a specific habitat. It involves sampling the air in a particular environment to capture the genetic material (DNA) present in microorganisms, including bacteria, viruses, fungi, and other microscopic organisms."},{"id":15,"txt":"INS Arnala, INS Androth and INS Anjadip belong to which of the following class of marine vessels:","ref":"","opts":["Frigates","Aircraft Carriers","Anti-Submarine Warfare Shallow Water Craft (ASW SWC)","Nuclear submarine"],"ci":2,"exp":"Ex: . INS Arnala, Androth and Anjadip are three out of eight Anti-Submarine Warfare Shallow Water Craft (ASW SWC), indigenously designed and built by Garden Reach Shipbuilders and Engineers (GRSE), Kolkata. At approximately 77 metres in length, the ASW SWCs are the largest Indian naval warships to be propelled by waterjets. They are equipped with state-of-the-art lightweight torpedoes, indigenously developed anti-submarine rockets and shallow-water sonar, enabling effective detection and engagement of underwater threats. These platforms will significantly enhance the Navy’s anti -submarine warfare capability, coastal surveillance and mine-laying operations."},{"id":16,"txt":"Consider the following statements:\n1. SONAR is preferred over RADAR for detecting submerged objects like submarines or shipwrecks.\n2. Radio waves are heavily absorbed and scattered by seawater, whereas sound waves can travel great distances through water with minimal absorption or scattering.\nWhich of the above is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I.","Both Statement I and Statement II are correct but Statement II does not explain Statement I.","Statement I is correct but Statement II is not correct.","Statement I is not correct but Statement II is correct."],"ci":0,"exp":"Ex: . Detecting objects underwater is scientifically challenging because water interacts differently with various types of waves . Technologies used in air or space do not always work effectively beneath the sea surface. This is why special systems are needed for underwater navigation and detection. Statement I is correct . SONAR, which stands for Sound Navigation and Ranging , is widely used to detect submerged objects such as submarines, underwater rocks, and shipwrecks. It is the primary sensing technology for underwater navigation and surveillance , unlike RADAR, which is mainly used in air and space. Statement II is correct . Electromagnetic waves, which are transverse in nature, including radio waves and microwaves used in RADAR systems, are strongly absorbed by seawater and thus getting attenuated . In contrast, sound waves are mechanical, longitudinal waves that can travel long distances in water with relatively little energy absorption or scattering . Statement II explains Statement I . Since Electromagnetic waves used in RADAR systems cannot propagate effectively in water , it becomes unsuitable for underwater detection. At the same time, sound waves propagate efficiently in water , making SONAR a reliable and effective tool for detecting submerged objects. Thus, the difference in how water interacts with electromagnetic waves and sound waves directly explains why SONAR is used instead of RADAR underwater ."},{"id":17,"txt":"In the co ntext of Indian defence technology, which of the following best describes “Akashteer”?","ref":"","opts":["A nuclear-powered attack submarine designed for underwater deterrence","A satellite-based early warning system for detecting intercontinental ballistic missiles","A long-range surface-to-surface ballistic missile developed by DRDO","An indigenous automated air defence control and reporting system of India"],"ci":3,"exp":"Ex: . Akashteer is an indigenously developed, automated Air Defence Control and Reporting System (ADCRS) for the Indian Army . It integrates radars, sensors, and air defence weapon systems into a single network. Akashteer enables real-time detection, tracking, identification, and engagement of aerial threats , thereby enhancing battlefield air defence and reducing human reaction time."},{"id":18,"txt":"Consider the following statements:\n1. Epigenome editing is considered a safer alternative to traditional CRISPR-Cas9 gene editing for treating certain genetic conditions.\n2. Unlike CRISPR-Cas9 gene editing, Epigenome editing involves regulating gene expression without altering the DNA sequence.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct and Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":0,"exp":"Ex: Epigenetics is the biochemical changes dictating expressivity of a gene in a cell. Statement I is correct: Apart from DNA or protein sequence level alterations, there are other biochemical changes that influence and dictate if a gene should be active or inactive in a given cell type. Such biochemical changes that dictate the expressivity of a gene in a particular cell are collectively termed “epigenetics.” Unlike DNA mutations that are permanent, such epigenetic changes are reversible and are mediated by regulatory proteins such as DNA methyl transferases (DNMTs), histone acetyl transferases (HATs), histone deacetylases (HDACs) and so on. These regulatory proteins can add or remove such modifications and can result in turning ON/OFF a specific gene in a tissue or organ specific manner. Epigenome editing is considered a safer alternative to traditional CRISPR-Cas9 gene editing as it is gentler. Rather than chopping the DNA in two, it uses an enzyme that installs or removes a chemical lock at a specific place in the genome. Statement II is correct and explains Statement I: Unlike traditional gene editing, which involves cutting DNA, epigenome editing offers precise, reversible control over gene expression. In epigenome editing, all modifications (e.g., methyl groups, histone modifications) that regulate gene expression are done without altering the DNA sequence."},{"id":19,"txt":"With reference to Trachoma, consider the following statements:\n1. It is an infectious disease caused by bacteria.\n2. It primarily affects the respiratory system and can lead to long-term pulmonary complications.\n3. India is one of the few countries in Asia to have eliminated Trachoma as a public health problem.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","I and II","I and III","II and III"],"ci":2,"exp":"Ex: Statement I is correct: Trachoma is a devastating eye disease caused by infection with the bacterium Chlamydia trachomatis . The infection spreads from person to person through contaminated fingers, fomites and flies that have come into contact with discharge from the eyes or nose of an infected person. Statement II is incorrect: Trachoma does not affect the respiratory system . It is an ocular disease, primarily affecting the conjunctiva and eyelids. Recurrent infection leads to scarring of the inner eyelid, inward turning of eyelashes ( trachomatous trichiasis ), corneal damage , and eventually irreversible blindness. Trachoma is one of the leading causes of blindness globally. There is no association of Trachoma with pulmonary or respiratory complications. Statement III is correct: India has been officially validated by the World Health Organization (WHO) in 2024 for eliminating Trachoma as a public health problem . With this achievement, India became the 20th country globally and the third in the South-East Asia region , after Nepal and Myanmar, to attain this status."},{"id":20,"txt":"Recently, the term “pumped - storage hydropower” is actually and appropriately discussed in the context of\nwhich one of the following?","ref":"","opts":["Irrigation of terraced crop fields","Lift irrigation of cereal crops","Long duration energy storage","Rainwater harvesting system"],"ci":2,"exp":"Ex: Option c is correct: The term “pumped - storage hydropower” relates to long -duration energy storage. It refers to a type of hydroelectric energy storage where two water reservoirs at different elevations are used to generate power. Water moves down from one reservoir to the other (discharge), passing through a turbine, and then requires power to be pumped back into the upper reservoir (recharge)."},{"id":21,"txt":"Consider the following statements with reference to Hepatitis D virus (HDV):\n1. HDV has been classified as carcinogenic to humans and is associated with an increased risk of liver cancer.\n2. HDV infects only those individuals who are already infected with Hepatitis B virus.\n3. HDV may be transmitted from an infected mother to her child during pregnancy or around the time of birth.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: Statement I is correct: Hepatitis D is an inflammation of the liver caused by the hepatitis D virus (HDV). Hepatitis D virus infection is strongly associated with severe liver disease , including rapid progression to cirrhosis and a higher risk of hepatocellular carcinoma (liver cancer) compared to Hepatitis B alone. On the basis of accumulating epidemiological evidence, the International Agency for Research on Cancer (IARC) has classified Hepatitis D as carcinogenic to humans. Statement II is correct: HDV is a defective virus and cannot infect or replicate independently. It requires the Hepatitis B surface antigen (HBsAg) for its assembly and transmission. Therefore, HDV infects only individuals who are already infected with Hepatitis B virus. HDV affects globally nearly 5% (an estimated 12 million) of people who have a chronic infection with Hepatitis B virus. Hence, Hepatitis D infection can be prevented by hepatitis B immunization. Statement III is correct: Hepatitis D spreads through similar routes as Hepatitis B , since it depends on it. These include: Contact with infected blood, Use of contaminated needles or medical equipment, Unprotected sexual contact , and Vertical transmission (from mother to child during pregnancy, delivery, or shortly after birth). Although mother-to-child transmission is a less common mode of transmission, it is still medically recognized."},{"id":22,"txt":"The primary function of Regulatory T cells (Tregs) in the immune system is:","ref":"","opts":["To produce antibodies against specific antigens.","To prevent immune system responses against the body’s own tissues.","To directly kill virus-infected and tumour cells.","To generate long-term immunological memory."],"ci":1,"exp":"Ex: Option b is correct: Regulatory T cells (Tregs) are a specialized group of T lymphocytes that play a central role in maintaining immune balance and self-tolerance. Their primary function is to prevent other T cells from mistakenly attacking the body’s own tissues, which is essential for a process known as peripheral immune tolerance.    This mechanism ensures that immune responses are directed only against harmful pathogens and not against the body's own tissues or cells. In addition to preventing autoimmunity, Regulatory T cells also help in down-regulating immune responses once a pathogen has been successfully eliminated. By calming the immune system after the threat is removed, Tregs prevent unnecessary tissue damage and excessive inflammation that could result from prolonged immune activation. Option a is incorrect: The production of antibodies is carried out by B cells , which differentiate into plasma cells upon exposure to an antigen. These antibodies bind to pathogens and help neutralize or mark them for destruction. Regulatory T cells do not secrete antibodies ; instead, they regulate the activity of other immune cells. Option c is incorrect: The direct elimination of infected or cancerous cells is the function of cytotoxic T lymphocytes (CD8 ⁺ T cells). These cells release perforin and granzymes that induce apoptosis (programmed cell death) in target cells. Regulatory T cells lack such cytotoxic functions and instead suppress immune activation. Option d is incorrect: Long-term immunological memory is formed by memory B cells and memory T cells following exposure to an antigen. This allows the immune system to respond more rapidly and effectively upon re- exposure to the same pathogen. Regulatory T cells do not create immune memory; i nstead, their main role is to control and suppress immune reactions. Knowledge Base: Nobel Prize in Physiology or Medicine (2025) In 2025 , the Nobel Prize in Physiology or Medicine was jointly awarded to Mary E. Brunkow , Fred Ramsdell , and Shimon Sakaguchi for their groundbreaking discoveries concerning peripheral immune tolerance , particularly the identification and understanding of Regulatory T cells (Tregs) ."},{"id":23,"txt":"With reference to the nuclear power generation, consider the following statements regarding the Fast Breeder Reactors (FBRs):\n1. They use a mixed oxide of uranium (U-238) and plutonium (Pu-239) to produce energy.\n2. In these reactors, heavy water is used both as a coolant and as a moderator.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":0,"exp":"Ex: Statement I is correct. Uranium-Plutonium Mixed Oxide (MOX) is used as fuel in a Fast Breeder Reactor (FBR). Fast-breeder reactors use depleted uranium (U-238) and plutonium (Pu-239) to produce energy and more fuel. Breeder reactors are a type of the nuclear reactors which produce more fissile materials than they consume. A Fast Breeder Reactor (FBR) is a nuclear reactor that uses fast neutrons to generate more nuclear fuels than they consume while generating power. Thus, they dramatically enhance the efficiency of the use of resources. Nuclear fission by fast neutrons causes the increase in neutrons generated. Furthermore, because the sodium used as coolant absorbs fewer neutrons compared to light water, more neutrons remain within the reactor. The increased number of neutrons causes a higher proportion of uranium 238 converting into plutonium 239 and yields more plutonium than original nuclear fuel. Statement II is incorrect. In fast breeder reactors, liquid sodium is used as coolant . Unlike thermal reactors, no moderator is required in such types of reactors. Knowledge Base: Moderator is a substance used to slow down the neutrons produced by fission to sustain the chain reaction. E.g.: - graphite, heavy water. Coolant is a substance which absorbs the thermal energy generated during the reaction. E.g.: - Water, heavy water, liquid sodium."},{"id":24,"txt":"Consider the following statements:\n1. Other than those made by humans, nanoparticles do not exist in nature.\n2. Nanoparticles of some metallic oxides are used in the manufacture of some cosmetics.\n3. Nanoparticles of some commercial products which enter the environment are unsafe for humans.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","3 only","1 and 2 only","2 and 3 only"],"ci":3,"exp":"Ex: Statement 1 is incorrect- Nanoparticles exist in nature, such as in volcanic ash, forest smoke, and sea spray. Nanoparticles can also be formed by natural processes, such as lightning strikes and erosion . Statement 2 is correct- Nanoparticles of some metallic oxides, such as titanium dioxide and zinc oxide , are used in the manufacture of some cosmetics, such as sunscreens . These nanoparticles are used because they have the ability to absorb and scatter ultraviolet (UV) radiation , which can protect the skin from sunburn and skin cancer . Statement 3 is correct- Nanoparticles of some commercial products which enter the environment can be unsafe for humans. For example, nanoparticles of diesel exhaust fumes have been linked to respiratory problems. Nanoparticles can also enter the food chain and be consumed by humans."},{"id":25,"txt":"In context of Genetically Mo dified (GM) Crops, the primary objective of ‘terminator technology’ is to:","ref":"","opts":["enhance pest resistance in crops to produce proteins toxic to specific insects while being safe for humans.","control gene expression in crops where specific genes are activated only under precise environmental or chemical conditions.","produce sterile plants with infertile seeds to prevent reuse of seeds by farmers.","improve tolerance of crops to abiotic stresses such as drought, salinity, and extreme temperatures."],"ci":2,"exp":"Ex: Option c is correct: Terminator technology or the Genetic Use Restriction Technology (GURT) can be used to exercise control and ownership over the biodiversity. With the help of new genetic engineering techniques, it is possible to create sterile plants with infertile seeds that can't be replanted. Thus, the seeds are killed after one generation. This technology is known as terminator technology. It forces the farmers to purchase seeds for every growing season."},{"id":26,"txt":"With reference to the GLP-1 (glucagon-like peptide-1) receptor agonists medicines, consider the following statements:\n1. These medicines are effective for the management of obesity.\n2. These medicines work by mimicking the action of a naturally occurring gut hormone which slows gastric emptying and increases the feeling of stomach fullness.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":0,"exp":"Ex: Statement I is correct: GLP-1 receptor agonists are medications originally developed for type-2 diabetes but are now also approved for treating obesity and promoting weight loss. GLP-1 receptor agonists drugs include drugs like ozempic, semaglutide, liraglutide, tirzepatide, etc. These drugs are clinically proven to promote significant weight loss in people with obesity and in those with type-2 diabetes. These drugs are now widely used as part of treatment regimens to help reduce body weight along with improving blood glucose levels. Statement II is correct: GLP-1 receptor agonists mimic the action of the naturally occurring hormone GLP-1, which is released from the gastrointestinal tract in response to food intake. Physiologically, GLP-1: 1. Stimulates insulin secretion from the pancreas in a glucose-dependent manner, 2. Suppresses the release of glucagon , thereby helping control blood glucose levels, and 3. Acts on the stomach to delay gastric emptying and on the brain to reduce hunger , increasing the feeling of fullness. Link between the Statements: By improving insulin secretion and reducing glucagon, these drugs control blood sugar in type-2 diabetes. At the same time, by delaying stomach emptying and suppressing appetite , they reduce food intake and promote a feeling of fullness. These combined effects directly lead to weight loss, which explains their effectiveness mentioned in Statement I. Therefore, Both Statement I and Statement II are correct and Statement II explains Statement I"},{"id":27,"txt":"With reference to Direct Energy Weapons (DEWs), consider the following statements:\n1. They use high-powered lasers to inflict damage on targets.\n2. Their performance is generally unaffected by atmospheric conditions like fog, rain, and dust.\n3. They generally have a much longer kill range radius than conventional weapon systems.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","I and II only","II and III only","I, II and III"],"ci":0,"exp":"Ex: In April 2025, India successfully demonstrated a 30-kilowatt laser-based directed energy weapon (DEW) system capable of disabling, degrading or destroying small unmanned aerial vehicles (UAVs), swarm drones, missiles and sensors at ranges up to about 3.5 km. The tests, conducted by the Defence Research and Development Organisation (DRDO), marked India’s entry into a select group of nations that have operational laser weapon capabilities, alongside the United States, Russia, China, the United Kingdom and Israel. Statement I is correct: Directed Energy Weapon systems use high-powered lasers to inflict damage on targets. Compared to traditional weapons, which primarily rely on physical impact and kinetic energy, DEW uses directed energy to heat up and destroy or damage the target. It has diverse military applications, offering rapid and precision strikes against threats such as unmanned aerial vehicles (UAVs), missiles and small vehicles and can be used in all warfighting environments. Statement II is incorrect: The performance of DEWs is significantly affected by atmospheric conditions . Factors such as fog, rain, dust, smoke, humidity, and atmospheric turbulence can absorb, scatter, or weaken energy beams, especially in the case of laser weapons. These conditions reduce accuracy and effective range. Thus, environmental sensitivity is considered one of the major operational limitations of current DEW technology. Statement III is incorrect: Although DEWs deliver energy nearly at the speed of light, their effective kill range radius is limited to 1-2 km by factors such as power generation capacity, beam dispersion, atmospheric attenuation, and line-of-sight constraints. Many conventional weapons, such as long-range missiles and artillery can engage targets at much greater distances than present-day DEW systems."},{"id":28,"txt":"It is an indigenous low-cost micro-missile air defence system developed in India to detect and neutralize enemy drone threats and drone swarms using guided micro-missiles and rockets. This counter drone system is capable of detecting even small incoming flying machines at over 6 km and can take them down using micro munitions.\nWhich one of the following defence systems is best described in the above passage?","ref":"","opts":["Nagastra","Rudrastra","Bhargavastra","Pralay"],"ci":2,"exp":"Ex: The defence system described in the passage is Bhargavastra , an indigenous, low-cost counter-drone micro- missile air defence system developed in India. I. Bhargavastra has been designed specifically to detect, track and neutralise hostile drones and drone swarms, which pose a significant threat at low altitudes. II. This system is capable of detecting even small incoming flying machines at over 6 km and can take them down using micro munitions that can be guided towards the threat. III. Bhargavastra follows a two-layer hard-kill approach : o It employs unguided micro rockets as the first layer of defence capable of neutralising swarms of drones with lethal radius of 20 meters and guided micro-missile as the second layer for pinpoint    accuracy, ensuring precise and impactful neutralisation. Designed for seamless deployment across diverse terrains, including high-altitude regions (> 5000 m above sea level), the system addresses the unique operational demands of India's armed forces. IV. The system is intended to be cost-effective, mobile, and suitable for deployment across diverse terrains, and can be integrated with soft-kill measures such as jamming and spoofing."},{"id":29,"txt":"With reference to differences between Nuclear Fission and Nuclear Fusion, consider the following statements:\n1. Nuclear fission involves the splitting of a heavy atomic nucleus into lighter nuclei, whereas nuclear fusion involves the combination of two light atomic nuclei to form a heavier nucleus.\n2. Nuclear fusion releases more energy per unit mass than nuclear fission.\n3. The radioactive waste generated by nuclear fusion is significantly greater and more long-lived than that produced by nuclear fission.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","I and II only","II and III only","I, II and III"],"ci":1,"exp":"Ex:    Statement I is correct: Nuclear fission is the process in which a heavy atomic nucleus (such as Uranium-235 or Plutonium-239) splits into two or more lighter nuclei , releasing energy. Nuclear fusion , on the other hand, involves the combination of two light atomic nuclei (such as isotopes of hydrogen) to form a heavier nucleus, releasing energy. This is the fundamental conceptual difference between the two processes. Statement II is correct: Fusion releases far more energy per unit mass compared to fission . For example, the energy yield from fusion reactions in stars is much greater than that from fission reactions in nuclear reactors. Fusion could generate nearly four times more energy per kilogram of fuel than fission and nearly four million times more energy than burning oil or coal. Statement III is incorrect: Nuclear fission power plants have the disadvantage of generating unstable nuclei; some of these are radioactive for millions of years. Fusion on the other hand does not create any long-lived radioactive nuclear waste. A fusion reactor produces helium, which is an inert gas. It also produces and consumes tritium within the plant in a closed circuit. Tritium is radioactive (a beta emitter) but its half life is short. It is only used in low amounts so, unlike long-lived radioactive nuclei, it cannot produce any serious danger."},{"id":30,"txt":"Consider the following statements:\n1. Carbon fibres are used in the manufacture of components used in automobiles and aircrafts.\n2. Carbon fibres once used cannot be recycled.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct: Carbon fibre is increasingly celebrated as a wonder material for the clean economy. Its unique combination of high strength and low weight has helped drive the wind power revolution and make planes more fuel efficient. Auto makers are also waking up to the material’s potential to make lighter and more efficient vehicles. Statement 2 is incorrect: The carbon fibre can be recycled though difficult to recycle. There is a need to divert carbon fibre from landfill, they could open the gates for use of recycled carbon fibre in cars, bikes and for dozens of other applications. They could also save a lot of energy since the production of virgin material is the most energy- intensive part of the process. Recycled carbon fibre often ends up in tennis rackets and golf clubs, where low weight (and the cachet of carbon fibre) is more important than strength"},{"id":31,"txt":"With reference to India’s three -stage nuclear programme, consider the following pairs: Stage of Nuclear Programme Primary Objective\n1. First Stage Utilisation of natural uranium in Pressurised Heavy Water Reactors (PHWRs) for power generation and to produce plutonium   \n2. Second Stage Use of plutonium - based Fast Breeder Reactors to generate more fissile material than they use.\n3. Third Stage Large - scale utilisation of thorium as a fertile material for sustainable nuclear energy generation\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":2,"exp":"Ex: India’s three -stage nuclear programme was conceived by Dr. Homi J. Bhabha (also known as father of India’s nuclear power development) 1954. It was designed with the objective of ensuring long-term energy security and self-reliance by making optimal use of the country’s limited uranium reserves an d abundant thorium resources. Pair I is correct: First Stage The first stage of India’s nuclear power programme focuses on using natural uranium as fuel in Pressurised Heavy Water Reactors (PHWRs). During reactor operation, uranium-238 absorbs neutrons and is converted into plutonium- 239 , which becomes the key fuel for the next stage.    Pair II is correct: Second Stage The second stage utilises Plutonium obtained from the spent fuel of Pressurised Heavy Water Reactors in Fast Breeder Reactors . These reactors not only produce energy but also breed more fissile material (mainly plutonium- 239 and uranium-233) than they consume. Pair III is correct: Third Stage The third stage aims at the large-scale use of thorium . Thorium is a fertile material , which means that it can be used to produce fissile material. India possesses vast thorium reserves but limited uranium; hence this stage seeks to achieve long-term energy security and sustainability by converting thorium-232 into fissile uranium-233 for power generation ."},{"id":32,"txt":"Consider the following factors:\n1. Indiscriminate use of antibiotics in human healthcare systems\n2. Premature discontinuation of prescribed antibiotic treatment\n3. Excessive intake of vitamin supplements\n4. Consumption of genetically modified (GM) crop-based foods in the human diet\n5. Extensive use of antimicrobial drugs in livestock farming\nHow many of the above significantly contribute to the development and spread of Antimicrobial Resistance (AMR)?","ref":"","opts":["Only two","Only three","Only four","All the five"],"ci":1,"exp":"Ex: Antimicrobial Resistance (AMR) refers to the ability of microorganisms such as bacteria, viruses, fungi, and parasites to survive and multiply despite the presence of antimicrobial drugs that were previously effective in treating infections caused by them. As a result, standard treatments become ineffective, infections persist longer, and the risk of spread, severe illness, and death increases. It develops mainly due to the misuse and overuse of antimicrobial drugs in humans, animals, and agriculture. Recognising its multi-sectoral nature, AMR is addressed through the One Health approach , which integrates human health, animal health, agriculture, and environmental management. The World Health Organization (WHO) has identified AMR as one of the top global public-health threats , warning that it could undermine decades of medical progress if not urgently contained. Option I is correct: Inappropriate prescribing, self-medication and frequent and unnecessary use of antibiotics (for example, using them for viral infections or without medical advice) are among the most significant drivers of AMR globally . This enables resistant bacteria to survive and multiply, gradually reducing the effectiveness of commonly used drugs. Option II is correct: When patients stop taking antibiotics before completing the full course, some bacteria may remain alive. These surviving bacteria are often more tolerant to the drug and can develop resistance , leading to recurrent and harder-to-treat infections.    Option III is incorrect: Vitamins do not possess antimicrobial activity and therefore do not exert selective pressure on microorganisms. Excessive vitamin consumption may have health consequences, but it has no role in the emergence or spread of antimicrobial resistance . Option IV Is incorrect: Genetically modified crops are designed to improve traits such as yield, pest resistance, or nutritional value. Their consumption does not involve exposure to antimicrobial agents and has no certain scientific evidence linking their consumption with the development or spread of antimicrobial resistance. Option V is correct: Antibiotics are often used in animals for growth promotion and disease prevention. This leads to the emergence of resistant bacteria , which can spread to humans through food products, direct animal contact, or environmental contamination, forming a key concern under the One Health framework. Knowledge Base: Global and National Efforts to Counter Antimicrobial Resistance (AMR) 1. Global Initiatives World Health Organization (WHO) Leads the Global Action Plan on AMR (2015) , focusing on surveillance, rational drug use, and public awareness. Tripartite Collaboration (WHO – FAO – WOAH) on One Health Approach Jointly led by Food and Agriculture Organization (FAO) and World Organisation for Animal Health (WOAH, formerly OIE) to promote the One Health approach (human – animal – environment link). Global Antimicrobial Resistance Surveillance System (GLASS) Coordinated by WHO to track resistance patterns worldwide. World AMR Awareness Week (WAAW) Celebrated from 18 to 24 November every year to raise awareness, understanding and best practices with the public, One Health stakeholders, and other policymakers. 2. National Efforts (India) National Action Plan on AMR (NAP-AMR) 2017 – 2021 (extended) Aligned with WHO’s Global Action Plan, it adopts the One Health framework and focuses on surveillance, rational use of antimicrobials, infection control, and research. National Programme on AMR Surveillance It monitors resistance patterns in major bacterial pathogens across healthcare institutions. Regulatory Measures Introduction of Schedule H1 under the Drugs and Cosmetics Rules to restrict over-the-counter sale of critical antibiotics. National Awareness Initiatives Campaigns such as Red Line Campaign to discourage self-medication and promote responsible antibiotic use."},{"id":33,"txt":"In the context of science and technology, the term 'Twigstats', often seen in the news, refers to:","ref":"","opts":["a blockchain-based platform for securing digital identities.","a software for earthquake prediction.","a tool to precisely study the individual-level genetic ancestry of humans.","a cloud-based platform to process weather forecasting models."],"ci":2,"exp":"Ex:    Twigstats is a cutting-edge tool developed for time-stratified ancestry analysis . It is designed to study human genetic history by analyzing ancient DNA samples . This tool helps researchers trace individual-level ancestry with high precision, providing insights into migration patterns, cultural transitions, and genetic makeup of ancient populations. 1. This approach has been applied to over 1,500 European genomes from individuals who lived primarily during the 500 BC to 1000 AD, encompassing eras such as the spanning the Iron, Roman, and Viking ages on the European continent. 2. Through this analysis, 'Twigstats' has uncovered previously unknown details of migrations in Europe, offering a more detailed understanding of human genetic history during these times. 3. This will offer new insights into the genetic legacy of groups like the Vikings and the impact of migrations on the genetic makeup of modern Europeans."},{"id":34,"txt":"Consider the following:\n1. Battery storage\n2. Biomass generators\n3. Fuel cells\n4. Rooftop solar photovoltaic units\nHow many of the above are considered “Distributed Energy Resources”?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: Distributed energy resources are small, modular, energy generation and storage technologies that provide electric capacity or energy where you need it. Typically producing less than 10 megawatts (MW) of power, DER systems can usually be sized to meet your particular needs and installed on site. Examples of distributed energy resources that can be installed include: roof top solar photovoltaic units wind generating units battery storage batteries in electric vehicles used to export power back to the grid combined heat and power units, or tri-generation units that also utilise waste heat to provide cooling biomass generators , which are fuelled with waste gas or industrial and agricultural by-products. open and closed cycle gas turbines reciprocating engines (diesel, oil) hydro and mini-hydro schemes fuel cells."},{"id":35,"txt":"‘Black Mass Recovery Technology’ is primarily used for which of the following purposes?","ref":"","opts":["Extraction of rare earth metals from sand minerals.","Recovery of biochar from agricultural wastes and crop residues.","Extraction of valuable metals from used lithium-ion batteries.","Recovery of fly ash from thermal power plants."],"ci":2,"exp":"Ex: Black Mass Recovery Technology is used in the recycling of lithium-ion batteries to extract valuable materials like lithium, copper, cobalt, and nickel from the used batteries. Black mass refers to the fine black powder obtained from recycling lithium-ion batteries. It is rich in high-value materials such as lithium, cobalt, graphite, and nickel. This technology is indigenously developed and patented by BatX Energies , significantly reducing reliance on imported recycling equipment while also reducing import of critical minerals ."},{"id":36,"txt":"With reference to the the Stem Cells in human body, consider the following statements:\n1. These are unspecialised cells which divide to produce two daughter cells, one of which remains a stem cell and the other one becomes differentiated.\n2. These cells are found only in the embryonic stage and are absent in adult tissues.\n3. The Haematopoietic stem cells (HSCs) are an example of totipotent stem cells.\nWhich of the statements given above is/are correct?","ref":"","opts":["III only","I and II","I only","I and III"],"ci":2,"exp":"Ex: Statement I is correct and statement II is incorrect. All of the human body cells are not differentiated. Some populations of unspecialised/undifferentiated cells, also known as stem cells, are found to be present in organisms even after attaining adulthood. Stem cells are unspecialised cells which divide to produce two daughter cells, one of which remains a stem cell and the other one becomes differentiated. The major sources of stem cells are embryos and adult tissues (adult stem cells). The embryonic stem cells can be derived from embryos which are in the early phase of development, usually a week old blastocyst is preferred. It is a common practice to extract the inner cell mass from the blastocyst and culture the cells in a culture dish containing essential nutrients. In the total absence of any necessary stimulation to differentiate, these cells begin to divide while retaining the ability to differentiate in any type of cell. The adult stem cells, on the other hand, can be found in various tissues throughout the body, e.g., bone marrow, blood vessels, brain, skeletal muscles and liver. In these tissues, the adult stem cells remain in a non- dividing (or quiescent) state until they are finally activated due to tissue injury. Statement III is incorrect. Multipotent cells have a limited range of tissues into which they can differentiate. Therefore, they have a lower cell differentiation potential than totipotent and pluripotent stem cells. An excellent example of Multipotent stem cell type is the haematopoietic stem cells (HSCs). HSCs differentiate into a large number of blood cells including red blood cells (RBCs), white blood cells (WBCs) and platelets. On the other hand, a totipotent cell is able to differentiate into all possible cell types in an organism. This ability of the cell is referred to as totipotency. Totipotent cells, thus, exhibit highest differentiation potential. Unlike pluripotent cells, totipotent cells can give rise to embryonic as well as extraembryonic cells. Examples of totipotent cells include a zygote formed after fertilisation (Fig 5.19), and asexual spores."},{"id":37,"txt":"Which of the following vaccines contains pathogens, like virus or bacteria, that are weakened by genetic manipulations so that they cannot cause disease but still trigger an immune response?","ref":"","opts":["Live attenuated Vaccine","Inactivated Vaccine","Conjugate Vaccine","Recombinant Vaccine"],"ci":0,"exp":"Ex: Option a is correct. In Live attenuated vaccines, Pathogens like virus or bacteria are weakened by genetic manipulations to limit its growth and thus do not cause disease to the host. In some modified versions of live vaccines an organism that is related to the pathogen is used that naturally grows poorly in humans. The weakened pathogen replicates in the body thus generating a broad immune response in the host similar to that shown by an infected individual with a natural pathogen. For example Oral polio vaccine . Option b is incorrect. In Inactivated or Dead vaccines , the disease-causing pathogen is killed or inactivated, usually through a thermal (application of high temperature) or chemical (formalin etc.) process. Such vaccines, when administered, elicit a robust immune response that mimics most of the responses seen during an infection. For example Hepatitis A vaccine. Option c is incorrect. Conjugate Vaccines do not contain the whole bacteria or viruses. Instead, they contain polysaccharides or proteins from the surface of the bacteria or virus . In these vaccines, bacterial polysaccharide molecules are chemically linked or conjugated to a carrier protein to induce a stronger immune response effective enough for young children also. For example Pneumococcal conjugate vaccine. Option d is incorrect. In Recombinant Vaccine, a small piece of the DNA is taken from the disease-causing bacterium or virus. The particular gene is incorporated into plasmid or a carrier vehicle which enables production of large quantities of well-defined proteins, which are then used as vaccines. These proteins are recognised as foreign antigen thus generating an immune response in the body . For example Human papillomavirus (HPV) vaccine."},{"id":38,"txt":"With reference to Genetically Modified mustard DMH-11 in India, consider the following statements:\n1. It is a hybrid variety of mustard produced by a crossing between the ‘Varuna’ and ‘Early Heera - 2’ mustard varieties.\n2. It is only the second Genetically Modified crop allowed for commercial cultivation in India.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":0,"exp":"Ex: GM mustard or Dhara Mustard Hybrid-11 (DMH-11) was developed by researchers at the Centre for Genetic Manipulation of Crop Plants (CGMCP) at the University of Delhi. Statement I is correct. The CGMCP scientists have deployed the barnase-barstar GM technology to create what they say is a robust and viable hybridisation system in mustard. This system was used to develop DMH-11 by crossing a popular Indian mustard variety ‘Varuna’ (the barnase line) with an East European ‘Early Heera - 2’ mutant (barstar) . It has three new genes: barnase, barstar, and bar genes. The first two genes are isolated from the soil bacterium Bacillus amyloliquefaciens. The first gene (‘barnase’) codes for a protein that impairs pollen production and renders the plant into which it is incorporated male-sterile. This plant is then crossed with a fertile parental line containing, in turn, the second ‘barstar’ gene that blocks the action of the barnase gene. The resultant F1 progeny is both high-yielding and also capable of producing seed/ grain , due to the barstar gene in the second fertile line. In experimental conditions, DMH-11 is claimed to have shown an average 28% yield increase over Varuna. Thus, the barnase gene enables cross-pollination and development of hybrid seeds. The barstar gene helps in the production of seeds . The bar gene is inserted as herbicide-tolerant to Glufosinate. Statement II is incorrect. The GEAC functions under the Ministry of Environment, Forest and Climate Change (MoEF&CC) and has been tasked with the appraisal of proposals relating to the ‘release’ of GM organisms into the environment. At present, Bt cotton is the only genetically modified crop allowed to be cultivated. Though the Environment Ministry/GEAC gave its conditional go-ahead for commercial cultivation of GM mustard in 2022, it has not taken off as it was challenged in the Supreme Court. At present, Bt cotton is the only genetically modified crop allowed to be commercially cultivated in India."},{"id":39,"txt":"Consider the following statements regarding the National Biofoundry Network of India:\n1. It has been launched under the BioE3 Policy.\n2. Its primary objective is to strengthen indigenous biomanufacturing and to foster sustainable biotechnology innovations.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: Statement I is correct. India’s first National Biofoundry Network was recently launched under the BioE3 (Biotechnology for Economy, Environment and Employment) Policy with the objective of strengthening indigenous Biomanufacturing. Statement II is correct. Its primary objective is the strengthening indigenous Biomanufacturing. It is a step towards making biotechnology a driver of India's economy, environment and employment. National Biofoundry Network aims to boost India's bioeconomy, create jobs, and foster sustainable biotechnology innovations. The National Biofoundry Network comprises six institutions to help scale up proof-of-concept developments, enhance indigenous biomanufacturing, and create employment opportunities.    The initiative reflects the government’s commitment to strengthening biotechnology as a pillar of India’s economic growth while ensuring benefits reach citizens in diverse sectors."},{"id":40,"txt":"Consider the following aircraft:\n1. Rafael\n2. MiG-29\n3. Tejas MK-1\nHow many of the above are considered fifth generation fighter aircraft?","ref":"","opts":["Only one","Only two","All three","None"],"ci":3,"exp":"Ex: Fifth-generation fighters include major technologies developed during the first part of the 21st century. They typically have characteristics like stealth, super cruise (prolonged supersonic cruise without reheat), advanced avionics, and networked data fusion for situational awareness. Examples of combat-ready fifth-generation fighters include the Lockheed Martin F-22 Raptor, Lockheed Martin F-35 Lightning II, Chengdu J-20, and Sukhoi Su-57. Option 1 is incorrect: The Rafale is a fourth-generation(4.5th) fighter jet developed by France. Option 2 is incorrect: The MiG-29 is also a fourth generation fighter jet developed by Russia. Option 3 is incorrect: The Tejas MK-1 is an indigenous Indian fighter, but it falls under the fourth generation (4.5th generation) as well."},{"id":41,"txt":"In the context of Biotechnology, what is the primary function of restriction enzymes?","ref":"","opts":["Making cuts at specific positions within the DNA.","Translation of genetic information into proteins.","Separation of DNA fragments based on their size.","Getting pure form of DNA, free from other macro-molecules, for DNA editing."],"ci":0,"exp":"Ex: The cutting of DNA at specific locations became possible with the discovery of the so-called molecular scissors i.e. restriction enzymes. Restriction enzymes belong to a larger class of enzymes called nucleases. These are of two kinds; exonucleases and endonucleases . Exonucleases remove nucleotides from the ends of the DNA whereas endonucleases make cuts at specific positions within the DNA. Each restriction endonuclease functions by ‘inspecting’ the length of a DNA sequence. Once it finds its specific recognition sequence, it will bind to the DNA and cut each of the two strands of the double helix at specific points in their sugar -phosphate backbones . Each restriction endonuclease recognises a specific palindromic nucleotide sequence in the DNA. The cutting of DNA by restriction endonucleases results in the fragments of DNA."},{"id":42,"txt":"Consider the following statements regarding the Organ-on-Chip technology:\n1. An organ-on-chip is a small device designed to recreate the dynamic functions of some human organ in a controlled microenvironment.\n2. It will help reduce dependence on testing of drugs on animals during preclinical trials.\n3. It can help in precision therapeutics, which involve developing and administering drugs according to the needs of individual patients.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":3,"exp":"Ex: Recent advancements in human-relevant 3D culture models , also known as ‘ new approach methods ’ (NAMs), have shown promising results in the field of precision therapeutics. These models include 3D spheroids, organoids, bioprinting, and organ-on-chips. Statement I is correct. An organ-on-chip is a small device designed to recreate the dynamic functions of some human organ in a controlled microenvironment. Organ-on-a-chip are small devices containing human cells that are used to mimic the environment in human organs. Organ on a chip is a novel in-vitro micro-scale biomimetic platform that helps in reproducing the physiological environment of human organs. It allows integrating cells derived from a human body with a well-defined in vitro biological environment (i.e. in the lab) that mimics the body’s conditions. Statement II is correct. In the early stages of drug trials, drugs are tested on animal models i.e. animals genetically engineered to a drug in a manner similar to how human organs might respond. However, drugs that succeed on these animals often fail in humans. Organ-on-chip technology offers a potential solution to this problem by providing a more accurate and efficient platform for testing drugs without involving animals or humans in preclinical testing. An organ-on-chip is a small device designed to recreate the dynamic functions of some human organ in a controlled microenvironment. These devices are expected to be more effective than the cell cultures and animal models currently used by researchers for testing the effects of a drug. The results obtained from the use of these devices would in turn provide a better understanding of the drug- candidate’s efficacy and toxicity, reduce the use of animals, and pave the way for personalized treatment. Statement III is correct: Precision therapeutics involves developing and administering drugs according to the needs of individual patients. Recent advancements in human- relevant 3D culture models, also known as ‘new approach methods’ (NAMs), have shown promising res ults in the field of precision therapeutics. These models include 3D spheroids, organoids, bioprinting, and organ-on-chips."},{"id":43,"txt":"Which among the following is an example of the ‘Xenotransplantation’?","ref":"","opts":["Replacement of defective mitochondria in a woman with healthy mitochondria from another woman.","Inactivation or removal of one or more specific genes from a human body.","Differentiation of stem cells into diverse functional tissues.","Infusion of non-human animal cells or tissues or organs into human recipients."],"ci":3,"exp":"Ex: Xenotransplantation refers to the transplantation of non-human tissues or organs into human recipients. Xenotransplantation is any procedure that involves the transplantation, implantation or infusion into a human recipient of either: a) live cells, tissues, or organs from a nonhuman animal source , or b) human body fluids, cells, tissues or organs that have had ex vivo contact with live nonhuman animal cells, tissues or organs. Thus, it is the use of animal cells and organs to heal humans. For example: Pig heart valves have been used for replacing damaged valves in humans for over 50 years now. The pig’s anatomical and physiological parameters are similar to that of humans, and the breeding of pigs in farms is widespread and cost-effective."},{"id":44,"txt":"With reference to bio-toilets used by the Indian Railways, consider the following statements:\n1. The decomposition of human waste in the bio-toilets is initiated by a fungal inoculum.\n2. Ammonia and water vapour are the only end products in this decomposition which are released into the atmosphere.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statements 1 and 2 are incorrect: The biological degradation of human waste is done by Anaerobic Bacteria inoculums. Bio-toilets dispose of human waste in 100% eco-friendly manner and generates colourless, odourless water and inflammable Methane-Gas for cooking."},{"id":45,"txt":"With reference to Carbon Nanotubes (CNTs), consider the following statements:\n1. They are three - dimensional concentric tubular structures with pentagonal arrangement of carbon atoms.\n2. They exhibit high electrical and thermal conductivity.\n3. They can be used in targeted drug delivery systems.\nWhich of the above given statements are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":1,"exp":"Ex: Statement I is incorrect: Carbon nanotube (CNT) is a one - dimensional concentric tubular structure with hexagonal arrangement of carbon atoms . It is in the form of fine powder, multi walled with 20 - 50nm diameter, length is 5 - 10μm (approx) & purity - 95%. Statement II is correct: CNTs are well known for a combination of special material properties like very high thermal & electrical conductivities , high tensile strength, high modulus of elasticity, low density, high porosity, chemical stabilities, and high aspect ratio. Statement III is correct: CNTs are used in medical applications like targeted drug delivery systems and biosensors."},{"id":46,"txt":"With reference to the applications of nuclear technology, consider the following:\n1. Plant breeding and genetics to develop disease-resistant crop varieties.\n2. Pest management in agricultural fields.\n3. Diagnosis and therapy of thyroid and related cancers.\nHow many of the above are the applications of nuclear technology?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":2,"exp":"Ex: .    Nuclear energy is often associated only with power generation. In reality, nuclear technology has wide non-electric applications . These applications use radiation, radioisotopes, and nuclear reactions to solve problems in agriculture, health, water management, and industry. Option I is correct . Nuclear technology used in crop breeding can develop improved varieties that better adapt to climate change and help vulnerable countries ensure their food and nutritional security. Seeds can b e irradiated with gamma rays, X rays, ions or electron beams to initiate genetic changes. This increased diversity allows for a wider selection of genetics for breeding techniques. Resulting crop varieties can have improved yield and quality, tolerance to drought, heat or flooding, better resistance to pests and diseases or shorter growth cycles. Option II is correct . Nuclear technology is used for insect pest management in agricultural fields. The nuclear- derived, sterile insect technique (SIT) is an environmentally-friendly method of managing insect pests . The technique involves mass-rearing the insects then sterilizing them through ionizing radiation before releasing them back into pest-infested areas. The technique reduces reproduction and suppresses or eradicates established insect pests. Option III is correct . Nuclear technology is used to produce radioactive medicines . The radioisotopes produced in nuclear reactors/ cyclotrons are employed for medical applications. The nature of radiation emitted from the radioisotope determines its utility for diagnostic or therapeutic application. 131 Example: I-Iodine based products for diagnosis and therapy of thyroid and related cancers."},{"id":47,"txt":"With reference to Trans Fats, consider the following statements:\n1. They are a type of unsaturated fatty acids.\n2. They do not occur naturally.\n3. In India presently, the permissible limit of trans fatty acids (TFA) in food products is 5% of total fats and oil.\n4. Regular high consumption of trans fats increases the risk of cardiovascular diseases.\nWhich of the statements given above are correct?","ref":"","opts":["I, II and IV","I and IV only","II and III only","I, III and IV"],"ci":1,"exp":"Ex: All natural fats and oils consist of a mixture of different types of fatty acids, including saturated, monounsaturated, and polyunsaturated fatty acids, and may also contain small amounts of trans fatty acids. Statement I is correct: Trans fats, also known as trans-fatty acids (TFAs), are a type of unsaturated fatty acids. Statement II is incorrect: Trans fats occur naturally as well as produced artificially. Trans fats are produced industrially by the partial hydrogenation of any liquid oils, in most cases vegetable oils and can be found in margarine, vegetable shortening, Vanaspati ghee, fried foods, and baked goods such as crackers, biscuits and pies. They can also be found naturally in meat and dairy foods from ruminant animals (e.g. cows, sheep, goats). Statement III is incorrect: In India, the permissible limit of trans fatty acids (TFA) in oils and fats is 2% (not 5%). In 2020, the Food Safety and Standards Authority of India (FSSAI) amended the Food Safety and Standards (Prohibition and Restriction on Sales) Regulations to progressively reduce the TFA limit from the earlier 5% to 3% in 2021 and further to 2% from 2022 onwards. Statement IV is correct: A regular high intake/consumption of trans fats significantly increases cardiovascular disease risk, increasing the likelihood of death from any cause by approximately 34%, deaths due to coronary heart disease by 28%, and the overall risk of developing coronary heart disease by about 21%."},{"id":48,"txt":"Consider the following:\n1. Brahmos missile\n2. Akash Prime\n3. Prithivi missile\n4. Agni-V missile\nHow many of the above are classified as Ballistic missiles?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Based on the type of trajectory , missiles are divided into ballistic missiles and cruise missiles . Ballistic missiles are those which follow a projectile or arch trajectory (similar to a ball thrown). They are guided only during their initial stage and for most of the path in their trajectory, they fall under the effect of gravity, friction and Coriolis force. Cruise missiles are those which fly at low altitude (within the atmosphere) and are guided throughout its path. They fly with nearly constant speed in major portions of their flight path. Option I is incorrect: Brahmos is a supersonic cruise missile (not ballistic missile) developed jointly by India and Russia. Option II is incorrect: Akash Prime is a medium-range, surface-to-air missile platform (not ballistic missile) designed to protect mobile, semi-mobile and static military installations from a range of aerial threats. Option III is correct: Prithvi missile is an indigenously developed short range surface-to-surface ballistic missile. Option IV is correct: Agni V is the intermediate-range ballistic missile. Agni- V, India’s indigenously developed intercontinental ballistic missile (ICBM) with a range of 5,000 km. Designed by the Defence Research and Developme nt Organisation (DRDO), the system has been developed keeping in view the country’s long -term security requirements."},{"id":49,"txt":"The primary concern about glycans in the context of viral infections like HIV is that they:","ref":"","opts":["increase the mutation rate of viral genetic material.","are the sugar shields that mask viral proteins from being recognised by the immune system.","are the viral proteins that directly destroy host antibodies after infection.","prevent the virus from binding to host cell receptors."],"ci":1,"exp":"Ex: . Viruses such as HIV are covered with special proteins on their outer surface. These surface proteins are essential because they help the virus attach to and enter human cells. However, these proteins are not left exposed. They are heavily covered with glycans , which are complex sugar molecules derived from the host cell itself. This covering of sugars is called a glycan shield . When HIV is produced inside a human cell, it uses the host cell’s machinery to add sugar molecules to its surface proteins. Since these sugars are similar to the body’s own sugars, the immune system sees them as “self” rather than “foreign ”. As a result, The protein parts of the virus, which immune cells and antibodies usually recognise, are physically covered by sugars. Antibodies work by binding to specific shapes on viral proteins. The glycan layer blocks access to these shapes. This prevents effective antibody binding. And because immune cells fail to clearly detect the virus, the body takes longer to mount a strong defence. This allows the virus to survive, multiply, and spread. The glycan shield does not kill immune cells directly . Instead, it confuses and misleads the immune system. This makes HIV particularly difficult to neutralise and is one of the main reasons why developing an effective HIV vaccine has been so challenging ."}],"m":null,"tt":3000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>

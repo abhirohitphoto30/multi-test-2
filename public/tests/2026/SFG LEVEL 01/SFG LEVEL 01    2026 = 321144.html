@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SFG LEVEL 01    2026 = 321144</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>SFG LEVEL 01    2026 = 321144</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="SFG LEVEL 01    2026 = 321144">SFG LEVEL 01    2026 = 321144</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"The first Gandharva Mahavidyalaya, a music training school, was set up in 1901 by Vishnu Digambar Paluskar in","ref":"","opts":["Delhi","Gwalior","Ujjain","Lahore"],"ci":3,"exp":"Ex: Option d is correct: Vishnu Digambar Paluskar founded the Gandharva Mahavidyalaya in Lahore in 1901 with the express purpose of teaching and transmitting the knowledge of Indian classical music and dance to the coming generations. The aim was to teach music to any aspirant without the necessity of being associated with a guru and gharana. Later, Gandharva Mahavidyalaya shifted to Mumbai. • After his death in 1931, the Delhi branch was inaugurated in 1939 by Pt. Vinay Chandra Maudgalya, who belonged to the same musical tradition."},{"id":1,"txt":"With reference to the literature related to the Indian Music, consider the following pairs: Book/Literature Author\n1. Sangita Ratnakara Sarngadeva\n2. Sangita Parijata Ahobal\n3. Brhaddesi Matanga\n4. Sangita Makaranda Narada\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":3,"exp":"Ex: . Indian music did not evolve suddenly. It developed slowly over centuries. It absorbed social and religious influences. It refined concepts like Raga, Tala, and performance styles. Ancient scholars documented this journey in treatises. These books are not just manuals. They are milestones in the history of Indian classical music. Pair I is correct . Sangita Ratnakara was written by Sharangadeva . It is considered one of the most important and authoritative texts on Indian music. It forms a bridge between the ancient and the medieval traditions. It discusses the three components of music: Gita refers to vocal music. Vadya refers to instrumental music. Nritya refers to dance. The well- known definition “ Gitam, Vadyam, Tatha Nrityam ” is associated with this composition. The text explains ragas, talas, musical instruments and performance techniques in detail. Both Hindustani and Carnatic music traditions draw from this treatise. Pair II is correct . Sangita Parijata was composed by Pt. Ahobal . It reflects the medieval development of North Indian classical music. It gives detailed descriptions of ragas and their classifications. It also discusses the emotional aspects of music. Pair III is correct . Brihaddeshi was written by Matanga. It is very important in the history of Indian music. It mentions the concept of Desi Raga for the first time. Earlier music was mainly Marga, which followed classical and pan-Indian traditions. Matanga recognised regional variations and local styles of music. He also discussed placing frets on the Kinnari Veena .    Pair IV is correct . Sangita Makaranda was written by Narada . It discusses ragas and their classification. It also mentions the Time Theory of Ragas. According to this theory, specific ragas are associated with specific times of the day."},{"id":2,"txt":"With reference to traditional Indian music, the terms Tat, Susira, Avanadha and Ghana refer to which of the following?","ref":"","opts":["Types of musical instruments based on method of sound production from instruments","Schools of classical music in medieval India","Rhythmic patterns used in classical dance","Ragas of Hindustani Classical music"],"ci":0,"exp":"Ex: . Ancient Indian musical text classified musical instruments into four main categories based on how sound is produced. Tat refers to string instruments. Sound is produced by vibrating strings. For example, Veena and Sitar. Susira refers to wind instruments. Sound is produced by blowing air into a hollow tube. Its examples include flute and shehnai. Avanadha refers to percussion instruments with stretched membranes. Sound is produced by striking the membrane. Its examples include tabla and mridangam. Ghana refers to solid instruments made of metal (like brass) or wood. Sound is produced by striking the body of the instrument itself. Its examples include manjira and cymbals."},{"id":3,"txt":"Consider the following statements:\n1. It is characterised by classical Tamil poetry and songs.\n2. Its theme centres on a love-struck heroine whose fate is predicted by a fortune-teller.\n3. It is performed in the form of a dance ballet and blends Bharatanatyam with folk elements.\nWhich of the following folk music and dance traditions is best described in the statements given above?","ref":"","opts":["Bhagavata Mela","Kuravanji","Ottan Thullal","Veedhi Natakam"],"ci":1,"exp":"Ex: . Kuruvanji Originated around 300 years ago, and the first Kuruvanji was composed by Thirukutarajappa Kaviyar Statement I . Kuravanji emerged in Tamil Nadu around three centuries ago. It was often performed in temple premises and courts. It is known for its rich classical Tamil poetry and lyrical compositions . It developed as a dance drama tradition rooted in devotion and romance. Statement II . The theme generally centres on a heroine who is deeply in love . A fortune-teller, called Kuratti , enters the story and predicts the future of the heroine. The word Kuravanji itself refers to this fortune-teller .    Statement III . It is presented in the form of a dance ballet . Bharatanatyam is the principal dance style used in its performance. At the same time, it also incorporates folk elements, which give it a distinct regional flavour. Knowledge Base: Bhagavata Mela is a traditional dance-drama of Tamil Nadu closely associated with Bharata Natya (Bharatanatyam) . It is performed mainly in temple settings and has strong roots in Vaishnavite devotional tradition . The performances revolve around mythological themes , especially stories from the Bhagavata Purana and the life of Lord Narasimha . It is presented as a ritual offering and combines music, dance, dialogue and dramatic expression . Ottan Thullal is a solo dance-drama form of Kerala introduced by Kunchan Nambiar . It is known for its satirical content , lively narration and rhythmic movements. The performer sings and dances while narrating stories, often drawn from Puranic themes , but presented with humour and social criticism . The performance is accompanied by simple percussion instruments. Thullal is designed to be easily understood by common people and therefore uses simple Malayalam language and expressive gestures. Veedhi Natakam is a traditional street theatre form of Andhra Pradesh . The term literally means “street play.” It continues to remain a major form of live rural entertainment . It is performed in open village spaces and often presents mythological stories, social themes and moral narratives . The performances are elaborate, sometimes lasting through the night, and involve colourful costumes, dialogue, music and dramatic storytelling."},{"id":4,"txt":"With reference to the scholars/litterateurs of ancient India, consider the following statements:\n1. Panini is associated with Pushyamitra.\n2. Amarasimha is associated with Harshavardhana.\n3. Kalidasa is associated with Chandra Gupta-II.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","3 only","1, 2 and 3"],"ci":2,"exp":"Ex: Amarasimha and Kalidasa were one of the Navratnas in the court of Chandra Gupta-II. Panini was a revered scholar belonging to the 5th – 6th Century, whereas Pushyamitra Shunga reigned in 2nd BCE."},{"id":5,"txt":"With reference to Folk Theatre traditions in India, consider the following pairs: Folk Theatre State/Union Territory where it is mainly performed\n1. Bhavai Gujarat   \n2. Tamasha Maharashtra\n3. Bhand Pather Jammu and Kashmir\n4. Yakshagana Karnataka\n5. Therukuttu Andhra Pradesh\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only two","Only three","Only four","All the five"],"ci":2,"exp":"Ex: . Pair I is correct . Bhavai is primarily a popular folk theatre form of Gujarat and southern region of Rajasthan . It uses extensive dance movements and narrates short romantic plays. One striking visual feature is that performers balance earthen pots or brass pitchers on their heads while dancing. The play is accompanied by semi-classical music in a folk style. Instruments like Jhanjhar and dholak are used. The sutradhar in Bhavai is known as Nayaka. Pair II is correct . Tamasha is a lively folk theatre form of Maharashtra . It is known for its humour and sometimes bold or erotic content. A very unique feature is the presence of female performers. They even play male roles in many performances. Tamasha is strongly associated with Lavani songs, which are energetic and expressive. It is a powerful blend of music, dance and drama. Pair III is correct . Bhand Pather is the traditional folk theatre of Jammu and Kashmir . It combines music, dance and drama. It often includes social satire and sometimes mythological themes. Though it is performed mainly by Muslim artists, it has a secular character. It reflects local life, humour and community issues in a simple and engaging way. Pair IV is correct . Yakshagana is one of the oldest surviving theatre traditions of Karnataka . It also has a presence in parts of Kerala. It originated during the Vijayanagara period. It was initially performed by a community known as Jakkula Varu. It evolved from a descriptive dance by a single performer into a full dance-drama form. It is strongly influenced by the Vaishnava Bhakti movement. The elaborate costumes and expressive storytelling make it visually striking. Pair V is incorrect . Therukuttu is a rural folk theatre tradition of Tamil Nadu and not Andhra Pradesh . The word literally means “street play.” It has roots in the ancient Tamil concept of Kuttu, which meant play or entertainment. Therukuttu is performed in open spaces and village streets. It combines storytelling with dance and music. It represents the enduring storytelling tradition of South India through dance-drama."},{"id":6,"txt":"With reference to Folk Dances in India, consider the following information: Folk Dance State Important Feature\n1. Cheraw Mizoram Use of bamboo staves placed in cross and horizontal forms\n2. Lama Dance Sikkim Masked ritual dances performed by Buddhist monks\n3. Rouf Karnataka Women performing in groups with songs in question – answer form\n4. Chari Rajasthan Women celebrating the discovery of water in the desert state\nIn how many of the above rows is the given information correctly matched?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: . Row I is correct . Cheraw is one of the oldest folk dances of Mizoram . It is popularly known as the Bamboo Dance . Bamboo staves are placed in cross and horizontal patterns on the ground. Male dancers move these staves rhythmically. Female dancers skillfully step in and out between the moving bamboo blocks. Timing and coordination are extremely important. This makes the performance visually striking and rhythmically rich. Row II is correct . Lama dances are religious masked dances of Sikkim . They are performed by Buddhist monks as part of ritual practices. These dances follow religious texts based on the teachings of Guru Padmashambhava . The performers wear colourful masks and elaborate costumes. Traditional instruments like cymbals and long horns accompany the chanting. The purpose is spiritual and is meant for the welfare of Buddhism and the state. Row III is incorrect . Rouf is not from Karnataka. It is one of the most popular traditional dances of Kashmir . It is performed mainly by women during festive occasions such as Eid and Ramzan . The music and dance is performed by a group of women facing each other. The song that is sung during the performance is in the form of question and answer where one group questions and the other responds to it in a rhythmic way. Row IV is correct . Chari is a folk dance of Rajasthan . It celebrates the discovery of water in the desert region . Women perform the dance while balancing brass pots on their heads. Sometimes the pots contain lighted lamps, adding a dramatic visual effect. The dance reflects the importance of water in desert life"},{"id":7,"txt":"With reference to Classical dances in India, consider the following statements about Bharatanatyam:\n1. It originated as a temple dance tradition known as Dasiyattam in South India.\n2. Unlike other classical dance forms of India, Bharatanatyam is known for its rigid postures, rhythmic movement and strenuous footwork.\n3. It was recently included in the United Nations Educational, Scientific and Cultural Organization (UNESCO) Memory of the World Register.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II only","II and III only","II only","I, II and III"],"ci":0,"exp":"Ex: Statement I is correct: Bharatanatyam is one of the classical dance forms originated in the southern part of India in the state of Tamil Nadu. It started as a temple dance tradition called Dasiyattam (the dance of the maid-servants) 2000 years ago. Word ‘Bharatanā ṭ yam’ reflect four most important aspects of dance (in Sanskrit). These are: Bha from Bhāva meaning emotion, Ra from Rāga meaning music or melody, Ta from Tāla meaning rhythm and Nā ṭ yam meaning dance. Statement II is correct: The basic unit of Nritta in Bharatanatyam is the adavu (the footwork). Accompanying the footwork are a few postures that make this dance form clearly distinguishable from the others. These are; Sthanam (standing posture), Araimandi (half sitting posture) and Muzhumandi (full sitting posture).    The footwork is in accordance with the talams of music. These talams can be classified into three types: slow, medium and fast . Unlike other classical dance forms of India, Bharatanatyam is known for its rigid postures, rhythmic movement and strenuous footwork. Footwork is accompanied by hand gestures or hastas which act as a medium of expression. These can be classified into two types; Asamyuta Hastas (single hand gestures) and Samyuta Hastas (double hand gestures) which are in accordance with the shlokas mentioned in the Natyashastra and the Abhinaya Darpana. Statement III is incorrect: The manuscripts of the Natya Shastra , the foundational text of Bharatanatyam, was added into United Nations Educational, Scientific and Cultural Organization(UNESCO) Memory of the World Register but not the dance itself."},{"id":8,"txt":"With reference to the performing arts in India, consider the following statements about Sattriya dance:\n1. It is a dance- drama performance art originated in the state of Assam.\n2. Bhakti saint Chaitanya Mahaprabhu played a major role in the development of the dance form.\n3. Ankiya Nat refers to a solo performance format within the Sattriya dance framework.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II and III only","I and III only","I, II and III"],"ci":0,"exp":"Ex: Statement I is correct: Sattriya or Sattriya Nrtya is one of the major classical dances originated in the eastern state of Assam. It is a dance-drama performance art with origins in the Krishna centred Vaishnavism monasteries of Assam. Statement II is incorrect: The dance was developed primarily by fifteenth century Bhakti movement scholar and saint Mahapurush Srimanta Sankardev (not by Chaitanya Mahaprabhu). Statement III is incorrect: Ankiya Nat refers to one-act devotional plays within the Sattriya tradition(not the Solo performance format). It combines the aesthetic and the religious through a ballad, dance and drama. The plays are usually performed in the dance community halls (namghar) of monastery temples (sattras). The themes played relate to Krishna and Radha, sometimes other Vishnu avatars such as Rama and Sita."},{"id":9,"txt":"Which of the following dances in its present form was developed primarily by Siddhendra Yogi, a Vaishnava poet?","ref":"","opts":["Mohiniattam","Kuchipudi","Manipuri","Kathakali"],"ci":1,"exp":"Ex: Kuchipudi is a dance style adapted from the dance dramas enacted by Brahmin priests or Bhagavatulus whose dance was again influenced by the style of the Rajanartakis or women court dancers of the time. Kuchipudi in its present form was developed by Siddhendra Yogi, a bhakti movement poet of the 16th-17th century . Siddhendra Yogi initiated local boys into Bhama Kalapam, a dramatic dance expression . Their performance in temples, royal courts and cultural centres won the hearts of kings , scholars and common people. Impressed by their performance , the ruler of Golconda, bul Hasan Qutb Shah, gifted them the Kuchipudi , a quiet village, about 65 kilometers from Vijayawada in Andhra Pradesh, from where it gets its present name. He composed the most famous dance-drama known as Paarijaatapaharanam for Kuchipudi. Siddhendra Yogi’s play “Bhama Kalapam” — the story of Satyabhama, the charming but jealous wife of Krishna — is a crown jewel of the dance."},{"id":10,"txt":"Consider the following statements:\n1. According to Mahavamsa, Ashoka turned to the Buddha’s dhamma when his nephew Nigrodha preached the doctrine to him.\n2. Divyavadana ascribes Ashoka being drawn to the Buddha’s teaching to the influence of Samudra, a merchant -turned monk.\n3. Dipavamsa speaks of Samudra, the 12 year old son of a merchant, as the key figure in Ashoka's coming under the influence of the Buddhist Dhamma.\nWhich of the statement(s) given above is/are correct?","ref":"","opts":["Only 1","Only 2","1 and 2","1 and 3"],"ci":2,"exp":"Ex: Statement 1 is correct: The Mahavamsa, a historical chronicle of Sri Lanka, mentions that Ashoka converted to Buddhism after being preached by his nephew, the Buddhist monk Nigrodha. Statement 2 is correct: The Divyavadana, a Buddhist text, mentions that Ashoka was influenced by a merchant-turned monk named Sa mudra, who played a role in Ashoka’s acceptance of Buddhism. Statement 3 is incorrect: Not Dipavamsa but Ashokavadana, mentions Samudra, the 12 year old son of a merchant, as a key figure in Ashoka’s conversion to Buddhism."},{"id":11,"txt":"In the context of Indian cultural heritage, the term “Kavaad Banchana” refers to:","ref":"","opts":["A traditional oral storytelling art of Rajasthan","A folk-dance form of Himachal Pradesh","A form of shadow puppetry of Odisha","A theatre performance without spoken dialogue from Madhya Pradesh"],"ci":0,"exp":"Ex: Kavaad Banchana is a traditional form of oral storytelling that is still active in Rajasthan. Here, Kavaad means panel of a door and Banchana means to narrate and show the illustrated story on the panel. The tradition of kavad/Kavaad banchana involves carrying the Kavad to different places, mostly homes of the patrons, and narrating stories from epics such as the Mahabharata , Ramayana , Puranas and other folk traditions."},{"id":12,"txt":"Consider the following literature:\n1. Upanishads\n2. Aranyakas\n3. Brahmanas\n4. Vedangas\nHow many of the above are categorized as Shruti literature?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: Options I, II and III are correct: Vedic age literature of Ancient India is broadly classified into two categories —Śruti (heard and revealed) and Sm ṛ ti (remembered and later recorded). The Śruti corpus comprises the four Vedas such as Ṛ igveda, Yajurveda, Atharvaveda and Sāmaveda along with eleven Brāhma ṇ as, three Ara ṇ yakas and more than one hundred Upani ṣ ads. Option IV is incorrect: In contrast, the Sm ṛ ti texts, attributed to human authorship, include the six Vedā ṅ gas (auxiliary disciplines of the Vedas), as well as the great epics, the Rāmāya ṇ a and the Mahābhārata and the Purā ṇ as. Knowledge Base: Vedas: Vedas include Ṛ igveda, Yajurveda, Atharvaveda and Sāmaveda. The Ṛ igveda, the oldest, contains 1028 hymns arranged in ten mandalas and forms the basis of Vedic literature. The Sāmaveda is a collection of melodic chants, largely derived from the Ṛ igveda, intended for Soma sacrifices. The Yajurveda prescribes procedures for performing sacrifices and exists in two forms —Śukla and K ṛṣṇ a. The Atharvaveda, distinct in content, includes hymns and mantras reflecting popular beliefs and ritual practices. The Brahmanas: The Brahmanas explain the hymns of the Vedas. They are written in prose and they elaborately describe the various sacrifices and rituals, along with their mystic meanings. Each Veda has several Brahmanas. The Aranyaka: The word Aranyaka means 'the forest' and these are called 'forest books' written mainly for the hermits and students living in the jungles. These are the concluding portions of the Brahmanas or their appendices. A strict code of secrecy was maintained over the Aranyakas as it was believed that the contents would spell danger if taught to the uninitiated. The Upanishads: The word Upanishad has been derived from the root Upani-sad that means 'to sit down near someone'. It denotes a student sitting under the feet of his guru to learn. Upanishads are also called Vedanta (the end of the Veda) firstly, because they denote the last phase of the Vedic period and secondly, because they reveal the final aim of the Veda.    Vedangas: There are six Vedangas (limbs of Veda). They are: Siksha, Kalpa, vyakarana, niruktas, chhandas and jyotisa. Siksha deals with pronunciation, Kalpa with rituals, Vyakarana with grammar, Nirukta with etymology, Chhanda with meter and Jyotisa with astrosciences."},{"id":13,"txt":"Which of the following authors are primarily known for writing literature in Sanskrit language?\n1. Ashvaghosha\n2. Bhavabhuti\n3. Shudraka\n4. Dhurjati\nSelect the correct answer using the code given below:","ref":"","opts":["I and II only","II, III and IV only","I, II and III only","I, II, III and IV"],"ci":2,"exp":"Ex: The development of Sanskrit grammar began with Panini in 400 BC with his book Asthadhyayi being the oldest book in Sanskrit grammar. The Sanskrit plays of Bhasha, Kalidasa, Shudraka, Harsha and Bhavabhuti complete a representative cross-section of Sanskrit drama. Option I is correct: The earliest Sanskrit play, an unfinished one, was written by Ashvaghosha, the court poet of the Kushan King Kanishka. This earliest Sanskrit play is called Sāriputra Prakara ṇ a. It comes in the form of a nine-act Buddhist play. Ashvaghosha also wrote the Buddhacharitra which is the biography of the Buddha. He also wrote Saundarananda, which is a fine example of Sanskrit poetry. Option II is correct: Bhavabhuti, a scholarly Brahmin, proficient in rhetoric and logic, has left three Sanskrit plays: two of which may be called historical-mythological — Mahāvi -ra-caritam and Uttararāma -caritam — both dealing with the Ramayana, and the third with a romance titled Mālati - Mādhavam. Option III is correct: Shudraka wrote a Sanskrit play M ṛ cchakatikam or the Toy Cart. It is a great source of socio- cultural conditions of the Gupta period. Mrichchhakatika is a ten act Sanskrit drama that is set in the ancient city of Ujjain during the reign of the king Pataka. The central story is that a young Brahmin Charudatta fails in love with a wealthy courtesan vasantasena. Option IV is incorrect: Dhurjati was a 16th century poet and one of the ‘ashtadiggajas’ in the court of Krishnadevaraya (1509-1529). Dhurjati, a devotee of Shiva, composed two poetical works of great merit known as Kalahasteeswara Mahatmayam and Kalahasteeswara Satakam. These were written in Telugu (and not Sanskrit)."},{"id":14,"txt":"With reference to the history of ancient India, which of the following statements is/are correct?\n1. Mitakshara was the civil law for upper castes and Dayabhaga was the civil law for lower castes.\n2. In the Mitakshara system, the sons can claim right to the property during the lifetime of the father, whereas in the Dayabhaga system, it is only after the death of the father that the sons can claim right to the property.   \n3. The Mitakshara system deals with the matters related to the property held by male members only of a family, whereas the Dayabhaga system deals with the matters related to the property held by both male and female members of a family.\nSelect the correct answer using the code given below:","ref":"","opts":["1 and 2","2 only","1 and 3","3 only"],"ci":1,"exp":"Ex: Statement 1 is incorrect . Mitakshara is the oldest school of Hindu law and is practiced in India except in the state of West Bengal and Assam. Dayabhaga is also an important school of Hindu law mainly practiced in Assam & West Bengal. Each law deals with upper and lower castes. Statement 2 is correct. According to the Mitakshara school of inheritance, when a son is born, he receives the right in father’s property from his birth itself. So, the son can claim the right to the property of his father, during the lifetime of his father . In the case of Dayabhaga school of inheritance, the right to the property can be claimed by the son only when the holder of the property dies. Statement 3 is incorrect. Both Mitakshara and Dayabhaga deal with male and female property rights. Mitakshara school is orthodox school. It is biased against women & gives them very less right to inherit property. Dayabhaga is also biased, but it is a liberal school, and it gives more rights to women to inherit property compared to Mitakshara."},{"id":15,"txt":"Consider the following texts:\n1. Svapanavāsavadattam\n2. Manimekalai\n3. Pratimānā ṭ akam\n4. Bhasa Kautilya\nHow many of the above texts are written by playwright Bhasa?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Options I and III are correct: Bhāsa’s plays largely adopted their subject from the epics of the Rāmāya ṇ a and the Mahābhārata. Thirteen of his plays are extant and some of them are: Svapanavāsavadattam , Cārudattam, Abhi ṣ ekanā ṭ akam, Pratimānā ṭ akam , Kar ṇ abhāram and Madhyamavyāyogam. Option II is incorrect: Manimekalai is composed by the poet Chithalai Chathanar. Manimekalai is a poem of 30 cantos. It is a story of Kovalan and Madhavi who became Buddhist Bhikkuni. Option IV is incorrect: Bhasa Kautilya, a commentary on Arthashastra is an ancient commentary on the Arthashastra written in the Malayalam language. It was not written by the ancient playwright Bhasa."},{"id":16,"txt":"Consider the following pairs: Geographical Indications (GI) Tagged Product State\n1. Woraiyur cotton sari Karnataka\n2. Yak Churpi Assam\n3. Nagauri Ashwagandha Rajasthan\n4. Pumtong Pulit Sikkim\nWhich of the above given pairs are correctly matched?","ref":"","opts":["I and II","II and III","III and IV","I and IV"],"ci":2,"exp":"Ex: Pair I is incorrect. Five products from Tamil Nadu — Woraiyur cotton sari, Kavindapadi nattu sakkarai (jaggery powder), Namakkal makkal pathirangal (soapstone cookware), the traditional Thooyamalli rice variety and Ambasamudram choppu saman (wooden toys) — have recently secured the Geographical Indications (GI) tag. Pair II is incorrect. Arunachal Pradesh's centuries-old highland staple, Yak Churpi, has received Geographical Indication (GI) registration. Produced from locally sourced yak milk and crafted using traditional knowledge passed down through pastoral families, Yak Churpi is not merely a culinary item, it is a symbol of resilience, identity and ecological harmony. Pair III is correct. The Government of India has granted the Geographical Indication (GI) tag to Nagauri Ashwagandha grown in Nagaur district of Rajasthan . The Nagauri Ashwagandha variety from Nagaur in the Marwar region has been officially recognized with a Geographical Indication (GI) tag for its unique quality, reputation and geographical origin. Pair IV is correct. The Government of India recently granted Geographical Indication (GI) registration for two traditional Lepcha musical instruments – Tungbuk and Pumtong Pulit – giving a major cultural boost to the Lepcha community of Sikkim. They were officially registered under the Musical Instrument category of the Geographical Indication Registry, Government of India, on the 5th of November. The Tungbuk is a three-string instrument, while the Pumtong Pulit is a bamboo flute. Both are integral to Lepcha folk music and hold deep cultural and spiritual significance. Ugen Palzor Lepcha and Namgyal Lepcha, who had submitted the GI tag applications for the Sikkim Lepcha Tungbuk and Sikkim Lepcha Pumtong Pulit respectively, received the certificates at the event."},{"id":17,"txt":"In the context of cultural history of India, Akkamahadevi and Allama Prabhu are best known for their association with which of the following?","ref":"","opts":["Introduction of the Dakhani style of Urdu poetry in the Deccan region.","Development of Sangam literature during the early historic period of South India.","Creation of Kritis under the Trinity of Carnatic music.","Development of Vachana literature and the Virashaiva movement."],"ci":3,"exp":"Ex: Option d is correct: Akkamahadevi and Allama Prabhu were pioneering 12th-century Kannada poet-saints and leaders of the Virasaiva (Lingayat) movement, known for their radical spirituality and contribution to Vachana literature. Akkamahadevi‘s vachanas explicitly express the resistance to patriarchy as well as monarchy /kingship in the 12th century vehemently. She resisted the custom-ridden society which would suffocate the lives of women in the name of Vedas and Brahmanical priesthood, in general and men in the name of kingship in particular. She is deemed to be the first woman who has the traces of feminism or rather she is the archetype of feminism, as early as 12th century. Allama Pabhu was born in Udutadi village in Shivamogga. Her Vachanas adore Lord Chennamallikarjuna or the Lord of white jasmine as her lover or husband. Allama Prabhu wrote about intimate relations between the almighty and the devotee , the need to attain perfection in the opportunity available, avoidance of hypocrisy in behaviour and winning over desire by abandoning indulgence in land, wealth and women. Knowledge Base: The Vachanas composed in the twelfth century by men and women saints from across the society finds no parallel in literary movement or the impact and imprint it left on the society. The fact that this explosion took place in a casteridden twelfth century Karnataka society , in which all the shudra and untouchable castes were denied right to literacy, makes the vachana revolution even more amazing. They rejected the stereotypes and traits traditionally attributed to and assigned to women ."},{"id":18,"txt":"She belonged to the Trika School of Kashmir Shaivism and composed mystic devotional poetry known as Vakhs (or Vatsun).\nWhich of the following women poets is described above?","ref":"","opts":["Andal","Mirabai","Lalleshwari (Lal Ded)","Bahinabai Chaudhari"],"ci":2,"exp":"Ex: Option c is correct: Lalleshwari, locally known mostly as Lal Ded, was a Kashmiri mystic of the Kashmir Shaivism school of Philosophy in the Indian subcontinent. She was the creator of the style of mystic poetry called Vatsun or Vakhs, literally ‘speech’. As her Vakhs suggest, Lal Ded belonged to the Trika school of Kashmir Shaivism, which was represented earlier by scholar-siddhas like Bhatta Narayana, Utpaladeva, Abhinavagupta and Shitikantha (8th – 13th century), and after Lal, by Roopa Bhavani (17th century) and Lakshman Joo (20th century), among others. Her teachings are universal: the    transience and futility of material pursuits, human attachments, and emotions they generate like greed, anger, pride, and fear of loss and death."},{"id":19,"txt":"With reference to the gallantry awards in India, consider the following statements:\n1. The Gallantry Awards can be awarded only to the personnel of the Armed Forces, and not to civilians.\n2. The Param Vir Chakra is the highest honour among the wartime gallantry awards in India.\n3. The Ashoka Chakra is the highest peacetime gallantry award in India.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":1,"exp":"Ex: Statement I is incorrect. Gallantry Awards have been instituted by the Government of India to honour the acts of bravery and sacrifice of the officers/personnel of the Armed Forces, other lawfully constituted Forces and civilians. Gallantry Awards are classified into two Categories Gallantry in the Face of Enemy Gallantry Other than in the Face of Enemy These gallantry awards are announced twice in a year - first on the occasion of the Republic Day and then on the occasion of the Independence Day. Statement II is correct. The Param Vir Chakra is awarded for the most conspicuous act of bravery and self-sacrifice in the face of the enemy. Wartime awards are awarded for acts of bravery in the face of the enemy, and are primarily for armed forces personnel. The highest honours among the wartime gallantry awards are the Paramvir Chakra followed by the Mahavir Chakra and the Vir Chakra. Statement III is correct. The highest honours in peacetime include the Ashoka Chakra , followed by the Kirti Chakra and the Shaurya Chakra. Ashok Chakra is awarded for acts of valour and self-sacrifice but, other than, in the face of the enemy. Peacetime awards can be awarded to armed forces, paramilitary forces, police, or civilians. Order of precedence of gallantry awards is the Param Vir Chakra, the Ashoka Chakra, the Mahavir Chakra, the Kirti Chakra, the Vir Chakra and the Shaurya Chakra. Recently, Group Captain Shubhanshu Shukla, who made history by becoming the first Indian to visit the International Space Station, has been honoured with the Ashoka Chakra, the country’s highest peacetime gallantry award."},{"id":20,"txt":"Whi ch one of the following statements about the ‘famous text of Panchatantra’ is correct?","ref":"","opts":["It is a philosophical text reflecting the debates of the time and refuting rival positions.","It is a text ushering in linguistics as a formal science.","It is a text discussing developments in various spheres of natural sciences.","It is a text showing through illustration what should and should not be done."],"ci":3,"exp":"Ex: The Panchatantra is a collection of Indian animal fables that was compiled in Sanskrit . The collection is generally attributed to Vishnu Sharma, but the original author is unknown. The Panchatantra is a didactic text, meaning that it is intended to teach a moral lesson. The stories in the Panchatantra are often humorous and entertaining, but they also contain valuable insights into human nature and the nature of the world."},{"id":21,"txt":"With reference to Odissi dance, consider the following statements: Statement-I : Odissi dance is often referred to as ‘mobile sculpture’. Statement-II: Odissi dance emphasises sculpturesque poses like the Tribhanga and Chowk postures.\nWhich of the above is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I.","Both Statement I and Statement II are correct but Statement II does not explain Statement I.","Statement I is correct but Statement II is not correct.","Statement I is not correct but Statement II is correct"],"ci":0,"exp":"Ex: . Odissi is one of the most graceful classical dance traditions of India. It developed in the region of present-day Odisha and has deep roots in temple traditions , especially those connected with the Jagannath cult. The dance evolved through the Mahari system in temples and later through the Gotipua tradition . Over time, it acquired a distinct identity marked by fluid torso movements, sculptural poses and devotional themes drawn from works like the Gita Govinda of Jayadeva Statement I is correct . The dancers create intricate geometrical shapes and patterns with their body. Their poses resemble the sculptural figures carved on the walls of ancient temples of Odisha. The grace, sensuality and aesthetic beauty of these movements make the body appear like a living sculpture in motion. Statement II is correct . Odissi gives special emphasis to two foundational postures: 1. Tribhanga – the three-bended posture of the body. In this stance, the head, torso and knee are bent in three different directions. It gives a lyrical and feminine quality to the dance. 2. Chowk – a square-like posture with knees bent and arms extended. It symbolises strength and masculinity. These postures are central to Odissi technique. The Tribhanga creates flowing curves, while the Chowk creates firm geometric lines. Both together define the physical vocabulary of the dance. Statement II explains Statement I . Odissi is redolent with sculpturesque poses which are reminiscent of the glorious stone sculptures of Konark and other temples from Odisha. The reason Odissi is called ‘mobile sculpture’ lies in its emphasis on Tribhanga and Chowk . These postures allow the dancer to recreate the sculptural aesthetics seen in temple carvings. The constant alternation between curved and square forms produces visual symmetry and geometry. The torso movement combined with static lower body control further enhances this sculptural illusion."},{"id":22,"txt":"Recently seen in the news, which of the following dances is popularly known as the “Butterfly Dance” because of its gentle, flowing and fluttering hand movements?","ref":"","opts":["Bagurumba","Jhumair","Karma Naach","Chhau"],"ci":0,"exp":"Ex: . Bagurumba was recently seen in news when thousands of Bodo dancers performed it together in Assam during a record attempt event. This dance is often called the “Butterfly Dance.” Bagurumba is a traditional folk dance of the Bodo tribe of Assam . It is closely connected with nature and the environment . The dancers perform slow, graceful movements that imitate the fluttering of butterflies and birds . The gentle hand gestures and rhythmic swaying of the body create a visual effect similar to a butterfly in motion. That is why it is popularly known as the Butterfly Dance . It is accompanied by traditional instruments such as Sifung (flute), Kham (drum), and Serja (violin-like instrument). Knowledge Base: Jhumair is a harvest dance performed by tribal communities of Jharkhand and Odisha . It has two forms — Janani Jhumair (performed by women) and Mardana Jhumair (performed by men). Karma Naach is performed during the Karma tribal festival in the Chota Nagpur Plateau region . Dancers form a circle and pla ce their arms around each other’s waists while dancing. The focus is on community bonding and ritual celebration. Chhau is a mask dance known for its vigorous and martial movements . It narrates mythological stories and sometimes natural themes like Sarpa Nritya (serpent dance) or Mayur Nritya (peacock dance) . It has three main styles — Saraikella (Jharkhand), Mayurbhanj (Odisha) and Purulia (West Bengal) . In 2010, UNESCO inscribed Chhau in the Representative List of Intangible Cultural Heritage of Humanity."},{"id":23,"txt":"With reference to Khayal music, consider the following statements:\n1. A Khayal composition is usually called a Bandish.\n2. Khayal music was developed by Baba Gopal Das in medieval India.\n3. Gwalior Gharana is one of the oldest and most elaborate gharanas of Khayal music.\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III only","I and III only","I, II and III"],"ci":2,"exp":"Ex: . Khayal is one of the most popular forms of Hindustani classical vocal music today. The word ‘Khayal’ is derived from Persian and means idea or imagination . As the name suggests, this style allows the singer freedom to explore and improvise within the framework of a raga. It is more flexible than Dhrupad and gives greater scope for ornamentation, taans and creative expression. Statement I is correct: A Khayal composition is usually called a Bandish . A typical performance has two parts — Bada Khayal (slow tempo) and Chhota Khayal (fast tempo). The slow section forms the major portion of the recital. The themes are often romantic in nature, though devotional compositions praising Lord Krishna are also common. Statement II is incorrect . Khayal music is traditionally attributed to Amir Khusrau and not to Baba Gopal Das . Initially, the Khayal style, during the era of Dhrupad music was rated as a form of semiclassical or even non-classical music in character. Gradually, and with the inclusion of newer elements, as also under great popular pressure, Khayal got elevated to the status of a full-fledged classical musical form. Later, Hussain Shah of the Sharqi dynasty of Jaunpur gave strong patronage to this form in the 15th century. In the 18th century, music in North Indian style received great encouragement at the court of the Mughal Emperor Muhammad Shah. Sadaranga and Adaranga were two great composers of Khayal gayaki at his court. Statement III is correct . The Gwalior Gharana is regarded as one of the oldest and most elaborate gharanas of Khayal music . It follows a rigorous approach. There is equal emphasis on melody and rhythm . Although the ragas chosen are simple, the presentation is technically complex. Important exponents of the Gwalior Gharana include Nathu Khan and Vishnu Paluskar . Knowledge Base: The gharana system represents distinct stylistic schools of music. Major Khayal gharanas include: Gwalior Gharana – Oldest and systematic style. Kirana Gharana – Focus on slow tempo and precise note tuning. Pandit Bhimsen Joshi was a famous exponent. Agra Gharana – Blend of Khayal and Dhrupad elements. Special emphasis on Bandish. Patiala Gharana – Known for intricate taans and rhythmic richness. Bade Ghulam Ali Khan was a legendary figure. Bhendibazaar Gharana – Famous for breath control and ability to sing long passages in a single breath."},{"id":24,"txt":"Consider the following statements:\n1. 21st February is declared to be the International Mother Language Day by UNICEF.\n2. The demand that Bangla has to be one of the national languages was raised in the Constituent Assembly of Pakistan.\nWhich of the above statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect. 21 February is declared as International Mother Language Day by UNESCO . The idea to celebrate International Mother Language Day was the initiative of Bangladesh. It was approved at the 1999 UNESCO General Conference and has been observed throughout the world since 2000. Statement 2 is correct. In 1948, the then Governor- General of Pakistan Muhammad Ali Jinnah declared that “Urdu, and only Urdu” would be the official language. The contentious nature of the official language question came to the fore during the first session of the Constituent Assembly of Pakistan. A member from East Bengal, Dhirendranath Datta, moved a motion to include Bengali as one of the languages of the Constituent Assembly along with English and Urdu. The motion was rejected. Bengali was eventually granted official status under the 1956 Constitution."},{"id":25,"txt":"With reference to Amir Khusro, consider the following statements:\n1. He is often regarded as the “Father of Qawwali”.\n2. He created different genres of music including Tarana.\n3. He is credited with inventing the musical instrument Sitar by combining the Indian Veena and the Iranian Tambura.\n4. He introduced several ragas such as Raga Yaman Kalyan and Raga Parghana into Hindustani classical music.\nWhich of the above given statements are correct?","ref":"","opts":["I and III only","II and IV only","I, III and IV only","I, II, III and IV"],"ci":3,"exp":"Ex: . Amir Khusro (1253 – 1325) was not just a court poet of the Delhi Sultanate but he was a cultural bridge between Central Asia and India. A disciple of the Sufi saint Nizamuddin Auliya, Khusro shaped the early structure of Hindustani classical music . His work reflects a creative fusion of Persian, Arabic, Turkic and Indian elements. Statement I is correct . Amir Khusro is widely regarded as the “Father of Qawwali.” He composed Sufi devotional songs that blended Persian poetic style with Indian musical patterns. His compositions are still sung in dargahs across the country. Statement II is correct . Khusro is believed to have created or popularised several musical forms. These include Qaul, Qalbana, Naqsh, Gul, Tarana and Khayal . Tarana, in particular, uses rhythmic syllables and fast tempo patterns. It later became an important part of classical performances. Statement III is correct . Amir Khusro is often associated with the invention of the Sitar . It is said that he developed it by combining elements of the Indian Veena and the Iranian Tambura . Statement IV is correct . Amir Khusro is credited with introducing and enriching several ragas in Hindustani music. Among the ragas associated with him are Raga Yaman Kalyan, Raga Parghana, Zeelaf and Sarpada. His exposure to Persian musical traditions allowed him to experiment with Indian melodic structures. This blending widened the scope of ragas in North Indian classical music. rd"},{"id":26,"txt":"With reference to the Carnatic music, consider the following statements:\n1. Purandara Dasa is considered the ‘Pitamaha’ or the fathe r of Carnatic music.\n2. Purandara Dasa created the Melakarta system of classifying the ragas.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":0,"exp":"Ex: . Carnatic music developed a systematic structure over centuries. Many scholars and saint-composers contributed to its theory and pedagogy. Among them, Purandara Dasa occupies a very special place. At the same time, the classification of ragas into the Melakarta system evolved later through scholarly works. Statement I is correct . Purandara Dasa (1484 – 1564) is widely honoured as the ‘Pitamaha’ or Father of Carnatic Music . He was a great devotee of Lord Krishna and composed numerous devotional songs known as Dasa Sahithya . More importantly, he structured the system of teaching Carnatic music . He introduced graded lessons such as sarali varisai, janta varisai and alankaras , which even today form the foundation of Carnatic music training. Because he systematised the learning process and made it accessible, he earned the title ‘Pitamaha’. Statement II is incorrect . The Melakarta system of classifying ragas was not created by Purandara Dasa. The foundation of the Mela system was laid earlier by Ramamatya in his work Swaramela Kalanidhi (1550). Later, in the 17th century, Venkatamakhi elaborated and stabilised it in his treatise Chaturdandi Prakasika. Venkatamakhi formulated the structure of the Melakarta ragas. Later scholars like Govindacharya standardized the system and gave names to the ragas. The use of Katapayadi Sankhya further helped in systematising the ragas mathematically."},{"id":27,"txt":"With reference to South Indian music and dance traditions, the terms Tillana, Padam and Javali can be best described as the-","ref":"","opts":["types of compositions in Carnatic music.","rhythmic cycles (talas) used in South Indian music.","classical dance mudras used in Bharatanatyam.","string instruments used in Carnatic music."],"ci":0,"exp":"Ex: .    Carnatic music has a well-developed system of compositions. Each type has its own structure, mood and purpose within a concert. Tillana, Padam and Javali belong to this compositional tradition and are musical forms. Tillana is a short and lively composition . It is marked by rhythmic syllables and brisk tempo. It usually appears towards the end of a concert . In dance recitals, it comes after expressive pieces and brings energy to the performance. Though mainly used in dance, it is also sung in music concerts. In Hindustani music, its counterpart is Tarana . Padam are slow and expressive compositions . They explore themes of love and devotion . Many deal with the emotional relationship between the hero and heroine, symbolising spiritual union. The music is dignified and allows deep expression. Javali are light classical compositions . They deal with worldly and romantic love , unlike Padams which often explore divine love. They use simple, colloquial language. The music is attractive and flowing. They are usually presented in the second half of a concert and are also used in dance performances. rd"},{"id":28,"txt":"With reference to ancient Indian music traditions, Gandharva Veda is generally associated as the Upaveda (sub- Veda) with which of the following Vedas?","ref":"","opts":["Rigveda","Samaveda","Yajurveda","Atharvaveda"],"ci":1,"exp":"Ex: . In ancient Indian thought, sound was not merely physical vibration . It was seen as a cosmic force. The idea of ‘Nada Brahma’ means that the universe itself is sound. According to this belief, harmony in the cosmos and in human life could be achieved through sacred sound. The Samaveda is the Veda primarily associated with music and chanting. It contains hymns that were meant to be sung rather than recited. The structured chanting of Samaveda was believed to maintain cosmic order. Over time, a specialised body of knowledge dealing with the science of music evolved from the Samaveda. This came to be known as the Gandharva Veda , which is regarded as its Upaveda (sub-Veda) . Gandharva Veda deals with musical theory, sound, melody and performance traditions. It laid the foundation for the later development of Indian classical music. Knowledge Base: Rigveda is mainly composed of hymns and praises. Yajurveda deals primarily with rituals and sacrificial formulas. Atharvaveda contains spells, incantations etc. rd"},{"id":29,"txt":"With reference to the Bharat Ratna Award, consider the following statements:\n1. It is awarded exclusively for achievements in literature, science, arts, and public services.\n2. The recommendations for Bharat Ratna are made by the Prime Minister to the President of India.\n3. The award does not consist of any monetary prize.   \n4. The Bharat Ratna cannot be awarded posthumously.\nWhich of the statements given above is/are correct?","ref":"","opts":["II only","II and III only","I, III and IV only","I and II only"],"ci":1,"exp":"Ex: The Government of India had instituted two civilian awards, Bharat Ratna and Padma Vibhushan, in 1954. The latter had three classes, namely Pahela Varg, Dusra Varg and Tisra Varg. These were subsequently renamed as Padma Vibhushan, Padma Bhushan, and Padma Shri in 1955. Statement I is incorrect. The Bharat Ratna, also known as the ‘Jewel of India’ or ‘Gem of India’, is India’s highest civilian honour. It is awarded in recognition of exceptional service/performance of the highest order in any field of human endeavour. Initially awarded for achievements in literature, science, the arts, and public services, the Indian government expanded the criteria in 2011, as it is a symbol of national gratitude and recognition, impacting India and its people through its contributions. The criteria w as expanded to include ‘any field of human endeavour’. Statement II is correct. The recommendations for Bharat Ratna are made by the Prime Minister to the President. No formal recommendations for this are necessary. The Prime Minister is free to consult or obtain advice from any one he chooses. However, as per practice, the Ministry of Home Affairs (MHA) receives several recommendations, which are forwarded to the Prime Minister’s Office. The MHA is the nodal ministry for these awards. Statement III is correct. Bharat Ratna is made of bronze and designed in the shape of a peepal leaf, embossed with the sun. The reverse side bears India’s emblem, the ‘Ashok Chakra’, and the motto, ‘Satyameva Jayate’. It does not carry any monetary grant. Statement IV is incorrect. The Bharat Ratna can be awarded posthumously. The recipient or (if posthumously) someone on his/her behalf receives a Sanad (certificate) signed by the President and a medallion. The number of awards is restricted to a maximum of three in a year. Although this rule has not been followed strictly and has been broken in 1999 (four persons were awarded Bharat Ranta) and in 2024 (five persons were awarded Bharat Ranta)."},{"id":30,"txt":"Consider the following statements regarding the Chakiarkoothu form of dance:\n1. It is performed by Chakiar caste.\n2. It cannot be traditionally witnessed by the higher caste Hindus.\n3. Mizhavu is the accompanying instrument.\n4. Its theatre form is called Koothambalam.\nWhich of these statements are correct?","ref":"","opts":["1, 3 and 4","1, 2 and 3","2, 3 and 4","1, 2 and 4"],"ci":0,"exp":"Ex: Chakiarkoothu is a traditional dance form of Kerala that is performed in the temples. It is a highly refined monologue where the performer narrates episodes from Hindu epics like Ramayana and Mahabharata. It was originally performed only in Koothambalams of Hindu temples. Statement 1 is correct: It is performed by members of the Chakiar caste along with the Ambalavasi Nambiars. Statement 2 is incorrect: Chakiarkoothu can be traditionally witnessed by the higher caste Hindus, but not by the lower caste Hindus or non-Hindus. Statement 3 is correct: Mizhavu is the accompanying instrument. Mizhavu is a big copper drum that is played as an accompanying percussion instrument in the Koodiyattam and Koothu, performing arts of Kerala. Statement 4 is correct : Koothambalam is the name of the theatre form where Chakiarkoothu is performed."},{"id":31,"txt":"Consider the following information:\n1. It is associated with a Bengali religious sect whose name means divinely inspired madness.\n2. Its lyrics reflect strong influences of the Bhakti movement as well as Sufi traditions, and it is used as a medium to preach mysticism.\n3. It has been inscribed on the UNESCO Representative List of the Intangible Cultural Heritage of Humanity from Bangladesh and is a common practice in West Bengal, India.\n4. It is traditionally performed using instruments like ektara, dotara and khamak.\nWhich of the following folk music traditions is best described by the information given above?","ref":"","opts":["Chhura","Naattupurapaattu","Ovi","Baul Gaan (Baul Songs)"],"ci":3,"exp":"Ex: . India’s folk music traditions are deeply connected with regional faith systems, social movements and local languages. The information given is about the Baul musical tradition of West Bengal and Bangladesh . Statement I. The word ‘Baul’ is derived from the Bengali word ‘batul’, which means divinely inspired madness . Bauls are not merely musicians. They belong to a mystic religious sect of Bengal . Their way of life emphasises spiritual freedom and inner realisation rather than ritualism. Statement II. Baul songs reflect a synthesis of Hindu Bhakti and Sufi influences . Many Baul singers are Vaishnavites, while others follow Sufi traditions. Their songs preach mysticism, devotion and the search for the divine within oneself . Statement III. Baul songs have been inscribed by UNESCO in the Representative List of Intangible Cultural Heritage of Humanity from Bangladesh as country of origin . This recognition highlights their cultural importance. Statement IV. Traditional Baul performances use simple folk instruments such as the ektara (single-string instrument), dotara and khamak . These instruments create a soulful and meditative musical environment. Knowledge Base: Naattupurapaattu refers to Tamil folk songs . These songs are rooted in rural Tamil Nadu and deal with everyday life, festivals and social themes. Ovi is a Maharashtrian folk form , traditionally sung by women during household activities like grinding grain. It reflects daily life and emotions Chhura is a tribal folk dance-song tradition , often associated with regional festivities.    rd"},{"id":32,"txt":"Tappa music is characterised by its fast, intricate, and rhythmic style of singing. In this context, consider the following statements:\n1. The origin of the Tappa style lies in the folk songs of camel riders of Punjab.\n2. It became refined and popular under the patronage of Mughal emperor Muhammad Shah.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: Tappa is a semi-classical form of Hindustani music known for its fast tempo, intricate ornamentation, and rapid, rolling taans. Statement I is correct: The origin of Tappa lies in the folk songs sung by camel riders of Punjab in the dialects of Punjabi such as Multani and Sarayki, incorporating poetry like Heer-Ranja of Waris Shah. These songs were characterised by quick, bouncing rhythms suited to the movement of camels. Later, this rustic musical form was refined and adapted into a classical style within the Hindustani music tradition. Statement II is correct: Tappa was refined and gained prominence in the 18th century under the patronage of the Mughal emperor Muhammad Shah (popularly known as Muhammad Shah ‘Rangeela’ ). His court was known for encouraging music and fine arts, which helped in popularising several musical forms, including Tappa."},{"id":33,"txt":"Consider the following theatre art forms:\n1. Koodiyattam\n2. Ramlila\n3. Ramman\n4. Mudiyettu\nHow many of the above theatre art forms are included in UNESCO’s Representative List of the Intangible Cultural Heritage of Humanity?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":3,"exp":"Ex:    The UNESCO’s Representative List of the Intangible Cultural Heritage of Humanity was established under the 2003 Convention for the Safeguarding of the Intangible Cultural Heritage . It recognises living traditions such as oral traditions, performing arts, social practices, rituals, festivals, knowledge concerning nature, and traditional craftsmanship. Option I is correct: Koodiyattam Koodiyattam is a classical Sanskrit theatre tradition of Kerala , performed in temple theatres known as Koothambalams. It is one of India’s oldest living theatrical traditions, originating more than 2,000 years ago. It combines elements of ancient Sanskrit drama with regional performance practices. Recognized by UNESCO in 2001 (formally inscribed in 2008) , it is considered one of the oldest surviving theatre traditions in the world . Option II is correct: Ramlila Ramlila is the traditional dramatic reenactment of the epic Ramayana , especially prominent in North India. Performed annually during the Navaratri – Dussehra period, it integrates music, dialogue, recitation, and procession. It was inscribed by UNESCO in 2008. Option III is correct: Ramman Ramman is an annual ritual theatre festival of the Garhwal Himalayas (Uttarakhand), performed in the village of Saloor-Dungra in late April . Dedicated to the local deity Bhumiyal Devta, it combines theatre, music, masked dance, and religious ritual. It was inscribed by UNESCO in 2009 , recognizing its unique blend of ritual performance and oral tradition. Option IV is correct: Mudiyettu Mudiyettu is a ritual theatre and dance drama from Kerala , traditionally performed in Bhagavati temples. It depicts the mythological battle between Goddess Kali and the demon DarikaIt was inscribed by UNESCO in 2010 for its strong ritual context and cultural continuity. It fosters mutual cooperation and community bonding while transmitting cultural values and traditions from elders to younger generations. Thus, all four theatre art forms mentioned above are included in UNESCO’s Repres entative List of the Intangible Cultural Heritage of Humanity. Knowledge Base: India and the Representative List: India has 14 elements included in this prestigious list of UNESCO , all of which are part of the Representative List of the Intangible Cultural Heritage of Humanity:"},{"id":34,"txt":"Sanghabhuti, an Indian Buddhist monk, who travelled to China at the end of the fourth century AD, was the author of a commentary on:","ref":"","opts":["Prajnaparamita Sutra","Visuddhimagga","Sarvastivada Vinaya","Lalitavistara"],"ci":2,"exp":"Ex: Many Indian monks who travelled to China during these centuries belonged to Kashmir (Dutt [1962], 1988: 294 – 310). They included Sanghabhuti, author of a commentary on the Sarvastivada Vinaya, who was in China in 381 – 84 CE ."},{"id":35,"txt":"With reference to the conferment of Padma Awards in India, consider the following statements:\n1. A Padma awardee can be given a higher Padma award anytime after conferment of the previous Padma award.\n2. The Padma Awards have been given without interruption every year since their inception in 1954.\n3. Posthumous awards are not allowed under Padma awards.\n4. Padma awards can be used as suffixes or prefixes to the awardee’s name.\nWhich of the statements given above is/are correct?","ref":"","opts":["I, III and IV only","II only","II and III only","None of the above"],"ci":3,"exp":"Ex: There are three levels of Padma Awards: Padma Vibhushan, Padma Bhushan and Padma Shri. The awards are given in various disciplines and fields of activities – art, social work, public affairs, science and engineering, trade and industry, medicine, literature and education, sports, civil service, etc. Statement I is incorrect. While a Padma awardee can be given a higher award (i.e. a Padma Shri awardee can receive a Padma Bhushan or Vibhushan), this can only happen after five years of the conferment of the previous award. Statement II is incorrect: Padma Awards, which were instituted in the year 1954, are announced every year on the occasion of Republic Day except for brief interruption(s) during the years 1978 and 1979 and 1993 to 1997. Statement III is incorrect . The Padma awards are normally not conferred posthumously. However, in highly deserving cases, the Government could consider giving an award posthumously. Statement IV is incorrect. The Supreme Court in Balaji Raghavan/SP Anand v. Union of India had answered whether the awards, Bharat Ratna, Padma Vibhushan, Padma Bhushan and Padma Shri are “Titles” within the meaning of Article 18(1) (abolition of titles) of the Constitution. “The National Awards do not amount to “titles” within the meaning of Article 18(1) and they should not be used as suffixes or prefixes. If this is done, the defaulter should forfeit the National Award conferred on him or her by following the procedure laid down in Regulation 10 of each of the four notifications creating these National Awards,” the supreme court had held."},{"id":36,"txt":"Consider the following statements regarding the history of puppetry in India:\n1. Excavations from Harappan sites have yielded objects resembling puppets.\n2. One of the earliest written references to puppetry in India are found in southern literary works such as Silappadikaram.\n3. Bharat Muni’s Natyashastra contains detailed chapters exclusively devoted to the techniques of puppetry.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II only","II and III only","I only","I, II and III"],"ci":0,"exp":"Ex: Statement I is correct: Excavations at Harappan sites such as Mohenjo-daro and Harappa have yielded puppet-like objects with sockets attached to insert a rod, which are believed to have been used as puppets. This provides evidence that rudimentary forms of puppetry or related performative traditions may have existed in ancient India, dating back to the Indus Valley Civilization. Statement II is correct: The earliest literary references to puppetry are found in early southern works such as Silappadikaram , a Tamil classic from the Sangam era composed by Ilango Adigal. Statement III is incorrect: The Natyashastra ( attributed to Bharata Muni , compiled between ~200 BCE – 200 CE) is a comprehensive treatise on performing arts (drama, dance, music, histrionics) with 36 chapters covering stagecraft, rasa theory, acting, costumes, music instruments, etc. It does not have any chapters devoted specifically to puppetry techniques. While it mentions the term Sutradhara (literally \"holder of strings,\" referring to the director/producer in human theatre), this is a metaphorical or derived usage from puppetry concepts rather than a dedicated discussion of puppet manipulation or techniques."},{"id":37,"txt":"With reference to traditional Indian puppetry, consider the following pairs: Puppetry Form State\n1. Kathputli Uttar Pradesh\n2. Kundhei (Kandhei) Odisha\n3. Gombeyaata Karnataka\n4. Bommalatam Andhra Pradesh\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Pair I is incorrect: Kathputli – Rajasthan (not Uttar Pradesh) Kathputli is the traditional string puppetry form of Rajasthan, not Uttar Pradesh . It is one of the most famous puppetry traditions of India, historically performed by the Bhatt community . It derives its name from the words ‘ kath’ and ‘ putli’ , meaning wood and doll respectively. Pair II is correct: Kundhei (Kandhei) – Odisha Kundhei is the traditional string puppetry form of Odisha . The Odissi classical dance form has an important influence on the Kundhei puppets. Made of light wood, the Orissa puppets have no legs but wear long flowing skirts. They have more joints and are, therefore, more versatile, articulate and easy to manipulate. Pair III is correct: Gombeyaata – Karnataka Gombeyaata is a traditional string puppetry form of Karnataka . Puppets are styled and designed like the characters of Yakshagana, the traditional theatre form of the region.Episodes enacted are usually based on Prasangas of the Yakshagana plays. Pair IV is incorrect: Bommalatam – Tamil Nadu (not Andhra Pradesh)    Bommalatam is a traditional puppetry form of Tamil Nadu, not Andhra Pradesh . It is known for large-sized puppets manipulated using both rods and strings. In contrast, Tholu Bommalata is the famous shadow puppetry tradition of Andhra Pradesh."},{"id":38,"txt":"Consider the following traditional puppetry forms in India:\n1. Ravanchhaya\n2. Tholpavakoothu\n3. Yampuri\n4. Putul Nach\nHow many of the above are examples of shadow puppetry?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":1,"exp":"Ex: Shadow puppetry is amongst the oldest forms of puppetry. The puppets are formed by cutting the leather and are given a flat shape. Sometimes, even paper cut-outs are used instead of leather. The figures are painted from both sides. Mostly, the performances of shadow puppetry are held in the shrine or the temple courtyard. The working of shadow puppetry performance takes place with the light falling on the puppets placed on a white screen, creating a shadow. Option I is correct: Ravanchhaya is a traditional shadow puppetry form of Odisha . It is also the most theatrical puppetry art. The leather used in making the figures comes from deerskin. The figures formed are without joints. Another unique thing about Ravanchhaya is the use of non-human figures like trees, animals, mountains, tanks etc. besides the human puppets. The size of the human puppets is smaller.    Option II is correct: Tholpavakoothu is a classical shadow puppetry tradition of Kerala , closely associated with temple performances, especially in Bhadrakali temples. The light cast on the screen is lit by oil lamps. Option III is incorrect: Yampuri is a form of rod puppetry of Bihar, not shadow puppetry. The theme of the shows is usually taken from Ramayana, Mahabharata, and other epics. Option IV is incorrect: Putul Nach is a rod puppetry tradition of West Bengal . The puppets are large and manipulated with rods rather than being projected as shadows on a screen. Therefore, it is not a shadow puppetry form."},{"id":39,"txt":"With reference to the Paishachi language, consider the following statements:\n1. Paishachi is regarded as a variant and form of ancient Sanskrit language.\n2. Gu ṇ ā ḍ hya’s B ṛ hatkathā was originally composed in the Paishachi language.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":1,"exp":"Ex: Statement I is incorrect: Paishachi is not regarded as a variety of Sanskrit . It is traditionally classified as a variety of Prakrit , i.e., one of the Middle Indo-Aryan languages. Paishachi is also calle d ‘ Bhuta- Bhasa’ (dead language). Statement II is correct: Gunadhya’s celebrated work Brihatkatha was originally composed in the Paishachi language. Although the original text is no longer extant, its stories survive in later Sanskrit adaptations such as Kathasaritsagara and Brihatkathamanjari."},{"id":40,"txt":"With reference to the cultural history of India, the memorizing of chronicles, dynastic histories and Epic tales was the profession of who of the following?","ref":"","opts":["Shramana","Parivraajaka","Agrahaarika","Maagadha"],"ci":3,"exp":"Ex: The memorization of chronicles, dynastic histories, or epic tales was the work of a group of people, the Sutas and Maagadhas. Knowledge Base: Shramanas were those who practiced an ascetic, or strict and self-denying, lifestyle in pursuit of spiritual liberation. The Shramana movement gave rise to Jainism and Buddhism. Parivraajaka an ascetic (of the fourth religious order) who has renounced the world. Agrahaarika is a land grant to a priest."},{"id":41,"txt":"Consider the following statements regarding the Brahmi script:\n1. The Brahmi script was deciphered in the 19th century by James Prinsep.\n2. The Brahmi script was usually written from right to left.\n3. The earliest extensive and systematic use of the Brahmi script is found in the inscriptions of Ashoka.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II only","III only","I, II and III","I and III only"],"ci":3,"exp":"Ex: The Brahmi script is one of the oldest writing systems used in the Indian subcontinent and parts of Central Asia during the final centuries BCE and the early centuries CE. It attained prominence through the inscriptions of Ashoka in the 3rd century BCE and later evolved into numerous regional scripts across South and Southeast Asia. Statement I is correct: The Brahmi script was deciphered in the 19th century (1837) by James Prinsep . His work enabled scholars to read the inscriptions of the Mauryan period, especially those of Ashoka. Statement II is incorrect: The Brahmi script was written from left to right . The script written from right to left in ancient India was Kharosthi , used mainly in the north-western regions. Statement III is correct: The earliest extensive and systematic use of the Brahmi script is found in the rock and pillar edicts of Ashoka (3rd century BCE), which are among the earliest deciphered written records of ancient India. These inscriptions provide crucial evidence about Mauryan administration, dhamma policy, and the geographical spread of the empire."},{"id":42,"txt":"With reference to medieval Indian history, what does the term Manipravalam refer to?","ref":"","opts":["A musical style that combined Carnatic ragas with Persian melodic elements.","A devotional hymn tradition that combined Tamil Bhakti poetry with Vedic chants.","A South Indian literary style that blends Sanskrit and regional Dravidian languages.","A classical dance form that combined Bharatanatyam technique with Kathak footwork."],"ci":2,"exp":"Ex:    The term Manipravalam refers to a medieval South Indian literary style that blended Sanskrit with regional Dravidian languages , especially early Malayalam (and to some extent Tamil). The word literally means “ diamonds (ruby) and corals ,” symbolising the harmonious combination of two di stinct linguistic traditions, referring to the two languages, Sanskrit and the regional language. This style flourished particularly in Kerala in the medieval period and was used in court poetry, devotional compositions, and works connected with temple culture. It represents a significant phase in the evolution of Malayalam literature."},{"id":43,"txt":"It was a script used to write Marathi for an estimated 700 years. The script was used for war correspondence and secret sociopolitical conversations between Marathas. Later, it was replaced by the Balbodh style of the Devanagari script as the standard writing system.\nWhich one of the following scripts is described above?","ref":"","opts":["Modi Script","Sarada Script","Grantha Script","Kadamba Script"],"ci":0,"exp":"Ex: The passage clearly describes the Modi Script. Modi Script was historically used to write the Marathi language and functioned as its official script until the 20th century. Modi was a script used to write Marathi for an estimated 700 years . The script was used for war correspondence and secret sociopolitical conversations between Marathas . It was later replaced by the Balbodh style of the Devanagari script as the standard writing system for Marathi. Though primarily associated with Marathi, Modi was also used at times to write other languages such as Urdu, Kannada, Gujarati, Hindi and Tamil. It is also classified as an abugida (a writing system in which consonant-vowel sequences are written as a unit). Modi Manuscript"},{"id":44,"txt":"A community of people called Manganiyars is well-known for their:","ref":"","opts":["martial arts in North-East India.","musical tradition in North-West India.","classical vocal music in South India.","pietra dura tradition in Central India."],"ci":1,"exp":"Ex: Manganiyars are a community from Rajasthan (Northwest India) with a strong musical tradition. Though the Manganiars are Muslim musicians, their lifestyle reflects the Hindu culture. They celebrate Hindu festivals such as Diwali and Holi. Many of the songs they render are in praise of the various Hindu deities."},{"id":45,"txt":"Consider the following Indian languages:\n1. Malayalam\n2. Odia\n3. Sanskrit\n4. Tamil\nWhich of the following is the correct chronological order based on the year in which the above given languages were declared as Classical Languages by the Government of India?","ref":"","opts":["IV-III-II-I","III-IV-I-II","IV-III-I-II","III-IV-II-I"],"ci":2,"exp":"Ex: Classical languages are defined by their ancient origins and their contribution to the intellectual, philosophical, and religious evolution of India. In 2004, the Government of India introduced the \"Classical Languages\" (Shastriya Bhasha) category to recognize languages with deep historical roots, rich literary traditions, and distinct cultural significance. In 2004, Government of India announced that languages might hold the title of \"Classical Language\" of India if they fulfilled a number of certain requirements So far, eleven languages have been recognized as classical languages.: Tamil (2004), Sanskrit (2005), Kannada (2008), Telugu (2008), Malayalam (2013), and Odia (2014). In 2024, five additional languages received this recognition: Marathi, Pali, Prakrit, Assamese, and Bengali. Hence the correct answer is option c: IV-III-I-II i.e. Tamil(2004)- Sanskrit(2005)- Malayalam(2013) -Odia(2014) Knowledge Base: The criteria for including a language in the ‘Classical Languages’ category was revised in 2024 on the    recommendations of the Linguistic Experts Committees (LEC) under Sahitya Akademi. High antiquity of its early texts/recorded history over a period of 1500- 2000 years. A body of ancient literature/texts, which is considered a heritage by generations of speakers. Knowledge texts, especially prose texts in addition to poetry, epigraphical and inscriptional evidence. The Classical Languages and literature could be distinct from its current form or could be discontinuous with later forms of its offshoots."},{"id":46,"txt":"With reference to Yajurveda, consider the following statements:\n1. Mundakopanisad is one of the prominent upanisadas of Yajurveda.\n2. Aitareya Brahmana and Shankyayana Brahmana are associated with Yajurveda.\nWhich of the statements given above is/are correct ?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":3,"exp":"Ex: Statement I is incorrect: The Yajur Veda is predominantly a ritual Veda as it acts like a guide book for the rishis/priests to conduct sacrificial rituals . The widely read Upanisads of the Krishna Yajurveda are Kathopanisad and Taittiriyopanisad. The upanisadas of the Shukla Yajurveda are Brihadaranayka and the Ishopanisad. The Prashnopanisad, Mundakopanisad and Mandukyopanisad are the three prominent Upanisadas of the Atharvaveda Statement II is incorrect: The Yajurveda is divided into two parts :the Krishna (Black) Yajurveda and the Shukla (White) Yajurveda. The Krishna Yajur is a combination of mantras and brahmanas, whereas, the Shukla Yajur is predominantly mantra portions. The famous available brahmana of the Krishna Yajurveda is the Taittiriya Brahmana and that of Shukla Yajur is Shatapatha Brahmana. Aitareya Brahmana and Shankyayana Brahmana are primarily associated with Rig veda hence incorrect."},{"id":47,"txt":"Consider the following ancient Indian literature:\n1. Tattvartha-sutra\n2. Aptamimansa\n3. Kalpa Sutra\nWhich of the above given literature belongs to Jainism?","ref":"","opts":["I only","II and III only","III only","I, II and III"],"ci":3,"exp":"Ex:    Option I is correct: The Tattvartha Sutra, or Book of Reality, was written by Umasvati (or Umasvami), the monk- scholar in 2nd – 5th century AD. It is an important Jain work in Sanskrit on logic, epistemology, ethics, and astronomy, and is accepted by both the Digambara and Svetambara sects. Option II is correct: Aptamimamsa is a Jain text written by Ācārya S amantabhadra in 2nd century CE in a philosophical-cum-logical manner, on the Jaina concept of omniscience and the attributes of the Omniscient. Option III is correct: Kalpa Sutra is the compendium of jain traditions that also include biographies of Jain Tirthankars (particularly Parshvanatha and Mahavira) written by Bhadrabahu in 3rd century BC, who was one of the greatest Jain monks and was the teacher of Chandragupta Maurya."},{"id":48,"txt":"Consider the following statements regarding the Sahitya Akademi Awards:\n1. They are awarded only for compositions written in any of the languages included in the Eighth Schedule of the Indian Constitution.\n2. They are awarded only to the Indian Citizens.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":1,"exp":"Ex: The Sahitya Akademi Award is a literary honour in India conferred by the Sahitya Akademi. It was established in 1954. The award comprises a cash prize of ₹ 1 lakh and a plaque which says ‘ Sahitya ’ in the Devanagiri script. The award was instituted in 1954 and is given by the ‘Sahitya Akademi’. T he Akademi is an autonomous body under the Union Ministry of Culture. Statement I is incorrect. The Sahitya Akademi Award conferred annually on writers of the most outstanding books of literary merit published in any of the 24 major Indian languages. (22 languages enumerated in the 8th Schedule of the Constitution, English and Rajasthani). Statement II is correct. The recipient author must be of Indian nationality. An author having dual citizenship is not eligible for the award. Non-Resident Indians and Persons of Indian Origin (PIO) are not eligible for the award."},{"id":49,"txt":"With reference to Tamil literature in India, consider the following pairs: Book Written by\n1. Silappatikaram Ilango Adigal   \n2. Sivaka Cintamani (Chivaka Cintamani) Thiruthakka thevar\n3. Tolkappiyam Tolkappiyar\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":2,"exp":"Ex: Pair I is correct : Silappadikaram is the greatest and earliest epic by Ilanko Adikal . It is a story of Kovalan of Puhar who falls in love with Madhavi, a dancer. Kovalan’s wife Kannagi takes revenge for his husband’s death at the hands of a Pandyan king and becomes a goddess. Pair II is correct: Sivaka Cintamani is also one of five big epics of Tamil Literature written by Tirutakkatevar, a Kongu Jain. He is said to be patronised by Pandya king King Poyyamozhi. Pair III is correct: Tolkappiyam, the ancient extant Tamil grammar work, was written by Tolkappiyar, who was believed to be a disciple of the mythical sage Agasthya. The Tolkappiyam lays down the rules and regulations for Tamil literature."}],"m":null,"tt":3000,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>
