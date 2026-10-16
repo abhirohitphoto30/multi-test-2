@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SFG LEVEL 02    2026 = 321159</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>SFG LEVEL 02    2026 = 321159</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="SFG LEVEL 02    2026 = 321159">SFG LEVEL 02    2026 = 321159</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"What was the main reason for the split in the Indian National Congress at Surat in 1907?","ref":"","opts":["Introduction of communalism into Indian politics by Lord Minto.","Extremists’ lack of faith in the capacity of the moderates to negotiate with the British Government.","Foundation of Muslim League.","Aurobindo Ghosh’s inability to be elected as the President of the Indian National Congress."],"ci":1,"exp":"Ex: There was a fundamental difference between the political ideologies of the extremists’ and moderates which led to their split at the Surat Session of Congress in 1907. The veteran moderate politicians refused to accommodate the new extremist’s trend within the Congress policies and programmes, and this led to the split in the Congress in its Surat session in 1907. The Extremists, during the Swadeshi Movement, decided to give a call for wide passive resistance and boycott of schools, colleges, legislative councils, municipalities, law courts, etc. The Moderates, encouraged by the news that council reforms were on the anvil, decided to tone down the scheme adopted at the Calcutta Session. The Extremists thought that the people had been aroused and the time had come for direct confrontation with the British. They considered the Moderates to be a drag on the movement and no longer had faith in the capacity of the moderates to negotiate with the British Government . They decided that it was necessary to Part Company with the Moderates, even if it meant a split in the Congress. On the other hand, the Moderates thought that it would be dangerous at that stage to associate with the Extremists whose anti - imperialist agitation would be ruthlessly suppressed by the mighty colonial forces. Both sides adopted rigid positions, which ultimately led to split. The moderates after the Surat Split in 1907 demanded colonial self - government, as against the extremist demand of complete independence."},{"id":1,"txt":"With reference to Indian National Movement during 19th century, consider the following pairs: Organization Founder\n1. The Indian League Rash Behari Gosh\n2. Bangabhasha Prakashika Sabha Radhakant Deb\n3. The East India Association Dadabhai Naoroji\nHow many of the pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":0,"exp":"Ex: Pair I is incorrect: The Indian League was started in 1875 by Sisir Kumar Ghosh (not by Rash Behari Gosh) with the object of “stimulating the sense of nationalism amongst the people” and of encouraging political educati on. Pair II is incorrect: The Bangabhasha Prakashika Sabha was formed in 1836 by associates of Raja Rammohan Roy. Radhakant Deb was not primarily associated with the Sabha. The Dharma Sabha was founded in 1830 by Radhakanta Deb. Pair III is correct: The East India Association was organised by Dadabhai Naoroji in 1866 in London to discuss the Indian question and influence public men in England to promote Indian welfare. Later, branches of the association were established in promine nt Indian cities ."},{"id":2,"txt":"With reference to Indian National Congress (INC ), consider the following statements about Moderates:\n1. Moderate leaders of INC opposed any kind of constitutional agitation to put forward their demands before the British Colonial Government.\n2. Moderate leaders of INC initially bel ieved that political connections with Britain was in India’s interest.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":3,"exp":"Ex: During the early phase of the Indian National Congress (1885 – 1905), its policies were largely shaped by leaders such as Dadabhai Naoroji, Pherozeshah Mehta, Dinshaw Edulji Wacha, Womesh Chandra Bonnerjee and Surendranath Banerjea. These leaders strongly believed in liberal princ iples and moderate political methods, and therefore came to be known as the Moderates. Statement I is incorrect: Moderate leaders of the Indian National Congress followed the method of ‘prayer, petition and protest’, which were themselves forms of constitu tional agitation. They sought reforms through lawful and peaceful means such as petitions, resolutions, participation in legislative councils, and appeals to British public opinion. They believed that gradual reforms could be achieved through constitutional methods. Statem ent II is correct: The Moderate leaders believed that association with British rule and the spread of English education had exposed Indians to modern liberal ideas such as liberty, equality, democracy, and the dignity of the individual. They also felt that British rule had helped establish law and order and an effective administrative system in India, which they considered necessary for the country’s progress at that stage."},{"id":3,"txt":"At the International Socialist Congress held at Stuttgart, Germany, in 1907, who among the following raised the tricolour flag on foreign soil for the first time?","ref":"","opts":["Virendranath Chattopadhyaya","Bhupendranath Dutta","Ajit Singh","Madam Bhikaji Cama"],"ci":3,"exp":"Ex: On 18 August 1907, Madam Bhikaji Cama raised the tricolour flag at the International Socialist Congress at Stuttgart, Germany — the first Indian to hoist the tricolour flag on foreign soil. The flag she unfurled was designed by her along with Vinayak Damodar Savarkar and Shyamji Krishna Varma. She co - founded and edited the revolutionary journal Madan's Talwar and was associated with the journal Bande Mataram published from Paris. Knowledge B ase: Virendranath Chattopadhyaya (1880 – 1937) - He was one of the founders of the Berlin India Committee (Indian Independence Committee) in 1915 . The Berlin India Committee worked in collaboration with Germany to organise the Ghadar Conspiracy and the Silk Letter Movement. He later moved further left    [ 2 ] ideologically and became associated with Communist International (Comintern) in Moscow. He worked closely with M.N. Roy in European communist circles. He founded the journal Talvar. Bhupendranath Dutta (1880 – 1961 ) - He was a founding member and editor of the revolutionary Bengali journal Yugantar launched in 1906. Yugantar was the organ of the Yugantar revolutionary group and was closely associated with Barindra Kumar Ghosh and Aurobindo Ghosh. Ajit Singh (1881 – 1947) - He founded the Bharat Mata Society in 1907 in Punjab. In 1907, he led the Pagri Sambhal Jatta movement."},{"id":4,"txt":"With reference to the Madras Mahajan Sabha, consider the following statements:\n1. Gazulu Lakshminarasu Chetty was one of the founding members of the Sabha.\n2. P. Rangaiah Naidu was elected as the first Pre sident of the Sabha.\n3. In 1896, Gandhiji addressed the Sabha about the problems faced by Indians in South Africa.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II only","II and III only","III only","I, II and III"],"ci":1,"exp":"Ex: Statement I is incorrect : The Madras Mahajan Sabha was founded in 1884 by M. Viraraghavachari , B. Subramaniya Aiyer and P. Ananda Charlu along with Balaji Rao, and Salem Ramaswamy Mudaliar. The Madras Native Associatio n (MNA) , considered as the first Indian political organization in the Madras Presidency to advocate for Indian rights, was founded by Gazulu Lakshminarasu Chetty in 1852 . He died in 1868, while the Madras mahajan Sabha was founded in 1884. Statement II is correct: The first conference of the Sabha was held in Madras in 1884, P.Rangaiah Naidu was elected first President of the Sabha. The Sabha adopted a moderate policy in its early days. Statement III is correct: In 1896, Gandhiji visited India and in an at tempt to arouse interest in the grievances of Indians in South Africa, he wrote a popular brochure called The Green Pamphlet citing the poor conditions of the Indian settlers in South Africa. Gandhi in the same year addressed the Madras Mahajan Sabha about the problems faced by Indians in South Africa."},{"id":5,"txt":"With reference to British Colonial Administration in India, consider the following events:\n1. Enactment of the Vernacular Press Act.\n2. Establishment of Statistical Survey of Indi a\n3. Reduction of maximum age limit for the I.C.S. examination from 21 years to 19 years.\nHow many of the above given events took place during the reign of Lord Lytton?","ref":"","opts":["Only one    [ 3 ]","Only two","All the three","None"],"ci":1,"exp":"Ex: Lord Lytton served as the Viceroy of India from 1876 to 1880. His tenure is often characterised by openly reactionary and anti - Indian policies and resulted in organisation of a number of all India political agitations. Option I is correct: The Vernacular Press Act, 1878 was enacted during the tenure of viceroy Lord Lytton. He imposed strict controls on newspapers and journals published in Indian languages. The Act empowered the colonial government to demand security depo sits from publishers and to confiscate printing presses if the content was considered critical of British rule. Option II is incorrect: Statistical Survey of India was established under the tenure of Lord Mayo (1869 - 72). Option III is correct: During Lord Lytton’s tenure, the upper age limit for appearing in the Indian Civil Service examination was reduced from 21 to 19 years ."},{"id":6,"txt":"With reference to the freedom struggle of India, consider the following national leaders:\n1. Aurobindo Ghosh\n2. Barindra Kumar Ghosh\n3. Ullaskar Dutta\n4. Chittaranjan Das\nWhich of the above leaders were formally tried and charged in court during the Alipore Bomb Case (1908)?","ref":"","opts":["I, II and III only","I and II only","III and IV only","I, II, III and IV"],"ci":0,"exp":"Ex: The Alipore Conspiracy Case (1908 – 1909) was one of the most famous political trials during the early revolutionary phase of the Indian freedom movement. It followed the Muzaffarpur Bomb Incident of 1908, where revolutionaries attempted to assassinate Magis trate Kingsford. The British govt arrested Aurobindo Ghosh, a prominent nationalist leader, his brother Barindra Kumar Ghosh, and many young revolutionaries, including Ullaskar Dutta, Hem Chandra Das, Upendra Nath Banerjee and Indubhushan Roy, in the Alip ore Bomb Case in 1908. Option I is correct. Aurobindo Ghosh was arrested and formally tried in the Alipore Conspiracy Case. The British authorities suspected him of being the intellectual leader behind the revolutionary activities. However, after a long trial, he was acquitted in 1909 . Options II and III are correct. Barindra Kumar Ghosh, the yo unger brother of Aurobindo Ghosh, was a key organiser of the revolutionary network and operated from the Muraripukur garden house , which served as the headquarters of the revolutionaries. He was arrested, formally charged, and tried in the case. Barindra K umar Ghosh, was the head of the secret society of revolutionaries, and Ullaskar Dutta, as the maker of bombs, were given death penalty. Statement IV is incorrect. Chittaranjan Das was not charged in the case . Instead, he played a crucial role as the defenc e lawyer for Aurobindo Ghosh during the trial."},{"id":7,"txt":"With reference to Modern Indian History, consider the following statements:\n1. Leaders like Lala Lajapat Rai believed in the Safety valve theory with respect to establishment of Indian National Congress.\n2. Around half the delegates of the first session of Indian National Congress were lawyers.\nWhich one of the following is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":1,"exp":"Ex: The Safety Valve Theory suggests that the Indian National Congress (INC) was founded in 1885 by A.O. Hume under British guidance to act as a \"safety valve\" for releasing growing political discontent among Indians. Statement I is correct: Lala Lajpat Rai believed in the Safety Valve Theory regarding the establishment of the Indian National Congress. H e argued that the British helped create the Indian National Congress (INC) in 1885 as a “Safety Valve” to allow Indians to express their grievances in a controlled manner, preventing them from turning to violent rebellion. Statement II is correct: The fi rst session of Indian national Congress was held on Monday, 28 December 1885, in Gokuldas Tejpal Sanskrit College, Bombay. It was attended by 72 delegates and out of these 72 delegates, 39 were lawyers. Both the Statements are individually true but have no t relation with each other."},{"id":8,"txt":"With reference to Modern Indian History, consider the following statements about British Indian Associa tion:\n1. It was set up by merging the Landholders’ Society and the Bengal British India Society.\n2. In 1875 it submitted a petition to the British Parliament demanding India’s direct representation in the British Parliament.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only    [ 5 ]","Both I and II","Neither I nor II"],"ci":0,"exp":"Ex: Statement I is correct: The British Indian Association was founded in Calcutta in 1851 by the zamind ars of Bengal, Bihar and Orissa and was among the earliest public organisations to mobilise people for a political cause. It was formed through the merger of the Landholders' Society and the Bengal British India Society, which had existed earlier in Calcut ta. Statement II is incorrect: It sent a petition to the British Parliament demanding inclusion of some of its suggestions in the renewed Charter of the Company, such as (i) establishment of a separate legislature of a popular character (ii) separation of executive from judicial functions iii) reduction in salaries of higher officers; and (iv) abolition of salt duty, abkari and stamp duties. Thus in 1852, the British Indian Association of Kolkata petitioned the British Parliament for establishment of a legi slature in India possessing a popular character reflecting the growing political consciousness of the period. It was perhaps for the first time that Indian opinion was being expressed on the subject of legislative reforms. It was the Poona Sarvajanik Sabha that sent a petition in 1875 to the British Parliament seeking India’s direct representation in the British Parliament."},{"id":9,"txt":"With reference to the power of the President of India to co nsult the Supreme Court under Article 143 of the Indian Constitution, consider the following statements:\n1. A Presidential reference made under Article 143 must be heard by a bench of at least five Supreme Court judges.\n2. It is a discretionary power of the President of India and can exercise it without the aid and advice of the Union Council of Ministers.\n3. The President is obligated to accept the advice tendered by the Supreme Court.\nWhich of the statements given ab ove is/are correct?","ref":"","opts":["I only","I and II","II only","I and III"],"ci":0,"exp":"Ex: Article 143 confers advisory jurisdiction on the Supreme Court and provides for the power of the President to consult the Supreme Court of India. Under Article 143(1) of the Constitution, the President may refer a “question of law or fact” to the Supreme Court for its opinion. The Supreme Court has the discretion to either tender its opinion or decline to do so. Article 143(2): This clause permits the President to refer matters related to pre - Constitution treaties, agreements, covenants, sanads, or similar instruments. In such cases, the Supreme Court is obligated to provide its opinion. Statement I is correct. As per Article 145(3), any reference under Article 143 must be heard by a bench of at least five judges of the Supreme Court. Statement II is incorrect. The President exercises this power based on the advice of the Union Council of Ministers. The President acts on the aid and advice of the Cab inet. Statement III is incorrect. In both types of references, the Supreme Court’s opinion is advisory in nature and not binding on the President. The President may accept or disregard the Court’s advice.    [ 6 ] Knowledge Base: Article 145 (4) says “ No judgment shall be delivered by the Supreme Court save in open Court, and no report shall be made under article 143 save in accordance with an opinion also delivered in open Court.” It means the judgment and advisory note made by the Supreme Court in regards to ref erence under Article 143 shall be in open court."},{"id":10,"txt":"Consider the following statements\n1. The first woman Presi dent of the Indian National Congress was Sarojini Naidu.\n2. The first Muslim President of the Indian National Congress was Badruddin Tyabji.\nWhich of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect. Annie Besant who was instrumental in creation of Home Rule League presided over the 1917 session in Calcutta and became the first woman president of INC. Sarojini Naidu joined the Indian National Movement in the wake of the 1905 partition of Bengal. She was elected as the President of the Indian National Congress Party in 1925, Kanpur Session. Thus, Sarojini Naidu was the first Indian women President of INC . Statement 2 is correct . Badrud din Tyabji came back to India from England in December 1867 and became the first Indian barrister in the High Court of Bombay. Badruddin Tyabji became the first Muslim president of the Indian National Congress. Overall, he was the third President of the Co ngress after WC Bannerjee and Dadabhai Naoroji (1886)."},{"id":11,"txt":"During the British colonial rule in India, there was a strong agitation by the Euro pean community in India against the Ilbert Bill or Criminal Procedure Amendment Bill. The protest was primarily against which among the following proposals of the bill?","ref":"","opts":["To expand the Governor General’s executive council and all the non - official members of the council to be Indians.","To allow senior Indian magistrates to preside over criminal cases involving British or European subjects in India.","To allow the use of vernacular language in the proceedings of all cases in the Bengal presidency.","To i mplement the provision of the Factory Act, 1881 in tea plantations owned by Europeans."],"ci":1,"exp":"Ex: The Criminal Procedure Amendment Bill or popularly called as the Ilbert Bill as it came to be called after the name of the Law member in Viceroy’s council was in essence a measure putting Indian judges on the same footing as Europeans in dealing with all c ases in the Bengal presidency. The Ilbert Bill of 1883 sought to remove racial discrimination in the judicial system by allowing senior Indian magistrates to preside over criminal cases involving British or European subjects in India. Until then, Europeans could only be tried by European judges. The proposal triggered strong opposition from the European community in India, revealing the deep racial prejudices embedded in colonial governance."},{"id":12,"txt":"‘Jana Gana Mana’, composed by Rabindranath Tagore, was first sung at which of the following sessions of the Indian National Congress (INC)?","ref":"","opts":["Calcutta Session, 1911","Belgaum Session, 19 24","Lahore Session, 1929","Haripura Session, 1938"],"ci":0,"exp":"Ex: Option a is correct: The ‘Jana Gana Mana’ was sung for the first time in the Calcutta Session of the Indian National Congress in 1911 (President: Bishan Naray an Dhar). It was composed by Rabindranath Tagore. The performance was led by Tagore’s niece Sarala Devi Chowdhurani, along with a group of students. Contemporary Congress records referred to the composition as “Janaganamana Adhinayaka”, describing it as a patriotic song. The lyrics were written in highly Sanskritised Bengali. Within a month of its first performance, the song was published in January 1912 in Tattvabodhini Patrika, the journal of the Brahmo Samaj. The journal was edited by Tagore himself. I n print, the song appeared under the title “Bharata Vidhata” and was classified as Brahmo Sangeet. During World War II, it was adopted by Subhas Chandra Bose’s Indian National Army (INA) as one of its anthems. On January 24, 1950, two days before India became a republic, Dr Rajendra Prasad, President of the Constituent Assembly, formally announced the adoption of Jana Gana Mana (hindi version) as the National Anthem of India."},{"id":13,"txt":"In the context of British colonial rule in India, the Lex Loci Act of 1850 is related to which one among the following?","ref":"","opts":["Granting legal validity to the remarriage of Hindu widows and recognizing their offspring as legitimate heir to inheritance.","Prohibiting the practice of Sati across all territories under British administration.","Providing that a person would not lose the right to inherit anc estral property on account of conversion to Christianity .","Reserving a fixed proportion of covenanted civil service posts for Indians.    [ 8 ]"],"ci":2,"exp":"Ex: The Lex Loci Act, 1850 provided the right to inherit the ancestral propert y of a person who converted to Christianity. It gave the Christian converts the right to inherit their ancestral properties. The Hindu and Muslim law provided that on conversion, the Hindu's or Muslim's property would be forfeited. It was believed that the Act would open floodgates to Christian conversion. The Madras Native Association came into being to counter this ‘offence’ to religion."},{"id":14,"txt":"Which one among the following is the central coordinating body for Sustainable Development Goals (SDGs) implementation in India?","ref":"","opts":["National Statistical Office","NITI Aayog","Prime Minister’s Office","Ministry of Environment, Forest and Climate Change"],"ci":1,"exp":"Ex: The Sustainable Development Goals lay out a uniquely ambitious and comprehensive agenda for global development by 2030. NITI Aayog is the nodal institution for achieving SDGs in the country , leading the 2030 Agen da with the spirit of cooperative and competitive federalism. Thus, NITI Aayog serves as the central coordinating body for SDG implementation in India."},{"id":15,"txt":"W ith reference to Dadabhai Naoroji, consider the following statements:\n1. He was one of the founders of Rast Goftar which focussed upon educating readers on the duties of citizenship.\n2. He wrote the ‘Poverty and Un - British Rule in India’ and a paper titled ‘Poverty of India’.\n3. He was the first Indian to be elected to the British House of Commons.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II only","I and III only","II only","I, II and III"],"ci":3,"exp":"Ex: Dadabhai Naoroji (1825 - 1917) was one of the most important early Indian nationalist leaders: He was among the founding leaders of the Indian National Congress; served as the Congress’ President on three occasions (1886, 1893 and 1906); put forward the “dr ain theory” to explain British exploitation of India. Statement I is correct: In 1851, Dadabhai Naoroji founded Rast Goftar (Truth Teller), a Gujarati fortnightly with a Persian name. It was a progressive journal educating readers on duties of citizenship. He was the first Indian to become a full professor.    [ 9 ] Statement II is correct: Dadabhai Naoroji carefully analysed the political economy of British rule in India. He wrote the book ‘Poverty and Un - British Rule in India’ and a paper titled ‘Poverty of India’ . The drain theory was put forward by Dadabhai Naoroji in his book Poverty and Un - British Rule in India. In the paper titled ‘Poverty of India’, read before the Bombay Branch of East Indian Association of 1876, he pointed at statistical fallacies and means to improve them. Statement III is correct: Dadabhai Naoroji was the first Indian to be elected to the House of Commons. He represented the Central Finsbury constituency as a candidate of Liberal party between 1892 and 1895. He represented India at the Int ernational Congress of Social Democrats at Amsterdam in 1905."},{"id":16,"txt":"As per the Indian Councils Act, 1861, half the members of the Governor - General's legislative council will be non - officials, i.e., both European and Indian, not in the service of the Crown. In this context, consider the following:\n1. Raja Sir Dinkar Rao Raghunath of Gwalior\n2. Sir Syed Ahmed Khan\n3. Maharaja Sir Narendra Singh of Patiala\n4. Nawab Khwaja Salimullah of Dacca\n5. Raja Deo Narain Singh of Benares\nWhich of the above were appointed by Viceroy Lord Canning to the newly constituted Legislative Council?","ref":"","opts":["I, II and IV","I, III and IV","I, III and V","II, IV and V"],"ci":2,"exp":"Ex: The Indian Councils Act 1861 introduced limited participation of Indians in governance. It marked an advance over the Government of India Act 1858, mainly by including non - official members in the legislative council for the first time. Options I, III and V are correct: The Governor - General was authorized to nominate to his council ‘not less than six nor more than twelve’ additional members at least one half of whom were to be non - officials. In 1862, Viceroy Lord Canning appointed three Indians - Maharaja Sir Narendra Singh of Patiala, Raja Deo Narain Singh of Benares and Raja Sir Dinkar Rao Raghunath of Gwalior to the newly constituted Legislative Council."},{"id":17,"txt":"With reference to the early phase of the Indian National Congress, which of the following were the demands of Moderate leaders of the Congress?\n1. Reduction in military expenditure of the colonial government.\n2. Extension of the Permanent Settlement to areas under the Ryotwari and Mahalwari settlement.\n3. Abolition of the salt tax.\nSelect the correct answer using the code given below:","ref":"","opts":["I, II and III","I and II only    [ 10 ]","I and III only","II and III only"],"ci":0,"exp":"Ex: Statement I is correct: The nationalists strongly criticised the high military expenditure of the Government of India, arguing that it placed a heavy burden on Indian revenu es. Statement II is correct: The early nationalists also demanded measures to reduce the burden of taxation on the peasantry , including the reduction of land revenue. The moderate leaders supported the extension of the Permanent Settlement to other areas i.e. areas under Ryotwari and Mahalwari settlement , believing that it could provide stability in land revenue and improve agricultural conditions. Statement III is correct: Moderate leaders criticized the salt tax as an unjust and regressive levy that disproportionately affected the poor. They demanded its reduction or abolition , arguing that it imposed an unfair burden on basic consumption."},{"id":18,"txt":"In the context of the freedom struggle of India, consider the following statements :\n1. The discriminatory colonial economic policies favo uring British manufacturers contributed to the growth of national consciousness in nineteenth - century India.\n2. During the tenure of Viceroy Lord Lytton, the import duties on cotton textiles were increased significantly.\nWhich one of the f ollowing is correct in respect of the above statements?","ref":"","opts":["Both Statement I and Statement II are correct and Statement II explains Statement I","Both Statement I and Statement II are correct but Statement II does not explain Statement I","Statement I is correct but Statement II is not correct","Statement I is not correct but Statement II is correct"],"ci":2,"exp":"Ex: Statement I is correct. The discriminatory economic policies of colonial rule gradually generat ed political consciousness among the emerging Indian capitalist class in particular and political leaders in general. Initially slow to develop nationalist sentiments, Indian industrialists increasingly realized that imperial policies in trade, tariffs, ta xation, and transport severely restricted their growth while favouring foreign capital and British enterprises. Lacking state support and facing intense competition from well - resourced foreign investors, Indian capitalists began to see a clear contradictio n between imperial interests and their own economic advancement. This realization reinforced the economic critique of colonialism advanced by early nationalists, particularly through the Drain of Wealth Theory, which argued that colonial rule systematicall y transferred India’s resources abroad. Consequently, many Indian business leaders concluded that only a national government free from imperial control could create conditions necessary for the independent development of Indian trade and industry. Statemen t II is incorrect: This discriminatory nature of colonial government came to the fore during the vice royalty of Lord Lytton when from 1876 - 80 most of the import duties on British textile imports were removed to please the textile manufacturers of Britain . This action was interpreted by Indians as proof of the British desire to ruin the small but growing textile industry of India. It created a wave of anger in the country and led to widespread nationalist agitation."},{"id":19,"txt":"Which of the following statements is correct regarding the Deputy Speaker of Lok Sabha?","ref":"","opts":["The election of Deputy Speaker is held on such a date as the President of India may fix.","The Constitution of India does not prescribe any time limit within which the Deputy Speaker is to be elected.","The Deputy Speaker subscribes to a separate oath of office which is administered by the Speaker.","The Deputy Speaker can be removed through a resolution passed by a majority of the members of Lok Sabha present and voting."],"ci":0,"exp":"Ex: The post of Deputy Speaker in Lok Sabha is vacant since 2019. No Deputy Speaker was elected by Lok Sabha in the entire time period of Seventeenth Lok Sabha (2019 - 2024) and the post is lying vacant in 18th Lok Sabha also (since 2024). Option a is incorrect. The Deputy Speaker is elected by the Lok Sabha itself from amongst its members. He is elected after the election of the Speaker has taken place. The date of election of the Deputy Speaker is fixed by the Speaker. The Deputy Speaker is elected by the membe rs of the Lok Sabha from among themselves by a simple majority (of those present and voting). Conventionally, this position has been handed over to the Opposition, in order to develop harmony between the ruling party and the Opposition. Option b is correct . Article 93 of the Constitution mandates that the Lok Sabha shall, as early as possible , elect two members from among itself to serve as the Speaker and Deputy Speaker . While Article 93 provides for the election of the Deputy Speaker “as soon as may be”, it does not set a timeline. The position of the Deputy Speaker has been lying vacant for the last six years raising questions on constitutional adherence and democratic resilience. Option c is incorrect. No separate oath is prescribed for the Deputy Speak er; the oath taken as a Member of Parliament (as per the Third Schedule of the Constitution of India) is sufficient. Option d is incorrect. The Deputy Speaker may be removed from his office by a resolution of the House of the People passed by a majority of all the then members of the House. Such a resolution can be moved only after giving 14 days’ advance notice."},{"id":20,"txt":"In the context of British Indian history, the names H. H. Risley and Sir Andrew Fraser are most closely associated with:","ref":"","opts":["Framing of the Famine Code and establishment of a dedicated Famine Relief Fund.","Introduction of the Separate Electorate system under the Morley - Minto Reforms.","Conducting the first systematic caste census for administrative classification.","Formu lation of the plan for the Partition of Bengal in 1905."],"ci":3,"exp":"Ex: The British government’s decision to partition Bengal had been made public in December 1903. The idea was to have two provinces: Bengal comprising Western Bengal as well as the provinces of Bihar and Orissa, and Eastern Bengal and Assam. Bengal retained Calcutta as its capital, while Dacca became the capital of Eastern Bengal. Option d is correct: The decision to partition the province of Bengal (undivided Bengal, Orissa, Assam and Bihar) supposedly for better administrative convenience was worked on by H. H. Risley (Secretary to Government of India, 1903) and Andrew Fraser (Lieutenant Governor of Bengal, 1903), and finally sanctioned by Lord Curzon, the Vic eroy (announced on 16th October, 1905). Sir A. Fraser and H.H. Risley were determined to use the plea for territorial readjustment to throttle the voice of nationalism. Knowledge Base: Reason for the Partition of Bengal: The official reason given for the decision was that Bengal with a population of 78 million had become too big to be administered. It was also stated that partition would help in the development of Assam if it came under the direct jurisdiction of the government. However, the real motive behind the partition plan was seen to be the British desire to weaken Bengal, the nerve centre of Indian nationalism."},{"id":21,"txt":"In the context of British colonial rule in India, consider the following personalities:\n1. George Yule\n2. William Wedderburn\n3. Allan Octavian Hume\n4. Henry Cotton\nHow many of the above were elected as the President of the Indian National Congress (IN C) Sessions?","ref":"","opts":["Only one","Only two","Only three","All the four"],"ci":2,"exp":"Ex: Option I is correct: George Yule was the fourth president of the Indian National Congress (INC). He was nominated for the coveted post in the 18 88 Allahabad Congress, thereby becoming the first non - Indian to lead the party. He also helped the 1889 Congress deputation to England, which pressed upon the British public the need for political reforms in India. He also served as the president of the In dian Chamber of Commerce and as the Sheriff in Calcutta and continued to advocate the party’s cause as a British Committee member in England. Option II is correct: William Wedderburn presided over the 4th session in Bombay (1889) and the 25th session in A llahabad (1910). He also helped publish the journal ‘India’. He also founded the Indian Parliamentary Committee , of    [ 13 ] which he was the chairman from 1893 to 1900. He also represented India in the 1895 Welby Commission or the Royal Commission on Indian Expend iture. He also participated in the 1901 Indian Famine Union. Wedderburn remained chairman of the Congress’s British Committee from 1889 till his death in 1918. Option III is incorrect: Allan Octavian Hume (A.O. Hume) was a key organizer of the Indian Nati onal Congress (INC) in 1885. While he was pivotal in the formation of the organisation, he never presided over any of the sessions of the INC. Option IV is correct: Sir Henry John Stedman Cotton was a 19th century Indian Civil Servant, who became sympathe tic to Indian nationalism. In 1904, he became the INC President in its 20th session in Bombay. He advocated the Indian Home Rule Movement. He published the book ‘New India’ or ‘India in Transition’ and became one of the fierce critics of Lord Curzon’s infa mous Partition of Bengal plan. Knowledge Base: Other foreigners who presided over the Indian National Congress (INC) Sessions: Alfred Webb: He became the third foreigner to head the INC when he chaired the Madras session in 1894. Annie Beasant: She becam e the INC president in the Calcutta session in 1917. In 1907, she became president of the Theosophical Society, headquartered in Chennai’s Adyar. In 1916, she formed the All India Home Rule League along with Lokmanya Tilak, with the sole aim of regime chan ge in India. She also started the Women’s Indian Association in 1917 and held the first All India Women’s Conference in Poona (Pune) in 1927."},{"id":22,"txt":"In the context of British rule in India, consider the following statement s:\n1. Satyendra Prasad Sinha was the first Indian to be appointed to the Viceroy’s Executive Council.\n2. The Indian Councils Act 1909 provided that one Indian was to be appointed to the Viceroy’s Executive Council.\nWhich of the statements given above is/ are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"Ex: The Viceroy Morley - Minto Reforms that translated into the Indian Councils Act of 1909 was announced by the British Government to placat e the Moderates as well as the Muslims. Statement I is correct: Satyendra Prasanna Sinha was an active member of the Indian National Congress (INC) from 1896 to 1919 when along with other moderates he left the organisation. He was the first Indian to becom e the Advocate - General of Bengal in 1905, also the first Indian to enter the Governor General's Executive Council in 1909. Statement II is correct: The British government introduced the reforms through Indian Councils Act of 1909. The Act increased the numb er of elected members in the Imperial Legislative Council and Provincial Legislative Councils. It also provided that one Indian was to be appointed to the Viceroy’s Executive Council and thus, Satyendra Sinha was the first Indian to be appointed in 1909. S ource:) History of Modern India - ForumIAS RedBook, 1st Edition, Chapter - 10, Rise of Extremism and Swadeshi Movement, Pg. 116"},{"id":23,"txt":"Consider the following statements regarding the Estimates Committee of the Parliament:\n1. The Members are elected according to the principle of proportional representation by means of the single transferable vote.\n2. Only a Union Minister can be appointed as the Chairperson of this Committee.\n3. It primarily scrutinizes the appropriation and the finance accounts of the Government of India.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II","I only","III only","I and III"],"ci":1,"exp":"Ex: Statement I is correct. The Committee on Estimates was constituted for the first time in 1950. The Estimates Committee consists of 30 members, elected every year by the Lok Sabha from among its Members. Members are elec ted according to the principle of proportional representation by means of the single transferable vote . The term of office of the Committee is one year. Statement II is incorrect. The Chairperson of the Committee is appointed by the Speaker from among its members. A Minister cannot be elected as a member of the Committee, and if a member, after being selected to the Committee, is appointed a Minister, the member ceases to be a member of the Committee from the date of such appointment. Statement III is incor rect. The Public Accounts Committee examines the appropriation accounts and the finance accounts of the Union Government. The functions of the Committee are enshrined in Rule 310 of the Rules of Procedure and Conduct of Business in the Lok Sabha. Rule 312 of the Lok Sabha provides that “the Committee may continue the examination of the estimates from time to time throughout the financial year and report to the House as its examination proceeds.” The functions of the Estimates Committee are: To report what e conomies, improvements in organisation, efficiency, or administrative reform — consistent with the policy underlying the estimates — may be effected; To suggest alternative policies in order to bring about efficiency and economy in administration; To examine w hether the money is well laid out within the limits of the policy implied in the estimates; To suggest the form in which the estimates shall be presented to Parliament ."},{"id":24,"txt":"In the context of modern Indian history, the ‘Deccan Sabha’ was founded by:","ref":"","opts":["Vishnu Shastri Chiplunkar","P. Anan da Charlu","G. Subramania Iyer","Gopal Krishna Gokhale"],"ci":3,"exp":"Ex: Option d is correct: The Deccan Sabha was founded by Gopal Krishna Gokhale in 1896 . Gokhale took keen interest in the activities of the Sabha. On behalf of the Sabha, Gokhale was sent to England to give evidence before the Welby Commission which was appointed by the Government to suggest ways of more equitable distribution of expenses of the administration between the British and the Indian Gover nment."},{"id":25,"txt":"Consider the following It was founded by prominent national leaders such as Pherozeshah Mehta, K.T. Telang, and Badruddin Tyabji. It was formed as a reaction to Lord Lytton’s Reaction policies and the Illbert Bill controversy.\nWhich of the following denotes that association?","ref":"","opts":["Poona Sarvajanik Sabha","London Indian Society","Bombay Association","Bombay Presidency Association"],"ci":3,"exp":"Ex: Option a is incorrect: The Poona Sarvajanik Sabha was founded in 1870 by Mahadeo Govind Ranade and others, w ith the object of serving as a bridge between the government and the people. Option b is incorrect: Bombay Association was formed in 1852 with the objective to appeal to the British parliament for protecting the interests of Indians. Option c is incorrect: The London Indian Society was founded in 1865 under the guidance of Dadabhai Naoroji. It was founded by Indian students as a forum for airing political grievances. Option d is correct: The Bombay Presidency Association was started by Badruddin Tyabji, Phe rozshah Mehta and K.T. Telang in 1885 . It was formed as a reaction to Lord Lytton’s Reaction policies and the Illbert Bill controversy. The association took up local grievances and through representations impressed upon the British parliament for addressin g their demand."},{"id":26,"txt":"During the British colonial rule in India, what was the primary aim of the Indian Official Secrets (Amendment) Act, 1904?","ref":"","opts":["Establishing an official intelligence agency for the British government.","Providing legal protection to Indian whistle blowers within the civil services.","Restricting the freedom of the press.","Legalizing the surveillance of activities of Indian revolutionary leaders in foreign territories."],"ci":2,"exp":"Ex: The Indian Official Secrets (Amendment) Act, 1904 was enacted during the time of Lord Curzon at a time when a lar ge number of powerful newspapers had emerged in several languages across India. Option c is correct: The Act was enacted as a more stringent version of the Indian Official Secrets Act of 1889. The purpose of this amendment was to counter a large number of nationalist newspapers that had emerged in several languages across India. The enactment of the Act was intended to crack down on editors and publishers that had been building political consciousness among the people. The law wanted to ensure secrecy and c onfidentiality in governance, especially on national security and espionage issues."},{"id":27,"txt":"With reference to the National Education Movement during the Swadeshi period, the Dawn Society in 1902 was founded by which one of the following?","ref":"","opts":["Satish Chandra Mukherjee","Surendrana th Banerjee","Aurobindo Ghosh","Rabindranath Tagore"],"ci":0,"exp":"Ex: . Satish Chandra Mukherjee founded the Dawn Society in 1902 . The organisation aimed to promote national consciousness through education . It emphasised self - help, intellectual awakening and the development of Indian industries. SC Mukherjee had already been active in spreading these ideas through his newspaper “Dawn” , which had been in circulation since 1897. The society later became close ly associated with the national education movement in Bengal . He also played a major role in the establishment of the National Council of Education , which sought to create an education system based on national control and vernacular instruction ."},{"id":28,"txt":"With reference to the Sustainable Harnessing and Advancement of Nuclear Energy for Transforming India (SHANTI) Act, 2025, consider the following statements:\n1. It enables limited private participation in India’s nuclear energy sector.\n2. It provides an un capped liability on the nuclear operators of Rs. 1000 cr irrespective of the reactor capacity.\n3. It grants statutory status to the Atomic Energy Regulatory Board (AERB).\nWhich of the statements given above are correct?","ref":"","opts":["I and II only","II and III on ly","I and III only","I, II and III"],"ci":2,"exp":"Ex: The Sustainable Harnessing and Advancement of Nuclear Energy for Transforming India (SHANTI) Act aims to modernise India’s nuclear legal framework, support clean energy ex pansion, and strengthen regulatory oversight while maintaining strategic control over sensitive nuclear activities. Statement I is correct: The Sustainable Harnessing and Advancement of Nuclear Energy for Transforming India (SHANTI) Act , passed in December 2025, represents a fundamental shift in India's nuclear policy. It amends the Atomic Energy Act, 1962, to allow private sector entities and state governments to participate in power generation and plant operations, which was previously a central government monopoly . Statement II is incorrect: In contrast to existing laws that impose a single statutory cap on operator liability, the SHANTI Bill establishes a graded liability framework . Under this framework, the limits on operator liabil ity is graded from Rs. 100 cr to rs. 3000 cr, linked to reactor capacity. Statement III is correct: The bill provides statutory recognition to the Atomic Energy Regulatory Board (AERB) to strengthen nuclear regulation and safety oversight.    [ 17 ]"},{"id":29,"txt":"The Partition of Bengal made by Lord Curzon in 1905 lasted until","ref":"","opts":["the First World War when Indian troops were needed by the British and the partition was ended.","King George V abrogated Curzon’s Act at the Royal Durbar in Delhi in 1911.","Gandhiji launched his Civil Disobedience Movement.","the Partition of India in 1947 when East Bengal became East Pakistan."],"ci":1,"exp":"Ex: Th e Partition of Bengal made by Lord Curzon in 1905 lasted until 1911, when King George V announced to annul the partition of Bengal at the Royal Darbar in Delhi in 1911. It was decided to annul the partition of Bengal in 1911 mainly to curb the menace of re volutionary activities. On 22 March 1911, a royal proclamation announced that the Durbar would be held in December to commemorate the coronation in Britain a few months earlier of King George V and Queen Mary and allow their proclamation as Emperor and Emp ress of India. Without public forewarning, the announcement of the move of India‘s capital from Calcutta to Delhi was also made at the Durbar . King George V also announced to annul the partition of Bengal."},{"id":30,"txt":"The Carlyle Circular was an important administrative directive issued during British rule in India. What was the primary objective of the Carlyle Circular?","ref":"","opts":["To regulate financial grants given to Indian educ ational institutions.","To restrict students from participating in nationalist activities during the Swadeshi Movement.","To encourage Indian students to join the civil services under British administration.","To reform the University Senates by increas ing the number of nominated British members and reducing Indian representation."],"ci":1,"exp":"Ex: The Carlyle Circular (1905) was an administrative order issued by the Government of Bengal , during the period of the Swadeshi Movement that followed the partition of Bengal. The primary objective of the Carlyle Circular was to prevent students from taking part in the Swadeshi and boycott movements . Educational institutions were warned that if their students participated in nationalist protests, they could face penalties such as fines, suspension, or withdrawal of government support."},{"id":31,"txt":"The 1908 Barrah Dacoity, an important revolutionary action carried out to obtain funds for nationalist activities, was organized by which of the following revolu tionaries?","ref":"","opts":["Jatindra Nath Das","Jogesh Chandra Chatterjee","Sarat Chandra Bose","Pulin Behari Das    [ 18 ]"],"ci":3,"exp":"Ex: Option a is incorrect: Jatindra Nath Das joined the Anushilan Samiti, a revolutionary group in Bengal. He was imprisoned in the Lahore Conspiracy Case. Died fasting against ill treatment meted to inmates of Jail. Option b is incorrect: Jogesh Chandra Chatterjee was a member of the Anushilan Samiti.He was one of the founder members of Hindustan Socialist Repub lican Association (HSRA). He was tried in the Kakori conspiracy case in 1926 and received rigorous imprisonment for life. Option c is incorrect: Sarat Chandra Bose was a barrister but later abandoned it to join the Indian independence movement. He actively participated in the Quit India Movement. Option d is correct: The Barrah Dacoity of 1908 was organized by Pulin Behari Das , a prominent revolutionary leader associated with the Dacca branch of the Anushilan Samiti . The purpose of this dacoity was to raise funds for revolutionary activities against British rule."},{"id":32,"txt":"With reference to Modern Indian History, consider the following statements about the Indian Association which was founded in Calcutta:\n1. In 1876, Surendranath Banerjea along with Ananda Mo han Bose formed the Indian Association in Calcutta.\n2. It aimed at promoting friendly feeling among the Hindu and Muslims.\n3. It protested against increasing the age limit of civil service examination.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and II only","II only","I and III only","I, II and III"],"ci":0,"exp":"Ex: Statement I is correct: The Indian Association (also known as the Indian National Associatio n) which was founded in Calcutta was founded in 1876 by younger nationalists of Bengal led by Surendranath Banerjea and Ananda Mohan Bose. Statement II is correct: The Indian Association of Calcutta sought to promote Hindu – Muslim friendship and unite the I ndian people under a common political programme , while also working to develop strong public opinion on political issues and create wider political awareness among the masses. Statement III is incorrect: The Indian Association of Calcutta protested against the reduction (not increase) of the age limit for the Indian Civil Service (ICS) examination in 1877 and demanded the simultaneous conduct of the ICS examination in both England and India, along with the Indianisation of higher administrative posts to inc rease Indian representation in the civil services."},{"id":33,"txt":"With reference to the Berlin Committee la ter known as Indian Independence Committee, consider the following statements:\n1. It was formed under the aegis of the German Foreign Ministry by the Indian nationalists in Berlin.    [ 19 ]\n2. It aimed to mobilise the Indian settlers abroad to send volunteers and arms to India to incite rebellion among Indian troops.\nWhich of the statements given above is/are correct?","ref":"","opts":["I only","II only","Both I and II","Neither I nor II"],"ci":2,"exp":"No explanation provided."},{"id":34,"txt":"With reference to the Swadeshi Movement, consider the following regions and the associated leaders who popularized the movement in the region: Region Associated Leader\n1. Punjab Lala Lajpat Rai\n2. Delhi Laikat Hossain\n3. Madras V.O. Chidambaram Pillai\nHow many pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All the three","None"],"ci":1,"exp":"Ex: The Swadeshi movement began as an agitation against the decision of Lord Curzon to partition Bengal in 1905. The intent of the British government behind the partition plan was to weaken Bengal, the nerve centre of Indian nationalism. Pair I is correct: La la Lajpat Rai took the Swadeshi movement to Punjab and parts of northern India. He was assisted in his venture by Ajit Singh.    [ 20 ] Pair II is incorrect: Syed Haider Raza (and not Laikat Hossain) popularised the Swadeshi Movement in Delhi. Laikat Hossain led the boycott campaign in Patna and organised the East Indian Railway strike in 1906. Pair III is correct: V.O. Chidambaram Pillai spread the Swadeshi movement to Madras and organised the strike of the Tuticorin Coral Mill. In 1906, founded the Swadeshi Steam Navigation Company in Tuticorin on the east coast of the Madras Province. He won the active support of another fiery Tamil orator, Subramania Siva. Pillai and Siva were aided in their efforts by a number of Tirunelveli - based lawyers, who formed an organisa tion called the Swadeshi Sangam, or ‘National Volunteers’."},{"id":35,"txt":"In the context of the revolutionary activities among Indian nationalists abroad during the early 20th century, Lala Har Dayal is most closely associated with which of the following?","ref":"","opts":["Assassination of Curzon Wyllie.","Establishment of the Ghadar Party.","Founding the Indian Home Rule League in London.","Publishing ‘The Talvar’, a revolutionary journal from Berlin."],"ci":1,"exp":"Ex: Lala Har Dayal, played a major role in mobilising Indian immigrants, especially in North America, and encouraging them to participate in revolutionary activities aimed at achieving India’s independence. Option a is incorrect. The assassination of Curzon Wy llie in London in 1909 was carried out by Madan Lal Dhingra. Option b is correct. Lala Har Dayal played a key role in organizing Indian immigrants in North America. In 1913 , he helped establish the Hindi Association of the Pacific Coast in Portland, which later became known as the Ghadar Party . The organisation aimed to mobilise Indians abroad and inspire an armed revolt against British rule in India. Option c is incorrect. The Indian Home Rule League in London was founded by Shyamji Krishna Varma in 1905. Option d is incorrect. The revolutionary journal The Talvar was associated with Indian revolutionaries in Europe, particularly Virendranath Chattopadhyaya and other Berlin - based revolutionaries."},{"id":36,"txt":"With reference to the Lucknow Session of the Indian National Congress (1916), consider the following statements:\n1. The session was presided over by Rash Behari Bose.\n2. Annie Beasant’s proposal for the Home Rule League program was formally approved at th is session.\n3. The session marked the reunion of the Moderates and Extremists within the Indian National Congress.\nWhich of the statements given above is/are correct?","ref":"","opts":["I and III only","III only","II and III only","I, II and III"],"ci":1,"exp":"Ex: Opti on b is the correct answer. The Lucknow Session of the Indian National Congress (1916) was an important milestone in the Indian freedom movement. It helped strengthen the nationalist movement by bringing unity within the Congress    [ 21 ] Statement I is incorrect. The Lucknow Session of 1916 was presided over by Ambika Charan Majumdar , a moderate leader of the Congress. Statement II is incorrect. The Home Rule League movement was launched by Annie Besant and Bal Gangadhar Tilak in 1916, but it was not formally app roved as a program of the Congress at the Lucknow Session. Statement III is correct. The Lucknow Session ended the split that had occurred in the Congress at the Surat Session of 1907 . Leaders of both groups Moderates and Extremists came together again, strengthening the nationalist movement."},{"id":37,"txt":"During the early phase of revolutionary nationalist activities among Indian immigrants abroad, several newspapers were started to spread anti - colonial ideas and mobilize support for India’s freedom. In this context, who\namong the following was the founder of the Indian revolutionary journal ‘Free Hindustan’?","ref":"","opts":["Taraknath Das","Sardar Ajit Singh","Shyamji Krishna Varma","Madan Lal Dhingra"],"ci":0,"exp":"Ex: Taraknath Das was one of the earliest leaders of the Indian nationalist movement among Indian immigrants in North America. He started the revolutionary journal Free Hindustan to spread nationalist ideas and encourage resistance against British rule."},{"id":38,"txt":"Which of the following statements does not correctly refer to the features of the Civil Registration System (CRS) in India?","ref":"","opts":["The registration of births, and deaths is statutorily mandatory in India.","‘Registration of births and deaths’ falls under the Union List of the Seventh Schedule.","The events of birth and death must be registered at the place of occurrence of the event.","Normally, birth and death events have to be registered within 21 days of occurrence."],"ci":1,"exp":"Ex: Civil Registration System (CRS), popularly known as birth and death registration system, is the recording of vital events i.e. Birth, Death & Still Birth under the statutory provisions on a continuous and permanent basi s. Option a is correct. The Registration of Births and Deaths Act (RBD Act) was enacted in 1969 to promote uniformity and comparability in the registration of Births and Deaths across the country and compilation of vital statistics based thereon. With the enactment of the Act, re gistration of births, deaths, and stillbirths has become mandatory in India. The registration of birth and death is done under the provisions of this central Act namely Registration of Births and Deaths (RBD) Act, 1969. Under the provisions of RBD Act, 196 9, the registration of birth and death is mandatory. Option b is incorrect. Civil Registration System (“Vital statistics including registration of births and deaths”) falls under the Concurrent list of the Constitution of India.    [ 22 ] Option c is correct. The ev ents of birth and death are registered at the place of occurrence of the event i.e. where the event took place. Under the provision of Section 7 of the RBD Act, the Registrars of Births and Deaths are appointed for each local area comprising the area withi n the jurisdiction of the Municipality, Panchayat or other local authority. The Registrar General of India (RGI) at the Central level coordinates and unifies the activities of registration throughout the country. Option d is correct. Births, stillbirths, a nd deaths must be registered at the place where the event occurred within 21 days. The events of births, still births and deaths are registered at the place of occurrence of the event i.e where the event took place. The normal period of reporting the event is 21 days from its occurrence , however, the event can be registered afte r the normal period under delayed registration provisions of Section 13 of the RBD Act ."},{"id":39,"txt":"What was Kamagatamaru?","ref":"","opts":["A political party based in Taiwan","Peasant Communist leader of China","A naval ship of Voyage to Canada","A Chinese village where Mao Tse lung began his long march."],"ci":2,"exp":"Ex: The Komagata Maru, a steamship built in Scotland in 1890 and later owned by Germany and Japan , saw various names including Stubbenhuk, Sicilia, Komagata Maru, and Heian Maru . In 1914, it transported 376 Sikh an d other migrants from the Far East to Canada, resulting in the Komagata Maru incident when Canadian authorities in Vancouver refused most of them entry and they were on ship for the 2 months. Later, they were forced to return to India where the Imperial Police attempted to arrest the group leaders."},{"id":40,"txt":"With reference to Lokmanya Tilak’s Indian Home Rule League Movement, consider the following statements:\n1. The headquarters of the League was in Bombay.\n2. The League demanded the formation of Linguistic states and education in vernacular languages.\n3. It demanded complete independence of India.\nWhich of the statements given above is/are correct?","ref":"","opts":["II only","I and III","III only","II and III"],"ci":0,"exp":"Ex: The Home Rule Movement was the Indian response to the First Wor ld War (1914 - 1918). It was launched with the main objective of demanding self - government or home rule for all of India within the British commonwealth. This alliance was to be the All India Home Rule League along the lines of the Irish Home Rule League.    [ 23 ] Statement I is incorrect: Bal Gangadhar Tilak (popularly known as Lokmanya Tilak) set up his Indian Home Rule League in April 1916. Tilak held his first Home Rule meeting at Belgaum. Poona was the headquarters of his league . His league was restricted to Ma harashtra (excluding Bombay city), Karnataka, Central Provinces and Berar. Annie Besant set up her All - India Home Rule League in September 1916 in Madras (now Chennai) and covered the rest of India (including Bombay city). Statement II is correct: Bal Gan gadhar Tilak’s Indian Home Rule League had six branches and the demands included swarajya, formation of linguistic states and education in the vernacular. Statement III is incorrect: Lokmanya Tilak’s Indian Home Rule League Movemen t demanded self - governance or home rule (Swaraj) for India within the British empire. It didnot demanded complete Independence of India."},{"id":41,"txt":"What was the significance of August 7, 1905 in modern Indian history?","ref":"","opts":["The British Government officially announced the Partition of Bengal.","The Partition of Bengal formally came into effect across the province.","The Swadeshi Movement was formally pr oclaimed at a public meeting in Calcutta Town Hall.","The famine in Bengal which led to the death of around 3 million people."],"ci":2,"exp":"Ex: . The Partition of Bengal in 1905 triggered one of the most significant mass pol itical movements of the early Indian national movement. Many Indians viewed the partition as a deliberate attempt by the British government to divide the Bengali population along communal lines and weaken the growing nationalist sentiment . In response, nat ionalist leaders searched for new methods of political protest , moving beyond the earlier moderate strategy of petitions and appeals. This led to the emergence of the Swadeshi and Boycott Movement , which encouraged Indians to reject foreign goods and promo te indigenous industries. The meeting held on 7 August 1905 became a landmark moment in this transformation. On 7 August 1905 , a mass public meeting was held at the Calcutta Town Hall . At this gathering, nationalist leaders and citizens resolved to boycott British goods and promote indigenous products . This meeting is widely regarded as the formal beginning of the Swadeshi Movement . The movement soon spread across Bengal and other parts of India, encouraging economic self - reliance and political activism. So urce: https://egyankosh.ac.in/bitstream/123456789/89549/3/Unit - 6.pdf Unit 6 - The Swadeshi Movement - Boycott, Swadeshi And National Education – Page 80 A Brief History of Modern India by Rajiv Ahir (Spectrum) - Era of Militant Nationalism (1905 - 1909) - Anti - Partition Campaign Under Moderates (1903 – 05) – Page 277"},{"id":42,"txt":"With reference to the Calcutta Session of the Indian National Congress held in 1906, consider the following statements:\n1. The session was presided over by Dadabhai Naoroji.\n2. It declared Swaraj as the g oal of Indian National Congress.\n3. The session passed a resolution for the extension of the boycott of foreign goods beyond Bengal.    [ 24 ]\n4. A resolution to boycott elections to the legislative councils and law courts across the country was passed at this se ssion.\nWhich of the statements given above are correct?","ref":"","opts":["I, II and III","I, II and IV","I and II only","III and IV only"],"ci":2,"exp":"Ex: . The Calcutta Session of the Indian National Congress in 1906 represented an important turning point in the national movement. By this time, the influence of the Extremist leaders had grown significantly, especially after the Swadeshi agitation that followed the Partition of Bengal in 1905 . This session therefore be came a moment of negotiation between the Moderates and the Extremists . While the Moderates continued to lead the Congress organisation, they had to acknowledge the rising nationalist mood among the people and the increasing appeal of the extremist politica l programme. Statement I is correct . The 1906 Calcutta Session was presided over by Dadabhai Naoroji , one of the most respected nationalist leaders of the time. Both Moderates and Extremists accepted his leadership because of his long association with the national movement and his moral authority . His presidency helped temporarily prevent a direct confrontation between the two factions. Statement II is correct . At this session, Dadabhai Naoroji declared Swaraj or self - government as the goal of the Indian Na tional Congress . However, the meaning of Swaraj was not precisely defined . For the Moderates, it meant self - government within the British Empire , similar to dominions like Canada or Australia. The Extremists, on the other hand, interpreted it in a more rad ical and expansive sense . Statement III is incorrect . The Extremist leaders wanted the boycott of foreign goods to be extended beyond Bengal to other provinces . However, the Moderates opposed such a wide expansion of the programme. As a result, this proposal was not accepted by the Congress , and the boycott programme remained limited in scope. Statement IV is incorrect . After the Calcutta session, the Extremists called for wider passive resistance , including boycott of institutions such as counci ls and courts. However, the Congress did not officially adopt such a programme in the 1906 session . The Moderates were cautious and preferred to avoid direct confrontation with the colonial administration."},{"id":43,"txt":"Consider the following statements: Under the Representation of the People Act of 1951, the Election Commission of Indi a (ECI) has the power to de - register a political party on the ground that it has failed to:\n1. contest any elections for ten consecutive years.\n2. regularly conduct internal party elections.\n3. conduct its affairs according to the Model Code of Conduct enforced during general assembly elections in the country.\nWhich of the statements given above is/are correct?","ref":"","opts":["III only","II and III only","I only    [ 25 ]","None of the above"],"ci":3,"exp":"Ex: The Representation of the People Act, 1951 does not confer explicit powers on the ECI to de - register any political party if it fails to contest elections, conduct inner - party elections or lodge requisite returns. The Supreme Court in Indian National Congre ss versus Institute of Social Welfare & Ors (2002) had held that the ECI does not have the power to de - register any political party under the RP Act. It may de - register only under exceptional circumstances such as the registration being obtained by fraud o r the political party ceasing to have allegiance to the Indian Constitution or if it is declared unlawful by the Government. The Law Commission in its 255th report (2015) had recommended amendments for de - registration of a political party if it fails to co ntest elections for 10 consecutive years."},{"id":44,"txt":"Which of the following would invariably happen in a country, when the demographic dividend has begun to operate?\n1. The number of illiterate people will decrease.\n2. The ratio of very old and very young will decrease for a while.\n3. Popu lation growth rate will quickly stabilize.\nSelect the correct answer using the code given below.","ref":"","opts":["1 and 2 only","2 only","1 and 3 only","1, 2 and 3"],"ci":1,"exp":"Ex: Statement 1 is incorrect: The passage does not state that the number of illiterate people will decrease as an immediate or direct effect of the demographic dividend. Statement 2 is correct: The passage explains that the demographic dividend involves a swelling in the working age popula tion and a decline in the ratio of very young and very old people for a while. Statement 3 is incorrect: The passage does not discuss the stabilization of the population growth rate as an effect of the demographic dividend.    [ 26 ]"},{"id":45,"txt":"With reference to the passage, which of the following inferences can be drawn?\n1. Demographic dividend is an essential condition for a country to rapidly increase its economic growth rate.\n2. Promotion of higher education is an essential condition for a country for its rapid economic growth.\nSelect the correct answer using the code given below.","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is incorrect: The passage indicates that the demographic dividend can be a source of economic growth but does not state it is an essential condition for rapid economic growth. It suggests that demographic dividend provides an opportunity rather than a necessity. Statement 2 is incorrect: While the passage emphasizes the importance of education, skills acquisition, and human capital to benefit from the demographic dividend, it does not claim that promotion of higher education alone is an essential condition for rap id economic growth. It implies a broader focus on education and skills rather than higher education alone."},{"id":46,"txt":"Jindal is a mathematician who likes to use his own mathematical symbols. In his notati on system, the expression (x, y) represents x raised to the power y, and the expression p ! q represents the remainder obtained when q is divided by p. Using Jindal’s notation, what is the remainder of the expression 2022 ! (2021, 2023)?","ref":"","opts":["2021","2023","2022","2020"],"ci":0,"exp":"Ex: Given Jindal’s notation defines: (x, y) → x raised to the power y p ! q → remainder when q is divided by p Thus (2021, 2023) = 2021² ⁰ ²³ Therefore the required value is remainder when 2021² ⁰ ²³ is divided by 2022 Express the Base in Terms of 2022 Observe that 2021 = 2022 − 1 Thus 2021² ⁰ ²³ = (2022 − 1) ² ⁰ ²³ Write the Division Form When dividing any number by 2022 , it can be written as number = 2022 × quotient + remainder Now 2022 − 1 = 2022 × 1 − 1 Thus 2021 = 2022 × 1 − 1 Raise to the Power 2021² ⁰ ²³ = (2022 × 1 − 1) ² ⁰ ²³    [ 27 ] When this expression is expanded, every term except the last contains 2022 as a factor , because each term will contain at least one 2022 . Therefore, those terms are completely divisible by 2022 . The only part that does not contain 2022 is the constant term that comes from multiplying − 1 repeatedly . Evaluate the Remaining Term The remaining term is (−1)² ⁰ ²³ Since 2023 is an odd number (−1)² ⁰ ²³ = − 1 Thus 2021² ⁰ ²³ = 2022 × k – 1 (for some integer k) Determine the Remainder If number = 2022k – 1 then when divided by 2022 remainder = 2022 − 1 remainder = 2021 Therefore, Option a is the correct answer."},{"id":47,"txt":"Consider the cryptographic sequence: K L _ M L _ L _ K K M _ M K _ L K M that follows a specific cyclic pattern. Which one of the following completes the sequence?","ref":"","opts":["M, K, M, L, L","M, L, M, K, L","K, M, L, M, L","L, K, M, M, K"],"ci":0,"exp":"Ex: K L _ M L _ L _ K K M _ M K _ L K M There are 5 blanks , and the letters used are only K, L, M . Group the sequence into blocks of 3 : Block 1: K L _ Block 2: M L _ Block 3: L _ K Block 4: K M _ Block 5: M K _ Block 6: L K M Each 3 - letter block is meant to be a distinct arrangement (permutation) of K, L, M . There are exactly 6 permutations of (K, L, M), and 6 blocks. Now comp lete each block so that it contains K, L, M exactly once : Block 1: K L _ → missing M Block 2: M L _ → missing K Block 3: L _ K → missing M Block 4: K M _ → missing L Block 5: M K _ → missing L Block 6: L K M → already complete So the blan ks (in order) are: M, K, M, L, L"},{"id":48,"txt":"What is the unit digit of the following expression? [(1! + 3! + 5! + ⋯ + 99!) × (2 ¹ × 2 ² × 2 ³ × ⋯ × 2 ¹ ⁰ )] + 5 ⁵","ref":"","opts":["0","1","5","7 An) b"],"ci":0,"exp":"Ex: Unit digit of (1! + 3! + 5! + ⋯ + 99!) 1! = 1 → unit digit 1 3! = 6 → unit digit 6 For every factorial from 5! onwards , the number ends in 0 (because it contains factors 2 and 5 ). So 5!, 7!, 9!, …, 99! all contribu te 0 in the unit digit . Therefore, the unit digit of the whole sum is: unit digit of (1! + 3!) = 1 + 6 = 7 So, unit digit of (1! + 3! + 5! + ⋯ + 99!) = 7 Unit digit of (2¹ × 2² × ⋯ × 2 ¹ ⁰ ) 2¹ × 2² × ⋯ × 2 ¹ ⁰ = 2^(1+2+ … +10) 1 + 2 + … + 10 = 10×11/2 = 55 So the product becomes: 2 ⁵⁵ Unit digits of powers of 2 repeat in a cycle of 4: 2, 4, 8, 6 55 divided by 4 leaves remainder 3 , so: unit digit of 2 ⁵⁵ = unit digit of 2 ³ = 8 Unit digit of the product Unit digit = 7 × 8 = 56 , so unit digit is 6 Unit digit of 5 ⁵ Any power of 5 ends in 5 , so: unit digit of 5 ⁵ = 5 Final unit digit Final unit digit = 6 + 5 = 11 , so unit digit is 1"}],"m":null,"tt":2940,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>
