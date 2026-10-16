@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>7. LOCAL GOVERNMENT</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#667eea;--primary-dark:#5568d3;--secondary:#764ba2;--success:#48bb78;--danger:#f5576c;--warning:#fbbf24;--info:#4facfe;--bg-light:#f7fafc;--bg-white:#fff;--text-dark:#1a202c;--text-light:#718096;--border:#e2e8f0}
+[data-theme="dark"]{--bg-light:#1a202c;--bg-white:#2d3748;--text-dark:#f7fafc;--text-light:#cbd5e0;--border:#4a5568}
+body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);min-height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .3s}
+.scrollable::-webkit-scrollbar{width:6px}
+.scrollable::-webkit-scrollbar-track{background:transparent}
+.scrollable::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+.protected-content{white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.6;user-select:none}
+#modeSelection{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.mode-container{background:#fff;border-radius:24px;padding:40px 30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:ms .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ms{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mode-header{text-align:center;margin-bottom:32px}
+.mode-header-icon{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(102,126,234,.3)}
+.mode-header h2{font-size:24px;font-weight:700;color:#1a202c;margin-bottom:8px}
+.mode-header p{font-size:14px;color:#718096;font-weight:400}
+.mode-cards{display:grid;gap:16px;margin-bottom:24px}
+.mode-card{background:#f7fafc;border:2px solid #e2e8f0;border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;position:relative}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(102,126,234,.15);border-color:#cbd5e0}
+.mode-card.selected{border-color:#667eea;background:#fff;box-shadow:0 8px 24px rgba(102,126,234,.2);transform:translateY(-2px)}
+.mode-card-header{display:flex;align-items:center}
+.mode-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.exam-mode .mode-icon{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.practice-mode .mode-icon{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.mode-info h3{font-size:17px;font-weight:700;color:#1a202c;margin-bottom:4px}
+.mode-info p{font-size:13px;color:#718096;line-height:1.4}
+.timer-config{margin-bottom:24px}
+.timer-config label{display:block;font-size:14px;font-weight:600;color:#1a202c;margin-bottom:10px}
+.timer-config label i{margin-right:6px;color:#667eea}
+.timer-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-weight:500;transition:all .3s;background:#fff;font-family:'Poppins',sans-serif;color:#1a202c}
+.timer-input::placeholder{color:#a0aec0}
+.timer-input:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+.start-btn{width:100%;padding:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(102,126,234,.35)}
+.start-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,126,234,.45)}
+.start-btn:active:not(:disabled){transform:translateY(0)}
+.start-btn:disabled{opacity:.5;cursor:not-allowed;background:#cbd5e0;box-shadow:none}
+#quizContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow:hidden}
+
+/* MODIFIED HEADER SIZES FOR COMPACTNESS */
+.quiz-header{position:fixed;top:0;left:0;right:0;background:var(--bg-white);box-shadow:0 2px 15px rgba(0,0,0,.08);z-index:100;padding:8px 12px}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px}
+.quiz-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.quiz-title-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.mode-badge{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.mode-badge.exam{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff}
+.mode-badge.practice{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff}
+.header-actions{display:flex;gap:8px;align-items:center}
+.theme-toggle{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-dark);transition:all .3s}
+.theme-toggle:hover{transform:scale(1.1)}
+.timer-display{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--primary);padding:5px 10px;background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-radius:12px;white-space:nowrap}
+.timer-display.warning{color:var(--danger);background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(240,147,251,.15) 100%);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.header-progress{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-light);margin-bottom:4px}
+.progress-bar-container{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary) 0%,var(--secondary) 100%);transition:width .3s;border-radius:10px}
+
+/* ADJUSTED FOR SMALLER HEADER & NAV FOOTER */
+.question-section{position:fixed;top:105px;left:0;right:0;bottom:70px;overflow-y:auto;overflow-x:hidden;padding:15px;-webkit-overflow-scrolling:touch}
+.question-section.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+
+/* MODIFIED FONT SIZES FOR QUESTIONS/OPTIONS */
+.question-card{background:var(--bg-white);border-radius:20px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.06);max-width:800px;margin:0 auto}
+.question-number{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);padding:5px 10px;border-radius:20px;margin-bottom:12px}
+.question-reference{background:linear-gradient(135deg,rgba(79,172,254,.15) 0%,rgba(0,242,254,.15) 100%);border-left:4px solid var(--info);padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--text-dark);line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.question-text{font-size:14px;font-weight:600;color:var(--text-dark);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-wrap:break-word;word-break:break-word}
+.options-container{display:grid;gap:10px}
+.option-btn{width:100%;padding:12px 15px;background:var(--bg-light);border:2px solid var(--border);border-radius:12px;text-align:left;font-size:13px;color:var(--text-dark);cursor:pointer;transition:all .3s;display:flex;align-items:flex-start;gap:10px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;user-select:none}
+.option-btn:active{transform:scale(.98)}
+.option-indicator{min-width:24px;height:24px;border-radius:50%;background:var(--bg-white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;transition:all .3s}
+.option-text{flex:1;padding-top:2px}
+.option-btn:hover:not(.disabled){border-color:var(--primary);transform:translateX(4px)}
+.option-btn.selected{background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);border-color:var(--primary)}
+.option-btn.selected .option-indicator{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.option-btn.correct{background:linear-gradient(135deg,rgba(72,187,120,.15) 0%,rgba(72,187,120,.15) 100%);border-color:var(--success)}
+.option-btn.correct .option-indicator{background:var(--success);color:#fff;border-color:transparent}
+.option-btn.incorrect{background:linear-gradient(135deg,rgba(245,87,108,.15) 0%,rgba(245,87,108,.15) 100%);border-color:var(--danger)}
+.option-btn.incorrect .option-indicator{background:var(--danger);color:#fff;border-color:transparent}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.explanation-box{display:none;background:linear-gradient(135deg,rgba(254,245,231,.5) 0%,rgba(251,191,36,.2) 100%);border-left:4px solid var(--warning);border-radius:12px;padding:12px;margin-top:16px;animation:sd .3s ease-out}
+@keyframes sd{from{opacity:0;max-height:0;padding:0}to{opacity:1;max-height:500px;padding:12px}}
+.explanation-header{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.explanation-text{font-size:12px;color:#78350f;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+[data-theme="dark"] .explanation-text{color:#fbbf24}
+.explanation-mode-control{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:var(--bg-light);border:1px solid var(--border);color:var(--text-light);font-size:10px;white-space:nowrap}
+.explanation-mode-control select{max-width:105px;border:1px solid var(--border);border-radius:6px;padding:5px 6px;background:var(--bg-white);color:var(--text-dark);font:600 11px 'Poppins',sans-serif;outline:none}
+.notes-panel{margin-top:16px;padding:14px;border:1px solid #d9dff2;border-radius:14px;background:#fffdf7;color:#222;box-shadow:0 3px 12px rgba(25,40,80,.08);user-select:text}
+.notes-banner{display:flex;align-items:center;gap:9px;padding:10px 12px;margin-bottom:12px;border-radius:10px;background:linear-gradient(135deg,#e8eef7,#f0e8f7);border:1px solid #b8c5e3;color:#243d70}
+.notes-banner-icon{font-size:22px}.notes-banner-title{font-size:14px;font-weight:800}.notes-banner-sub{font-size:10px;color:#64708a;margin-top:2px}
+.notes-section{border:1px solid var(--note-border,#cbd5e1);border-radius:9px;padding:11px 12px;margin:9px 0;background:var(--note-bg,#f7f9fd)}
+.notes-section h4{font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:7px;color:var(--note-head,#254575)}
+.notes-section p,.notes-section li{font-size:12px;line-height:1.6;color:#303744;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes-section ul{padding-left:18px}.notes-section li{margin:4px 0}
+.notes-section.definition{--note-border:#e4b84c;--note-bg:#fff8e1;--note-head:#805600}
+.notes-section.points{--note-border:#9db4de;--note-bg:#edf3fc;--note-head:#1a3a6b}
+.notes-section.timeline{--note-border:#8bc6c1;--note-bg:#e8f7f7;--note-head:#1a6b6b}
+.notes-section.terms{--note-border:#c8a4de;--note-bg:#f3eafa;--note-head:#5a1a8b}
+.notes-section.revision{--note-border:#9ac9a7;--note-bg:#eaf7ed;--note-head:#1a6b3a}
+.notes-empty{font-size:12px;color:#64748b;font-style:italic}
+@media(max-width:600px){.explanation-mode-control label{display:none}.explanation-mode-control select{max-width:88px}.notes-panel{padding:10px}}
+.nav-controls{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);padding:10px 16px;box-shadow:0 -2px 15px rgba(0,0,0,.08);display:flex;gap:10px;z-index:90}
+.nav-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.nav-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.nav-btn.secondary{background:var(--bg-light);color:var(--text-dark);border:2px solid var(--border)}
+.nav-btn:active{transform:scale(.96)}
+.nav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.question-nav-toggle{position:fixed;bottom:85px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(102,126,234,.4);z-index:85;transition:all .3s}
+.question-nav-toggle:active{transform:scale(.95)}
+.question-nav-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg-white);border-radius:24px 24px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);z-index:95;max-height:70vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;padding:20px}
+.question-nav-panel.open{transform:translateY(0)}
+.nav-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.nav-panel-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.nav-close-btn{width:32px;height:32px;background:var(--bg-light);border:none;border-radius:50%;font-size:16px;cursor:pointer;color:var(--text-light)}
+.nav-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:11px;color:var(--text-dark)}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-dark)}
+.legend-box{width:16px;height:16px;border-radius:4px}
+.legend-box.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%)}
+.legend-box.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%)}
+.legend-box.unanswered{background:var(--border)}
+.question-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.question-nav-item{aspect-ratio:1;border:2px solid var(--border);border-radius:8px;background:var(--bg-white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;color:var(--text-light)}
+.question-nav-item:active{transform:scale(.95)}
+.question-nav-item.current{border-color:var(--primary);background:linear-gradient(135deg,rgba(102,126,234,.15) 0%,rgba(118,75,162,.15) 100%);color:var(--primary)}
+.question-nav-item.answered{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff;border-color:transparent}
+.question-nav-item.marked{background:linear-gradient(135deg,var(--warning) 0%,#f59e0b 100%);color:#fff;border-color:transparent}
+.question-nav-item.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff;border-color:transparent}
+.question-nav-item.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff;border-color:transparent}
+#resultsContainer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:var(--bg-light);overflow-y:auto;overflow-x:hidden;padding:20px;z-index:1000}
+#resultsContainer.scrollable{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+.results-header{text-align:center;padding:40px 20px;background:var(--bg-white);border-radius:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.results-icon{font-size:60px;margin-bottom:15px}
+.results-title{font-size:22px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.results-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.results-percentage{font-size:18px;color:var(--text-light);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+.stat-card{background:var(--bg-white);padding:18px;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.stat-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.stat-icon.correct{background:linear-gradient(135deg,var(--success) 0%,#38a169 100%);color:#fff}
+.stat-icon.incorrect{background:linear-gradient(135deg,var(--danger) 0%,#e53e3e 100%);color:#fff}
+.stat-icon.unattempted{background:linear-gradient(135deg,#a0aec0 0%,#718096 100%);color:#fff}
+.stat-icon.negative{background:linear-gradient(135deg,#ed8936 0%,#dd6b20 100%);color:#fff}
+.stat-value{font-size:26px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text-light);font-weight:500}
+.action-buttons{display:grid;gap:10px;max-width:800px;margin:0 auto}
+.action-btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.action-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:#fff}
+.action-btn.secondary{background:var(--bg-white);color:var(--text-dark);border:2px solid var(--border)}
+.action-btn:hover{transform:translateY(-2px)}
+
+@media (min-width: 1024px) {
+    body { overflow: auto !important; }
+    #quizContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 320px;
+        grid-template-rows: auto 1fr auto;
+        gap: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+    .quiz-header {
+        grid-column: 1 / -1;
+        position: static;
+        padding: 12px 20px;
+        border-bottom: 3px solid var(--border);
+    }
+    .header-top {
+        max-width: none;
+        margin-bottom: 10px;
+    }
+    .quiz-title-text { max-width: 400px; }
+    .timer-display {
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+    .question-section {
+        position: static !important;
+        grid-column: 1;
+        grid-row: 2;
+        overflow-y: auto;
+        padding: 24px;
+        background: var(--bg-light);
+        top: auto !important;
+        bottom: auto !important;
+    }
+    .question-card {
+        max-width: 900px;
+        padding: 24px;
+        margin: 0 auto 20px;
+    }
+    .question-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .option-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    .option-indicator {
+        min-width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .question-nav-panel {
+        position: static !important;
+        grid-column: 2;
+        grid-row: 2;
+        transform: none !important;
+        max-height: none;
+        height: 100%;
+        border-radius: 0;
+        border-left: 3px solid var(--border);
+        box-shadow: none;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--bg-white);
+    }
+    .question-nav-panel.open { transform: none !important; }
+    .nav-panel-header {
+        position: sticky;
+        top: 0;
+        background: var(--bg-white);
+        z-index: 10;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .nav-panel-title {
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .nav-close-btn { display: none; }
+    .nav-legend {
+        position: sticky;
+        top: 60px;
+        background: var(--bg-white);
+        z-index: 9;
+        padding: 16px;
+        margin: -16px -16px 20px;
+        border-radius: 12px;
+        background: var(--bg-light);
+    }
+    .question-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .question-nav-item {
+        aspect-ratio: 1;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+    .question-nav-toggle { display: none; }
+    .nav-controls {
+        position: static;
+        grid-column: 1;
+        grid-row: 3;
+        padding: 12px 20px;
+        border-top: 3px solid var(--border);
+        max-width: none;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+    }
+    .nav-btn {
+        min-width: 140px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    #resultsContainer {
+        padding: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .results-header {
+        padding: 50px 30px;
+        margin-bottom: 24px;
+    }
+    .results-icon { font-size: 80px; }
+    .results-title { font-size: 30px; }
+    .results-score { font-size: 56px; }
+    .results-percentage { font-size: 20px; }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+        max-width: none;
+    }
+    .stat-card { padding: 24px; }
+    .stat-icon { width: 48px; height: 48px; font-size: 20px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .action-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 800px;
+    }
+    .action-btn { padding: 16px; font-size: 15px; }
+    .mode-container {
+        max-width: 600px;
+        padding: 40px 30px;
+    }
+    .mode-header-icon {
+        width: 76px;
+        height: 76px;
+        font-size: 36px;
+    }
+    .mode-header h2 { font-size: 26px; }
+    .mode-header p { font-size: 14px; }
+    .mode-cards { gap: 16px; }
+    .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    .mode-icon {
+        width: 54px;
+        height: 54px;
+        font-size: 24px;
+        margin-right: 16px;
+    }
+    .mode-info h3 { font-size: 17px; }
+    .mode-info p { font-size: 13px; }
+    .timer-input { padding: 14px 16px; font-size: 15px; }
+    .start-btn { padding: 16px; font-size: 16px; }
+}
+
+@media (min-width: 1440px) {
+    #quizContainer {
+        grid-template-columns: 1fr 380px;
+    }
+    .question-section { padding: 32px 48px; }
+    .question-card { max-width: 1000px; padding: 32px; }
+    .question-nav-panel { padding: 32px; }
+    .question-grid { grid-template-columns: repeat(5, 1fr); }
+    .nav-controls { padding: 16px 48px; }
+}
+</style>
+</head>
+<body class="theme-anime">
+<div id="modeSelection">
+<div class="mode-container">
+<div class="mode-header">
+<div class="mode-header-icon"><i class="fas fa-graduation-cap"></i></div>
+<h2>7. LOCAL GOVERNMENT</h2>
+<p>Choose your preferred test mode</p>
+</div>
+<div class="mode-cards">
+<div class="mode-card exam-mode" data-mode="exam">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-file-alt"></i></div>
+<div class="mode-info">
+<h3>Exam Mode</h3>
+<p>Complete all questions, results shown after submission</p>
+</div>
+</div>
+</div>
+<div class="mode-card practice-mode" data-mode="practice">
+<div class="mode-card-header">
+<div class="mode-icon"><i class="fas fa-book-open"></i></div>
+<div class="mode-info">
+<h3>Practice Mode</h3>
+<p>Instant feedback with detailed explanations</p>
+</div>
+</div>
+</div>
+</div>
+<div class="timer-config">
+<label for="ct"><i class="fas fa-clock"></i> Custom Timer (minutes)</label>
+<input type="number" id="ct" class="timer-input" placeholder="Default: ${Math.round(qd.tt / 60)} minutes" min="1" max="300"/>
+</div>
+<button class="start-btn" id="sb" disabled><i class="fas fa-play-circle"></i><span>Start Quiz</span></button>
+</div>
+</div>
+<div id="quizContainer">
+<div class="quiz-header">
+<div class="header-top">
+<div class="quiz-title">
+<i class="fas fa-clipboard-list"></i>
+<span class="quiz-title-text" title="7. LOCAL GOVERNMENT">7. LOCAL GOVERNMENT</span>
+<span class="mode-badge" id="mb"></span>
+</div>
+<div class="header-actions">
+<div class="explanation-mode-control" title="Choose how explanations appear under each question"><label for="explanationMode">Explanation</label><select id="explanationMode" onchange="setExplanationMode(this.value)"><option value="plain">Plain</option><option value="notes">Study Notes</option></select></div>
+<!-- Standalone TTS Controls -->
+<div style="display: flex; gap: 8px; font-size: 11px; align-items: center; color: var(--text-light); margin-right: 10px;">
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-q-p" style="accent-color: var(--primary);"> Q
+    </label>
+    <label style="display: flex; align-items: center; gap: 3px; cursor: pointer; user-select: none;">
+        <input type="checkbox" id="tts-read-exp-p" style="accent-color: var(--primary);"> Exp
+    </label>
+</div>
+<button class="theme-toggle" id="tt" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+<div class="timer-display" id="td"><i class="fas fa-clock"></i><span id="tt2">00:00</span></div>
+</div>
+</div>
+<div class="header-progress">
+<span id="pt">Question 1 of 100</span>
+<span id="at">Attempted: 0/100</span>
+</div>
+<div class="progress-bar-container"><div class="progress-bar" id="pb"></div></div>
+</div>
+<div class="question-section scrollable" id="qs"></div>
+<div class="nav-controls">
+<button class="nav-btn secondary" id="pv"><i class="fas fa-chevron-left"></i>Previous</button>
+<button class="nav-btn secondary" id="mk"><i class="fas fa-bookmark"></i>Mark</button>
+<!-- Lifelines Buttons -->
+<button class="nav-btn secondary" id="ll-5050" onclick="useLifeline('5050')" style="background: rgba(102,126,234,0.1); color: var(--primary); border-color: rgba(102,126,234,0.2);">🌓 50:50</button>
+<button class="nav-btn secondary" id="ll-poll" onclick="useLifeline('poll')" style="background: rgba(72,187,120,0.1); color: var(--success); border-color: rgba(72,187,120,0.2);">📊 Poll</button>
+<button class="nav-btn secondary" id="ll-double" onclick="useLifeline('double')" style="background: rgba(251,191,36,0.1); color: var(--warning); border-color: rgba(251,191,36,0.2);">2️⃣ Double</button>
+<button class="nav-btn primary" id="nx">Next<i class="fas fa-chevron-right"></i></button>
+<button class="nav-btn primary" id="sm" style="display:none"><i class="fas fa-paper-plane"></i>Submit</button>
+</div>
+<button class="question-nav-toggle" id="nt"><i class="fas fa-th"></i></button>
+<div class="question-nav-panel" id="np">
+<div class="nav-panel-header">
+<h3 class="nav-panel-title"><i class="fas fa-map-marked-alt"></i> Question Navigator</h3>
+<button class="nav-close-btn" id="nc"><i class="fas fa-times"></i></button>
+</div>
+<div class="nav-legend">
+<div class="legend-item"><div class="legend-box answered"></div><span>Answered</span></div>
+<div class="legend-item"><div class="legend-box marked"></div><span>Marked</span></div>
+<div class="legend-item"><div class="legend-box unanswered"></div><span>Not Answered</span></div>
+</div>
+<div class="question-grid" id="qg"></div>
+</div>
+</div>
+<div id="resultsContainer">
+<div class="results-header">
+<div class="results-icon" id="ri"></div>
+<h2 class="results-title" id="rt"></h2>
+<div class="results-score" id="rs"></div>
+<div class="results-percentage" id="rp"></div>
+</div>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon correct"><i class="fas fa-check"></i></div><div class="stat-value" id="cc">0</div><div class="stat-label">Correct</div></div>
+<div class="stat-card"><div class="stat-icon incorrect"><i class="fas fa-times"></i></div><div class="stat-value" id="ic">0</div><div class="stat-label">Incorrect</div></div>
+<div class="stat-card"><div class="stat-icon unattempted"><i class="fas fa-minus"></i></div><div class="stat-value" id="uc">0</div><div class="stat-label">Unattempted</div></div>
+<div class="stat-card"><div class="stat-icon negative"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-value" id="nm">0</div><div class="stat-label">Negative Marks</div></div>
+</div>
+<div class="action-buttons">
+<button class="action-btn primary" id="rb"><i class="fas fa-search"></i>Review Answers</button>
+<button class="action-btn secondary" id="rsb"><i class="fas fa-redo"></i>Restart Quiz</button>
+</div>
+</div>
+
+<!-- Standalone Audience Poll Modal -->
+<div id="pollModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:var(--bg-white); border-radius:20px; padding:30px; max-width:400px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.2); color:var(--text-dark);">
+        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Audience Poll</h3>
+        <div id="pollBarsContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
+        <button class="nav-btn primary" onclick="document.getElementById('pollModal').style.display='none'" style="width:100%;">Close</button>
+    </div>
+</div>
+
+<script>
+const qd={"q":[{"id":0,"txt":"With reference to Panchayat Samiti in India, consider the following statements:\n1. It is a local government body at the tehsil or Taluka level in India.\n2. It is mandatory for every Indian state to constitute a Panchayati samiti at the intermediate level.\n3. District magistrate acts as ex-officio chairman of the panchayat samiti. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is correct as the Panchayat Samiti is the middle tier created at the tehsil level[cite: 1211, 1212]. Statement 2 is incorrect because states with a population under 20 lakh are not required to constitute the intermediate level[cite: 1214]. Statement 3 is incorrect as the chairperson is elected by the elected members, and the DM is not the ex-officio chairman[cite: 1215, 1216]."},{"id":1,"txt":"Measuring land and keeping land records at village level is the main work of which of the following?","ref":"","opts":["Patwari","Sarpanch","Tehsildar","Panchayat Secretary"],"ci":0,"exp":"Ex: Measuring land and maintaining land records is the primary work of the Patwari[cite: 1220]. This officer, also known as Lekhpal or Kanungo, is responsible for a group of villages and organizes the collection of land revenue[cite: 1221, 1223]."},{"id":2,"txt":"Consider the following statements with reference to the Panchayati Raj Institutions in India:\n1. The term Gram Sabha has not been defined in the constitution.\n2. No more than three villages can be covered under a Panchayat.\n3. One of the powers of Gram Sabha is finalization of list of below poverty line people in Panchayat area. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is incorrect because Gram Sabha is defined in Article 243of the Constitution[cite: 1226]. Statement 2 is incorrect as a Panchayat can cover one village or a number of villages without a specific bar[cite: 1230, 1231]. Statement 3 is correct as the Gram Sabha identifies beneficiaries for poverty alleviation programs and BPL lists[cite: 1232]."},{"id":3,"txt":"Consider the following Committees and their key recommendations with reference to Panchayati Raj Institutions (PRIs) in India:\n1. Balwant Rai Mehta Committee: Creation of Mandal Panchayat.\n2. Ashok Mehta Committee: Three-tier system.\n3. G.V.K. Rao Committee: Creation of post of District Development Commissioner.\n4. L M Singhvi Committee: Constitutional Recognition to Panchayats. How many of the above given pairs are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Pair 3 and 4 are correct; G.V.K. Rao recommended the post of District Development Commissioner and L.M. Singhvi recommended constitutional recognition[cite: 1238, 1240]. Pair 1 and 2 are incorrect because Balwant Rai Mehta recommended a three-tier system and Ashok Mehta recommended a two-tier Mandal Panchayat system[cite: 1235, 1237]."},{"id":4,"txt":"The PESA Act, 1996 extends the provisions of Part IX of the Constitution relating to the Panchayats to which of the following groups of states?","ref":"","opts":["Andhra Pradesh, Madhya Pradesh, Odisha, and Gujarat","Madhya Pradesh, Tamil Nadu, Mizoram and Nagaland","Himachal Pradesh, Kerala, Meghalaya and Assam","Tamil Nadu, Rajasthan, Bihar and Nagaland"],"ci":0,"exp":"Ex: PESA applies to ten states with Fifth Schedule Areas, including Andhra Pradesh, Gujarat, Madhya Pradesh, Odisha, and Rajasthan[cite: 1260]. It does not apply to states like Mizoram, Nagaland, or Meghalaya which fall under the Sixth Schedule or have other traditional institutions[cite: 1260]."},{"id":5,"txt":"Consider the following statements with reference to the District Planning Committee (DPC) in India:\n1. It consolidates the plans prepared by both panchayats and municipalities in the district.\n2. The provisions of the composition of such committees are made by the respective State legislature.\n3. 50 per cent of the members of DPC are nominated by the Governor of the respective state. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 2 are correct as DPCs consolidate local plans and their composition is determined by state legislatures[cite: 1266, 1267]. Statement 3 is incorrect because four-fifths of the members are elected by and from among the elected members of the district panchayats and municipalities[cite: 1268]."},{"id":6,"txt":"Which among the following are the sources of income for the Urban Local Bodies (ULBs) in India?\n1. Property Tax\n2. Payment for Public Utilities\n3. Loan from financial institutions\n4. Excise Duty Select the correct answer using the code given below:","ref":"","opts":["2 and 3 only","1 and 4 only","1, 2 and 3 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Property tax, user charges (public utilities), and loans from financial institutions are legitimate sources of revenue for ULBs[cite: 1272, 1274, 1276]. Excise duty is incorrect as it was a central tax levied on production prior to GST[cite: 1278]."},{"id":7,"txt":"Consider the following statements with reference to the Provisions of the Panchayats (Extension to the Scheduled Areas) Act, 1996 or PESA Act:\n1. It confers powers to the Gram Sabha to ensure proper functioning of Panchayats.\n2. Scheduled Tribes have been ensured at least 50 percent reservation of the seats at every Panchayat in Scheduled Areas.\n3. At intermediate or district levels the Governor can nominate such Scheduled Tribes which have no representation in the Panchayat. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 2 are correct; PESA empowers Gram Sabhas and mandates at least 50% reservation for STs[cite: 1281, 1282]. Statement 3 is incorrect because the state government (not the Governor) may nominate unrepresented STs, and the nomination cannot exceed one-tenth of the total elected members[cite: 1284, 1285]."},{"id":8,"txt":"Consider the following statements with reference to the State Finance Commission:\n1. It functions under the guidance of the Union Finance Commission.\n2. It is constituted under the 74th Amendment Act of the Constitution.\n3. They recommend principles for the devolution of funds to both the Panchayats and Municipalities. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is incorrect as the SFC is independent of the UFC[cite: 1294]. Statement 2 is incorrect because the SFC for Panchayats was established under the 73rd Amendment (Article 243-I)[cite: 1295]. Statement 3 is correct as it recommends fund distribution for both rural and urban bodies[cite: 1297, 1298]."},{"id":9,"txt":"With reference to local self-governance in India, consider the following statements:\n1. The constitution does not confer any inherent taxation powers on the local bodies.\n2. The subject of Local governance falls under the Concurrent legislative jurisdiction under the Seventh Schedule of the Constitution.\n3. Powers and functions of Gram Sabha are clearly mentioned in the Constitution. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is correct as state legislatures determine which taxes local bodies can levy[cite: 1310]. Statement 2 is incorrect as local governance is in the State List[cite: 1311]. Statement 3 is incorrect because the Constitution states that state legislatures determine the powers and functions of the Gram Sabha[cite: 1314, 1315]."},{"id":10,"txt":"With reference to the local governance in India, consider the following statements:\n1. The provisions of Part IX do not apply to the Union Territories.\n2. The President can make exceptions to decide which provisions of Part IX apply to Scheduled Areas. Which of the statements given above is/ are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is incorrect as Part IX applies to UTs unless the President directs otherwise[cite: 1322, 1323]. Statement 2 is incorrect as it is the Parliament (not President) that decides on the application and modification of Part IX to Scheduled Areas[cite: 1324]."},{"id":11,"txt":"With reference to the Metropolitan Planning Committee (MPC), consider the following statements:\n1. The Constitution makes it mandatory for States to set up MPCs in Metropolitan areas.\n2. It consists of members from both urban as well as rural local bodies.\n3. The Governor can make provision with respect to the functions of MPC in relation to planning and coordination for the metropolitan area. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 2 are correct; MPCs are mandatory for areas with 10 lakh+ population and include members from both urban and rural bodies[cite: 1328, 1330]. Statement 3 is incorrect as the State Legislature (not Governor) determines the functions of the MPC[cite: 1331]."},{"id":12,"txt":"With reference to the composition of Panchayats, consider the following statements:\n1. There is a reservation of seats for SC/STS only at the village and intermediate levels.\n2. Reservation for backward classes for the post of chairperson is not mandatory at any level of Panchayats.\n3. The reservation of both seats and the post of chairperson for women is mandatory at all levels. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is incorrect as SC/ST reservation is mandatory at all levels (village, intermediate, and district)[cite: 1341]. Statements 2 and 3 are correct: reservation for backward classes is voluntary for states, while 1/3rd reservation for women is mandatory at all levels[cite: 1342, 1345]."},{"id":13,"txt":"Consider the following statements:\n1. Maharashtra is the most urbanized state in India with more than half of the population living in urban areas.\n2. In India, the Census Commission defines a metropolitan city as urban agglomeration having a population of over one million. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is incorrect as Goa is the most urbanized state (62.17%)[cite: 1348]. Statement 2 is incorrect because the Census defines a metropolitan city as an urban agglomeration with a population of over four million[cite: 1352]."},{"id":14,"txt":"Which of the following items are included within the purview of the Municipalities under the Twelfth Schedule of the Indian constitution?\n1. Planning for economic and social development\n2. Safeguarding the interests of weaker sections of society\n3. Technical training and vocational education\n4. Slum improvement and upgradation\n5. Implementation of land reforms Select the correct answer using the codes given below:","ref":"","opts":["1 and 3 only","2, 3 and 5 only","1, 2 and 4 only","1, 3, 4 and 5 only"],"ci":2,"exp":"Ex: Items 1, 2, and 4 are listed in the 12th Schedule[cite: 1366]. Technical training (3) and land reforms (5) are part of the 11th Schedule (Panchayats) and not the 12th Schedule[cite: 1367, 1368]."},{"id":15,"txt":"With reference to District Planning committee, consider the following statements\n1. The constitution of India provided that every district India shall constitute a District Planning committee.\n2. Members of the Lok Sabha and the State legislative Assembly can be Specially invited permanent members of District Planning committee.\n3. District Magistrate may be appointed as the ex-officio secretary of the District Planning Committee. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: All three statements are correct as every district must have a DPC (Article 243ZD), MPs/MLAs can be invited, and the DM serves as the ex-officio secretary[cite: 1371, 1372, 1375]."},{"id":16,"txt":"With reference to Town Area Committee, which of the following statements is/are correct?\n1. It is non-statutory body established by respective state governments.\n2. It is always an entirely nominated body including the chairperson, who is nominated by the District Magistrate. Choose the correct answer using the options given below:","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is incorrect as it is a statutory body created by a state legislative act[cite: 1379]. Statement 2 is incorrect as it can be elected, nominated, or a mix, as determined by the state act[cite: 1382]."},{"id":17,"txt":"In opposition to enhancing the powers of panchayat, this national leader said- \"A population which is hidebound by caste; a population which is infected by ancient prejudices... can it be expected to have the right notions even to discharge bare justice? Sir, I deny that proposition...\" Which one of the following national leaders spoken words given in the above passage?","ref":"","opts":["Mahatma Gandhi","Sardar Vallabhbhai Patel","Dr. B. R. Ambedkar","Jawahar Lal Nehru"],"ci":2,"exp":"Ex: Dr. B.R. Ambedkar was critical of the caste-ridden nature of rural society and opposed empowering Panchayats for this reason[cite: 1394, 1401]."},{"id":18,"txt":"With reference to 'Finances of Panchayati Raj in India, consider the following statements:\n1. Union government provide grants to the Panchayats based on the recommendations of Finance Commission of India.\n2. The internal resource generation at the Panchayat level is the major source of funds for Panchayats in India.\n3. Panchayats cannot borrow money in the form of loans. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is correct (Article 280)[cite: 1404]. Statement 2 is incorrect as internal resource generation is very weak[cite: 1406]. Statement 3 is incorrect as Panchayats can borrow from state governments and financial institutions[cite: 1408]."},{"id":19,"txt":"Which of the following are the reasons behind the ineffective performance of Panchayats in India?\n1. They do not accommodate the diverse sections of village society.\n2. The position of panchayats is subordinate to the bureaucracy at state level.\n3. Parallel bodies have bypassed the role and responsibilities of Panchayats. Select the correct answer using the codes given below:","ref":"","opts":["1 and 2 only","2 and 3 only","2 only","3 only"],"ci":1,"exp":"Ex: Statement 1 is incorrect as reservations ensure accommodation of diverse sections[cite: 1418, 1419]. Statements 2 and 3 are correct: bureaucracy often dominates PRIs and parallel bodies usurp their roles[cite: 1423, 1424, 1425]."},{"id":20,"txt":"With reference to Panchayat Extension to Scheduled Areas (PESA) Act, 1996, consider the following statements:\n1. It provided the Gram Sabha to protect common properties of the tribal communities based on their traditional systems.\n2. The act also applies to the schedule areas of the Sixth schedule of the Indian Constitution.\n3. The reservation of seats in the Scheduled Areas in every Panchayat should be atleast in proportion to the population of the Scheduled caste and Scheduled tribe communities. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 3 are correct; PESA protects traditional systems and mandates proportional reservation (with a minimum of 50% for STs)[cite: 1429, 1432, 1433]. Statement 2 is incorrect as PESA applies to Fifth Schedule areas, not the Sixth Schedule states (Assam, Meghalaya, Tripura, Mizoram)[cite: 1430, 1431]."},{"id":21,"txt":"Which of the following are the mandatory provisions under the 73rd Constitutional Amendment Act, 1992?\n1. Constitution of a State Finance Commission after every five years.\n2. Indirect elections to the post of chairperson of panchayats at the district levels\n3. Giving representation to members of the Parliament in the panchayats Select the correct answer using the codes given below:","ref":"","opts":["1 and 2 only","1 only","2 only","1 and 3 only"],"ci":0,"exp":"Ex: 1 and 2 are compulsory provisions[cite: 1456, 1462]. Statement 3 is a voluntary provision[cite: 1463]."},{"id":22,"txt":"A person can be disqualified from being a member of panchayat under which of the following circumstances?\n1. If disqualified under any law for the time being in force for the purpose of elections to the legislature of the state concerned.\n2. A person of 21 years old can be disqualified on the ground that he is less than 25 years of age.\n3. If he is dismissed from the service of a local authority. Select the correct answer using the codes given below:","ref":"","opts":["1 only","1 and 2 only","2 and 3 only","1 and 3 only"],"ci":3,"exp":"Ex: Statements 1 and 3 are correct grounds for disqualification[cite: 1469, 1470]. Statement 2 is incorrect as a person cannot be disqualified for being under 25 if they are at least 21[cite: 1471]."},{"id":23,"txt":"Under 73rd Constitutional Amendment Act, a panchayat constituted upon the dissolution of a panchayat before the expiration of its duration continues for-","ref":"","opts":["The full period of five years from the date of announcement of the election results","Only for the remainder of the period for which the dissolved panchayat would have continued","Six months or less to hold any election for constituting the new panchayat for such period.","The period decided by the state legislature in consultation with State Election Commission"],"ci":1,"exp":"Ex: A reconstituted panchayat only serves the remainder of the original five-year term[cite: 1477, 1478]."},{"id":24,"txt":"With reference to 'Evolution of Urban bodies in India , consider the following statements:\n1. The Calcutta Municipal Corporation was the first municipal corporation to be set up in India.\n2. Lord Ripon's Resolution of Local Self- Government introduced a two-tier system of local governance at municipality level.\n3. Under the Government of India Act of 1919, local self-government became a reserved subject under the direct charge of Governor. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is incorrect as Madras (1687) was the first[cite: 1481]. Statement 2 is correct (Ripon's 1882 Resolution)[cite: 1482, 1483]. Statement 3 is incorrect as it became a \"transferred\" subject under an Indian minister[cite: 1485]."},{"id":25,"txt":"Under 74th Constitutional Amendment Act of 1992, which of the following persons can be provided representation in municipality?\n1. The members of the state legislative assembly representing constituencies that comprise, wholly or partly, the municipal area.\n2. Members of Lok Sabha elected from any constituency within the state in which the municipality is located.\n3. Persons having special knowledge or experience in municipal administration\n4. The members of the state legislative council registered as electors within the municipal area Select the correct answer using the codes given below:","ref":"","opts":["1 and 4 only","1, 2 and 3 only","1, 3 and 4 only","2 and 3 only"],"ci":2,"exp":"Ex: Representation is given to MLAs (1), LC members (4), and experts (3)[cite: 1497, 1498, 1499]. Statement 2 is incorrect as Lok Sabha members must represent a constituency within the municipal area[cite: 1498]."},{"id":26,"txt":"Consider the following statements regarding 74th Amendment Act of 1992:\n1. The act provides for the constitution of Ward Committees in all municipalities with a population of 3 lakhs or more.\n2. The maintenance of the accounts of the municipalities and other audit shall be done according to the guidelines of the state finance commission. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct (Article 243S)[cite: 1505]. Statement 2 is incorrect as audit is done according to State law provisions[cite: 1506]."},{"id":27,"txt":"With reference to 'Central Council of Local Government, consider the following statements:\n1. It was constituted in 1993 as an attached body of the Ministry of Panchayati Raj.\n2. Presently the council works as an advisory body dealing with matters of urban local government only.\n3. It performs the functions of making proposals for legislation with regard to local government. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is incorrect as it was set up in 1954[cite: 1510]. Statements 2 and 3 are correct: it's an advisory body for urban local government that makes legislative proposals[cite: 1511, 1515, 1516]."},{"id":28,"txt":"Consider the following statements regarding Gram Panchayat Development Plan (GPDP):\n1. The Article 243G of the Indian Constitution provides for local level planning.\n2. It brings together both the citizens and their elected representatives in the decentralized planning process.\n3. It is conducted by Panchayats every year across the country under the People's Plan Campaign (PPC). How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: All three statements are correct: Article 243G provides for local planning, it's a participatory process, and it's conducted annually under the PPC[cite: 1520, 1522, 1524]."},{"id":29,"txt":"With reference to different types of municipal personnel systems in India, consider the following pairs:\n1. Separate Personnel System: State government appoints, administers, and controls municipal personnel for every local body.\n2. United Personnel System: Personnel are transferable between the local bodies in the state.\n3. Integrated Personnel System: Each local body appoints, administers, and controls its own personnel. How many of the above given pairs are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only pair 2 is correct[cite: 1532, 1533]. In a \"Separate\" system, the local body controls its own personnel (Pair 1 is incorrect)[cite: 1530]. In an \"Integrated\" system, personnel belong to the state service (Pair 3 is incorrect)[cite: 1538]."},{"id":30,"txt":"Which of the following statements regarding the dissolution of urban local bodies is/are correct?\n1. If a municipality is dissolved before completion of its full term, then the new municipality reconstituted does not enjoy a full term of five years.\n2. After dissolution, it is not necessary to hold an election for a new municipality if the remainder of the period is less than 6 months. Select the correct answer using the code given below:","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both are correct: reconstituted bodies only serve the remaining term, and no election is needed if that term is under 6 months[cite: 1542, 1543, 1545]."},{"id":31,"txt":"The 11th Schedule of Indian constitution lists 29 matters under the purview of Panchayats. Which of the following are the matters mentioned under the 11th Schedule?\n1. Fisheries\n2. Adult and non-formal education\n3. Non-conventional energy sources\n4. Family welfare\n5. Fire Services Select the correct answer using the codes given below","ref":"","opts":["1, 2 and 5 only","3, 4 and 5 only","1, 2, 3 and 4 only","1, 2, 3, 4 and 5"],"ci":2,"exp":"Ex: Items 1, 2, 3, and 4 are in the 11th Schedule[cite: 1557, 1558, 1559, 1560]. Fire Services (5) is in the 12th Schedule[cite: 1562, 1563]."},{"id":32,"txt":"With reference to panchayats in India, consider the following statements:\n1. A state having a population below 20 lakhs may not constitute panchayats at the intermediate level.\n2. The provision relating to the reservation of seats in panchayats for the Scheduled Castes is not applicable to Arunachal Pradesh. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both are correct: small states can skip the intermediate tier, and SC reservation doesn't apply to Arunachal Pradesh (83rd Amendment)[cite: 1567, 1568, 1570]."},{"id":33,"txt":"Consider the following pairs with reference to Urban Local Bodies:\n1. Notified Area Committee: Created for administration of fast developing town due to industrialization\n2. Town Area Committee: Established by large public sector enterprises\n3. Township: Created by State Government for administration of a small town\n4. Port Trust: It is created by an Act of Parliament How many pairs matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Pairs 1 and 4 are correct[cite: 1574, 1578]. Pair 2 is incorrect as Town Area Committees are for small towns[cite: 1575]. Pair 3 is incorrect as Townships are for public enterprise staff colonies[cite: 1576]."},{"id":34,"txt":"Consider the following statements regarding 74th Constitutional Amendment Act, 1992:\n1. Member of Lok Sabha from the respective area can be given representation in the municipality.\n2. It provides for the reservation of not less than one-third of the total number of seats in municipality for women.\n3. It has a mandatory provision of direct election for the position of the chairperson of a municipality. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 2 are correct[cite: 1600, 1602]. Statement 3 is incorrect as the election manner for chairpersons is determined by state legislatures[cite: 1603]."},{"id":35,"txt":"Consider the following statements regarding the Cantonment Board in India:\n1. It works under the administrative control of the Ministry of Home Affairs.\n2. It consists of partly elected and partly nominated members.\n3. The executive officer of the cantonment board is appointed by the President of India.\n4. The president of the board is elected by the elected members from amongst themselves for a term of five years. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statements 2 and 3 are correct[cite: 1609, 1611]. Statement 1 is incorrect as it is under the Defense Ministry[cite: 1608]. Statement 4 is incorrect as the military commanding officer is the ex-officio president[cite: 1613]."},{"id":36,"txt":"With reference to the financial powers of Urban Local Bodies (ULBs) in India, consider the following statements:\n1. The Constitution empowers the ULBS to levy, collect and retain certain taxes without any interference by the State legislatures.\n2. The Department of Finance of a state recommends the process for the distribution of net proceeds of taxes and duties leviable by state between the states and ULBs. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Statement 1 is incorrect as state legislatures authorize ULB taxation[cite: 1628, 1629]. Statement 2 is incorrect as the SFC (not Finance Dept) recommends distribution principles[cite: 1630]."},{"id":37,"txt":"In the context of Urban Local Bodies (ULBs) in India, which of the following statements is/are correct with respect to \"Ward Committees\"?\n1. The 74th Constitutional Amendment Act mandates State governments to establish Ward committees for all urban local bodies to ensure grassroot democracy.\n2. As per the 74th Constitutional Amendment Act (CAA), only elected members of urban local bodies can become a member of ward committees.\n3. The Chairperson of the Ward committee have to vacate his/her office, if he/she ceases to be a member of Ward committee. Select the correct answer using the code given below:","ref":"","opts":["1 and 2 only","1 only","2 and 3 only","3 only"],"ci":3,"exp":"Ex: Statement 1 is incorrect as they are only mandatory for cities with 3 lakh+ population[cite: 1635]. Statement 2 is incorrect as filling seats is determined by state legislatures[cite: 1636]. Statement 3 is correct[cite: 1639]."},{"id":38,"txt":"Which of the following are the Voluntary Provision for States under 73rd Constitutional Amendment Act?\n1. Fixing tenure of five years for panchayats at all levels\n2. Indirect elections to the post of chairperson at intermediate and district levels\n3. Providing reservation of seats for backward classes in panchayats\n4. Granting financial powers to the panchayats Select the correct answer using the code given below:","ref":"","opts":["3 and 4 only","1, 2 and 3 only","1, 3 and 4 only","2 and 4 only"],"ci":0,"exp":"Ex: 3 and 4 are voluntary[cite: 1650, 1651]. 1 and 2 are mandatory provisions[cite: 1648, 1649]."},{"id":39,"txt":"What was the key reason for Dr. BR Ambedkar, for opposing the idea of democratic decentralization via Panchayat?","ref":"","opts":["It would have been financially unviable for the new republic.","The diversity of Indian society was a hinderance to a uniform Panchayati raj system.","Villages were suffering from problems of illiteracy, caste discrimination and social inequality.","There is no caste census available till village level, prohibiting implementation of reservation."],"ci":2,"exp":"Ex: Ambedkar believed villages were \"sinks of localism\" and caste-ridden, which would defeat democratic purposes[cite: 1654, 1656]."},{"id":40,"txt":"Consider the following statements with reference to elections of members and chairpersons in the Panchayati Raj System in India:\n1. All the members of panchayats at the village level are elected directly by the people.\n2. All the members of panchayats at district levels are elected indirectly by the people. Which of the above given statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct[cite: 1659]. Statement 2 is incorrect as members at ALL levels are elected directly[cite: 1659, 1661]."},{"id":41,"txt":"Consider the following statements about the differences between Central Finance Commission (CFC) and State Finance Commission (SFC) in India:\n1. Central Financial Commission is a constitutional body, whereas SFC is a statutory body.\n2. The recommendations of the CFC are binding on the Government of India, while the recommendations of the SFC are advisory in nature. Which of the statements given above is/are correct?","ref":"","opts":["1 Only","2 Only","Both 1 and 2.","Neither 1 nor 2"],"ci":3,"exp":"Ex: Both are constitutional bodies and both are advisory in nature[cite: 1664, 1665, 1666]."},{"id":42,"txt":"With reference to '73rd Constitutional Amendment Act, consider the following statements:\n1. Power to extend the provisions of this act to any Union Territory lies with the Parliament.\n2. The act does not apply to the hill area of Manipur state for which a district council exists. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect as the President (not Parliament) directs the application to UTs[cite: 1673]. Statement 2 is correct[cite: 1674, 1675]."},{"id":43,"txt":"With reference to 'Election related provisions of Panchayati Raj Institution', consider the following statements:\n1. The validity of any law relating to the delimitation of Panchayat constituencies cannot be questioned in any court.\n2. In case of any dispute, it is the Governor of a state that decides to whom an election petition needs to be submitted. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct[cite: 1680, 1681]. Statement 2 is incorrect as the state legislature (not Governor) determines the authority for election petitions[cite: 1682]."},{"id":44,"txt":"With reference to Panchayats (Extension to the Scheduled Areas) Act, 1996, consider the following statements:\n1. It was formulated based on the recommendation of Bhuria Committee report.\n2. One of the objectives of the act is to safeguard and preserve the traditions and customs of tribal communities.\n3. It extends the provisions of 73rd Constitutional Amendment Act to the sixth schedule areas. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 2 are correct[cite: 1685, 1686]. Statement 3 is incorrect as it applies to Fifth Schedule areas[cite: 1692]."},{"id":45,"txt":"Which of the following powers are given to Gram Sabha under PESA Act, 1996?\n1. Right to plan and manage minor water bodies in the Scheduled Areas.\n2. Collection of taxes from services of primary education, healthcare and water supply in tribal areas\n3. Right to be consulted before making acquisition of land in the Scheduled Areas for development projects.\n4. Power to restrict the sale and consumption of any intoxicant. Select the correct answer using the codes given below:","ref":"","opts":["1 and 2 only","2 and 4 only","1, 3 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: Powers 1, 3, and 4 are correct under PESA[cite: 1703, 1704, 1705, 1706]. Power 2 is incorrect[cite: 1707]."},{"id":46,"txt":"Consider the following statements regarding disqualification of a member of a municipality under 74th Amendment Act, 1992:\n1. If a person is disqualified under any law made by the state legislature, then he/ she will be disqualified as a member of a municipality.\n2. Any person below 25 years of age is disqualified from being a member of panchayat.\n3. All disputes regarding disqualification of a member are referred to and decided by the State Election Commission. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is correct[cite: 1710]. Statement 2 is incorrect as the age limit is 21[cite: 1713]. Statement 3 is incorrect as state legislatures determine the authority[cite: 1715]."},{"id":47,"txt":"Consider the following statements with reference to the Metropolitan Planning Committee (MPC):\n1. Two-thirds of the members are elected by the elected members of the municipalities and chairpersons of panchayats in the metropolitan area from amongst themselves.\n2. The Constitution lays down detailed provisions regarding the manner of election of members of MPC.\n3. The state legislature is empowered to lay down the functions of the committee regarding planning and coordination for the metropolitan area. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 3 are correct[cite: 1722, 1723]. Statement 2 is incorrect as state legislatures (not the Constitution) determine the manner of election[cite: 1723, 1725]."},{"id":48,"txt":"Arrange the following committees related to Panchayati Raj in the correct chronological order of their constitution.\n1. Balwant Rai Mehta Committee\n2. LM Singhvi Committee\n3. Ashok Mehta Committee\n4. GVK Rao Committee Select the correct answer using the code given below:","ref":"","opts":["1-3-4-2","2-3-4-1","2-1-4-3","3-2-1-4"],"ci":0,"exp":"Ex: The order is: Balwant Rai Mehta (1957), Ashok Mehta (1977), GVK Rao (1985), and LM Singhvi (1986)[cite: 1732, 1733, 1734, 1735, 1736]."},{"id":49,"txt":"Which of the following items is/are considered as a source of revenue for municipalities?\n1. Income on minor mineral\n2. Surcharge on stamp duty\n3. Tax on newspaper advertisement published in\n4. Property tax\n5. Octroi tax Select the correct answer using the code given below:","ref":"","opts":["1, 3 and 4 only","2, 3 and 5 only","1, 2, 4 and 5 only","1, 2, 3, 4 and 5"],"ci":2,"exp":"Ex: Items 1, 2, 4, and 5 are sources[cite: 1744, 1746]. Item 3 is incorrect as newspaper ads are excluded from municipal tax powers[cite: 1744]."},{"id":50,"txt":"Consider the following statements regarding the Panchayats (Extension to the Scheduled Areas) Act, 1996:\n1. One of its objectives is to preserve the traditions and customs of tribal communities.\n2. It extends the provisions of Part IX of the Constitution to the Sixth Scheduled Areas.\n3. All the seats of Chairpersons of Panchayats at all levels are reserved for the Scheduled Tribes.\n4. The President can nominate some Scheduled Tribes in the Panchayats at all levels. How many statements given above are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: Statements 1 and 3 are correct[cite: 1749, 1753]. Statement 2 is incorrect (applies to 5th Schedule)[cite: 1750]. Statement 4 is incorrect as state governments (not President) nominate unrepresented STs[cite: 1756]."},{"id":51,"txt":"With reference to the 'Ward Committees' of the Urban Local Government in India, consider the following statements:\n1. Ward refers to the territorial constituencies into which a municipal area is divided.\n2. The Constitution mandates the formation of a separate Ward Committee for each ward.\n3. Ward Committees can oversee the spending of funds granted to their respective wards. How many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 3 are correct[cite: 1769, 1772]. Statement 2 is incorrect as committees can consist of \"one or more wards\"[cite: 1771]."},{"id":52,"txt":"Consider the following statements:\n1. Gram Sabha comprises of all the adult members (registered as voters) in the Panchayat area.\n2. Gram Sabha's role and functions are mentioned in constitution.\n3. The chairperson of panchayats at the intermediate and district levels are indirectly elected from amongst the elected members. How many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 3 are correct[cite: 1777, 1784]. Statement 2 is incorrect as powers/functions are determined by state legislatures[cite: 1779, 1780]."},{"id":53,"txt":"With reference to 74th Amendment Act consider the following statements:\n1. Governor of the state shall provide for the manner of election of the chairperson of a municipality.\n2. All the members of a Nagar panchayat shall be elected directly by the people of the municipal area.\n3. The act provides for a three-tier structure of Municipalities. How many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 2 is correct[cite: 1789, 1790]. Statement 1 is incorrect (State legislature, not Governor)[cite: 1788]. Statement 3 is incorrect (no mandatory three-tier structure like PRIs)[cite: 1791, 1792]."},{"id":54,"txt":"Consider the following statements:\n1. The allotment of seats in panchayat and municipality elections cannot be challenged in high court.\n2. Without giving any opportunity to be heard, a municipality can be dissolved earlier than its term. Which of the above statement is/are incorrect?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 1 is correct (Article 243ZG)[cite: 1800, 1801]. Statement 2 is incorrect as a reasonable opportunity to be heard must be given[cite: 1803]."},{"id":55,"txt":"Which of the following statements are incorrect regarding 'Special Purpose Agency'?","ref":"","opts":["They act as subordinate agencies of the local municipal bodies.","States may setup such agencies to undertake specific functions.","These can be established as statutory bodies by an act of state legislature.","They are function-based and not area-based."],"ci":0,"exp":"Ex: Option is incorrect as they are autonomous and not subordinate to local bodies[cite: 1806, 1807]. Options (b), (c), and are correct[cite: 1808, 1809, 1810]."},{"id":56,"txt":"Gram Sabha can be best explained as an exercise of:","ref":"","opts":["Administrative Delegation","Representative Democracy","Federalism","Direct Democracy"],"ci":3,"exp":"Ex: Gram Sabha is a measure of direct democracy at the grassroots level[cite: 1814]."},{"id":57,"txt":"Which of the following statements is/ are correct regarding the State Finance Commission?\n1. It recommends the principles that govern the grants-in-aid to the panchayats from the Consolidated Fund of India.\n2. It has the function of the determination of taxes, duties, tolls and fees that may he assigned to the panchayats.\n3. It is to be constituted by the governor of a state after every five years. Select the correct answer using the code given below.","ref":"","opts":["1 and 2 only","2 only","2 and 3 only","3 only"],"ci":2,"exp":"Ex: Statement 1 is incorrect (Consolidated Fund of the State, not India)[cite: 1817]. Statements 2 and 3 are correct[cite: 1818, 1819]."},{"id":58,"txt":"With respect to the Grants to Local Governments, consider the recommendations made by the Fifteenth Finance Commission:\n1. The commission earmarked whole grants to Panchayati Raj Institutions for national priorities.\n2. Basic grants are proposed for municipal areas with a population of less than one million.\n3. 'Million-Plus' cities would receive performance-linked grants only. How many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is incorrect (earmarked 60%, not whole)[cite: 1823]. Statements 2 and 3 are correct[cite: 1825, 1826]."},{"id":59,"txt":"With regard to Indian Polity, which of the following statement correctly describes the 'principle of subsidiarity'?","ref":"","opts":["The president shall act in accordance with the advice of the council of minister.","Issues should be decided at the lowest level that involves all those who are affected.","The Union shall have over-riding power over the States to protect national interest.","The constitution of India has certain features which cannot be altered by the parliament."],"ci":1,"exp":"Ex: Subsidiarity means tasks are performed at the lowest level possible unless it's more efficient to handle them centrally[cite: 1829, 1830, 1831]."},{"id":60,"txt":"At the central level, the subject of Urban Local Government is dealt by which of the following ministries?\n1. Ministry of Home Affairs.\n2. Ministry of Urban Development.\n3. Ministry of Defence. Select the correct answer using the code given below:","ref":"","opts":["1 and 2 only","2 and 3 only","1, 2 and 3","2 only"],"ci":2,"exp":"Ex: All three ministries deal with urban local government depending on the jurisdiction (general, cantonments, or UTs)[cite: 1834, 1835, 1836, 1837]."},{"id":61,"txt":"With reference to the Panchayati Raj Institutions in India, consider the following statements:\n1. Gram Sabha includes every person of the village who is aged 18 years or more.\n2. The secretary of the Gram Sabha is appointed by the state government. Which of the statements given above is/are correct?","ref":"","opts":["1 Only","2 Only","Both 1 and 2","Neither 1 and 2"],"ci":1,"exp":"Ex: Statement 1 is incorrect as members must also be registered voters[cite: 1840, 1841]. Statement 2 is correct[cite: 1843, 1844]."},{"id":62,"txt":"Which of the following can come under the ambit of the responsibilities of the Gram Panchayat?\n1. Contruction of roads, bridges, and waterways.\n2. Levying and collecting tax on agricultural income.\n3. Maintenace of community assets. Select the correct answer using the code given below:","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: 1 and 3 are correct[cite: 1866, 1881]. 2 is incorrect as state governments levy agricultural income tax[cite: 1883]."},{"id":63,"txt":"With reference to the village administration in India, consider the following statements:\n1. Panchayat Secretary working under Gram Panchayat is responsible to measure the land and keep land records of the villages.\n2. Patwari collects land revenue from the farmers and provides information to the government about the crops grown in the village.\n3. Tehsildars supervises the work of the Patwaris and hear land disputes in his/ her area. How many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statement 1 is incorrect as the Patwari handles land records[cite: 1887]. Statements 2 and 3 are correct[cite: 1888, 1889, 1892, 1893]."},{"id":64,"txt":"With reference to the decentralization of powers to local government institutions, consider the following statements:\n1. Mahatma Gandhi advocated decentralization and local self-government to make development inclusive.\n2. Jawaharlal Nehru considered decentralization to local level as a threat to the unity and integrity of India.\n3. B.R. Ambedkar largely supported decentralization as it would empower the lower-caste people to voice their needs in institutionalized forum. How many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: Statements 1 and 2 are correct[cite: 1897, 1900]. Statement 3 is incorrect as Ambedkar opposed it[cite: 1902]."},{"id":65,"txt":"Which of the following is the qualifying criteria, as per the Census of India, for a place to be classified as an urban area?\n1. A minimum population of 5,000.\n2. least 75 per cent of the total working population is engaged in non-agricultural activities\n3. A density of population of at least 400 persons per sq. km How many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: 1 and 3 are correct[cite: 1908, 1910]. 2 is incorrect (75% of male working population, not total)[cite: 1908, 1909]."},{"id":66,"txt":"The provisions of Part IX of the Constitution are not applicable to which one of the following groups of states?","ref":"","opts":["Sikkim, Manipur and Nagaland","Jammu & Kashmir, Mizoram and Meghalaya","Assam, Jammu & Kashmir and Manipur","Nagaland, Mizoram and Meghalaya"],"ci":3,"exp":"Ex: Part IX doesn't apply to Nagaland, Mizoram, and Meghalaya[cite: 1913, 1914]."},{"id":67,"txt":"Which of the following reasons are responsible for ineffective performance of the Panchayati Raj Institutions (PRIs)?\n1. Excessive control by bureaucracy\n2. Inadequate powers to Gram Sabha\n3. Reluctance to collection of taxes by Gram Sabha\n4. No funding from state governments Select the correct option from the codes given below.","ref":"","opts":["1 and 2 only","2, 3 and 4 only","1, 2 and 3 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: 1, 2, and 3 are correct[cite: 1926, 1929, 1931]. 4 is incorrect as Panchayats depend heavily on government funding[cite: 1933, 1934]."},{"id":68,"txt":"With reference to the Panchayati Raj Institutions (PRIs), Consider the following statements:\n1. Rajasthan was the first state to establish Panchayati Raj after independence.\n2. The subject of 'Local Government' is mentioned in the Concurrent List under the Seventh Schedule of the Constitution.\n3. The institution was constitutionalized through 73rd Constitutional Amendment Act, passed under the Prime Ministership of Rajiv Gandhi. How many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is correct[cite: 1940]. 2 is incorrect (State List)[cite: 1943]. 3 is incorrect (Prime Ministership of P.V. Narasimha Rao)[cite: 1944]."},{"id":69,"txt":"Consider the following pairs:\n1. Thungon Committee: Examine political/admin structure in district for district planning\n2. L M Singhvi Committee: Revitalisation of PRIs for Democracy/Development\n3. Ashok Mehta Committee: Review existing Admin Arrangements for Rural Dev/Poverty Alleviation\n4. Gadgil Committee: How best PRIs could be made effective How many pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":2,"exp":"Ex: 1, 2, and 4 are correctly matched[cite: 1951, 1954, 1959, 1960]. Pair 3 is incorrect as that was the role of the G.V.K. Rao Committee[cite: 1956, 1957]."},{"id":70,"txt":"With reference to the Home Minister's Advisory Committees of the Union Territories, consider the following statements:\n1. These are constituted only for those Union Territories that do not have legislature.\n2. They consist of nominated members from civil society.\n3. They are consulted for matters related to internal security. Which of the followings statements are correct?","ref":"","opts":["1 and 2 only","2 and 3 only","1, 2 and 3","1 and 3 only"],"ci":2,"exp":"Ex: All three statements are correct for UTs without legislature[cite: 1965, 1975, 1976, 1979]."},{"id":71,"txt":"Which of the followings may be the correct reasons for creation of Union Territories in Independent India?\n1. Special treatment and care of the tribal people\n2. Political and administrative consideration\n3. Cultural distinctiveness\n4. Resolution of Inter-state water sharing dispute Select the correct answer using the codes given below:","ref":"","opts":["1 and 2 only","2, 3 and 4 only","1, 2 and 3 only","3 and 4 only"],"ci":2,"exp":"Ex: 1, 2, and 3 are correct reasons[cite: 1987, 1989, 1990]. 4 is incorrect[cite: 1991, 1992]."},{"id":72,"txt":"With reference to 'States and Union Territories', consider the following statements:\n1. Unlike in Union Territories, States in India share a distribution of power with the Centre.\n2. President of India is the constitutional and executive head of both States and Union Territories.\n3. There is no Union territory larger in size than any state of India. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 1 is correct[cite: 1995, 1996]. 2 is incorrect (Governor is constitutional head of state)[cite: 1999]. 3 is incorrect (Ladakh is larger than many states)[cite: 2000]."},{"id":73,"txt":"Consider the following statements with reference to different Union territories of India:\n1. Before independence, Dadra and Nagar Haveli was ruled by French.\n2. A regulation made by the President can repeal or amend any act of Parliament in relation to the union territory of Lakshadweep.\n3. The President can make regulations for the peace, progress and good government of the Andaman and Nicobar Islands, Delhi and Daman and Diu. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 2 is correct[cite: 2008]. 1 is incorrect (Portuguese)[cite: 2007]. 3 is incorrect (cannot make regulations for Delhi)[cite: 2009]."},{"id":74,"txt":"With reference to 'Special Provisions for Delhi', consider the following statements:\n1. The strength of the council of ministers is fixed at ten per cent of the total strength of the Legislative Assembly.\n2. The Lieutenant Governor is empowered to promulgate ordinances during recess of the assembly.\n3. In the case of a difference of opinion between the Lt. Governor and his council of ministers, the decision of the council of ministers prevails. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: 1 and 2 are correct[cite: 2017, 2018]. 3 is incorrect (President's decision prevails)[cite: 2027]."},{"id":75,"txt":"Consider the following statements:\n1. Union territory is administered by the President acting through an administrator appointed by him.\n2. President can make laws on any subject of the Seventh Schedule including the State List for all the union territories.\n3. The authority to put Union Territory under the jurisdiction of the High Court of adjacent state is vested in the Parliament of India. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: 1 and 3 are correct[cite: 2036, 2040]. 2 is incorrect (Parliament makes laws for UTs)[cite: 2038]."},{"id":76,"txt":"Which of the following Union Ministries acts as a nodal ministry for all matters of Union Territories relating to legislation, finance and budget?","ref":"","opts":["Ministry of Home Affairs","Ministry of Defense","Ministry of Finance","None of the above."],"ci":0,"exp":"Ex: Ministry of Home Affairs is the nodal ministry[cite: 2047]."},{"id":77,"txt":"Consider the following statements regarding the Union Territories in India:\n1. A Union Territory is administered by the President through an administrator appointed by him/her.\n2. The President can appoint the Governor of a state as the administrator of an adjoining union territory.\n3. The President can specify the designation of the administrator of the Union Territory. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":2,"exp":"Ex: All three statements are correct[cite: 2055, 2057, 2059]."},{"id":78,"txt":"Consider the following statements regarding the Home Minister's Advisory Committee (HMAC):\n1. All the Union Territories (UTs) except Ladakh have the forum of HMAC.\n2. The HMAC discusses the general issues relating to social and economic development of the UTs.\n3. Elected members of local bodies of respective UTs can become members of the corresponding HMAC. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: 2 and 3 are correct[cite: 2065, 2067]. 1 is incorrect (Ladakh has HMAC)[cite: 2064]."},{"id":79,"txt":"Consider the following statements regarding the creation of a Union territory (UT) from an existing state:\n1. The President has the power to create a UT by issuing a public notification.\n2. Before the creation of a new UT from an existing State, the President has to refer the matter to the concerned State Legislature for expressing its views. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 2 is correct[cite: 2077]. 1 is incorrect (Parliament separates territory to form states/UTs)[cite: 2070, 2071]."},{"id":80,"txt":"Consider the following statements regarding Union Territories in India:\n1. President has power to establish a separate high court for any union territory.\n2. Delhi is the only union territory that has a separate high court of its own, which is not shared with any other state or union territory.\n3. Union Territory of Lakshadweep comes under the jurisdiction of Madras High Court. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 2 is correct[cite: 2085]. 1 is incorrect (Parliament establishes high courts for UTs)[cite: 2084]. 3 is incorrect (Lakshadweep is under Kerala High Court)[cite: 2087]."},{"id":81,"txt":"Consider the following statements regarding Union Territories (UTs) of Delhi and Puducherry:\n1. Legislative Assemblies of both the UTS can make laws on any subject of the State List and the Concurrent List.\n2. Lieutenant Governor of Delhi and Puducherry both are guided only by the Government of Union Territories Act, 1963. Which of the statements given above is/are incorrect?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both are incorrect[cite: 2095, 2096, 2097, 2099]."},{"id":82,"txt":"With reference to the special provisions for some states in Constitution, consider the following statements:\n1. The President gives special responsibility to the state legislatures to set up development boards for certain areas in Maharashtra and Gujarat.\n2. The Legislative Assembly of the state of Goa must consist of not less than 30 members.\n3. The Governor has the special responsibility with respect to law and order in the state of Manipur.\n4. Parliament may provide a number of seats for people of different sections in the Nagaland legislative assembly, in order to protect their rights and interests. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Only Statement 2 is correct[cite: 2104]. 1 is incorrect (responsibility given to Governors)[cite: 2102]. 3 is incorrect (Arunachal Governor)[cite: 2105]. 4 is incorrect (Sikkim)[cite: 2106]."},{"id":83,"txt":"Consider the following statements regarding the 'Inner Line Permit, often seen in news:\n1. It is an official travel document issued by the Government of India to allow inward travel of foreigners into a protected area for a limited period.\n2. Presently, this permit is issued for states of Nagaland, Manipur and Assam only. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Both are incorrect (ILP is for Indian citizens in Arunachal, Nagaland, and Mizoram)[cite: 2110, 2111]."},{"id":84,"txt":"Consider the following statements with reference to the special provisions for Nagaland under Article 371-A of the Constitution:\n1. The Governor of Nagaland has the responsibility for maintaining law and order in the state.\n2. The parliamentary laws dealing with the ownership and transfer of land do not apply to Nagaland unless consent is given by the state's Governor. Which of the above given statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct[cite: 2125]. 2 is incorrect (state assembly must decide)[cite: 2128]."},{"id":85,"txt":"What was the intention behind inclusion of Articles 371 to 371-J in the Constitution of India?\n1. To meet the aspirations of the people of backward regions of the states\n2. To deal with the disturbed law and order condition in some parts of the states\n3. To deal with the border issues with neighboring countries in North-Western India.\n4. To protect the cultural and economic interests of the tribal people of the states Select the correct answer using the codes given below:","ref":"","opts":["1, 3 and 4 only","1, 2 and 3 only","1, 2 and 4 only","1, 2, 3 and 4"],"ci":2,"exp":"Ex: 1, 2, and 4 are correct intentions[cite: 2139, 2140, 2141]. 3 is incorrect[cite: 2144]."},{"id":86,"txt":"Consider the following statements with reference to the special provisions regarding Manipur:\n1. The President can create a committee of the Manipur Legislative Assembly consisting of the members elected from the Hill Areas of the Manipur.\n2. It is the responsibility of Governor to submit an annual report regarding the administration of the hill areas of Manipur to the President. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both statements are correct[cite: 2151, 2153]."},{"id":87,"txt":"With reference to Special provisions for some states given in part XXI of the Constitution, separate development boards are provided for which of the following regions?\n1. Vidarbha, Marathwada and the rest of Maharashtra\n2. Saurashtra, Kutch and the rest of Gujarat\n3. Hyderabad-Karnataka region\n4. Naga Hills-Tuensang Area Select the correct answer using the code given below:","ref":"","opts":["1, 2 and 3 only","2, 3 and 4 only","1, 2, 3 and 4","1, 3 and 4 only"],"ci":0,"exp":"Ex: 1, 2, and 3 are correct[cite: 2159, 2160]. 4 is incorrect[cite: 2161, 2162]."},{"id":88,"txt":"With reference to Fifth Schedule of the Constitution of India, consider the following statements:\n1. Only the Governor can declare an area as a Schedule Area in a State under the Fifth Schedule of the Constitution.\n2. As per the Constitution, provisions related to the Panchayats as well as Municipalities do not apply to the Fifth Scheduled Areas until Parliament makes a law regarding the same.\n3. Any amendment to the Fifth Schedule requires a Constitutional amendment under Article 368 of the Constitution. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","Only three","None"],"ci":0,"exp":"Ex: Statement 2 is correct[cite: 2172, 2173]. 1 is incorrect (President declares)[cite: 2171]. 3 is incorrect (simple majority, outside Article 368)[cite: 2174]."},{"id":89,"txt":"With reference to Tribes Advisory Council (TAC) under the provisions of Fifth Schedule of Constitution of India, consider the following statements:\n1. It is a constitutional body established to advise the state government on the advancement of the Scheduled Tribes in Scheduled areas.\n2. It must be established in all states having Scheduled Areas, declared under the Fifth Schedule.\n3. Only the Members of the State Legislative Assembly belonging to Scheduled Tribes can become a member of such Council. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","Only three","None"],"ci":1,"exp":"Ex: 1 and 2 are correct[cite: 2177, 2178, 2179]. 3 is incorrect[cite: 2183]."},{"id":90,"txt":"With reference to the special provisions for legislations regarding special areas in India, consider the following statements:\n1. An order by the President can repeal or amend any Parliamentary law with respect to Union territory of Andaman and Nicobar Islands.\n2. The Legislatures of states having Tribal Areas can restrict application of Parliamentary laws in those areas.\n3. The Governors of states having Scheduled Areas can direct the modification of Parliamentary laws in those areas. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: 1 and 3 are correct[cite: 2190, 2193, 2197, 2198]. 2 is incorrect (Governor, not legislature)[cite: 2195]."},{"id":91,"txt":"In the context of powers of the Governor with respect to the sixth schedule of the constitution, consider the following statements:\n1. The Governor's assent is mandatory for enforcing the laws created by district councils on matters related to social customs.\n2. While the Governor can create a new autonomous district, he/she cannot alter boundaries of the existing autonomous district.\n3. The Governor shall make rules to provide for the delimitation of territorial constituencies for the purpose of elections to district councils. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: 1 and 3 are correct[cite: 2204, 2215]. 2 is incorrect (Governor can alter boundaries)[cite: 2211, 2212]."},{"id":92,"txt":"With reference to Scheduled Areas mentioned under the Fifth schedule of the Constitution of India, consider the following statements:\n1. Normally, the executive power of state governments does not extend to these areas unless permitted by the central government.\n2. The Governor of a state having Scheduled area is empowered to direct that any particular act of Parliament does not apply to a scheduled area.\n3. The Governor of a state having Scheduled area can prohibit the transfer of land by Scheduled Tribes in these areas. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: 2 and 3 are correct[cite: 2222, 2223]. 1 is incorrect (executive power does extend)[cite: 2219]."},{"id":93,"txt":"With reference to District Councils for the administration of Autonomous Districts, under the Sixth schedule of the constitution, consider the following statements:\n1. The constitution mandates that a District Councils must be represented by the elected members only.\n2. They are prohibited by Constitution from being involved in any judicial matters.\n3. They are empowered to assess and collect land revenue as well as to impose certain taxes. How many of the above given statements are incorrect?","ref":"","opts":["Only one","Only two","All three","None"],"ci":1,"exp":"Ex: 1 and 2 are incorrect[cite: 2227, 2228, 2229, 2230]. 3 is correct[cite: 2439]."},{"id":94,"txt":"Consider the following statements with reference to the 'Control of the Union over the Administration of Scheduled Areas and the Welfare of Scheduled Tribes':\n1. According to the Constitution, the Parliament must appoint a Commission to report on the administration of the Scheduled Areas.\n2. The Union has executive power to give directions to a State for the welfare of the Scheduled Tribes in the State.\n3. First commission regarding the administration of Scheduled Areas and the Welfare of STs was appointed under DB Kalelkar. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Statement 2 is correct[cite: 2242]. 1 is incorrect (President appoints)[cite: 2239]. 3 is incorrect (U.N. Dhebar)[cite: 2244]."},{"id":95,"txt":"For which among the following States, there are the provisions for the administration of Tribal Areas under the Sixth Schedule of the Constitution?","ref":"","opts":["Arunachal Pradesh, Mizoram, Tripura, Manipur","Assam, Meghalaya, Tripura, Mizoram","Assam, Manipur, Tripura, Mizoram","Arunachal Pradesh, Meghalaya, Tripura, Mizoram"],"ci":1,"exp":"Ex: Sixth Schedule applies to Assam, Meghalaya, Tripura, and Mizoram[cite: 2254]."},{"id":96,"txt":"Under which Schedule of the Constitution of India can the transfer of tribal land to private parties for mining be declared null and void?","ref":"","opts":["Third Schedule","Fifth Schedule","Ninth Schedule","Twelfth Schedule"],"ci":1,"exp":"Ex: Declared null and void under the Fifth Schedule in Samatha vs. State of Andhra Pradesh[cite: 2274]."},{"id":97,"txt":"With reference to the Fifth Schedule of the Constitution, consider the following statements:\n1. A region is declared as a Scheduled Area by the President but any change in its area can be done only by the Governor of respective State.\n2. The executive power of a State does not extend to the Scheduled Areas.\n3. The President can direct to establish a Tribes Advisory Council in states without Scheduled Areas.\n4. A Governor can make a regulation to repeal any act of the state legislature in Scheduled Areas, with President's assent. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":1,"exp":"Ex: 3 and 4 are correct[cite: 2284, 2286]. 1 and 2 are incorrect[cite: 2278, 2279]."},{"id":98,"txt":"With reference to the 'District Councils' for Tribal Areas of some states, consider the following statements:\n1. Each Autonomous district has a fully elected district council.\n2. Laws made on village administration by these Councils require the assent of the Governor.\n3. The Governor is empowered to dissolve the district council on recommendation of the State Government. How many of the above given statements are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only Statement 2 is correct[cite: 2294]. 1 is incorrect (4 nominated members)[cite: 2290]. 3 is incorrect (Governor dissolves on recommendation of commission)[cite: 2296]."},{"id":99,"txt":"Consider the following statements regarding 6th Schedule of the constitution:\n1. All the members of Autonomous District councils are elected based on adult franchise.\n2. Village council can be established under the district council for trial of suits or cases between the tribes.\n3. The President can appoint a commission to report on any matter relating to the administration of autonomous district or regions. How many statements given above are correct?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only Statement 2 is correct[cite: 2304]. 1 is incorrect[cite: 2303]. 3 is incorrect (Governor appoints commission)[cite: 2305]."},{"id":100,"txt":"Consider the following statements with reference to the Union Territory of Lakshadweep:\n1. A regulation made by the President of India can repeal or amend any Act made by Parliament.\n2. Lakshadweep Police is under the direct command of Administrator of the Union Territory.\n3. The provisions under Fifth Schedule of the Constitution does not apply to Lakshadweep.\n4. A non-native person needs a permit to enter or reside in Lakshadweep. How many statements given above are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":3,"exp":"Ex: All four statements are correct based on the administrative and legal rules of Lakshadweep[cite: 2313, 2314, 2316, 2317]."},{"id":101,"txt":"Consider the following statements in the context of the Autonomous District Council:\n1. Autonomous district councils have the powers to levy taxes and fees.\n2. The jurisdiction of autonomous councils is subject to the jurisdiction of the concerned High Court. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both statements are correct[cite: 2323, 2326]."},{"id":102,"txt":"Which of the following functions is/are performed by Governor with regard to 5th Schedule areas?\n1. He/she directs to establish Tribes advisory council in a state having schedule tribes but not schedule areas.\n2. He/she regulate the business of money lending in relation to the schedule tribes\n3. He/she is empowered to appoint a commission to report on the administration of the schedule areas and the welfare of the schedule tribes in the states.\n4. He/she can restrict the transfer of land by or among members of scheduled tribes. Select the correct answer using the code given below:","ref":"","opts":["1 and 3 only","3 and 4 only","2 and 4 only","1, 2 and 4 only"],"ci":2,"exp":"Ex: 2 and 4 are Governor's functions[cite: 2332]. 1 and 3 are President's functions[cite: 2331, 2333]."},{"id":103,"txt":"With reference to the schedule tribes, which of the following statements is/are correct?\n1. The constitution mentioned criteria for specification of a community as a Scheduled Tribe.\n2. The first specification of Scheduled Tribes in relation to a particular State/ Union Territory is by a notified order of the President, after consultation with the State governments concerned. Select the correct answer using the code given below:","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 2 is correct[cite: 2339]. 1 is incorrect (criteria not spelt out in Constitution)[cite: 2338]."},{"id":104,"txt":"The Constitution of India provides for establishment of an Administrative Tribunal as a part of special provisions related to the state of Telangana. In this context, which of the following statements is/are correct regarding the aforementioned tribunal?\n1. The Governor of the State is empowered to establish the Tribunal.\n2. The tribunal functions outside the purview of the state High Court.\n3. The power to abolish the Tribunal lies with the President. Select the correct answer using the code given below.","ref":"","opts":["1 and 2 only","1 and 3 only","2 and 3 only","1, 2 and 3"],"ci":2,"exp":"Ex: 2 and 3 are correct[cite: 2344, 2346]. 1 is incorrect (President establishes)[cite: 2343]."},{"id":105,"txt":"Articles 371 to 371-J of the Indian Constitution deals with the special provisions of certain states. Which of the following states are included in these Articles?\n1. Maharashtra\n2. Manipur\n3. Karnataka Select the correct answer using the code given below.","ref":"","opts":["1 only","2 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: All three are included under Article 371 (Maharashtra), 371C (Manipur), and 371J (Karnataka)[cite: 2349, 2350, 2362]."},{"id":106,"txt":"With reference to the Tribes Advisory Council (TAC), consider the following statements:\n1. Majority of its members are the representatives of the scheduled tribes in the state legislative assembly.\n2. It is consulted by the Governor while making regulations for the governance of a scheduled area. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both statements are correct[cite: 2368, 2370]."},{"id":107,"txt":"The Sixth Schedule of the Constitution empowers the District Councils to\n1. Collect land revenue\n2. Manage primary schools\n3. Make laws on land related matters Select the correct answer using the code given below.","ref":"","opts":["1 and 2 only","2 and 3 only","1 and 3 only","1, 2 and 3"],"ci":3,"exp":"Ex: All three are powers given to District Councils[cite: 2373, 2374, 2378]."},{"id":108,"txt":"With reference to the Autonomous District area in Tripura, who among the following may direct that an act of the state legislative Assembly does not apply to the autonomous district area?","ref":"","opts":["The President of India","The Governor","The Tripura Tribal Areas Autonomous District Council","National Commission for Scheduled Tribes"],"ci":1,"exp":"Ex: The Governor of the state is empowered to give such directions[cite: 2387]."},{"id":109,"txt":"Consider the following statements with regards to the Special Provisions for some states:\n1. The original Constitution of India did not make any special provisions for the states.\n2. They aim to protect the cultural and economic interests of the people of these regions. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both statements are correct[cite: 2390, 2392]."},{"id":110,"txt":"Which of the following tribal areas and their associated states is/are correctly matched?\n1. Chakma district: Mizoram\n2. Karbi Anglong district: Tripura\n3. Jaintia hills district: Meghalaya\n4. Mara district: Manipur Select the correct answer using the code given below.","ref":"","opts":["1, 2 and 3 only","1 and 3 only","3 and 4 only","1, 2, 3 and 4"],"ci":1,"exp":"Ex: Pairs 1 and 3 are correct[cite: 2395, 2400]. 2 (Assam) and 4 (Mizoram) are incorrect[cite: 2398, 2403]."},{"id":111,"txt":"With reference to the reservation of seats for Scheduled Castes (SCs) and Scheduled Tribes (STs) in Parliament, consider the following statements:\n1. Seats are reserved for SCs and STs only in Lok Sabha and not in Rajya Sabha.\n2. Equal number of seats are reserved for SCs and STs in Parliament from each state. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":0,"exp":"Ex: Statement 1 is correct[cite: 2415]. 2 is incorrect (depends on population)[cite: 2417]."},{"id":112,"txt":"With reference to the provisions for the administration of Delhi, consider the following statements:\n1. According to the Constitution, Delhi is to be administered by the Lieutenant Governor.\n2. The term \"Delhi government\" in any law made by the Delhi Legislative Assembly implies the Lieutenant Governor (LG). Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":2,"exp":"Ex: Both statements are correct based on Article 239AA and 2021 amendments[cite: 2424, 2425]."},{"id":113,"txt":"Consider the following statements with respect to the administration of Sixth Schedule areas:\n1. The tribal areas under Sixth Schedule fall outside the executive authority of the respective states.\n2. The President has the power to organise or reorganise the autonomous districts under Sixth Schedule.\n3. In autonomous districts, it is mandatory to establish district councils with majority of nominated members.\n4. The district councils are empowered to lay specific taxes and collect land revenue. How many statements given above are correct?","ref":"","opts":["Only one","Only two","Only three","All four"],"ci":0,"exp":"Ex: Only Statement 4 is correct[cite: 2439]. Statements 1, 2, and 3 are incorrect based on the administrative rules of the 6th Schedule[cite: 2431, 2433, 2436]."},{"id":114,"txt":"Consider the following pairs regarding the administration of the Union Territories in India:\n1. Lieutenant Governor: Puducherry\n2. Chief Commissioner: Lakshadweep\n3. Administrator: Andaman and Nicobar How many pairs given above are correctly matched?","ref":"","opts":["Only one","Only two","All three","None"],"ci":0,"exp":"Ex: Only pair 1 is correct[cite: 2442]. 2 and 3 are incorrectly matched[cite: 2442, 2443]."},{"id":115,"txt":"Consider the following statements with reference to the Union Territories of India:\n1. The Supreme Court can establish a high court for a union territory or put it under the jurisdiction of the high court of adjacent state.\n2. The Constitution does not contain any separate provisions for the administration of acquired territories. Which of the statements given above is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 2 is correct[cite: 2450]. 1 is incorrect (Parliament can establish high courts for UTs)[cite: 2449]."},{"id":116,"txt":"Consider the following statements with reference to Autonomous Districts under 6th Schedule of Indian Constitution:\n1. A State's executive authority does not extend over the Autonomous districts in tribal areas.\n2. Autonomous district councils have powers to form courts to hear cases. Which of the above given statements is/are correct?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":1,"exp":"Ex: Statement 2 is correct[cite: 2457]. 1 is incorrect (authority does extend)[cite: 2456]."},{"id":117,"txt":"The Dilip Singh Bhuria commission is related to which of the following?","ref":"","opts":["Administration of the Scheduled Areas","Notification of Particularly Vulnerable Tribal Groups","Modification in the list of Scheduled Tribes","Recommendations on Denotified Tribes"],"ci":0,"exp":"Ex: It reported on the administration of Scheduled Areas/Tribes[cite: 2468]."},{"id":118,"txt":"Consider the following statements with reference to the Control of the Union over the Administration of Scheduled Areas and the Welfare of STs:\n1. The President is required to appoint a commission to report on the administration of the scheduled areas and the welfare of the STs in the states.\n2. Central government has executive power to give direction to the state with respect to the welfare of the STs in the state. Which of the statements given above is/are incorrect?","ref":"","opts":["1 only","2 only","Both 1 and 2","Neither 1 nor 2"],"ci":3,"exp":"Ex: Both are correct central powers/responsibilities[cite: 2474, 2478]."}],"m":null,"tt":7140,"nm":0.66};
+let explanationMode='plain';
+function setExplanationMode(mode){explanationMode=mode==='notes'?'notes':'plain';const sel=document.getElementById('explanationMode');if(sel&&sel.value!==explanationMode)sel.value=explanationMode;if(typeof st!=='undefined'&&st&&typeof st.cq==='number'&&document.getElementById('qs'))rq(st.cq);}
+function noteEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;');}
+function buildStudyNotes(raw){
+ const text=String(raw||'').replace(/^\s*Ex\s*:\s*/i,'').trim();
+ if(!text)return '<div class="notes-panel"><div class="notes-empty">No explanation was provided for this question.</div></div>';
+ const sentences=text.split(/\n+|(?<=[.!?])\s+(?=[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+ const defs=sentences.filter(x=>/\b(is defined as|means that|refers to|is known as|can be defined as|denotes)\b/i.test(x));
+ const years=[];const yearRx=/\b(?:1[6-9]\d{2}|20[0-3]\d)\b/g;let match;while((match=yearRx.exec(text))!==null){if(!years.some(y=>y.year===match[0])){const start=Math.max(0,match.index-65),end=Math.min(text.length,match.index+105);years.push({year:match[0],detail:text.slice(start,end).trim()});}}
+ const termSet=[];const termRx=/\b(?:Article\s+\d+[A-Za-z]?|[A-Z]{2,}(?:\s+[A-Z]{2,}){0,2})\b/g;while((match=termRx.exec(text))!==null){const term=match[0].trim();if(term.length>2&&!/^(THE|AND|FOR|NOT|BUT|EX|INDIA)$/i.test(term)&&!termSet.includes(term))termSet.push(term);}
+ const esc=noteEscape;let html='<div class="notes-panel"><div class="notes-banner"><span class="notes-banner-icon">📚</span><div><div class="notes-banner-title">Structured Study Notes</div><div class="notes-banner-sub">Explanation organised for quick revision</div></div></div>';
+ if(defs.length)html+='<section class="notes-section definition"><h4>📖 Definition / Core Idea</h4>'+defs.map(x=>'<p>'+esc(x)+'</p>').join('')+'</section>';
+ const key=sentences.filter(x=>defs.indexOf(x)===-1&&!/^(Hence|Therefore|Thus|In conclusion)\b/i.test(x));
+ if(key.length)html+='<section class="notes-section points"><h4>📌 Key Points</h4><ul>'+key.slice(0,12).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></section>';
+ if(years.length)html+='<section class="notes-section timeline"><h4>🗓️ Important Years / Dates</h4><ul>'+years.slice(0,8).map(y=>'<li><b>'+esc(y.year)+'</b> — '+esc(y.detail)+'</li>').join('')+'</ul></section>';
+ if(termSet.length)html+='<section class="notes-section terms"><h4>🔑 Key Terms</h4><p>'+termSet.slice(0,10).map(esc).join(' · ')+'</p></section>';
+ const revision=sentences.slice(0,5);if(revision.length)html+='<section class="notes-section revision"><h4>☑️ Quick Revision Checklist</h4><ul>'+revision.map(x=>'<li>☐ '+esc(x)+'</li>').join('')+'</ul></section>';
+ html+='<details class="notes-section"><summary style="cursor:pointer;font-size:11px;font-weight:700;color:#475569">View original explanation</summary><p style="margin-top:8px">'+esc(text)+'</p></details></div>';return html;
+}
+st={cq:0,a:Array(qd.q.length).fill(null),mk:Array(qd.q.length).fill(false),tr:qd.tt,ti:null,sb:false,rv:false,th:'light'};
+
+const VoiceEngine = {
+    enabledQ: false,
+    enabledExp: false,
+    selectedVoice: null,
+    init() {
+        const qCheck = document.getElementById('tts-read-q-p');
+        const expCheck = document.getElementById('tts-read-exp-p');
+        if (qCheck) {
+            this.enabledQ = localStorage.getItem('tts_read_q') === 'true';
+            qCheck.checked = this.enabledQ;
+            qCheck.addEventListener('change', (e) => {
+                this.enabledQ = e.target.checked;
+                localStorage.setItem('tts_read_q', this.enabledQ);
+                if (this.enabledQ) this.speak("Voice enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        if (expCheck) {
+            this.enabledExp = localStorage.getItem('tts_read_exp') === 'true';
+            expCheck.checked = this.enabledExp;
+            expCheck.addEventListener('change', (e) => {
+                this.enabledExp = e.target.checked;
+                localStorage.setItem('tts_read_exp', this.enabledExp);
+                if (this.enabledExp) this.speak("Explanation enabled");
+                else window.speechSynthesis.cancel();
+            });
+        }
+        this.selectVoice();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => this.selectVoice();
+        }
+    },
+    selectVoice() {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        const voices = window.speechSynthesis.getVoices();
+        let hiVoice = voices.find(v => v.lang.startsWith('hi') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('veena') || v.name.toLowerCase().includes('google')));
+        if (!hiVoice) hiVoice = voices.find(v => v.lang.startsWith('hi'));
+        let enVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('hazel') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('samantha')));
+        if (!enVoice) enVoice = voices.find(v => v.lang.startsWith('en'));
+        this.selectedVoice = hiVoice || enVoice || voices[0];
+    },
+    speak(text) {
+        if (typeof window === 'undefined' || !window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        let cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        if (this.selectedVoice) utterance.voice = this.selectedVoice;
+        window.speechSynthesis.speak(utterance);
+    },
+    speakQuestion(qObj) {
+        if (!this.enabledQ) return;
+        let str = qObj.txt + ". ";
+        if (qObj.opts) {
+            qObj.opts.forEach((o, i) => {
+                str += "Option " + String.fromCharCode(65 + i) + ": " + o + ". ";
+            });
+        }
+        this.speak(str);
+    },
+    speakExplanation(exp) {
+        if (!this.enabledExp) return;
+        this.speak("Explanation: " + exp);
+    }
+};
+
+const Lifelines = {
+    used5050: false,
+    usedPoll: false,
+    usedDouble: false,
+    doubleDipActive: false,
+    init() {
+        this.used5050 = false;
+        this.usedPoll = false;
+        this.usedDouble = false;
+        this.doubleDipActive = false;
+        const btn1 = document.getElementById('ll-5050');
+        const btn2 = document.getElementById('ll-poll');
+        const btn3 = document.getElementById('ll-double');
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+        if (btn3) btn3.disabled = false;
+    }
+};
+
+function useLifeline(type) {
+    const q = qd.q[st.cq];
+    if (type === '5050') {
+        if (Lifelines.used5050) return;
+        Lifelines.used5050 = true;
+        document.getElementById('ll-5050').disabled = true;
+        
+        const incorrect = [];
+        q.opts.forEach((_, i) => {
+            if (i !== q.ci) incorrect.push(i);
+        });
+        
+        const toHide = [];
+        while (toHide.length < 2 && incorrect.length > 0) {
+            toHide.push(incorrect.splice(Math.floor(Math.random() * incorrect.length), 1)[0]);
+        }
+        
+        const btns = document.querySelectorAll('.option-btn');
+        toHide.forEach(idx => {
+            if (btns[idx]) {
+                btns[idx].style.opacity = '0';
+                btns[idx].style.pointerEvents = 'none';
+            }
+        });
+    } 
+    else if (type === 'poll') {
+        if (Lifelines.usedPoll) return;
+        Lifelines.usedPoll = true;
+        document.getElementById('ll-poll').disabled = true;
+        
+        let correctPct = Math.floor(Math.random() * 25) + 50;
+        let remaining = 100 - correctPct;
+        
+        const optPcts = [0, 0, 0, 0];
+        optPcts[q.ci] = correctPct;
+        
+        const other = [0, 1, 2, 3].filter(i => i !== q.ci);
+        const p1 = Math.floor(Math.random() * (remaining - 5));
+        remaining -= p1;
+        const p2 = Math.floor(Math.random() * remaining);
+        const p3 = remaining - p2;
+        optPcts[other[0]] = p1;
+        optPcts[other[1]] = p2;
+        optPcts[other[2]] = p3;
+        
+        const container = document.getElementById('pollBarsContainer');
+        container.innerHTML = '';
+        
+        q.opts.forEach((opt, idx) => {
+            const pct = optPcts[idx];
+            const label = String.fromCharCode(65 + idx);
+            const barWrap = document.createElement('div');
+            barWrap.style.marginBottom = '10px';
+            barWrap.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:4px;">
+                    <span>Option ${label}: ${opt.slice(0, 25)}</span>
+                    <span>${pct}%</span>
+                </div>
+                <div style="height:10px; background:rgba(0,0,0,0.05); border-radius:5px; overflow:hidden;">
+                    <div class="poll-fill-${idx}" style="height:100%; border-radius:5px; width:0%; background:${idx === q.ci ? 'var(--success)' : 'var(--primary)'}; transition: width 1s ease;"></div>
+                </div>
+            `;
+            container.appendChild(barWrap);
+            setTimeout(() => {
+                const fillEl = container.querySelector('.poll-fill-' + idx);
+                if (fillEl) fillEl.style.width = pct + '%';
+            }, 100);
+        });
+        
+        document.getElementById('pollModal').style.display = 'flex';
+    } 
+    else if (type === 'double') {
+        if (Lifelines.usedDouble) return;
+        Lifelines.usedDouble = true;
+        Lifelines.doubleDipActive = true;
+        document.getElementById('ll-double').disabled = true;
+        alert("Double Dip Lifeline Active! You can now guess twice for this question.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{sms();pcc();lt()});
+function lt(){const t=localStorage.getItem('qt')||'light';st.th=t;document.documentElement.setAttribute('data-theme',t);uti()}
+function tgt(){st.th=st.th==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',st.th);localStorage.setItem('qt',st.th);uti()}
+function uti(){const i=document.querySelector('#tt i');if(i)i.className=st.th==='light'?'fas fa-moon':'fas fa-sun'}
+function pcc(){document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>e.preventDefault());document.addEventListener('cut',e=>e.preventDefault());document.addEventListener('selectstart',e=>{if(!e.target.tagName.match(/INPUT|TEXTAREA/i))e.preventDefault()})}
+function sms(){const mc=document.querySelectorAll('.mode-card'),sb=document.getElementById('sb');mc.forEach(c=>{c.addEventListener('click',()=>{mc.forEach(x=>x.classList.remove('selected'));c.classList.add('selected');qd.m=c.dataset.mode;sb.disabled=false})});sb.addEventListener('click',sq)}
+function sq(){const ct=document.getElementById('ct'),ctv=parseInt(ct.value);if(ctv&&ctv>0){st.tr=ctv*60;qd.tt=ctv*60}document.body.style.overflow='hidden';document.getElementById('modeSelection').style.display='none';document.getElementById('quizContainer').style.display='block';document.getElementById('mb').textContent=qd.m;document.getElementById('mb').className='mode-badge '+qd.m;iq()}
+function iq(){Lifelines.init();VoiceEngine.init();rq(0);rqg();stt();sn()}
+function stt(){utd();st.ti=setInterval(()=>{st.tr--;utd();if(st.tr<=0){clearInterval(st.ti);sbq()}if(st.tr<=60)document.getElementById('td').classList.add('warning')},1000)}
+function utd(){const m=Math.floor(st.tr/60),s=st.tr%60;document.getElementById('tt2').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+function rq(i){st.cq=i;const q=qd.q[i],qs=document.getElementById('qs');let h=`<div class="question-card"><div class="question-number"><i class="fas fa-question-circle"></i>Question ${i+1} of ${qd.q.length}</div>`;if(q.ref)h+=`<div class="question-reference protected-content"><i class="fas fa-info-circle"></i> ${q.ref}</div>`;h+=`<div class="question-text protected-content">${q.txt}</div><div class="options-container">`;q.opts.forEach((o,x)=>{let bc='option-btn',ic=String.fromCharCode(65+x);const isSel=st.a[i]===x,isCor=x===q.ci,shAns=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(isSel)bc+=' selected';if(shAns){bc+=' disabled';if(isCor){bc+=' correct';ic='<i class="fas fa-check"></i>'}else if(isSel&&!isCor){bc+=' incorrect';ic='<i class="fas fa-times"></i>'}}h+=`<button class="${bc}" data-index="${x}" onclick="so(${x})"><div class="option-indicator">${ic}</div><div class="option-text protected-content">${o}</div></button>`});h+=`</div>`;const shExp=(qd.m==='practice'&&st.a[i]!==null)||st.sb;if(shExp){if(explanationMode==='notes'){h+=buildStudyNotes(q.exp)}else{h+=`<div class="explanation-box" style="display:block"><div class="explanation-header"><i class="fas fa-lightbulb"></i>Explanation</div><div class="explanation-text protected-content">${q.exp}</div></div>`}}h+=`</div>`;qs.innerHTML=h;qs.scrollTop=0;up();unb();uqg();if(!st.sb && VoiceEngine.enabledQ){VoiceEngine.speakQuestion(q);}}
+function so(oi){if(st.sb)return;const q=qd.q[st.cq];if(Lifelines.doubleDipActive){if(oi!==q.ci){Lifelines.doubleDipActive=false;const btn=document.querySelector('.option-btn[data-index="'+oi+'"]');if(btn){btn.classList.add('incorrect');btn.style.pointerEvents='none';btn.querySelector('.option-indicator').innerHTML='<i class="fas fa-times"></i>';}return;}else{Lifelines.doubleDipActive=false;}}if(st.a[st.cq]===oi){st.a[st.cq]=null}else{st.a[st.cq]=oi}rq(st.cq);if(qd.m==='practice' && st.a[st.cq]!==null && VoiceEngine.enabledExp){VoiceEngine.speakExplanation(q.exp);}}
+function sn(){document.getElementById('pv').addEventListener('click',np);document.getElementById('nx').addEventListener('click',nn);document.getElementById('mk').addEventListener('click',tm);document.getElementById('sm').addEventListener('click',cs);document.getElementById('nt').addEventListener('click',tnp);document.getElementById('nc').addEventListener('click',tnp);document.getElementById('rb').addEventListener('click',ra);document.getElementById('rsb').addEventListener('click',rs);document.getElementById('tt').addEventListener('click',tgt);document.addEventListener('keydown',e=>{if(st.sb)return;if(e.key==='ArrowLeft')np();if(e.key==='ArrowRight')nn()})}
+function np(){if(st.cq>0)rq(st.cq-1)}
+function nn(){if(st.cq<qd.q.length-1)rq(st.cq+1)}
+function tm(){st.mk[st.cq]=!st.mk[st.cq];uqg();const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function unb(){document.getElementById('pv').disabled=st.cq===0;if(st.cq===qd.q.length-1){document.getElementById('nx').style.display='none';document.getElementById('sm').style.display='flex'}else{document.getElementById('nx').style.display='flex';document.getElementById('sm').style.display='none'}const mb=document.getElementById('mk');mb.innerHTML=st.mk[st.cq]?'<i class="fas fa-bookmark"></i> Unmark':'<i class="fas fa-bookmark"></i> Mark'}
+function up(){const at=st.a.filter(a=>a!==null).length,pr=((st.cq+1)/qd.q.length)*100;document.getElementById('pt').textContent=`Question ${st.cq+1} of ${qd.q.length}`;document.getElementById('at').textContent=`Attempted: ${at}/${qd.q.length}`;document.getElementById('pb').style.width=pr+'%'}
+function rqg(){const g=document.getElementById('qg');g.innerHTML='';qd.q.forEach((_,i)=>{const it=document.createElement('div');it.className='question-nav-item';it.textContent=i+1;it.onclick=()=>{rq(i);if(window.innerWidth<768)tnp()};g.appendChild(it)})}
+function uqg() {
+    const its = document.querySelectorAll('.question-nav-item');
+    its.forEach((it, i) => {
+        it.className = 'question-nav-item';
+        if (i === st.cq) it.classList.add('current');
+        if (st.sb) {
+            if (st.a[i] === qd.q[i].ci) it.classList.add('correct');
+            else if (st.a[i] !== null) it.classList.add('incorrect');
+        } else {
+            if (st.a[i] !== null) it.classList.add('answered');
+            if (st.mk[i]) it.classList.add('marked');
+        }
+    });
+}
+function tnp(){document.getElementById('np').classList.toggle('open')}
+function cs(){const u=st.a.filter(a=>a===null).length;if(u>0){const c=window.confirm(`You have ${u} unattempted question(s). Do you want to submit?`);if(!c)return}sbq()}
+function sbq(){clearInterval(st.ti);st.sb=true;let c=0,ic=0,u=0,nm=0;st.a.forEach((a,i)=>{if(a===null)u++;else if(a===qd.q[i].ci)c++;else{ic++;nm+=qd.nm}});const ts=c-nm,pc=(ts/qd.q.length)*100;document.body.style.overflow='auto';document.getElementById('quizContainer').style.display='none';document.getElementById('resultsContainer').style.display='block';document.getElementById('resultsContainer').classList.add('scrollable');if(pc>=70){document.getElementById('ri').innerHTML='<i class="fas fa-trophy" style="color:#fbbf24"></i>';document.getElementById('rt').textContent='Excellent Performance!'}else if(pc>=50){document.getElementById('ri').innerHTML='<i class="far fa-smile" style="color:#48bb78"></i>';document.getElementById('rt').textContent='Good Job!'}else{document.getElementById('ri').innerHTML='<i class="far fa-meh" style="color:#f5576c"></i>';document.getElementById('rt').textContent='Keep Practicing!'}document.getElementById('rs').textContent=ts.toFixed(2)+' / '+qd.q.length;document.getElementById('rp').textContent=pc.toFixed(1)+'%';document.getElementById('cc').textContent=c;document.getElementById('ic').textContent=ic;document.getElementById('uc').textContent=u;document.getElementById('nm').textContent='-'+nm.toFixed(2)}
+function ra(){st.rv=true;document.body.style.overflow='hidden';document.getElementById('resultsContainer').style.display='none';document.getElementById('quizContainer').style.display='block';rq(0);uqg()}
+function rs(){document.body.style.overflow='hidden';location.reload()}
+</script>
+</body>
+</html>
