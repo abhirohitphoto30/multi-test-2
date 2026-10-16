@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hindi TXT + PDF Translator — Updated V7</title>
+<style>
+:root{--bg:#0b1020;--panel:#131b30;--panel2:#19243d;--text:#edf2ff;--muted:#a9b7d3;--accent:#7c9cff;--accent2:#42d6b5;--danger:#ff7777}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1b2c52 0,#0b1020 60%);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans Devanagari","Mangal",sans-serif;min-height:100vh;padding:24px}
+.wrap{max-width:1000px;margin:auto}.hero{padding:20px 0 12px}.eyebrow{color:var(--accent2);font-weight:700;letter-spacing:.08em;font-size:12px;text-transform:uppercase}.hero h1{font-size:clamp(27px,4vw,42px);line-height:1.15;margin:10px 0}.hero p{color:var(--muted);max-width:760px;line-height:1.65}
+.panel{background:rgba(19,27,48,.92);border:1px solid #2b3b5d;border-radius:20px;padding:22px;margin:18px 0;box-shadow:0 15px 45px #0002}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.drop{border:1.5px dashed #52658c;border-radius:15px;padding:22px;text-align:center;background:#0f172a}.drop strong{display:block;font-size:18px;margin-bottom:8px}.drop small{color:var(--muted)}
+input[type=file]{max-width:100%;margin-top:14px;color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button{border:0;border-radius:12px;padding:12px 18px;font-weight:750;cursor:pointer;font-size:14px;transition:.15s}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:linear-gradient(135deg,var(--accent),#9a7cff);color:#081022}.secondary{background:#263655;color:var(--text);border:1px solid #405477}.success{background:var(--accent2);color:#05231e}
+.status{margin-top:18px;background:#0d1528;border:1px solid #2b3b5d;border-radius:13px;padding:14px}.bar{height:8px;background:#273653;border-radius:99px;overflow:hidden;margin:10px 0}.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .2s}.muted{color:var(--muted);font-size:13px;line-height:1.6}.warning{color:#ffd28a}.good{color:#83f0ce}.bad{color:#ff9c9c}
+textarea{width:100%;min-height:180px;background:#0b1222;color:#edf2ff;border:1px solid #304263;border-radius:12px;padding:14px;resize:vertical;font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace}
+.previewhead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}.previewhead h2{font-size:18px;margin:0}.pill{background:#253654;border-radius:99px;padding:5px 10px;color:#b9c8e5;font-size:12px}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:16px}
+@media(max-width:720px){body{padding:14px}.grid{grid-template-columns:1fr}.panel{padding:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="eyebrow">Free • TXT/PDF in / Hindi TXT out</div>
+    <h1>🇮🇳 Hindi TXT + PDF Translator — Updated V7</h1>
+    <p>English TXT ya selectable-text PDF ko Hindi mein translate karein. TXT ki line formatting aur PDF ke page-wise text order/columns ko jitna mumkin ho preserve karke Hindi TXT output milega.</p>
+  </div>
+  <div class="panel">
+    <div class="grid">
+      <div class="drop">
+        <strong>📄 Input TXT ya PDF file</strong>
+        <small>TXT, selectable-text PDF, questions, options aur explanations</small><br>
+        <input id="file" type="file" accept=".txt,.pdf,text/plain,application/pdf">
+      </div>
+      <div class="drop">
+        <strong>🛡️ Format protection</strong>
+        <small>Q numbers, “Ex:”, 😂, ✅, option order, page breaks aur column reading order ko best-effort preserve kiya jayega.</small>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="start" class="primary" disabled>✨ Translate to Hindi</button>
+      <button id="stop" class="secondary" disabled>Pause / Stop</button>
+      <button id="download" class="success" disabled>⬇ Download Hindi TXT</button>
+      <button id="downloadPdf" class="primary" disabled>📄 Save Hindi PDF</button>
+      <button id="reset" class="secondary">Reset</button>
+    </div>
+    <div class="status">
+      <div id="statusText">Pehle apni .txt file select karein.</div>
+      <div class="bar"><div id="bar"></div></div>
+      <div id="details" class="muted">Translation ke liye internet chahiye. Koi API key ya payment ki zaroorat nahi; public translation endpoint kabhi-kabhi rate-limit ho sakta hai.</div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="previewhead"><h2>👀 Output preview</h2><span class="pill" id="counts">0 lines</span></div>
+    <textarea id="preview" spellcheck="false" placeholder="Hindi translated text yahan dikhega…"></textarea>
+    <p class="muted">Aap preview mein manually corrections kar sakte hain. Download button current preview ko hi save karega.</p>
+  </div>
+  <div class="panel">
+    <h2 style="font-size:18px;margin-top:0">⚙️ Kaise kaam karta hai?</h2>
+    <ul class="muted">
+      <li>TXT mein original line breaks/blank lines rakhta hai. PDF mein page-wise text extract karta hai aur two-column pages par left-to-right reading order ka andaza lagata hai.</li>
+      <li>Q1., Q2., Ex:, 😂, ✅, (A)/(B)/(a)/(b), standalone numbers aur symbols ko protect karne ki koshish karta hai.</li>
+      <li>Multiple lines ko ek request mein batch karta hai aur kuch batches parallel chalata hai, taaki translation tez ho.</li><li>PDF export translated text se ek nayi, printable PDF banata hai. Yeh original PDF ke images, diagrams, exact fonts ya page layout ko bilkul same nahi rakhta. Scanned/image-only PDF ke liye OCR chahiye, jo is version mein nahi hai.</li>
+      <li>Translation Google Translate ke public, unofficial web endpoint se hota hai. Yeh free hai, lekin Google ki service badalne ya rate limit karne par fail ho sakta hai.</li>
+    </ul>
+    <p class="muted warning">Important: koi bhi automatic translator 100% perfect matra/grammar ki guarantee nahi de sakta. Exam content mein names, facts, legal terms aur answer keys ko ek baar review zaroor karein. Original file ko tool overwrite nahi karta. PDF ke text extraction mein columns/tables ka order complex PDFs mein imperfect ho sakta hai; download se pehle preview check karein.</p>
+  </div>
+  <footer>TXT/PDF question banks • Hindi / Devanagari friendly • Original file remains unchanged</footer>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+let sourceText = '', running = false, stopRequested = false, translatedText = '', selectedName = 'translated';
+
+function setStatus(t, cls='') {
+  $('statusText').textContent = t;
+  $('statusText').className = cls;
+}
+function updatePreview() {
+  $('preview').value = translatedText;
+  $('counts').textContent = translatedText ? translatedText.split('\n').length + ' lines' : '0 lines';
+}
+async function extractPdfText(file) {
+  // PDF.js is loaded from a public CDN. This extracts selectable text and approximates reading order.
+  const pdfjsLib = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs');
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+  const data = new Uint8Array(await file.arrayBuffer());
+  const pdf = await pdfjsLib.getDocument({data}).promise;
+  const pages = [];
+  for (let pageNo = 1; pageNo <= pdf.numPages; pageNo++) {
+    const page = await pdf.getPage(pageNo);
+    const content = await page.getTextContent();
+    const viewport = page.getViewport({scale: 1});
+    const items = content.items.filter(it => it.str && it.str.trim()).map(it => ({
+      text: it.str, x: it.transform[4], y: it.transform[5],
+      w: Math.abs(it.width || 0), h: Math.abs(it.height || it.transform[3] || 0)
+    }));
+    if (!items.length) {
+      pages.push(`===== PAGE ${pageNo} =====\n[Is page par selectable text nahi mila — scanned/image-only page ho sakta hai]`);
+      continue;
+    }
+    const leftCount = items.filter(i => i.x < viewport.width * 0.48).length;
+    const rightCount = items.filter(i => i.x >= viewport.width * 0.48).length;
+    const twoCols = leftCount > 18 && rightCount > 18 && rightCount > items.length * 0.12 && leftCount > items.length * 0.12;
+    const groups = twoCols ? [
+      items.filter(i => i.x < viewport.width * 0.48),
+      items.filter(i => i.x >= viewport.width * 0.48)
+    ] : [items];
+    const pageLines = [];
+    for (let gi=0; gi<groups.length; gi++) {
+      const group = groups[gi];
+      group.sort((a,b) => b.y-a.y || a.x-b.x);
+      const lines = [];
+      for (const item of group) {
+        let line = lines.find(l => Math.abs(l.y - item.y) <= Math.max(2.5, Math.min(5, item.h * 0.35)));
+        if (!line) { line = {y:item.y, items:[]}; lines.push(line); }
+        line.items.push(item);
+      }
+      lines.sort((a,b) => b.y-a.y);
+      for (const line of lines) {
+        line.items.sort((a,b) => a.x-b.x);
+        let text = '', prev = null;
+        for (const it of line.items) {
+          if (prev) {
+            const gap = it.x - (prev.x + prev.w);
+            if (gap > 1.8 && !/[\s\-–—]$/.test(text) && !/^[,.;:!?%)\]}]/.test(it.text)) text += ' ';
+          }
+          text += it.text;
+          prev = it;
+        }
+        text = text.replace(/[ \t]+/g, ' ').trim();
+        if (text) pageLines.push(text);
+      }
+      if (twoCols && gi === 0) pageLines.push('');
+    }
+    pages.push(`===== PAGE ${pageNo} =====\n` + pageLines.join('\n'));
+  }
+  return pages.join('\n\n');
+}
+
+$('file').addEventListener('change', async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try {
+    setStatus(/\.pdf$/i.test(f.name) ? 'PDF ka text extract ho raha hai…' : 'TXT file read ho rahi hai…');
+    $('start').disabled = true;
+    if (/\.pdf$/i.test(f.name)) {
+      sourceText = await extractPdfText(f);
+      selectedName = f.name.replace(/\.pdf$/i, '') + '_HINDI.txt';
+    } else {
+      sourceText = await f.text();
+      selectedName = f.name.replace(/\.txt$/i, '') + '_HINDI.txt';
+    }
+    translatedText = '';
+    $('preview').value = '';
+    $('download').disabled = true;
+    $('downloadPdf').disabled = true;
+    $('start').disabled = sourceText.length === 0;
+    setStatus(sourceText.length ? 'File loaded: ' + f.name : 'File khaali hai. Doosri file select karein.', sourceText.length ? 'good' : 'warning');
+    const pages = (sourceText.match(/===== PAGE \d+ =====/g) || []).length;
+    $('details').textContent = sourceText.length.toLocaleString() + ' characters • ' + sourceText.split('\n').length + ' lines' + (pages ? ` • ${pages} PDF pages extracted` : '') + '. Ab multiple lines ek request mein translate hongi.';
+    if (/\.pdf$/i.test(f.name) && sourceText.length < 1000) {
+      $('details').textContent += ' Warning: is PDF mein selectable text bahut kam mila. Yeh scanned PDF ho sakti hai; OCR support is version mein included nahi hai.';
+    }
+  } catch (err) {
+    sourceText = '';
+    $('start').disabled = true;
+    setStatus('File read/extract nahi ho paayi: ' + (err.message || 'unknown error'), 'bad');
+    $('details').textContent = 'PDF extraction ke liye internet connection chahiye (PDF.js CDN).';
+  }
+});
+
+const MARKER = 'ZXQKEEP';
+const SEP = 'ZXQLINESEPZX';
+const MAX_CHARS = 2800;
+const CONCURRENCY = 3;
+
+function isEmojiOnly(line) {
+  const t = line.trim();
+  return !!t && /^[😂🤣😅😊😍❤️❤💯🔥⭐🌟👉❖➢■●○▪✅❌☑️✔️]+$/.test(t);
+}
+function prepareLine(line, tokenState) {
+  if (!line.trim() || isEmojiOnly(line)) return { text: line, fixed: true };
+
+  // Preserve PDF page markers exactly.
+  if (/^===== PAGE \d+ =====$/.test(line.trim())) return { text: line, fixed: true };
+
+  // Keep matching-code rows exactly as written: A–C–B–D, i ii iii iv, etc.
+  const codeRow = line.trim();
+  if (/^(?:(?:[A-D])(?:\s*[–—-]\s*[A-D])+|(?:i|ii|iii|iv|v|vi|vii|viii|ix|x)(?:\s+(?:i|ii|iii|iv|v|vi|vii|viii|ix|x)){1,7})$/i.test(codeRow)) {
+    return { text: line, fixed: true };
+  }
+
+  // Keep indentation/trailing whitespace and structural labels outside translation.
+  const ws = line.match(/^\s*/)?.[0] || '';
+  const tail = line.match(/\s*$/)?.[0] || '';
+  let core = line.slice(ws.length, line.length - tail.length);
+  let prefix = '';
+
+  let m = core.match(/^(Q\s*\d+\.\s*)(.*)$/i);
+  if (m) { prefix = m[1]; core = m[2]; }
+  else {
+    m = core.match(/^(Ex\s*:\s*)(.*)$/i);
+    if (m) { prefix = m[1]; core = m[2]; }
+    else {
+      // Preserve option labels like (a), (B), a), B. and attached answer marks.
+      m = core.match(/^((?:\([A-Da-d]\)|[A-Da-d][.)])\s+)(.*)$/);
+      if (m && m[2].trim()) { prefix = m[1]; core = m[2]; }
+    }
+  }
+
+  const tokens = [];
+  const protect = value => {
+    const key = MARKER + String(tokenState.next++).padStart(5, '0') + 'XZ';
+    tokens.push([key, value]);
+    return key;
+  };
+
+  // Preserve symbols and explicit labels. Bare words beginning with A/B/C/D are translated normally.
+  core = core.replace(/✅|❌|😂|🤣|😅|👉|❖|➢|■|●|○|▪|☑️|✔️/g, protect);
+  core = core.replace(/\([A-Da-d]\)/g, protect);
+  core = core.replace(/(^|\s)(Q\s*\d+\.|Ex:)(?=\s)/gi, (whole, before, label) => before + protect(label));
+
+  return { text: core, fixed: false, ws, prefix, tail, tokens };
+}
+function restoreTokens(s, tokens) {
+  // Restore exact original tokens even if the translator inserted spaces inside the marker.
+  for (const [key, value] of tokens) s = s.split(key).join(value);
+  return s;
+}
+function makeBatches(lines) {
+  const batches = [];
+  let batch = [], length = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const item = lines[i];
+    const n = item.text.length + SEP.length;
+    if (batch.length && length + n > MAX_CHARS) {
+      batches.push(batch); batch = []; length = 0;
+    }
+    batch.push({ index: i, item });
+    length += n;
+  }
+  if (batch.length) batches.push(batch);
+  return batches;
+}
+async function translateBatch(batch) {
+  if (stopRequested) throw new Error('STOPPED');
+  const tokenPairs = [];
+  const payload = batch.map(({item}) => {
+    let s = item.text;
+    if (item.tokens) tokenPairs.push(...item.tokens);
+    return s;
+  }).join('\n' + SEP + '\n');
+
+  const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=hi&dt=t&q=' + encodeURIComponent(payload);
+  let lastErr;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error('Translation service HTTP ' + r.status);
+      const data = await r.json();
+      if (!Array.isArray(data) || !Array.isArray(data[0])) throw new Error('Unexpected translation response');
+      let translated = data[0].map(x => x && x[0] ? x[0] : '').join('');
+      translated = restoreTokens(translated, tokenPairs);
+      let pieces = translated.split(SEP);
+      // The service may add spaces/newlines around our separator; normalize only the separator boundary.
+      pieces = pieces.map(x => x.replace(/^\s*\n\s*|\s*\n\s*$/g, ''));
+      if (pieces.length !== batch.length) {
+        // Safer fallback: individual lines if the endpoint did not preserve separators.
+        return await translateBatchIndividually(batch);
+      }
+      return pieces;
+    } catch (e) {
+      lastErr = e;
+      if (attempt < 2) await new Promise(res => setTimeout(res, 350 * (attempt + 1)));
+    }
+  }
+  throw lastErr || new Error('Translation failed');
+}
+async function translateBatchIndividually(batch) {
+  const out = [];
+  for (const {item} of batch) {
+    if (stopRequested) throw new Error('STOPPED');
+    if (item.fixed) { out.push(item.text); continue; }
+    // Use one request for a fallback line; tokens still protect formatting marks.
+    const tokens = item.tokens || [];
+    let text = item.text;
+    const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=hi&dt=t&q=' + encodeURIComponent(text);
+    const r = await fetch(url);
+    if (!r.ok) throw new Error('Translation service HTTP ' + r.status);
+    const data = await r.json();
+    let result = data[0].map(x => x && x[0] ? x[0] : '').join('');
+    out.push(restoreTokens(result, tokens));
+  }
+  return out;
+}
+
+$('start').addEventListener('click', async () => {
+  if (!sourceText || running) return;
+  running = true; stopRequested = false;
+  $('start').disabled = true; $('stop').disabled = false; $('download').disabled = true; $('downloadPdf').disabled = true;
+  const lines = sourceText.split('\n');
+  const tokenState = { next: 0 };
+  const prepared = lines.map(line => prepareLine(line, tokenState));
+  const batches = makeBatches(prepared);
+  const output = new Array(lines.length);
+  let nextBatch = 0, completedLines = 0, failures = 0;
+
+  translatedText = ''; updatePreview();
+  setStatus('Translation shuru ho raha hai…');
+  $('details').textContent = `${lines.length} lines ko ${batches.length} batches mein process kiya ja raha hai; up to ${CONCURRENCY} batches parallel chalengi.`;
+
+  async function worker() {
+    while (true) {
+      if (stopRequested) return;
+      const bi = nextBatch++;
+      if (bi >= batches.length) return;
+      const batch = batches[bi];
+      try {
+        const results = await translateBatch(batch);
+        batch.forEach(({index, item}, j) => {
+          if (item.fixed) output[index] = item.text;
+          else {
+            let result = results[j] ?? item.text;
+            // Restore exact leading label, indentation and trailing whitespace from original line.
+            const body = result;
+            if (item.ws !== undefined) {
+              output[index] = item.ws + item.prefix + body + item.tail;
+            } else output[index] = result;
+          }
+          completedLines++;
+        });
+      } catch (e) {
+        if (e.message === 'STOPPED') return;
+        failures++;
+        batch.forEach(({index, item}) => {
+          output[index] = item.text;
+          completedLines++;
+        });
+      }
+      translatedText = output.map((v, i) => v === undefined ? lines[i] : v).join('\n');
+      updatePreview();
+      $('bar').style.width = (completedLines / lines.length * 100) + '%';
+      setStatus(`Translating… ${completedLines} / ${lines.length} lines` + (failures ? ` • ${failures} batch(es) failed; original text retained` : ''));
+    }
+  }
+
+  try {
+    await Promise.all(Array.from({length: Math.min(CONCURRENCY, batches.length)}, () => worker()));
+    translatedText = output.map((v, i) => v === undefined ? lines[i] : v).join('\n');
+    updatePreview();
+    $('download').disabled = !translatedText; $('downloadPdf').disabled = !translatedText;
+    if (stopRequested) setStatus('Process stopped. Partial result download kar sakte hain.', 'warning');
+    else if (failures) setStatus(`Complete, lekin ${failures} batch(es) translate nahi hui; unka original text preserve kiya gaya.`, 'warning');
+    else setStatus('Translation complete! Hindi TXT download ke liye ready hai. 🎉', 'good');
+    $('details').textContent = `Processed ${completedLines} of ${lines.length} lines in ${batches.length} batches. Output formatting, blank lines and structural labels are preserved as closely as possible.`;
+  } catch (err) {
+    setStatus('Translation error: ' + (err.message || err), 'bad');
+  } finally {
+    running = false; $('start').disabled = !sourceText; $('stop').disabled = true;
+  }
+});
+$('stop').addEventListener('click', () => {
+  stopRequested = true;
+  setStatus('Stop request bhej di gayi hai; current request complete hote hi rukega.', 'warning');
+});
+$('download').addEventListener('click', () => {
+  const blob = new Blob([$('preview').value], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = selectedName; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+// Export current preview as a printable PDF. The browser's print dialog lets the user choose Save as PDF.
+$('downloadPdf').addEventListener('click', () => {
+  const text = $('preview').value;
+  if (!text.trim()) { setStatus('Pehle translation complete karein.', 'warning'); return; }
+  const win = window.open('', '_blank');
+  if (!win) { setStatus('PDF window block ho gayi. Chrome mein pop-ups allow karke dobara try karein.', 'warning'); return; }
+  const safeText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const title = (selectedName || 'Hindi_Translation.txt').replace(/\.txt$/i, '_PDF');
+  win.document.open();
+  win.document.write(`<!doctype html><html lang="hi"><head><meta charset="utf-8"><title>${title}</title><style>
+    @page { size: A4; margin: 15mm; }
+    body { color:#111; background:#fff; font-family:"Noto Sans Devanagari", Mangal, "Arial Unicode MS", sans-serif; }
+    pre { white-space:pre-wrap; overflow-wrap:anywhere; font-family:inherit; font-size:10pt; line-height:1.45; margin:0; }
+    .hint { font: 10pt Arial,sans-serif; color:#555; margin:0 0 12px; padding:8px; border:1px solid #ccc; }
+    @media print { .hint { display:none; } }
+  </style></head><body><div class="hint">Print dialog mein Destination: <b>Save as PDF</b> select karein, phir Save dabayein.</div><pre>${safeText}</pre><script>window.onload=()=>setTimeout(()=>window.print(),350);<\/script></body></html>`);
+  win.document.close();
+  setStatus('Print window khul gayi. Destination mein “Save as PDF” select karke Save karein.', 'good');
+});
+
+$('reset').addEventListener('click', () => {
+  if (running) stopRequested = true;
+  sourceText = ''; translatedText = '';
+  $('file').value = ''; $('preview').value = '';
+  $('start').disabled = true; $('download').disabled = true; $('downloadPdf').disabled = true; $('stop').disabled = true;
+  $('bar').style.width = '0%'; $('counts').textContent = '0 lines';
+  setStatus('Pehle apni .txt file select karein.');
+  $('details').textContent = 'Translation ke liye internet chahiye. Free public translation service kabhi-kabhi rate-limit ho sakti hai.';
+});
+</script>
+</body>
+</html>
